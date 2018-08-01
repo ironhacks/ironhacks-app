@@ -15,6 +15,15 @@ import { BrowserRouter } from 'react-router-dom' // Router
 import 'bootstrap/dist/css/bootstrap-reboot.min.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 
+import firebase from 'firebase'
+
+var config = {
+apiKey: "AIzaSyCkcfwdASmN50otDinZUiRBdkj8umKZt0Y", // Dev
+authDomain: "ironhacks-platform-dev.firebaseapp.com",
+projectId: "ironhacks-platform-dev"
+};
+
+firebase.initializeApp(config);
 
 ReactDOM.render((
   <BrowserRouter>

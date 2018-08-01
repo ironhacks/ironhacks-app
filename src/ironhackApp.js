@@ -5,6 +5,8 @@
 import React from 'react';
 import Header from './js/components/header.js';
 import Landing from './js/components/landing.js';
+import Login from './js/components/login.js';
+import UserProfile from './js/components/userProfile.js';
 
 import { Switch, Route, Redirect } from "react-router-dom";
 
@@ -25,16 +27,18 @@ class IronHacksApp extends React.Component {
 
   render() {
 
-
     return (
-      <Switch>
-        <Route exact path="/" component={Landing}/>
-        <Route path="/login" component={Login}/>
-        <Route path="/profile" component={UserProfile}/>
-        {this.isUserConected() && 
-          <Redirect to='/profile'/>
-        }
-      </Switch>
+      <div className='App'> 
+        <Header/>
+        <Switch>
+          <Route exact path="/" component={Landing}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/profile" component={UserProfile}/>
+          {this.isUserConected() && 
+            <Redirect to='/profile'/>
+          }
+        </Switch>
+      </div>
     )
   }
 }
