@@ -1,21 +1,13 @@
 /*
   IronHacks Platform
-  header.css - Navigation bar style sheet
+  footer.css - Footer style sheet
   Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 */
-
-/* Creating variables for reuse*/
 :root {
   --main-bg-color: #FFCE35;
 }
 
-.header {
+.footer {
 	height: 50px;
 	background-color: var(--main-bg-color);
-}
-
-.login-section {
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
 }

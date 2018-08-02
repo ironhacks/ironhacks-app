@@ -1,0 +1,10 @@
+/*
+  IronHacks Platform
+  tutorial.css - Tutorial style sheet
+  Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+*/
+
+.tutorial {
+	height: calc(100vh - 50px - 50px);
+	padding-top: 100px;
+}

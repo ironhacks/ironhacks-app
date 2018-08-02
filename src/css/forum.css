@@ -1,0 +1,10 @@
+/*
+  IronHacks Platform
+  forum.css - Forum Main Component style sheet
+  Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+*/
+
+.forum {
+	height: calc(100vh - 50px - 50px);
+	padding-top: 100px;
+}

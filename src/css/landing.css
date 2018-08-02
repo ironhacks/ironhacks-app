@@ -1,0 +1,29 @@
+/*
+  IronHacks Platform
+  landing.css - Landing view style sheet
+  Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+*/
+
+/* Creating variables for reuse*/
+:root {
+  --main-bg-color: #FFCE35;
+}
+
+.landing {
+	height: 100vh;
+	background-color: var(--main-bg-color)
+}
+
+a.login-button:link, a.login-button:visited {
+    background-color: var(--main-bg-color);
+    color: black;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+
+a.login-button:hover, a.login-button:active {
+    background-color: red;
+}
