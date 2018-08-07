@@ -5,9 +5,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-//Css
-import '../../css/task.css'
-
 class Task extends React.Component {
   
   render() {

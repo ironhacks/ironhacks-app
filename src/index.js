@@ -15,7 +15,12 @@ import { BrowserRouter } from 'react-router-dom' // Router
 import 'bootstrap/dist/css/bootstrap-reboot.min.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 
-import firebase from 'firebase'
+//Main CSS
+import './main.css'
+
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
 
 var config = {
 apiKey: "AIzaSyCkcfwdASmN50otDinZUiRBdkj8umKZt0Y", // Dev

@@ -5,16 +5,16 @@
 import React from 'react';
 
 // Custom Components
-import Header from './js/components/header.js';
-import Footer from './js/components/footer.js';
-import Landing from './js/components/landing.js';
-import Login from './js/components/login.js';
-import Forum from './js/components/forum.js';
-import Tutorial from './js/components/tutorial.js';
-import Task from './js/components/task.js';
-import Quizzes from './js/components/quizzes.js';
-import Results from './js/components/results.js';
-import UserProfile from './js/components/userProfile.js';
+import Header from './js/components/header/header.js';
+import Footer from './js/components/footer/footer.js';
+import Landing from './js/components/landing/landing.js';
+import Login from './js/components/login/login.js';
+import Forum from './js/components/forum/forum.js';
+import Tutorial from './js/components/tutorial/tutorial.js';
+import Task from './js/components/task/task.js';
+import Quizzes from './js/components/quizzes/quizzes.js';
+import Results from './js/components/results/results.js';
+import UserProfile from './js/components/userProfile/userProfile.js';
 
 
 import { Switch, Route, Redirect } from "react-router-dom";

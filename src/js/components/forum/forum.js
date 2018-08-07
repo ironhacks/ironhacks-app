@@ -1,21 +1,18 @@
 // IronHacks Platform
-// quizzes.js - Quiz picker and visualizer
+// forum.js - forum main Component
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
 import { Link } from "react-router-dom";
 
-//Css
-import '../../css/quizzes.css'
-
-class Quizzes extends React.Component {
+class Forum extends React.Component {
   
   render() {
     return (
-      <div className="quizzes container-fluid">
+      <div className="forum container-fluid">
         <div className="row">
           <div className='col-12'>
-          	<h1>Imagine all the quizzes buttons here</h1>
+          	<h1>Imagine a forum</h1>
           </div>
         </div>
       </div>
@@ -23,4 +20,4 @@ class Quizzes extends React.Component {
   }
 }
 
-export default Quizzes;
+export default Forum;

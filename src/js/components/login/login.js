@@ -8,8 +8,6 @@ import { Link } from "react-router-dom";
 import firebase from 'firebase/app';
 import firebaseui from 'firebaseui';
 
-// CSS
-import '../../css/login.css'
 
 class Login extends React.Component {
   componentDidMount(){

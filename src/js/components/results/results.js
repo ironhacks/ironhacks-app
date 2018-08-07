@@ -1,21 +1,18 @@
 // IronHacks Platform
-// tutorial.js - Tutorial editor and visualizer
+// results.js - Results Component
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
 import { Link } from "react-router-dom";
 
-//Css
-import '../../css/tutorial.css'
-
-class Tutorial extends React.Component {
+class Results extends React.Component {
   
   render() {
     return (
-      <div className="tutorial container-fluid">
+      <div className="results container-fluid">
         <div className="row">
           <div className='col-12'>
-          	<h1>Imagine a Tutorial document</h1>
+          	<h1>Imagine all the results Here</h1>
           </div>
         </div>
       </div>
@@ -23,4 +20,4 @@ class Tutorial extends React.Component {
   }
 }
 
-export default Tutorial;
+export default Results;
