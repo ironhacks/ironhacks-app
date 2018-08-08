@@ -4,31 +4,10 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+//Styled components
 import styled, {ThemeProvider} from 'styled-components';
-
-import * as Constants from '../../../constants.js'
-
-// Define our button, but with the use of props.theme this time
-/*
-const Button = styled.button`
-  color: ${props => props.theme.fg};
-  border: 2px solid ${props => props.theme.fg};
-  background: ${props => props.theme.bg};
-
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border-radius: 3px;
-`;
-
-// This theme swaps `fg` and `bg`
-const invertTheme = ({ fg, bg }) => ({
-  fg: bg,
-  bg: fg
-});
-*/
-
+//Custom Constants
+import * as Constants from '../../../constants.js';
 
 const theme = Constants.HeaderTheme;
 
@@ -43,10 +22,11 @@ const NavButton = styled(Link)`
   padding: 10px 10px;
   text-align: center;
   text-decoration: none;
+  font-weight: bold;
   display: inline-block;
   transition: color 0.5s, font-size 0.5s;
 
-  &:hover{
+  &:hover {
     color: ${props => props.theme.hoverTextColor};
     font-size:18px;
   }
@@ -54,9 +34,10 @@ const NavButton = styled(Link)`
 
 // Center Logo
 const IronHacksCenterLogo = styled('div')`
-
+  padding: 10px 10px;
+  font-weight: 900;
+  text-align: center;
 `;
-
 
 // Right section
 const RightAlignDiv = styled('div')`
@@ -84,7 +65,9 @@ class Header extends React.Component {
               <NavButton to="/results">Results</NavButton>
             </div>
             <div className="col-2">
-              <span>IronHacks</span>
+              <IronHacksCenterLogo>
+                <span>IronHacks</span>
+              </IronHacksCenterLogo>
             </div>
             <RightAlignDiv className='col-5'>
               <NavButton to="/login">User name</NavButton>

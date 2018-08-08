@@ -3,8 +3,6 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-import { Link } from "react-router-dom";
-
 
 class Quizzes extends React.Component {
   

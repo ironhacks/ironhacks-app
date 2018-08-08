@@ -48,7 +48,6 @@ class IronHacksApp extends React.Component {
           <Route path="/task" component={Task}/>
           <Route path="/quizzes" component={Quizzes}/>
           <Route path="/results" component={Results}/>
-          
           {this.isUserConected() && 
             <Redirect to='/profile'/>
           }

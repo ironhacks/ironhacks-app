@@ -16,10 +16,10 @@ import 'bootstrap/dist/css/bootstrap-reboot.min.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 
 //Main CSS
-import './main.css'
+import './main.css';
 
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 
 var config = {
@@ -34,7 +34,7 @@ ReactDOM.render((
   <BrowserRouter>
     <IronHacksApp/>
   </BrowserRouter>
-), document.getElementById('root'))
+), document.getElementById('root'));
 
 registerServiceWorker();
 

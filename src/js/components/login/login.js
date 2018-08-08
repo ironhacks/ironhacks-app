@@ -1,10 +1,10 @@
-// IronHacks Platform
+  // IronHacks Platform
 // login.js - Loging page
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
 
-import { Link } from "react-router-dom";
+
 import firebase from 'firebase/app';
 import firebaseui from 'firebaseui';
 
