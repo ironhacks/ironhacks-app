@@ -7,6 +7,7 @@ import React from 'react';
 import styled, {ThemeProvider} from 'styled-components';
 //Custom Components
 import ThreadPreview from './threadPreview.js'
+import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js'
 //Custom Constants
 import * as Constants from '../../../constants.js';
 //Image references
@@ -31,7 +32,7 @@ const MainHeader = styled('h1')`
 //Controls
 const Control = styled('div')`
   height: 30px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 `;
 //New thread button
 const NewThreadButton = styled('button')`
@@ -40,7 +41,7 @@ const NewThreadButton = styled('button')`
   padding-left: 10px;
   padding-right: 10px;
   border: none;
-  border-radius: ${Constants.universalBorderRadious}
+  border-radius: ${Constants.universalBorderRadius}
   background-color: ${Constants.mainBgColor};
 `;
 //SearchBar Container
@@ -55,7 +56,7 @@ const SearchBar = styled('form')`
     background-color: #F2F2F2;
     border: 1px solid #999999;
     border-right: none; 
-    border-radius: ${Constants.universalBorderRadious} 0px 0px ${Constants.universalBorderRadious};
+    border-radius: ${Constants.universalBorderRadius} 0px 0px ${Constants.universalBorderRadius};
     padding-left: 10px;
   }
 
@@ -64,7 +65,7 @@ const SearchBar = styled('form')`
     background-color: #F2F2F2;
     border: 1px solid #999999;
     border-left: none;
-    border-radius: 0px ${Constants.universalBorderRadious} ${Constants.universalBorderRadious} 0px;
+    border-radius: 0px ${Constants.universalBorderRadius} ${Constants.universalBorderRadius} 0px;
     padding-left: 10px;
 
     img {
@@ -85,15 +86,18 @@ const ForumHeader = styled('div')`
   display: flex;
   align-items: center;
   padding-left: 10px;
-  padding-top: 5px;
   margin-bottom: ${Constants.threadPreviewBottomMargin};
   background-color: ${Constants.forumHeaderColor}
-  border-radius: ${Constants.universalBorderRadious}
+  border-radius: ${Constants.universalBorderRadius}
+
+  h2 {
+    margin-bottom: 0;
+  }
 `;
 //Section separator
 const SectionSeparator = styled('div')`
   background-color: ${Constants.mainBgColor}
-  height: 2px;
+  height: 1px;
   width 100%;
   margin-top: calc(${Constants.threadPreviewBottomMargin} + 10px);
   margin-bottom: calc(${Constants.threadPreviewBottomMargin} + 10px);
@@ -102,10 +106,18 @@ const SectionSeparator = styled('div')`
 const Sponsors = styled('div')`
   height: 150px;
   background-color: gray;
+  overflow-x: auto;
 `;
 
 
+
+
 class Forum extends React.Component {
+
+
+
+
+
   render() {
     return (
       <ThemeProvider theme={theme}>
@@ -127,16 +139,17 @@ class Forum extends React.Component {
           <div className="row flex-grow-1">
             <ForumThreads className='col-8 offset-2'>
               <ForumHeader><h2>Pinned</h2></ForumHeader>
-              <ThreadPreview/>
+              <ThreadPreview title='Welcome to your Forum!' author='Alejandro Díaz V.'/>
               <SectionSeparator/>
               <ForumHeader><h2>General discussion</h2></ForumHeader>
-              <ThreadPreview/>
-              <ThreadPreview/>
+              <ThreadPreview title='Usefull library' author='Random user'/>
+              <ThreadPreview title='Help!' author='Random user 2'/>
             </ForumThreads>
           </div>
           <div className="row">
-            <Sponsors className='col-8 offset-2'>
-            </Sponsors>
+            <div className='col-8 offset-2'>
+              <SponsorsBanner></SponsorsBanner>
+            </div>
           </div>
         </SectionContainer>
       </ThemeProvider>

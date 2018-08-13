@@ -34,11 +34,17 @@ const NavButton = styled(Link)`
 
 // Center Logo
 const IronHacksCenterLogo = styled('div')`
-  padding: 10px 10px;
-  font-weight: 900;
-  text-align: center;
-`;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 24px;
 
+  label {
+    margin-botton: 5px;
+  }
+`;
 // Right section
 const RightAlignDiv = styled('div')`
   display: flex;
@@ -51,8 +57,8 @@ class Header extends React.Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <HeaderContainer className="container-fluid">
-          <div className="row">
+        <div className="container-fluid">
+          <HeaderContainer className="row">
             <div className="col-5">
               <NavButton to="/forum">Forum</NavButton>
               <span> | </span>
@@ -66,14 +72,14 @@ class Header extends React.Component {
             </div>
             <div className="col-2">
               <IronHacksCenterLogo>
-                <span>IronHacks</span>
+                <label>IronHacks</label>
               </IronHacksCenterLogo>
             </div>
             <RightAlignDiv className='col-5'>
               <NavButton to="/login">User name</NavButton>
             </RightAlignDiv>
-          </div>
-        </HeaderContainer>
+          </HeaderContainer>
+        </div>
       </ThemeProvider>
     );
   }

@@ -26,7 +26,7 @@ class IronHacksApp extends React.Component {
     // This is a funciton that calls Firebase SDK to know if there is an active user session
     
 
-    return false;
+    return true  ;
   }
 
   checkUserType = () => {
@@ -38,7 +38,12 @@ class IronHacksApp extends React.Component {
 
     return (
       <div className='App'> 
-        <Header/>
+        <Switch>
+          <Route exact path="/" render={() => null}/>
+          <Route exact path="/login" render={() => null}/>
+          {!this.isUserConected() && <Redirect to="/"/>}
+          <Route component={Header}/>
+        </Switch>
         <Switch>
           <Route exact path="/" component={Landing}/>
           <Route path="/login" component={Login}/>
@@ -48,11 +53,12 @@ class IronHacksApp extends React.Component {
           <Route path="/task" component={Task}/>
           <Route path="/quizzes" component={Quizzes}/>
           <Route path="/results" component={Results}/>
-          {this.isUserConected() && 
-            <Redirect to='/profile'/>
-          }
         </Switch>
-        <Footer/>
+        <Switch>
+          <Route exact path="/" render={() => null}/>
+          <Route exact path="/login" render={() => null}/>
+          <Route component={Footer}/>
+        </Switch>
       </div>
     )
   }
