@@ -6,7 +6,10 @@ import React from 'react';
 
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
+//Router
+import { Redirect } from 'react-router-dom';
 //Custom Components
+//import ThreadView from './threadView/threadView.js'
 import ReactionsView from './reactionsView.js';
 import TagView from './tagView.js';
 import ReactionPicker from './reactionPicker.js';
@@ -20,6 +23,12 @@ const PreviewContainer = styled('div')`
   border-radius: ${Constants.universalBorderRadius};
   background-color: ${props => props.theme.backgroundColor};
   margin-bottom: ${Constants.threadPreviewBottomMargin};
+  padding: 0 15px 0 15px;
+  transition: background-color 0.5s;
+
+  &:hover {
+    background-color: ${props => props.theme.highlightedTextBgColor};
+  }
 
   h2 {
     font-size: 20px;
@@ -44,16 +53,31 @@ const RightAlignDiv = styled('div')`
   display: flex;
   justify-content: flex-end;
 `;
-const tag = styled('div')`
+//const tag = styled('div')`
   
-`;
+//`;
 
 class ThreadPreview extends React.Component {
-  
+  constructor(props) {
+    super(props);
+    this.state = {
+      navigate: false,
+      referrer: null,
+    };
+  }
+
+  handleClick = () => {
+    console.log('Button is cliked!');
+    this.setState({referrer: 'forum/' + this.props.title});
+  }
+
   render() {
+    const {referrer} = this.state;
+    if (referrer) return <Redirect to={referrer} />;
+
     return (
       <ThemeProvider theme={theme}>
-        <PreviewContainer>
+        <PreviewContainer onClick={this.handleClick}>
           <div className="row">
             <div className='col-6'>
               <h2>{this.props.title}</h2>

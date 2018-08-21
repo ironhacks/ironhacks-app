@@ -18,18 +18,6 @@ import 'bootstrap/dist/css/bootstrap-grid.min.css';
 //Main CSS
 import './main.css';
 
-import firebase from 'firebase/app';
-import 'firebase/auth';
-
-
-var config = {
-apiKey: "AIzaSyCkcfwdASmN50otDinZUiRBdkj8umKZt0Y", // Dev
-authDomain: "ironhacks-platform-dev.firebaseapp.com",
-projectId: "ironhacks-platform-dev"
-};
-
-firebase.initializeApp(config);
-
 ReactDOM.render((
   <BrowserRouter>
     <IronHacksApp/>

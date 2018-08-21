@@ -5,9 +5,9 @@
 import React from 'react';
 
 //Styled components
-import styled, {ThemeProvider} from 'styled-components';
+import styled from 'styled-components';
 //Custom Constants
-import * as Constants from '../../../constants.js';
+//import * as Constants from '../../../constants.js';
 // Images
 import smile from './img/smile.svg';
 
@@ -32,7 +32,7 @@ class ReactionPicker extends React.Component {
   render() {
     return (
       <Picker>
-      <span>+</span><img src={smile} />
+      <span>+</span><img src={smile} alt='smile'/>
       </Picker>
     );
   }

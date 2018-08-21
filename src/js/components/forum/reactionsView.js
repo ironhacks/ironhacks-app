@@ -36,9 +36,9 @@ class ReactionsView extends React.Component {
       <ThemeProvider theme={theme}>
         <Reactions>
         <span>9</span>
-        <img src={likeReaction}/>
+        <img src={likeReaction} alt='likeReaction'/>
         <span>18</span>
-        <img src={heartReaction}/>
+        <img src={heartReaction} alt='heartReaction'/>
         <span>| 17 comments | 7 days ago</span>
         </Reactions>
       </ThemeProvider>

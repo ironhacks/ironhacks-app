@@ -39,13 +39,13 @@ class SponsorsBanner extends React.Component {
     return (
       <ThemeProvider theme={theme}>
             <BannerContainer>
-              <img src={githubLogo}/>
-              <img src={nsfLogo}/>
-              <img src={redhatLogo}/>
-              <img src={socrataLogo}/>
-              <img src={techNexusLogo}/>
-              <img src={UNALLogo}/>
-              <img src={PurdueLogo}/>
+              <img src={githubLogo} alt='githubLogo'/>
+              <img src={nsfLogo} alt='nsfLogo'/>
+              <img src={redhatLogo} alt='redHatLogo'/>
+              <img src={socrataLogo} alt='socrataLogo'/>
+              <img src={techNexusLogo} alt='techNexusLogo'/>
+              <img src={UNALLogo} alt='UNALLogo'/>
+              <img src={PurdueLogo} alt='PurdueLogo'/>
             </BannerContainer>
       </ThemeProvider>
     );

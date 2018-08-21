@@ -1,18 +1,32 @@
 //CSS color constants
 export const mainBgColor = '#FFCE35';
+export const buttonHighlightedBgColor = '#E6B92F'
 export const mainTextColor = 'black';
 export const invertedTextColor = 'white';
 export const highlightedTextColor = 'white';
+export const invertedHighlightedTextColor = 'black';
 
 export const universalBorderRadius = "4px";
 
+export const LoaderTheme = {
+  loaderFrontColor: mainBgColor,
+  loaderBackgroundColor: '#C7C3B7',
+  sectionBackgroundColor: '#EEEDE9',
+}
+
 //LANDING
-export const LandingTheme  = {
+export const LandingTheme = {
   containerHeight: "100vh",
   backgroundColor: mainBgColor,
   textColor: "black",
-}
+};
 
+//LOGIN
+export const LoginTheme = {
+  containerHeight:'100vh;',
+  backgroundColor: "white",
+  textColor: "black"
+};
 //HEADER
 export const HeaderTheme = {
   // Header Container:
@@ -40,12 +54,14 @@ export const AppSectionTheme = {
 };
 
 //FORUM
-export const forumHeaderColor = "#D2DDC9";
-export const threadPreviewBgColor = "#FEF8ED";
-export const threadPreviewBottomMargin = "5px";
+export const forumHeaderColor = '#D2DDC9';
+export const threadPreviewBgColor = '#FEF8ED';
+export const threadPreviewHighlightedBgColor = '#fff1c7';
+export const threadPreviewBottomMargin = '5px';
 
 export const ThreadPreviewTheme = {
   backgroundColor: threadPreviewBgColor,
+  highlightedTextBgColor: threadPreviewHighlightedBgColor,
   separatorBgColor: '#808080',
   containerHeight: "110px",
 }

@@ -5,13 +5,15 @@
 import React from 'react';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
+//Router
+import {Link} from "react-router-dom";
 //Custom Components
 import ThreadPreview from './threadPreview.js'
 import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js'
 //Custom Constants
 import * as Constants from '../../../constants.js';
 //Image references
-import searchIcon from './img/searchIcon.svg'
+import searchIcon from './img/searchIcon.svg';
 
 const theme = Constants.AppSectionTheme;
 
@@ -43,6 +45,20 @@ const NewThreadButton = styled('button')`
   border: none;
   border-radius: ${Constants.universalBorderRadius}
   background-color: ${Constants.mainBgColor};
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: ${Constants.buttonHighlightedBgColor};
+  }
+
+  a {
+    color: black;
+
+    &:hover {
+      text-decoration: none;
+      color: black;
+    }
+  }
 `;
 //SearchBar Container
 const SearchBar = styled('form')`
@@ -74,7 +90,7 @@ const SearchBar = styled('form')`
     }
   }
 `;
-//Holder
+//ThemeProviderreads Holder
 const ForumThreads = styled('div')`
   margin-bottom 10px;
   overflow: auto;
@@ -102,21 +118,8 @@ const SectionSeparator = styled('div')`
   margin-top: calc(${Constants.threadPreviewBottomMargin} + 10px);
   margin-bottom: calc(${Constants.threadPreviewBottomMargin} + 10px);
 `;
-//TODO: Move this componet to a single reusable file
-const Sponsors = styled('div')`
-  height: 150px;
-  background-color: gray;
-  overflow-x: auto;
-`;
-
-
-
 
 class Forum extends React.Component {
-
-
-
-
 
   render() {
     return (
@@ -129,10 +132,10 @@ class Forum extends React.Component {
           </div>
           <Control className="row">
             <div className='col-4 offset-2'>
-              <NewThreadButton>Create a new thread</NewThreadButton>
+              <NewThreadButton><Link to='forum/new'>Create a new thread</Link></NewThreadButton>
             </div>
             <SearchBar className='col-4'>
-              <input type='text' placeholder='Search...'></input>
+              <input type='text' placeholder='Search...'/>
               <button><img src={searchIcon} alt='searchIcon'/></button>
             </SearchBar>
           </Control>

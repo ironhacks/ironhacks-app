@@ -20,7 +20,27 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Ironhacks Platform</title>
+    <!--Firebase-->
+    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-firestore.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCkcfwdASmN50otDinZUiRBdkj8umKZt0Y",
+        authDomain: "ironhacks-platform-dev.firebaseapp.com",
+        databaseURL: "https://ironhacks-platform-dev.firebaseio.com",
+        projectId: "ironhacks-platform-dev"
+      };
+
+      firebase.initializeApp(config);
+      //We leave the firebase reference on the window objecto to access to it globally.
+    </script>
+    <!-- Firebase ui -->
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.3.0/firebaseui.js"></script>
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+    <!-- needed for markdown editor-->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   </head>
   <body>
     <noscript>
