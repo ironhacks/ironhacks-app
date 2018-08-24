@@ -1,4 +1,4 @@
-// IronHacks Platform
+  // IronHacks Platform
 // header.js - Navigation bar
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
@@ -80,7 +80,13 @@ class Header extends React.Component {
     this.state = {
       showMenu: 'none',
     }
+
+    this.getUserName()
   }
+
+  getUserName = () => {
+    return window.firebase.auth().currentUser.displayName
+  };
 
   showMenu = () => {
     if(this.state.showMenu === 'none'){
@@ -126,7 +132,7 @@ class Header extends React.Component {
               </IronHacksCenterLogo>
             </div>
             <RightAlignDiv className='col-5'>
-              <UserMenuDropper onClick={this.showMenu}>Menu</UserMenuDropper>
+              <UserMenuDropper onClick={this.showMenu}>{this.getUserName()}</UserMenuDropper>
               <UserMenu display={this.state.showMenu}>
                 <UserMenuButton>Profile</UserMenuButton>
                 <UserMenuButton onClick={this.logout}>Sign Out</UserMenuButton>

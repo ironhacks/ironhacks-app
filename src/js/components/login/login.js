@@ -3,6 +3,7 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
@@ -35,6 +36,13 @@ const SectionContainer = styled('div')`
   }
 `;
 class Login extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      navigate: false,
+    };
+  }
+
   componentDidMount(){
     this.initAuthUI()
   }
@@ -50,17 +58,20 @@ class Login extends React.Component {
       callbacks : {
         signInSuccessWithAuthResult : (authResult, redirectUrl) => {
           var user = authResult.user;
+          // Interupt the redirect if the user is new while writing on the db.
           if(authResult.additionalUserInfo.isNewUser === true){
             this.writeOnDatabase(user);
-          };
-          return false;
+            return false;
+          }else{
+            return true;
+          }
         },
         signInFailure: function(error) {
           // Some unrecoverable error occurred during sign-in.
           // Return a promise when error handling is completed and FirebaseUI
           // will reset, clearing any UI. This commonly occurs for error code
           // 'firebaseui/anonymous-upgrade-merge-conflict' when merge conflict
-          // occurs. Check below for more details on this.
+          // occurs.
           console.log(error);
         }
       },
@@ -78,10 +89,11 @@ class Login extends React.Component {
     }
   }
   
-  writeOnDatabase(user){
+  writeOnDatabase = (user) => {
     //db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
+    const _this = this;
     firestore.settings(settings);
 
     firestore.collection("users").add({
@@ -89,16 +101,21 @@ class Login extends React.Component {
       email: user.email,
     })
     .then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
-      return true;
+      _this.setState((prevState, props) => {
+        return {navigate: !prevState.navigate};
+      });
     })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
-    return true;
   }
 
   render() {
+    if(this.state.navigate === true){
+      return(
+        <Redirect to='/forum'/>
+      );
+    }
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>

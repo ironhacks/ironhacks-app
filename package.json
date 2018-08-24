@@ -2,6 +2,7 @@
   "name": "ironhacks-platform",
   "version": "0.1.0",
   "private": true,
+  "homepage": "dev.ironhacks.com",
   "dependencies": {
     "bootstrap": "^4.1.2",
     "draft-js": "^0.10.5",

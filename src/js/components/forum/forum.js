@@ -120,6 +120,31 @@ const SectionSeparator = styled('div')`
 `;
 
 class Forum extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      threads: [],
+    }
+  }
+
+  componentDidMount(){
+    this.getThreats();
+  }
+
+  getThreats = () => {
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    const _this = this;
+    var threads = [];
+    firestore.collection("threads").get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        threads.push(doc);
+      });
+      _this.setState({threads: threads});
+    });
+  }
 
   render() {
     return (
@@ -142,11 +167,19 @@ class Forum extends React.Component {
           <div className="row flex-grow-1">
             <ForumThreads className='col-8 offset-2'>
               <ForumHeader><h2>Pinned</h2></ForumHeader>
-              <ThreadPreview title='Welcome to your Forum!' author='Alejandro Díaz V.'/>
+              {this.state.threads.map((thread, index) => {
+                console.log(thread.id);
+                return(
+                  <ThreadPreview 
+                    title={thread.data().title}
+                    author={thread.data().authorName}
+                    treadId={thread.id}
+                  />
+                )
+              })}
               <SectionSeparator/>
               <ForumHeader><h2>General discussion</h2></ForumHeader>
               <ThreadPreview title='Usefull library' author='Random user'/>
-              <ThreadPreview title='Help!' author='Random user 2'/>
             </ForumThreads>
           </div>
           <div className="row">

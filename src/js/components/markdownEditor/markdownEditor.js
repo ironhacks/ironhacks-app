@@ -21,6 +21,14 @@ const Editor = styled(ReactMde)`
   width: 100%;
 `;
 
+const ConverterConfig = {
+  tables: true,
+  simplifiedAutoLink: true,
+  prefixHeaderId: true, //Add a prefix to the generated header ids. Passing a string will prefix that string to the header id. Setting to true will add a generic 'section' prefix.
+  strikethrough: true, //Enable support for strikethrough syntax. ~~strikethrough~~ as <del>strikethrough</del>
+  tasklists: true,
+};
+
 class MarkdownEditor extends React.Component<{}, AppState> {
 
   converter: Showdown.Converter;
@@ -30,12 +38,15 @@ class MarkdownEditor extends React.Component<{}, AppState> {
     this.state = {
       mdeState: null,
     };
-    this.converter = new Showdown.Converter({tables: true, simplifiedAutoLink: true});
+    this.converter = new Showdown.Converter(ConverterConfig);
   }
 
   handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
+    this.props.onEditorChange(mdeState.markdown);
     this.setState({mdeState});
   }
+
+
 
   render() {
     return (

@@ -68,7 +68,7 @@ class ThreadPreview extends React.Component {
 
   handleClick = () => {
     console.log('Button is cliked!');
-    this.setState({referrer: 'forum/' + this.props.title});
+    this.setState({referrer: 'forum/:' + this.props.title});
   }
 
   render() {
