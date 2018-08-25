@@ -173,7 +173,7 @@ class Forum extends React.Component {
                   <ThreadPreview 
                     title={thread.data().title}
                     author={thread.data().authorName}
-                    treadId={thread.id}
+                    threadId={thread.id}
                   />
                 )
               })}

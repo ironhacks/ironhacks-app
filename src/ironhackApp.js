@@ -14,6 +14,7 @@ import Landing from './js/components/landing/landing.js';
 import Login from './js/components/login/login.js';
 import Forum from './js/components/forum/forum.js';
 import NewThread from './js/components/forum/newThread.js';
+import ThreadView from './js/components/forum/threadView/threadView.js';
 import Tutorial from './js/components/tutorial/tutorial.js';
 import Task from './js/components/task/task.js';
 import Quizzes from './js/components/quizzes/quizzes.js';
@@ -75,15 +76,17 @@ class IronHacksApp extends React.Component {
             <Route component={Header}/>
           </Switch>
           <Switch>
-            <Route exact path="/" component={Landing}/>
             <Route path="/login" component={Login}/>
             <Route path="/profile" component={UserProfile}/>
             <Route exact path="/forum" component={Forum}/>
             <Route exact path="/forum/new" component={NewThread}/>
+            <Route path="/forum/thread/:threadId" component={ThreadView}/>
             <Route path="/tutorial" component={Tutorial}/>
             <Route path="/task" component={Task}/>
             <Route path="/quizzes" component={Quizzes}/>
             <Route path="/results" component={Results}/>
+            {this.state.user && <Redirect to='/forum'/>}
+            <Route exact path="/" component={Landing}/>
           </Switch>
           <Switch>
             <Route exact path="/" render={() => null}/>
