@@ -14,7 +14,7 @@ import Landing from './js/components/landing/landing.js';
 import Login from './js/components/login/login.js';
 import Forum from './js/components/forum/forum.js';
 import NewThread from './js/components/forum/newThread.js';
-import ThreadView from './js/components/forum/threadView/threadView.js';
+import ThreadViewWithRouter from './js/components/forum/threadView/threadView.js';
 import Tutorial from './js/components/tutorial/tutorial.js';
 import Task from './js/components/task/task.js';
 import Quizzes from './js/components/quizzes/quizzes.js';
@@ -80,7 +80,7 @@ class IronHacksApp extends React.Component {
             <Route path="/profile" component={UserProfile}/>
             <Route exact path="/forum" component={Forum}/>
             <Route exact path="/forum/new" component={NewThread}/>
-            <Route path="/forum/thread/:threadId" component={ThreadView}/>
+            <Route path="/forum/thread/:threadId" component={ThreadViewWithRouter}/>
             <Route path="/tutorial" component={Tutorial}/>
             <Route path="/task" component={Task}/>
             <Route path="/quizzes" component={Quizzes}/>

@@ -20,13 +20,6 @@ export const LandingTheme = {
   backgroundColor: mainBgColor,
   textColor: "black",
 };
-
-//LOGIN
-export const LoginTheme = {
-  containerHeight:'100vh;',
-  backgroundColor: "white",
-  textColor: "black"
-};
 //HEADER
 export const HeaderTheme = {
   // Header Container:
@@ -44,7 +37,6 @@ export const FooterTheme = {
   textColor: mainTextColor,
   hoverTextColor: highlightedTextColor
 }
-
 //MAIN SECTION THEME
 export const AppSectionTheme = {
   containerHeight: "calc(100vh - " + HeaderTheme.containerHeight + " - " + FooterTheme.containerHeight + ")",
@@ -52,18 +44,32 @@ export const AppSectionTheme = {
   textColor: "black",
   hoverTextColor: highlightedTextColor
 };
+//LOGIN
+export const LoginTheme = {
+  containerHeight:'100vh;',
+  backgroundColor: "white",
+  textColor: "black"
+};
 
 //FORUM
 export const forumHeaderColor = '#D2DDC9';
 export const threadPreviewBgColor = '#FEF8ED';
 export const threadPreviewHighlightedBgColor = '#fff1c7';
 export const threadPreviewBottomMargin = '5px';
+export const commentViewBottomMargin = '5px';
 
 export const ThreadPreviewTheme = {
   backgroundColor: threadPreviewBgColor,
   highlightedTextBgColor: threadPreviewHighlightedBgColor,
   separatorBgColor: '#808080',
   containerHeight: "110px",
+}
+
+export const CommentViewTheme = {
+  backgroundColor: threadPreviewBgColor,
+  highlightedTextBgColor: threadPreviewHighlightedBgColor,
+  separatorBgColor: '#808080',
+  containerHeight: 'auto',
 }
 
 export const ReactionsViewTheme = {

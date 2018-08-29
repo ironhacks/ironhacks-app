@@ -143,6 +143,9 @@ class Forum extends React.Component {
         threads.push(doc);
       });
       _this.setState({threads: threads});
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
     });
   }
 
@@ -168,18 +171,14 @@ class Forum extends React.Component {
             <ForumThreads className='col-8 offset-2'>
               <ForumHeader><h2>Pinned</h2></ForumHeader>
               {this.state.threads.map((thread, index) => {
-                console.log(thread.id);
                 return(
-                  <ThreadPreview 
-                    title={thread.data().title}
-                    author={thread.data().authorName}
-                    threadId={thread.id}
+                  <ThreadPreview key={thread.id}
+                    thread={thread}
                   />
                 )
               })}
               <SectionSeparator/>
               <ForumHeader><h2>General discussion</h2></ForumHeader>
-              <ThreadPreview title='Usefull library' author='Random user'/>
             </ForumThreads>
           </div>
           <div className="row">

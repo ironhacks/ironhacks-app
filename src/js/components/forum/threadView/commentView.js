@@ -1,28 +1,27 @@
 // IronHacks Platform
-// threadPreview.js - Preview that will be displayed on the Forum section
+// commentView.js
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
 
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
-//Router
-import { Redirect } from 'react-router-dom';
 //Custom Components
-import ReactionsView from './reactionsView.js';
-import TagView from './tagView.js';
-import ReactionPicker from './reactionPicker.js';
+import ReactionsView from '../reactionsView.js';
+import TagView from '../tagView.js';
+import ReactionPicker from '../reactionPicker.js';
 //Custom Constants
-import * as Constants from '../../../constants.js';
+import * as Constants from '../../../../constants.js';
 
-const theme = Constants.ThreadPreviewTheme;
+const theme = Constants.CommentViewTheme;
 
-const PreviewContainer = styled('div')`
+const CommentContainer = styled('div')`
   height: ${props => props.theme.containerHeight};
   border-radius: ${Constants.universalBorderRadius};
   background-color: ${props => props.theme.backgroundColor};
-  margin-bottom: ${Constants.threadPreviewBottomMargin};
-  padding: 0 15px 0 15px;
+  margin-top: 20px;
+  margin-bottom: ${Constants.commentViewBottomMargin};
+  padding: 10px 15px 10px 15px;
   transition: background-color 0.2s;
 
   &:hover {
@@ -56,7 +55,17 @@ const RightAlignDiv = styled('div')`
   
 //`;
 
-class ThreadPreview extends React.Component {
+//Comment view Props (inside commentData):
+/*
+* authorName : String = The name of the autor.
+* body : String = The content of the comment.
+* date : TimeStamp = The date when the comment was done.
+* reaction : [Reaction] = An array with all the reactions made.
+*
+*
+*
+*/
+class CommentView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,20 +76,17 @@ class ThreadPreview extends React.Component {
 
   handleClick = () => {
     console.log('Button is cliked!');
-    this.setState({referrer: 'forum/thread/' + this.props.thread.id});
   }
-  
+
   render() {
-    const { referrer } = this.state;
-    if (referrer) return <Redirect to={referrer} />;
 
     return (
       <ThemeProvider theme={theme}>
-        <PreviewContainer onClick={this.handleClick}>
+        <CommentContainer onClick={this.handleClick}>
           <div className="row">
             <div className='col-6'>
-              <h2>{this.props.thread.data().title}</h2>
-              <label>{this.props.thread.data().authorName}</label>
+              <h2>{this.props.commentData.authorName}</h2>
+              <p>{this.props.commentData.body}</p>
             </div>
             <RightAlignDiv className='col-6'>
               <ReactionPicker/>
@@ -99,10 +105,10 @@ class ThreadPreview extends React.Component {
               <TagView/>
             </RightAlignDiv>
           </div>
-        </PreviewContainer>
+        </CommentContainer>
       </ThemeProvider>
     );
   }
 }
 
-export default ThreadPreview;
+export default CommentView;
