@@ -110,7 +110,7 @@ const ForumHeader = styled('div')`
     margin-bottom: 0;
   }
 `;
-//Section separator
+//Section separator -- TODO: move to a separate file
 const SectionSeparator = styled('div')`
   background-color: ${Constants.mainBgColor}
   height: 1px;

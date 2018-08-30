@@ -19,7 +19,6 @@ const CommentContainer = styled('div')`
   height: ${props => props.theme.containerHeight};
   border-radius: ${Constants.universalBorderRadius};
   background-color: ${props => props.theme.backgroundColor};
-  margin-top: 20px;
   margin-bottom: ${Constants.commentViewBottomMargin};
   padding: 10px 15px 10px 15px;
   transition: background-color 0.2s;
