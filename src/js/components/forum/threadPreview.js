@@ -37,7 +37,7 @@ const PreviewContainer = styled('div')`
     line-height: 15px;
   }
 
-  label {
+  span {
     font-style: italic;
     margin-bottom: 10px;
   }
@@ -66,13 +66,12 @@ class ThreadPreview extends React.Component {
   }
 
   handleClick = () => {
-    console.log('Button is cliked!');
     this.setState({referrer: 'forum/thread/' + this.props.thread.id});
   }
   
   render() {
     const { referrer } = this.state;
-    if (referrer) return <Redirect to={referrer} />;
+    if (referrer) return <Redirect to={{ pathname: referrer, state: { title: this.props.thread.data().title}}} />;
 
     return (
       <ThemeProvider theme={theme}>
@@ -80,7 +79,7 @@ class ThreadPreview extends React.Component {
           <div className="row">
             <div className='col-6'>
               <h2>{this.props.thread.data().title}</h2>
-              <label>{this.props.thread.data().authorName}</label>
+              <span>{this.props.thread.data().authorName}</span>
             </div>
             <RightAlignDiv className='col-6'>
               <ReactionPicker/>

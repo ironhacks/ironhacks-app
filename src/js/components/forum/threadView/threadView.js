@@ -55,7 +55,8 @@ class ThreadView extends React.Component {
   };
 
   componentDidMount(){
-    this.getComments()
+    console.log(this.props.location.state);
+    this.getComments();
   }
   //This functions get all the comments from a specific thread.
   //TODO: We are asking for the thread twice, one on the main forum and second here, we must reduce that to one query.
@@ -81,7 +82,7 @@ class ThreadView extends React.Component {
         });
 
     })
-    .catch(function(error) {
+    .catch(function(error) {  
         console.log('Error getting documents: ', error);
     });
   };
@@ -128,7 +129,7 @@ class ThreadView extends React.Component {
       <SectionContainer className="container-fluid d-flex flex-column">
           <div className="row flex-grow-1">
             <ThreadSection className='col-md-8 offset-md-2'>
-              {this.state.threadHead && <CommentView commentData={this.state.threadHead.data()}/>}
+              {this.state.threadHead && <CommentView commentData={this.state.threadHead.data()} title={this.props.location.state.title}/>}
               <SectionSeparator/>
               {this.state.comments.map((comment, index) => (
                 <CommentView commentData={comment.data()} key={comment.id} /> 
