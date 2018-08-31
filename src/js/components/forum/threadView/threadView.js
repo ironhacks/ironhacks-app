@@ -33,7 +33,7 @@ const SectionSeparator = styled('div')`
   margin-bottom: calc(${Constants.threadPreviewBottomMargin} + 10px);
 `;
 const CommentEditor = styled('div')`
-  height: 255px;
+  height: 150px;
   padding: 0px;
 `;
 
@@ -99,10 +99,11 @@ class ThreadView extends React.Component {
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
     const _this = this;
+    const codedBody = this.utoa(this.state.markdown);
     firestore.collection("comments").add({
       author: userId,
       authorName: userName,
-      body: _this.state.markdown,
+      body: codedBody,
       createdAt: Date.now(),
       threadId: this.props.match.params.threadId,  
     }) // Adding double reference on the thread.
@@ -114,6 +115,11 @@ class ThreadView extends React.Component {
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
+  };
+  //TODO: utoa and atou are defined on more than 1 component, we should put this in toher place, like an 'Utilities' in other to avoid this multiple definitions.
+  // ucs-2 string to base64 encoded ascii
+  utoa = (str) => {
+      return window.btoa(unescape(encodeURIComponent(str)));
   };
 
   render() {

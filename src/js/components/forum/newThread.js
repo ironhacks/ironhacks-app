@@ -92,7 +92,8 @@ class NewThread extends React.Component {
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
-    const _this = this;
+
+    const codedBody = this.utoa(this.state.markdown);
     //TODO: add forum id
     firestore.collection("threads").add({
       title: this.state.titleValue,
@@ -105,7 +106,7 @@ class NewThread extends React.Component {
       firestore.collection("comments").add({
         author: userId,
         authorName: userName,
-        body: _this.state.markdown,
+        body: codedBody,
         createdAt: currentDate,
         threadId: docRef.id,  
       }) // Adding double reference on the thread.
@@ -119,6 +120,10 @@ class NewThread extends React.Component {
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
+  };
+  // ucs-2 string to base64 encoded ascii
+  utoa = (str) => {
+      return window.btoa(unescape(encodeURIComponent(str)));
   };
 
   render() {
