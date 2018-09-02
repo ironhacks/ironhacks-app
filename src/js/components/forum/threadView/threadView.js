@@ -55,7 +55,6 @@ class ThreadView extends React.Component {
   };
 
   componentDidMount(){
-    console.log(this.props.location.state);
     this.getComments();
   }
   //This functions get all the comments from a specific thread.

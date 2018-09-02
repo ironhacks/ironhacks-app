@@ -28,7 +28,6 @@ export const HeaderTheme = {
   textColor: mainTextColor,
   hoverTextColor: highlightedTextColor
 }
-
 //FOOTER
 export const FooterTheme = {
   // Header Container:
@@ -50,7 +49,13 @@ export const LoginTheme = {
   backgroundColor: "white",
   textColor: "black"
 };
-
+//ADMIN
+export const adminInnerSectionsTheme = {
+  containerHeight: "100%",
+  backgroundColor: "white",
+  textColor: "black",
+  hoverTextColor: highlightedTextColor
+}
 //FORUM
 export const forumHeaderColor = '#D2DDC9';
 export const threadPreviewBgColor = '#FEF8ED';

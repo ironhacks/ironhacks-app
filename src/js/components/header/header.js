@@ -125,6 +125,8 @@ class Header extends React.Component {
               <NavButton to="/task">Task</NavButton>
               <span> | </span>
               <NavButton to="/results">Results</NavButton>
+              <span> | </span>
+              <NavButton to="/admin">Admin</NavButton>
             </div>
             <div className="col-2">
               <IronHacksCenterLogo>

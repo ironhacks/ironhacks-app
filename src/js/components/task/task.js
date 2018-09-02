@@ -21,12 +21,12 @@ const SectionContainer = styled('div')`
 
 class Task extends React.Component {
   
+          //<MarkdownEditor/>
   
   render() {
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
-          <MarkdownEditor/>
         </SectionContainer>
       </ThemeProvider>
     );

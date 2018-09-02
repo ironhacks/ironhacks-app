@@ -3,6 +3,7 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
@@ -54,6 +55,7 @@ class NewThread extends React.Component {
     this.state = {
       submit: false,
       titleValue: "",
+      mustNavigate: false,
     };
   };
 
@@ -92,7 +94,7 @@ class NewThread extends React.Component {
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
-
+    const _this = this;
     const codedBody = this.utoa(this.state.markdown);
     //TODO: add forum id
     firestore.collection("threads").add({
@@ -115,6 +117,7 @@ class NewThread extends React.Component {
         firestore.collection("threads").doc(threadRef).update({
           comments: [docRef.id],
         })
+        _this.setState({mustNavigate: true, threadRef: threadRef});
       })
     })  
     .catch(function(error) {
@@ -127,6 +130,7 @@ class NewThread extends React.Component {
   };
 
   render() {
+    if (this.state.mustNavigate) return <Redirect to={{ pathname: '/forum/thread/' + this.state.threadRef, state: { title: this.state.titleValue}}}/>;
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fluid d-flex flex-column'>

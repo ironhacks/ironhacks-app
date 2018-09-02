@@ -11,6 +11,7 @@ import Loader from './js/utilities/loader.js';
 import Header from './js/components/header/header.js';
 import Footer from './js/components/footer/footer.js';
 import Landing from './js/components/landing/landing.js';
+import Admin from './js/components/admin/admin.js';
 import Login from './js/components/login/login.js';
 import Forum from './js/components/forum/forum.js';
 import NewThread from './js/components/forum/newThread.js';
@@ -78,6 +79,7 @@ class IronHacksApp extends React.Component {
           <Switch>
             <Route path="/login" component={Login}/>
             <Route path="/profile" component={UserProfile}/>
+            <Route path="/admin" component={Admin}/>
             <Route exact path="/forum" component={Forum}/>
             <Route exact path="/forum/new" component={NewThread}/>
             <Route path="/forum/thread/:threadId" component={ThreadViewWithRouter}/>
