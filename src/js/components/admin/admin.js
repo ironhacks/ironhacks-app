@@ -3,6 +3,7 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Custom components
@@ -39,8 +40,22 @@ const CardsContainer = styled('div')`
 `;
 
 class Admin extends React.Component {
-  
+  constructor(props){
+    super(props);
+    this.state = {
+      startNewHackNav: false,
+    };
+  }
+
+  goToNewHack = () => {
+    this.setState({startNewHackNav: true})
+  };
+
   render() {
+    if(this.state.startNewHackNav === true){
+      return (<Redirect to='admin/newHack'/>)
+    }
+
     return (
       <ThemeProvider theme={theme}>
       <SectionContainer className="container-fluid">
@@ -50,7 +65,7 @@ class Admin extends React.Component {
             <span>Belllow you will find all the availabe hacks, click on one of them to see more details.</span>
             <Separator/>
             <CardsContainer>
-              <HackCard newHack={true}/>
+              <HackCard newHack={true} onClick={this.goToNewHack}/>
               <HackCard/>
               <HackCard/>
               <HackCard/>

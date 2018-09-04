@@ -9,19 +9,23 @@ import styled from 'styled-components';
 import * as Constants from '../../../constants.js';
 
 //Section container
-const CardContainer = styled('div')`
+const CardContainer = styled('button')`
   height: 100px;
   width: 22%;
   margin-left: 4%;
+  text-align: left;
   box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
+  border: none;
+  background-color: white; 
+  padding: 0;
 
   &:first-child {
     margin-left: 0;
   };
 
   &.newHackCard {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
@@ -41,7 +45,7 @@ const CardContainer = styled('div')`
 
   h3 {
     line-height: 12px;
-    margin: 20px 0 0 15px;
+    margin: 0 0 0 15px;
   };
 
   span {
@@ -52,7 +56,7 @@ const CardContainer = styled('div')`
 const Separator = styled('div')`
   width: 100%;
   height: 1px;
-  margin-top: 30px;
+  margin-top: 25px;
   background-color: ${Constants.mainBgColor};
 `;
 
@@ -61,7 +65,7 @@ class HackCard extends React.Component {
   render() {
     if(this.props.newHack === true){
       return (
-        <CardContainer className='newHackCard'>
+        <CardContainer className='newHackCard' onClick={this.props.onClick}>
           <span>+</span>
           <span>Add Hack</span>
         </CardContainer>

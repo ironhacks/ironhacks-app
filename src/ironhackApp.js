@@ -12,6 +12,7 @@ import Header from './js/components/header/header.js';
 import Footer from './js/components/footer/footer.js';
 import Landing from './js/components/landing/landing.js';
 import Admin from './js/components/admin/admin.js';
+import NewHack from './js/components/admin/newHack/newHack.js';
 import Login from './js/components/login/login.js';
 import Forum from './js/components/forum/forum.js';
 import NewThread from './js/components/forum/newThread.js';
@@ -32,7 +33,7 @@ class IronHacksApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: undefined,
+      user: undefined,  
     };
   }
 
@@ -79,9 +80,10 @@ class IronHacksApp extends React.Component {
           <Switch>
             <Route path="/login" component={Login}/>
             <Route path="/profile" component={UserProfile}/>
-            <Route path="/admin" component={Admin}/>
             <Route exact path="/forum" component={Forum}/>
             <Route exact path="/forum/new" component={NewThread}/>
+            <Route exact path="/admin/newHack" component={NewHack}/>
+            <Route path="/admin" component={Admin}/>
             <Route path="/forum/thread/:threadId" component={ThreadViewWithRouter}/>
             <Route path="/tutorial" component={Tutorial}/>
             <Route path="/task" component={Task}/>
