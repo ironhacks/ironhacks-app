@@ -6,9 +6,13 @@
   "dependencies": {
     "bootstrap": "^4.1.2",
     "draft-js": "^0.10.5",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.21",
     "react": "^16.4.1",
+    "react-datepicker": "^1.6.0",
     "react-dom": "^16.4.1",
     "react-mde": "^5.8.0",
+    "react-moment": "^0.7.9",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "showdown": "^1.8.6",
@@ -17,10 +21,12 @@
   "dependenciesComments": {
     "bootstrap": "Css library",
     "draft-js": "Dependency from react-mde",
+    "moment": "Parse, validate, manipulate, and display dates and times in JavaScript.",
+    "moment-timezone": "Allows timezone use for moment",
+    "react-moment": "React component for the moment date library.",
     "react-mde": "Markdown editor",
     "react-router-dom": "Router, it allow us to navigate through pages",
-    "showdown": "Markdown to HMTL parser, also react-mde's dependency",
-    
+    "showdown": "Markdown to HMTL parser, also react-mde's dependency"
   },
   "scripts": {
     "start": "react-scripts start",
