@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import ReactMde, {ReactMdeTypes} from 'react-mde'; //react-mde
 import * as Showdown from "showdown"; // Markdown reader
 
-import 'react-mde/lib/styles/css/react-mde-all.css'; //Editor stylesheet
+import './css/react-mde-all.css'; //Custom Editor stylesheet
 
 interface AppState {
     mdeState: ReactMdeTypes.MdeState;
