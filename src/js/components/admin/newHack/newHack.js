@@ -4,9 +4,11 @@
 
 import React from 'react';
 //Styled components
-import styled, {ThemeProvider} from 'styled-components'; 
+import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../../constants.js';
+//Custom Components
+import PhasePicker from '../phasePicker.js';
 
 const theme = Constants.AppSectionTheme;
 
@@ -20,7 +22,13 @@ const SectionContainer = styled('div')`
     &:first-child {
       margin: 30px 0 0 0;
     }
+  };
+
+  red-border {
+    color: red;
   }
+
+  overflow: auto;
 `;
 const Separator = styled('div')`
   width: 100%;
@@ -41,18 +49,33 @@ const NewElementButton = styled('button')`
     cursor: pointer;
   }
 `;
+
 class NewHack extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       hackName : '',
+      phases: [{coding: {start: moment(), end: moment()}, evaluation: {start: moment(), end: moment()}}],
+      forums: [],
     }
   }
 
-  //This callback report if the title input state change
+  //This callback reports if the title input state change
   hackNameEventHandler = (event) => {
     this.setState({hackName: event.target.value});
   };
+
+  addNewPhase = () => {
+    this.setState((prevState, props) => {
+      return prevState.phases.push(<PhasePicker/>)
+    });
+  };
+
+  addNewForum = () => {
+    this.setState((prevState, props) => {
+      return prevState.phases.push(<phasePicker/>)
+    });
+  }
 
   render() {
     return (
@@ -71,7 +94,13 @@ class NewHack extends React.Component {
             <Separator/>
             <h2>Phases</h2>
             <p>Phase mechanic description.</p>
-            <NewElementButton>ADD PHASE</NewElementButton>
+            {this.state.phases.map((item, index) => (
+              <PhasePicker props={item} key={index}/>
+            ))}
+            <NewElementButton onClick={this.addNewPhase}>ADD PHASE</NewElementButton>
+            <Separator/>
+            <h2>Forums</h2>
+            <NewElementButton onClick={this.addNewForum}>ADD FORUM</NewElementButton>
             <Separator/>
           </div>
         </div>

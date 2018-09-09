@@ -8,7 +8,7 @@ import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 //Custom components
-import MarkdownEditor from '../markdownEditor/markdownEditor.js';
+//import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 
 const theme = Constants.AppSectionTheme;
 
