@@ -5,10 +5,15 @@
 import React from 'react';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
+//Date Picker
+import DayPicker, { DateUtils } from 'react-day-picker';
+// Include the locale utils designed for moment
+import MomentLocaleUtils, { formatDate, parseDate } from 'react-day-picker/moment';
+import moment from 'moment';
 //Custom Constants
 import * as Constants from '../../../../constants.js';
 //Custom Components
-import PhasePicker from '../phasePicker.js';
+import Phase from './phase.js';
 
 const theme = Constants.AppSectionTheme;
 
@@ -55,6 +60,9 @@ class NewHack extends React.Component {
     super(props);
     this.state = {
       hackName : '',
+      from: undefined,
+      to: undefined,
+      pickingStart: false,
       phases: [{coding: {start: moment(), end: moment()}, evaluation: {start: moment(), end: moment()}}],
       forums: [],
     }
@@ -67,17 +75,24 @@ class NewHack extends React.Component {
 
   addNewPhase = () => {
     this.setState((prevState, props) => {
-      return prevState.phases.push(<PhasePicker/>)
+      return prevState.phases.push(<Phase/>)
     });
+  };
+
+  handleDayClick = (day) => {
+    const range = DateUtils.addDayToRange(day, this.state);
+    this.setState(range);
   };
 
   addNewForum = () => {
     this.setState((prevState, props) => {
-      return prevState.phases.push(<phasePicker/>)
+      return prevState.phases.push(<Phase/>)
     });
   }
 
   render() {
+    const { from, to } = this.state;
+    const modifiers = { start: from, end: to };
     return (
       <ThemeProvider theme={theme}>
       <SectionContainer className='container-fluid'>
@@ -95,8 +110,15 @@ class NewHack extends React.Component {
             <h2>Phases</h2>
             <p>Phase mechanic description.</p>
             {this.state.phases.map((item, index) => (
-              <PhasePicker props={item} key={index}/>
+              <Phase props={item} key={index} />
             ))}
+            <p>{this.state.from && formatDate(this.state.from, 'MMM dd YY', 'en')}</p>
+            <DayPicker
+              className="Selectable"
+              selectedDays={[from, { from, to }]}
+              modifiers={modifiers}
+              onDayClick={this.handleDayClick}
+            />
             <NewElementButton onClick={this.addNewPhase}>ADD PHASE</NewElementButton>
             <Separator/>
             <h2>Forums</h2>
