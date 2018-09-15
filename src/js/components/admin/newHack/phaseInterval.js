@@ -5,7 +5,7 @@
 import React from 'react';
 //Styled components
 import styled from 'styled-components';
-//import moment from 'moment';
+import moment from 'moment';
 //Custom Constants
 import * as Constants from '../../../../constants.js';
 
@@ -59,6 +59,9 @@ class PhaseInterval extends React.Component {
     super(props);
     this.state = {
     }
+
+
+    console.log(this.props)
   }
 
   isSelected = () => {
@@ -79,8 +82,7 @@ class PhaseInterval extends React.Component {
             borderTop  
             borderBottom
             onClick={this.props.onClick}>
-              {this.props.start.format('MM dd YYYY')}
-
+            {moment(this.props.start).format('MMM Do YYYY')}
           </SetDateButton>
           <SetDateButton 
             borderTop
@@ -94,7 +96,7 @@ class PhaseInterval extends React.Component {
             borderRight
             borderBottom
             onClick={this.props.onClick}>
-            {this.props.end.format('MM dd YYYY')}
+            {moment(this.props.end).format('MMM Do YYYY')}
           </SetDateButton>
         </div>
       </PhaseIntervalContainer>

@@ -9,7 +9,6 @@ import styled, {ThemeProvider} from 'styled-components';
 import DayPicker, { DateUtils } from 'react-day-picker';
 // Include the locale utils designed for moment
 import { formatDate } from 'react-day-picker/moment';
-import moment from 'moment';
 //Custom Constants
 import * as Constants from '../../../../constants.js';
 //Custom Components
@@ -34,6 +33,7 @@ const SectionContainer = styled('div')`
   };
 
   overflow: auto;
+
 `;
 const NewElementButton = styled('button')`
   background-color: transparent;
@@ -45,22 +45,29 @@ const NewElementButton = styled('button')`
     cursor: pointer;
   }
 `;
-const DatePickerContainer = styled('div')`
+const DatePickerContainer = styled('button')`
   display: ${(props) => {
-    console.log(props)
     if(props.phase === 0) {
       return 'none'
     }else{
       return 'block'
     }
   }}
-  position: relative;
   top: 30px;
   left: 20px;
   margin-bottom: 10px;
+  background-color: transparent;
+  border: none;
+
+  &:focus {
+    outline: 0;
+  }
 `;  
 
 class NewHack extends React.Component {
+
+  _timeoutID;
+
   constructor(props){
     super(props);
     this.state = {
@@ -68,29 +75,59 @@ class NewHack extends React.Component {
       from: undefined,
       to: undefined,
       selectedPhase: 0,
-      phases: [{coding: {start: moment(), end: moment()}, evaluation: {start: moment(), end: moment()}}],
+      isCalendarManagingFocus: false,
+      phases: [{coding: {start: new Date(), end: new Date()}, evaluation: {start: new Date(), end: new Date()}}],
       forums: [],
     }
+
+    //References
+    this.calendarContainerRef = React.createRef();  
   }
 
   componentDidMount() {
 
   }
 
+  componentDidUpdate() {
+    this.calendarContainerRef.current.focus()
+  }
+
   //Callback, reports if the title input state change
   hackNameEventHandler = (event) => {
     this.setState({hackName: event.target.value});
   };
+
+//---------------------------------------- phase Functions ---------------------------------------------
   //Add a new Phase Json Representation Object to de phases array on the state object
   addNewPhase = () => {
     this.setState((prevState, props) => {
-      return prevState.phases.push({coding: {start: moment(), end: moment()}})
+      return prevState.phases.push({coding: {start: new Date(), end: new Date()}, evaluation: {start: new Date(), end: new Date()}})
     });
   };
 
-  onPhaseCalendarClick = (phaseIndex) => {
-    this.setState({selectedPhase: phaseIndex})
+  onPhaseClick = (phaseIndex, phaseStage) => {
+    var range;
+    console.log(this.state.phaseState)
+    if(phaseStage === 'coding') {
+      range = {
+        from: this.state.phases[phaseIndex - 1].coding.start,
+        to: this.state.phases[phaseIndex - 1].coding.end,
+      }
+    }else{
+      range = {
+        from: this.state.phases[phaseIndex - 1].evaluation.start,
+        to: this.state.phases[phaseIndex - 1].evaluation.end,
+      }
+    };
+    console.log(range)
+    this.setState((prevState, props) => {
+      return {selectedPhase: phaseIndex,
+      phaseStage: phaseStage,
+      from: range.from,
+      to: range.to}
+    })
   };
+//---------------------------------------- phase Functions ---------------------------------------------
 // --------------------- Calendar functions ------------------------- //
   //Callback, handle when the user clicks on a day.
   handleDayClick = (day) => {
@@ -103,20 +140,47 @@ class NewHack extends React.Component {
     * }
     */
     const range = DateUtils.addDayToRange(day, this.state);
-    //Setting the phase value for the correct phase index.
-
-
-    this.setState(range);
-
-    //After set the state 
-
+    console.log(this.state)
+    //Setting the phase value for the correct phase index and updating the calendar display
+    this.setState((prevState, props) => {
+      console.log(prevState.phaseStage)
+      if(prevState.phaseStage === 'coding'){
+        prevState.phases[prevState.selectedPhase - 1].coding = {
+          start: range.from,
+          end: range.to
+        }
+      }else if(prevState.phaseStage === 'evaluation'){
+        prevState.phases[prevState.selectedPhase - 1].evaluation = {
+          start: range.from,
+          end: range.to
+        }
+      }
+      console.log(prevState.phases)
+      return {phases: prevState.phases, from: range.from, to: range.to}
+    });
   };
 
-  showCalendarPicker = () => {
-    
-  }
+  _onCalendarContainerBlur = () => {
+    this._timeoutID = setTimeout(() => {
+      if (this.state.isCalendarManagingFocus) {
+        this.setState({
+          isCalendarManagingFocus: false,
+          selectedPhase: 0
+        });
+      }
+    }, 0);
+  };
 
+  _onCalendarContainerFocus = () => {
+    clearTimeout(this._timeoutID);
+    if (!this.state.isCalendarManagingFocus) {
+      this.setState({
+        isCalendarManagingFocus: true,
+      });
+    }
+  };
 // --------------------- Calendar functions ------------------------- //
+
   addNewForum = () => {
     this.setState((prevState, props) => {
       return prevState.phases.push(<Phase/>)
@@ -155,18 +219,16 @@ class NewHack extends React.Component {
             <h2>Phases</h2>
             <p>Phase mechanic description.</p>
             {this.state.phases.map((item, index) => (
-              <Phase dates={item} phaseIndex={index + 1} key={index} onFocusHandler={this.onPhaseCalendarClick}/>  
+              <Phase dates={item} phaseIndex={index + 1} key={index} onFocusHandler={this.onPhaseClick}/>  
             ))}
-            <p>{this.state.from && formatDate(this.state.from, 'MMM dd YY', 'en')}</p>
-            <DatePickerContainer phase={this.state.selectedPhase}>
+            <DatePickerContainer className='date-picker-container' phase={this.state.selectedPhase} innerRef={this.calendarContainerRef} onBlur={this._onCalendarContainerBlur} onFocus={this._onCalendarContainerFocus}>
               <DayPicker
-                className="Selectable"
                 selectedDays={[from, { from, to }]}
                 modifiers={modifiers}
                 onDayClick={this.handleDayClick}
               />
             </DatePickerContainer>
-            <NewElementButton onClick={this.addNewPhase}>ADD PHASE</NewElementButton>
+            <NewElementButton onClick={this.addNewPhase} >ADD PHASE</NewElementButton>
           </div> 
         </div>
         <div className='row'>

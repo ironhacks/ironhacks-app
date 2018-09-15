@@ -21,13 +21,17 @@ const PhaseItem = styled('div')`
 class Phase extends React.Component {
   constructor(props){
     super(props);
-    console.log(props)
     this.state = {
+
     }
   }
 
-  isSelected = () => {
-    this.props.onFocusHandler(this.props.phaseIndex)
+  onCodingHandler = () => {
+    this.props.onFocusHandler(this.props.phaseIndex, 'coding')
+  };
+
+  onEvaluationHandler = () => {
+    this.props.onFocusHandler(this.props.phaseIndex, 'evaluation')
   }
 
   render() {
@@ -38,13 +42,13 @@ class Phase extends React.Component {
           phaseIndex={this.props.phaseIndex}
           start={this.props.dates.coding.start} 
           end={this.props.dates.coding.end}
-          onClick={this.isSelected}
+          onClick={this.onCodingHandler}
         />
         <PhaseInterval intervalName='Evaluation'
           phaseIndex={this.props.phaseIndex}
-          start={this.props.dates.coding.start} 
-          end={this.props.dates.coding.end}
-          onClick={this.isSelected}
+          start={this.props.dates.evaluation.start} 
+          end={this.props.dates.evaluation.end}
+          onClick={this.onEvaluationHandler}
         />
       </PhaseItem>
 
