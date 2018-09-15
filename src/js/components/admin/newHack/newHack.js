@@ -8,12 +8,16 @@ import styled, {ThemeProvider} from 'styled-components';
 //Date Picker
 import DayPicker, { DateUtils } from 'react-day-picker';
 // Include the locale utils designed for moment
-import MomentLocaleUtils, { formatDate, parseDate } from 'react-day-picker/moment';
+import { formatDate } from 'react-day-picker/moment';
 import moment from 'moment';
 //Custom Constants
 import * as Constants from '../../../../constants.js';
 //Custom Components
+import Separator from '../../../utilities/separator.js';
 import Phase from './phase.js';
+
+//DatePicker css
+import 'react-day-picker/lib/style.css';
 
 const theme = Constants.AppSectionTheme;
 
@@ -29,20 +33,7 @@ const SectionContainer = styled('div')`
     }
   };
 
-  red-border {
-    color: red;
-  }
-
   overflow: auto;
-`;
-const Separator = styled('div')`
-  width: 100%;
-  height: 1px;
-  margin-top: 15px;
-  margin-bottom: 10px;
-  background-color: ${(props) => 
-    props.primary ? Constants.mainBgColor : 'lightgray'
-  };
 `;
 const NewElementButton = styled('button')`
   background-color: transparent;
@@ -54,6 +45,20 @@ const NewElementButton = styled('button')`
     cursor: pointer;
   }
 `;
+const DatePickerContainer = styled('div')`
+  display: ${(props) => {
+    console.log(props)
+    if(props.phase === 0) {
+      return 'none'
+    }else{
+      return 'block'
+    }
+  }}
+  position: relative;
+  top: 30px;
+  left: 20px;
+  margin-bottom: 10px;
+`;  
 
 class NewHack extends React.Component {
   constructor(props){
@@ -62,28 +67,56 @@ class NewHack extends React.Component {
       hackName : '',
       from: undefined,
       to: undefined,
-      pickingStart: false,
+      selectedPhase: 0,
       phases: [{coding: {start: moment(), end: moment()}, evaluation: {start: moment(), end: moment()}}],
       forums: [],
     }
   }
 
-  //This callback reports if the title input state change
+  componentDidMount() {
+
+  }
+
+  //Callback, reports if the title input state change
   hackNameEventHandler = (event) => {
     this.setState({hackName: event.target.value});
   };
-
+  //Add a new Phase Json Representation Object to de phases array on the state object
   addNewPhase = () => {
     this.setState((prevState, props) => {
-      return prevState.phases.push(<Phase/>)
+      return prevState.phases.push({coding: {start: moment(), end: moment()}})
     });
   };
 
+  onPhaseCalendarClick = (phaseIndex) => {
+    this.setState({selectedPhase: phaseIndex})
+  };
+// --------------------- Calendar functions ------------------------- //
+  //Callback, handle when the user clicks on a day.
   handleDayClick = (day) => {
+    //Update the range shown on the calendar.
+    /*
+    * range object format
+    * range = {
+    *   from: Date(),
+    *   to: Date(),
+    * }
+    */
     const range = DateUtils.addDayToRange(day, this.state);
+    //Setting the phase value for the correct phase index.
+
+
     this.setState(range);
+
+    //After set the state 
+
   };
 
+  showCalendarPicker = () => {
+    
+  }
+
+// --------------------- Calendar functions ------------------------- //
   addNewForum = () => {
     this.setState((prevState, props) => {
       return prevState.phases.push(<Phase/>)
@@ -101,25 +134,43 @@ class NewHack extends React.Component {
           	<h1>Create a new Hack</h1>
             <p>Hack description</p>
             <Separator primary/>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-md-8 offset-md-2'>
             <h2>Hack name</h2>
             <input type='text' placeholder='Hack Name' onChange={this.hackNameEventHandler}/>
             <Separator/>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-md-8 offset-md-2'>
             <h2>{this.state.hackName} Dates</h2>
             <p>Dates Explanation.</p>
             <Separator/>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-md-7 offset-md-2'>
             <h2>Phases</h2>
             <p>Phase mechanic description.</p>
             {this.state.phases.map((item, index) => (
-              <Phase props={item} key={index} />
+              <Phase dates={item} phaseIndex={index + 1} key={index} onFocusHandler={this.onPhaseCalendarClick}/>  
             ))}
             <p>{this.state.from && formatDate(this.state.from, 'MMM dd YY', 'en')}</p>
-            <DayPicker
-              className="Selectable"
-              selectedDays={[from, { from, to }]}
-              modifiers={modifiers}
-              onDayClick={this.handleDayClick}
-            />
+            <DatePickerContainer phase={this.state.selectedPhase}>
+              <DayPicker
+                className="Selectable"
+                selectedDays={[from, { from, to }]}
+                modifiers={modifiers}
+                onDayClick={this.handleDayClick}
+              />
+            </DatePickerContainer>
             <NewElementButton onClick={this.addNewPhase}>ADD PHASE</NewElementButton>
+          </div> 
+        </div>
+        <div className='row'>
+          <div className='col-md-8 offset-md-2'>
             <Separator/>
             <h2>Forums</h2>
             <NewElementButton onClick={this.addNewForum}>ADD FORUM</NewElementButton>

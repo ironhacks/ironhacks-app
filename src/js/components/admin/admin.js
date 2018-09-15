@@ -20,7 +20,7 @@ const SectionContainer = styled('div')`
   background-color: ${props => props.theme.backgroundColor};
 
   h1 {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 
     &:first-child {
       margin-top: 150px;

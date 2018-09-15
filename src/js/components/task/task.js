@@ -17,11 +17,14 @@ const SectionContainer = styled('div')`
   width: 100%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
+
+  object {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 class Task extends React.Component {
-  
-          //<MarkdownEditor/>
   
   render() {
     return (
