@@ -14,6 +14,7 @@ import * as Constants from '../../../../constants.js';
 //Custom Components
 import Separator from '../../../utilities/separator.js';
 import Phase from './phase.js';
+import ForumItem from './forumItem.js';
 
 //DatePicker css
 import 'react-day-picker/lib/style.css';
@@ -33,6 +34,13 @@ const SectionContainer = styled('div')`
   };
 
   overflow: auto;
+
+  input {
+    border: 1px solid gray;
+    border-radius: 4px;
+    background-color: lightgray;
+    padding-left: 10px;
+  }
 
 `;
 const NewElementButton = styled('button')`
@@ -77,7 +85,7 @@ class NewHack extends React.Component {
       selectedPhase: 0,
       isCalendarManagingFocus: false,
       phases: [{coding: {start: new Date(), end: new Date()}, evaluation: {start: new Date(), end: new Date()}}],
-      forums: [],
+      forums: [''],
     }
 
     //References
@@ -180,12 +188,17 @@ class NewHack extends React.Component {
     }
   };
 // --------------------- Calendar functions ------------------------- //
-
+// --------------------- forum functions ------------------------- //
+  //Add a new Phase Json Representation Object to de forum array on the state object
   addNewForum = () => {
     this.setState((prevState, props) => {
-      return prevState.phases.push(<Phase/>)
+      return prevState.forums.push('')
     });
-  }
+  };
+
+
+// --------------------- forum functions ------------------------- //
+
 
   render() {
     const { from, to } = this.state;
@@ -235,6 +248,9 @@ class NewHack extends React.Component {
           <div className='col-md-8 offset-md-2'>
             <Separator/>
             <h2>Forums</h2>
+            {this.state.forums.map((item, index) => (
+              <ForumItem name={item} forumIndex={index + 1} key={index}/>  
+            ))}
             <NewElementButton onClick={this.addNewForum}>ADD FORUM</NewElementButton>
             <Separator/>
           </div>

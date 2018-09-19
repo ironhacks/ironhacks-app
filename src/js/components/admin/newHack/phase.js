@@ -1,5 +1,5 @@
 // IronHacks Platform
-// datePickerContainer.js
+// phase.js
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
@@ -19,13 +19,6 @@ const PhaseItem = styled('div')`
 `;
 
 class Phase extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-
-    }
-  }
-
   onCodingHandler = () => {
     this.props.onFocusHandler(this.props.phaseIndex, 'coding')
   };
