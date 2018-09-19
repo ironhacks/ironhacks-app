@@ -13,6 +13,7 @@ import { formatDate } from 'react-day-picker/moment';
 import * as Constants from '../../../../constants.js';
 //Custom Components
 import Separator from '../../../utilities/separator.js';
+import Button from '../../../utilities/button.js';
 import Phase from './phase.js';
 import ForumItem from './forumItem.js';
 
@@ -42,6 +43,12 @@ const SectionContainer = styled('div')`
     padding-left: 10px;
   }
 
+  .finish-cancel-button-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    height: 50px;
+  }
 `;
 const NewElementButton = styled('button')`
   background-color: transparent;
@@ -90,22 +97,22 @@ class NewHack extends React.Component {
 
     //References
     this.calendarContainerRef = React.createRef();  
-  }
+  };
 
-  componentDidMount() {
+  componentDidMount = () => {
 
-  }
+  };
 
-  componentDidUpdate() {
+  componentDidUpdate = () => {
     this.calendarContainerRef.current.focus()
-  }
+  };
 
   //Callback, reports if the title input state change
   hackNameEventHandler = (event) => {
     this.setState({hackName: event.target.value});
   };
 
-//---------------------------------------- phase Functions ---------------------------------------------
+//---------------------- Phase Functions -----------------------------//
   //Add a new Phase Json Representation Object to de phases array on the state object
   addNewPhase = () => {
     this.setState((prevState, props) => {
@@ -135,7 +142,7 @@ class NewHack extends React.Component {
       to: range.to}
     })
   };
-//---------------------------------------- phase Functions ---------------------------------------------
+//---------------------- Phase Functions -----------------------------//
 // --------------------- Calendar functions ------------------------- //
   //Callback, handle when the user clicks on a day.
   handleDayClick = (day) => {
@@ -195,10 +202,7 @@ class NewHack extends React.Component {
       return prevState.forums.push('')
     });
   };
-
-
 // --------------------- forum functions ------------------------- //
-
 
   render() {
     const { from, to } = this.state;
@@ -253,6 +257,22 @@ class NewHack extends React.Component {
             ))}
             <NewElementButton onClick={this.addNewForum}>ADD FORUM</NewElementButton>
             <Separator/>
+          </div>
+        </div>
+         <div className='row'>
+          <div className='col-md-8 offset-md-2'>
+            <h2>Forums</h2>
+            {this.state.forums.map((item, index) => (
+              <ForumItem name={item} forumIndex={index + 1} key={index}/>  
+            ))}
+            <NewElementButton onClick={this.addNewForum}>ADD FORUM</NewElementButton>
+            <Separator/>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-md-8 offset-md-2 finish-cancel-button-container'>
+            <Button width='150px' margin='0 0 0 15px' primary>Create Hack</Button>
+            <Button width='150px'>Cancel</Button>
           </div>
         </div>
       </SectionContainer>
