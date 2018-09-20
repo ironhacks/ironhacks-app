@@ -3,6 +3,7 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Date Picker
@@ -92,13 +93,16 @@ class NewHack extends React.Component {
       phases: [{coding: {start: new Date(), end: new Date()}, evaluation: {start: new Date(), end: new Date()}}],
       forums: [{name: '', treatment: 0}],
       isCreateEnable: true,
+      mustNavigate: false
     }
     //References
     this.calendarContainerRef = React.createRef();  
   };
 
   componentDidUpdate = () => {
-    this.calendarContainerRef.current.focus()
+    if(this.calendarContainerRef.current){
+      this.calendarContainerRef.current.focus()
+    };
   };
 
   //Callback, reports if the title input state change
@@ -244,6 +248,7 @@ class NewHack extends React.Component {
       phases: phases,
     }
 
+    this.setState({hack: hackInstance});
     //db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
@@ -264,6 +269,7 @@ class NewHack extends React.Component {
       // Commit the batch
       batch.commit().then(function () {
           console.log('done')
+          _this.setState({mustNavigate: true});
       });
     })  
     .catch(function(error) {
@@ -276,6 +282,7 @@ class NewHack extends React.Component {
 
 
   render() {
+    if (this.state.mustNavigate) return <Redirect to={{ pathname: '/admin/dashboard/' + this.state.hackName, state: { hack: this.state.hack}}}/>;
     const { from, to } = this.state;
     const modifiers = { start: from, end: to };
     return (

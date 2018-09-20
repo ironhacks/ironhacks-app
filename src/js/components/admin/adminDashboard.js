@@ -6,8 +6,8 @@ import React from 'react';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Router
-import { Link, Switch, Route, Redirect} from "react-router-dom";
-//Custom controllers
+import { Link, Switch, Route } from "react-router-dom";
+//Custom components
 import TutorialSection from './sections/admTutorialSection.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
@@ -79,7 +79,15 @@ const SectionBody = styled('div')`
 `;
 
 class AdminDashboard extends React.Component {
+  constructor(props){
+    super(props)
+    console.log(props)
+  }
   
+  //This function handle the tutorial docuement update.
+  onTutorialUpdate = () => {
+
+  }
   render() {
     return (
       <ThemeProvider theme={theme}>
@@ -90,22 +98,22 @@ class AdminDashboard extends React.Component {
                 <img src={HouseIcon} alt='Home'/>
                 <span>Proyect Overview </span>
                 <VerticalSeparator/>
-                <img src={SettingsIcon} alt='Settings'/>                  
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/settings/'} replace><img src={SettingsIcon} alt='Settings'/></Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <span>Stats</span>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/stats/'} replace>Stats</Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <span>Forums</span>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/forums/'} replace>Forums</Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <span>Qualtrics Integration</span>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/qualtrics/'} replace>Qualtrics Integration</Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <Link to={'admin/tutorial'}>Tutorial</Link>
+                <Link to={{pathname: '/admin/dashboard/' + this.props.match.params.hackId + '/tutorial/', state: {lala: "lala"}}} replace>Tutorial</Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <span>Taks</span>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/task/'} replace>Task</Link>
               </ControlPanelItem>
             </ControlPanel>
             <div className='col-md-10'>
@@ -116,7 +124,7 @@ class AdminDashboard extends React.Component {
               <div className='row no-gutters'>
                 <SectionBody className='col-md-12'>
                   <Switch>
-                    <Route path="/admin/tutorial" component={TutorialSection}/>
+                    <Route path={this.props.match.url + '/tutorial'} component={TutorialSection}/>
                   </Switch>
                 </SectionBody>
               </div>

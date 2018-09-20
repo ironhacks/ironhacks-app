@@ -12,6 +12,7 @@ import Header from './js/components/header/header.js';
 import Footer from './js/components/footer/footer.js';
 import Landing from './js/components/landing/landing.js';
 import Admin from './js/components/admin/admin.js';
+import AdminDashboard from './js/components/admin/adminDashboard.js';
 import NewHack from './js/components/admin/newHack/newHack.js';
 import Login from './js/components/login/login.js';
 import Forum from './js/components/forum/forum.js';
@@ -72,29 +73,30 @@ class IronHacksApp extends React.Component {
       return (
         <div className='App'>
           <Switch>
-            <Route exact path="/" render={() => null}/> 
-            <Route exact path="/login" render={() => null}/>
+            <Route exact path='/' render={() => null}/> 
+            <Route exact path='/login' render={() => null}/>
             {!this.state.user && <Redirect to='/'/>}
             <Route component={Header}/>
           </Switch>
           <Switch>
-            <Route path="/login" component={Login}/>
-            <Route path="/profile" component={UserProfile}/>
-            <Route exact path="/forum" component={Forum}/>
-            <Route exact path="/forum/new" component={NewThread}/>
-            <Route exact path="/admin/newHack" component={NewHack}/>
-            <Route path="/admin" component={Admin}/>
-            <Route path="/forum/thread/:threadId" component={ThreadViewWithRouter}/>
-            <Route path="/tutorial" component={Tutorial}/>
-            <Route path="/task" component={Task}/>
-            <Route path="/quizzes" component={Quizzes}/>
-            <Route path="/results" component={Results}/>
+            <Route path='/login' component={Login}/>
+            <Route path='/profile' component={UserProfile}/>
+            <Route exact path='/forum' component={Forum}/>
+            <Route exact path='/forum/new' component={NewThread}/>
+            <Route exact path='/admin/newHack' component={NewHack}/>
+            <Route path='/admin/dashboard/:hackId' component={AdminDashboard}/>
+            <Route path='/admin' component={Admin}/>
+            <Route path='/forum/thread/:threadId' component={ThreadViewWithRouter}/>
+            <Route path='/tutorial' component={Tutorial}/>
+            <Route path='/task' component={Task}/>
+            <Route path='/quizzes' component={Quizzes}/>
+            <Route path='/results' component={Results}/>
             {this.state.user && <Redirect to='/forum'/>}
-            <Route exact path="/" component={Landing}/>
+            <Route exact path='/' component={Landing}/>
           </Switch>
           <Switch>
-            <Route exact path="/" render={() => null}/>
-            <Route exact path="/login" render={() => null}/>
+            <Route exact path='/' render={() => null}/>
+            <Route exact path='/login' render={() => null}/>
             <Route component={Footer}/>
           </Switch>
         </div>
