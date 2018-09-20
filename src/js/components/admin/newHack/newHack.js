@@ -87,20 +87,16 @@ class NewHack extends React.Component {
     super(props);
     this.state = {
       hackName : '',
+      selectedPhase: 0,
       from: undefined,
       to: undefined,
-      selectedPhase: 0,
       isCalendarManagingFocus: false,
       phases: [{coding: {start: new Date(), end: new Date()}, evaluation: {start: new Date(), end: new Date()}}],
       forums: [''],
+      isCreateEnable: true,
     }
-
     //References
     this.calendarContainerRef = React.createRef();  
-  };
-
-  componentDidMount = () => {
-
   };
 
   componentDidUpdate = () => {
@@ -109,7 +105,10 @@ class NewHack extends React.Component {
 
   //Callback, reports if the title input state change
   hackNameEventHandler = (event) => {
-    this.setState({hackName: event.target.value});
+    this.setState({
+      hackName: event.target.value,
+      isCreateEnable: event.target.value ? false : true,
+    });
   };
 
 //---------------------- Phase Functions -----------------------------//
@@ -195,14 +194,53 @@ class NewHack extends React.Component {
     }
   };
 // --------------------- Calendar functions ------------------------- //
-// --------------------- forum functions ------------------------- //
+// --------------------- Forum functions ---------------------------- //
   //Add a new Phase Json Representation Object to de forum array on the state object
   addNewForum = () => {
     this.setState((prevState, props) => {
       return prevState.forums.push('')
     });
   };
-// --------------------- forum functions ------------------------- //
+// --------------------- Forum functions ---------------------------- //
+// --------------------- Create Hack Process ------------------------ //
+  
+  // this fucton handle the 'create' button onClick
+  createHackHandler = () => { 
+    //TODO: change the ui in order to block all input fields.
+    this.createHack();
+  };
+
+  createHack = () => {
+    //Begin to create the hack json representation: 
+    /*
+    * Hack = {
+    *   name: string,  
+    *   phases: [{}],
+    *   tutorial: {},
+    *   ceremony: {},
+    */
+
+    //Mapping phases object to create the json representation of it.
+    const phases = this.state.phases.map((item, index) => {
+      return {
+        index: index,
+        codingStartDate: item.coding.start,
+        codingStartEnd: item.coding.end,
+        evaluationStartDate: item.evaluation.start,
+        evaluationStartend: item.evaluation.end,
+      }
+    })
+
+    console.log(phases)
+
+    let hackInstance = {
+      name: this.state.hackName,
+    }
+  };
+
+
+// --------------------- Create Hack Process ------------------------ //
+
 
   render() {
     const { from, to } = this.state;
@@ -271,7 +309,14 @@ class NewHack extends React.Component {
         </div>
         <div className='row'>
           <div className='col-md-8 offset-md-2 finish-cancel-button-container'>
-            <Button width='150px' margin='0 0 0 15px' primary>Create Hack</Button>
+            <Button 
+              primary
+              width='150px' 
+              margin='0 0 0 15px'
+              onClick={this.createHackHandler}
+              disabled={this.state.isCreateEnable}>
+              Create Hack
+            </Button>
             <Button width='150px'>Cancel</Button>
           </div>
         </div>
