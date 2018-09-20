@@ -55,14 +55,6 @@ const SetDateButton = styled('button')`
 //${Constants.universalBorderRadius} 0px 0px ${Constants.universalBorderRadius}
 
 class PhaseInterval extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-    }
-
-
-    console.log(this.props)
-  }
 
   isSelected = () => {
     this.props.onClick()

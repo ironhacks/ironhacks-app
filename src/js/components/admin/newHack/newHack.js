@@ -7,8 +7,6 @@ import React from 'react';
 import styled, {ThemeProvider} from 'styled-components';
 //Date Picker
 import DayPicker, { DateUtils } from 'react-day-picker';
-// Include the locale utils designed for moment
-import { formatDate } from 'react-day-picker/moment';
 //Custom Constants
 import * as Constants from '../../../../constants.js';
 //Custom Components
@@ -92,7 +90,7 @@ class NewHack extends React.Component {
       to: undefined,
       isCalendarManagingFocus: false,
       phases: [{coding: {start: new Date(), end: new Date()}, evaluation: {start: new Date(), end: new Date()}}],
-      forums: [''],
+      forums: [{name: '', treatment: 0}],
       isCreateEnable: true,
     }
     //References
@@ -198,7 +196,17 @@ class NewHack extends React.Component {
   //Add a new Phase Json Representation Object to de forum array on the state object
   addNewForum = () => {
     this.setState((prevState, props) => {
-      return prevState.forums.push('')
+      return prevState.forums.push({name: '', treatment: 0})
+    });
+  };
+
+  onForumItemUpdate = (name, treatment, index) => {
+    this.setState((prevState, props) => {
+      prevState.forums[index] = {
+        name: name ? name : prevState.forums[index].name,
+        treatment: treatment ? treatment : prevState.forums[index].treatment
+      }
+      return prevState.forums;
     });
   };
 // --------------------- Forum functions ---------------------------- //
@@ -231,11 +239,36 @@ class NewHack extends React.Component {
       }
     })
 
-    console.log(phases)
-
     let hackInstance = {
       name: this.state.hackName,
+      phases: phases,
     }
+
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    const _this = this;
+    //TODO: add forum id
+    firestore.collection('hacks').add(hackInstance)
+    .then(function(docRef) {
+      const hackRef = docRef.id;
+      //Adding each forum to the hack:
+      // Get a new write batch
+      var batch = firestore.batch();
+      _this.state.forums.forEach((forum) => {
+        forum.hack = hackRef;
+        var newForumRef = firestore.collection('forums').doc();
+        batch.set(newForumRef, forum);
+      })
+      // Commit the batch
+      batch.commit().then(function () {
+          console.log('done')
+      });
+    })  
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
   };
 
 
@@ -291,17 +324,7 @@ class NewHack extends React.Component {
             <Separator/>
             <h2>Forums</h2>
             {this.state.forums.map((item, index) => (
-              <ForumItem name={item} forumIndex={index + 1} key={index}/>  
-            ))}
-            <NewElementButton onClick={this.addNewForum}>ADD FORUM</NewElementButton>
-            <Separator/>
-          </div>
-        </div>
-         <div className='row'>
-          <div className='col-md-8 offset-md-2'>
-            <h2>Forums</h2>
-            {this.state.forums.map((item, index) => (
-              <ForumItem name={item} forumIndex={index + 1} key={index}/>  
+              <ForumItem name={item} treatment={item.treatment} onForumItemUpdate={this.onForumItemUpdate} forumIndex={index} key={index}/>  
             ))}
             <NewElementButton onClick={this.addNewForum}>ADD FORUM</NewElementButton>
             <Separator/>

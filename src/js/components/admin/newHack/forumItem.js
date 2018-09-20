@@ -44,19 +44,30 @@ const ForumItemContainer = styled('div')`
 `;
 
 class ForumItem extends React.Component {
+
+  onNameChange = (e) => {
+    const name = e.target.value
+    this.props.onForumItemUpdate(name, false, this.props.forumIndex)
+  };
+
+  onTreatmentChange = (e) => {
+    const treatment = e.target.value
+    this.props.onForumItemUpdate(false, treatment, this.props.forumIndex)
+  };
+
   render() {
     
     return (
       <ForumItemContainer>
         <div>
           <img src={forumIcon} alt='forum-icon'/>
-          <span className='interval'>{'Forum ' + this.props.forumIndex}</span>
+          <span className='interval'>{'Forum ' + (this.props.forumIndex + 1)}</span>
         </div>
         <div>
-          <input type='text' placeholder='Forum Name'/>
+          <input type='text' placeholder='Forum Name' onChange={this.onNameChange}/>
           <div className='treatment-div'>
             <span>Treatment identifier:</span>
-            <input type='number' name='treatmentIdentifier' min='0'/>
+            <input type='number' name='treatmentIdentifier' defaultValue={this.props.treatment} min='0' onChange={this.onTreatmentChange}/>
           </div>
         </div>
       </ForumItemContainer>

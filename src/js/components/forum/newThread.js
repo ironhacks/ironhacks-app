@@ -81,7 +81,7 @@ class NewThread extends React.Component {
 
   onEditorChange = (markdown) => {
     this.setState({markdown: markdown});
-  }
+  };
 
   //This function handle the sumbit process
   handleSubmit = (event) => {
