@@ -8,6 +8,7 @@ import styled, {ThemeProvider} from 'styled-components';
 //Router
 import { Link, Switch, Route } from "react-router-dom";
 //Custom components
+import TaskSection from './sections/task/admTaskSection.js';
 import TutorialSection from './sections/tutorial/admTutorialSection.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
@@ -69,15 +70,17 @@ const VerticalSeparator = styled('div')`
   height: 25px;
   background-color: black;
 `;
+const Test = styled('div')`
+  height 100%;
+`;
 const SectionHeader = styled('div')`
   height: 140px;
   border-bottom: 1px solid black;
 `;
 const SectionBody = styled('div')`
-  height: 704px;
+  height: auto;
   overflow: auto;
 `;
-
 class AdminDashboard extends React.Component {
   constructor(props){
     super(props);
@@ -120,7 +123,7 @@ class AdminDashboard extends React.Component {
 //--------------------------- TUTORIAL SECTION ----------------------------//
   //This function handle the tutorial docuement update.
   onTutorialMarkdownUpdate = (markdown) => {
-    this.setState({tutorialMarkdonw: markdown});
+    this.setState({tutorialMarkdown: markdown});
   };
 
   updateTutorialDocument = () => {
@@ -131,7 +134,7 @@ class AdminDashboard extends React.Component {
     //Updating the current hack:
     const hackRef = firestore.collection('hacks').doc(this.state.hackId);
     var hackTutorial = this.state.hack.tutorial;
-    hackTutorial.doc = this.utoa(this.state.tutorialMarkdonw)
+    hackTutorial.doc = this.utoa(this.state.tutorialMarkdown)
     hackRef.update({
       tutorial: hackTutorial,
     })
@@ -144,6 +147,35 @@ class AdminDashboard extends React.Component {
     });
   };
 //--------------------------- TUTORIAL SECTION ----------------------------//
+//--------------------------- TASK SECTION ----------------------------//
+  //This function handle the tutorial docuement update.
+  onTaskMarkdownUpdate = (markdown) => {
+    console.log(markdown)
+    this.setState({taskMarkdown: markdown});
+  };
+
+  updateTaskDocument = () => {
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    //Updating the current hack:
+    const hackRef = firestore.collection('hacks').doc(this.state.hackId);
+    var hackTask = this.state.hack.task;
+    console.log(this.state)
+    hackTask.doc = this.utoa(this.state.taskMarkdown)
+    hackRef.update({
+      task: hackTask,
+    })
+    .then(() => {
+      //TODO: update UI to provide feedback to the user.
+      console.log('done')
+    })  
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+  };
+//--------------------------- TASK SECTION ----------------------------//
 //--------------------------- MARKDOWN UTILITIES --------------------------//
   // ucs-2 string to base64 encoded ascii
   utoa = (str) => {
@@ -159,7 +191,7 @@ class AdminDashboard extends React.Component {
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fuild'>
-          <div className='row no-gutters'>
+          <Test className='row no-gutters'>
             <ControlPanel className='col-md-2'>
               <ControlPanelItem >
                 <img src={HouseIcon} alt='Home'/>
@@ -184,13 +216,14 @@ class AdminDashboard extends React.Component {
               </ControlPanelItem>
             </ControlPanel>
             <div className='col-md-10'>
+              <div className='d-flex flex-column'>
               <div className='row no-gutters'>
                 <SectionHeader className='col-md-12'>
                   <h2>{this.state.hack.name ? this.state.hack.name : 'Loading'}</h2>
                   <span>Hack Dashboard</span>
                 </SectionHeader>
               </div>
-              <div className='row no-gutters'>
+              <div className='row no-gutters flex-grow-1'>
                 <SectionBody className='col-md-12'>
                   <Switch>
                     <Route 
@@ -201,11 +234,20 @@ class AdminDashboard extends React.Component {
                           onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
                           updateTutorialDocument={this.updateTutorialDocument}
                         />}/>
+                      <Route 
+                      path={this.props.match.url + '/task'}
+                      render={()=> 
+                        <TaskSection 
+                          previousDocument={this.state.hack.task ? this.atou(this.state.hack.task.doc) : ''}
+                          onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
+                          updateTaskDocument={this.updateTaskDocument}
+                        />}/>
                   </Switch>
                 </SectionBody>
               </div>
+              </div>
             </div>
-          </div>
+          </Test>
         </SectionContainer>
       </ThemeProvider>
     );

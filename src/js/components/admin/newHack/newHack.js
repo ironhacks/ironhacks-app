@@ -250,7 +250,10 @@ class NewHack extends React.Component {
         start: new Date(),
         end: new Date(),
       },
-      taks: '',
+      task: {
+        doc: '',
+        releaseDate: new Date(),
+      },
     }
 
     this.setState({hack: hackInstance});
@@ -263,7 +266,7 @@ class NewHack extends React.Component {
     firestore.collection('hacks').add(hackInstance)
     .then(function(docRef) {
       const hackRef = docRef.id;
-      this.setState({hackId: hackRef});
+      _this.setState({hackId: hackRef});
       //Adding each forum to the hack:
       // Get a new write batch
       var batch = firestore.batch();
