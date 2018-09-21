@@ -10,18 +10,14 @@ import * as Constants from '../../../constants.js';
 
 //Section container
 const CardContainer = styled('button')`
-  height: 100px;
-  width: 22%;
-  margin-left: 4%;
+  height: 150px;
+  width: 250px;
+  margin: 10px;
   text-align: left;
   box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);
   border: none;
   background-color: white; 
   padding: 0;
-
-  &:first-child {
-    margin-left: 0;
-  };
 
   &.newHackCard {
     display: flex;
@@ -61,7 +57,10 @@ const Separator = styled('div')`
 `;
 
 class HackCard extends React.Component {
-  
+  onHackCardClick = () => {
+    this.props.onClick(this.props.index);
+  };
+
   render() {
     if(this.props.newHack === true){
       return (
@@ -73,9 +72,9 @@ class HackCard extends React.Component {
     }
 
     return (
-      <CardContainer>
-        <h3>HackTitle</h3>
-        <span>3 Gropus, 5 Phases</span>
+      <CardContainer onClick={this.onHackCardClick}>
+        <h3>{this.props.hack.data().name}</h3>
+        <span>{"Phases: " + this.props.hack.data().phases.length}</span>
         <Separator/>
       </CardContainer>
     );

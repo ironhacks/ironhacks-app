@@ -58,11 +58,7 @@ class NewThread extends React.Component {
       mustNavigate: false,
     };
   };
-
-  createThread = () => {
-
-  };
-
+  
   //This callback report if the title input state change
   titleEventHandler = (event) => {
     this.setState({titleValue: event.target.value});

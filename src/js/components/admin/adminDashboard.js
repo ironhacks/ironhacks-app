@@ -8,7 +8,7 @@ import styled, {ThemeProvider} from 'styled-components';
 //Router
 import { Link, Switch, Route } from "react-router-dom";
 //Custom components
-import TutorialSection from './sections/admTutorialSection.js';
+import TutorialSection from './sections/tutorial/admTutorialSection.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 //Image references
@@ -80,14 +80,81 @@ const SectionBody = styled('div')`
 
 class AdminDashboard extends React.Component {
   constructor(props){
-    super(props)
-    console.log(props)
+    super(props);
+    this.state = {
+      hack: {},
+      hackId: '',
+    }
   }
-  
-  //This function handle the tutorial docuement update.
-  onTutorialUpdate = () => {
 
-  }
+  componentDidMount(){
+    //Check if there is a hack instance on the component state, if not, ask for it.
+    if(!this.props.location.state){
+      this.getHack();
+    }else{
+      this.setState({
+        hack: this.props.location.state.hack,
+        hackId: this.props.location.state.hackId,
+      });
+    };
+  };
+
+  getHack = () => {
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    const _this = this;
+    //Updating the current hack:
+    firestore.collection('hacks').where('name', '==', this.props.match.params.hackId).limit(1)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          _this.setState({hack: doc.data(), hackId: doc.id});
+        });
+    }) 
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+  };
+//--------------------------- TUTORIAL SECTION ----------------------------//
+  //This function handle the tutorial docuement update.
+  onTutorialMarkdownUpdate = (markdown) => {
+    this.setState({tutorialMarkdonw: markdown});
+  };
+
+  updateTutorialDocument = () => {
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    //Updating the current hack:
+    const hackRef = firestore.collection('hacks').doc(this.state.hackId);
+    var hackTutorial = this.state.hack.tutorial;
+    hackTutorial.doc = this.utoa(this.state.tutorialMarkdonw)
+    hackRef.update({
+      tutorial: hackTutorial,
+    })
+    .then(() => {
+      //TODO: update UI to provide feedback to the user.
+      console.log('done')
+    })  
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+  };
+//--------------------------- TUTORIAL SECTION ----------------------------//
+//--------------------------- MARKDOWN UTILITIES --------------------------//
+  // ucs-2 string to base64 encoded ascii
+  utoa = (str) => {
+      return window.btoa(unescape(encodeURIComponent(str)));
+  };
+  // base64 encoded ascii to ucs-2 string
+  atou = (str) => {
+      return decodeURIComponent(escape(window.atob(str)));
+  };
+//--------------------------- MARKDOWN UTILITIES --------------------------//
+
   render() {
     return (
       <ThemeProvider theme={theme}>
@@ -98,33 +165,42 @@ class AdminDashboard extends React.Component {
                 <img src={HouseIcon} alt='Home'/>
                 <span>Proyect Overview </span>
                 <VerticalSeparator/>
-                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/settings/'} replace><img src={SettingsIcon} alt='Settings'/></Link>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/settings/'}><img src={SettingsIcon} alt='Settings'/></Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/stats/'} replace>Stats</Link>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/stats/'}>Stats</Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/forums/'} replace>Forums</Link>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/forums/'}>Forums</Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/qualtrics/'} replace>Qualtrics Integration</Link>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/qualtrics/'}>Qualtrics Integration</Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <Link to={{pathname: '/admin/dashboard/' + this.props.match.params.hackId + '/tutorial/', state: {lala: "lala"}}} replace>Tutorial</Link>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/tutorial/'}>Tutorial</Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/task/'} replace>Task</Link>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/task/'}>Task</Link>
               </ControlPanelItem>
             </ControlPanel>
             <div className='col-md-10'>
               <div className='row no-gutters'>
                 <SectionHeader className='col-md-12'>
+                  <h2>{this.state.hack.name ? this.state.hack.name : 'Loading'}</h2>
+                  <span>Hack Dashboard</span>
                 </SectionHeader>
               </div>
               <div className='row no-gutters'>
                 <SectionBody className='col-md-12'>
                   <Switch>
-                    <Route path={this.props.match.url + '/tutorial'} component={TutorialSection}/>
+                    <Route 
+                      path={this.props.match.url + '/tutorial'}
+                      render={()=> 
+                        <TutorialSection 
+                          previousDocument={this.state.hack.tutorial ? this.atou(this.state.hack.tutorial.doc) : ''}
+                          onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
+                          updateTutorialDocument={this.updateTutorialDocument}
+                        />}/>
                   </Switch>
                 </SectionBody>
               </div>

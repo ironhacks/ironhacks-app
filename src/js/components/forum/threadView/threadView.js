@@ -3,7 +3,6 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import styled, {ThemeProvider} from 'styled-components';
 //Custom constants
@@ -44,19 +43,12 @@ class ThreadView extends React.Component {
       loadingComments: true,
       threadHead: null,
       comments: [],
-    }
-
-  }
-  //Route props
-  static propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
+    };
   };
 
   componentDidMount(){
     this.getComments();
-  }
+  };
   //This functions get all the comments from a specific thread.
   //TODO: We are asking for the thread twice, one on the main forum and second here, we must reduce that to one query.
   //TODO:  This query is not efficient when the db has a good amount of comments, we must find a way to make it scalable.
@@ -88,7 +80,7 @@ class ThreadView extends React.Component {
   //Saving the current content of the editor on the component state.
   onEditorChange = (markdown) => {
     this.setState({markdown: markdown});
-  }
+  };
   //This function handle the sumbit process
   handleSubmit = () => {
     //Getting the current user referece:

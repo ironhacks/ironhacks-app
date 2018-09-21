@@ -71,9 +71,6 @@ const ConverterConfig = {
 * body : String = The content of the comment.
 * date : TimeStamp = The date when the comment was done.
 * reaction : [Reaction] = An array with all the reactions made.
-*
-*
-*
 */
 class CommentView extends React.Component {
   constructor(props) {

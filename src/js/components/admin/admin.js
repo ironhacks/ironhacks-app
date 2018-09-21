@@ -36,6 +36,8 @@ const Separator = styled('div')`
 const CardsContainer = styled('div')`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   margin-top: 70px;
 `;
 
@@ -44,16 +46,59 @@ class Admin extends React.Component {
     super(props);
     this.state = {
       startNewHackNav: false,
+      startDashboardNav: false,
+      hacks: [],
     };
   }
+
+  componentDidMount(){
+    this.getHacks();
+  }
+
+  //Query all the hacks objects from the db.
+  getHacks = () => {
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    const _this = this;
+    var hacks = [];
+    firestore.collection("hacks").get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        hacks.push(doc);
+      });
+      _this.setState({hacks: hacks});
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+  };
 
   goToNewHack = () => {
     this.setState({startNewHackNav: true})
   };
 
+  goToHackDashBoard = (hackIndex) => {
+    this.setState((prevState, props) => {
+      return {
+        startDashboardNav: true,
+        selectedHack: prevState.hacks[hackIndex],
+      }
+    });
+  };
+
   render() {
-    if(this.state.startNewHackNav === true){
-      return (<Redirect to='admin/newHack'/>)
+    if (this.state.startNewHackNav === true) return <Redirect to='admin/newHack'/>;
+    if (this.state.startDashboardNav === true){
+      const selectedHack = this.state.selectedHack.data();
+      const selectedHackId = this.state.selectedHack.id;
+      const hackName = selectedHack.name
+      const pathname = '/admin/dashboard/' + hackName;
+      return <Redirect to={{
+        pathname: pathname,
+        state: {hack: selectedHack, hackId: selectedHackId}
+      }}
+      />;
     }
 
     return (
@@ -66,9 +111,9 @@ class Admin extends React.Component {
             <Separator/>
             <CardsContainer>
               <HackCard newHack={true} onClick={this.goToNewHack}/>
-              <HackCard/>
-              <HackCard/>
-              <HackCard/>
+              {this.state.hacks.map((hack, index) => {
+                return <HackCard hack={hack} index={index} key={hack.id} onClick={this.goToHackDashBoard}/>
+              })}
             </CardsContainer>
           </div>
         </div>

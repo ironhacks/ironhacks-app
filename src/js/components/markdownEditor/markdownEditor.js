@@ -35,18 +35,19 @@ class MarkdownEditor extends React.Component<{}, AppState> {
 
   constructor(props) {
     super(props);
+    console.log(this.props.withContent ? this.props.withContent : '')
     this.state = {
-      mdeState: null,
+      mdeState: {
+        markdown: this.props.withContent ? this.props.withContent : '',
+      },
     };
     this.converter = new Showdown.Converter(ConverterConfig);
-  }
+  };
 
   handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
     this.props.onEditorChange(mdeState.markdown);
     this.setState({mdeState});
-  }
-
-
+  };
 
   render() {
     return (

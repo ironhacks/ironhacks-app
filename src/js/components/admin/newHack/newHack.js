@@ -215,7 +215,6 @@ class NewHack extends React.Component {
   };
 // --------------------- Forum functions ---------------------------- //
 // --------------------- Create Hack Process ------------------------ //
-  
   // this fucton handle the 'create' button onClick
   createHackHandler = () => { 
     //TODO: change the ui in order to block all input fields.
@@ -246,6 +245,12 @@ class NewHack extends React.Component {
     let hackInstance = {
       name: this.state.hackName,
       phases: phases,
+      tutorial: {
+        doc: '',
+        start: new Date(),
+        end: new Date(),
+      },
+      taks: '',
     }
 
     this.setState({hack: hackInstance});
@@ -258,6 +263,7 @@ class NewHack extends React.Component {
     firestore.collection('hacks').add(hackInstance)
     .then(function(docRef) {
       const hackRef = docRef.id;
+      this.setState({hackId: hackRef});
       //Adding each forum to the hack:
       // Get a new write batch
       var batch = firestore.batch();
@@ -276,13 +282,11 @@ class NewHack extends React.Component {
       console.error("Error adding document: ", error);
     });
   };
-
-
 // --------------------- Create Hack Process ------------------------ //
 
 
   render() {
-    if (this.state.mustNavigate) return <Redirect to={{ pathname: '/admin/dashboard/' + this.state.hackName, state: { hack: this.state.hack}}}/>;
+    if (this.state.mustNavigate) return <Redirect to={{ pathname: '/admin/dashboard/' + this.state.hackName, state: { hack: this.state.hack, hackId: this.state.hackId}}}/>;
     const { from, to } = this.state;
     const modifiers = { start: from, end: to };
     return (
