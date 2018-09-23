@@ -27,9 +27,18 @@ const SectionContainer = styled('div')`
   .container-fuild {
     padding: 0;
   }
+
+  .full-height {
+    height: 100%;
+  }
+
+  .overflow {
+    overflow: auto;
+  }
+
 `;
 const ControlPanel = styled('div')`
-  height ${props => props.theme.containerHeight}; 
+  height 100%; 
   border-right: 1px solid black;
 `;
 const ControlPanelItem = styled('div')`
@@ -70,15 +79,11 @@ const VerticalSeparator = styled('div')`
   height: 25px;
   background-color: black;
 `;
-const Test = styled('div')`
-  height 100%;
-`;
 const SectionHeader = styled('div')`
-  height: 140px;
+  min-height: 140px;
   border-bottom: 1px solid black;
 `;
 const SectionBody = styled('div')`
-  height: auto;
   overflow: auto;
 `;
 class AdminDashboard extends React.Component {
@@ -150,7 +155,6 @@ class AdminDashboard extends React.Component {
 //--------------------------- TASK SECTION ----------------------------//
   //This function handle the tutorial docuement update.
   onTaskMarkdownUpdate = (markdown) => {
-    console.log(markdown)
     this.setState({taskMarkdown: markdown});
   };
 
@@ -162,7 +166,6 @@ class AdminDashboard extends React.Component {
     //Updating the current hack:
     const hackRef = firestore.collection('hacks').doc(this.state.hackId);
     var hackTask = this.state.hack.task;
-    console.log(this.state)
     hackTask.doc = this.utoa(this.state.taskMarkdown)
     hackRef.update({
       task: hackTask,
@@ -191,7 +194,7 @@ class AdminDashboard extends React.Component {
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fuild'>
-          <Test className='row no-gutters'>
+          <div className='row no-gutters full-height'>
             <ControlPanel className='col-md-2'>
               <ControlPanelItem >
                 <img src={HouseIcon} alt='Home'/>
@@ -215,15 +218,15 @@ class AdminDashboard extends React.Component {
                 <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/task/'}>Task</Link>
               </ControlPanelItem>
             </ControlPanel>
-            <div className='col-md-10'>
-              <div className='d-flex flex-column'>
-              <div className='row no-gutters'>
-                <SectionHeader className='col-md-12'>
+            <div className='col-md-10 full-height'>
+              <div className='d-flex flex-column full-height'>
+              <SectionHeader className='row no-gutters'>
+                <div className='col-md-12'>
                   <h2>{this.state.hack.name ? this.state.hack.name : 'Loading'}</h2>
                   <span>Hack Dashboard</span>
-                </SectionHeader>
-              </div>
-              <div className='row no-gutters flex-grow-1'>
+                </div>
+              </SectionHeader>
+              <div className='row no-gutters flex-grow-1 overflow'>
                 <SectionBody className='col-md-12'>
                   <Switch>
                     <Route 
@@ -247,7 +250,7 @@ class AdminDashboard extends React.Component {
               </div>
               </div>
             </div>
-          </Test>
+          </div>
         </SectionContainer>
       </ThemeProvider>
     );

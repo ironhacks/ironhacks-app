@@ -18,8 +18,8 @@ const theme = Constants.adminInnerSectionsTheme;
 //Section container
 const SectionContainer = styled('div')`
   width: 100%;
+  height: 100%;
   padding: 25px 50px 50px 50px;
-  height: ${props => props.theme.containerHeight};
 
   .finish-cancel-button-container {
     width: 100%;
