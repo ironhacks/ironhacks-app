@@ -8,6 +8,7 @@ import styled, {ThemeProvider} from 'styled-components';
 //Router
 import { Link, Switch, Route } from "react-router-dom";
 //Custom components
+import SettingsSection from './sections/settings/admSettingsSection.js';
 import TaskSection from './sections/task/admTaskSection.js';
 import TutorialSection from './sections/tutorial/admTutorialSection.js';
 //Custom Constants
@@ -125,6 +126,32 @@ class AdminDashboard extends React.Component {
       console.error("Error adding document: ", error);
     });
   };
+//--------------------------- SETTINGS SECTION ----------------------------//
+  //This function handle the tutorial docuement update.
+  onSaveSettings = (settings) => {
+  };
+
+  updateTutorialDocument = () => {
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    //Updating the current hack:
+    const hackRef = firestore.collection('hacks').doc(this.state.hackId);
+    var hackTutorial = this.state.hack.tutorial;
+    hackTutorial.doc = this.utoa(this.state.tutorialMarkdown)
+    hackRef.update({
+      tutorial: hackTutorial,
+    })
+    .then(() => {
+      //TODO: update UI to provide feedback to the user.
+      console.log('done')
+    })  
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+  };
+//--------------------------- SETTIGS SECTION ----------------------------//
 //--------------------------- TUTORIAL SECTION ----------------------------//
   //This function handle the tutorial docuement update.
   onTutorialMarkdownUpdate = (markdown) => {
@@ -229,6 +256,13 @@ class AdminDashboard extends React.Component {
               <div className='row no-gutters flex-grow-1 overflow'>
                 <SectionBody className='col-md-12'>
                   <Switch>
+                    <Route 
+                        path={this.props.match.url + '/settings'}
+                        render={()=> 
+                          <SettingsSection 
+                            hack={this.state.hack}
+                            onSaveSettings={this.onSaveSettings}
+                          />}/>
                     <Route 
                       path={this.props.match.url + '/tutorial'}
                       render={()=> 

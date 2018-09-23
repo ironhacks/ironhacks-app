@@ -9,6 +9,7 @@ import styled, {ThemeProvider} from 'styled-components';
 //import { Switch, Route, Redirect} from "react-router-dom";
 //Customs components
 import MarkdownEditor from '../../../markdownEditor/markdownEditor.js';  
+import AvailableActionsDiv from '../../../../utilities/availableActionsDiv.js';
 import Button from '../../../../utilities/button.js';
 //Custom Constants
 import * as Constants from '../../../../../constants.js';
@@ -20,13 +21,6 @@ const SectionContainer = styled('div')`
   width: 100%;
   padding: 25px 50px 50px 50px;
   height: ${props => props.theme.containerHeight};
-
-  .finish-cancel-button-container {
-    width: 100%;
-    display: flex;
-    flex-direction: row-reverse;
-    height: 50px;
-  }
 `;
 const EditorContainer = styled('div')`
   height: 500px;
@@ -51,7 +45,7 @@ class AdmTutorialSection extends React.Component {
             <MarkdownEditor editorLayout='horizontal' onEditorChange={this.onEditorChange} withContent={this.state.previousDocument}/>
           </EditorContainer>
           <p>Here you will find the instrictions to publish your task.</p>
-          <div className='finish-cancel-button-container'>
+          <AvailableActionsDiv>
             <Button 
               primary
               width='150px' 
@@ -59,7 +53,7 @@ class AdmTutorialSection extends React.Component {
               onClick={this.props.updateTutorialDocument}>
               Publish tutorial
             </Button>
-          </div>
+          </AvailableActionsDiv>
         </SectionContainer>
       </ThemeProvider>
     );

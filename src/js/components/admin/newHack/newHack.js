@@ -254,6 +254,7 @@ class NewHack extends React.Component {
         doc: '',
         releaseDate: new Date(),
       },
+      whiteList: [],
     }
 
     this.setState({hack: hackInstance});
