@@ -29,21 +29,20 @@ const EditorContainer = styled('div')`
   margin-bottom: 20px;
 `;
 
-class AdmTaskSection extends React.Component {
-  state = {previousDocument: this.props.previousDocument};
-
+class AdmTaskSection extends React.Component { 
   onEditorChange = (markdown) => {
     this.props.onTaskMarkdownUpdate(markdown);
   };
 
   render() {
+    console.log(this.props)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
           <h2>Task document editor</h2>
           <p>Here you can edit and preview the Task document. You can also publish the document or schedule it (check bellow).</p>
           <EditorContainer>
-            <MarkdownEditor editorLayout='horizontal' onEditorChange={this.onEditorChange} withContent={this.state.previousDocument}/>
+            <MarkdownEditor editorLayout='horizontal' onEditorChange={this.onEditorChange} withContent={this.props.previousDocument}/>
           </EditorContainer>
           <p>Here you will find the instrictions to publish your task.</p>
           <AvailableActionsDiv>
@@ -51,7 +50,7 @@ class AdmTaskSection extends React.Component {
               primary
               width='150px' 
               margin='0 0 0 15px'
-              onClick={this.props.updateTaskDocument}>
+              onClick={this.state.updateTaskDocument}>
               Publish Task
             </Button>
           </AvailableActionsDiv>

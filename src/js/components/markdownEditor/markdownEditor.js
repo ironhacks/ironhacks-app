@@ -50,6 +50,7 @@ class MarkdownEditor extends React.Component<{}, AppState> {
   };
 
   render() {
+    console.log(this.strikethroughate)
     return (
       <Editor
         layout={this.props.editorLayout}
@@ -59,6 +60,6 @@ class MarkdownEditor extends React.Component<{}, AppState> {
       />
     )
   }
-}
+} 
 
 export default MarkdownEditor;
