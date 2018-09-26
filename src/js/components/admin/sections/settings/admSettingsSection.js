@@ -31,8 +31,10 @@ const SectionContainer = styled('div')`
 class AdmSettingsSection extends React.Component {
   state = {previousDocument: this.props.previousDocument};
 
-  onEditorChange = (markdown) => {
-    this.props.onTaskMarkdownUpdate(markdown);
+
+
+  onWhiteListChange = (e) => {
+    console.log(e)
   };
 
   render() {
@@ -44,7 +46,7 @@ class AdmSettingsSection extends React.Component {
           <Separator primary/>
           <h3><label htmlFor='whiteList'>White List</label></h3>
           <p>The white list is an email list that the defines which users are allow to register and participate in a hack (like a participants list). Please introduce the list of emails separated by commas (,).</p>
-          <textarea id='whiteList' placeholder='participant@email.com, participant@email.com, participant@email.com, participant@email.com...' defaultValue={this.props.hack.whiteList.length > 0 ? 'lala' : 'lele'}></textarea>
+          <textarea id='whiteList' placeholder='participant@email.com, participant@email.com, participant@email.com, participant@email.com...' defaultValue={this.props.hack.whiteList.length > 0 ? 'lala' : 'lele'} onChange={this.onWhiteListChange}></textarea>
           <AvailableActionsDiv>
             <Button 
               primary

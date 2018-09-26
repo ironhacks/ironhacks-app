@@ -35,7 +35,6 @@ class AdmTaskSection extends React.Component {
   };
 
   render() {
-    console.log(this.props)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
@@ -50,7 +49,7 @@ class AdmTaskSection extends React.Component {
               primary
               width='150px' 
               margin='0 0 0 15px'
-              onClick={this.state.updateTaskDocument}>
+              onClick={this.props.updateTaskDocument}>
               Publish Task
             </Button>
           </AvailableActionsDiv>

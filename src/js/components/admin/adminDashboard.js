@@ -8,6 +8,7 @@ import styled, {ThemeProvider} from 'styled-components';
 //Router
 import { Link, Switch, Route } from "react-router-dom";
 //Custom components
+import Loader from '../../utilities/loader.js';
 import SettingsSection from './sections/settings/admSettingsSection.js';
 import TaskSection from './sections/task/admTaskSection.js';
 import TutorialSection from './sections/tutorial/admTutorialSection.js';
@@ -91,7 +92,7 @@ class AdminDashboard extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      hack: {},
+      hack: null,
       hackId: '',
     }
   }
@@ -218,6 +219,7 @@ class AdminDashboard extends React.Component {
 //--------------------------- MARKDOWN UTILITIES --------------------------//
 
   render() {
+    console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fuild'>
@@ -249,12 +251,13 @@ class AdminDashboard extends React.Component {
               <div className='d-flex flex-column full-height'>
               <SectionHeader className='row no-gutters'>
                 <div className='col-md-12'>
-                  <h2>{this.state.hack.name ? this.state.hack.name : 'Loading'}</h2>
+                  <h2>{this.state.hack ? this.state.hack.name : 'Loading'}</h2>
                   <span>Hack Dashboard</span>
                 </div>
               </SectionHeader>
               <div className='row no-gutters flex-grow-1 overflow'>
                 <SectionBody className='col-md-12'>
+                  {this.state.hack ? 
                   <Switch>
                     <Route 
                         path={this.props.match.url + '/settings'}
@@ -280,6 +283,7 @@ class AdminDashboard extends React.Component {
                           updateTaskDocument={this.updateTaskDocument}
                         />}/>
                   </Switch>
+                  : <Loader />}
                 </SectionBody>
               </div>
               </div>
