@@ -219,7 +219,6 @@ class AdminDashboard extends React.Component {
 //--------------------------- MARKDOWN UTILITIES --------------------------//
 
   render() {
-    console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fuild'>
