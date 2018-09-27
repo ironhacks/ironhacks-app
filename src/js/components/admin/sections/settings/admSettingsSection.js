@@ -20,7 +20,7 @@ const SectionContainer = styled('div')`
   height: 100%;
   padding: 25px 50px 50px 50px;
 
-  textarea {
+  input {
     width: 100%;
     max-height: 45px;
   }
@@ -30,12 +30,11 @@ const WhiteListContainer = styled('div')`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  max-height: 180px;
   margin-bottom: 15px;
   overflow-x: auto;
 `;
 
-const WhiteListItem = styled('div')`
+const WhiteListItem = styled('input')`
   height: 35px;
   padding: 10px 10px;
   margin-right: 10px;
@@ -51,27 +50,40 @@ const WhiteListItem = styled('div')`
 `
 
 class AdmSettingsSection extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      normalizeWhiteList: ['']
+    }
+  }
 
   onWhiteListChange = (e) => {
-    this.normalizeTextAreaContent(e.target.value);
+    if(e.target.value.split(/,| |\n/).length > 1){
+      this.normalizeInputContent(e.target.value);
+    }
   };
 
-  normalizeTextAreaContent = (textareaContent) => {
+  onWhiteListItemChange = (e) => {
+    console.log(e.target)
+  };
+
+  normalizeInputContent = (textareaContent) => {
     const emailList = textareaContent.split(/,| |\n/);
     this.setState((prevState, props) => {
-      if(!prevState){
-        return {whiteList: this.normalizeEmailArray(emailList)}
-      }else{
-        prevState.whiteList = prevState.whiteList.concat(emailList)
-        return {whiteList: emailList}
+      var joinedList = prevState.normalizeWhiteList.concat(emailList)
+      joinedList = this.normalizeEmailArray(joinedList)
+      if(joinedList[0] === ''){
+        joinedList.splice(0, 1);
       }
-    });
+      console.log(joinedList)
+      return {normalizeWhiteList: joinedList}
+    }); 
   };
 
   // This function sort the emails array, then remove the duplicates.
   normalizeEmailArray = (array) => {
     return array.sort().filter(function(item, pos, ary) {
-        return !pos || item != ary[pos - 1];
+        return !pos || item !== ary[pos - 1];
     })
   };
 
@@ -82,6 +94,7 @@ class AdmSettingsSection extends React.Component {
   }
 
   render() {
+    console.log(this.state)
     return (
       <SectionContainer>
         <h2>{this.props.hack.name}'s Settings</h2>
@@ -89,16 +102,22 @@ class AdmSettingsSection extends React.Component {
         <h3><label htmlFor='whiteList'>White List</label></h3>
         <p>The white list is an email list that the defines which users are allow to register and participate in a hack (like a participants list). Please introduce the list of emails. You can separate them by commas (,) whitespaces or by pressing intro. You can also copy-paste them directly from excel.</p>
         <WhiteListContainer>
-
-          {this.state && this.state.whiteList.map((item, index) => {
+          {this.state.normalizeWhiteList && this.state.normalizeWhiteList.map((item, index, arr) => {
             if(item !== ''){
-              return <WhiteListItem key={index} isValid={this.validateEmailStructure(item)}>
-                {item}
-              </WhiteListItem>
+              if(arr.length - 1 === index){
+                return <div key={index + item}>
+                  <WhiteListItem isValid={this.validateEmailStructure(item)} defaultValue={item} onChange={this.onWhiteListItemChange}/>
+                  <input id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
+                </div>
+              }else{
+                return <WhiteListItem key={index + item} isValid={this.validateEmailStructure(item)} defaultValue={item} onChange={this.onWhiteListItemChange}/>
+              }
+            }
+            if(arr.length - 1 === index){
+              return <input key={index + item} id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
             }
           })}
         </WhiteListContainer>
-        <textarea id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange}></textarea>
         <AvailableActionsDiv>
           <Button 
             primary
