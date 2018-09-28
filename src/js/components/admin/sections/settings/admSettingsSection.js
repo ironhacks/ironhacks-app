@@ -106,7 +106,7 @@ class AdmSettingsSection extends React.Component {
             if(item !== ''){
               if(arr.length - 1 === index){
                 return <div key={index + item}>
-                  <WhiteListItem isValid={this.validateEmailStructure(item)} defaultValue={item} onChange={this.onWhiteListItemChange}/>
+                  <WhiteListItem isValid={this.validateEmailStructure(item)} index={index} defaultValue={item} onChange={this.onWhiteListItemChange}/>
                   <input id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
                 </div>
               }else{
