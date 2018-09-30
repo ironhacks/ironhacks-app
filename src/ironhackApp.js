@@ -106,31 +106,3 @@ class IronHacksApp extends React.Component {
 }
 
 export default IronHacksApp;
-   
-/*
-    return (
-      <div className='App'>
-        <Switch>
-          <Route exact path="/" render={() => null}/> 
-          <Route exact path="/login" render={() => null}/>
-          <Route component={Header}/>
-        </Switch>
-        <Switch>
-          <Route exact path="/" component={Landing}/>
-          <Route path="/login" component={Login}/>
-          <Route path="/profile" component={UserProfile}/>
-          <Route exact path="/forum" component={Forum}/>
-          <Route exact path="/forum/new" component={NewThread}/>
-          <Route path="/tutorial" component={Tutorial}/>
-          <Route path="/task" component={Task}/>
-          <Route path="/quizzes" component={Quizzes}/>
-          <Route path="/results" component={Results}/>
-        </Switch>
-        <Switch>
-          <Route exact path="/" render={() => null}/>
-          <Route exact path="/login" render={() => null}/>
-          <Route component={Footer}/>
-        </Switch>
-      </div>
-    )
-*/
