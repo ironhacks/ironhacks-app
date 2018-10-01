@@ -9,6 +9,7 @@ import styled from 'styled-components';
 //import { Switch, Route, Redirect} from "react-router-dom";
 //Customs components  
 import Separator from '../../../../utilities/separator.js';
+import WhiteListItem from './whiteListItem.js';
 import AvailableActionsDiv from '../../../../utilities/availableActionsDiv.js';
 import Button from '../../../../utilities/button.js';
 //Custom Constants
@@ -24,6 +25,12 @@ const SectionContainer = styled('div')`
     width: 100%;
     max-height: 45px;
   }
+
+  .new-item-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
 `;
 
 const WhiteListContainer = styled('div')`
@@ -34,26 +41,15 @@ const WhiteListContainer = styled('div')`
   overflow-x: auto;
 `;
 
-const WhiteListItem = styled('input')`
-  height: 35px;
-  padding: 10px 10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: ${Constants.universalBorderRadius};
-  background-color: ${(props) => 
-    props.isValid ? Constants.mainBgColor : 'red'
-  };
-`
+const NewWhiteListItem = styled('input')`
+  width 100%;
+`;
 
 class AdmSettingsSection extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      normalizeWhiteList: ['']
+      whiteList: ['']
     }
   }
 
@@ -63,38 +59,61 @@ class AdmSettingsSection extends React.Component {
     }
   };
 
-  onWhiteListItemChange = (e) => {
-    console.log(e.target)
+  onWhiteListItemChange = (email, index) => {
+    this.setState((prevState, props) => {
+      prevState.whiteList[index] = email;
+      return {whiteList: prevState.whiteList};
+    })
+  };
+  onWhiteListItemDelete = (index) => {
+    this.setState((prevState, props) => {
+      if(prevState.whiteList.length === 1) {
+        return {whiteList: ['']};  
+      }else{
+        prevState.whiteList.splice(index, 1);
+        return {whiteList: prevState.whiteList};
+      }
+    })
   };
 
   normalizeInputContent = (textareaContent) => {
-    const emailList = textareaContent.split(/,| |\n/);
+    var emailList = textareaContent.split(/,| |\n/);
+    // Removing empty string at the end.
+    emailList.splice(1, 1);
     this.setState((prevState, props) => {
-      var joinedList = prevState.normalizeWhiteList.concat(emailList)
-      joinedList = this.normalizeEmailArray(joinedList)
+      var joinedList = prevState.whiteList.concat(emailList)
       if(joinedList[0] === ''){
         joinedList.splice(0, 1);
       }
-      console.log(joinedList)
-      return {normalizeWhiteList: joinedList}
+      return {whiteList: joinedList}
     }); 
   };
 
   // This function sort the emails array, then remove the duplicates.
   normalizeEmailArray = (array) => {
+    const _this = this
     return array.sort().filter(function(item, pos, ary) {
+        if(!_this.validateEmailStructure(item)){
+          return false;
+        }
         return !pos || item !== ary[pos - 1];
     })
   };
 
+  saveChanges = () => {
+    var normalizeWhiteList = this.state.whiteList;
+    normalizeWhiteList = this.normalizeEmailArray(normalizeWhiteList);
+    this.props.onSaveSettings(normalizeWhiteList);
+  };
+  
   //This function is just to verify the simplest email format: string@string.string, and is just to give and alert to the researcher in case one email is not valid.
   validateEmailStructure = (email) => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   }
+  
 
   render() {
-    console.log(this.state)
     return (
       <SectionContainer>
         <h2>{this.props.hack.name}'s Settings</h2>
@@ -102,19 +121,18 @@ class AdmSettingsSection extends React.Component {
         <h3><label htmlFor='whiteList'>White List</label></h3>
         <p>The white list is an email list that the defines which users are allow to register and participate in a hack (like a participants list). Please introduce the list of emails. You can separate them by commas (,) whitespaces or by pressing intro. You can also copy-paste them directly from excel.</p>
         <WhiteListContainer>
-          {this.state.normalizeWhiteList && this.state.normalizeWhiteList.map((item, index, arr) => {
+          {this.state.whiteList && this.state.whiteList.map((item, index, arr) => {
             if(item !== ''){
-              if(arr.length - 1 === index){
-                return <div key={index + item}>
-                  <WhiteListItem isValid={this.validateEmailStructure(item)} index={index} defaultValue={item} onChange={this.onWhiteListItemChange}/>
-                  <input id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
+              if(arr.length === 1 || arr.length - 1 === index){
+                return <div className='new-item-list' key={index + item}>
+                  <WhiteListItem key={index + item} index={index} userEmail={item} onChange={this.onWhiteListItemChange} onWhiteListItemDelete={this.onWhiteListItemDelete} isValid={this.validateEmailStructure(item)}/>
+                  <NewWhiteListItem id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
                 </div>
               }else{
-                return <WhiteListItem key={index + item} isValid={this.validateEmailStructure(item)} defaultValue={item} onChange={this.onWhiteListItemChange}/>
+                return <WhiteListItem key={index + item} index={index} userEmail={item} onChange={this.onWhiteListItemChange} onWhiteListItemDelete={this.onWhiteListItemDelete} isValid={this.validateEmailStructure(this.props.userEmail)}/>
               }
-            }
-            if(arr.length - 1 === index){
-              return <input key={index + item} id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
+            }else{
+              return <NewWhiteListItem key={index + item} id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
             }
           })}
         </WhiteListContainer>
@@ -123,7 +141,7 @@ class AdmSettingsSection extends React.Component {
             primary
             width='150px' 
             margin='0 0 0 15px'
-            onClick={this.props.onSaveSettings}>
+            onClick={this.saveChanges}>
             Save
           </Button>
         </AvailableActionsDiv>

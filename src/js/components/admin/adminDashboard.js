@@ -129,7 +129,8 @@ class AdminDashboard extends React.Component {
   };
 //--------------------------- SETTINGS SECTION ----------------------------//
   //This function handle the tutorial docuement update.
-  onSaveSettings = (settings) => {
+  onSaveSettings = (whiteList) => {
+    console.log(whiteList)
   };
 
   updateTutorialDocument = () => {
