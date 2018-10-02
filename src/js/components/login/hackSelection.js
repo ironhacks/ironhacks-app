@@ -41,7 +41,7 @@ const CardsContainer = styled('div')`
   margin-top: 70px;
 `;
 
-class Admin extends React.Component {
+class HackSelection extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -123,4 +123,4 @@ class Admin extends React.Component {
   }
 }
 
-export default Admin;
+export default HackSelection;

@@ -113,7 +113,7 @@ class Login extends React.Component {
   render() {
     if(this.state.navigate === true){
       return(
-        <Redirect to='/forum'/>
+        <Redirect to='/hackSelection'/>
       );
     }
     return (

@@ -15,6 +15,7 @@ import Admin from './js/components/admin/admin.js';
 import AdminDashboard from './js/components/admin/adminDashboard.js';
 import NewHack from './js/components/admin/newHack/newHack.js';
 import Login from './js/components/login/login.js';
+//import HackSelection from './js/components/login/hackSelection.js';
 import Forum from './js/components/forum/forum.js';
 import NewThread from './js/components/forum/newThread.js';
 import ThreadViewWithRouter from './js/components/forum/threadView/threadView.js';
@@ -62,6 +63,7 @@ class IronHacksApp extends React.Component {
 
 
   render() {
+    console.log(this.state)
     //If this.user is null, means that we didn't receive response from firebase auth, therefore we show a loader:
     if(typeof this.state.user === 'undefined'){
       return(
