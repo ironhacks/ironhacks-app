@@ -130,23 +130,26 @@ class AdminDashboard extends React.Component {
 //--------------------------- SETTINGS SECTION ----------------------------//
   //This function handle the tutorial docuement update.
   onSaveSettings = (whiteList) => {
-    console.log(whiteList)
+    this.updateHackSettings({whiteList: whiteList});
   };
 
-  updateTutorialDocument = () => {
+  updateHackSettings = (newSettings) => {
     //db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
+    const _this = this;
     //Updating the current hack:
     const hackRef = firestore.collection('hacks').doc(this.state.hackId);
-    var hackTutorial = this.state.hack.tutorial;
-    hackTutorial.doc = this.utoa(this.state.tutorialMarkdown)
-    hackRef.update({
-      tutorial: hackTutorial,
-    })
+    hackRef.update(newSettings)
     .then(() => {
       //TODO: update UI to provide feedback to the user.
+      //Updating local stage
+      this.setState((prevState, props) => {
+        console.log(prevState)
+        prevState.hack.whiteList = newSettings.whiteList
+        return {hack: prevState.hack};
+      })
       console.log('done')
     })  
     .catch(function(error) {

@@ -48,11 +48,14 @@ const NewWhiteListItem = styled('input')`
 class AdmSettingsSection extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      whiteList: ['']
+    let whiteList = [''];
+    if(this.props.hack.whiteList && this.props.hack.whiteList.length > 0){
+      whiteList = this.props.hack.whiteList;
+    }
+      this.state = {
+      whiteList: whiteList,
     }
   }
-
   onWhiteListChange = (e) => {
     if(e.target.value.split(/,| |\n/).length > 1){
       this.normalizeInputContent(e.target.value);
@@ -65,6 +68,7 @@ class AdmSettingsSection extends React.Component {
       return {whiteList: prevState.whiteList};
     })
   };
+
   onWhiteListItemDelete = (index) => {
     this.setState((prevState, props) => {
       if(prevState.whiteList.length === 1) {
@@ -104,6 +108,7 @@ class AdmSettingsSection extends React.Component {
     var normalizeWhiteList = this.state.whiteList;
     normalizeWhiteList = this.normalizeEmailArray(normalizeWhiteList);
     this.props.onSaveSettings(normalizeWhiteList);
+    this.setState({whiteList: normalizeWhiteList});
   };
   
   //This function is just to verify the simplest email format: string@string.string, and is just to give and alert to the researcher in case one email is not valid.
@@ -112,8 +117,8 @@ class AdmSettingsSection extends React.Component {
     return re.test(email);
   }
   
-
   render() {
+    console.log(this.props)
     return (
       <SectionContainer>
         <h2>{this.props.hack.name}'s Settings</h2>
@@ -129,7 +134,7 @@ class AdmSettingsSection extends React.Component {
                   <NewWhiteListItem id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
                 </div>
               }else{
-                return <WhiteListItem key={index + item} index={index} userEmail={item} onChange={this.onWhiteListItemChange} onWhiteListItemDelete={this.onWhiteListItemDelete} isValid={this.validateEmailStructure(this.props.userEmail)}/>
+                return <WhiteListItem key={index + item} index={index} userEmail={item} onChange={this.onWhiteListItemChange} onWhiteListItemDelete={this.onWhiteListItemDelete} isValid={this.validateEmailStructure(item)}/>
               }
             }else{
               return <NewWhiteListItem key={index + item} id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
