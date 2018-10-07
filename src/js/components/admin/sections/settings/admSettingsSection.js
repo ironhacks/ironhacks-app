@@ -52,6 +52,7 @@ class AdmSettingsSection extends React.Component {
     if(this.props.hack.whiteList && this.props.hack.whiteList.length > 0){
       whiteList = this.props.hack.whiteList;
     }
+    console.log(this.props.hack.whiteList)
       this.state = {
       whiteList: whiteList,
     }
@@ -118,7 +119,7 @@ class AdmSettingsSection extends React.Component {
   }
   
   render() {
-    console.log(this.props)
+    console.log(this.state)
     return (
       <SectionContainer>
         <h2>{this.props.hack.name}'s Settings</h2>

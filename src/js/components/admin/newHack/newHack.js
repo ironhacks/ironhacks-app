@@ -278,8 +278,9 @@ class NewHack extends React.Component {
       })
       // Commit the batch
       batch.commit().then(function () {
-          console.log('done')
-          _this.setState({mustNavigate: true});
+          //TODO: Update the UI to give feedback to the user
+          console.log('Hack Created')
+          this.setState({mustNavigate: true})
       });
     })  
     .catch(function(error) {

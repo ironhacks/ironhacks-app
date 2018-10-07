@@ -120,7 +120,10 @@ class AdminDashboard extends React.Component {
     .get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-          _this.setState({hack: doc.data(), hackId: doc.id});
+          var hackData = doc.data()
+          var hackId = doc.id;  
+          hackData['whiteList'] = doc.data().whiteList;
+          _this.setState({hack: hackData, hackId: hackId});
         });
     }) 
     .catch(function(error) {
@@ -130,24 +133,36 @@ class AdminDashboard extends React.Component {
 //--------------------------- SETTINGS SECTION ----------------------------//
   //This function handle the tutorial docuement update.
   onSaveSettings = (whiteList) => {
-    this.updateHackSettings({whiteList: whiteList});
+    this.updateHackSettings(whiteList);
+    //Creating a map for the whiteList
   };
 
-  updateHackSettings = (newSettings) => {
+  updateHackSettings = (whiteList) => {
     //db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
     const _this = this;
-    //Updating the current hack:
+    //Updating the whiteList collection:
+    var batch = firestore.batch();
+    whiteList.forEach((email) => {
+      const data = {whiteList: window.firebase.firestore.FieldValue.arrayUnion(_this.state.hackId)}
+      const whiteListDoc = firestore.collection('whiteLists').doc(email);
+      batch.set(whiteListDoc, data, {merge: true});
+    })
+    // Adding whiteList cross reference to the hack object on firebase:
+    const hackWhiteListObject = {
+      whiteList:  whiteList
+    }
     const hackRef = firestore.collection('hacks').doc(this.state.hackId);
-    hackRef.update(newSettings)
+    batch.set(hackRef, hackWhiteListObject, {merge: true});
+    batch.commit()
     .then(() => {
       //TODO: update UI to provide feedback to the user.
       //Updating local stage
       this.setState((prevState, props) => {
         console.log(prevState)
-        prevState.hack.whiteList = newSettings.whiteList
+        prevState.hack.whiteList = {whiteList: whiteList}
         return {hack: prevState.hack};
       })
       console.log('done')

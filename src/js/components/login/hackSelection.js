@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Custom components
-import HackCard from './hackCard.js';
+import HackCard from '../admin/hackCard.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 
@@ -62,6 +62,17 @@ class HackSelection extends React.Component {
     firestore.settings(settings);
     const _this = this;
     var hacks = [];
+    firestore.collection("whiteLists").get().then(function(doc) {
+      //querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.data())  
+      //});
+      
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+    /*
     firestore.collection("hacks").get().then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
@@ -72,6 +83,7 @@ class HackSelection extends React.Component {
     .catch(function(error) {
         console.error("Error getting documents: ", error);
     });
+    */
   };
 
   goToNewHack = () => {
@@ -107,10 +119,9 @@ class HackSelection extends React.Component {
         <div className="row">
           <div className='col-md-8 offset-md-2'>
             <h1>Welcome to IronHacks Platform!</h1>
-            <span>Belllow you will find all the availabe hacks, click on one of them to see more details.</span>
+            <span>Bellow you will find all the availabe hacks to register in. Click on one of them to start the registration process.</span>
             <Separator/>
-            <CardsContainer>
-              <HackCard newHack={true} onClick={this.goToNewHack}/>
+            <CardsContainer >
               {this.state.hacks.map((hack, index) => {
                 return <HackCard hack={hack} index={index} key={hack.id} onClick={this.goToHackDashBoard}/>
               })}
