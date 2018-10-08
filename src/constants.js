@@ -13,7 +13,6 @@ export const LoaderTheme = {
   loaderBackgroundColor: '#C7C3B7',
   sectionBackgroundColor: '#EEEDE9',
 }
-
 //LANDING
 export const LandingTheme = {
   containerHeight: "100vh",
@@ -91,4 +90,10 @@ export const SponsorBannerTheme = {
 export const QuizzesTheme = {
   backgroundColor: 'white',
   containerHeight: "125px",
+}
+// Error 404
+export const Error404Theme = {
+  containerHeight:'100vh;',
+  backgroundColor: "white",
+  textColor: "black"
 }

@@ -24,6 +24,7 @@ import Task from './js/components/task/task.js';
 import Quizzes from './js/components/quizzes/quizzes.js';
 import Results from './js/components/results/results.js';
 import UserProfile from './js/components/userProfile/userProfile.js';
+import NotFound from './js/utilities/404.js';
 
 const LoaderContainer = styled('div')`
   width: 100vw;
@@ -35,9 +36,10 @@ class IronHacksApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: undefined,  
+      user: undefined,
+      mustNavigate: false,
     };
-  }
+  };
 
   componentDidMount(){
     this.isUserConected();
@@ -48,23 +50,47 @@ class IronHacksApp extends React.Component {
     window.firebase.auth().onAuthStateChanged(function(user) {
       if(user){
         this.setState({user: user});
+        this.isAdmin(); //We only check this to display specific ui items.
       }else{
-        this.setState({user: false});
+        this.setState({user: false, mustNavigate: true});
       }
     }.bind(this), function(error) {
       console.log(error);
       this.setState({user: false});
     }.bind(this))
-  }
-
-  checkUserType = () => {
-
-  }
+  };
+  //check on the DB if the current user is admin.
+  isAdmin = () => {
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    const _this = this;
+    //Updating the current hack:
+    firestore.collection('admins').doc(this.state.user.uid)
+    .get()
+    .then(function(doc) {
+      //Is admin.
+        _this.setState((prevState, props) => {
+        prevState.user.isAdmin = false;
+        prevState.mustNavigate = true;
+        return prevState;
+      })
+    }) 
+    .catch(function(error) {
+      // The user can't read the admins collection, therefore, is not admin.
+        _this.setState((prevState, props) => {
+        prevState.user.isAdmin = false;
+        prevState.mustNavigate = true;
+        return prevState;
+      })
+    });
+  };
 
 
   render() {
     //If this.user is null, means that we didn't receive response from firebase auth, therefore we show a loader:
-    if(typeof this.state.user === 'undefined'){
+    if(!this.state.mustNavigate){
       return(
         <LoaderContainer>
           <Loader/>
@@ -76,6 +102,7 @@ class IronHacksApp extends React.Component {
           <Switch>
             <Route exact path='/' render={() => null}/> 
             <Route exact path='/login' render={() => null}/>
+            <Route exact path='/404' render={() => null}/>
             {!this.state.user && <Redirect to='/'/>}
             <Route component={Header}/>
           </Switch>
@@ -93,12 +120,16 @@ class IronHacksApp extends React.Component {
             <Route path='/task' component={Task}/>
             <Route path='/quizzes' component={Quizzes}/>
             <Route path='/results' component={Results}/>
+            <Route exact path='/404' component={NotFound}/> 
             {this.state.user && <Redirect to='/forum'/>}
             <Route exact path='/' component={Landing}/>
+            {this.state.user && <Redirect to='/404'/>}
+            {<Redirect to='/'/>}
           </Switch>
           <Switch>
             <Route exact path='/' render={() => null}/>
             <Route exact path='/login' render={() => null}/>
+            <Route exact path='/404' render={() => null}/>
             <Route component={Footer}/>
           </Switch>
         </div>
