@@ -47,17 +47,15 @@ class IronHacksApp extends React.Component {
 
   // This funciton calls Firebase SDK to know if there is an active user session
   isUserConected = () => {
-    window.firebase.auth().onAuthStateChanged(function(user) {
+    const _this = this;
+    window.firebase.auth().onAuthStateChanged((user) => {
       if(user){
-        this.setState({user: user});
-        this.isAdmin(); //We only check this to display specific ui items.
+        _this.setState({user: user});
+        _this.isAdmin(); //We only check this to display specific ui items.
       }else{
-        this.setState({user: false, mustNavigate: true});
+        _this.setState({user: false, mustNavigate: true});
       }
-    }.bind(this), function(error) {
-      console.log(error);
-      this.setState({user: false});
-    }.bind(this))
+    });
   };
   //check on the DB if the current user is admin.
   isAdmin = () => {
@@ -121,6 +119,7 @@ class IronHacksApp extends React.Component {
             <Route path='/quizzes' component={Quizzes}/>
             <Route path='/results' component={Results}/>
             <Route exact path='/404' component={NotFound}/> 
+            {this.state.user.admin && <Redirect to='/admin'/>}
             {this.state.user && <Redirect to='/forum'/>}
             <Route exact path='/' component={Landing}/>
             {this.state.user && <Redirect to='/404'/>}

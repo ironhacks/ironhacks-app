@@ -8,6 +8,7 @@ import { Redirect } from 'react-router-dom';
 import styled, {ThemeProvider} from 'styled-components';
 //Custom components
 import HackCard from '../admin/hackCard.js';
+import Separator from '../../utilities/separator.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 
@@ -27,12 +28,6 @@ const SectionContainer = styled('div')`
     }
   }
 `;
-const Separator = styled('div')`
-  width: 100%;
-  height: 1px;
-  background-color: ${Constants.mainBgColor};
-  margin: 5px 0 5px 0;
-`;
 const CardsContainer = styled('div')`
   display: flex;
   flex-direction: row;
@@ -49,10 +44,22 @@ class HackSelection extends React.Component {
       startDashboardNav: false,
       hacks: [],
     };
+    if(this.props.location.state){
+      this.state.user = this.props.location.state.user
+    }
   };
 
   componentDidMount(){
-    this.getHacks();
+    if(this.state.user) {
+      this.getHacks()
+    }else{
+      this.getUserData();
+    }
+  };
+
+  //ask for the user status and data.
+  getUserData = () => {
+
   };
 
   //Query all the hacks objects from the db.
@@ -62,7 +69,7 @@ class HackSelection extends React.Component {
     firestore.settings(settings);
     const _this = this;
     var hacks = [];
-    firestore.collection("whiteLists").get().then(function(doc) {
+    firestore.collection("whiteLists").doc(this.state.user.email).get().then(function(doc) {
       //querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.data())  
@@ -100,19 +107,7 @@ class HackSelection extends React.Component {
   };
 
   render() {
-    if (this.state.startNewHackNav === true) return <Redirect to='admin/newHack'/>;
-    if (this.state.startDashboardNav === true){
-      const selectedHack = this.state.selectedHack.data();
-      const selectedHackId = this.state.selectedHack.id;
-      const hackName = selectedHack.name
-      const pathname = '/admin/dashboard/' + hackName;
-      return <Redirect to={{
-        pathname: pathname,
-        state: {hack: selectedHack, hackId: selectedHackId}
-      }}
-      />;
-    }
-
+    console.log(this.props)
     return (
       <ThemeProvider theme={theme}>
       <SectionContainer className="container-fluid">
@@ -120,7 +115,7 @@ class HackSelection extends React.Component {
           <div className='col-md-8 offset-md-2'>
             <h1>Welcome to IronHacks Platform!</h1>
             <span>Bellow you will find all the availabe hacks to register in. Click on one of them to start the registration process.</span>
-            <Separator/>
+            <Separator primary/>
             <CardsContainer >
               {this.state.hacks.map((hack, index) => {
                 return <HackCard hack={hack} index={index} key={hack.id} onClick={this.goToHackDashBoard}/>

@@ -1,4 +1,4 @@
-  // IronHacks Platform
+// IronHacks Platform
 // header.js - Navigation bar
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 

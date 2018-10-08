@@ -8,6 +8,7 @@ import { Redirect } from 'react-router-dom';
 import styled, {ThemeProvider} from 'styled-components';
 //Custom components
 import HackCard from './hackCard.js';
+import Separator from '../../utilities/separator.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 
@@ -26,12 +27,6 @@ const SectionContainer = styled('div')`
       margin-top: 150px;
     }
   }
-`;
-const Separator = styled('div')`
-  width: 100%;
-  height: 1px;
-  background-color: ${Constants.mainBgColor};
-  margin: 5px 0 5px 0;
 `;
 const CardsContainer = styled('div')`
   display: flex;
@@ -108,7 +103,7 @@ class Admin extends React.Component {
           <div className='col-md-8 offset-md-2'>
           	<h1>Welcome to IronHacks Platform!</h1>
             <span>Belllow you will find all the availabe hacks, click on one of them to see more details.</span>
-            <Separator/>
+            <Separator primary/>
             <CardsContainer>
               <HackCard newHack={true} onClick={this.goToNewHack}/>
               {this.state.hacks.map((hack, index) => {

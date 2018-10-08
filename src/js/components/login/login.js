@@ -39,7 +39,7 @@ class Login extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      navigate: false,
+      mustNavigate: false,
     };
   }
 
@@ -50,20 +50,26 @@ class Login extends React.Component {
   initAuthUI(){ 
     //Config object
     const uiConfig = {
-      signInSuccessUrl: '/forum',
-      signInFlow: 'redirect',
+      signInFlow: 'redirect', 
       signInOptions: [
         window.firebase.auth.EmailAuthProvider.PROVIDER_ID
       ],
       callbacks : {
         signInSuccessWithAuthResult : (authResult, redirectUrl) => {
-          var user = authResult.user;
+          var user = {
+            name: authResult.user.displayName,
+            email: authResult.user.email,
+            uid: authResult.user.uid
+          }
+          this.setState({user: user});
           // Interupt the redirect if the user is new while writing on the db.
           if(authResult.additionalUserInfo.isNewUser === true){
-            this.writeOnDatabase(user);
+            this.saveUserOnDB(user);
+            user.isAdmin = false;
             return false;
           }else{
-            return true;
+            this.isAdmin(user);
+            return false;
           }
         },
         signInFailure: function(error) {
@@ -89,32 +95,68 @@ class Login extends React.Component {
     }
   }
   
-  writeOnDatabase = (user) => {
+  saveUserOnDB = (user) => {
     //db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     const _this = this;
     firestore.settings(settings);
-
     firestore.collection("users").add({
       name: user.displayName,
       email: user.email,
     })
     .then(function(docRef) {
-      _this.setState((prevState, props) => {
-        return {navigate: !prevState.navigate};
-      });
+      _this.setState({mustNavigate: true});
     })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
-  }
+  };
+
+  isAdmin = (user) => {
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    const _this = this;
+    const _user = user;
+    //Updating the current hack:
+    firestore.collection('admins').doc(_user.uid)
+    .get()
+    .then(function(doc) {
+      //Is admin.
+        _this.setState((prevState, props) => {
+        _user.isAdmin = true
+        return {
+          user: _user,
+          mustNavigate: true
+        };
+      })
+    }) 
+    .catch(function(error) {
+      // The user can't read the admins collection, therefore, is not admin.
+        _this.setState((prevState, props) => {
+        _user.isAdmin = false;
+        return {
+          user: _user,
+          mustNavigate: true
+        };
+      })
+    });
+  };
 
   render() {
-    if(this.state.navigate === true){
-      return(
-        <Redirect to='/hackSelection'/>
-      );
+    const currentUser = this.state.user;
+    if(this.state.mustNavigate){
+      if(currentUser.isAdmin){
+        console.log(currentUser)
+      }else{
+        console.log(currentUser)
+        return <Redirect to={{
+          pathname: '/hackSelection',
+          state: {user: currentUser}
+        }}/>
+      }
     }
     return (
       <ThemeProvider theme={theme}>
