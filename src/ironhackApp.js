@@ -70,7 +70,7 @@ class IronHacksApp extends React.Component {
     .then(function(doc) {
       //Is admin.
         _this.setState((prevState, props) => {
-        prevState.user.isAdmin = false;
+        prevState.user.isAdmin = true;
         prevState.mustNavigate = true;
         return prevState;
       })

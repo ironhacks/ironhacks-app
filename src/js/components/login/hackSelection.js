@@ -59,9 +59,43 @@ class HackSelection extends React.Component {
 
   //ask for the user status and data.
   getUserData = () => {
-
+    const _this = this;
+    window.firebase.auth().onAuthStateChanged((user) => {
+      if(user){
+        _this.setState({user: user});
+        _this.isAdmin(); //We only check this to display specific ui items.
+      }else{
+        _this.setState({user: false, mustNavigate: true});
+      }
+    });
   };
-
+  //check on the DB if the current user is admin.
+  isAdmin = () => {
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    const _this = this;
+    //Updating the current hack:
+    firestore.collection('admins').doc(this.state.user.uid)
+    .get()
+    .then(function(doc) {
+      //Is admin.
+        _this.setState((prevState, props) => {
+        prevState.user.isAdmin = true;
+        return prevState;
+      })
+        _this.getHacks();
+    }) 
+    .catch(function(error) {
+      // The user can't read the admins collection, therefore, is not admin.
+        _this.setState((prevState, props) => {
+        prevState.user.isAdmin = false;
+        return prevState;
+      })
+        _this.getHacks();
+    });
+  };
   //Query all the hacks objects from the db.
   getHacks = () => {
     const firestore = window.firebase.firestore();
@@ -70,11 +104,16 @@ class HackSelection extends React.Component {
     const _this = this;
     var hacks = [];
     firestore.collection("whiteLists").doc(this.state.user.email).get().then(function(doc) {
-      //querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.data())  
-      //});
-      
+      const hackIds = doc.data().whiteList;
+      hackIds.map((hackId) => {
+        firestore.collection("hacks").doc(hackId).get().then(function(doc) {
+          console.log(doc.data())
+          _this.setState((prevState, props) => {
+            prevState.hacks.push(doc);
+            return prevState;
+          })
+        })
+      })
     })
     .catch(function(error) {
         console.error("Error getting documents: ", error);
