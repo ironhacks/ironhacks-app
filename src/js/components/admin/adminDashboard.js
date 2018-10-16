@@ -120,10 +120,15 @@ class AdminDashboard extends React.Component {
     .get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-          var hackData = doc.data()
-          var hackId = doc.id;  
+          const hackData = doc.data()
+          const hackId = doc.id;  
           hackData['whiteList'] = doc.data().whiteList;
           _this.setState({hack: hackData, hackId: hackId});
+          firestore.collection('adminHackData').doc(hackId)
+          .get()
+          .then(function(doc) {
+          
+          });
         });
     }) 
     .catch(function(error) {
@@ -211,8 +216,9 @@ class AdminDashboard extends React.Component {
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
     //Updating the current hack:
-    const hackRef = firestore.collection('hacks').doc(this.state.hackId);
-    var hackTask = this.state.hack.task;
+    const hackRef = firestore.collection('adminHackData').doc(this.state.hackId);
+    const hackTask = this.state.hack.task;
+    console.log(this.state)
     hackTask.doc = this.utoa(this.state.taskMarkdown)
     hackRef.update({
       task: hackTask,

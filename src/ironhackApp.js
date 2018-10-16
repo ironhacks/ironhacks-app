@@ -24,6 +24,7 @@ import Task from './js/components/task/task.js';
 import Quizzes from './js/components/quizzes/quizzes.js';
 import Results from './js/components/results/results.js';
 import UserProfile from './js/components/userProfile/userProfile.js';
+import ProjectEditor from './js/components/projectEditor/projectEditor.js';
 import NotFound from './js/utilities/404.js';
 
 const LoaderContainer = styled('div')`
@@ -118,6 +119,7 @@ class IronHacksApp extends React.Component {
             <Route path='/task' component={Task}/>
             <Route path='/quizzes' component={Quizzes}/>
             <Route path='/results' component={Results}/>
+            <Route path='/projectEditor' component={ProjectEditor}/>
             <Route exact path='/404' component={NotFound}/> 
             {this.state.user.admin && <Redirect to='/admin'/>}
             {this.state.user && <Redirect to='/forum'/>}

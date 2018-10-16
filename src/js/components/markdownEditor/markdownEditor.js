@@ -35,7 +35,6 @@ class MarkdownEditor extends React.Component<{}, AppState> {
 
   constructor(props) {
     super(props);
-    console.log(this.props.withContent ? this.props.withContent : '')
     this.state = {
       mdeState: {
         markdown: this.props.withContent ? this.props.withContent : '',
@@ -50,7 +49,6 @@ class MarkdownEditor extends React.Component<{}, AppState> {
   };
 
   render() {
-    console.log(this.strikethroughate)
     return (
       <Editor
         layout={this.props.editorLayout}

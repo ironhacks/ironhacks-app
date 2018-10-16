@@ -149,9 +149,11 @@ class Login extends React.Component {
     const currentUser = this.state.user;
     if(this.state.mustNavigate){
       if(currentUser.isAdmin){
-        console.log(currentUser)
+        return <Redirect to={{
+          pathname: '/admin',
+          state: {user: currentUser}
+        }}/>
       }else{
-        console.log(currentUser)
         return <Redirect to={{
           pathname: '/hackSelection',
           state: {user: currentUser}

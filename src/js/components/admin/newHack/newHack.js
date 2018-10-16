@@ -135,7 +135,6 @@ class NewHack extends React.Component {
         to: this.state.phases[phaseIndex - 1].evaluation.end,
       }
     };
-    console.log(range)
     this.setState((prevState, props) => {
       return {selectedPhase: phaseIndex,
       phaseStage: phaseStage,
@@ -156,10 +155,8 @@ class NewHack extends React.Component {
     * }
     */
     const range = DateUtils.addDayToRange(day, this.state);
-    console.log(this.state)
     //Setting the phase value for the correct phase index and updating the calendar display
     this.setState((prevState, props) => {
-      console.log(prevState.phaseStage)
       if(prevState.phaseStage === 'coding'){
         prevState.phases[prevState.selectedPhase - 1].coding = {
           start: range.from,
@@ -171,7 +168,6 @@ class NewHack extends React.Component {
           end: range.to
         }
       }
-      console.log(prevState.phases)
       return {phases: prevState.phases, from: range.from, to: range.to}
     });
   };
@@ -242,7 +238,7 @@ class NewHack extends React.Component {
       }
     })
 
-    let hackInstance = {
+    const hackInstance = {
       name: this.state.hackName,
       phases: phases,
       tutorial: {
@@ -250,6 +246,9 @@ class NewHack extends React.Component {
         start: new Date(),
         end: new Date(),
       },
+    }
+
+    const adminData = {
       task: {
         doc: '',
         releaseDate: new Date(),
@@ -270,17 +269,19 @@ class NewHack extends React.Component {
       _this.setState({hackId: hackRef});
       //Adding each forum to the hack:
       // Get a new write batch
-      var batch = firestore.batch();
+      const batch = firestore.batch();
       _this.state.forums.forEach((forum) => {
         forum.hack = hackRef;
-        var newForumRef = firestore.collection('forums').doc();
+        const newForumRef = firestore.collection('forums').doc();
         batch.set(newForumRef, forum);
       })
+      const adminDataRef = firestore.collection('adminHackData').doc(hackRef);
+      batch.set(adminDataRef, adminData);
       // Commit the batch
       batch.commit().then(function () {
           //TODO: Update the UI to give feedback to the user
           console.log('Hack Created')
-          this.setState({mustNavigate: true})
+          _this.setState({mustNavigate: true})
       });
     })  
     .catch(function(error) {

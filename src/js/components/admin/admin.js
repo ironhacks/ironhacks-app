@@ -62,6 +62,7 @@ class Admin extends React.Component {
         // doc.data() is never undefined for query doc snapshots
         hacks.push(doc);
       });
+      console.log(hacks)
       _this.setState({hacks: hacks});
     })
     .catch(function(error) {
