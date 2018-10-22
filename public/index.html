@@ -24,13 +24,15 @@
     <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-storage.js"></script>
     <script>
       // Initialize Firebase
       var config = {
         apiKey: "AIzaSyCkcfwdASmN50otDinZUiRBdkj8umKZt0Y",
         authDomain: "ironhacks-platform-dev.firebaseapp.com",
         databaseURL: "https://ironhacks-platform-dev.firebaseio.com",
-        projectId: "ironhacks-platform-dev"
+        projectId: "ironhacks-platform-dev",        
+        storageBucket: "ironhacks-platform-dev.appspot.com",
       };
 
       firebase.initializeApp(config);

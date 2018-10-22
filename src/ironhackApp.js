@@ -119,7 +119,8 @@ class IronHacksApp extends React.Component {
             <Route path='/task' component={Task}/>
             <Route path='/quizzes' component={Quizzes}/>
             <Route path='/results' component={Results}/>
-            <Route path='/projectEditor' component={ProjectEditor}/>
+            <Route exact path='/projectEditor' component={ProjectEditor}/>
+            <Route exact path='/projectEditor/:proyectName' component={ProjectEditor}/>
             <Route exact path='/404' component={NotFound}/> 
             {this.state.user.admin && <Redirect to='/admin'/>}
             {this.state.user && <Redirect to='/forum'/>}

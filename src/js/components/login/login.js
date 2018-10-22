@@ -41,11 +41,11 @@ class Login extends React.Component {
     this.state = {
       mustNavigate: false,
     };
-  }
+  };
 
   componentDidMount(){
     this.initAuthUI()
-  }
+  };
 
   initAuthUI(){ 
     //Config object
@@ -93,7 +93,7 @@ class Login extends React.Component {
       const ui = new window.firebaseui.auth.AuthUI(window.firebase.auth())
       ui.start('#firebaseui-auth-container', uiConfig)
     }
-  }
+  };
   
   saveUserOnDB = (user) => {
     //db Reference

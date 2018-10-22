@@ -97,3 +97,6 @@ export const Error404Theme = {
   backgroundColor: "white",
   textColor: "black"
 }
+//Proyect Editor
+export const cloudFunctionsDevEndPoint = 'localhost:5000';
+export const cloudFunctionsProdEndPoint = 'https://us-central1-ironhacks-platform-dev.cloudfunctions.net';
