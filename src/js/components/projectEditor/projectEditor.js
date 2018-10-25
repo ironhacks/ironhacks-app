@@ -21,6 +21,9 @@ import 'codemirror/addon/lint/json-lint';
 import 'codemirror/addon/lint/javascript-lint'
 import 'codemirror/addon/lint/lint.css';
 
+//Custom components
+import Loader from '../../utilities/loader.js';
+
 window.JSHINT = JSHINT
 const theme = Constants.AppSectionTheme;
 
@@ -55,14 +58,21 @@ const SectionContainer = styled('div')`
   }
 `;
 
+const ProjectContent = styled('div')`
+  width: 100%;
+  height: 100%;
+  padding: 15px !important;
+  background-color: ${Constants.projectEditorBgColor};
+`;
+
 const Editor = styled(CodeMirror)`
   width: 100%;
-  height: 80%;
+  height: 100%;
 `;
 
 const PreviewContainer = styled('div')`
   width: 100%;
-  height: 100%
+  height: 100%;
 
   iframe {
     border: none;
@@ -93,6 +103,7 @@ class ProjectEditor extends React.Component {
       editorContent: editorThemplate,
       readonly: false,
       mode: 'xml',
+      loadingFiles: true,
     }
   }
 
@@ -127,7 +138,8 @@ class ProjectEditor extends React.Component {
         prevState.user.isAdmin = true;
         return prevState;
       });
-      _this.getProject();
+      _this.getProjectPreviewPath();
+      _this.getProjectFilesUrls();
     }) 
     .catch(function(error) {
       // The user can't read the admins collection, therefore, is not admin.
@@ -135,27 +147,65 @@ class ProjectEditor extends React.Component {
         prevState.user.isAdmin = false;
         return prevState;
       });
-      _this.getProject();
+      _this.getProjectPreviewPath();
+      _this.getProjectFilesUrls();
     });
   };
 
-  getProject = () => {
+  getProjectFilesUrls = () => {
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    const _this = this;
+    //Updating the current hack:
+    firestore.collection('users')
+    .doc(this.state.user.uid)
+    .collection('projects')
+    .doc(this.props.match.params.proyectName)
+    .get()
+    .then(function(doc) {
+      _this.setState({projectFiles: doc.data()})
+      _this.getProjectFiles();
+    }) 
+    .catch(function(error) {
+      console.error(error)
+    });
+  };
+
+  getProjectFiles = () => {
+    let remainingFiles = Object.keys(this.state.projectFiles).length
+    const _this = this;
+    for (const file in this.state.projectFiles){
+      const xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      xhr.onload = function(event) {
+        const blob = xhr.response;
+          _this.setState((prevState, props) => {
+          prevState.projectFiles[file].blob = blob;
+          remainingFiles -= 1;
+          if(remainingFiles === 0){
+            prevState.loadingFiles = false;
+          };
+          return prevState;
+        })
+      };
+      xhr.open('GET', this.state.projectFiles[file]);
+      xhr.send();
+    };
+  }
+
+  getProjectPreviewPath = () => {
     // Create a reference with an initial file path and name
     var storage = window.firebase.storage().ref();
     const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.props.match.params.proyectName}/index.html`; 
     this.setState({proyectPath: proyectPath});
-    /*
-    storage.child(proyectPath).getDownloadURL().then(function(url) {
-      console.log(url)
-      _this.setState({index: url})
-    })
-    */
+
   };
 
   saveProject = () => {
     // Create a root reference
     var storageRef = window.firebase.storage().ref();
-    var indexRef = storageRef.child('test/index.html');
+    var indexRef = storageRef.child(`${this.state.user.uid}/${this.props.match.params.params.proyectName}/index.html`);
     // Raw string is the default if no format is provided
     var message = this.state.editorContent;
     console.log(message)
@@ -170,18 +220,20 @@ class ProjectEditor extends React.Component {
   }
 
   onChangeEditor = (editor, data, value) => {
-    console.log(value)
     this.setState({editorContent: value})
   }
   
   render() {
-    console.log(this.props, this.state)
-      const { readOnly, mode, code, calc_title } = this.state
+    const { readOnly, mode, code, calc_title } = this.state
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fluid'>
           <div className='row no-gutters'>
-            <div className='col-md-6 editor-container'>
+              {this.state.loadingFiles && <Loader/>}
+            <ProjectContent className='col-md-2'>
+              <h2>{this.props.match.params.proyectName.toUpperCase()}</h2>
+            </ProjectContent>
+            <div className='col-md-5 editor-container'>
               <Editor
                 value={editorThemplate}
                 options={{
@@ -197,7 +249,7 @@ class ProjectEditor extends React.Component {
                 onChange={this.onChangeEditor}
               />
             </div>
-            <PreviewContainer className='col-md-6'>
+            <PreviewContainer className='col-md-5'>
               {this.state.proyectPath && <iframe src={this.state.proyectPath} />}
               <button onClick={this.saveProject} className={"save-button"}> Save </button>
             </PreviewContainer>
