@@ -13,19 +13,25 @@ const theme = Constants.LoaderTheme;
 //Section container
 const SectionContainer = styled('div')`
   width: 100%;
-  height: 100%;
-  background-color: ${props => props.theme.sectionBackgroundColor};
+  height: ${props => props.small ? '50%' : '100%'};
+  background-color: ${props => {
+    if(props.backgroundColor){
+      return props.backgroundColor;
+    }else{
+      return props.theme.sectionBackgroundColor;
+    }
+  }};
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
 const Spinner = styled('div')`
-  border: 16px solid ${props => props.theme.loaderBackgroundColor};
+  border: ${props => props.small ? '8px' : '16px'} solid ${props => props.theme.loaderBackgroundColor};
   border-radius: 50%;
-  border-top: 16px solid ${props => props.theme.loaderFrontColor};
-  width: 120px;
-  height: 120px;
+  border-top: ${props => props.small ? '8px' : '16px'} solid ${props => props.dark ? props.theme.loaderFrontColorDark : props.theme.loaderFrontColor };
+  width: ${props => props.small ? '40px' : '120px'};
+  height: ${props => props.small ? '40px' : '120px'};
   -webkit-animation: spin 1s linear infinite; /* Safari */
   animation: spin 1s linear infinite;
 
@@ -45,8 +51,10 @@ class Loader extends React.Component {
   render() {
     return(
       <ThemeProvider theme={theme}>
-        <SectionContainer>
-          <Spinner/>
+        <SectionContainer backgroundColor={this.props.backgroundColor ? this.props.backgroundColor : null} small={this.props.small}>
+          <Spinner
+            dark={this.props.dark}
+            small={this.props.small}/>
         </SectionContainer>
       </ThemeProvider>
     )

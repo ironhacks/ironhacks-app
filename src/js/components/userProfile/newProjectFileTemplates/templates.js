@@ -27,7 +27,7 @@ const js = `console.log("You can add you custom js here.")
 
 export const indexBlob = {
   name: 'index.html',
-  path: '/',
+  path: '',
   blob: new Blob([index], {type: 'text/html'})
 };
 

@@ -10,6 +10,7 @@ export const universalBorderRadius = "4px";
 
 export const LoaderTheme = {
   loaderFrontColor: mainBgColor,
+  loaderFrontColorDark: '#212529',
   loaderBackgroundColor: '#C7C3B7',
   sectionBackgroundColor: '#EEEDE9',
 }

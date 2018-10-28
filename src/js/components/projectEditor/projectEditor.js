@@ -22,6 +22,7 @@ import 'codemirror/addon/lint/javascript-lint'
 import 'codemirror/addon/lint/lint.css';
 
 //Custom components
+import FilesContainer from './filesContainer.js';
 import Loader from '../../utilities/loader.js';
 
 window.JSHINT = JSHINT
@@ -50,11 +51,6 @@ const SectionContainer = styled('div')`
       width: 100%;
       height: 100%;      
     }
-  }
-
-  button {
-    position: absolute;
-    bottom: 10hv;
   }
 `;
 
@@ -91,9 +87,10 @@ const editorThemplate = `<!DOCTYPE html>
   </body>
 </html>`;
 
-var defaults = {
-  javascript: 'var component = {\n\tname: "react-codemirror",\n\tauthor: "Jed Watson",\n\trepo: "https://github.com/JedWatson/react-codemirror"\n};',
-  
+const editorModeMIMERel = {
+  html: 'xml',
+  css: 'css',
+  js: 'javascript',
 }
 
 class ProjectEditor extends React.Component {
@@ -102,8 +99,9 @@ class ProjectEditor extends React.Component {
     this.state = {
       editorContent: editorThemplate,
       readonly: false,
-      mode: 'xml',
+      editorMode: 'xml',
       loadingFiles: true,
+      selectedFile: 'index.html'
     }
   }
 
@@ -181,7 +179,12 @@ class ProjectEditor extends React.Component {
       xhr.onload = function(event) {
         const blob = xhr.response;
           _this.setState((prevState, props) => {
+          const reader = new FileReader();
+          reader.addEventListener('loadend', () => {
+            prevState.projectFiles[file].content = reader.result
+          })
           prevState.projectFiles[file].blob = blob;
+          reader.readAsText(blob);
           remainingFiles -= 1;
           if(remainingFiles === 0){
             prevState.loadingFiles = false;
@@ -189,14 +192,14 @@ class ProjectEditor extends React.Component {
           return prevState;
         })
       };
-      xhr.open('GET', this.state.projectFiles[file]);
+      xhr.open('GET', this.state.projectFiles[file].url);
       xhr.send();
     };
-  }
+  };
 
   getProjectPreviewPath = () => {
     // Create a reference with an initial file path and name
-    var storage = window.firebase.storage().ref();
+    const storage = window.firebase.storage().ref();
     const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.props.match.params.proyectName}/index.html`; 
     this.setState({proyectPath: proyectPath});
 
@@ -204,50 +207,100 @@ class ProjectEditor extends React.Component {
 
   saveProject = () => {
     // Create a root reference
-    var storageRef = window.firebase.storage().ref();
-    var indexRef = storageRef.child(`${this.state.user.uid}/${this.props.match.params.params.proyectName}/index.html`);
+    const storageRef = window.firebase.storage().ref();
     // Raw string is the default if no format is provided
-    var message = this.state.editorContent;
-    console.log(message)
-    var myblob = new Blob([message], {
-        type: 'text/html'
-    });
+    const newBlobs = this.updateProjectBlobs();
     const _this = this;
-    indexRef.put(myblob).then(function(snapshot) {
-      console.log('Uploaded a raw string!');
-      _this.getProject();
+    console.log(newBlobs)
+    Promise.all(
+      newBlobs.map(item => this.uploadBlogToFirebase(item, storageRef))
+    )
+    .then((url) => {
+      console.log(`All success`)
+      const currentLocation = _this.state.proyectPath;
+      _this.setState({proyectPath: currentLocation + ' '})
+    })
+    .catch((error) => {
+      console.log(`Some failed: `, error.message)
+    });
+    
+  };
+
+  updateProjectBlobs = () => {
+    let newBlobs = [];
+    for(const fileName in this.state.projectFiles){
+      if(this.state.projectFiles[fileName].didChange){
+        const path = `${this.state.user.uid}/${this.props.match.params.proyectName}/${fileName}`
+        const newContent = this.state.projectFiles[fileName].unSavedContent;
+        const updatedBlob = new Blob([newContent], {
+            type: this.state.projectFiles[fileName].blob.type
+        });
+        newBlobs.push({path: path, blob: updatedBlob});
+      }
+    }
+    return newBlobs;
+  };
+
+  uploadBlogToFirebase = (blob, storageRef) => {
+    const indexRef = storageRef.child(blob.path);
+    return indexRef.put(blob.blob).then(function(snapshot) {
+      console.log('Blob Uploaded!');
+    });
+  };
+
+  onChangeEditor = (editor, data, value) => {
+    this.setState((prevState, props) => {
+      prevState.projectFiles[prevState.selectedFile].unSavedContent = value;
+      prevState.projectFiles[prevState.selectedFile].didChange = true;
+      return prevState;
+    });
+  };
+
+  onFileSelection = (name) => {
+    const splitedFileName = name.split('.');
+    this.setState((prevState, props) => { 
+      if(prevState.projectFiles[prevState.selectedFile].unSavedContent) {
+        prevState.projectFiles[prevState.selectedFile].content =  prevState.projectFiles[prevState.selectedFile].unSavedContent;
+      }
+      prevState.selectedFile = name;
+      prevState.editorMode = editorModeMIMERel[splitedFileName[splitedFileName.length - 1]];
+      return prevState;
     });
   }
 
-  onChangeEditor = (editor, data, value) => {
-    this.setState({editorContent: value})
-  }
   
   render() {
-    const { readOnly, mode, code, calc_title } = this.state
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fluid'>
           <div className='row no-gutters'>
-              {this.state.loadingFiles && <Loader/>}
             <ProjectContent className='col-md-2'>
               <h2>{this.props.match.params.proyectName.toUpperCase()}</h2>
+              <h3>Files:</h3>
+              {this.state.loadingFiles ? <Loader 
+                  backgroundColor={Constants.projectEditorBgColor}
+                  dark
+                  small
+                /> : 
+                <FilesContainer files={this.state.projectFiles} onClick={this.onFileSelection} selectedFile={this.state.selectedFile}/>  
+              }
             </ProjectContent>
             <div className='col-md-5 editor-container'>
-              <Editor
-                value={editorThemplate}
+              {!this.state.loadingFiles && <Editor
+                value={this.state.projectFiles[this.state.selectedFile].content}
                 options={{
                     lineNumbers: true,
-                    mode: mode,
+                    mode: this.state.editorMode,
                     lint: true,
                     gutters: [
                      'CodeMirror-lint-markers',
                    ],
                     theme: 'material',
-                    esversion: 6
+                    tabSize: 2,
+                    lineWrapping: true,
                 }}
                 onChange={this.onChangeEditor}
-              />
+              />}
             </div>
             <PreviewContainer className='col-md-5'>
               {this.state.proyectPath && <iframe src={this.state.proyectPath} />}
