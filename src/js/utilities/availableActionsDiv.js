@@ -4,7 +4,6 @@
 //Styled components
 import styled from 'styled-components';
 //Custom Constants
-import * as Constants from '../../constants.js';
 
 const AvailableActionsDiv = styled('div')`
   width: 100%;

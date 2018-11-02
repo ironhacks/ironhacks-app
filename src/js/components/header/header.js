@@ -79,8 +79,8 @@ class Header extends React.Component {
     super(props);
     this.state = {
       showMenu: 'none',
+      user: props.user,
     }
-
     this.getUserName()
   }
 
@@ -94,9 +94,9 @@ class Header extends React.Component {
     }else{
       this.setState({showMenu: 'none'})
     }
-  }
+  };
 
-  logout(){
+  logout = () => {
     window.firebase.auth().signOut().then(function() {
       console.log('Signed Out');
     }, function(error) {
@@ -110,31 +110,34 @@ class Header extends React.Component {
         <Redirect to='/'/>
       );
     };
-
     return (
       <ThemeProvider theme={theme}>
         <div className="container-fluid">
           <HeaderContainer className="row">
-            <div className="col-5">
-              <NavButton to="/forum">Forum</NavButton>
-              <span> | </span>
-              <NavButton to="/tutorial">Tutorial</NavButton>
-              <span> | </span>
-              <NavButton to="/quizzes">Quizzes</NavButton>
-              <span> | </span>
-              <NavButton to="/task">Task</NavButton>
-              <span> | </span>
-              <NavButton to="/results">Results</NavButton>
-              <span> | </span>
-              <NavButton to="/admin">Admin</NavButton>
-            </div>
+            {this.props.location.pathname === '/hackSelection' ? 
+              <div className="col-5"/> 
+              :
+              <div className="col-5">
+                <NavButton to="/forum">Forum</NavButton>
+                <span> | </span>
+                <NavButton to="/tutorial">Tutorial</NavButton>
+                <span> | </span>
+                <NavButton to="/quizzes">Quizzes</NavButton>
+                <span> | </span>
+                <NavButton to="/task">Task</NavButton>
+                <span> | </span>
+                <NavButton to="/results">Results</NavButton>
+                <span> | </span>
+                {this.state.user.isAdmin && <NavButton to="/admin">Admin</NavButton>}
+              </div>
+            }
             <div className="col-2">
               <IronHacksCenterLogo>
                 <label>IronHacks</label>
               </IronHacksCenterLogo>
             </div>
             <RightAlignDiv className='col-5'>
-              <UserMenuDropper onClick={this.showMenu}>{this.getUserName()}</UserMenuDropper>
+              <UserMenuDropper onClick={this.showMenu}>{this.state.user.displayName}</UserMenuDropper>
               <UserMenu display={this.state.showMenu}>
                 <UserMenuButton>Profile</UserMenuButton>
                 <UserMenuButton onClick={this.logout}>Sign Out</UserMenuButton>

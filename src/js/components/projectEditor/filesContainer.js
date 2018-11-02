@@ -4,11 +4,9 @@
 
 import React from 'react';
 //Styled components
-import styled, {ThemeProvider} from 'styled-components';
+import styled from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
-//Custom components
-import Loader from '../../utilities/loader.js';
 
 //Section container
 const MainContainer = styled('div')`

@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
 //Custom Components
 import ThreadPreview from './threadPreview.js'
 import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js'
+import ForumSelector from './forumSelector.js'
 //Custom Constants
 import * as Constants from '../../../constants.js';
 //Image references
@@ -22,6 +23,10 @@ const SectionContainer = styled('div')`
   width: 100%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
+
+  .flex {
+    display: flex;
+  } 
 `;
 //Header
 const MainHeader = styled('h1')`
@@ -124,20 +129,26 @@ class Forum extends React.Component {
     super(props);
     this.state = {
       threads: [],
+      selectedHack: 0,
     }
-  }
+    this.firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    this.firestore.settings(settings);
+  };
 
   componentDidMount(){
-    this.getThreats();
+    this.getThreads();
+    if(this.props.user.isAdmin){
+      this.getHacks();
+    };
   }
 
-  getThreats = () => {
-    const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
+  getThreads = () => {
     const _this = this;
     var threads = [];
-    firestore.collection("threads").get().then(function(querySnapshot) {
+    this.firestore.collection('threads')
+    .get()
+    .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
         threads.push(doc);
@@ -147,9 +158,69 @@ class Forum extends React.Component {
     .catch(function(error) {
         console.error("Error getting documents: ", error);
     });
+  };
+
+//---------------------------------------- Admin features ------------------------------------------
+
+  //Query all the hacks objects from the db.
+  getHacks = () => {
+    const _this = this;
+    var hacks = [];
+    this.firestore.collection("hacks")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const hackData = doc.data()
+        hackData.id = doc.id;  
+        hacks.push(hackData);
+        _this.firestore.collection('adminHackData').doc(doc.id)
+      });
+      _this.setState({hacks: hacks});
+      _this.getForums();
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+  };
+
+  getForums = (hackIndex) => {
+    const _this = this;
+    const forums = [];
+    const index = hackIndex ? hackIndex : 0;
+    this.firestore.collection('forums')
+    .where('hack', '==', this.state.hacks[index].id)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        forums.push(doc.data());
+      });
+      _this.setState((prevState, props) => {
+        prevState.hacks[index].forums = forums;
+        return prevState;
+      })
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+  };
+
+  onHackSelection = (hackIndex) => {
+    if(this.state.hacks[hackIndex].forums){
+      this.setState({selectedHack: hackIndex});
+    }else{
+      this.setState({selectedHack: hackIndex});
+      this.getForums(hackIndex);
+    };
+  };
+
+  onForumSelection = (forumIndex) => {
+    console.log(forumIndex)
   }
 
+//---------------------------------------- Admin features ------------------------------------------
+
   render() {
+    console.log(this.props)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fluid d-flex flex-column'>
@@ -159,8 +230,15 @@ class Forum extends React.Component {
             </div>
           </div>
           <Control className="row">
-            <div className='col-4 offset-2'>
+            <div className='col-4 offset-2 flex'>
               <NewThreadButton><Link to='forum/new'>Create a new thread</Link></NewThreadButton>
+              {this.props.user.isAdmin 
+                && this.state.hacks 
+                && <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
+              {this.props.user.isAdmin 
+                && this.state.hacks 
+                && this.state.hacks[this.state.selectedHack].forums
+                && <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
             </div>
             <SearchBar className='col-4'>
               <input type='text' placeholder='Search...'/>

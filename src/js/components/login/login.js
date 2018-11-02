@@ -105,7 +105,6 @@ class Login extends React.Component {
     firestore.collection("users").doc(user.uid).set({
       name: user.name,
       email: user.email,
-      projects: {},
     })
     .then(function(docRef) {
       _this.setState({mustNavigate: true});

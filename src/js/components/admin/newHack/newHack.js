@@ -91,7 +91,7 @@ class NewHack extends React.Component {
       to: undefined,
       isCalendarManagingFocus: false,
       phases: [{coding: {start: new Date(), end: new Date()}, evaluation: {start: new Date(), end: new Date()}}],
-      forums: [{name: '', treatment: 0}],
+      forums: [{name: '', treatment: 0, participants: []}],
       isCreateEnable: true,
       mustNavigate: false
     }
@@ -196,7 +196,7 @@ class NewHack extends React.Component {
   //Add a new Phase Json Representation Object to de forum array on the state object
   addNewForum = () => {
     this.setState((prevState, props) => {
-      return prevState.forums.push({name: '', treatment: 0})
+      return prevState.forums.push({name: '', treatment: 0, participants: []})
     });
   };
 
@@ -204,7 +204,8 @@ class NewHack extends React.Component {
     this.setState((prevState, props) => {
       prevState.forums[index] = {
         name: name ? name : prevState.forums[index].name,
-        treatment: treatment ? treatment : prevState.forums[index].treatment
+        treatment: treatment ? treatment : prevState.forums[index].treatment,
+        participants: [],
       }
       return prevState.forums;
     });

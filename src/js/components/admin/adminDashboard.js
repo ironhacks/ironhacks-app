@@ -112,18 +112,20 @@ class AdminDashboard extends React.Component {
     firestore.settings(settings);
     const _this = this;
     //Updating the current hack:
-    firestore.collection('hacks').where('name', '==', this.props.match.params.hackId).limit(1)
+    firestore.collection('hacks')
+    .where('name', '==', this.props.match.params.hackId)
+    .limit(1)
     .get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const hackData = doc.data()
           const hackId = doc.id;  
-          hackData['whiteList'] = doc.data().whiteList;
-          _this.setState({hack: hackData, hackId: hackId});
           firestore.collection('adminHackData').doc(hackId)
           .get()
           .then(function(doc) {
-          
+            hackData['whiteList'] = doc.data().whiteList;
+            hackData['task'] = doc.data().task;
+            _this.setState({hack: hackData, hackId: hackId});
           });
         });
     }) 
@@ -135,7 +137,6 @@ class AdminDashboard extends React.Component {
   //This function handle the tutorial docuement update.
   onSaveSettings = (whiteList) => {
     this.updateHackSettings(whiteList);
-    //Creating a map for the whiteList
   };
 
   updateHackSettings = (whiteList) => {
@@ -155,7 +156,7 @@ class AdminDashboard extends React.Component {
     const hackWhiteListObject = {
       whiteList:  whiteList
     }
-    const hackRef = firestore.collection('hacks').doc(this.state.hackId);
+    const hackRef = firestore.collection('adminHackData').doc(this.state.hackId);
     batch.set(hackRef, hackWhiteListObject, {merge: true});
     batch.commit()
     .then(() => {
@@ -214,7 +215,6 @@ class AdminDashboard extends React.Component {
     //Updating the current hack:
     const hackRef = firestore.collection('adminHackData').doc(this.state.hackId);
     const hackTask = this.state.hack.task;
-    console.log(this.state)
     hackTask.doc = this.utoa(this.state.taskMarkdown)
     hackRef.update({
       task: hackTask,

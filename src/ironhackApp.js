@@ -86,6 +86,13 @@ class IronHacksApp extends React.Component {
     });
   };
 
+  onHackSelection = (hackId, forumId) => {
+    this.setState((prevState, props) => {
+      prevState.user.currentHack = hackId;
+      prevState.user.currentForum = forumId;
+      return prevState;
+    })
+  }
 
   render() {
     //If this.user is null, means that we didn't receive response from firebase auth, therefore we show a loader:
@@ -103,18 +110,18 @@ class IronHacksApp extends React.Component {
             <Route exact path='/login' render={() => null}/>
             <Route exact path='/404' render={() => null}/>
             {!this.state.user && <Redirect to='/'/>}
-            <Route component={Header}/>
+            <Route render={(props) => (<Header user={this.state.user} {...props}/>)}/>
           </Switch>
           <Switch>
             <Route path='/login' component={Login}/>
-            <Route path='/hackSelection' component={HackSelection}/>
+            <Route path='/hackSelection' render={(props) => (<HackSelection user={this.state.user} onHackSelection={this.onHackSelection} {...props}/>)}/>
             <Route path='/profile' component={UserProfile}/>
-            <Route exact path='/forum' component={Forum}/>
-            <Route exact path='/forum/new' component={NewThread}/>
+            <Route exact path='/forum' render={(props) => (<Forum user={this.state.user} {...props}/>)}/>
+            <Route exact path='/forum/new' render={(props) => (<NewThread user={this.state.user} {...props}/>)}/>
+            <Route path='/forum/thread/:threadId' component={ThreadViewWithRouter}/>
             <Route exact path='/admin/newHack' component={NewHack}/>
             <Route path='/admin/dashboard/:hackId' component={AdminDashboard}/>
             <Route path='/admin' component={Admin}/>
-            <Route path='/forum/thread/:threadId' component={ThreadViewWithRouter}/>
             <Route path='/tutorial' component={Tutorial}/>
             <Route path='/task' component={Task}/>
             <Route path='/quizzes' component={Quizzes}/>

@@ -73,8 +73,8 @@ class HackCard extends React.Component {
 
     return (
       <CardContainer onClick={this.onHackCardClick}>
-        <h3>{this.props.hack.data().name}</h3>
-        <span>{"Phases: " + this.props.hack.data().phases.length}</span>
+        <h3>{this.props.hack.name}</h3>
+        <span>{"Phases: " + this.props.hack.phases.length}</span>
         <Separator/>
       </CardContainer>
     );

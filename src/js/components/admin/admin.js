@@ -60,10 +60,17 @@ class Admin extends React.Component {
     firestore.collection("hacks").get().then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
-        hacks.push(doc);
+        const hackData = doc.data()
+        hackData.id = doc.id;  
+        firestore.collection('adminHackData').doc(doc.id)
+        .get()
+        .then(function(doc) {
+          hackData['whiteList'] = doc.data().whiteList;
+          hackData['task'] = doc.data().task;
+          hacks.push(hackData);
+          _this.setState({hacks: hacks});
+        });
       });
-      console.log(hacks)
-      _this.setState({hacks: hacks});
     })
     .catch(function(error) {
         console.error("Error getting documents: ", error);
@@ -86,7 +93,7 @@ class Admin extends React.Component {
   render() {
     if (this.state.startNewHackNav === true) return <Redirect to='admin/newHack'/>;
     if (this.state.startDashboardNav === true){
-      const selectedHack = this.state.selectedHack.data();
+      const selectedHack = this.state.selectedHack;
       const selectedHackId = this.state.selectedHack.id;
       const hackName = selectedHack.name
       const pathname = '/admin/dashboard/' + hackName;

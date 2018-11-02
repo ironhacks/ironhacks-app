@@ -13,7 +13,7 @@ import WhiteListItem from './whiteListItem.js';
 import AvailableActionsDiv from '../../../../utilities/availableActionsDiv.js';
 import Button from '../../../../utilities/button.js';
 //Custom Constants
-import * as Constants from '../../../../../constants.js';
+//import * as Constants from '../../../../../constants.js';
 
 //Section container
 const SectionContainer = styled('div')`
@@ -52,11 +52,11 @@ class AdmSettingsSection extends React.Component {
     if(this.props.hack.whiteList && this.props.hack.whiteList.length > 0){
       whiteList = this.props.hack.whiteList;
     }
-    console.log(this.props.hack.whiteList)
       this.state = {
       whiteList: whiteList,
     }
   }
+
   onWhiteListChange = (e) => {
     if(e.target.value.split(/,| |\n/).length > 1){
       this.normalizeInputContent(e.target.value);

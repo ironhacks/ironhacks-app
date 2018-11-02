@@ -199,7 +199,6 @@ class ProjectEditor extends React.Component {
 
   getProjectPreviewPath = () => {
     // Create a reference with an initial file path and name
-    const storage = window.firebase.storage().ref();
     const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.props.match.params.proyectName}/index.html`; 
     this.setState({proyectPath: proyectPath});
 
@@ -303,7 +302,7 @@ class ProjectEditor extends React.Component {
               />}
             </div>
             <PreviewContainer className='col-md-5'>
-              {this.state.proyectPath && <iframe src={this.state.proyectPath} />}
+              {this.state.proyectPath && <iframe src={this.state.proyectPath} title='The Project Preview'/>}
               <button onClick={this.saveProject} className={"save-button"}> Save </button>
             </PreviewContainer>
           </div>
