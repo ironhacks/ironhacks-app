@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import { withCookies } from 'react-cookie';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Custom components
@@ -108,7 +109,9 @@ class HackSelection extends React.Component {
       .doc(this.props.user.uid)
       .get()
       .then((doc) => {
-        _this.props.onHackSelection(hackId, doc.data().forums[hackId].id);
+        const { cookies } = _this.props;
+        cookies.set('currentHack', hackId);
+        cookies.set('currentForum', doc.data().forums[hackId].id);
         _this.setState({mustNavigate: true})
       })
     });
@@ -121,7 +124,9 @@ class HackSelection extends React.Component {
     .doc(this.props.user.uid)
     .get()
     .then((doc) => {
-      _this.props.onHackSelection(hackId, doc.data().forums[hackId].id);
+      const { cookies } = _this.props;
+      cookies.set('currentHack', hackId);
+      cookies.set('currentForum', doc.data().forums[hackId].id);
       _this.setState({mustNavigate: true})
     })
   };
@@ -174,4 +179,4 @@ class HackSelection extends React.Component {
   }
 }
 
-export default HackSelection;
+export default withCookies(HackSelection);

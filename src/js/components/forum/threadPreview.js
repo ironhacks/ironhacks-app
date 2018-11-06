@@ -6,8 +6,9 @@ import React from 'react';
 
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
+import PropTypes from 'prop-types';
 //Router
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 //Custom Components
 import ReactionsView from './reactionsView.js';
 import TagView from './tagView.js';
@@ -65,17 +66,21 @@ class ThreadPreview extends React.Component {
     };
   }
 
+  static contextTypes = {
+    router: PropTypes.object
+  } 
+
   handleClick = () => {
     this.setState({referrer: 'forum/thread/' + this.props.thread.id});
   }
   
   render() {
     const { referrer } = this.state;
-    if (referrer) return <Redirect to={{ pathname: referrer, state: { title: this.props.thread.data().title}}} />;
+    if (referrer) return <Redirect push to={{ pathname: referrer, state: { thread: this.props.thread.data()}}} />;
 
     return (
       <ThemeProvider theme={theme}>
-        <PreviewContainer onClick={this.handleClick}>
+        <PreviewContainer to={'forum/thread/' + this.props.thread.id} onClick={this.handleClick}>
           <div className="row">
             <div className='col-6'>
               <h2>{this.props.thread.data().title}</h2>

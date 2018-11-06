@@ -27,12 +27,14 @@ const SectionContainer = styled('div')`
       margin-top: 150px;
     }
   }
+
+  overflow: auto;
 `;
 const CardsContainer = styled('div')`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: left;
   margin-top: 70px;
 `;
 

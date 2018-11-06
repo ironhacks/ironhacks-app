@@ -3,6 +3,7 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
+import { CookiesProvider } from 'react-cookie';
 import { Switch, Route, Redirect} from "react-router-dom";
 //Styled components
 import styled from 'styled-components';
@@ -86,14 +87,6 @@ class IronHacksApp extends React.Component {
     });
   };
 
-  onHackSelection = (hackId, forumId) => {
-    this.setState((prevState, props) => {
-      prevState.user.currentHack = hackId;
-      prevState.user.currentForum = forumId;
-      return prevState;
-    })
-  }
-
   render() {
     //If this.user is null, means that we didn't receive response from firebase auth, therefore we show a loader:
     if(!this.state.mustNavigate){
@@ -104,44 +97,46 @@ class IronHacksApp extends React.Component {
       );
     }else{
       return (
-        <div className='App'>
-          <Switch>
-            <Route exact path='/' render={() => null}/> 
-            <Route exact path='/login' render={() => null}/>
-            <Route exact path='/404' render={() => null}/>
-            {!this.state.user && <Redirect to='/'/>}
-            <Route render={(props) => (<Header user={this.state.user} {...props}/>)}/>
-          </Switch>
-          <Switch>
-            <Route path='/login' component={Login}/>
-            <Route path='/hackSelection' render={(props) => (<HackSelection user={this.state.user} onHackSelection={this.onHackSelection} {...props}/>)}/>
-            <Route path='/profile' component={UserProfile}/>
-            <Route exact path='/forum' render={(props) => (<Forum user={this.state.user} {...props}/>)}/>
-            <Route exact path='/forum/new' render={(props) => (<NewThread user={this.state.user} {...props}/>)}/>
-            <Route path='/forum/thread/:threadId' component={ThreadViewWithRouter}/>
-            <Route exact path='/admin/newHack' component={NewHack}/>
-            <Route path='/admin/dashboard/:hackId' component={AdminDashboard}/>
-            <Route path='/admin' component={Admin}/>
-            <Route path='/tutorial' component={Tutorial}/>
-            <Route path='/task' component={Task}/>
-            <Route path='/quizzes' component={Quizzes}/>
-            <Route path='/results' component={Results}/>
-            <Route exact path='/projectEditor' component={ProjectEditor}/>
-            <Route exact path='/projectEditor/:proyectName' component={ProjectEditor}/>
-            <Route exact path='/404' component={NotFound}/> 
-            {this.state.user.admin && <Redirect to='/admin'/>}
-            {this.state.user && <Redirect to='/forum'/>}
-            <Route exact path='/' component={Landing}/>
-            {this.state.user && <Redirect to='/404'/>}
-            {<Redirect to='/'/>}
-          </Switch>
-          <Switch>
-            <Route exact path='/' render={() => null}/>
-            <Route exact path='/login' render={() => null}/>
-            <Route exact path='/404' render={() => null}/>
-            <Route component={Footer}/>
-          </Switch>
-        </div>
+        <CookiesProvider>
+          <div className='App'>
+            <Switch>
+              <Route exact path='/' render={() => null}/> 
+              <Route exact path='/login' render={() => null}/>
+              <Route exact path='/404' render={() => null}/>
+              {!this.state.user && <Redirect to='/'/>}
+              <Route render={(props) => (<Header user={this.state.user} {...props}/>)}/>
+            </Switch>
+            <Switch>
+              <Route path='/login' component={Login}/>
+              <Route path='/hackSelection' render={(props) => (<HackSelection user={this.state.user} {...props}/>)}/>
+              <Route path='/profile' component={UserProfile}/>
+              <Route exact path='/forum' render={(props) => (<Forum user={this.state.user} {...props}/>)}/>
+              <Route exact path='/forum/new' render={(props) => (<NewThread user={this.state.user} {...props}/>)}/>
+              <Route path='/forum/thread/:threadId' component={ThreadViewWithRouter}/>
+              <Route exact path='/admin/newHack' component={NewHack}/>
+              <Route path='/admin/dashboard/:hackId' component={AdminDashboard}/>
+              <Route path='/admin' component={Admin}/>
+              <Route path='/tutorial' render={(props) => (<Tutorial user={this.state.user} {...props}/>)}/>
+              <Route path='/task' render={(props) => (<Task user={this.state.user} {...props}/>)}/>
+              <Route path='/quizzes' component={Quizzes}/>
+              <Route path='/results' component={Results}/>
+              <Route exact path='/projectEditor' component={ProjectEditor}/>
+              <Route exact path='/projectEditor/:proyectName' component={ProjectEditor}/>
+              <Route exact path='/404' component={NotFound}/> 
+              {this.state.user.admin && <Redirect to='/admin'/>}
+              {this.state.user && <Redirect to='/forum'/>}
+              <Route exact path='/' component={Landing}/>
+              {this.state.user && <Redirect to='/404'/>}
+              {<Redirect to='/'/>}
+            </Switch>
+            <Switch>
+              <Route exact path='/' render={() => null}/>
+              <Route exact path='/login' render={() => null}/>
+              <Route exact path='/404' render={() => null}/>
+              <Route component={Footer}/>
+            </Switch>
+          </div>
+        </CookiesProvider>
       );
     }
   };

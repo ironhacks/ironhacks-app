@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import { withCookies } from 'react-cookie';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
@@ -97,12 +98,23 @@ class Header extends React.Component {
   };
 
   logout = () => {
+    //this.removeCookies();    
     window.firebase.auth().signOut().then(function() {
       console.log('Signed Out');
     }, function(error) {
       console.error('Sign Out Error', error);
     });
   };
+
+  removeCookies = () => {
+    const { cookies } = this.props;
+    if(cookies.get('currentHack')){
+      cookies.remove('currentHack');
+    }
+    if(cookies.get('currentForum')){
+      cookies.remove('currentForum');
+    }
+  }
 
   render() {
     if(this.state.signOut === true){
@@ -150,4 +162,4 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+export default withCookies(Header);

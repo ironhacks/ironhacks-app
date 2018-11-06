@@ -20,7 +20,7 @@ import PurdueLogo from './img/purdue-sig-black-gold.png'
 const theme = Constants.SponsorBannerTheme;
 
 const BannerContainer = styled('div')`
-  height: ${props => props.theme.containerHeight};
+  min-height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
   display: flex;
   align-items: center;

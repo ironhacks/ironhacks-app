@@ -136,7 +136,7 @@ class NewThread extends React.Component {
     let hackId, forumId;
     if(this.props.user.isAdmin){
       hackId = this.state.hacks[this.state.selectedHack].id;
-      forumId = this.state.hacks[this.state.selectedForum].id;
+      forumId = this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id
     }else{
       hackId = this.props.user.currentHack;
       forumId = this.props.user.currentForum;
@@ -155,12 +155,14 @@ class NewThread extends React.Component {
     })
     .then(function(docRef) {
       const threadRef = docRef.id;
+      console.log(_this.props)
       _this.firestore.collection("comments").add({
-        author: this.props.user.id,
-        authorName: this.props.user.displayName,
+        author: _this.props.user.uid,
+        authorName: _this.props.user.displayName,
         body: codedBody,
         createdAt: currentDate,
-        threadId: docRef.id,  
+        threadId: docRef.id,
+        forumId: forumId,  
       }) // Adding double reference on the thread.
       .then(function(docRef) {
         console.log(threadRef)
@@ -211,7 +213,10 @@ class NewThread extends React.Component {
     .get()
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        forums.push(doc.data());
+        console.log(doc.data())
+        const forum = doc.data();
+        forum.id = doc.id;
+        forums.push(forum);
       });
       _this.setState((prevState, props) => {
         prevState.hacks[index].forums = forums;
@@ -224,6 +229,8 @@ class NewThread extends React.Component {
   };
 
   onHackSelection = (hackIndex) => {
+    console.log(this.state.hacks[this.state.selectedHack].id)
+    console.log(this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id)
     if(this.state.hacks[hackIndex].forums){
       this.setState({selectedHack: hackIndex});
     }else{
@@ -239,7 +246,7 @@ class NewThread extends React.Component {
 //---------------------------------------- Admin features ------------------------------------------
 
   render() {
-    console.log(this.props)
+    console.log(this.state)
     if (this.state.mustNavigate) return <Redirect to={{ pathname: '/forum/thread/' + this.state.threadRef, state: { title: this.state.titleValue}}}/>;
     return (
       <ThemeProvider theme={theme}>

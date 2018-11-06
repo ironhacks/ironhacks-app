@@ -53,9 +53,7 @@ const UserImage = styled('div')`
   background-color: gray;
   border-radius: 20px;
 `;
-//const tag = styled('div')`
-  
-//`;
+
 const ConverterConfig = {
   tables: true,
   simplifiedAutoLink: true,
@@ -76,26 +74,23 @@ class CommentView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navigate: false,
-      referrer: null,
     };
   }
+
+  handleClick = () => {
+    console.log('Button is cliked!');
+  };
 
   decodeBody = (markdown) => {
     const converter = new Showdown.Converter(ConverterConfig);
     return converter.makeHtml(markdown)
   };
-
-  handleClick = () => {
-    console.log('Button is cliked!');
-  };
   // base64 encoded ascii to ucs-2 string
   atou = (str) => {
-      return decodeURIComponent(escape(window.atob(str)));
+    return decodeURIComponent(escape(window.atob(str)));
   };
 
   render() {
-
     return (
       <ThemeProvider theme={theme}>
         <CommentContainer>

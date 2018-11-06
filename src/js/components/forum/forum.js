@@ -3,10 +3,11 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
+import { withCookies } from 'react-cookie';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Router
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 //Custom Components
 import ThreadPreview from './threadPreview.js'
 import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js'
@@ -26,7 +27,11 @@ const SectionContainer = styled('div')`
 
   .flex {
     display: flex;
-  } 
+  }
+
+  .sponsors-div {
+    min-height: 125px;
+  }
 `;
 //Header
 const MainHeader = styled('h1')`
@@ -127,7 +132,10 @@ const SectionSeparator = styled('div')`
 class Forum extends React.Component {
   constructor(props){
     super(props);
+    const { cookies } = props;
     this.state = {
+      currentHack: cookies.get('currentHack') || null,
+      forum: cookies.get('currentForum') || null,
       threads: [],
       selectedHack: 0,
     }
@@ -137,16 +145,18 @@ class Forum extends React.Component {
   };
 
   componentDidMount(){
-    this.getThreads();
     if(this.props.user.isAdmin){
       this.getHacks();
-    };
+    }else {
+      this.getThreads();
+    }
   }
 
   getThreads = () => {
     const _this = this;
     var threads = [];
     this.firestore.collection('threads')
+    .where('forumId', '==', this.state.forum)
     .get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
@@ -198,6 +208,7 @@ class Forum extends React.Component {
         prevState.hacks[index].forums = forums;
         return prevState;
       })
+      this.getThreadsAdmin();
     })
     .catch(function(error) {
         console.error("Error getting documents: ", error);
@@ -211,16 +222,38 @@ class Forum extends React.Component {
       this.setState({selectedHack: hackIndex});
       this.getForums(hackIndex);
     };
-  };
+  }; 
 
   onForumSelection = (forumIndex) => {
     console.log(forumIndex)
-  }
+  };
+
+  getThreadsAdmin = () => {
+    const _this = this;
+    var threads = [];
+    this.firestore.collection('threads')
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        threads.push(doc);
+      });
+      _this.setState({threads: threads});
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+  };
 
 //---------------------------------------- Admin features ------------------------------------------
 
   render() {
-    console.log(this.props)
+    console.log(this.props, this.state)
+    if((this.state.currentHack == null || this.state.forum == null) && this.props.user && !this.props.user.isAdmin){
+      return (
+        <Redirect to='/hackSelection'/>
+      )
+    }
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fluid d-flex flex-column'>
@@ -259,7 +292,7 @@ class Forum extends React.Component {
               <ForumHeader><h2>General discussion</h2></ForumHeader>
             </ForumThreads>
           </div>
-          <div className="row">
+          <div className="row sponsors-div">
             <div className='col-8 offset-2'>
               <SponsorsBanner></SponsorsBanner>
             </div>
@@ -270,4 +303,4 @@ class Forum extends React.Component {
   }
 }
 
-export default Forum;
+export default withCookies(Forum);
