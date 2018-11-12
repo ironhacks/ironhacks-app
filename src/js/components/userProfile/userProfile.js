@@ -20,6 +20,7 @@ const SectionContainer = styled('div')`
   width: 100%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
+  overflow: auto;
 
   h1 {
     margin-bottom: 20px;

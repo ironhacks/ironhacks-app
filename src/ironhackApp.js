@@ -109,7 +109,7 @@ class IronHacksApp extends React.Component {
             <Switch>
               <Route path='/login' component={Login}/>
               <Route path='/hackSelection' render={(props) => (<HackSelection user={this.state.user} {...props}/>)}/>
-              <Route path='/profile' component={UserProfile}/>
+              <Route path='/profile' render={(props) => (<UserProfile user={this.state.user} {...props}/>)}/>
               <Route exact path='/forum' render={(props) => (<Forum user={this.state.user} {...props}/>)}/>
               <Route exact path='/forum/new' render={(props) => (<NewThread user={this.state.user} {...props}/>)}/>
               <Route path='/forum/thread/:threadId' component={ThreadViewWithRouter}/>
