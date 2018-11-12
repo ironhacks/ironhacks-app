@@ -62,7 +62,6 @@ class Login extends React.Component {
             uid: authResult.user.uid
           }
           this.setState({user: user});
-          // Interupt the redirect if the user is new while writing on the db.
           if(authResult.additionalUserInfo.isNewUser === true){
             this.saveUserOnDB(user);
             user.isAdmin = false;
@@ -73,11 +72,6 @@ class Login extends React.Component {
           }
         },
         signInFailure: function(error) {
-          // Some unrecoverable error occurred during sign-in.
-          // Return a promise when error handling is completed and FirebaseUI
-          // will reset, clearing any UI. This commonly occurs for error code
-          // 'firebaseui/anonymous-upgrade-merge-conflict' when merge conflict
-          // occurs.
           console.log(error);
         }
       },

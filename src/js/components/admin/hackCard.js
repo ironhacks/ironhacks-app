@@ -11,7 +11,7 @@ import * as Constants from '../../../constants.js';
 //Section container
 const CardContainer = styled('button')`
   height: 150px;
-  width: 250px;
+  width: 30%;
   margin: 10px;
   text-align: left;
   box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);

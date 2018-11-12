@@ -239,7 +239,6 @@ class Header extends React.Component {
         <Redirect to='/'/>
       );
     };
-    console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
         <div className="container-fluid">
@@ -263,7 +262,7 @@ class Header extends React.Component {
                     <span> | </span>
                     <NavButton to="/results" onClick={this.hideMenus}>Results</NavButton>
                     <span> | </span>
-                    {this.state.user.isAdmin && <NavButton to="/admin">Admin</NavButton>}
+                    {this.state.user.isAdmin && <NavButton to="/admin" onClick={this.hideMenus}>Admin</NavButton>}
                   </div>
                 </NavContainer>
               </div>

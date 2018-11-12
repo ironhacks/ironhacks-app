@@ -8,7 +8,7 @@ import React from 'react';
 import styled, {ThemeProvider} from 'styled-components';
 import PropTypes from 'prop-types';
 //Router
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 //Custom Components
 import ReactionsView from './reactionsView.js';
 import TagView from './tagView.js';

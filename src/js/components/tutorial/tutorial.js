@@ -60,7 +60,6 @@ class Tutorial extends React.Component {
   }
 
   getTutorialDocument = () => {
-    console.log("lala")
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
@@ -70,10 +69,10 @@ class Tutorial extends React.Component {
     .get()
     .then((doc) => {
       console.log(doc.data())
-      this.setState({tutorial: doc.data().tutorial, hackName: doc.data().name});
+      _this.setState({tutorial: doc.data().tutorial, hackName: doc.data().name});
     })
     .catch(function(error) {
-        console.error("Error getting documents: ", error);
+      console.error("Error getting documents: ", error);
     });
   };
 
@@ -88,7 +87,6 @@ class Tutorial extends React.Component {
   };
   
   render() {
-    console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fluid'>

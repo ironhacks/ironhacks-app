@@ -12,7 +12,7 @@ import Button from '../../utilities/button.js';
 //Section container
 const CardContainer = styled('button')`
   height: 150px;
-  width: 250px;
+  width: 30%;
   margin: 10px;
   text-align: left;
   box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);
@@ -52,7 +52,7 @@ const CardContainer = styled('button')`
 
 const NewProjectForm = styled('div')`
   height: 150px;
-  width: 250px;
+  width: 30%;
   margin: 10px;
   text-align: left;
   box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);
@@ -162,7 +162,7 @@ class ProjectCard extends React.Component {
 
     return (
       <CardContainer onClick={this.onProjectCardClick}>
-        <h3>{this.props.project.data().name}</h3>
+        <h3>{this.props.project.name}</h3>
         <Separator/>
       </CardContainer>
     );

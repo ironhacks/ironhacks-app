@@ -24,6 +24,7 @@ import 'codemirror/addon/lint/lint.css';
 //Custom components
 import FilesContainer from './filesContainer.js';
 import Loader from '../../utilities/loader.js';
+import Button from '../../utilities/button.js';
 
 window.JSHINT = JSHINT
 const theme = Constants.AppSectionTheme;
@@ -34,7 +35,7 @@ const SectionContainer = styled('div')`
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
   padding: 0 !important;
-
+  color: #70867b;
   &.container-fuild {
     padding: 0;
   }
@@ -59,6 +60,9 @@ const ProjectContent = styled('div')`
   height: 100%;
   padding: 15px !important;
   background-color: ${Constants.projectEditorBgColor};
+`;
+
+const ProjectControl = styled('div')`
 `;
 
 const Editor = styled(CodeMirror)`
@@ -283,6 +287,9 @@ class ProjectEditor extends React.Component {
                 /> : 
                 <FilesContainer files={this.state.projectFiles} onClick={this.onFileSelection} selectedFile={this.state.selectedFile}/>  
               }
+            <div>
+              <Button primary onClick={this.saveProject}> Save </Button>
+            </div>
             </ProjectContent>
             <div className='col-md-5 editor-container'>
               {!this.state.loadingFiles && <Editor
@@ -303,7 +310,6 @@ class ProjectEditor extends React.Component {
             </div>
             <PreviewContainer className='col-md-5'>
               {this.state.proyectPath && <iframe src={this.state.proyectPath} title='The Project Preview'/>}
-              <button onClick={this.saveProject} className={"save-button"}> Save </button>
             </PreviewContainer>
           </div>
         </SectionContainer> 

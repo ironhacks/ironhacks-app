@@ -34,7 +34,7 @@ const CardsContainer = styled('div')`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: left;
   margin-top: 70px;
 `;
 
@@ -44,7 +44,8 @@ class UserProfile extends React.Component {
     this.state = {
       startNewProjecNav: false,
       startProjectEditorNav: false,
-      hacks: [],
+      projects: [],
+      user: this.props.user,
     };
     if(this.props.location.state){
       this.state.user = this.props.location.state.user
@@ -52,45 +53,7 @@ class UserProfile extends React.Component {
   };
 
   componentDidMount(){
-    this.getUserData();
-  };
-
-  //ask for the user status and data.
-  getUserData = () => {
-    const _this = this;
-    window.firebase.auth().onAuthStateChanged((user) => {
-      if(user){
-        _this.setState({user: user});
-        _this.isAdmin(); //We only check this to display specific ui items.
-      }
-    });
-  };
-  //check on the DB if the current user is admin.
-  isAdmin = () => {
-    //db Reference
-    const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
-    const _this = this;
-    //Updating the current hack:
-    firestore.collection('admins').doc(this.state.user.uid)
-    .get()
-    .then(function(doc) {
-      //Is admin.
-      _this.setState((prevState, props) => {
-        prevState.user.isAdmin = true;
-        return prevState;
-      })
-      _this.getProjects();
-    }) 
-    .catch(function(error) {
-      // The user can't read the admins collection, therefore, is not admin.
-      _this.setState((prevState, props) => {
-        prevState.user.isAdmin = false;
-        return prevState;
-      })
-      _this.getProjects();
-    });
+    this.getProjects();
   };
   //Query all the hacks objects from the db.
   getProjects = () => {
@@ -99,15 +62,17 @@ class UserProfile extends React.Component {
     firestore.settings(settings);
     const _this = this;
     var projects = [];
-    firestore.collection("users").doc(this.state.user.uid).get().then(function(doc) {
-      const userData = doc.data();
-      if(userData.projectList){
-        projects = userData.projectList;
-        _this.setState({projectList: projects});
-      }else{
-        //The user doesn't hace any projects.
-        _this.setState({projectList: {}});
-      }
+    firestore.collection("users")
+    .doc(this.state.user.uid)
+    .collection('projects')
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach((doc) => {
+        const projectData = doc.data();
+        projectData.name = doc.id;
+        projects.push(projectData);
+        _this.setState({projects: projects});
+      });
     })
     .catch(function(error) {
         console.error("Error getting documents: ", error);
@@ -122,7 +87,10 @@ class UserProfile extends React.Component {
       templateFiles.map(file => this.putStorageFile(file, name))
     )
     .then((url) => {
-      console.log(`All success`, url)
+      this.setState({
+        navigateToCreatedProject: true,
+        newProjectName: name,
+      })
     })
     .catch((error) => {
       console.log(`Some failed: `, error.message)
@@ -164,21 +132,18 @@ class UserProfile extends React.Component {
     }).catch((error) => {
       console.log('One failed:', file, error.message)
     });
+  };
+
+  goToProjectEditor = (index) => {
+    this.setState({
+      selectedProject: index,
+      navigateToProject: true,
+    })
   }
 
   render() {
-    if (this.state.startNewProjecNav === true) return <Redirect to='admin/newHack'/>;
-    if (this.state.startDashboardNav === true){
-      const selectedHack = this.state.selectedHack.data();
-      const selectedHackId = this.state.selectedHack.id;
-      const hackName = selectedHack.name
-      const pathname = '/admin/dashboard/' + hackName;
-      return <Redirect to={{
-        pathname: pathname,
-        state: {hack: selectedHack, hackId: selectedHackId}
-      }}
-      />;
-    }
+    if (this.state.navigateToProject === true) return <Redirect push to={`projectEditor/${this.state.projects[this.state.selectedProject].name}`}/>;
+    if (this.state.navigateToCreatedProject === true) return <Redirect push to={`projectEditor/${this.state.newProjectName}`}/>;
 
     return (
       <ThemeProvider theme={theme}>
@@ -186,12 +151,12 @@ class UserProfile extends React.Component {
         <div className="row">
           <div className='col-md-8 offset-md-2'>
             <h1>Welcome to IronHacks Platform!</h1>
-            <span>Bellow you will find all the availabe hacks to register in. Click on one of them to start the registration process.</span>
+            <span>Bellow you will find the current hack status. You can also manage your projects from here.</span>
             <Separator primary/>
-            <ProjectCard newProject={true} onSave={this.createNewProject}/>
             <CardsContainer >
-              {this.state.hacks.map((hack, index) => {
-                return <ProjectCard hack={hack} index={index} key={hack.id} onClick={this.goToHackDashBoard}/>
+              <ProjectCard newProject={true} onSave={this.createNewProject}/>
+              {this.state.projects.map((project, index) => {
+                return <ProjectCard project={project} index={index} key={index} onClick={this.goToProjectEditor}/>
               })}
             </CardsContainer>
           </div>
