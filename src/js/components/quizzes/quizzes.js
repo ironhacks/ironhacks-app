@@ -5,9 +5,10 @@
 import React from 'react';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
+import { Link } from 'react-router-dom';
 //Custom Constants
 import * as Constants from '../../../constants.js';
-
+import QuizForm from './quizForm/quizForm.js';
 const theme = Constants.AppSectionTheme;
 
 //Section container
@@ -33,10 +34,14 @@ const ButtonContainer = styled('div')`
   overflow: auto;
 `;
 
-const QuizButton = styled('button')`
+const QuizButton = styled(Link)`
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: ${Constants.mainBgColor};
-  border: none;
   border-radius: ${Constants.universalBorderRadius};
+  color: black;
   width: 50%;
   height: 35px;
   margin-bottom: 15px;
@@ -56,11 +61,11 @@ class Quizzes extends React.Component {
           </div>
           <div className="row">
             <ButtonContainer className='col-4 offset-4'>
-              <QuizButton>Quizzes</QuizButton>
-              <QuizButton>Quizzes</QuizButton>
-              <QuizButton>Quizzes</QuizButton>
-              <QuizButton>Quizzes</QuizButton>
-              <QuizButton>Quizzes</QuizButton>
+              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
+              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
+              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
+              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
+              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
             </ButtonContainer>
           </div>
         </SectionContainer> 

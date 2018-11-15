@@ -273,6 +273,7 @@ class ProjectEditor extends React.Component {
 
   
   render() {
+    console.log(this.state, this.props)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fluid'>
@@ -288,6 +289,7 @@ class ProjectEditor extends React.Component {
                 <FilesContainer files={this.state.projectFiles} onClick={this.onFileSelection} selectedFile={this.state.selectedFile}/>  
               }
             <div>
+              <Button primary onClick={this.saveProject}> Save </Button>
               <Button primary onClick={this.saveProject}> Save </Button>
             </div>
             </ProjectContent>

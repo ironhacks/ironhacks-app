@@ -36,8 +36,10 @@ const SectionContainer = styled('div')`
 
 `;
 const ControlPanel = styled('div')`
-  height 100%; 
+  height 100%;
+  max-height: 100%;
   border-right: 1px solid black;
+  overflow: auto;
 `;
 const ControlPanelItem = styled('div')`
   width: 100%;
