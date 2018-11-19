@@ -103,3 +103,76 @@ export const cloudFunctionsDevEndPoint = 'localhost:5000';
 export const cloudFunctionsProdEndPoint = 'https://us-central1-ironhacks-platform-dev.cloudfunctions.net';
 
 export const projectEditorBgColor = 'darkslategrey';
+
+//-- Alerts constructors: --
+
+export const surveyRedirecAlertContent = {
+  title: "Push to evaluation",
+  text: "Before push your final commit for this phase, you must fill the phase survey.",
+  confirmButtonText: 'Go to survey',
+  confirmButtonColor: mainBgColor,
+  showCancelButton: true,
+  cancelButtonColor: '#70867b',
+  cancelButtonText: 'Cancel',
+  showCloseButton: true,
+  allowOutsideClick: false
+}
+
+export const pushSurveyAlertContent = (url) => {
+  console.log(url)
+  return {
+    title: 'Evaluation push survey',
+    html: `<iframe src='${url}' title='Qualtrics survey'/>`,
+    showCloseButton: true,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    customClass: 'surveyAlert',
+  }
+}
+
+
+export const commitContentAlertContent = {
+  title: "Push to evaluation",
+  text: "Please enter bellow a short message describing mayor changes since your last phase or just describing what you add to the project.",
+  confirmButtonText: 'Send',
+  confirmButtonColor: mainBgColor,
+  showCloseButton: true,
+  allowOutsideClick: false,
+  input: 'text',
+  inputPlaceholder: 'Commit message',
+  inputValidator: (value) => {
+    return !value && 'You need to write a commit message!'
+  }
+};
+
+export const successFinalCommitAlert = (phase) => {
+  return {
+    title: "Success",
+    type: "success",
+    text: 'Thanks for making your final commit for phase ' + phase + '! Your app will be considered for evaluation! Stay tuned and wait for feedback in your dashboard!' ,
+    confirmButtonText: 'Ok',
+    confirmButtonColor: mainBgColor,
+    showCloseButton: true,
+    allowOutsideClick: false,
+  }
+};
+
+export const successNoFinalCommitAlertContent = {
+  title: "Success",
+  type: "success",
+  text: 'You have just commited your code to github! Congratulations!\nRemember: To submit your app for grading you have to make a final commit (select yes)',
+  confirmButtonText: 'OK',
+  confirmButtonColor: mainBgColor,
+  showCloseButton: true,
+  allowOutsideClick: false,
+};
+
+export const commitCanceledAlertContent = {
+  title: "Error",
+  type: "error",
+  text: "Your commit was canceled.",
+  confirmButtonText: 'Ok',
+  confirmButtonColor: mainBgColor,
+  showCloseButton: true,
+  allowOutsideClick: false,
+};

@@ -2,8 +2,8 @@
 // proyectEditor.js
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 import React from 'react';
+import swal from 'sweetalert2';
 import {UnControlled as CodeMirror} from 'react-codemirror2'
-
 import { JSHINT } from 'jshint';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
@@ -17,7 +17,6 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
-
 import 'codemirror/addon/lint/javascript-lint'
 import 'codemirror/addon/lint/lint.css';
 
@@ -81,16 +80,6 @@ const PreviewContainer = styled('div')`
   }
 `;
 
-const editorThemplate = `<!DOCTYPE html>
-  <html>
-  <head>
-    <title></title>
-  </head>
-  <body>
-  
-  </body>
-</html>`;
-
 const editorModeMIMERel = {
   html: 'xml',
   css: 'css',
@@ -101,58 +90,28 @@ class ProjectEditor extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      editorContent: editorThemplate,
+      editorContent: '',
       readonly: false,
       editorMode: 'xml',
       loadingFiles: true,
-      selectedFile: 'index.html'
+      selectedFile: 'index.html',
+      user: this.props.user,
+      currentAlert: null,
     }
   }
 
   componentDidMount() {
-    this.getUserData();
+    this.getProjectPreviewPath();
+    this.getProjectFilesUrls();
+    window.addEventListener("message", this.recieveMessage)
+  };
+
+  recieveMessage = (event) => {
+    console.log(event)
+    if(event.data == 'quizDone'){
+      swal.clickConfirm();
+    }
   }
-
-  // This funciton calls Firebase SDK to know if there is an active user session
-  getUserData = () => {
-    const _this = this;
-    window.firebase.auth().onAuthStateChanged((user) => {
-      if(user){
-        _this.setState({user: user});
-        _this.isAdmin(); //We only check this to display specific ui items.
-      };
-    });
-  };
-
-  //check on the DB if the current user is admin.
-  isAdmin = () => {
-    //db Reference
-    const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
-    const _this = this;
-    //Updating the current hack:
-    firestore.collection('admins').doc(this.state.user.uid)
-    .get()
-    .then(function(doc) {
-      //Is admin.
-      _this.setState((prevState, props) => {
-        prevState.user.isAdmin = true;
-        return prevState;
-      });
-      _this.getProjectPreviewPath();
-      _this.getProjectFilesUrls();
-    }) 
-    .catch(function(error) {
-      // The user can't read the admins collection, therefore, is not admin.
-      _this.setState((prevState, props) => {
-        prevState.user.isAdmin = false;
-        return prevState;
-      });
-      _this.getProjectPreviewPath();
-      _this.getProjectFilesUrls();
-    });
-  };
 
   getProjectFilesUrls = () => {
     const firestore = window.firebase.firestore();
@@ -205,7 +164,6 @@ class ProjectEditor extends React.Component {
     // Create a reference with an initial file path and name
     const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.props.match.params.proyectName}/index.html`; 
     this.setState({proyectPath: proyectPath});
-
   };
 
   saveProject = () => {
@@ -226,7 +184,19 @@ class ProjectEditor extends React.Component {
     .catch((error) => {
       console.log(`Some failed: `, error.message)
     });
-    
+  };
+
+  startPushNavigation = () => {
+    swal(Constants.surveyRedirecAlertContent)
+    .then((result) => {
+      console.log(result)
+      if(!result.dismiss) {
+        swal(Constants.pushSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_ai47Laj9EM1n433?user_email=pepito'))
+        .then((result) => {
+          swal(Constants.commitContentAlertContent);
+        })
+      };
+    }); 
   };
 
   updateProjectBlobs = () => {
@@ -273,7 +243,6 @@ class ProjectEditor extends React.Component {
 
   
   render() {
-    console.log(this.state, this.props)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fluid'>
@@ -289,8 +258,8 @@ class ProjectEditor extends React.Component {
                 <FilesContainer files={this.state.projectFiles} onClick={this.onFileSelection} selectedFile={this.state.selectedFile}/>  
               }
             <div>
-              <Button primary onClick={this.saveProject}> Save </Button>
-              <Button primary onClick={this.saveProject}> Save </Button>
+              <Button primary onClick={this.saveProject}> Save and run </Button>
+              <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
             </div>
             </ProjectContent>
             <div className='col-md-5 editor-container'>

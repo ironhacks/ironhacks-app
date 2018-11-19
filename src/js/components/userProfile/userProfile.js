@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import { withCookies } from 'react-cookie';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Custom components
@@ -41,7 +42,10 @@ const CardsContainer = styled('div')`
 class UserProfile extends React.Component {
   constructor(props){
     super(props);
+    const { cookies } = props;
     this.state = {
+      currentHack: cookies.get('currentHack') || null,
+      forum: cookies.get('currentForum') || null,
       startNewProjecNav: false,
       startProjectEditorNav: false,
       projects: [],
@@ -79,7 +83,7 @@ class UserProfile extends React.Component {
     });
   };
 
-  createNewProject = (name) => { 
+  createNewProject = (name) => {
     // Accesing to all the blob template variables:
     const templateFiles = [TemplateFiles.indexBlob, TemplateFiles.jsBlob, TemplateFiles.cssBlob]
     Promise.all(
@@ -96,6 +100,22 @@ class UserProfile extends React.Component {
       console.log(`Some failed: `, error.message)
     });
   };
+
+  createGitHubRepository = (name) => {
+    // Accesing to all the pain text template variables:
+    const templateFiles = [TemplateFiles.index, TemplateFiles.js, TemplateFiles.css]
+    let projectName = this.state.user.isAdmin ? `admin-${this.state.user.uid}-${name}` : ``;
+    const _this = this;
+    const createGitHubRepo = window.firebase.functions().httpsCallable('createGitHubRepo');
+    createGitHubRepo({hackId: this.state.currentHack}).then((result) => {
+      if(result.data.task){
+        _this.setState({task: result.data.task});
+      }else{
+        //no task on the response, task not available yet.
+        _this.setState({noTask: true});
+      }
+    });
+  }
 
   putStorageFile = (file, projectName) => {
     //Uploading each template file to storage
@@ -142,6 +162,7 @@ class UserProfile extends React.Component {
   }
 
   render() {
+    console.log(this.state, this.props)
     if (this.state.navigateToProject === true) return <Redirect push to={`projectEditor/${this.state.projects[this.state.selectedProject].name}`}/>;
     if (this.state.navigateToCreatedProject === true) return <Redirect push to={`projectEditor/${this.state.newProjectName}`}/>;
 
@@ -167,4 +188,4 @@ class UserProfile extends React.Component {
   }
 }
 
-export default UserProfile;
+export default withCookies(UserProfile);

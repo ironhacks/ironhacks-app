@@ -1,4 +1,4 @@
-const index = `<!DOCTYPE html>
+export const index = `<!DOCTYPE html>
   <html>
   <head>
     <title>Ironhacks project</title>
@@ -12,7 +12,7 @@ const index = `<!DOCTYPE html>
 </html>
 `;
 
-const css = `/* Template file */
+export const css = `/* Template file */
 h1 {
   color: red;
 }
@@ -22,7 +22,7 @@ p {
 }
 `;
 
-const js = `console.log("You can add you custom js here.")
+export const js = `console.log("You can add you custom js here.")
 `;
 
 export const indexBlob = {

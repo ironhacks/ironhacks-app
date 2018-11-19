@@ -9,3 +9,31 @@ h1, h2, h3 {
   font-family: 'Muli', sans-serif;
   font-weight: 800;
 }
+
+.surveyAlert {
+  width: 80vw;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.surveyAlert .swal2-content {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.surveyAlert .swal2-content #swal2-content {
+	display: flex !important;
+	flex-direction: column;
+	flex-grow: 1;
+	width: 100%;
+  height: 100%;
+}
+
+.surveyAlert .swal2-content #swal2-content iframe {
+	border: none;
+	flex-grow: 1;
+  width: 100%;
+  height: 100%;
+}

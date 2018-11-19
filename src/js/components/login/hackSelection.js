@@ -34,6 +34,8 @@ const SectionContainer = styled('div')`
     color: gray;
     font-style: italic;
   }
+
+  overflow: auto;
 `;
 const CardsContainer = styled('div')`
   display: flex;

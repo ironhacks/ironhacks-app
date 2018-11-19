@@ -19,7 +19,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "showdown": "^1.8.6",
-    "styled-components": "^3.4.0"
+    "styled-components": "^3.4.0",
+    "sweetalert2": "^7.29.0"
   },
   "dependenciesComments": {
     "bootstrap": "Css library",
