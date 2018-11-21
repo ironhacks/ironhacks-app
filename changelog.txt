@@ -37,10 +37,10 @@ Landing.
 
 Top priority:
 
-- project structure
-- Commit flow
+- project structure x
+- Commit flow x
 - stats
 - results 
-- git snapshots
+- git snapshots x
 
 Github	Account: opendigital@purdue.edu	Password: GoBoilers2015!	

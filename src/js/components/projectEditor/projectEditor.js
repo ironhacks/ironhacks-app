@@ -187,14 +187,17 @@ class ProjectEditor extends React.Component {
   };
 
   startPushNavigation = () => {
-    swal(Constants.surveyRedirecAlertContent)
+    swal(Constants.loadingAlertContent)
     .then((result) => {
       console.log(result)
       if(!result.dismiss) {
         swal(Constants.pushSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_ai47Laj9EM1n433?user_email=pepito'))
         .then((result) => {
-          swal(Constants.commitContentAlertContent);
-        })
+          swal(Constants.commitContentAlertContent)
+          .then((result) => {
+            swal(Constants.loadingAlertContent);
+          });
+        });
       };
     }); 
   };

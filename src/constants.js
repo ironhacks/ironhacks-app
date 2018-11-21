@@ -176,3 +176,10 @@ export const commitCanceledAlertContent = {
   showCloseButton: true,
   allowOutsideClick: false,
 };
+
+export const loadingAlertContent = {
+  title: "Sending...",
+  showCloseButton: false,
+  showConfirmButton: false,
+  allowOutsideClick: false,
+};

@@ -91,31 +91,42 @@ class UserProfile extends React.Component {
       templateFiles.map(file => this.putStorageFile(file, name))
     )
     .then((url) => {
-      this.setState({
-        navigateToCreatedProject: true,
-        newProjectName: name,
-      })
+      this.createGitHubRepository(name);
     })
     .catch((error) => {
-      console.log(`Some failed: `, error.message)
+      console.log(`Something failed: `, error.message)
     });
   };
 
   createGitHubRepository = (name) => {
+    console.log('git')
     // Accesing to all the pain text template variables:
     const templateFiles = [TemplateFiles.index, TemplateFiles.js, TemplateFiles.css]
-    let projectName = this.state.user.isAdmin ? `admin-${this.state.user.uid}-${name}` : ``;
+    let projectName = this.state.user.isAdmin ? 
+      `admin-${this.state.user.uid}-${name}` : 
+      `${this.state.user.currentHack}-${this.state.user.uid}-${name}`;
     const _this = this;
+    const newRepoConfig = {
+      name: projectName,
+      description: 'UNAL-ironhacks-fall-2018',
+      private: true,
+      auto_init: true,
+    }
     const createGitHubRepo = window.firebase.functions().httpsCallable('createGitHubRepo');
-    createGitHubRepo({hackId: this.state.currentHack}).then((result) => {
-      if(result.data.task){
-        _this.setState({task: result.data.task});
+    createGitHubRepo(newRepoConfig)
+    .then((result) => {
+      if(result.status === 201){
+        _this.setState({
+          navigateToCreatedProject: true,
+          newProjectName: name,
+        })
       }else{
-        //no task on the response, task not available yet.
-        _this.setState({noTask: true});
+        //Error
+        console.log('errororororo');
+        console.error(result.data.error);
       }
     });
-  }
+  };
 
   putStorageFile = (file, projectName) => {
     //Uploading each template file to storage
@@ -162,7 +173,7 @@ class UserProfile extends React.Component {
   }
 
   render() {
-    console.log(this.state, this.props)
+    console.log(this.state)
     if (this.state.navigateToProject === true) return <Redirect push to={`projectEditor/${this.state.projects[this.state.selectedProject].name}`}/>;
     if (this.state.navigateToCreatedProject === true) return <Redirect push to={`projectEditor/${this.state.newProjectName}`}/>;
 
