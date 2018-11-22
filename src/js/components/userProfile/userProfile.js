@@ -107,7 +107,7 @@ class UserProfile extends React.Component {
       `${this.state.user.currentHack}-${this.state.user.uid}-${name}`;
     const _this = this;
     const newRepoConfig = {
-      name: projectName,
+      //name: projectName,
       description: 'UNAL-ironhacks-fall-2018',
       private: true,
       auto_init: true,
@@ -115,6 +115,7 @@ class UserProfile extends React.Component {
     const createGitHubRepo = window.firebase.functions().httpsCallable('createGitHubRepo');
     createGitHubRepo(newRepoConfig)
     .then((result) => {
+      console.log(result)
       if(result.status === 201){
         _this.setState({
           navigateToCreatedProject: true,
