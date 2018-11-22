@@ -104,7 +104,7 @@ class UserProfile extends React.Component {
     const templateFiles = [TemplateFiles.index, TemplateFiles.js, TemplateFiles.css]
     let projectName = this.state.user.isAdmin ? 
       `admin-${this.state.user.uid}-${name}` : 
-      `${this.state.user.currentHack}-${this.state.user.uid}-${name}`;
+      `${this.state.currentHack}-${this.state.user.uid}-${name}`;
     const _this = this;
     const newRepoConfig = {
       name: projectName,
@@ -115,15 +115,16 @@ class UserProfile extends React.Component {
     const createGitHubRepo = window.firebase.functions().httpsCallable('createGitHubRepo');
     createGitHubRepo(newRepoConfig)
     .then((result) => {
-      if(result.status === 201){
+      console.log(result)
+      if(result.status === 500){
+        //Error
+        console.log('Error');
+        console.error(result.data.error);
+      }else{
         _this.setState({
           navigateToCreatedProject: true,
           newProjectName: name,
         })
-      }else{
-        //Error
-        console.log('errororororo');
-        console.error(result.data.error);
       }
     });
   };
