@@ -252,15 +252,11 @@ class Header extends React.Component {
                     <img src={menuIcon} alt='menu_icon'/>
                   </button>
                   <div className='links-container'>
-                    <NavButton to="/forum" onClick={this.hideMenus}>Forum</NavButton>
-                    <span> | </span>
                     <NavButton to="/tutorial" onClick={this.hideMenus}>Tutorial</NavButton>
                     <span> | </span>
                     <NavButton to="/quizzes" onClick={this.hideMenus}>Quizzes</NavButton>
                     <span> | </span>
                     <NavButton to="/task" onClick={this.hideMenus}>Task</NavButton>
-                    <span> | </span>
-                    <NavButton to="/results" onClick={this.hideMenus}>Results</NavButton>
                     <span> | </span>
                     {this.state.user.isAdmin && <NavButton to="/admin" onClick={this.hideMenus}>Admin</NavButton>}
                   </div>
@@ -285,5 +281,12 @@ class Header extends React.Component {
     );
   }
 }
+/*
 
+                    <NavButton to="/forum" onClick={this.hideMenus}>Forum</NavButton>
+                    <span> | </span>
+                    
+                    <NavButton to="/results" onClick={this.hideMenus}>Results</NavButton>
+                    <span> | </span>
+*/
 export default withCookies(Header);

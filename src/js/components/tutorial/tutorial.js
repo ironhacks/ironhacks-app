@@ -68,7 +68,6 @@ class Tutorial extends React.Component {
     .doc(this.state.currentHack)
     .get()
     .then((doc) => {
-      console.log(doc.data())
       _this.setState({tutorial: doc.data().tutorial, hackName: doc.data().name});
     })
     .catch(function(error) {

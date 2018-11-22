@@ -8,7 +8,6 @@ import styled, {ThemeProvider} from 'styled-components';
 import { Link } from 'react-router-dom';
 //Custom Constants
 import * as Constants from '../../../constants.js';
-import QuizForm from './quizForm/quizForm.js';
 const theme = Constants.AppSectionTheme;
 
 //Section container
@@ -61,11 +60,11 @@ class Quizzes extends React.Component {
           </div>
           <div className="row">
             <ButtonContainer className='col-4 offset-4'>
-              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
-              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
-              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
-              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
-              <QuizButton to='quizzes/quizForm'>Quizzes</QuizButton>
+              <QuizButton to='quizzes/html_css'>HTML & Css</QuizButton>
+              <QuizButton to='quizzes/bootstrap'>Bootstrap</QuizButton>
+              <QuizButton to='quizzes/javascript_jquery'>Javascript & Jquery</QuizButton>
+              <QuizButton to='quizzes/google_maps'>Google Maps API</QuizButton>
+              <QuizButton to='quizzes/d3'>D3.js</QuizButton>
             </ButtonContainer>
           </div>
         </SectionContainer> 

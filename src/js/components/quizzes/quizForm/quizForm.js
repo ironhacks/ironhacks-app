@@ -25,6 +25,7 @@ const SectionContainer = styled('div')`
   iframe {
     width: 100%;
     height: 80%;
+    border: none;
   }
 
   button {
@@ -33,12 +34,22 @@ const SectionContainer = styled('div')`
   }
 `;
 
+const quizzesURLS = {
+  bootstrap: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_ai47Laj9EM1n433',
+  html_css: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_0l9UUOmgB2TCZ1P',
+  javascript_jquery: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_1Xkpq23Qu5j7P01',
+  d3: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_0ep4CDeW4BYTckR',
+  google_maps: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_eEe3JnzCkS2ppnn',
+}
+
 class QuizFrom extends React.Component {
-  constructor(props){
+  constructor(props){ 
     super(props);
     this.state = {
       showReturnButton: 'none',
       mustNavigate: false,
+      user: this.props.user,
+      quiz: quizzesURLS[props.match.params.quizName],
     }
   }
   
@@ -48,7 +59,7 @@ class QuizFrom extends React.Component {
 
   recieveMessage = (event) => {
     console.log(event)
-    if(event.data == 'quizDone'){
+    if(event.data === 'quizDone'){
       this.setState({showReturnButton: 'block'});
     }
   }
@@ -63,10 +74,11 @@ class QuizFrom extends React.Component {
         <Redirect push to='/quizzes'/>
       )
     }
+    console.log(this.props)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer showReturnButton={this.state.showReturnButton}>
-          <iframe src='https://purdue.ca1.qualtrics.com/jfe/form/SV_ai47Laj9EM1n433?user_email=pepito'/>
+          <iframe title='quizForm' src={`${this.state.quiz}?user_email=${this.state.user.email}`}/>
           <Button width='30%' onClick={this.goToMenu} primary>Return to quizzes menu</Button>
         </SectionContainer>
       </ThemeProvider>

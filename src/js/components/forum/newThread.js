@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import { withCookies } from 'react-cookie';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
@@ -91,13 +92,16 @@ const TitleInput = styled('input')`
 class NewThread extends React.Component {
   constructor(props){
     super(props);
-
+    const { cookies } = props;
     this.state = {
       submit: false,
       titleValue: "",
       mustNavigate: false,
       selectedHack: 0,
       selectedForum: 0,
+      currentHack: cookies.get('currentHack') || null,
+      forum: cookies.get('currentForum') || null,
+      user: this.props.user
     };    
     this.firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
@@ -132,15 +136,18 @@ class NewThread extends React.Component {
 
   //This function handle the sumbit process
   handleSubmit = (event) => {
+    console.log(this.state)
     event.preventDefault();
     let hackId, forumId;
     if(this.props.user.isAdmin){
       hackId = this.state.hacks[this.state.selectedHack].id;
       forumId = this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id
     }else{
-      hackId = this.props.user.currentHack;
-      forumId = this.props.user.currentForum;
+      hackId = this.state.currentHack;
+      forumId = this.state.forum;
     }
+
+
     const currentDate = Date.now(); //We use the same date in both the thread and the comment, so on the db the stats show that they were created at the same time.
     const _this = this;
     const codedBody = this.utoa(this.state.markdown);
@@ -155,7 +162,6 @@ class NewThread extends React.Component {
     })
     .then(function(docRef) {
       const threadRef = docRef.id;
-      console.log(_this.props)
       _this.firestore.collection("comments").add({
         author: _this.props.user.uid,
         authorName: _this.props.user.displayName,
@@ -165,7 +171,6 @@ class NewThread extends React.Component {
         forumId: forumId,  
       }) // Adding double reference on the thread.
       .then(function(docRef) {
-        console.log(threadRef)
         _this.firestore.collection("threads").doc(threadRef).update({
           comments: [docRef.id],
         })
@@ -213,7 +218,6 @@ class NewThread extends React.Component {
     .get()
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        console.log(doc.data())
         const forum = doc.data();
         forum.id = doc.id;
         forums.push(forum);
@@ -229,8 +233,6 @@ class NewThread extends React.Component {
   };
 
   onHackSelection = (hackIndex) => {
-    console.log(this.state.hacks[this.state.selectedHack].id)
-    console.log(this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id)
     if(this.state.hacks[hackIndex].forums){
       this.setState({selectedHack: hackIndex});
     }else{
@@ -246,7 +248,6 @@ class NewThread extends React.Component {
 //---------------------------------------- Admin features ------------------------------------------
 
   render() {
-    console.log(this.state)
     if (this.state.mustNavigate) return <Redirect to={{ pathname: '/forum/thread/' + this.state.threadRef, state: { title: this.state.titleValue}}}/>;
     return (
       <ThemeProvider theme={theme}>
@@ -295,4 +296,4 @@ class NewThread extends React.Component {
   }
 }
 
-export default NewThread;
+export default withCookies(NewThread);

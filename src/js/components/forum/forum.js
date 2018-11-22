@@ -280,7 +280,7 @@ class Forum extends React.Component {
           </Control>
           <div className="row flex-grow-1">
             <ForumThreads className='col-8 offset-2'>
-              <ForumHeader><h2>Pinned</h2></ForumHeader>
+              <ForumHeader><h2>General discussion</h2></ForumHeader>
               {this.state.threads.map((thread, index) => {
                 return(
                   <ThreadPreview key={thread.id}
@@ -288,8 +288,6 @@ class Forum extends React.Component {
                   />
                 )
               })}
-              <SectionSeparator/>
-              <ForumHeader><h2>General discussion</h2></ForumHeader>
             </ForumThreads>
           </div>
           <div className="row sponsors-div">

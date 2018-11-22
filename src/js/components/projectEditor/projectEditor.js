@@ -61,9 +61,6 @@ const ProjectContent = styled('div')`
   background-color: ${Constants.projectEditorBgColor};
 `;
 
-const ProjectControl = styled('div')`
-`;
-
 const Editor = styled(CodeMirror)`
   width: 100%;
   height: 100%;
@@ -107,8 +104,7 @@ class ProjectEditor extends React.Component {
   };
 
   recieveMessage = (event) => {
-    console.log(event)
-    if(event.data == 'quizDone'){
+    if(event.data === 'quizDone'){
       swal.clickConfirm();
     }
   }
@@ -172,12 +168,10 @@ class ProjectEditor extends React.Component {
     // Raw string is the default if no format is provided
     const newBlobs = this.updateProjectBlobs();
     const _this = this;
-    console.log(newBlobs)
     Promise.all(
       newBlobs.map(item => this.uploadBlogToFirebase(item, storageRef))
     )
     .then((url) => {
-      console.log(`All success`)
       const currentLocation = _this.state.proyectPath;
       _this.setState({proyectPath: currentLocation + ' '})
     })
@@ -189,7 +183,6 @@ class ProjectEditor extends React.Component {
   startPushNavigation = () => {
     swal(Constants.loadingAlertContent)
     .then((result) => {
-      console.log(result)
       if(!result.dismiss) {
         swal(Constants.pushSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_ai47Laj9EM1n433?user_email=pepito'))
         .then((result) => {
@@ -220,7 +213,6 @@ class ProjectEditor extends React.Component {
   uploadBlogToFirebase = (blob, storageRef) => {
     const indexRef = storageRef.child(blob.path);
     return indexRef.put(blob.blob).then(function(snapshot) {
-      console.log('Blob Uploaded!');
     });
   };
 

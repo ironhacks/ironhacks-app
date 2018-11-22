@@ -99,15 +99,14 @@ class UserProfile extends React.Component {
   };
 
   createGitHubRepository = (name) => {
-    console.log('git')
     // Accesing to all the pain text template variables:
     const templateFiles = [TemplateFiles.index, TemplateFiles.js, TemplateFiles.css]
     let projectName = this.state.user.isAdmin ? 
       `admin-${this.state.user.uid}-${name}` : 
-      `${this.state.user.currentHack}-${this.state.user.uid}-${name}`;
+      `${this.state.currentHack}-${this.state.user.uid}-${name}`;
     const _this = this;
     const newRepoConfig = {
-      //name: projectName,
+      name: projectName,
       description: 'UNAL-ironhacks-fall-2018',
       private: true,
       auto_init: true,
@@ -115,16 +114,22 @@ class UserProfile extends React.Component {
     const createGitHubRepo = window.firebase.functions().httpsCallable('createGitHubRepo');
     createGitHubRepo(newRepoConfig)
     .then((result) => {
-      console.log(result)
-      if(result.status === 201){
-        _this.setState({
-          navigateToCreatedProject: true,
-          newProjectName: name,
-        })
-      }else{
+      if(result.status === 500){
         //Error
-        console.log('errororororo');
         console.error(result.data.error);
+      }else{
+        const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
+        commitToGitHub({name: projectName, files: templateFiles})
+        .then((result) => {
+          if(result.status === 500){
+            console.error(result.error);
+          }else{
+            _this.setState({
+              navigateToCreatedProject: true,
+              newProjectName: name,
+            })
+          }
+        })
       }
     });
   };
@@ -137,10 +142,8 @@ class UserProfile extends React.Component {
     // the return value will be a Promise
     return pathRef.put(file.blob)
     .then((snapshot) => {
-      console.log('One success:', file, snapshot)
       // Get the download URL
       pathRef.getDownloadURL().then(function(url) {
-        console.log(url)
         const fileURL = url;
         const fileJson = {};
         const fullPath = file.path + file.name;
@@ -174,7 +177,6 @@ class UserProfile extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     if (this.state.navigateToProject === true) return <Redirect push to={`projectEditor/${this.state.projects[this.state.selectedProject].name}`}/>;
     if (this.state.navigateToCreatedProject === true) return <Redirect push to={`projectEditor/${this.state.newProjectName}`}/>;
 
