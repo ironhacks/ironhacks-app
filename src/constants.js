@@ -130,6 +130,18 @@ export const pushSurveyAlertContent = (url) => {
   }
 }
 
+export const preSurveyAlertContent = (url) => {
+  console.log(url)
+  return {
+    title: 'Pre survey UNAL',
+    html: `<iframe src='${url}' title='Qualtrics survey'/>`,
+    showCloseButton: true,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    customClass: 'surveyAlert',
+  }
+}
+
 
 export const commitContentAlertContent = {
   title: "Push to evaluation",

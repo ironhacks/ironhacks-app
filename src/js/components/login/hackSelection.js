@@ -7,6 +7,7 @@ import { Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
+import swal from 'sweetalert2';
 //Custom components
 import HackCard from '../admin/hackCard.js';
 import Separator from '../../utilities/separator.js';
@@ -60,9 +61,16 @@ class HackSelection extends React.Component {
     this.firestore.settings(settings);
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.getHacks()
+    window.addEventListener("message", this.recieveMessage)
   };
+
+  recieveMessage = (event) => {
+    if(event.data === 'quizDone'){
+      swal.clickConfirm();
+    }
+  }
 
   //Query all the hacks objects from the db.
   getHacks = () => {
@@ -119,6 +127,15 @@ class HackSelection extends React.Component {
     });
   };
 
+  goToPresurvey = (hackIndex) => {
+    swal(Constants.preSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_1LXiVsGcARieE3X?user_email=' + this.props.user.email))
+    .then((result) => {
+      if(!result.dismiss) {
+        this.callRegistrationFuncion(hackIndex);
+      };
+    });
+  };
+
   setHack = (hackIndex) => {
     const hackId = this.state.registeredHacks[hackIndex].id
     const _this = this;
@@ -170,7 +187,7 @@ class HackSelection extends React.Component {
             {this.state.availableHacks.length === 0 ? <span className='empty-list'>Theres is no hacks availabe.</span> : false}
             <CardsContainer >
               {this.state.availableHacks.map((hack, index) => {
-                return <HackCard hack={hack.data()} index={index} key={hack.id} onClick={this.callRegistrationFuncion}/>
+                return <HackCard hack={hack.data()} index={index} key={hack.id} onClick={this.goToPresurvey}/>
               })}
             </CardsContainer>
           </div>
