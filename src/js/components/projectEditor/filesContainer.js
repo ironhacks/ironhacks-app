@@ -5,10 +5,9 @@
 import React from 'react';
 //Styled components
 import styled from 'styled-components';
+import FoderWrapper from './folderWrapper.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
-
-import fileIcon from './img/file-icon.svg';
 
 //Section container
 const MainContainer = styled('div')`
@@ -64,41 +63,75 @@ class FilesContainer extends React.Component {
 
   generateFilesTree = () => {
     const filesPaths = Object.keys(this.props.files)
-    filesPaths.push("css/rest/test.css", "css/main.css")
-    const testArry = ["css/rest/test.css",  "css/main.css"]
+    filesPaths.push('index.js', "css/index.css", "js/index.js", "css/img/index.css")
     const filesTree = {};
-    testArry.forEach((filePath) => {
+    filesPaths.forEach((filePath) => {
       const splitedPath = filePath.split('/');
       this.createNestedObject(filesTree, splitedPath);
     });
-    console.log(filesTree)
-  }
+    this.setState({filesTree: filesTree});
+    console.log(filesTree);
+  };
 
   createNestedObject = (base, names) => {
     // If the lastName was removed, then the last object is not set yet:
+    const fileName = names.pop()
+
     for( var i = 0; i < names.length; i++ ) {
         base = base[ names[i] ] = base[ names[i] ] || {};
     }
-
-    base["items"] = {test: "test"}
+    if (base["files"]) {
+      base["files"].push(fileName);
+    }else {
+      base["files"] = [fileName];
+    } 
 
     return base;
-};
+  };
+
+  eachRecursive = (obj, folders) => {
+    folders = folders || [<FoderWrapper type='root' name='Root'/>];
+    for (var k in obj) {
+      if (!obj.hasOwnProperty(k)) continue;
+      if (typeof obj[k] == "object" && obj[k] !== null){
+        if(k != 'files'){
+          folders.push(<FoderWrapper type='folder' name={k}/>)
+        }else if (k === 'files'){
+          console.log(folders[folders.length - 1])
+          folders[folders.length - 1].addFiles(obj[k])
+        }
+        this.eachRecursive(obj[k], folders);
+      }else{
+      }
+    }
+    return folders
+  };
+
+  getPath = (obj, val, path) => {
+   path = path || "";
+   var fullpath = "";
+   for (var b in obj) {
+      if (obj[b].files && obj[b].files.includes(val)) {
+         return (path + "/" + b);
+      }
+      else if (typeof obj[b] === "object") {
+         fullpath = this.getPath(obj[b], val, path + "/" + b) || fullpath;
+      }
+   }
+   return fullpath;
+}
+
+  // createFilesTreeRepresentation = () => {
+  //   for (let key in this.state.filesTree){
+  //     if (key == "child")
+  //       // do something...
+  //   } 
+  // };
 
   render() {
     return(
       <MainContainer>
-        {Object.keys(this.props.files).map((file, i) => {
-          const path = file.split('/')
-          const name = path[path.length -1]
-          return <FileButton 
-            key={name}
-            onClick={() => this.onFileClick(file, name)}
-            isSelected={name === this.state.selectedFile}>
-            <img src={fileIcon} alt='file-icon'/>
-            {name}
-          </FileButton>;
-        })}
+        {this.eachRecursive(this.state.filesTree)}
       </MainContainer>
     )
   }

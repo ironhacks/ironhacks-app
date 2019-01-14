@@ -236,6 +236,7 @@ class ProjectEditor extends React.Component {
   };
 
   onFileSelection = (name) => {
+    console.log(name)
     const splitedFileName = name.split('.');
     this.setState((prevState, props) => { 
       if(prevState.projectFiles[prevState.selectedFile].unSavedContent) {
