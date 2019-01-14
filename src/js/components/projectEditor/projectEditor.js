@@ -30,35 +30,44 @@ const theme = Constants.AppSectionTheme;
 
 //Section container
 const SectionContainer = styled('div')`
+  display: flex;
+  flex-direction: row;
   width: 100%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
-  padding: 0 !important;
   color: #70867b;
-  &.container-fuild {
-    padding: 0;
+`;
+
+const ProjectContent = styled('div')`
+  width: 20%;
+  height: 100%;
+  background-color: ${Constants.projectEditorBgColor};
+  padding-top: 20px;
+
+  h2, h3 {
+    margin-left: 20px;
   }
 
-  .row {
-    height: 100%;
-  }
-
-  .editor-container {
+  .control {
     width: 100%;
-    height: 100%;
+    bottom: 20px;
+    padding: 0 20px 0 20px;
 
-    .CodeMirror {
-      width: 100%;
-      height: 100%;      
+    button {
+      margin-bottom: 10px;
     }
   }
 `;
 
-const ProjectContent = styled('div')`
-  width: 100%;
+const EditorContainer = styled('div')`
+  width: 40%;
   height: 100%;
-  padding: 15px !important;
-  background-color: ${Constants.projectEditorBgColor};
+
+  .CodeMirror {
+    width: 100%;
+    height: 100%;      
+  }
+
 `;
 
 const Editor = styled(CodeMirror)`
@@ -67,13 +76,14 @@ const Editor = styled(CodeMirror)`
 `;
 
 const PreviewContainer = styled('div')`
-  width: 100%;
+  width: 40%;
   height: 100%;
 
   iframe {
     border: none;
     width: 100%;
     height: 100%;
+    overflow: hidden;
   }
 `;
 
@@ -107,7 +117,7 @@ class ProjectEditor extends React.Component {
     if(event.data === 'quizDone'){
       swal.clickConfirm();
     }
-  }
+  };
 
   getProjectFilesUrls = () => {
     const firestore = window.firebase.firestore();
@@ -181,13 +191,14 @@ class ProjectEditor extends React.Component {
   };
 
   startPushNavigation = () => {
-    swal(Constants.loadingAlertContent)
+    swal(Constants.surveyRedirecAlertContent)
     .then((result) => {
       if(!result.dismiss) {
         swal(Constants.pushSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_ai47Laj9EM1n433?user_email=pepito'))
         .then((result) => {
           swal(Constants.commitContentAlertContent)
           .then((result) => {
+            
             swal(Constants.loadingAlertContent);
           });
         });
@@ -240,10 +251,13 @@ class ProjectEditor extends React.Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <SectionContainer className='container-fluid'>
-          <div className='row no-gutters'>
-            <ProjectContent className='col-md-2'>
+        <SectionContainer>
+            <ProjectContent>
               <h2>{this.props.match.params.proyectName.toUpperCase()}</h2>
+              <div className="control">
+                <Button primary onClick={this.saveProject}> Save and run </Button>
+                <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
+              </div>
               <h3>Files:</h3>
               {this.state.loadingFiles ? <Loader 
                   backgroundColor={Constants.projectEditorBgColor}
@@ -252,12 +266,8 @@ class ProjectEditor extends React.Component {
                 /> : 
                 <FilesContainer files={this.state.projectFiles} onClick={this.onFileSelection} selectedFile={this.state.selectedFile}/>  
               }
-            <div>
-              <Button primary onClick={this.saveProject}> Save and run </Button>
-              <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
-            </div>
             </ProjectContent>
-            <div className='col-md-5 editor-container'>
+            <EditorContainer>
               {!this.state.loadingFiles && <Editor
                 value={this.state.projectFiles[this.state.selectedFile].content}
                 options={{
@@ -273,11 +283,10 @@ class ProjectEditor extends React.Component {
                 }}
                 onChange={this.onChangeEditor}
               />}
-            </div>
-            <PreviewContainer className='col-md-5'>
+            </EditorContainer>
+            <PreviewContainer>
               {this.state.proyectPath && <iframe src={this.state.proyectPath} title='The Project Preview'/>}
             </PreviewContainer>
-          </div>
         </SectionContainer> 
       </ThemeProvider>
     );

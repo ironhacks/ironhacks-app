@@ -19,6 +19,7 @@ const MainContainer = styled('div')`
   background-color: ${props => props.backgroundColor ? props.backgroundColor : Constants.projectEditorBgColor};
   display: flex;
   flex-direction: column;
+  padding: 0 20px 0 20px;
 `;
 
 const FileButton = styled('button')`
@@ -46,16 +47,43 @@ const FileButton = styled('button')`
 class FilesContainer extends React.Component {
   constructor(props){
     super(props);
-    console.log(props.files)
+    console.log()
     this.state = {
       selectedFile: 'index.html',
     }
   }
 
+  componentWillMount() {
+    this.generateFilesTree();
+  }
+
   onFileClick = (file, name) => {
     this.props.onClick(file)
     this.setState({selectedFile: name})
+  };
+
+  generateFilesTree = () => {
+    const filesPaths = Object.keys(this.props.files)
+    filesPaths.push("css/rest/test.css", "css/main.css")
+    const testArry = ["css/rest/test.css",  "css/main.css"]
+    const filesTree = {};
+    testArry.forEach((filePath) => {
+      const splitedPath = filePath.split('/');
+      this.createNestedObject(filesTree, splitedPath);
+    });
+    console.log(filesTree)
   }
+
+  createNestedObject = (base, names) => {
+    // If the lastName was removed, then the last object is not set yet:
+    for( var i = 0; i < names.length; i++ ) {
+        base = base[ names[i] ] = base[ names[i] ] || {};
+    }
+
+    base["items"] = {test: "test"}
+
+    return base;
+};
 
   render() {
     return(

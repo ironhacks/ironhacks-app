@@ -24,12 +24,6 @@ import 'codemirror/addon/lint/lint.css';
 
 window.JSHINT = JSHINT
 
-const initValue = `const InitMessage = I ♥ IronHacks;
-
-function printMessage = (message) {
-  console.log(message);
-}
-`
 const Editor = styled(CodeMirror)`
   width: 100%;
   height: 100%;
@@ -52,7 +46,6 @@ class ProjectEditor extends React.Component {
           <div className='row editor-container'>
             <div className='col-md-12 editor-container'>
               <Editor
-                value={initValue}
                 options={{
                     lineNumbers: true,
                     mode: mode,
