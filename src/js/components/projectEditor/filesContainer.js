@@ -5,10 +5,13 @@
 import React from 'react';
 //Styled components
 import styled from 'styled-components';
-import FoderWrapper from './folderWrapper.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
+import {Treebeard, decorators} from 'react-treebeard';
 
+import fileIcon from './img/file-icon.svg';
+import newFileIcon from './img/new-file-icon.svg';
+import folderIcon from './img/folder-icon.svg';
 //Section container
 const MainContainer = styled('div')`
   width: 100%;
@@ -19,40 +22,135 @@ const MainContainer = styled('div')`
   display: flex;
   flex-direction: column;
   padding: 0 20px 0 20px;
-`;
 
-const FileButton = styled('button')`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  background-color: transparent;
-  color: ${(props) => props.isSelected ? '#b8c3be' : '#eaedeb'};
-  border: ${(props) => props.isSelected ? 'solid' : 'none'};
-  border-radius: 4px;
-  padding: 3px;
-  margin: 5px 0;
-  text-align: left;
-  min-height: 35px;
-
-  &:hover {
-    color: #616e6e;
-  }
-
-  img {
-    margin-right: 5px;
+  * li {
+    cursor: pointer;
   }
 `;
 
+const TreeStyles = {
+  tree: {
+    base: {
+      listStyle: 'none',
+      backgroundColor: `${props => props.backgroundColor ? props.backgroundColor : Constants.projectEditorBgColor}`,
+      margin: 0,
+      padding: 0,
+      color: '#9DA5AB',
+      fontFamily: 'Muli',
+      fontSize: '14px',
+    },
+    node: {
+      base: {
+        position: 'relative',
+      },
+      link: {
+        cursor: 'pointer',
+        position: 'relative',
+        padding: '0px 5px',
+        display: 'block'
+      },
+      activeLink: {
+        background: '#31363F',
+      },
+      toggle: {
+        base: {
+          position: 'relative',
+          display: 'inline-block',
+          verticalAlign: 'top',
+          marginLeft: '-5px',
+          height: '24px',
+          width: '24px'
+        },
+        wrapper: {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          margin: '-7px 0 0 -7px',
+          height: '14px'
+        },
+        height: 14,
+        width: 14,
+        arrow: {
+          fill: '#9DA5AB',
+          strokeWidth: 0
+        }
+      },
+      header: {
+        base: {
+          display: 'inline-block',
+          verticalAlign: 'top',
+          color: '#9DA5AB'
+        },
+        connector: {
+          width: '2px',
+          height: '12px',
+          borderLeft: 'solid 2px black',
+          borderBottom: 'solid 2px black',
+          position: 'absolute',
+          top: '0px',
+          left: '-21px'
+        },
+        title: {
+          lineHeight: '24px',
+          verticalAlign: 'middle'
+        }
+      },
+      subtree: {
+        listStyle: 'none',
+        paddingLeft: '19px'
+      },
+      loading: {
+        color: '#E2C089'
+      }
+    }
+  }
+}
+
+const NodeHeader = styled('div')`
+  display: inline-block;
+
+  div {
+    display: flex;
+    align-items: center;
+    font-family: 'Muli';
+    font-size: 14px;
+    
+    img {
+      height: 14px;
+      width: 14px;
+      margin-right: 5px;
+    }
+  }
+`;
+
+// Example: Customising The Header Decorator To Include Icons
+decorators.Header = ({style, node}) => {
+  console.log(style)
+    const iconType = node.children ? 'folder' : 'file';
+    return (
+        <NodeHeader>
+          <div>
+            <img src={iconType === 'file' ? fileIcon : folderIcon}/>
+            {node.name}
+          </div>
+        </NodeHeader>
+    );
+};
 class FilesContainer extends React.Component {
   constructor(props){
     super(props);
-    console.log()
     this.state = {
+      cursor: false,
       selectedFile: 'index.html',
+      data: {
+        name: this.props.projectName,
+        toggled: true,
+        children: [],
+      },
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.generateFilesTree();
   }
 
@@ -63,48 +161,57 @@ class FilesContainer extends React.Component {
 
   generateFilesTree = () => {
     const filesPaths = Object.keys(this.props.files)
-    filesPaths.push('index.js', "css/index.css", "js/index.js", "css/img/index.css")
-    const filesTree = {};
+    let { children: filesTree } = this.state.data;
     filesPaths.forEach((filePath) => {
-      const splitedPath = filePath.split('/');
-      this.createNestedObject(filesTree, splitedPath);
+      this.generateTreeBeardData(filesTree, filePath);
     });
-    this.setState({filesTree: filesTree});
-    console.log(filesTree);
+    this.setState((prevState, props) => ({
+        ...prevState.data,
+        children: filesTree,
+    }));
   };
 
-  createNestedObject = (base, names) => {
-    // If the lastName was removed, then the last object is not set yet:
-    const fileName = names.pop()
-
-    for( var i = 0; i < names.length; i++ ) {
-        base = base[ names[i] ] = base[ names[i] ] || {};
+  generateTreeBeardData = (filesTree, filePath) => {
+    const splitedPath = filePath.split('/');
+    if(splitedPath.length === 1) {
+      filesTree.push({
+        name: splitedPath.shift(),
+        path: filePath,
+      })
+      return;
     }
-    if (base["files"]) {
-      base["files"].push(fileName);
-    }else {
-      base["files"] = [fileName];
-    } 
+    const fileName = splitedPath.pop();
+    if(filesTree.length === 0){
+      filesTree.push({
+        name: splitedPath.shift() || fileName,
+      });
+    }
+    if (splitedPath.length === 0) {
+      if(filesTree[filesTree.length - 1].name !== fileName)
+        filesTree[filesTree.length - 1].children ? filesTree[filesTree.lenght - 1].children.push({name: fileName, path: filePath}) : filesTree[filesTree.length - 1].children = [{name: fileName, path: filePath}];
+      return;
+    }
 
-    return base;
-  };
-
-  eachRecursive = (obj, folders) => {
-    folders = folders || [<FoderWrapper type='root' name='Root'/>];
-    for (var k in obj) {
-      if (!obj.hasOwnProperty(k)) continue;
-      if (typeof obj[k] == "object" && obj[k] !== null){
-        if(k != 'files'){
-          folders.push(<FoderWrapper type='folder' name={k}/>)
-        }else if (k === 'files'){
-          console.log(folders[folders.length - 1])
-          folders[folders.length - 1].addFiles(obj[k])
+    splitedPath.forEach((component) => {
+      filesTree.some((folder, i) => {
+        if (folder.name === component) {
+          folder.children = folder.children || [];
+          filesTree = folder.children;
+          return false;
         }
-        this.eachRecursive(obj[k], folders);
-      }else{
-      }
-    }
-    return folders
+        if(i = filesTree.length - 1) {
+          folder = {
+            name: component,
+            children: [],
+          }
+          filesTree.push(folder);
+          filesTree = folder.children;
+        }
+        return true;
+      });
+    })    
+
+    filesTree.push({name: fileName, path: filePath});
   };
 
   getPath = (obj, val, path) => {
@@ -119,22 +226,38 @@ class FilesContainer extends React.Component {
       }
    }
    return fullpath;
-}
+  };
 
-  // createFilesTreeRepresentation = () => {
-  //   for (let key in this.state.filesTree){
-  //     if (key == "child")
-  //       // do something...
-  //   } 
-  // };
+  onToggle = (node, toggled) => {
+    if(this.state.cursor){this.state.cursor.active = false;}
+    node.active = true;
+    if(node.children){ node.toggled = toggled; }
+    this.setState((prevState, props) => {
+      const state = {
+        cursor: node,
+        selectedFile: node.path || prevState.selectedFile,
+      }
+      return state;
+    });
+    if (node.path) 
+      this.props.onFileSelection(node.path);
+  }
 
   render() {
     return(
       <MainContainer>
-        {this.eachRecursive(this.state.filesTree)}
+        <Treebeard className='component'
+          data={this.state.data}
+          decorators={decorators}
+          onToggle={this.onToggle}
+          style={TreeStyles}
+        />
       </MainContainer>
     )
   }
 }
 
-export default FilesContainer;
+
+
+
+export default FilesContainer;  

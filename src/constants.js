@@ -102,9 +102,26 @@ export const Error404Theme = {
 export const cloudFunctionsDevEndPoint = 'localhost:5000';
 export const cloudFunctionsProdEndPoint = 'https://us-central1-ironhacks-platform-dev.cloudfunctions.net';
 
-export const projectEditorBgColor = 'darkslategrey';
+export const projectEditorBgColor = '#24282A';
 
 //-- Alerts constructors: --
+export const createNewFileFlowAlertContent = (validator) => {
+  return {
+    title: "Create new file",
+    html: "Please insert the full path of the new file. Ie: js/yourfilename.js <break>" +
+      "Remember to write the file extention as well. <strong> 'folder' and 'file' are not valid names.",
+    input: 'text',
+    inputValue: 'File path',
+    inputValidator: validator,
+    confirmButtonText: 'Create file',
+    confirmButtonColor: mainBgColor,
+    showCancelButton: true,
+    cancelButtonColor: '#70867b',
+    cancelButtonText: 'Cancel',
+    showCloseButton: true,
+    allowOutsideClick: false
+  }
+}
 
 export const surveyRedirecAlertContent = {
   title: "Push to evaluation",
@@ -119,7 +136,6 @@ export const surveyRedirecAlertContent = {
 }
 
 export const pushSurveyAlertContent = (url) => {
-  console.log(url)
   return {
     title: 'Evaluation push survey',
     html: `<iframe src='${url}' title='Qualtrics survey'/>`,
@@ -141,7 +157,6 @@ export const preSurveyAlertContent = (url) => {
     customClass: 'surveyAlert',
   }
 }
-
 
 export const commitContentAlertContent = {
   title: "Push to evaluation",

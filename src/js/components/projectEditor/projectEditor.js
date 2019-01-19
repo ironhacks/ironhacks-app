@@ -21,6 +21,7 @@ import 'codemirror/addon/lint/javascript-lint'
 import 'codemirror/addon/lint/lint.css';
 
 //Custom components
+import ProjectPreview from './projectPreview.js';
 import FilesContainer from './filesContainer.js';
 import Loader from '../../utilities/loader.js';
 import Button from '../../utilities/button.js';
@@ -34,11 +35,17 @@ const SectionContainer = styled('div')`
   flex-direction: row;
   width: 100%;
   height: ${props => props.theme.containerHeight};
-  background-color: ${props => props.theme.backgroundColor};
-  color: #70867b;
+  background-color: #1C2022;
+  color: rgb(255, 255, 255, 0.4);
+
+  .preview-container {
+    width: 40%;
+    height: 100%;
+  }
 `;
 
 const ProjectContent = styled('div')`
+  position: relative;
   width: 20%;
   height: 100%;
   background-color: ${Constants.projectEditorBgColor};
@@ -55,6 +62,16 @@ const ProjectContent = styled('div')`
 
     button {
       margin-bottom: 10px;
+    }
+  }
+
+  .hack-status {
+    position: absolute;
+    bottom: 10px;
+    padding: 20px;
+
+    h3, p {
+      margin: 0;
     }
   }
 `;
@@ -75,18 +92,6 @@ const Editor = styled(CodeMirror)`
   height: 100%;
 `;
 
-const PreviewContainer = styled('div')`
-  width: 40%;
-  height: 100%;
-
-  iframe {
-    border: none;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-`;
-
 const editorModeMIMERel = {
   html: 'xml',
   css: 'css',
@@ -102,8 +107,12 @@ class ProjectEditor extends React.Component {
       editorMode: 'xml',
       loadingFiles: true,
       selectedFile: 'index.html',
+      projectFiles: [],
       user: this.props.user,
       currentAlert: null,
+      creatingFile: true,
+      projectName: this.props.match.params.proyectName,
+      timer: {seconds: 0, minutes: 0, hours: 0, days: 0},
     }
   }
 
@@ -111,13 +120,41 @@ class ProjectEditor extends React.Component {
     this.getProjectPreviewPath();
     this.getProjectFilesUrls();
     window.addEventListener("message", this.recieveMessage)
+    this.getCountDown();
   };
+
+  getCountDown = () => {
+    const _this = this;
+    const timer = setInterval(function() {
+      const countDownDate = new Date("Jan 20, 2019 00:00:00").getTime();
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Display the result in the element with id="demo"
+      _this.setState({timer: {seconds: seconds, minutes: minutes, hours: hours, days: days}})
+      // If the count down is finished, write some text 
+      if (distance < 0) {
+        clearInterval(timer);
+        _this.setState({timer: null})
+      }
+    }, 1000) 
+  }
 
   recieveMessage = (event) => {
     if(event.data === 'quizDone'){
       swal.clickConfirm();
     }
-  };
+  }
 
   getProjectFilesUrls = () => {
     const firestore = window.firebase.firestore();
@@ -128,7 +165,7 @@ class ProjectEditor extends React.Component {
     firestore.collection('users')
     .doc(this.state.user.uid)
     .collection('projects')
-    .doc(this.props.match.params.proyectName)
+    .doc(this.state.projectName)
     .get()
     .then(function(doc) {
       _this.setState({projectFiles: doc.data()})
@@ -137,7 +174,7 @@ class ProjectEditor extends React.Component {
     .catch(function(error) {
       console.error(error)
     });
-  };
+  }
 
   getProjectFiles = () => {
     let remainingFiles = Object.keys(this.state.projectFiles).length
@@ -164,13 +201,13 @@ class ProjectEditor extends React.Component {
       xhr.open('GET', this.state.projectFiles[file].url);
       xhr.send();
     };
-  };
+  }
 
   getProjectPreviewPath = () => {
     // Create a reference with an initial file path and name
-    const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.props.match.params.proyectName}/index.html`; 
+    const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`; 
     this.setState({proyectPath: proyectPath});
-  };
+  }
 
   saveProject = () => {
     // Create a root reference
@@ -188,7 +225,7 @@ class ProjectEditor extends React.Component {
     .catch((error) => {
       console.log(`Some failed: `, error.message)
     });
-  };
+  }
 
   startPushNavigation = () => {
     swal(Constants.surveyRedirecAlertContent)
@@ -198,19 +235,18 @@ class ProjectEditor extends React.Component {
         .then((result) => {
           swal(Constants.commitContentAlertContent)
           .then((result) => {
-            
             swal(Constants.loadingAlertContent);
           });
         });
       };
     }); 
-  };
+  }
 
   updateProjectBlobs = () => {
     let newBlobs = [];
     for(const fileName in this.state.projectFiles){
       if(this.state.projectFiles[fileName].didChange){
-        const path = `${this.state.user.uid}/${this.props.match.params.proyectName}/${fileName}`
+        const path = `${this.state.user.uid}/${this.state.projectName}/${fileName}`
         const newContent = this.state.projectFiles[fileName].unSavedContent;
         const updatedBlob = new Blob([newContent], {
             type: this.state.projectFiles[fileName].blob.type
@@ -219,13 +255,13 @@ class ProjectEditor extends React.Component {
       }
     }
     return newBlobs;
-  };
+  }
 
   uploadBlogToFirebase = (blob, storageRef) => {
     const indexRef = storageRef.child(blob.path);
     return indexRef.put(blob.blob).then(function(snapshot) {
     });
-  };
+  }
 
   onChangeEditor = (editor, data, value) => {
     this.setState((prevState, props) => {
@@ -233,10 +269,9 @@ class ProjectEditor extends React.Component {
       prevState.projectFiles[prevState.selectedFile].didChange = true;
       return prevState;
     });
-  };
+  }
 
   onFileSelection = (name) => {
-    console.log(name)
     const splitedFileName = name.split('.');
     this.setState((prevState, props) => { 
       if(prevState.projectFiles[prevState.selectedFile].unSavedContent) {
@@ -248,16 +283,115 @@ class ProjectEditor extends React.Component {
     });
   }
 
-  
+  startCreateNewFileFlow = async () => {
+    const {value: filePath, error: error} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
+    if(filePath) {
+      this.createNewFile(filePath);
+    }
+  }
+
+  createNewFile = (filePath) => {
+    
+  }
+
+  fileNameValidator = (fileName) => {
+    if (fileName) {
+      const name = fileName.toLowerCase();
+      const splitedFileName = name.split('/')
+      console.log(splitedFileName, name)
+      if (splitedFileName.includes('file') || splitedFileName.includes('folder')) {
+        console.log("on if")
+        return true && '"File" or "folder" are not valid names.';
+      }
+      return false;
+    } else {
+      return !fileName && 'You need to write something!'
+    }
+  }
+
+  // getProjects = () => {
+  //   const firestore = window.firebase.firestore();
+  //   const settings = {timestampsInSnapshots: true};
+  //   firestore.settings(settings);
+  //   const _this = this;
+  //   var projects = [];
+  //   firestore.collection("users")
+  //   .doc(this.state.user.uid)
+  //   .collection('projects')
+  //   .get()
+  //   .then(function(querySnapshot) {
+  //     querySnapshot.forEach((doc) => {
+  //       const projectData = doc.data();
+  //       projectData.name = doc.id;
+  //       projects.push(projectData);
+  //       _this.setState({projects: projects});
+  //     });
+  //   })
+  //   .catch(function(error) {
+  //       console.error("Error getting documents: ", error);
+  //   });
+  // }
+
+  // createGitHubRepository = (name) => {
+  //   const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
+  //   commitToGitHub({name: this.state.projectName, files: templateFiles})
+  //   .then((result) => {
+  //     if(result.status === 500){
+  //       console.error(result.error);
+  //     }else{
+  //       _this.setState({
+  //         navigateToCreatedProject: true,
+  //         newProjectName: name,
+  //       })
+  //     }
+  //   });
+  // }
+
+  // putStorageFile = (file, projectName) => {
+  //   //Uploading each template file to storage
+  //   const storageRef = window.firebase.storage().ref();
+  //   const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)   
+  //   const _this = this;
+  //   // the return value will be a Promise
+  //   return pathRef.put(file.blob)
+  //   .then((snapshot) => {
+  //     // Get the download URL
+  //     pathRef.getDownloadURL().then(function(url) {
+  //       const fileURL = url;
+  //       const fileJson = {};
+  //       const fullPath = file.path + file.name;
+  //       fileJson[fullPath] = {url: fileURL}
+  //       const firestore = window.firebase.firestore();
+  //       const settings = {timestampsInSnapshots: true};
+  //       firestore.settings(settings);
+  //       firestore.collection("users")
+  //       .doc(_this.state.user.uid)
+  //       .collection('projects')
+  //       .doc(projectName)
+  //       .set(fileJson, {merge: true})
+  //       .then(function(doc) {
+  //         _this.setState({projectList: {}});
+  //       })
+  //     })
+  //   .catch(function(error) {
+  //       console.error("Error getting documents: ", error);
+  //   });
+  //     }).catch(function(error) {
+  //   }).catch((error) => {
+  //     console.log('One failed:', file, error.message)
+  //   });
+  // };
+
   render() {
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
             <ProjectContent>
-              <h2>{this.props.match.params.proyectName.toUpperCase()}</h2>
+              <h2>{this.state.projectName.toUpperCase()}</h2>
               <div className="control">
                 <Button primary onClick={this.saveProject}> Save and run </Button>
                 <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
+                <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
               </div>
               <h3>Files:</h3>
               {this.state.loadingFiles ? <Loader 
@@ -265,8 +399,18 @@ class ProjectEditor extends React.Component {
                   dark
                   small
                 /> : 
-                <FilesContainer files={this.state.projectFiles} onClick={this.onFileSelection} selectedFile={this.state.selectedFile}/>  
+                <FilesContainer files={this.state.projectFiles}
+                  onFileSelection={this.onFileSelection}
+                  selectedFile={this.state.selectedFile}
+                  projectName={this.state.projectName.toUpperCase()}/>  
               }
+              <div className="hack-status">
+                <h3>Current phase: 1</h3>
+                <p>
+                  Remaining time: <br/>
+                  {`${this.state.timer.days}:${this.state.timer.hours}:${this.state.timer.minutes}:${this.state.timer.seconds}`}
+                </p>
+              </div>
             </ProjectContent>
             <EditorContainer>
               {!this.state.loadingFiles && <Editor
@@ -285,9 +429,9 @@ class ProjectEditor extends React.Component {
                 onChange={this.onChangeEditor}
               />}
             </EditorContainer>
-            <PreviewContainer>
-              {this.state.proyectPath && <iframe src={this.state.proyectPath} title='The Project Preview'/>}
-            </PreviewContainer>
+            <div className="preview-container">
+              <ProjectPreview projectURL={this.state.proyectPath}/>
+            </div>
         </SectionContainer> 
       </ThemeProvider>
     );
