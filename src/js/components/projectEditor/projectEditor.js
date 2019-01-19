@@ -10,15 +10,25 @@ import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 // codemirror css
-import 'codemirror/addon/lint/lint.css';
-import 'codemirror/mode/xml/xml';
-import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
+import 'codemirror/mode/xml/xml';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/css/css';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
 import 'codemirror/addon/lint/javascript-lint'
 import 'codemirror/addon/lint/lint.css';
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/hint/javascript-hint';
+import 'codemirror/addon/hint/css-hint';
+import 'codemirror/addon/hint/xml-hint';
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/addon/edit/matchtags';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/edit/closetag';
+
 
 //Custom components
 import ProjectPreview from './projectPreview.js';
@@ -121,7 +131,7 @@ class ProjectEditor extends React.Component {
     this.getProjectFilesUrls();
     window.addEventListener("message", this.recieveMessage)
     this.getCountDown();
-  };
+  }
 
   getCountDown = () => {
     const _this = this;
@@ -291,16 +301,21 @@ class ProjectEditor extends React.Component {
   }
 
   createNewFile = (filePath) => {
-    
+    const splitedPath = filePath.split('/')
+    const newFile = {
+      name: splitedPath[splitedPath.length - 1],
+      path: filePath,
+      blob: new Blob([`${splitedPath[splitedPath.length - 1]} create by: ${this.state.user.displayName}`]),
+    };
+
+    console.log(newFile);
   }
 
   fileNameValidator = (fileName) => {
     if (fileName) {
       const name = fileName.toLowerCase();
       const splitedFileName = name.split('/')
-      console.log(splitedFileName, name)
       if (splitedFileName.includes('file') || splitedFileName.includes('folder')) {
-        console.log("on if")
         return true && '"File" or "folder" are not valid names.';
       }
       return false;
@@ -347,40 +362,40 @@ class ProjectEditor extends React.Component {
   //   });
   // }
 
-  // putStorageFile = (file, projectName) => {
-  //   //Uploading each template file to storage
-  //   const storageRef = window.firebase.storage().ref();
-  //   const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)   
-  //   const _this = this;
-  //   // the return value will be a Promise
-  //   return pathRef.put(file.blob)
-  //   .then((snapshot) => {
-  //     // Get the download URL
-  //     pathRef.getDownloadURL().then(function(url) {
-  //       const fileURL = url;
-  //       const fileJson = {};
-  //       const fullPath = file.path + file.name;
-  //       fileJson[fullPath] = {url: fileURL}
-  //       const firestore = window.firebase.firestore();
-  //       const settings = {timestampsInSnapshots: true};
-  //       firestore.settings(settings);
-  //       firestore.collection("users")
-  //       .doc(_this.state.user.uid)
-  //       .collection('projects')
-  //       .doc(projectName)
-  //       .set(fileJson, {merge: true})
-  //       .then(function(doc) {
-  //         _this.setState({projectList: {}});
-  //       })
-  //     })
-  //   .catch(function(error) {
-  //       console.error("Error getting documents: ", error);
-  //   });
-  //     }).catch(function(error) {
-  //   }).catch((error) => {
-  //     console.log('One failed:', file, error.message)
-  //   });
-  // };
+  putStorageFile = (file, projectName) => {
+    //Uploading each template file to storage
+    const storageRef = window.firebase.storage().ref();
+    const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)   
+    const _this = this;
+    //the return value will be a Promise
+    return pathRef.put(file.blob)
+    .then((snapshot) => {
+      //Get the download URL
+      pathRef.getDownloadURL().then(function(url) {
+        const fileURL = url;
+        const fileJson = {};
+        const fullPath = file.path + file.name;
+        fileJson[fullPath] = {url: fileURL}
+        const firestore = window.firebase.firestore();
+        const settings = {timestampsInSnapshots: true};
+        firestore.settings(settings);
+        firestore.collection("users")
+        .doc(_this.state.user.uid)
+        .collection('projects')
+        .doc(projectName)
+        .set(fileJson, {merge: true})
+        .then(function(doc) {
+          _this.setState({projectList: {}});
+        })
+      })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+      }).catch(function(error) {
+    }).catch((error) => {
+      console.log('One failed:', file, error.message)
+    });
+  };
 
   render() {
     return (
@@ -425,12 +440,21 @@ class ProjectEditor extends React.Component {
                     theme: 'material',
                     tabSize: 2,
                     lineWrapping: true,
+                    matchBrackets: true,
+                    matchTags: true,
+                    autoCloseTags: true,
+                    autoCloseBrackets: true,
                 }}
                 onChange={this.onChangeEditor}
               />}
             </EditorContainer>
             <div className="preview-container">
-              <ProjectPreview projectURL={this.state.proyectPath}/>
+              {this.state.proyectPath &&
+                <ProjectPreview 
+                  projectURL={this.state.proyectPath}
+                  projectName={this.state.projectName}
+                />
+              }
             </div>
         </SectionContainer> 
       </ThemeProvider>

@@ -125,16 +125,15 @@ const NodeHeader = styled('div')`
 
 // Example: Customising The Header Decorator To Include Icons
 decorators.Header = ({style, node}) => {
-  console.log(style)
-    const iconType = node.children ? 'folder' : 'file';
-    return (
-        <NodeHeader>
-          <div>
-            <img src={iconType === 'file' ? fileIcon : folderIcon}/>
-            {node.name}
-          </div>
-        </NodeHeader>
-    );
+  const iconType = node.children ? 'folder' : 'file';
+  return (
+    <NodeHeader>
+      <div>
+        <img src={iconType === 'file' ? fileIcon : folderIcon}/>
+        {node.name}
+      </div>
+    </NodeHeader>
+  );
 };
 class FilesContainer extends React.Component {
   constructor(props){

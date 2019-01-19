@@ -27,6 +27,7 @@ import QuizForm from './js/components/quizzes/quizForm/quizForm.js';
 import Results from './js/components/results/results.js';
 import UserProfile from './js/components/userProfile/userProfile.js';
 import ProjectEditor from './js/components/projectEditor/projectEditor.js';
+import ProjectPreview from './js/components/projectEditor/projectPreview.js';
 import NotFound from './js/utilities/404.js';
 
 const LoaderContainer = styled('div')`
@@ -104,6 +105,7 @@ class IronHacksApp extends React.Component {
               <Route exact path='/' render={() => null}/> 
               <Route exact path='/login' render={() => null}/>
               <Route exact path='/404' render={() => null}/>
+              <Route exact path='/projectEditor/:proyectName/preview' render={() => null}/>
               {!this.state.user && <Redirect to='/'/>}
               <Route render={(props) => (<Header user={this.state.user} {...props}/>)}/>
             </Switch>
@@ -123,6 +125,7 @@ class IronHacksApp extends React.Component {
               <Route path='/quizzes/:quizName' render={(props) => (<QuizForm user={this.state.user} {...props}/>)}/>
               <Route path='/results' component={Results}/>
               <Route exact path='/projectEditor/:proyectName' render={(props) => (<ProjectEditor user={this.state.user} {...props}/>)}/>
+              <Route exact path='/projectEditor/:proyectName/preview' render={(props) => (<ProjectPreview user={this.state.user} {...props}/>)}/>
               <Route exact path='/404' component={NotFound}/> 
               {this.state.user.admin && <Redirect to='/admin'/>}
               <Route exact path='/' component={Landing}/>
@@ -133,6 +136,7 @@ class IronHacksApp extends React.Component {
               <Route exact path='/' render={() => null}/>
               <Route exact path='/login' render={() => null}/>
               <Route exact path='/404' render={() => null}/>
+              <Route exact path='/projectEditor/:proyectName/preview' render={() => null}/>
               <Route component={Footer}/>
             </Switch>
           </div>
