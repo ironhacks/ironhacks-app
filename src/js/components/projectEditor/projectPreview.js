@@ -88,8 +88,8 @@ class ProjectPreview extends React.Component {
     }
   }
   
-  reloadFrame = (event) => {
-    console.log("test")
+  reloadFrame = () => {
+    this.props.reloadFrame();
   }
 
   getProjectPreviewPath = () => {
@@ -114,7 +114,7 @@ class ProjectPreview extends React.Component {
           </a>
         </div>
         <div className="smooth-borders">
-          {this.state.projectURL && <iframe src={this.state.projectURL} title='The Project Preview'/>}
+          {this.props.projectURL && <iframe src={this.props.projectURL} title='The Project Preview'/>}
         </div>
 
       </PreviewContainer>

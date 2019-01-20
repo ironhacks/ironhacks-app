@@ -397,6 +397,13 @@ class ProjectEditor extends React.Component {
     });
   };
 
+  reloadFrame = () => {
+    this.setState((prevState, props) => {
+      const proyectPath = prevState.proyectPath + ' ';
+      return {proyectPath}
+    });
+  }
+
   render() {
     return (
       <ThemeProvider theme={theme}>
@@ -453,6 +460,7 @@ class ProjectEditor extends React.Component {
                 <ProjectPreview 
                   projectURL={this.state.proyectPath}
                   projectName={this.state.projectName}
+                  reloadFrame={this.reloadFrame}
                 />
               }
             </div>
