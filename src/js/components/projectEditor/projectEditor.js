@@ -94,7 +94,6 @@ const EditorContainer = styled('div')`
     width: 100%;
     height: 100%;      
   }
-
 `;
 
 const Editor = styled(CodeMirror)`
@@ -107,6 +106,8 @@ const editorModeMIMERel = {
   css: 'css',
   js: 'javascript',
 }
+
+const storageRef = window.firebase.storage().ref();
 
 class ProjectEditor extends React.Component {
   constructor(props){
@@ -136,7 +137,7 @@ class ProjectEditor extends React.Component {
   getCountDown = () => {
     const _this = this;
     const timer = setInterval(function() {
-      const countDownDate = new Date("Jan 20, 2019 00:00:00").getTime();
+      const countDownDate = new Date("Jan 25, 2019 00:00:00").getTime();
 
       // Get todays date and time
       var now = new Date().getTime();
@@ -220,13 +221,11 @@ class ProjectEditor extends React.Component {
   }
 
   saveProject = () => {
-    // Create a root reference
-    const storageRef = window.firebase.storage().ref();
     // Raw string is the default if no format is provided
     const newBlobs = this.updateProjectBlobs();
     const _this = this;
     Promise.all(
-      newBlobs.map(item => this.uploadBlogToFirebase(item, storageRef))
+      newBlobs.map(item => this.uploadBlogToFirebase(item))
     )
     .then((url) => {
       const currentLocation = _this.state.proyectPath;
@@ -235,6 +234,21 @@ class ProjectEditor extends React.Component {
     .catch((error) => {
       console.log(`Some failed: `, error.message)
     });
+  }
+
+  pushToGitHub = () => {
+    let projectName = this.state.user.isAdmin ? 
+      `admin-${this.state.user.uid}-${this.state.projectName}` : 
+      `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
+    const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
+    commitToGitHub({name: this.state.projectName, files: this.state.projectFiles})
+    .then((result) => {
+      if(result.status === 500){
+        console.error(result.error);
+      }else{
+        console.log('extiooo')
+      }
+    })
   }
 
   startPushNavigation = () => {
@@ -267,7 +281,7 @@ class ProjectEditor extends React.Component {
     return newBlobs;
   }
 
-  uploadBlogToFirebase = (blob, storageRef) => {
+  uploadBlogToFirebase = (blob) => {
     const indexRef = storageRef.child(blob.path);
     return indexRef.put(blob.blob).then(function(snapshot) {
     });
@@ -296,7 +310,9 @@ class ProjectEditor extends React.Component {
   startCreateNewFileFlow = async () => {
     const {value: filePath, error: error} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
     if(filePath) {
-      this.createNewFile(filePath);
+      const file = this.createNewFile(filePath);
+      console.log(file)
+      this.putStorageFile(file, this.state.projectName);
     }
   }
 
@@ -305,10 +321,9 @@ class ProjectEditor extends React.Component {
     const newFile = {
       name: splitedPath[splitedPath.length - 1],
       path: filePath,
-      blob: new Blob([`${splitedPath[splitedPath.length - 1]} create by: ${this.state.user.displayName}`]),
+      blob: new Blob([`${splitedPath[splitedPath.length - 1]} create by: ${this.state.user.displayName}`], {type: this.getMIME(splitedPath[splitedPath.length - 1])}),
     };
-
-    console.log(newFile);
+    return newFile;
   }
 
   fileNameValidator = (fileName) => {
@@ -318,54 +333,39 @@ class ProjectEditor extends React.Component {
       if (splitedFileName.includes('file') || splitedFileName.includes('folder')) {
         return true && '"File" or "folder" are not valid names.';
       }
+      if (this.state.projectFiles.hasOwnProperty(fileName)) {
+        return true && 'File already exists.'
+      }
       return false;
     } else {
       return !fileName && 'You need to write something!'
     }
   }
 
-  // getProjects = () => {
-  //   const firestore = window.firebase.firestore();
-  //   const settings = {timestampsInSnapshots: true};
-  //   firestore.settings(settings);
-  //   const _this = this;
-  //   var projects = [];
-  //   firestore.collection("users")
-  //   .doc(this.state.user.uid)
-  //   .collection('projects')
-  //   .get()
-  //   .then(function(querySnapshot) {
-  //     querySnapshot.forEach((doc) => {
-  //       const projectData = doc.data();
-  //       projectData.name = doc.id;
-  //       projects.push(projectData);
-  //       _this.setState({projects: projects});
-  //     });
-  //   })
-  //   .catch(function(error) {
-  //       console.error("Error getting documents: ", error);
-  //   });
-  // }
+  getMIME = (fileName) => {
+    const splitedName = fileName.split('.');
+    const extention = splitedName.pop();
+    console.log(splitedName, extention)
+    const extToMimes = {
+      'txt': 'text/plain',
+      'html': 'text/html',
+      'css': 'text/css',
+      'js': 'text/javascript',
+      'md': 'text/markdown',
+      'svg': 'image/svg+xml',
+      'img': 'image/jpeg',
+      'png': 'image/png',
+      'gif': 'image/gif',
+    }
 
-  // createGitHubRepository = (name) => {
-  //   const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
-  //   commitToGitHub({name: this.state.projectName, files: templateFiles})
-  //   .then((result) => {
-  //     if(result.status === 500){
-  //       console.error(result.error);
-  //     }else{
-  //       _this.setState({
-  //         navigateToCreatedProject: true,
-  //         newProjectName: name,
-  //       })
-  //     }
-  //   });
-  // }
+    if (extToMimes.hasOwnProperty(extention)) {
+      return extToMimes[extention];
+    }
+    return false;
+  }
 
   putStorageFile = (file, projectName) => {
-    //Uploading each template file to storage
-    const storageRef = window.firebase.storage().ref();
-    const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)   
+    const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}`)   
     const _this = this;
     //the return value will be a Promise
     return pathRef.put(file.blob)
@@ -374,7 +374,7 @@ class ProjectEditor extends React.Component {
       pathRef.getDownloadURL().then(function(url) {
         const fileURL = url;
         const fileJson = {};
-        const fullPath = file.path + file.name;
+        const fullPath = file.path;
         fileJson[fullPath] = {url: fileURL}
         const firestore = window.firebase.firestore();
         const settings = {timestampsInSnapshots: true};
@@ -385,7 +385,7 @@ class ProjectEditor extends React.Component {
         .doc(projectName)
         .set(fileJson, {merge: true})
         .then(function(doc) {
-          _this.setState({projectList: {}});
+          _this.getProjectFilesUrls();
         })
       })
     .catch(function(error) {
@@ -412,7 +412,7 @@ class ProjectEditor extends React.Component {
               <h2>{this.state.projectName.toUpperCase()}</h2>
               <div className="control">
                 <Button primary onClick={this.saveProject}> Save and run </Button>
-                <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
+                <Button primary onClick={this.pushToGitHub}> Push to evaluation </Button>
                 <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
               </div>
               <h3>Files:</h3>

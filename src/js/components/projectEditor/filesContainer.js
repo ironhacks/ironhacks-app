@@ -135,6 +135,7 @@ decorators.Header = ({style, node}) => {
     </NodeHeader>
   );
 };
+
 class FilesContainer extends React.Component {
   constructor(props){
     super(props);
@@ -156,7 +157,7 @@ class FilesContainer extends React.Component {
   onFileClick = (file, name) => {
     this.props.onClick(file)
     this.setState({selectedFile: name})
-  };
+  }
 
   generateFilesTree = () => {
     const filesPaths = Object.keys(this.props.files)
@@ -179,26 +180,27 @@ class FilesContainer extends React.Component {
       })
       return;
     }
+
     const fileName = splitedPath.pop();
     if(filesTree.length === 0){
       filesTree.push({
         name: splitedPath.shift() || fileName,
       });
     }
+
     if (splitedPath.length === 0) {
       if(filesTree[filesTree.length - 1].name !== fileName)
         filesTree[filesTree.length - 1].children ? filesTree[filesTree.lenght - 1].children.push({name: fileName, path: filePath}) : filesTree[filesTree.length - 1].children = [{name: fileName, path: filePath}];
       return;
     }
-
     splitedPath.forEach((component) => {
-      filesTree.some((folder, i) => {
+      filesTree.some((folder, index) => {
         if (folder.name === component) {
           folder.children = folder.children || [];
           filesTree = folder.children;
-          return false;
+          return true;
         }
-        if(i = filesTree.length - 1) {
+        if (index === filesTree.length - 1) {
           folder = {
             name: component,
             children: [],
@@ -206,7 +208,7 @@ class FilesContainer extends React.Component {
           filesTree.push(folder);
           filesTree = folder.children;
         }
-        return true;
+        return false;
       });
     })    
 
