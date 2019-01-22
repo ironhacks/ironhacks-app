@@ -100,7 +100,7 @@ class UserProfile extends React.Component {
 
   createGitHubRepository = (name) => {
     // Accesing to all the pain text template variables:
-    const templateFiles = [TemplateFiles.index, TemplateFiles.js, TemplateFiles.css]
+    const templateFiles = [{name: 'index.html', content: TemplateFiles.index}, {name: 'js/main.js', content: TemplateFiles.js}, {name: 'css/main.css', content: TemplateFiles.css}]
     let projectName = this.state.user.isAdmin ? 
       `admin-${this.state.user.uid}-${name}` : 
       `${this.state.currentHack}-${this.state.user.uid}-${name}`;
@@ -118,9 +118,11 @@ class UserProfile extends React.Component {
         //Error
         console.error(result.data.error);
       }else{
+        console.log("commit")
         const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
-        commitToGitHub({name: projectName, files: templateFiles})
+        commitToGitHub({name: projectName, files: templateFiles, commitMessage: 'init commit'})
         .then((result) => {
+          console.log("commit result", result)
           if(result.status === 500){
             console.error(result.error);
           }else{

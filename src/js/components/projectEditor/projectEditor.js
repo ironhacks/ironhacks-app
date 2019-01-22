@@ -236,17 +236,23 @@ class ProjectEditor extends React.Component {
     });
   }
 
-  pushToGitHub = () => {
+  pushToGitHub = (commiteMessage) => {
+    console.log(this.state.projectFiles)
+    const files = [];
+    for (const key in this.state.projectFiles) {
+      files.push({name: key, content: this.state.projectFiles[key].content})
+    }
     let projectName = this.state.user.isAdmin ? 
       `admin-${this.state.user.uid}-${this.state.projectName}` : 
       `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
     const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
-    commitToGitHub({name: this.state.projectName, files: this.state.projectFiles})
+    commitToGitHub({name: projectName, files:files, commitMessage: 'commit from editor'})
     .then((result) => {
       if(result.status === 500){
         console.error(result.error);
       }else{
-        console.log('extiooo')
+        console.log("exitoo")
+        console.log(result)
       }
     })
   }
