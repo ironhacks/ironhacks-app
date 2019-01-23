@@ -317,7 +317,6 @@ class ProjectEditor extends React.Component {
     const {value: filePath, error: error} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
     if(filePath) {
       const file = this.createNewFile(filePath);
-      console.log(file)
       this.putStorageFile(file, this.state.projectName);
     }
   }
@@ -371,6 +370,7 @@ class ProjectEditor extends React.Component {
   }
 
   putStorageFile = (file, projectName) => {
+    this.setState({loadingFiles: true});
     const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}`)   
     const _this = this;
     //the return value will be a Promise

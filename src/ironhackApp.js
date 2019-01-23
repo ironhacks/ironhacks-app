@@ -123,7 +123,7 @@ class IronHacksApp extends React.Component {
               <Route path='/task' render={(props) => (<Task user={this.state.user} {...props}/>)}/>
               <Route exact path='/quizzes' component={Quizzes}/>
               <Route path='/quizzes/:quizName' render={(props) => (<QuizForm user={this.state.user} {...props}/>)}/>
-              <Route path='/results' component={Results}/>
+              <Route path='/results' render={(props) => (<Results user={this.state.user} {...props}/>)}/>
               <Route exact path='/projectEditor/:proyectName' render={(props) => (<ProjectEditor user={this.state.user} {...props}/>)}/>
               <Route exact path='/projectEditor/:proyectName/preview' render={(props) => (<ProjectPreview user={this.state.user} {...props}/>)}/>
               <Route exact path='/404' component={NotFound}/> 
