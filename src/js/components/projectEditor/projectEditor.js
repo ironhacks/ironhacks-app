@@ -99,6 +99,11 @@ const EditorContainer = styled('div')`
 const Editor = styled(CodeMirror)`
   width: 100%;
   height: 100%;
+
+  .CodeMirror-matchingtag {
+    background-color: transparent;
+    text-decoration: underline;
+  }
 `;
 
 const editorModeMIMERel = {
@@ -131,7 +136,7 @@ class ProjectEditor extends React.Component {
     this.getProjectPreviewPath();
     this.getProjectFilesUrls();
     window.addEventListener("message", this.recieveMessage)
-    this.getCountDown();
+    //this.getCountDown();
   }
 
   getCountDown = () => {
@@ -314,6 +319,7 @@ class ProjectEditor extends React.Component {
   }
 
   startCreateNewFileFlow = async () => {
+    this.saveProject();
     const {value: filePath, error: error} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
     if(filePath) {
       const file = this.createNewFile(filePath);
@@ -411,6 +417,7 @@ class ProjectEditor extends React.Component {
   }
 
   render() {
+    console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>

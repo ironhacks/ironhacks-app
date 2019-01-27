@@ -11,7 +11,7 @@ import Button from '../../utilities/button.js';
 
 //Section container
 const CardContainer = styled('button')`
-  height: 150px;
+  height: 180px;
   width: 30%;
   margin: 10px;
   text-align: left;
@@ -51,7 +51,7 @@ const CardContainer = styled('button')`
 `;
 
 const NewProjectForm = styled('div')`
-  height: 150px;
+  height: 180px;
   width: 30%;
   margin: 10px;
   text-align: left;
@@ -59,6 +59,13 @@ const NewProjectForm = styled('div')`
   border: none;
   background-color: white; 
   padding: 0;
+
+  .name-error {
+    font-size: 13px;
+    margin-top: 5px;
+    margin-bottom: 0;
+    color: salmon;
+  }
 
   form {
     display: flex;
@@ -79,6 +86,16 @@ const NewProjectForm = styled('div')`
       border-radius: 4px;
       background-color: lightgray;
       padding-left: 10px;
+
+      &[type=submit] {
+        width: 80px;
+        height: 30px;
+        margin-left: 5px;
+        padding: 0 10px;
+        background-color: ${Constants.mainBgColor};
+        border-radius: ${Constants.universalBorderRadius};
+        border: none;
+      }
     }
 
     .control {
@@ -119,12 +136,40 @@ class ProjectCard extends React.Component {
     this.setState({newProjectName: event.target.value});
   };
 
+  validateName = () => {
+    const whiteSpaces = /\s/;
+    const alphaNumeric = /^[a-z0-9]+$/i
+    if (this.state.newProjectName === '')
+      return {error: "You must write something!"}
+    if (whiteSpaces.test(this.state.newProjectName))
+      return {error: "Name can't contain spaces."};
+    const duplicatedName = this.props.projects.some((project) => 
+      (project.name === this.state.newProjectName))
+    if (duplicatedName)
+        return {error: 'A project with that name already exists'};
+    if (alphaNumeric.test(this.state.newProjectName))
+      return {result: true};
+    return {error: "Name can only contain letters and numbers."};
+  }
+
+  duplicatedName = (name) => {
+    return name === this.state.name;
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.onSave(this.state.newProjectName);
+    const { result, error } = this.validateName();
+    console.log(result, error);
+    if(result){
+      //this.props.onSave(this.state.newProjectName);
+      this.setState({nameError: null});
+    }else {
+      this.setState({nameError: error});
+    }
   }
 
   render() {
+    console.log(this.props)
     if(this.props.newProject === true){
       if(!this.state.showNewProjectForm) {
         return (
@@ -136,18 +181,18 @@ class ProjectCard extends React.Component {
       }else{
         return (
           <NewProjectForm>
-            <form>
+            <form onSubmit={this.handleSubmit}>
               <h3>Project name:</h3>
               <input type='text' placeholder='Awasome project' onChange={this.handleNameInput}/>
+              {this.state.nameError && 
+                <p className="name-error">
+                  {this.state.nameError}
+                </p>
+              }
               <div className='control'>
-                <Button 
-                  primary
-                  width='80px'
-                  margin='0 0 0 15px'
-                  disabled={this.state.newProjectName ? false: true}
-                  onClick={this.handleSubmit}>  
-                  Create
-                </Button>
+                <input 
+                  type="submit"
+                  value="Create"/>
                 <Button 
                   width='80px' 
                   onClick={this.showNewProjectForm}>

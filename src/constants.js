@@ -210,3 +210,15 @@ export const loadingAlertContent = {
   showConfirmButton: false,
   allowOutsideClick: false,
 };
+
+export const personalFeddbackTheme = {
+  technology: {
+    backgroundColor: '#a59f8b',
+  },
+  analytics: {
+    backgroundColor: '#88a923',
+  },
+  infoVis: {
+    backgroundColor: '#e62f5d',
+  },
+}

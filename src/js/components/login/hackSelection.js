@@ -12,6 +12,7 @@ import swal from 'sweetalert2';
 import HackCard from '../admin/hackCard.js';
 import Separator from '../../utilities/separator.js';
 import Loader from '../../utilities/loader.js';
+import * as TemplateFiles from './newHackTemplates/sprint2019Unal.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 
@@ -51,10 +52,12 @@ class HackSelection extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      user: this.props.user,
       startNewHackNav: false,
       startDashboardNav: false,
       registeredHacks: [],
       availableHacks: [],
+      loading: false,
     };
     this.firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
@@ -64,7 +67,7 @@ class HackSelection extends React.Component {
   componentDidMount() {
     this.getHacks()
     window.addEventListener("message", this.recieveMessage)
-  };
+  }
 
   recieveMessage = (event) => {
     if(event.data === 'quizDone'){
@@ -76,9 +79,10 @@ class HackSelection extends React.Component {
   getHacks = () => {
     const _this = this;
     this.firestore.collection('users')
-    .doc(_this.props.user.uid)
+    .doc(_this.state.user.uid)
     .get()
     .then((user) => {
+      console.log(user.data());
       _this.firestore.collection("whiteLists")
       .doc(_this.props.user.email)
       .get()
@@ -107,48 +111,154 @@ class HackSelection extends React.Component {
     .catch(function(error) {
         console.error("Error getting documents: ", error);
     })
-  };
+  }
+
+  goToPresurvey = (hackIndex) => {
+    // swal(Constants.preSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_1LXiVsGcARieE3X?user_email=' + this.props.user.email))
+    // .then((result) => {
+    //   if(!result.dismiss) {
+        this.callRegistrationFuncion(hackIndex);
+    //   };
+    // });
+  }
 
   callRegistrationFuncion = (hackIndex) => {
-    this.setState({loading:true})
+    this.setState({loading:true, status: "Starting registration process..."});
     const _this = this;
     const hackId = _this.state.availableHacks[hackIndex].id
     const registerUserFunc = window.firebase.functions().httpsCallable('registerUser');
     registerUserFunc({hackId: hackId}).then((result) => {
-      _this.firestore.collection('users')
-      .doc(this.props.user.uid)
-      .get()
-      .then((doc) => {
-        const { cookies } = _this.props;
-        cookies.set('currentHack', hackId);
-        cookies.set('currentForum', doc.data().forums[hackId].id);
-        _this.setState({mustNavigate: true})
-      })
+      const projectName = _this.state.availableHacks[hackIndex].data().name.replace(/\s/g, '');
+      _this.createNewProject(projectName, hackId, hackIndex);
     });
-  };
-
-  goToPresurvey = (hackIndex) => {
-    swal(Constants.preSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_1LXiVsGcARieE3X?user_email=' + this.props.user.email))
-    .then((result) => {
-      if(!result.dismiss) {
-        this.callRegistrationFuncion(hackIndex);
-      };
-    });
-  };
+  }
 
   setHack = (hackIndex) => {
-    const hackId = this.state.registeredHacks[hackIndex].id
+    this.setState({status: "Creating participant profile..."});
+    console.log(hackIndex, this.state.registeredHacks, this.state.availableHacks);
+    const hackId = this.state.registeredHacks[hackIndex] ? this.state.registeredHacks[hackIndex].id : this.state.availableHacks[hackIndex].id;
+    console.log(hackId)
     const _this = this;
     this.firestore.collection('users')
     .doc(this.props.user.uid)
     .get()
     .then((doc) => {
+      console.log(doc.data())
       const { cookies } = _this.props;
       cookies.set('currentHack', hackId);
       cookies.set('currentForum', doc.data().forums[hackId].id);
-      _this.setState({mustNavigate: true})
+      _this.setState({mustNavigate: true});
     })
-  };
+  }
+
+   createNewProject = (name, hackId, hackIndex) => {
+    this.setState({status: "Creating participant projects (1/2)..."});
+    // Accesing to all the blob template variables:
+    const files = TemplateFiles.files;
+    Promise.all(
+      // Array of "Promises"
+      files.map(file => this.putStorageFile(file, name))
+    )
+    .then((url) => {
+      this.createGitHubRepository(name, hackId, hackIndex);
+    })
+    .catch((error) => {
+      console.log(`Something failed: `, error.message)
+    });
+  }
+
+  createGitHubRepository = (name, hackId, hackIndex) => {
+    this.setState({status: "Creating participant profile (2/2)..."});
+    // Accesing to all the pain text template variables:
+    const templateFiles = 
+    [
+       {
+          name: 'index.html',
+          content: TemplateFiles.indexContent,
+        },
+        {
+          name: 'js/main.js',
+          content: TemplateFiles.mainJSContent,
+        },
+        {
+          name: 'js/map.js',
+          content: TemplateFiles.mapJSContent,
+        },
+        {
+          name: 'js/visualization.js',
+          content: TemplateFiles.visualizationJSContent,
+        },
+        {
+          name: 'css/main.css',
+          content: TemplateFiles.mainCSSContent,
+        },
+        {
+          name: 'data/population.csv',
+          content: TemplateFiles.d3Data,
+        },
+    ]
+    let projectName = `${hackId}-${this.state.user.uid}-${name}`;
+    const _this = this;
+    const newRepoConfig = {
+      name: projectName,
+      description: 'UNAL-ironhacks-spring-2019',
+      private: true,
+      auto_init: true,
+    }
+    const createGitHubRepo = window.firebase.functions().httpsCallable('createGitHubRepo');
+    createGitHubRepo(newRepoConfig)
+    .then((result) => {
+      if(result.status === 500){
+        console.error(result.data.error);
+      }else{
+        _this.setState({status: "Uploading files..."});
+        const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
+        commitToGitHub({name: projectName, files: templateFiles, commitMessage: 'init commit'})
+        .then((result) => {
+          if(result.status === 500){
+            console.error(result.error);
+          }else{
+            _this.setHack(hackIndex);
+          }
+        })
+      }
+    });
+  }
+
+  putStorageFile = (file, projectName) => {
+    //Uploading each template file to storage
+    const storageRef = window.firebase.storage().ref();
+    const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)   
+    const _this = this;
+    // the return value will be a Promise
+    return pathRef.put(file.blob)
+    .then((snapshot) => {
+      // Get the download URL
+      pathRef.getDownloadURL().then(function(url) {
+        const fileURL = url;
+        const fileJson = {};
+        const fullPath = file.path + file.name;
+        fileJson[fullPath] = {url: fileURL}
+        const firestore = window.firebase.firestore();
+        const settings = {timestampsInSnapshots: true};
+        firestore.settings(settings);
+        firestore.collection("users")
+        .doc(_this.state.user.uid)
+        .collection('projects')
+        .doc(projectName)
+        .set(fileJson, {merge: true})
+        .then(function(doc) {
+          _this.setState({projectList: {}});
+        })
+      })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+      }).catch(function(error) {
+    }).catch((error) => {
+      console.log('One failed:', file, error.message)
+    });
+  }
 
   render() {
     if(this.state.mustNavigate){
@@ -160,7 +270,7 @@ class HackSelection extends React.Component {
       return (
         <ThemeProvider theme={theme}>
         <SectionContainer className="container-fluid">
-          <Loader />
+          <Loader status={this.state.status} />
         </SectionContainer>
         </ThemeProvider>
       );

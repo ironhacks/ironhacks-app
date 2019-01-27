@@ -22,8 +22,15 @@ const SectionContainer = styled('div')`
     }
   }};
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  span {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 20px;
+  }
 `;
 
 const Spinner = styled('div')`
@@ -55,6 +62,9 @@ class Loader extends React.Component {
           <Spinner
             dark={this.props.dark}
             small={this.props.small}/>
+          {this.props.status && 
+            <span>{this.props.status}</span>
+          }
         </SectionContainer>
       </ThemeProvider>
     )

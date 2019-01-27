@@ -54,6 +54,9 @@ class IronHacksApp extends React.Component {
     const _this = this;
     window.firebase.auth().onAuthStateChanged((user) => {
       if(user){
+        const splitedName = user.displayName.split(' ');
+        const profileLetters = splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1)
+        user.profileLetters = profileLetters;
         _this.setState({user: user});
         _this.isAdmin(); //We only check this to display specific ui items.
       }else{

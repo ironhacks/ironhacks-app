@@ -10,6 +10,7 @@ import styled, {ThemeProvider} from 'styled-components';
 //Custom components
 import ProjectCard from './projectCard.js';
 import Separator from '../../utilities/separator.js';
+import TimeLine from './timeLine.js';
 import * as TemplateFiles from './newProjectFileTemplates/templates.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
@@ -18,10 +19,13 @@ const theme = Constants.AppSectionTheme;
 
 //Section container
 const SectionContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
-  overflow: auto;
+  padding: 20px 15%;
+  overflow: scroll;
 
   h1 {
     margin-bottom: 20px;
@@ -30,7 +34,39 @@ const SectionContainer = styled('div')`
       margin-top: 150px;
     }
   }
+
+  @media (min-width: 1400px) {
+    padding: 20px 20%;
+  }
 `;
+
+const ProfileContainer = styled('div')`
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 100px 0 20px 0;
+  height: 250px;
+
+  span {
+    width: 250px;
+    height: 250px;
+    background-color: lightgray;
+    text-align: center;
+    font-size: 140px;
+    border-radius: 125px;
+    padding: 17px 0;
+  }
+
+  .user-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin-left: 50px;
+  }
+`;
+
+
 const CardsContainer = styled('div')`
   display: flex;
   flex-direction: row;
@@ -49,15 +85,21 @@ class UserProfile extends React.Component {
       startNewProjecNav: false,
       startProjectEditorNav: false,
       projects: [],
+      hackData: null,
       user: this.props.user,
     };
+
     if(this.props.location.state){
       this.state.user = this.props.location.state.user
     }
+
+    this.firestore = window.firebase.firestore();
   };
 
   componentDidMount(){
     this.getProjects();
+    if(!this.state.user.isAdmin)
+      this.getCurrentHackInfo();
   };
   //Query all the hacks objects from the db.
   getProjects = () => {
@@ -178,26 +220,55 @@ class UserProfile extends React.Component {
     })
   }
 
+  getCurrentHackInfo = () => {
+    const _this = this;
+    this.firestore.collection('hacks')
+    .doc(this.state.currentHack)
+    .get()
+    .then((doc) => {
+      const initDate = new window.firebase.firestore.Timestamp(doc.data().phases[0].codingStartDate.seconds, doc.data().phases[0].codingStartDate.nanoseconds)
+      console.log(initDate.toDate())
+      _this.setState({hackData: doc.data()});
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    })
+  };
+
   render() {
     if (this.state.navigateToProject === true) return <Redirect push to={`projectEditor/${this.state.projects[this.state.selectedProject].name}`}/>;
     if (this.state.navigateToCreatedProject === true) return <Redirect push to={`projectEditor/${this.state.newProjectName}`}/>;
-
+  console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
-      <SectionContainer className="container-fluid">
-        <div className="row">
-          <div className='col-md-8 offset-md-2'>
-            <h1>Welcome to IronHacks Platform!</h1>
-            <span>Bellow you will find the current hack status. You can also manage your projects from here.</span>
-            <Separator primary/>
-            <CardsContainer >
-              <ProjectCard newProject={true} onSave={this.createNewProject}/>
-              {this.state.projects.map((project, index) => {
-                return <ProjectCard project={project} index={index} key={index} onClick={this.goToProjectEditor}/>
-              })}
-            </CardsContainer>
+      <SectionContainer>
+        <ProfileContainer>
+          <span>{this.state.user.profileLetters}</span>
+          <div className='user-data'>
+            <h3>Personal Info:</h3>
+            <p>
+              Name: {this.state.user.displayName} <br/>
+              Email: {this.state.user.email}
+            </p>
+            <h3>Hack Info:</h3>
+            <p>
+              Current hack: {this.state.hackData ? this.state.hackData.name : "loading..."} <br/>
+              Current Phase: {this.state.hackData ? this.state.hackData.name : "loading..."}
+            </p>
           </div>
-        </div>
+          {this.state.hackData && 
+            <TimeLine phases={this.state.hackData.phases}/>
+          }
+        </ProfileContainer>
+        <h2>Projects</h2>
+        <span>Bellow you will find the current hack status. You can also manage your projects from here.</span>
+        <Separator primary/>
+        <CardsContainer >
+          <ProjectCard newProject={true} onSave={this.createNewProject} projects={this.state.projects}/>
+          {this.state.projects.map((project, index) => {
+            return <ProjectCard project={project} index={index} key={index} onClick={this.goToProjectEditor}/>
+          })}
+        </CardsContainer>
       </SectionContainer>
       </ThemeProvider>
     );
