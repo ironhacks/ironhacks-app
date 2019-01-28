@@ -17,7 +17,7 @@ const theme = Constants.AppSectionTheme;
 //Section container
 const SectionContainer = styled('div')`
   width: 100%;
-  padding: 20px 15%;
+  padding: 0 15%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
   overflow: auto;
@@ -27,14 +27,24 @@ const SectionContainer = styled('div')`
   }
 
   .tab-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 
     .tab-button {
-      border: none;
-      height: 30px;
-      border-radius: 8px 8px 0 0;
+        border: none;
+        height: 60px;
+        width: 30%;
+        margin-left: 10px;
+        border-radius: 4px;
+        font-size: 20px;
+        font-weight: 700;
+
+        &.selected {
+          background-color: ${Constants.mainBgColor};
+        }
     }
   }
-
   .seleted-section {
     padding: 20px;
   }
@@ -47,6 +57,29 @@ const AdminControlls = styled('div')`
 
 `;
 
+const results = {
+  1: {
+    b: {
+      id: 'hacker 1',
+      infoVis: [100, 100, 100],
+      analytics: [1, 10],
+      similarity: {
+        a: 1,
+      },
+      tech: [100, 100]
+    },
+    a: {
+      id: 'hacker 2',
+      infoVis: [100, 100, 100],
+      analytics: [1, 10],
+      similarity: {
+        b: 1
+      },
+      tech: [100, 100]
+    }
+  }
+}
+
 class Results extends React.Component {
   constructor(props) {
     super(props);
@@ -57,7 +90,7 @@ class Results extends React.Component {
       forumId: cookies.get('currentForum') || null,
       treatment: 1,
       loading: true,
-      currentSection: 'personalScore',
+      currentSection: 'yourCompetitors',
     }
   
     this.firestore = window.firebase.firestore();
@@ -85,6 +118,10 @@ class Results extends React.Component {
     });
   };
 
+  changeSection = (event) => {
+    this.setState({currentSection: event.target.id});
+  }
+
 
   render() {
     console.log(this.state)
@@ -104,18 +141,44 @@ class Results extends React.Component {
           <h1>Welcome back to your dashboard</h1>
           {Texts.treatmentText[this.state.treatment].header}
           <div className="tab-container">
-            <button className="tab-button">Personal Feedback</button>
-            <button className="tab-button">Your competitors</button>
+            <button
+              className={`tab-button ${this.state.currentSection === 'yourCompetitors' ? 'selected' : ''}`}
+              onClick={this.changeSection}
+              id='yourCompetitors'>
+              Your competitors
+            </button>
+            <button
+              className={`tab-button ${this.state.currentSection === 'personalFeedback' ? 'selected' : ''}`}
+              onClick={this.changeSection}
+              id='personalFeedback'>
+              Personal Feedback
+            </button>
           </div>
           <div className="seleted-section">
-            {this.state.currentSection === 'personalScore' &&
+            {this.state.currentSection === 'yourCompetitors' &&
+              <React.Fragment>
+                <h2>Your Peers</h2>
+                {Texts.treatmentText[this.state.treatment].ranking.instructions}
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Hacker</th>
+                      <th>Project Link</th>
+                      {this.state.treatment === "1" && 
+                      <th>similarity</th>
+                      }
+                    </tr>
+                  </thead>
+                </table>
+              </React.Fragment>
+            }
+            {this.state.currentSection === 'personalFeedback' &&
               <React.Fragment>
                 <h2>{Texts.personalFeddback.title}</h2>
                 {Texts.personalFeddback.subTitle}
                 <PersonalScoreSection/>
               </React.Fragment>
             }
-            
           </div>
         </SectionContainer>
       </ThemeProvider>

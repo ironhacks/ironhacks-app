@@ -11,7 +11,7 @@ import * as Texts from './staticTexts.js';
 
 const ItemContainer = styled('div')`
   display: flex;
-  width: 700px;
+  width: 100%;
   flex-direction: column;
   border-radius: 30px;
   margin-bottom: 30px;
