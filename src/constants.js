@@ -214,11 +214,14 @@ export const loadingAlertContent = {
 export const personalFeddbackTheme = {
   technology: {
     backgroundColor: '#a59f8b',
+    lightBackgroundColor: '#d5d2c9',
   },
   analytics: {
     backgroundColor: '#88a923',
+    lightBackgroundColor: '#cedba4'
   },
   infoVis: {
     backgroundColor: '#e62f5d',
+    lightBackgroundColor: '#f39cb4',
   },
 }

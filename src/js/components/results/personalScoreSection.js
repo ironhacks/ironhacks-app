@@ -13,9 +13,11 @@ import PersonalScoreItem from './personalScoreItem.js';
 
 const SectionContainer = styled('div')`
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
   width: 100%;
-  min-height: 500px;
+  min-height: 600px;
   border-radius: ${Constants.universalBorderRadius};
 `;
 
