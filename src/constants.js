@@ -206,6 +206,7 @@ export const commitCanceledAlertContent = {
 
 export const loadingAlertContent = {
   title: "Sending...",
+  text: "This can take up to 10 senconds, don't close this tab.",
   showCloseButton: false,
   showConfirmButton: false,
   allowOutsideClick: false,

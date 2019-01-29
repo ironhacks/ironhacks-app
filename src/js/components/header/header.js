@@ -9,6 +9,7 @@ import { withCookies } from 'react-cookie';
 import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
+import { registerStats } from '../../utilities/registerStat.js';
 
 import menuIcon from './img/menu-icon.svg';
 
@@ -207,7 +208,16 @@ class Header extends React.Component {
     }
   };
 
-  hideMenus = () => {
+  hideMenus = (event) => {
+    const statData = {
+      userId: this.state.user.uid,
+      event: 'changeSection',
+      metadata: {
+        location: 'header',
+        target: event.target.innerHTML,
+      },
+    };
+    registerStats(statData);
     this.setState({
       showMenu: 'none',
       showUserMenu: 'none'

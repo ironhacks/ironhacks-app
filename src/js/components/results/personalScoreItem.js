@@ -35,7 +35,7 @@ const ItemContainer = styled('div')`
 
   p {
     text-align: justify;
-    padding: 0 40px;
+    padding: 0 15px;
   }
 `;
 
@@ -53,36 +53,56 @@ const Title = styled('div')`
 
 const Contents = styled('div')`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
   border-right: solid 1px ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
   border-left: solid 1px ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
   border-bottom: solid 1px ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
 `;
 
+const VerticalContainer = styled('div')`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 166%;
+  flex-grow: 1;
+
+  h3 {
+    span {
+      font-size: 14px;
+    }
+  }
+
+  .horizontal {
+    display: flex;
+    flex-direction: row;
+  }
+`;
+
 const SubSection = styled('div')`
   position: relative;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
 
   .sub-category-text {
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     align-items: center;
-    width: 80%;
+    width: 100%;
   }
 
   .score {
-    position: absolute;
-    right: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 20%;
-    height: 100%;
+    width: 100%;
     background-color: ${(props) => Constants.personalFeddbackTheme[props.type].lightBackgroundColor};
 
     h3 {
@@ -121,9 +141,10 @@ class PersonalScoreItem extends React.Component {
           <span className='category-weight'>{`(${Texts.personalFeddback[this.props.type].weight} of total value)`}</span>
         </Title>
         <Contents type={this.props.type}>
+          {this.props.type !== 'infoVis' && 
           <SubSection type={this.props.type}>
             <div className='sub-category-text'>
-              <h3>Effort for excellence</h3>
+              <h3>Effort for excellence <span>(70%)</span></h3>
               {Texts.personalFeddback[this.props.type].efe}
             </div>
             <div className="score">
@@ -131,9 +152,35 @@ class PersonalScoreItem extends React.Component {
               <span>Total points</span>
             </div>
           </SubSection>
+          }
+          {this.props.type === 'infoVis' && 
+            <VerticalContainer type={this.props.type}>
+              <h3>Effort for excellence <span>(70%)</span></h3>
+              <div className="horizontal">
+                <SubSection type={this.props.type}>
+                  <div className="sub-category-text">
+                    {Texts.personalFeddback[this.props.type].efe}
+                  </div>
+                  <div className="score">
+                    <h3>25</h3>
+                    <span>Total points</span>
+                  </div>
+                </SubSection>
+                <SubSection type={this.props.type}>
+                  <div className="sub-category-text">
+                    {Texts.personalFeddback[this.props.type].efe}
+                  </div>
+                  <div className="score">
+                    <h3>25</h3>
+                    <span>Total points</span>
+                  </div>
+                </SubSection>
+              </div>
+            </VerticalContainer>
+          }
           <SubSection type={this.props.type}>
             <div className="sub-category-text">
-              <h3>Progress on Requirements</h3>
+              <h3>Progress on Requirements <span>(30%)</span></h3>
               {Texts.personalFeddback[this.props.type].por}
             </div>
             <div className="score">

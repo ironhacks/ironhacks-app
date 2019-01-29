@@ -10,6 +10,7 @@ import * as Texts from './staticTexts.js';
 import PersonalScoreSection from './personalScoreSection.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
+import * as DateFormater from '../../utilities/dateFormater.js';
 import Loader from '../../utilities/loader.js';
 
 const theme = Constants.AppSectionTheme;
@@ -88,16 +89,18 @@ class Results extends React.Component {
       user,
       currentHack: cookies.get('currentHack') || null,
       forumId: cookies.get('currentForum') || null,
-      treatment: 1,
+      hackData: null,
+      treatment: null,
       loading: true,
-      currentSection: 'yourCompetitors',
+      currentSection: 'personalFeedback',
     }
   
     this.firestore = window.firebase.firestore();
   }
 
   componentDidMount() {
-    this.getForumData();
+    this.getCurrentHackInfo();
+    
   }
 
   getForumData = () => {
@@ -116,12 +119,30 @@ class Results extends React.Component {
     .catch(function(error) {
         console.error("Error getting documents: ", error);
     });
-  };
+  }
 
   changeSection = (event) => {
     this.setState({currentSection: event.target.id});
   }
 
+  getCurrentHackInfo = () => {
+    const _this = this;
+    this.firestore.collection('hacks')
+    .doc(this.state.currentHack)
+    .get()
+    .then((doc) => {
+      const hackData = doc.data();
+      const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1;
+      _this.setState({
+        hackData,
+        currentPhase,
+      });
+      _this.getForumData();
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    })
+  };
 
   render() {
     console.log(this.state)

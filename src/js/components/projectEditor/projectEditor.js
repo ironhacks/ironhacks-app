@@ -2,6 +2,7 @@
 // proyectEditor.js
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 import React from 'react';
+import { withCookies } from 'react-cookie';
 import swal from 'sweetalert2';
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 import { JSHINT } from 'jshint';
@@ -114,10 +115,21 @@ const editorModeMIMERel = {
 
 const storageRef = window.firebase.storage().ref();
 
+const commitSurveys = {
+  1: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_exR2GmwUUS07XUN',
+  2: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_2hHiUsFZ0Urzbmt',
+  3: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8HYZoJadcow0Lad',
+  4 :'https://purdue.ca1.qualtrics.com/jfe/form/SV_3La7PbTVxqJkVh3',
+  5: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_bxSTjywdbM3zf0x',
+}
+
+
 class ProjectEditor extends React.Component {
   constructor(props){
     super(props);
+    const { cookies, user } = props;
     this.state = {
+      currentHack: cookies.get('currentHack') || null,
       editorContent: '',
       readonly: false,
       editorMode: 'xml',
@@ -242,7 +254,7 @@ class ProjectEditor extends React.Component {
   }
 
   pushToGitHub = (commiteMessage) => {
-    console.log(this.state.projectFiles)
+    const composedCommitMessage = commiteMessage + '\n\n\n Final commit phase 1.';
     const files = [];
     for (const key in this.state.projectFiles) {
       files.push({name: key, content: this.state.projectFiles[key].content})
@@ -250,19 +262,21 @@ class ProjectEditor extends React.Component {
     let projectName = this.state.user.isAdmin ? 
       `admin-${this.state.user.uid}-${this.state.projectName}` : 
       `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
+    console.log(projectName)
     const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
-    commitToGitHub({name: projectName, files:files, commitMessage: 'commit from editor'})
+    commitToGitHub({name: projectName, files:files, commitMessage: composedCommitMessage})
     .then((result) => {
       if(result.status === 500){
         console.error(result.error);
       }else{
-        console.log("exitoo")
+        swal.clickConfirm();
         console.log(result)
       }
     })
   }
 
   startPushNavigation = () => {
+    this.saveProject();
     swal(Constants.surveyRedirecAlertContent)
     .then((result) => {
       if(!result.dismiss) {
@@ -270,7 +284,11 @@ class ProjectEditor extends React.Component {
         .then((result) => {
           swal(Constants.commitContentAlertContent)
           .then((result) => {
-            swal(Constants.loadingAlertContent);
+            const { value } = result;
+            if (value) {
+              this.pushToGitHub(value)
+              swal(Constants.loadingAlertContent);
+            };
           });
         });
       };
@@ -356,7 +374,6 @@ class ProjectEditor extends React.Component {
   getMIME = (fileName) => {
     const splitedName = fileName.split('.');
     const extention = splitedName.pop();
-    console.log(splitedName, extention)
     const extToMimes = {
       'txt': 'text/plain',
       'html': 'text/html',
@@ -417,7 +434,6 @@ class ProjectEditor extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
@@ -425,7 +441,7 @@ class ProjectEditor extends React.Component {
               <h2>{this.state.projectName.toUpperCase()}</h2>
               <div className="control">
                 <Button primary onClick={this.saveProject}> Save and run </Button>
-                <Button primary onClick={this.pushToGitHub}> Push to evaluation </Button>
+                <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
                 <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
               </div>
               <h3>Files:</h3>
@@ -482,5 +498,4 @@ class ProjectEditor extends React.Component {
     );
   }
 }
-
-export default ProjectEditor;
+export default withCookies(ProjectEditor);
