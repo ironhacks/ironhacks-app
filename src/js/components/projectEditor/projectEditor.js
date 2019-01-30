@@ -36,6 +36,7 @@ import ProjectPreview from './projectPreview.js';
 import FilesContainer from './filesContainer.js';
 import Loader from '../../utilities/loader.js';
 import Button from '../../utilities/button.js';
+import * as DateFormater from '../../utilities/dateFormater.js';
 
 window.JSHINT = JSHINT
 const theme = Constants.AppSectionTheme;
@@ -142,19 +143,42 @@ class ProjectEditor extends React.Component {
       projectName: this.props.match.params.proyectName,
       timer: {seconds: 0, minutes: 0, hours: 0, days: 0},
     }
+    this.firestore = window.firebase.firestore();
   }
 
   componentDidMount() {
     this.getProjectPreviewPath();
     this.getProjectFilesUrls();
+    this.getCurrentHackInfo();
     window.addEventListener("message", this.recieveMessage)
     //this.getCountDown();
   }
 
+  getCurrentHackInfo = () => {
+    const _this = this;
+    this.firestore.collection('hacks')
+    .doc(this.state.currentHack)
+    .get()
+    .then((doc) => {
+      const hackData = doc.data();
+      const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1;
+      _this.setState({
+        hackData,
+        currentPhase,
+      });
+      _this.getCountDown()
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    })
+  };
+
   getCountDown = () => {
     const _this = this;
+    const phase = this.state.hackData.phases[this.state.currentPhase]
+      console.log(phase)
+    const countDownDate = new window.firebase.firestore.Timestamp(phase.codingStartEnd.seconds, phase.codingStartEnd.nanoseconds).toDate();
     const timer = setInterval(function() {
-      const countDownDate = new Date("Jan 25, 2019 00:00:00").getTime();
 
       // Get todays date and time
       var now = new Date().getTime();
@@ -167,7 +191,6 @@ class ProjectEditor extends React.Component {
       var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
       // Display the result in the element with id="demo"
       _this.setState({timer: {seconds: seconds, minutes: minutes, hours: hours, days: days}})
       // If the count down is finished, write some text 
@@ -280,7 +303,7 @@ class ProjectEditor extends React.Component {
     swal(Constants.surveyRedirecAlertContent)
     .then((result) => {
       if(!result.dismiss) {
-        swal(Constants.pushSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_ai47Laj9EM1n433?user_email=pepito'))
+        swal(Constants.pushSurveyAlertContent(`${commitSurveys[this.state.currentPhase]}?user_email=${this.state.user.email}`))
         .then((result) => {
           swal(Constants.commitContentAlertContent)
           .then((result) => {
@@ -456,7 +479,7 @@ class ProjectEditor extends React.Component {
                   projectName={this.state.projectName.toUpperCase()}/>  
               }
               <div className="hack-status">
-                <h3>Current phase: 1</h3>
+                <h3>Current phase: {this.state.currentPhase}</h3>
                 <p>
                   Remaining time: <br/>
                   {`${this.state.timer.days}:${this.state.timer.hours}:${this.state.timer.minutes}:${this.state.timer.seconds}`}
