@@ -34,11 +34,12 @@ class PersonalScoreSection extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <SectionContainer>
-        <PersonalScoreItem type='technology'/>
-        <PersonalScoreItem type='analytics'/>
-        <PersonalScoreItem type='infoVis'/>
+        <PersonalScoreItem type='technology' score={this.props.scores.tech}/>
+        <PersonalScoreItem type='analytics' score={this.props.scores.analytics}/>
+        <PersonalScoreItem type='infoVis' score={this.props.scores.InfoVis}/>
       </SectionContainer>
     );
   }
