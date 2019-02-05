@@ -12,28 +12,30 @@ import * as Constants from '../../../constants.js';
 //Custom components
 import ForumSelector from './forumSelector.js'
 import MarkdownEditor from '../markdownEditor/markdownEditor.js';
+import Loader from '../../utilities/loader.js';
 
 const theme = Constants.AppSectionTheme;
 
 //Section container
 const SectionContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  padding: 0 10%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
   overflow: auto;
 `;
-//Title controls
-const TitleRow = styled('div')`
-  width: 100%;
-  margin-top: 10px;
-`;
 const Header = styled('div')`
   width 100%;
-  min-height: 20vh;
+  margin-top: 25px;
 `;
+
 const EditorContainer = styled('div')`
+  position: relative;
   width 100%;
-  min-height: 60vh;
+  height: 1px;
+  flex-grow: 1;
 `;
 const AdminSection = styled('div')`
   display: flex;
@@ -67,14 +69,26 @@ const AdminSection = styled('div')`
 `;
 //Publish controls row
 const PublishControlsRow = styled('div')`
-  width 100%;
-  min-height: 70px;
-  padding: 15px 0 15px 0;
   display: flex;
   flex-direction: row-reverse;
+  width 100%;
+  height: 60px;
+  padding: 15px 0 15px 0;
 
   button {
+    padding: 0 10px;
+    background-color: ${Constants.mainBgColor};
+    border-radius: ${Constants.universalBorderRadius};
+    border: none;
+    cursor: pointer;
+    border: none;
     height: 100%;
+
+    &:disabled {
+      cursor: inherit;
+      background-color: lightgray;
+      color: white;
+    }
   }
 `;
 //Title intpu
@@ -92,16 +106,16 @@ const TitleInput = styled('input')`
 class NewThread extends React.Component {
   constructor(props){
     super(props);
-    const { cookies } = props;
+    const { cookies, user } = props;
     this.state = {
-      submit: false,
+      currentHack: cookies.get('currentHack') || null,
+      forum: cookies.get('currentForum') || null,
+      user,
       titleValue: "",
+      markdown: "",
       mustNavigate: false,
       selectedHack: 0,
       selectedForum: 0,
-      currentHack: cookies.get('currentHack') || null,
-      forum: cookies.get('currentForum') || null,
-      user: this.props.user
     };    
     this.firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
@@ -113,30 +127,23 @@ class NewThread extends React.Component {
       this.getHacks();
     };
   }
-  
-  //This callback report if the title input state change
-  titleEventHandler = (event) => {
-    this.setState({titleValue: event.target.value});
-    this.enableSubmitButton();
-  };
-  //This function enable or disable the submit button based on the fields content.
-  enableSubmitButton = () => {
-    this.setState((prevState, props) => {
-      if(prevState.titleValue !== ""){
-        return {submit: true};
-      }else{
-        return {submit: false};
-      }
-    })
-  };
 
   onEditorChange = (markdown) => {
     this.setState({markdown: markdown});
   };
 
+  handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    
+    this.setState({
+      [name]: value
+    });
+  };
+
   //This function handle the sumbit process
   handleSubmit = (event) => {
-    console.log(this.state)
     event.preventDefault();
     let hackId, forumId;
     if(this.props.user.isAdmin){
@@ -146,14 +153,12 @@ class NewThread extends React.Component {
       hackId = this.state.currentHack;
       forumId = this.state.forum;
     }
-
-
-    const currentDate = Date.now(); //We use the same date in both the thread and the comment, so on the db the stats show that they were created at the same time.
+    const currentDate = new Date(); //We use the same date in both the thread and the comment, so on the db the stats show that they were created at the same time.
     const _this = this;
     const codedBody = this.utoa(this.state.markdown);
     //TODO: add forum id
     this.firestore.collection("threads").add({
-      title: this.state.titleValue,
+      title: this.state.title,
       author: this.props.user.uid,
       authorName: this.props.user.displayName,
       createdAt: currentDate,
@@ -186,10 +191,11 @@ class NewThread extends React.Component {
       return window.btoa(unescape(encodeURIComponent(str)));
   };
 
-  //---------------------------------------- Admin features ------------------------------------------
+//---------------------------------------- Admin features ------------------------------------------
 
   //Query all the hacks objects from the db.
   getHacks = () => {
+    this.setState({loading: true})
     const _this = this;
     var hacks = [];
     this.firestore.collection("hacks")
@@ -212,7 +218,7 @@ class NewThread extends React.Component {
   getForums = (hackIndex) => {
     const _this = this;
     const forums = [];
-    const index = hackIndex ? hackIndex : 0;
+    const index = hackIndex || 0;
     this.firestore.collection('forums')
     .where('hack', '==', this.state.hacks[index].id)
     .get()
@@ -223,8 +229,9 @@ class NewThread extends React.Component {
         forums.push(forum);
       });
       _this.setState((prevState, props) => {
-        prevState.hacks[index].forums = forums;
-        return prevState;
+        const hacks = prevState.hacks;
+        hacks[index].forums = forums;
+        return {hacks, loading: false};
       })
     })
     .catch(function(error) {
@@ -248,47 +255,50 @@ class NewThread extends React.Component {
 //---------------------------------------- Admin features ------------------------------------------
 
   render() {
+    if (this.state.loading) {
+      return (
+        <ThemeProvider theme={theme}>
+        <SectionContainer>
+          <Loader/>
+        </SectionContainer>
+        </ThemeProvider>
+      );
+    }
     if (this.state.mustNavigate) return <Redirect to={{ pathname: '/forum/thread/' + this.state.threadRef, state: { title: this.state.titleValue}}}/>;
     return (
       <ThemeProvider theme={theme}>
-        <SectionContainer className='container-fluid'>
-          <Header className='row'>
-            <TitleRow className='col-md-10 offset-md-1'>
-              <h1>New Thread</h1>
-              <p> Bellow you will find a <strong><i>Markdown Editor</i></strong>, so you can style your Thread using Markdown syntax (If you don't know Markdown, please check <a target="_blank" rel="noopener noreferrer" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">this!</a>). Write on the left, you will see the preview on the right.</p>
-              <TitleInput type='text' placeholder='Thread Title..' onChange={this.titleEventHandler}/>
-              {this.props.user.isAdmin && 
-              <AdminSection>
-                <div>
-                  <h3>Admin Tools</h3>
-                  <p> Here you can pick on which hack and forum you will post your thread. You can also pin a post from here. (A pinned post will appear at the top of the forum, as a good practice, try to avoid having more than 3 pinned posts.)</p>
-                </div>
-                <div className='hackSelector'>
-                <span>Hack:</span>
-                {this.props.user.isAdmin 
+        <SectionContainer>
+          <Header>
+            <h1>New Thread</h1>
+            <p> Bellow you will find a <strong><i>Markdown Editor</i></strong>, so you can style your Thread using Markdown syntax <strong>(If you don't know Markdown, please check <a target="_blank" rel="noopener noreferrer" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">this!</a>)</strong>. Write on the left, you will see the preview on the right.</p>
+            <TitleInput type='text' placeholder='Thread Title..' onChange={this.handleInputChange} name='title'/>
+            {this.props.user.isAdmin && 
+            <AdminSection>
+              <div>
+                <h3>Admin Tools</h3>
+                <p> Here you can pick on which hack and forum you will post your thread. You can also pin a post from here. (A pinned post will appear at the top of the forum, as a good practice, try to avoid having more than 3 pinned posts.)</p>
+              </div>
+              <div className='hackSelector'>
+              <span>Hack:</span>
+              {this.props.user.isAdmin 
+              && this.state.hacks 
+              && <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
+              <span>Forum:</span>
+              {this.props.user.isAdmin 
                 && this.state.hacks 
-                && <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
-                <span>Forum:</span>
-                {this.props.user.isAdmin 
-                  && this.state.hacks 
-                  && this.state.hacks[this.state.selectedHack].forums
-                  && <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
-                <input type='checkbox'/>
-                <span>Pin this thread.</span>
-                </div>
-              </AdminSection>
-              }
-            </TitleRow>
+                && this.state.hacks[this.state.selectedHack].forums
+                && <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
+              <input type='checkbox' onChange={this.handleInputChange} name='pinned'/>
+              <span>Pin this thread.</span>
+              </div>
+            </AdminSection>
+            }
           </Header>
-          <EditorContainer className='row'>
-            <div className='col-md-10 offset-md-1'>
-              <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>
-            </div>
+          <EditorContainer>
+            <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>
           </EditorContainer>
-          <PublishControlsRow className='row'>
-            <div className='col-md-10 offset-md-1'>
-              <button disabled={!this.state.submit} onClick={this.handleSubmit}>Submit</button>
-            </div>
+          <PublishControlsRow>
+            <button disabled={this.state.title === "" || this.state.markdown === ""} onClick={this.handleSubmit}>Submit</button>
           </PublishControlsRow>
         </SectionContainer>
       </ThemeProvider>

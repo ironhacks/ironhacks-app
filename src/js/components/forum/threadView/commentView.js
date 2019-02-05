@@ -11,17 +11,27 @@ import styled, {ThemeProvider} from 'styled-components';
 import ReactionsView from '../reactionsView.js';
 import TagView from '../tagView.js';
 import ReactionPicker from '../reactionPicker.js';
+import TrashIcon from '..//img/trash.svg';
 //Custom Constants
 import * as Constants from '../../../../constants.js';
 
 const theme = Constants.CommentViewTheme;
 
 const CommentContainer = styled('div')`
+  position: relative;
   height: ${props => props.theme.containerHeight};
   border-radius: ${Constants.universalBorderRadius};
   background-color: ${props => props.theme.backgroundColor};
   margin-bottom: ${Constants.commentViewBottomMargin};
   padding: 10px 15px 10px 15px;
+
+  .comment-content {
+    overflow: hidden;
+
+    img {
+      width: 100%;
+    }
+  }
 `;
 const Separator = styled('div')`
   height: 1px;
@@ -47,9 +57,15 @@ const UserName = styled('div')`
   }
 `;
 const UserImage = styled('div')`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 40px;
   height: 40px;
+  font-size: 16px;
   margin-right: 15px;
+  font-weight: 800;
+  font-style: normal;
   background-color: gray;
   border-radius: 20px;
 `;
@@ -63,6 +79,32 @@ const ConverterConfig = {
   tasklists: true,
 };
 
+
+const DeleteButton = styled('button')`
+  position: absolute;
+  top: 0;
+  right: 70px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: ${Constants.universalBorderRadius};
+  transition: background-color 0.3s;
+
+  img {
+    height: 25px;
+    width 25px;
+    object-fit: contain;
+  }
+
+  &:hover {
+    background-color: #ffe085;
+  }
+`;
+
 //Comment view Props (inside commentData):
 /*
 * authorName : String = The name of the autor.
@@ -73,14 +115,16 @@ const ConverterConfig = {
 class CommentView extends React.Component {
   constructor(props) {
     super(props);
+    const { user } = props;
     this.state = {
+      user,
     };
+
+    this.firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    this.firestore.settings(settings);
   }
-
-  handleClick = () => {
-    console.log('Button is cliked!');
-  };
-
+  
   decodeBody = (markdown) => {
     const converter = new Showdown.Converter(ConverterConfig);
     return converter.makeHtml(markdown)
@@ -90,38 +134,57 @@ class CommentView extends React.Component {
     return decodeURIComponent(escape(window.atob(str)));
   };
 
+  deleteComment = () => {
+    if(this.props.title) {
+      //Is the head, must delete the whole thread.
+    } else {
+      this.deleteSingleComment()
+    }
+  }
+
+  deleteThread = () => {
+
+  }
+
+  deleteSingleComment = () => {
+    const threadRef = this.firestore.collection("threads").doc(this.props.commentData.threadId);
+    threadRef.get()
+    .then((doc) => {
+      const threadData = doc.data();
+      threadData.comments = threadData.comments.filter((comment) => (comment != this.props.commentData.id));
+      threadRef.update(threadData);
+    }).catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+    this.firestore.collection("comments")
+    .doc(this.props.commentData.id)
+    .delete()
+    .then(() => {
+      this.props.reloadComments();
+    }).catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+  };
+
   render() {
     return (
       <ThemeProvider theme={theme}>
         <CommentContainer>
-          <div className="row">
-            <UserName className='col-md-6'>
-              <UserImage/><span>{this.props.commentData.authorName}</span>
-            </UserName>
-            <RightAlignDiv className='col-md-6'>
-              <ReactionPicker/>
-            </RightAlignDiv>
-          </div>
-          <div className="row">
-            <div className='col-md-12'>
-              <Separator/>
-            </div>
-            <div className='col-md-12'>
-              <h2>{this.props.title}</h2>
-              <div dangerouslySetInnerHTML={{__html:this.decodeBody(this.atou(this.props.commentData.body))}}/>
-            </div>
-            <div className='col-md-12'>
-                <Separator/>
-            </div>
-          </div>
-          <div className="row">
-            <div className='col-md-6'>
-              <ReactionsView likes={14}/>
-            </div>
-            <RightAlignDiv className='col-md-6'>
-              <TagView/>
-            </RightAlignDiv>
-          </div>
+          <UserName>
+            <UserImage>{this.state.user.profileLetters}</UserImage>
+            <span>{this.props.commentData.authorName}</span>
+          </UserName>
+          <Separator/>
+          <h2>{this.props.title}</h2>
+          <div className='comment-content' dangerouslySetInnerHTML={{__html:this.decodeBody(this.atou(this.props.commentData.body))}}/>
+          <Separator/>
+          <ReactionsView 
+            commentData={this.props.commentData}
+          />
+          <ReactionPicker/>
+          {this.props.commentData.author === this.state.user.uid && 
+            <DeleteButton><img src={TrashIcon} alt="trash-icon" onClick={this.deleteComment}/></DeleteButton>
+          }
         </CommentContainer>
       </ThemeProvider>
     );

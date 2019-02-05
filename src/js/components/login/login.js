@@ -95,7 +95,6 @@ class Login extends React.Component {
     const settings = {timestampsInSnapshots: true};
     const _this = this;
     firestore.settings(settings);
-    console.log(user)
     firestore.collection("users").doc(user.uid).set({
       name: user.name,
       email: user.email,

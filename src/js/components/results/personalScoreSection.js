@@ -17,8 +17,8 @@ const SectionContainer = styled('div')`
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  min-height: 600px;
-  border-radius: ${Constants.universalBorderRadius};
+  overflow: hidden;
+  border-radius: 40px;
 `;
 
 class PersonalScoreSection extends React.Component {
@@ -34,7 +34,6 @@ class PersonalScoreSection extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <SectionContainer>
         <PersonalScoreItem type='technology' score={this.props.scores.tech}/>

@@ -93,13 +93,13 @@ class Admin extends React.Component {
   };
 
   render() {
-    if (this.state.startNewHackNav === true) return <Redirect to='admin/newHack'/>;
+    if (this.state.startNewHackNav === true) return <Redirect push to='admin/newHack'/>;
     if (this.state.startDashboardNav === true){
       const selectedHack = this.state.selectedHack;
       const selectedHackId = this.state.selectedHack.id;
       const hackName = selectedHack.name
       const pathname = '/admin/dashboard/' + hackName;
-      return <Redirect to={{
+      return <Redirect push to={{
         pathname: pathname,
         state: {hack: selectedHack, hackId: selectedHackId}
       }}

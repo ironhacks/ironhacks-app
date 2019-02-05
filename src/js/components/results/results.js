@@ -1,156 +1,235 @@
-  // IronHacks Platform
-  // results.js - Results Component
-  // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+// IronHacks Platform
+// results.js - Results Component
+// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
-  import React from 'react';
-  import { withCookies } from 'react-cookie';
-  //Styled components
-  import styled, {ThemeProvider} from 'styled-components';
-  import * as Texts from './staticTexts.js';
-  import PersonalScoreSection from './personalScoreSection.js';
-  //Custom Constants
-  import * as Constants from '../../../constants.js';
-  import * as DateFormater from '../../utilities/dateFormater.js';
-  import Loader from '../../utilities/loader.js';
+import React from 'react';
+import { withCookies } from 'react-cookie';
+//Styled components
+import styled, {ThemeProvider} from 'styled-components';
+import * as Texts from './staticTexts.js';
+import PersonalScoreSection from './personalScoreSection.js';
+import YourCompetitorsRank from './yourCompetitorsRank.js';
+//Custom Constants
+import * as Constants from '../../../constants.js';
+import * as DateFormater from '../../utilities/dateFormater.js';
+import Loader from '../../utilities/loader.js';
+import TimeLine from '../../utilities/timeLine.js';
 
-  const theme = Constants.AppSectionTheme;
+const theme = Constants.AppSectionTheme;
 
-  //Section container
-  const SectionContainer = styled('div')`
-    width: 100%;
-    padding: 0 15%;
-    height: ${props => props.theme.containerHeight};
-    background-color: ${props => props.theme.backgroundColor};
-    overflow: auto;
+//Section container
+const SectionContainer = styled('div')`
+  width: 100%;
+  height: ${props => props.theme.containerHeight};
+  background-color: ${props => props.theme.backgroundColor};
+  overflow: auto;
+
+  .top-container {
+    padding: 0 10%;
+    background-color: #f9f9f8;
+    border-bottom: 1px solid rgb(224, 228, 232);
 
     h1 {
-      margin-top: 100px;
+      padding-top: 100px;
     }
 
-    .tab-container {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-
-      .tab-button {
-          border: none;
-          height: 60px;
-          width: 30%;
-          margin-left: 10px;
-          border-radius: 4px;
-          font-size: 20px;
-          font-weight: 700;
-
-          &.selected {
-            background-color: ${Constants.mainBgColor};
-          }
-      }
+    h3 {
+      margin-bottom: 0;
+      text-align: center;
     }
-    .seleted-section {
-      padding: 20px;
-    }
-  `;
+  }
 
-  const AdminControlls = styled('div')`
+  .tab-container {
     display: flex;
+    justify-content: left;
+    padding: 0 10%;
     width: 100%;
-    padding: 0 10% 0 10%;
+    margin-bottom: -1px;
 
-  `;
+    .tab-button {
+        background-color: #f9f9f8;
+        cursor: pointer;
+        border: none;
+        height: 60px;
+        width: 150px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom: 1px solid rgb(224, 228, 232);
+        outline: none;
 
-  class Results extends React.Component {
-    constructor(props) {
-      super(props);
-      const { cookies, user } = props;
-      this.state = {
-        user,
-        currentHack: cookies.get('currentHack') || null,
-        forumId: cookies.get('currentForum') || null,
-        hackData: null,
-        treatment: null,
-        loading: true,
-        currentSection: 'personalFeedback',
+
+        &.selected {
+          background-color: white;
+          border-top: 3px solid ${Constants.mainBgColor};
+          border-right: 1px solid rgb(225, 228, 232);
+          border-left: 1px solid rgb(224, 228, 232);          
+          border-bottom: 1px solid white;
+        }
+    }
+  }
+
+  .selected-section {
+    margin-top: 20px;
+    padding: 0 10%;
+
+    .results-loader {
+      margin-top: -20px;
+      height: 500px;
+    }
+
+    h2 {
+      &.no-results {
+        margin-top: 50px;
+        text-align: center;
       }
-    
-      this.firestore = window.firebase.firestore();
     }
+  }
+`;
 
-    componentDidMount() {
-      this.getCurrentHackInfo();
+const AdminControlls = styled('div')`
+  display: flex;
+  width: 100%;
+  padding: 0 10% 0 10%;
+
+`;
+
+class Results extends React.Component {
+  constructor(props) {
+    super(props);
+    const { cookies, user } = props;
+    this.state = {
+      user,
+      currentHack: cookies.get('currentHack') || null,
+      forumId: cookies.get('currentForum') || null,
+      hackData: null,
+      treatment: null,
+      scores: null,
+      loading: true,
+      currentSection: 'yourCompetitors',
     }
+  
+    this.firestore = window.firebase.firestore();
+  }
 
-    getCurrentHackInfo = () => {
-      const _this = this;
-      this.firestore.collection('hacks')
-      .doc(this.state.currentHack)
-      .get()
-      .then((doc) => {
-        const hackData = doc.data();
-        const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1;
-        _this.setState({
-          hackData,
-          currentPhase,
-        });
-        _this.getForumData();
-      })
-      .catch(function(error) {
-          console.error("Error getting documents: ", error);
-      })
-    }
+  componentDidMount() {
+    this.getCurrentHackInfo();
+  }
 
-    getForumData = () => {
-      const _this = this;
-      this.firestore.collection("forums")
-      .doc(this.state.forumId)
-      .get()
-      .then((doc) => {
-        const data = doc.data();
-        _this.setState({
-          treatment: data.treatment,
-          
-        });
-        const getResults = window.firebase.functions().httpsCallable('getPhaseResults');
-        getResults({
-          treatment: data.treatment,
-          userId: this.state.user.uid,
-          hackId: this.state.currentHack,
-          phase: this.state.currentPhase - 1,
-          forumId: this.state.forumId}
-        ).then((response) => {
-          const { data: results } = response.data;
-          _this.setState({
-            results: results,
-            loading: false,
-          });
-        })
-      })
-      .catch(function(error) {
-          console.error("Error getting documents: ", error);
+  getCurrentHackInfo = () => {
+    const _this = this;
+    this.firestore.collection('hacks')
+    .doc(this.state.currentHack)
+    .get()
+    .then((doc) => {
+      const hackData = doc.data();
+      let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+      _this.setState({
+        hackData,
+        currentPhase,
       });
-    }
+      _this.getForumData();
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    })
+  }
 
-    changeSection = (event) => {
-      this.setState({currentSection: event.target.id});
-    }
-
-
-    render() {
-      console.log(this.state)
-      if(this.state.loading){
-        return (
-          <ThemeProvider theme={theme}>
-          <SectionContainer className="container-fluid">
-            <Loader status="Fetching results..."/>
-          </SectionContainer>
-          </ThemeProvider>
-        );
+  getForumData = () => {
+    const _this = this;
+    this.firestore.collection("forums")
+    .doc(this.state.forumId)
+    .get()
+    .then((doc) => {
+      const data = doc.data();
+      const { treatment, participants } = data; 
+      _this.setState({
+        treatment,
+        participants,
+      });
+      if( this.state.currentPhase === -1 ){
+        this.setState({
+          results: false,
+          loading: false,
+        });
+        return;
       }
+      const getResults = window.firebase.functions().httpsCallable('getPhaseResults');
+      _this.getResults(this.state.currentPhase)
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+  }
 
+  changeSection = (event) => {
+    this.setState({currentSection: event.target.id});
+  }
+  
+  onPhaseSelection = (phase) => {
+    this.setState({selectedPhase: phase + 1})
+    this.getResults(phase + 1);
+  }
+
+  getResults = (phase) => {
+    this.setState({gettingResults: true})
+    const getResults = window.firebase.functions().httpsCallable('getPhaseResults');
+    const _this = this;
+
+    getResults({
+      userId: this.state.user.uid,
+      hackId: this.state.currentHack,
+      phase: phase,
+      forumId: this.state.forumId}
+    ).then((response) => {
+      const { userResults: results } = response.data;
+      _this.setState({
+        results,
+        loading: false,
+        gettingResults: false,
+      });
+    })
+  }
+
+  saveLikedCompetitors = (likedCompetitors) => {
+    const saveLikedCompetitors = window.firebase.functions().httpsCallable('saveLikedCompetitors');
+    const _this = this;
+    const { currentHack: hackId, currentPhase: phase} = this.state;
+    saveLikedCompetitors({
+      userId: this.state.user.uid,
+      hackId: this.state.currentHack,
+      phase: this.state.currentPhase,
+      likedCompetitors}
+    ).then((response) => {
+      this.getResults(phase);
+    })
+  }
+
+
+  render() {
+    if(this.state.loading){
       return (
         <ThemeProvider theme={theme}>
-          <SectionContainer>
+        <SectionContainer>
+          <Loader status="Fetching results..."/>
+        </SectionContainer>
+        </ThemeProvider>
+      );
+    }
+
+    return (
+      <ThemeProvider theme={theme}>
+        <SectionContainer>
+          <div className="top-container">
             <h1>Welcome back to your dashboard</h1>
             {Texts.treatmentText[this.state.treatment].header}
+            <h3>Please select the phase you want to check.</h3>
+            {this.state.hackData && 
+              <TimeLine
+                phases={this.state.hackData.phases}
+                onClick={this.onPhaseSelection}
+                currentPhase={this.state.currentPhase}
+              />
+            }
             <div className="tab-container">
               <button
                 className={`tab-button ${this.state.currentSection === 'yourCompetitors' ? 'selected' : ''}`}
@@ -165,39 +244,38 @@
                 Personal Feedback
               </button>
             </div>
-            <div className="seleted-section">
-              {this.state.currentSection === 'yourCompetitors' &&
-                <React.Fragment>
-                  <h2>Your Peers</h2>
-                  {Texts.treatmentText[this.state.treatment].ranking.instructions}
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Hacker</th>
-                        <th>Project Link</th>
-                        {this.state.treatment === "1" && 
-                        <th>similarity</th>
-                        }
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
-                  </table>
-                </React.Fragment>
-              }
-              {this.state.currentSection === 'personalFeedback' &&
-                <React.Fragment>
-                  <h2>{Texts.personalFeddback.title}</h2>
-                  {Texts.personalFeddback.subTitle}
-                  <PersonalScoreSection scores={this.state.results}/>
-                </React.Fragment>
-              }
-            </div>
-          </SectionContainer>
-        </ThemeProvider>
-      );
-    }
+          </div>
+          <div className="selected-section">
+            {this.state.gettingResults && 
+              <div className='results-loader'>
+                <Loader status="Fetching results..."/>  
+              </div>
+            }
+            {!this.state.gettingResults && this.state.results && this.state.currentSection === 'yourCompetitors' &&
+              <React.Fragment>
+                <h2>Your Peers</h2>
+                {Texts.treatmentText[this.state.treatment].ranking.instructions}
+                <YourCompetitorsRank
+                  treatment={this.state.treatment}
+                  scores={this.state.results}
+                  hackName={this.state.hackData.name}
+                  participants={this.state.participants}
+                  onLikedCompetitors={this.saveLikedCompetitors}/>
+              </React.Fragment>
+            }
+            {!this.state.gettingResults && this.state.results && this.state.currentSection === 'personalFeedback' &&
+              <React.Fragment>
+                <h2>{Texts.personalFeddback.title}</h2>
+                {Texts.personalFeddback.subTitle}
+                <PersonalScoreSection scores={this.state.results}/>
+              </React.Fragment>
+            }
+            {!this.state.gettingResults && !this.state.results && <h2 className='no-results'>Not results for this phase yet.</h2>}
+          </div>
+        </SectionContainer>
+      </ThemeProvider>
+    );
   }
+}
 
-  export default withCookies(Results);
+export default withCookies(Results);

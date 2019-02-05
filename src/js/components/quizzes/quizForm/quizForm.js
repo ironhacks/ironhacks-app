@@ -58,7 +58,6 @@ class QuizFrom extends React.Component {
   }
 
   recieveMessage = (event) => {
-    console.log(event)
     if(event.data === 'quizDone'){
       this.setState({showReturnButton: 'block'});
     }
@@ -74,7 +73,6 @@ class QuizFrom extends React.Component {
         <Redirect push to='/quizzes'/>
       )
     }
-    console.log(this.props)
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer showReturnButton={this.state.showReturnButton}>

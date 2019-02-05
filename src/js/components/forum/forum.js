@@ -12,6 +12,7 @@ import {Link, Redirect} from "react-router-dom";
 import ThreadPreview from './threadPreview.js'
 import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js'
 import ForumSelector from './forumSelector.js'
+import { registerStats } from '../../utilities/registerStat.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 //Image references
@@ -121,13 +122,13 @@ const ForumHeader = styled('div')`
   }
 `;
 //Section separator -- TODO: move to a separate file
-const SectionSeparator = styled('div')`
-  background-color: ${Constants.mainBgColor}
-  height: 1px;
-  width 100%;
-  margin-top: calc(${Constants.threadPreviewBottomMargin} + 10px);
-  margin-bottom: calc(${Constants.threadPreviewBottomMargin} + 10px);
-`;
+// const SectionSeparator = styled('div')`
+//   background-color: ${Constants.mainBgColor}
+//   height: 1px;
+//   width 100%;
+//   margin-top: calc(${Constants.threadPreviewBottomMargin} + 10px);
+//   margin-bottom: calc(${Constants.threadPreviewBottomMargin} + 10px);
+// `;
 
 class Forum extends React.Component {
   constructor(props){
@@ -154,7 +155,7 @@ class Forum extends React.Component {
 
   getThreads = () => {
     const _this = this;
-    var threads = [];
+    let threads = [];
     this.firestore.collection('threads')
     .where('forumId', '==', this.state.forum)
     .get()
@@ -163,6 +164,7 @@ class Forum extends React.Component {
         // doc.data() is never undefined for query doc snapshots
         threads.push(doc);
       });
+      threads = threads.reverse();
       _this.setState({threads: threads});
     })
     .catch(function(error) {
@@ -202,13 +204,36 @@ class Forum extends React.Component {
     .get()
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        forums.push(doc.data());
+        const data = doc.data();
+        data.id = doc.id;
+        forums.push(data);
       });
       _this.setState((prevState, props) => {
         prevState.hacks[index].forums = forums;
         return prevState;
       })
-      this.getThreadsAdmin();
+      _this.getThreadsAdmin();
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+  };
+
+  getThreadsAdmin = (forumIndex) => {
+    const hackId = this.state.hacks[this.state.selectedHack].id;
+    const forumId = this.state.hacks[this.state.selectedHack].forums ? this.state.hacks[this.state.selectedHack].forums[forumIndex].id : 0;
+    const _this = this;
+    var threads = [];
+    this.firestore.collection('threads')
+    .where('hackId', '==', hackId)
+    .where('forumId', '==', forumId)
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        threads.push(doc);
+      });
+      _this.setState({threads: threads});
     })
     .catch(function(error) {
         console.error("Error getting documents: ", error);
@@ -225,35 +250,38 @@ class Forum extends React.Component {
   }; 
 
   onForumSelection = (forumIndex) => {
-    console.log(forumIndex)
+    this.setState({forum: forumIndex});
+    this.getThreadsAdmin(forumIndex)
   };
 
-  getThreadsAdmin = () => {
-    const _this = this;
-    var threads = [];
-    this.firestore.collection('threads')
-    .get()
-    .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        threads.push(doc);
-      });
-      _this.setState({threads: threads});
-    })
-    .catch(function(error) {
-        console.error("Error getting documents: ", error);
-    });
-  };
 
 //---------------------------------------- Admin features ------------------------------------------
 
+  saveStat = (event) => {
+    const statData = {
+      userId: this.props.user.uid,
+      event: 'click',
+      metadata: {
+        on: 'create-new-thread',
+        location: 'forum',
+      },
+    };
+    registerStats(statData);
+    this.setState({ startNewThreadFlow: true });
+  }
+
   render() {
-    console.log(this.props, this.state)
     if((this.state.currentHack == null || this.state.forum == null) && this.props.user && !this.props.user.isAdmin){
       return (
-        <Redirect to='/hackSelection'/>
+        <Redirect push to='/hackSelection'/>
       )
     }
+    if(this.state.startNewThreadFlow) {
+      return (
+        <Redirect push to='/forum/new'/>
+      )
+    }
+
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer className='container-fluid d-flex flex-column'>
@@ -264,7 +292,7 @@ class Forum extends React.Component {
           </div>
           <Control className="row">
             <div className='col-4 offset-2 flex'>
-              <NewThreadButton><Link to='forum/new'>Create a new thread</Link></NewThreadButton>
+              <NewThreadButton onClick={this.saveStat}>Create a new thread</NewThreadButton>
               {this.props.user.isAdmin 
                 && this.state.hacks 
                 && <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
@@ -283,8 +311,10 @@ class Forum extends React.Component {
               <ForumHeader><h2>General discussion</h2></ForumHeader>
               {this.state.threads.map((thread, index) => {
                 return(
-                  <ThreadPreview key={thread.id}
+                  <ThreadPreview
+                    key={thread.id}
                     thread={thread}
+                    user={this.props.user}
                   />
                 )
               })}

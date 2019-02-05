@@ -11,22 +11,25 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 //Custom Components
 import ReactionsView from './reactionsView.js';
-import TagView from './tagView.js';
 import ReactionPicker from './reactionPicker.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
+import { registerStats } from '../../utilities/registerStat.js';
 
 const theme = Constants.ThreadPreviewTheme;
 
 const PreviewContainer = styled('div')`
-  height: ${props => props.theme.containerHeight};
+  position: relative;
+  display: flex;
+  flex-direction: column;
   border-radius: ${Constants.universalBorderRadius};
   background-color: ${props => props.theme.backgroundColor};
   margin-bottom: ${Constants.threadPreviewBottomMargin};
-  padding: 0 15px 0 15px;
+  padding: 10px 15px;
   transition: background-color 0.2s;
 
   &:hover {
+    cursor: pointer;
     background-color: ${props => props.theme.highlightedTextBgColor};
   }
 
@@ -38,24 +41,17 @@ const PreviewContainer = styled('div')`
     line-height: 15px;
   }
 
-  span {
+  .author-name {
     font-style: italic;
     margin-bottom: 10px;
   }
 `;
+
 const Separator = styled('div')`
   height: 1px;
   background-color: ${props => props.theme.separatorBgColor};
   margin-bottom: 10px;
 `;
-// Right section
-const RightAlignDiv = styled('div')`
-  display: flex;
-  justify-content: flex-end;
-`;
-//const tag = styled('div')`
-  
-//`;
 
 class ThreadPreview extends React.Component {
   constructor(props) {
@@ -71,38 +67,31 @@ class ThreadPreview extends React.Component {
   } 
 
   handleClick = () => {
+    const statData = {
+      userId: this.props.user.uid,
+      event: 'on-thread-click',
+      metadata: {
+        location: 'forum',
+        threadId: this.props.thread.id,
+      },
+    };
+    registerStats(statData);
     this.setState({referrer: 'forum/thread/' + this.props.thread.id});
   }
   
   render() {
     const { referrer } = this.state;
     if (referrer) return <Redirect push to={{ pathname: referrer, state: { thread: this.props.thread.data()}}} />;
-
     return (
       <ThemeProvider theme={theme}>
         <PreviewContainer to={'forum/thread/' + this.props.thread.id} onClick={this.handleClick}>
-          <div className="row">
-            <div className='col-6'>
-              <h2>{this.props.thread.data().title}</h2>
-              <span>{this.props.thread.data().authorName}</span>
-            </div>
-            <RightAlignDiv className='col-6'>
-              <ReactionPicker/>
-            </RightAlignDiv>
-          </div>
-          <div className="row">
-            <div className='col-12'>
-              <Separator/>
-            </div>
-          </div>
-          <div className="row">
-            <div className='col-6'>
-              <ReactionsView/>
-            </div>
-            <RightAlignDiv className='col-6'>
-              <TagView/>
-            </RightAlignDiv>
-          </div>
+          <h2>{this.props.thread.data().title}</h2>
+          <span className='author-name'>{this.props.thread.data().authorName}</span>
+          <Separator/>
+          <ReactionsView 
+            commentId={this.props.thread.data().comments[0]}
+            totalComments={this.props.thread.data().comments.length}
+          />
         </PreviewContainer>
       </ThemeProvider>
     );

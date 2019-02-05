@@ -120,6 +120,7 @@ const NavButton = styled(Link)`
 `;
 // User menu (right menu)
 const UserMenuDropper = styled('button')`
+  cursor: pointer;
   border: none;
   background-color: transparent;
   color: black;
@@ -186,6 +187,25 @@ class Header extends React.Component {
       user: props.user,
     }
     this.getUserName()
+    this.userMenuRef = React.createRef();
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  };
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  };
+
+  handleClickOutside = (event) => {
+    const ref = this.userMenuRef.current;
+    if (ref && !ref.contains(event.target)) {
+      this.setState({
+        showMenu: 'none',
+        showUserMenu: 'none'
+      })
+    }
   }
 
   getUserName = () => {
@@ -211,7 +231,7 @@ class Header extends React.Component {
   hideMenus = (event) => {
     const statData = {
       userId: this.state.user.uid,
-      event: 'changeSection',
+      event: 'change-section',
       metadata: {
         location: 'header',
         target: event.target.innerHTML,
@@ -227,7 +247,6 @@ class Header extends React.Component {
   logout = () => {
     this.removeCookies();    
     window.firebase.auth().signOut().then(function() {
-      console.log('Signed Out');
     }, function(error) {
       console.error('Sign Out Error', error);
     });
@@ -284,7 +303,7 @@ class Header extends React.Component {
             </div>
             <RightAlignDiv className='col-5'>
               <UserMenuDropper onClick={this.showUserMenu} >{this.state.user.displayName}</UserMenuDropper>
-              <UserMenu display={this.state.showUserMenu}>
+              <UserMenu display={this.state.showUserMenu} innerRef={this.userMenuRef}>
                 <NavButton to="/profile" onClick={this.hideMenus}>Profile</NavButton>
                 <UserMenuButton onClick={this.logout}>Sign Out</UserMenuButton>
               </UserMenu>

@@ -59,10 +59,6 @@ export const visualizationJSContent = `
   var el   = document.getElementById("d3Example");
   var rect = el.getBoundingClientRect();
 
-  console.log( rect);
-  console.log( rect.width);
-  console.log( rect.height);
-
   var margin = {top: 20, right: 40, bottom: 30, left: 20},
       width = rect.width - margin.left - margin.right,
       height = rect.height - margin.top - margin.bottom,

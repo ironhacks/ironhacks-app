@@ -75,10 +75,6 @@ class Task extends React.Component {
     const converter = new Showdown.Converter(ConverterConfig);
     return converter.makeHtml(markdown)
   };
-
-  handleClick = () => {
-    console.log('Button is cliked!');
-  };
   // base64 encoded ascii to ucs-2 string
   atou = (str) => {
     return decodeURIComponent(escape(window.atob(str)));

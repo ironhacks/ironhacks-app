@@ -10,22 +10,20 @@ import styled, {ThemeProvider} from 'styled-components';
 //Custom components
 import ProjectCard from './projectCard.js';
 import Separator from '../../utilities/separator.js';
-import TimeLine from './timeLine.js';
+import TimeLine from '../../utilities/timeLine.js';
 import * as TemplateFiles from './newProjectFileTemplates/templates.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
-
+import Loader from '../../utilities/loader.js';
 const theme = Constants.AppSectionTheme;
 
 //Section container
 const SectionContainer = styled('div')`
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
-  padding: 20px 15%;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 
   h1 {
     margin-bottom: 20px;
@@ -35,16 +33,21 @@ const SectionContainer = styled('div')`
     }
   }
 
-  @media (min-width: 1400px) {
-    padding: 20px 20%;
+  h2 {
+    margin-top: 50px;
+  }
+
+  .padding {
+    padding: 0 10%;
   }
 `;
 
 const ProfileContainer = styled('div')`
-  position: relative;
   display: flex;
-  align-items: center;
+  justify-content: center;
+  padding: 0 10%;
   margin: 100px 0 20px 0;
+  width: 100%;
   height: 250px;
 
   span {
@@ -68,6 +71,8 @@ const ProfileContainer = styled('div')`
 
 
 const CardsContainer = styled('div')`
+  height: auto;
+  padding: 20px 10%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -126,6 +131,7 @@ class UserProfile extends React.Component {
   };
 
   createNewProject = (name) => {
+    this.setState({loading: true, status: "Creatring project..."});
     // Accesing to all the blob template variables:
     const templateFiles = [TemplateFiles.indexBlob, TemplateFiles.jsBlob, TemplateFiles.cssBlob]
     Promise.all(
@@ -141,6 +147,7 @@ class UserProfile extends React.Component {
   };
 
   createGitHubRepository = (name) => {
+    this.setState({status: "Creating repository..."});
     // Accesing to all the pain text template variables:
     const templateFiles = [{name: 'index.html', content: TemplateFiles.index}, {name: 'js/main.js', content: TemplateFiles.js}, {name: 'css/main.css', content: TemplateFiles.css}]
     let projectName = this.state.user.isAdmin ? 
@@ -160,15 +167,15 @@ class UserProfile extends React.Component {
         //Error
         console.error(result.data.error);
       }else{
-        console.log("commit")
+        this.setState({status: "Uploading files..."});
         const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
         commitToGitHub({name: projectName, files: templateFiles, commitMessage: 'init commit'})
         .then((result) => {
-          console.log("commit result", result)
           if(result.status === 500){
             console.error(result.error);
           }else{
             _this.setState({
+              loading: false,
               navigateToCreatedProject: true,
               newProjectName: name,
             })
@@ -226,8 +233,7 @@ class UserProfile extends React.Component {
     .doc(this.state.currentHack)
     .get()
     .then((doc) => {
-      const initDate = new window.firebase.firestore.Timestamp(doc.data().phases[0].codingStartDate.seconds, doc.data().phases[0].codingStartDate.nanoseconds)
-      console.log(initDate.toDate())
+      const initDate = new window.firebase.firestore.Timestamp(doc.data().phases[0].codingStartDate.seconds, doc.data().phases[0].codingStartDate.nanoseconds);
       _this.setState({hackData: doc.data()});
     })
     .catch(function(error) {
@@ -235,10 +241,23 @@ class UserProfile extends React.Component {
     })
   };
 
+  onPhaseSelection = (phase) => {
+
+  }
+
   render() {
+    if(this.state.loading){
+      return (
+        <ThemeProvider theme={theme}>
+        <SectionContainer>
+          <Loader status={this.state.status}/>
+        </SectionContainer>
+        </ThemeProvider>
+      );
+    }
+
     if (this.state.navigateToProject === true) return <Redirect push to={`projectEditor/${this.state.projects[this.state.selectedProject].name}`}/>;
     if (this.state.navigateToCreatedProject === true) return <Redirect push to={`projectEditor/${this.state.newProjectName}`}/>;
-  console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
       <SectionContainer>
@@ -256,13 +275,17 @@ class UserProfile extends React.Component {
               Current Phase: {this.state.hackData ? this.state.hackData.name : "loading..."}
             </p>
           </div>
-          {this.state.hackData && 
-            <TimeLine phases={this.state.hackData.phases}/>
-          }
         </ProfileContainer>
-        <h2>Projects</h2>
-        <span>Bellow you will find the current hack status. You can also manage your projects from here.</span>
-        <Separator primary/>
+        {this.state.hackData && 
+          <TimeLine
+            phases={this.state.hackData.phases}
+            onClick={this.onPhaseSelection}
+            currentPhase={this.state.currentPhase}
+          />
+        }
+        <h2 className='padding'>Projects</h2>
+        <span className='padding'>Bellow you will find the current hack status. You can also manage your projects from here.</span>
+        <Separator primary className='padding'/>
         <CardsContainer >
           <ProjectCard newProject={true} onSave={this.createNewProject} projects={this.state.projects}/>
           {this.state.projects.map((project, index) => {

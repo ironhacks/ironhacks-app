@@ -119,7 +119,6 @@ class AdmSettingsSection extends React.Component {
   }
   
   render() {
-    console.log(this.state)
     return (
       <SectionContainer>
         <h2>{this.props.hack.name}'s Settings</h2>

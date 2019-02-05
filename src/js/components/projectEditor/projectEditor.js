@@ -37,6 +37,7 @@ import FilesContainer from './filesContainer.js';
 import Loader from '../../utilities/loader.js';
 import Button from '../../utilities/button.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
+import { registerStats } from '../../utilities/registerStat.js';
 
 window.JSHINT = JSHINT
 const theme = Constants.AppSectionTheme;
@@ -129,17 +130,20 @@ class ProjectEditor extends React.Component {
   constructor(props){
     super(props);
     const { cookies, user } = props;
+    const hackerId = props.location.query ? props.location.query.hackerId : null;
+    const readOnly = hackerId ? true : false;
     this.state = {
+      user,
+      readOnly,
+      hackerId,
       currentHack: cookies.get('currentHack') || null,
       editorContent: '',
-      readonly: false,
       editorMode: 'xml',
       loadingFiles: true,
       selectedFile: 'index.html',
       projectFiles: [],
-      user: this.props.user,
       currentAlert: null,
-      creatingFile: true,
+      creatingFile: false,
       projectName: this.props.match.params.proyectName,
       timer: {seconds: 0, minutes: 0, hours: 0, days: 0},
     }
@@ -151,60 +155,13 @@ class ProjectEditor extends React.Component {
     this.getProjectFilesUrls();
     this.getCurrentHackInfo();
     window.addEventListener("message", this.recieveMessage)
-    //this.getCountDown();
   }
 
-  getCurrentHackInfo = () => {
-    const _this = this;
-    this.firestore.collection('hacks')
-    .doc(this.state.currentHack)
-    .get()
-    .then((doc) => {
-      const hackData = doc.data();
-      const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1;
-      _this.setState({
-        hackData,
-        currentPhase,
-      });
-      _this.getCountDown()
-    })
-    .catch(function(error) {
-        console.error("Error getting documents: ", error);
-    })
-  };
-
-  getCountDown = () => {
-    const _this = this;
-    const phase = this.state.hackData.phases[this.state.currentPhase]
-      console.log(phase)
-    const countDownDate = new window.firebase.firestore.Timestamp(phase.codingStartEnd.seconds, phase.codingStartEnd.nanoseconds).toDate();
-    const timer = setInterval(function() {
-
-      // Get todays date and time
-      var now = new Date().getTime();
-
-      // Find the distance between now and the count down date
-      var distance = countDownDate - now;
-
-      // Time calculations for days, hours, minutes and seconds
-      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      // Display the result in the element with id="demo"
-      _this.setState({timer: {seconds: seconds, minutes: minutes, hours: hours, days: days}})
-      // If the count down is finished, write some text 
-      if (distance < 0) {
-        clearInterval(timer);
-        _this.setState({timer: null})
-      }
-    }, 1000) 
-  }
-
-  recieveMessage = (event) => {
-    if(event.data === 'quizDone'){
-      swal.clickConfirm();
-    }
+  getProjectPreviewPath = () => {
+    // Create a reference with an initial file path and name
+    const userId = this.state.hackerId || this.state.user.uid;
+    const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`; 
+    this.setState({proyectPath: proyectPath});
   }
 
   getProjectFilesUrls = () => {
@@ -212,9 +169,10 @@ class ProjectEditor extends React.Component {
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
     const _this = this;
+    const userId = this.state.hackerId || this.state.user.uid;
     //Updating the current hack:
     firestore.collection('users')
-    .doc(this.state.user.uid)
+    .doc(userId)
     .collection('projects')
     .doc(this.state.projectName)
     .get()
@@ -254,13 +212,61 @@ class ProjectEditor extends React.Component {
     };
   }
 
-  getProjectPreviewPath = () => {
-    // Create a reference with an initial file path and name
-    const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`; 
-    this.setState({proyectPath: proyectPath});
+  getCurrentHackInfo = () => {
+    const _this = this;
+    this.firestore.collection('hacks')
+    .doc(this.state.currentHack)
+    .get()
+    .then((doc) => {
+      const hackData = doc.data();
+      const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+      _this.setState({
+        hackData,
+        currentPhase,
+      });
+      if(currentPhase != -1) 
+        _this.getCountDown()
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    })
+  };
+
+  getCountDown = () => {
+    const _this = this;
+    const phase = this.state.hackData.phases[this.state.currentPhase]
+    const countDownDate = new window.firebase.firestore.Timestamp(phase.codingStartEnd.seconds, phase.codingStartEnd.nanoseconds).toDate();
+    const timer = setInterval(function() {
+
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      // Display the result in the element with id="demo"
+      _this.setState({timer: {seconds: seconds, minutes: minutes, hours: hours, days: days}})
+      // If the count down is finished, write some text 
+      if (distance < 0) {
+        clearInterval(timer);
+        _this.setState({timer: null})
+      }
+    }, 1000) 
+  }
+
+  recieveMessage = (event) => {
+    if(event.data === 'quizDone'){
+      swal.clickConfirm();
+    }
   }
 
   saveProject = () => {
+    this.saveStat({event: 'save-and-run', metadata: {action: 'click'}})
     // Raw string is the default if no format is provided
     const newBlobs = this.updateProjectBlobs();
     const _this = this;
@@ -268,54 +274,18 @@ class ProjectEditor extends React.Component {
       newBlobs.map(item => this.uploadBlogToFirebase(item))
     )
     .then((url) => {
-      const currentLocation = _this.state.proyectPath;
-      _this.setState({proyectPath: currentLocation + ' '})
+      _this.setState((prevState, props) => {
+        const proyectPath = prevState.proyectPath + ' ';
+        const projectFiles = prevState.projectFiles;
+        if(projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
+          projectFiles[prevState.selectedFile].content =  projectFiles[prevState.selectedFile].unSavedContent;
+        }
+        return {projectFiles, proyectPath};
+      });
     })
     .catch((error) => {
       console.log(`Some failed: `, error.message)
     });
-  }
-
-  pushToGitHub = (commiteMessage) => {
-    const composedCommitMessage = commiteMessage + '\n\n\n Final commit phase 1.';
-    const files = [];
-    for (const key in this.state.projectFiles) {
-      files.push({name: key, content: this.state.projectFiles[key].content})
-    }
-    let projectName = this.state.user.isAdmin ? 
-      `admin-${this.state.user.uid}-${this.state.projectName}` : 
-      `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
-    console.log(projectName)
-    const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
-    commitToGitHub({name: projectName, files:files, commitMessage: composedCommitMessage})
-    .then((result) => {
-      if(result.status === 500){
-        console.error(result.error);
-      }else{
-        swal.clickConfirm();
-        console.log(result)
-      }
-    })
-  }
-
-  startPushNavigation = () => {
-    this.saveProject();
-    swal(Constants.surveyRedirecAlertContent)
-    .then((result) => {
-      if(!result.dismiss) {
-        swal(Constants.pushSurveyAlertContent(`${commitSurveys[this.state.currentPhase]}?user_email=${this.state.user.email}`))
-        .then((result) => {
-          swal(Constants.commitContentAlertContent)
-          .then((result) => {
-            const { value } = result;
-            if (value) {
-              this.pushToGitHub(value)
-              swal(Constants.loadingAlertContent);
-            };
-          });
-        });
-      };
-    }); 
   }
 
   updateProjectBlobs = () => {
@@ -333,6 +303,48 @@ class ProjectEditor extends React.Component {
     return newBlobs;
   }
 
+  startPushNavigation = () => {
+    this.saveProject();
+    swal(Constants.surveyRedirecAlertContent)
+    .then((result) => {
+      if(!result.dismiss) {
+        swal(Constants.pushSurveyAlertContent(`${commitSurveys[this.state.currentPhase]}?user_email=${this.state.user.email}`))
+        .then((result) => {
+          if(!result.dismiss) {
+            swal(Constants.commitContentAlertContent)
+            .then((result) => {
+              const { value } = result;
+              if (value) {
+                this.pushToGitHub(value)
+                swal(Constants.loadingAlertContent);
+              };
+            });
+          }
+        });
+      };
+    }); 
+  }
+
+  pushToGitHub = (commiteMessage) => {
+    const composedCommitMessage = commiteMessage + '\n\n\n Final commit phase 1.';
+    const files = [];
+    for (const key in this.state.projectFiles) {
+      files.push({name: key, content: this.state.projectFiles[key].content})
+    }
+    let projectName = this.state.user.isAdmin ? 
+      `admin-${this.state.user.uid}-${this.state.projectName}` : 
+      `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
+    const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
+    commitToGitHub({name: projectName, files:files, commitMessage: composedCommitMessage})
+    .then((result) => {
+      if(result.status === 500){
+        console.error(result.error);
+      }else{
+        swal.clickConfirm();
+      }
+    })
+  }
+
   uploadBlogToFirebase = (blob) => {
     const indexRef = storageRef.child(blob.path);
     return indexRef.put(blob.blob).then(function(snapshot) {
@@ -341,30 +353,34 @@ class ProjectEditor extends React.Component {
 
   onChangeEditor = (editor, data, value) => {
     this.setState((prevState, props) => {
-      prevState.projectFiles[prevState.selectedFile].unSavedContent = value;
-      prevState.projectFiles[prevState.selectedFile].didChange = true;
-      return prevState;
+      const projectFiles = prevState.projectFiles;
+      projectFiles[prevState.selectedFile].unSavedContent = value;
+      projectFiles[prevState.selectedFile].didChange = true;
+      return {projectFiles};
     });
   }
 
   onFileSelection = (name) => {
     const splitedFileName = name.split('.');
-    this.setState((prevState, props) => { 
-      if(prevState.projectFiles[prevState.selectedFile].unSavedContent) {
-        prevState.projectFiles[prevState.selectedFile].content =  prevState.projectFiles[prevState.selectedFile].unSavedContent;
+    this.saveStat({event: 'view-file', metadata: {filename: name}})
+    this.setState((prevState, props) => {
+      const projectFiles = prevState.projectFiles;
+      if(projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
+        projectFiles[prevState.selectedFile].content =  projectFiles[prevState.selectedFile].unSavedContent;
       }
-      prevState.selectedFile = name;
-      prevState.editorMode = editorModeMIMERel[splitedFileName[splitedFileName.length - 1]];
-      return prevState;
+      const selectedFile = name;
+      const editorMode = editorModeMIMERel[splitedFileName[splitedFileName.length - 1]];
+      return {projectFiles, selectedFile, editorMode};
     });
   }
 
   startCreateNewFileFlow = async () => {
     this.saveProject();
-    const {value: filePath, error: error} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
+    const {value: filePath, error} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
     if(filePath) {
       const file = this.createNewFile(filePath);
       this.putStorageFile(file, this.state.projectName);
+      this.saveStat({event: 'new-file', metadata: {filename: filePath}})
     }
   }
 
@@ -456,17 +472,31 @@ class ProjectEditor extends React.Component {
     });
   }
 
+  saveStat = (stat) => {
+    stat.userId = this.state.user.uid;
+    stat.metadata.hackId = this.state.currentHack;
+    stat.metadata.projectName = this.state.projectName;
+    registerStats(stat);
+  }
+
   render() {
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
             <ProjectContent>
+              {this.state.readOnly && 
+                <h2>{this.props.location.query.alias}</h2>
+              }
               <h2>{this.state.projectName.toUpperCase()}</h2>
-              <div className="control">
-                <Button primary onClick={this.saveProject}> Save and run </Button>
-                <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
-                <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
-              </div>
+              {!this.state.readOnly && 
+                <div className="control">
+                  <Button primary onClick={this.saveProject}> Save and run </Button>
+                  {this.state.currentPhase != -1 &&
+                    <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
+                  }
+                  <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
+                </div>
+              }
               <h3>Files:</h3>
               {this.state.loadingFiles ? <Loader 
                   backgroundColor={Constants.projectEditorBgColor}
@@ -479,7 +509,7 @@ class ProjectEditor extends React.Component {
                   projectName={this.state.projectName.toUpperCase()}/>  
               }
               <div className="hack-status">
-                <h3>Current phase: {this.state.currentPhase}</h3>
+                <h3>Current phase: {this.state.currentPhase != -1 ? this.state.currentPhase : 'Tutorial stage'}</h3>
                 <p>
                   Remaining time: <br/>
                   {`${this.state.timer.days}:${this.state.timer.hours}:${this.state.timer.minutes}:${this.state.timer.seconds}`}
@@ -503,6 +533,7 @@ class ProjectEditor extends React.Component {
                     matchTags: true,
                     autoCloseTags: true,
                     autoCloseBrackets: true,
+                    readOnly: this.state.readOnly,
                 }}
                 onChange={this.onChangeEditor}
               />}

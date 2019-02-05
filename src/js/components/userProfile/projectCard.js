@@ -159,9 +159,8 @@ class ProjectCard extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const { result, error } = this.validateName();
-    console.log(result, error);
     if(result){
-      //this.props.onSave(this.state.newProjectName);
+      this.props.onSave(this.state.newProjectName);
       this.setState({nameError: null});
     }else {
       this.setState({nameError: error});
@@ -169,7 +168,6 @@ class ProjectCard extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     if(this.props.newProject === true){
       if(!this.state.showNewProjectForm) {
         return (

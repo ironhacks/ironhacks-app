@@ -14,7 +14,6 @@ const ItemContainer = styled('div')`
   width: 100%;
   flex-direction: column;
   border-radius: 30px;
-  margin-bottom: 30px;
 
   h2 {
     margin-bottom: 0;
@@ -47,21 +46,25 @@ const Title = styled('button')`
   padding-top: 15px;
   margin-top: -1px;
   border: none;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
   background-color: ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
   cursor: pointer;
 `;
 
 const Contents = styled('div')`
-  display: ${(props) => (props.active ? 'flex' : 'none')};
+  display: flex;
+  max-height: ${(props) => (props.active ? '10000px' : '0px')};
   flex-direction: row;
   width: 100%;
+  overflow: hidden;
   border-right: solid 1px ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
   border-left: solid 1px ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
   border-bottom: solid 1px ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
 
-  transition: height 0.5 ease 0;
+  
+  transition: max-height 1s ease-out;
+  ${(props) => (props.active && css`
+    transition: max-height 1s ease-in 0s;
+  `)};
 
 `;
 
@@ -73,12 +76,6 @@ const VerticalContainer = styled('div')`
   justify-content: space-between;
   width: 166%;
   flex-grow: 1;
-
-  h3 {
-    span {
-      font-size: 14px;
-    }
-  }
 
   .horizontal {
     display: flex;
@@ -111,14 +108,14 @@ const SubSection = styled('div')`
     background-color: ${(props) => Constants.personalFeddbackTheme[props.type].lightBackgroundColor};
 
     h3 {
-      font-size: 70px;
+      font-size: 45px;
       margin-top: 0;
       margin-bottom: 0;
       text-overflow: ellipsis;
     }
 
     span {
-      margin-top: -20px;
+      margin-top: -17px;
       margin-bottom: 20px;
     }
 
@@ -150,50 +147,50 @@ class PersonalScoreItem extends React.Component {
       <ItemContainer type={this.props.type}>
         <Title type={this.props.type} onClick={this.toggleSection}>  
           <h2>{this.props.type.toUpperCase()}</h2>
-          <span className='category-weight'>{`(${Texts.personalFeddback[this.props.type].weight} of total value)`}</span>
+          <span className='category-weight'>{`(${Texts.personalFeddback[this.props.type].weight} of total points)`}</span>
         </Title>
         <Contents type={this.props.type} active={this.state.active}>
           <SubSection type={this.props.type}>
             <div className="sub-category-text">
-              <h3>Progress on Requirements <span>(30%)</span></h3>
+              <h3>Progress on Requirements</h3>
               {Texts.personalFeddback[this.props.type].por}
-            </div>
-            <div className="score">
-              <h3>{this.props.type === 'infoVis' ? this.props.score[2].toString().slice(0, 5) : this.props.score[1].toString().slice(0, 5)}</h3>
-              <span>Total points</span>
-            </div>
-          </SubSection>
-          {this.props.type !== 'infoVis' && 
-          <SubSection type={this.props.type}>
-            <div className='sub-category-text'>
-              <h3>Effort for excellence <span>(70%)</span></h3>
-              {Texts.personalFeddback[this.props.type].efe}
             </div>
             <div className="score">
               <h3>{this.props.score[0]}</h3>
               <span>Total points</span>
             </div>
           </SubSection>
+          {this.props.type !== 'infoVis' && 
+          <SubSection type={this.props.type}>
+            <div className='sub-category-text'>
+              <h3>Effort for excellence</h3>
+              {Texts.personalFeddback[this.props.type].efe}
+            </div>
+            <div className="score">
+              <h3>{this.props.score[1].toString().slice(0, 5)}</h3>
+              <span>Total points</span>
+            </div>
+          </SubSection>
           }
           {this.props.type === 'infoVis' && 
             <VerticalContainer type={this.props.type}>
-              <h3>Effort for excellence <span>(70%)</span></h3>
+              <h3>Effort for excellence</h3>
               <div className="horizontal">
                 <SubSection type={this.props.type}>
                   <div className="sub-category-text">
-                    {Texts.personalFeddback[this.props.type].efe}
+                    {Texts.personalFeddback[this.props.type].efeA}
                   </div>
                   <div className="score">
-                    <h3>{this.props.score[0]}</h3>
+                    <h3>{this.props.score[1].toString().slice(0, 5)}</h3>
                     <span>Total points</span>
                   </div>
                 </SubSection>
                 <SubSection type={this.props.type}>
                   <div className="sub-category-text">
-                    {Texts.personalFeddback[this.props.type].efe}
+                    {Texts.personalFeddback[this.props.type].efeB}
                   </div>
                   <div className="score">
-                    <h3>{this.props.score[1].toString().slice(0, 5)}</h3>
+                    <h3>{this.props.score[2].toString().slice(0, 5)}</h3>
                     <span>Total points</span>
                   </div>
                 </SubSection>

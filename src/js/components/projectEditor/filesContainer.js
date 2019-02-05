@@ -10,7 +10,7 @@ import * as Constants from '../../../constants.js';
 import {Treebeard, decorators} from 'react-treebeard';
 
 import fileIcon from './img/file-icon.svg';
-import newFileIcon from './img/new-file-icon.svg';
+// import newFileIcon from './img/new-file-icon.svg';
 import folderIcon from './img/folder-icon.svg';
 //Section container
 const MainContainer = styled('div')`
@@ -129,7 +129,7 @@ decorators.Header = ({style, node}) => {
   return (
     <NodeHeader>
       <div>
-        <img src={iconType === 'file' ? fileIcon : folderIcon}/>
+        <img src={iconType === 'file' ? fileIcon : folderIcon} alt='item-icon'/>
         {node.name}
       </div>
     </NodeHeader>
@@ -230,7 +230,7 @@ class FilesContainer extends React.Component {
   };
 
   onToggle = (node, toggled) => {
-    if(this.state.cursor){this.state.cursor.active = false;}
+    if(this.state.cursor){this.setState({cursor: {active: false}})};
     node.active = true;
     if(node.children){ node.toggled = toggled; }
     this.setState((prevState, props) => {

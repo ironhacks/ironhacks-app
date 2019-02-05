@@ -165,11 +165,9 @@ class AdminDashboard extends React.Component {
       //TODO: update UI to provide feedback to the user.
       //Updating local stage
       this.setState((prevState, props) => {
-        console.log(prevState)
         prevState.hack.whiteList = {whiteList: whiteList}
         return {hack: prevState.hack};
       })
-      console.log('done')
     })  
     .catch(function(error) {
       console.error("Error adding document: ", error);
@@ -196,7 +194,6 @@ class AdminDashboard extends React.Component {
     })
     .then(() => {
       //TODO: update UI to provide feedback to the user.
-      console.log('done')
     })  
     .catch(function(error) {
       console.error("Error adding document: ", error);
@@ -223,7 +220,6 @@ class AdminDashboard extends React.Component {
     })
     .then(() => {
       //TODO: update UI to provide feedback to the user.
-      console.log('done')
     })  
     .catch(function(error) {
       console.error("Error adding document: ", error);

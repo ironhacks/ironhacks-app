@@ -9,40 +9,44 @@ import styled from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 // Images
-import heartReaction from './img/heart-reaction.svg';
-import likeReaction from './img/like-reaction.svg';
-import smile from './img/smile.svg';
+import DislikeReaction from './img/dislike-reaction.svg';
+import LikeReaction from './img/like-reaction.svg';
+import Smile from './img/smile.svg';
 
 //Picker displayer
 const ReactionIcon = styled('div')`
+  position: absolute;
+  top: 0;
+  right: 0;
   height: 30px;
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  padding-right: 15px;
   margin-top: 5px;
 
   button {
     border: none;
-    background-color: transparent;
     border-radius: ${Constants.universalBorderRadius};
-  
+    background-color: transparent;
+    transition: background-color 0.3s;
+
     &:hover {
       cursor: pointer;
+      background-color: #ffe085;
     }
 
     &:focus {
-      background-color: lightgray;
       outline: none;
     }
   }
 
   img {
-    height: 30px;
-    width 30px;
-    padding: 5px; 
+    height: 25px;
+    width 25px;
     object-fit: contain;
   }
 `;
+
 const Picker = styled('div')`
   display: ${props => props.display};
   align-items: center;
@@ -56,17 +60,19 @@ const Picker = styled('div')`
   padding: 5px 5px;
   z-index: 1;
 
+  button {
+    padding: 5px 8px; 
+    &:hover {
+      cursor: pointer;
+      background-color: #ffe085;
+    }
+  }
 
   img {
-    border-radius: 6px;
     margin-left: 6px;
     
     &:first-child {
       margin: 0;
-    }
-
-    &:hover {
-      background-color: lightgray;
     }
   }
 `;
@@ -76,15 +82,31 @@ class ReactionPicker extends React.Component {
     this.state = {
       showPicker: 'none',
     }
+    this.picker = React.createRef();
   }
 
-  toggleReactionMenu = () => {
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  };
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  };
+
+  handleClickOutside = (event) => {
+    const ref = this.picker.current;
+    if (ref && !ref.contains(event.target)) {
+      this.hideReactionPicker();
+    }
+  }
+
+  toggleReactionMenu = (event) => {
     if(this.state.showPicker === 'none'){
       this.setState({showPicker: 'flex'})
     }else{
       this.setState({showPicker: 'none'})
     }
-  };
+  }
 
   hideReactionPicker = () => {
     this.setState({showPicker: 'none'})
@@ -92,13 +114,13 @@ class ReactionPicker extends React.Component {
 
   render() {
     return (
-      <ReactionIcon onBlur={this.hideReactionPicker}>
+      <ReactionIcon>
           <button onClick={this.toggleReactionMenu}>
-            <span>+</span><img src={smile} alt='smile'/>
+            <span>+ </span><img src={Smile} alt='smile'/>
           </button>
-          <Picker display={this.state.showPicker}>
-            <button><img src={heartReaction} alt='heart'/></button>
-            <button><img src={likeReaction} alt='like'/></button>
+          <Picker display={this.state.showPicker} innerRef={this.picker}>
+            <button><img src={LikeReaction} alt='like'/></button>
+            <button><img src={DislikeReaction} alt='dislike'/></button>
         </Picker>
       </ReactionIcon>
     );

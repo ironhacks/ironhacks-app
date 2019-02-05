@@ -123,7 +123,6 @@ class NewHack extends React.Component {
 
   onPhaseClick = (phaseIndex, phaseStage) => {
     var range;
-    console.log(this.state.phaseState)
     if(phaseStage === 'coding') {
       range = {
         from: this.state.phases[phaseIndex - 1].coding.start,
@@ -205,7 +204,7 @@ class NewHack extends React.Component {
       prevState.forums[index] = {
         name: name ? name : prevState.forums[index].name,
         treatment: treatment ? treatment : prevState.forums[index].treatment,
-        participants: [],
+        participants: {},
       }
       return prevState.forums;
     });
@@ -281,7 +280,6 @@ class NewHack extends React.Component {
       // Commit the batch
       batch.commit().then(function () {
           //TODO: Update the UI to give feedback to the user
-          console.log('Hack Created')
           _this.setState({mustNavigate: true})
       });
     })  

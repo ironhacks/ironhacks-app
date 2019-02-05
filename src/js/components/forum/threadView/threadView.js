@@ -19,16 +19,18 @@ const SectionContainer = styled('div')`
   width: 100%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
+  padding: 0 10%;
   overflow: auto;
 
   .editor {
     margin: 20px 0;
-
-    .control {
-      display: flex;
-      flex-direction: row-reverse;
-      margin-top: 10px;
-    }
+  }
+  
+  .control {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 10px;
+    margin-bottom: 20px;
   }
 `;
 //First comment view (this is the author's comment)
@@ -44,18 +46,21 @@ const SectionSeparator = styled('div')`
   margin-bottom: calc(${Constants.threadPreviewBottomMargin} + 10px);
 `;
 const CommentEditor = styled('div')`
-  height: 150px;
+  height: 400px;
   padding: 0px;
+  margin-bottom: 15px;
 `;
 
 class ThreadView extends React.Component {
   constructor(props){
     super(props);
+    const { user } = props;
     this.state = {
       loadingComments: true,
       thread: this.props.location.state.thread || null,
-      threadHead: null,
+      head: null,
       comments: [],
+      user,
     };
 
     this.firestore = window.firebase.firestore();
@@ -76,18 +81,23 @@ class ThreadView extends React.Component {
     .orderBy('createdAt', 'asc')
     .get()
     .then(function(querySnapshot) { 
-        const comments = [];
+        let comments = [];
+        let head;
         querySnapshot.forEach(function(doc) {
           const comment = doc.data();
           comment.id = doc.id;
-          // doc.data() is never undefined for query doc snapshots
-          comments.push(comment);
+          if (comment.forumId) { 
+            head = comment
+          }else {
+            comments.push(comment);
+          }
         });
-        //Setting the head
-        _this.setState({threadHead: comments.shift()});
         //updating the rest of the comments:
         _this.setState((prevState, props) => {
-          return({comments: comments})
+          return({
+            head,
+            comments,
+          })
         });
       })
       .catch(function(error) {  
@@ -109,7 +119,7 @@ class ThreadView extends React.Component {
       author: userId,
       authorName: userName,
       body: codedBody,
-      createdAt: Date.now(),
+      createdAt: new Date(),
       threadId: this.props.match.params.threadId,  
     }
     this.firestore.collection("comments")
@@ -121,10 +131,7 @@ class ThreadView extends React.Component {
         comments: window.firebase.firestore.FieldValue.arrayUnion(docRef.id),
       })
       .then((result) => {
-        _this.setState((prevState, props) => {
-          prevState.comments.push(comment);
-          return prevState;
-        })
+        _this.getComments()
       })
       .catch(function(error) {
         console.error("Error adding document: ", error);
@@ -143,23 +150,28 @@ class ThreadView extends React.Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-      <SectionContainer className="container-fluid">
-        <div className="row no-gutters">
-          <ThreadSection className='col-md-8 offset-md-2'>
-            {this.state.threadHead && <CommentView commentData={this.state.threadHead} title={this.props.location.state.title}/>}
-            <SectionSeparator/>
-            {this.state.comments.map((comment, index) => (
-              <CommentView commentData={comment} key={comment.id} /> 
-            ))}
-          </ThreadSection>
-        </div>     
-        <div className='row editor no-gutters'>
-          <CommentEditor className='col-md-8 offset-md-2'>
-            <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>
-          </CommentEditor>
-          <div className='col-md-8 offset-md-2 control'>
-            <Button primary onClick={this.handleSubmit}>Submit</Button>
-          </div>
+      <SectionContainer>
+        <ThreadSection>
+          {this.state.head && 
+            <CommentView
+              commentData={this.state.head}
+              title={this.props.location.state.title}
+              user={this.state.user}
+              reloadComments={this.getComments}/>}
+          <SectionSeparator/>
+          {this.state.comments.map((comment, index) => (
+            <CommentView
+              key={comment.id}
+              commentData={comment}
+              user={this.state.user}
+              reloadComments={this.getComments}/> 
+          ))}
+        </ThreadSection>
+        <CommentEditor>
+          <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>
+        </CommentEditor>
+        <div className='control'>
+          <Button primary width='150px' onClick={this.handleSubmit}>Submit</Button>
         </div>
       </SectionContainer>
       </ThemeProvider>

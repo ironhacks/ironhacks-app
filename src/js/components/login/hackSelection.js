@@ -82,7 +82,6 @@ class HackSelection extends React.Component {
     .doc(_this.state.user.uid)
     .get()
     .then((user) => {
-      console.log(user.data());
       _this.firestore.collection("whiteLists")
       .doc(_this.props.user.email)
       .get()
@@ -102,6 +101,9 @@ class HackSelection extends React.Component {
               return prevState;
             })
           })
+          .catch(function(error) {
+            console.error("Error getting documents: ", error);
+          })
         }
       })
       .catch(function(error) {
@@ -114,12 +116,12 @@ class HackSelection extends React.Component {
   }
 
   goToPresurvey = (hackIndex) => {
-    // swal(Constants.preSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_1LXiVsGcARieE3X?user_email=' + this.props.user.email))
-    // .then((result) => {
-    //   if(!result.dismiss) {
+    swal(Constants.preSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_1HZrbxWIcPvZkUJ?user_email=' + this.props.user.email))
+    .then((result) => {
+      if(!result.dismiss) {
         this.callRegistrationFuncion(hackIndex);
-    //   };
-    // });
+      };
+    });
   }
 
   callRegistrationFuncion = (hackIndex) => {
@@ -135,15 +137,12 @@ class HackSelection extends React.Component {
 
   setHack = (hackIndex) => {
     this.setState({status: "Creating participant profile..."});
-    console.log(hackIndex, this.state.registeredHacks, this.state.availableHacks);
     const hackId = this.state.registeredHacks[hackIndex] ? this.state.registeredHacks[hackIndex].id : this.state.availableHacks[hackIndex].id;
-    console.log(hackId)
     const _this = this;
     this.firestore.collection('users')
     .doc(this.props.user.uid)
     .get()
     .then((doc) => {
-      console.log(doc.data())
       const { cookies } = _this.props;
       cookies.set('currentHack', hackId);
       cookies.set('currentForum', doc.data().forums[hackId].id);
@@ -262,7 +261,7 @@ class HackSelection extends React.Component {
 
   render() {
     if(this.state.mustNavigate){
-      return <Redirect to={{
+      return <Redirect Redirect to={{
         pathname: '/forum',
       }}/>
     }

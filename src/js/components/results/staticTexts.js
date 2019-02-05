@@ -11,7 +11,7 @@ export const treatmentText = {
 			</p>
 		</div>,
 		ranking: {
-			intructions: <div>
+			instructions: <div>
 				<p>
 					<strong>Check out others' work:</strong> Also, please take a look at your fellow participants’ solutions. <br/> Below, you find a table with your peers in your hacking group with three  things to inspect or take action upon: 1) A link to their app, 2) A rating of how similar they are compared to you on scale from 0 (not similar at all to 1 very similar) and 3) a like button. 
 				</p>
@@ -24,7 +24,7 @@ export const treatmentText = {
 				<p><strong>How to read the similarity rankings?</strong> We use similarity scores to measure how similar your app, and the other hacker’s app is with respect of the visual components of your app. So the more dissimilar from others  you are the better! Try to become more dissimilar and start exploring those that are dissimilar! The rating in the second column evaluates their similarity on scale from 0 ((not similar at all) to 10 (very similar). <br/>
 					<strong>Remember:</strong> Please write down the number of the hackers that you liked! You might want to look at those in the next round again. To make your app unique consider recombining your own ideas with those you find in other apps! Do not worry <strong>you can reuse up to 50%</strong> of others code!
 				</p>
-			</div>
+			</div>,
 		}
 	},
 	1: {
@@ -48,7 +48,7 @@ export const treatmentText = {
 					<li>The second column gives you the opportunity to select your top 3 apps: Select those that you consider to inspect further because they are useful and you want to learn from there! It is very important that you rate your most favorite app as it will give us an idea how much you try to improve! 
 					</li>
 				</ul>
-			</div>
+			</div>,
 		}
 	}
 }
@@ -62,47 +62,32 @@ export const personalFeddback = {
 		</p>
 	</div>,
 	technology: {
-		por: <ul>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-		</ul>,
+		por: <p>
+			Here you can find out how well you master the minimum requirements! In this section, we measure the minimum technical requirements such as the creation of the map, charts ,the use of the parameters require, and the use of the datasets required. For more details go the the section of Technology in the section of excellence (www.ironhacks.com/task).
+		</p>,
 		efe: <p>
-			How to read your personal feedback. <strong>There are three different scrollable tables that give you a rough idea of how well your app is improving in terms of minimum requirements and also excellence. Keep in mind: Fulfilling the minimum requirements is not enough. Keep pushing to increase the excellence of your app.</strong><br/> The more novel and unique your app the higher your reward eventually. And remember: The InfoVis Dimension matters the most. Stand out from the crowd!! 
+			As specified in the task (www.ironhacks.com/task), we evaluate if your current app was written successfully in the simplest manner.
 		</p>,
 		weight: '15%',
 	},
 	analytics: {
-		por: <ul>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-		</ul>,
+		por: <p>As specified in the task (www.ironhacks.com/task), you were asked to correctly rank the districts with respect to three parameters (distance, safety, afforability). The value describes how many correct ranks you have identified for all 4 ranking decision parameters. For more details go the the section of Analytics in the section of requirements (www.ironhacks.com/task).
+		</p>,
 		efe: <p>
-			How to read your personal feedback. <strong>There are three different scrollable tables that give you a rough idea of how well your app is improving in terms of minimum requirements and also excellence. Keep in mind: Fulfilling the minimum requirements is not enough. Keep pushing to increase the excellence of your app.</strong><br/> The more novel and unique your app the higher your reward eventually. And remember: The InfoVis Dimension matters the most. Stand out from the crowd!! 
+			As specified in the task (www.ironhacks.com/task), we evaluate if your current app presents analyticas solutions by using the parameters and datasets required and beyond. Remember that this measure 'parameter'  captures how many variables you have tried to use in relation to all variables available in the eligable datasets. For more details go the the section of Analytics in the section of excellence (www.ironhacks.com/task).
 		</p>,
 		weight: '25%',
 	},
 	infoVis: {
-		por: <ul>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-			<li>this is a requirement</li>
-		</ul>,
-		efe: <p>
-			How to read your personal feedback. <strong>There are three different scrollable tables that give you a rough idea of how well your app is improving in terms of minimum requirements and also excellence. Keep in mind: Fulfilling the minimum requirements is not enough. Keep pushing to increase the excellence of your app.</strong><br/> The more novel and unique your app the higher your reward eventually. And remember: The InfoVis Dimension matters the most. Stand out from the crowd!! 
+		por: <p>As specified in the task (www.ironhacks.com/task), you were asked to visualize and rank correctly the districts with respect to three parameters (distance, safety, afforability). Here we considered the  The value describes how many correct ranks you have identified for all 4 ranking decision parameters. For more details go the the section of Analytics in the section of requirements (www.ironhacks.com/task).
+		</p>,
+		efeA: <p>
+			The visualization component of your solution must inform the final user how to take a decision based on a processed and destiled data to trasnform in valuable information. Therfor, please take in consideration the lessons learnt in the usability training for the way of presenting the information, time that the final user will require to understand the data visualization, etc. For more details go the the section of Information visualization in the section of excellence (www.ironhacks.com/task).
+		</p>,
+		efeB: <p>
+			Below, you can find out tackle the visualization of the data and analytics in your app. Remember, that there very creative ways to visualize metrics. Check out below how your app tackles the visualization task, and how advanced you are in visualization data. Our goal is to turn you into a visualization champion! <br/><br/>
+			There are varies ways to visualize data. From barcharts to more novel multidimensional charts. The more variety have the more advanced your visualization, the greater the value displayed.<br/><br/>
+			Representing the mandatory parameters in new ways on the map definitely makes your app standing out from the rest. We review how well you visualize the mandatory datasets (distance, safety, affordability) on your maps and charts. The more unique (e.g.interactive) the more advanced your app. For the implication score you can achieve a score from 0 to 100. For more details go the the section of Information visualization in the section of excellence (www.ironhacks.com/task).
 		</p>,
 		weight: '60%',
 	},

@@ -108,8 +108,10 @@ export const projectEditorBgColor = '#24282A';
 export const createNewFileFlowAlertContent = (validator) => {
   return {
     title: "Create new file",
-    html: "Please insert the full path of the new file. Ie: js/yourfilename.js <break>" +
-      "Remember to write the file extention as well. <strong> 'folder' and 'file' are not valid names.",
+    html: `Please insert the full path of the new file. Folder are created automatically as needed, so you only have to write the relative path, for example:<br/><br/>
+    <strong>js/example.js</strong><br/><br/>
+    This will create a folder called 'js', and a file called 'example.js' with in it.
+    Remember to write the file extention as well. <strong>'folder' and 'file'</strong> are not valid names.`,
     input: 'text',
     inputValue: 'File path',
     inputValidator: validator,
@@ -147,7 +149,6 @@ export const pushSurveyAlertContent = (url) => {
 }
 
 export const preSurveyAlertContent = (url) => {
-  console.log(url)
   return {
     title: 'Pre survey UNAL',
     html: `<iframe src='${url}' title='Qualtrics survey'/>`,
@@ -214,15 +215,15 @@ export const loadingAlertContent = {
 
 export const personalFeddbackTheme = {
   technology: {
-    backgroundColor: '#a59f8b',
-    lightBackgroundColor: '#d5d2c9',
+    backgroundColor: '#9AC247',
+    lightBackgroundColor: '#d3e4af',
   },
   analytics: {
-    backgroundColor: '#88a923',
-    lightBackgroundColor: '#cedba4'
+    backgroundColor: '#40AA69',
+    lightBackgroundColor: '#9acf93'
   },
   infoVis: {
-    backgroundColor: '#e62f5d',
-    lightBackgroundColor: '#f39cb4',
+    backgroundColor: '#018B7D',
+    lightBackgroundColor: '#7ac2ba',
   },
 }
