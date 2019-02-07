@@ -13,6 +13,7 @@ import ThreadPreview from './threadPreview.js'
 import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js'
 import ForumSelector from './forumSelector.js'
 import { registerStats } from '../../utilities/registerStat.js';
+import * as DateFormater from '../../utilities/dateFormater.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 //Image references
@@ -161,16 +162,28 @@ class Forum extends React.Component {
     .get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        threads.push(doc);
+        const thread = doc.data();
+        thread.id = doc.id;
+        threads.push(thread);
       });
-      threads = threads.reverse();
+      console.log(threads)
+      threads = _this.sortThreads(threads);
       _this.setState({threads: threads});
     })
     .catch(function(error) {
         console.error("Error getting documents: ", error);
     });
   };
+
+  sortThreads = (threads) => {
+    const sortedThreads = threads;
+    sortedThreads.sort((a, b) => {
+      const aDate = DateFormater.getFirebaseDate(a.createdAt);
+      const bDate = DateFormater.getFirebaseDate(b.createdAt);
+      return aDate > bDate ? -1 : aDate < bDate ? 1 : 0;
+    })
+    return sortedThreads;
+  }
 
 //---------------------------------------- Admin features ------------------------------------------
 
@@ -187,7 +200,7 @@ class Forum extends React.Component {
         hacks.push(hackData);
         _this.firestore.collection('adminHackData').doc(doc.id)
       });
-      _this.setState({hacks: hacks});
+      _this.setState({hacks: hacks, selectedHack: 0});
       _this.getForums();
     })
     .catch(function(error) {
@@ -212,7 +225,7 @@ class Forum extends React.Component {
         prevState.hacks[index].forums = forums;
         return prevState;
       })
-      _this.getThreadsAdmin();
+      _this.getThreadsAdmin(0);
     })
     .catch(function(error) {
         console.error("Error getting documents: ", error);
@@ -230,9 +243,11 @@ class Forum extends React.Component {
     .get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        threads.push(doc);
+        const thread = doc.data();
+        thread.id = doc.id;
+        threads.push(thread);
       });
+      threads = _this.sortThreads(threads);
       _this.setState({threads: threads});
     })
     .catch(function(error) {
@@ -253,6 +268,7 @@ class Forum extends React.Component {
     this.setState({forum: forumIndex});
     this.getThreadsAdmin(forumIndex)
   };
+
 
 
 //---------------------------------------- Admin features ------------------------------------------

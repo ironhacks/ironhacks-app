@@ -12,6 +12,10 @@ export const getCurrentPhase = (phasesDates) => {
   }
 }
 
+export const getReactionViewformat = (date) => {
+  return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+}
+
 export const getDatesDifference = (date) => {
 	return dateDiffInDays(date, new Date());
 }
@@ -28,3 +32,4 @@ function dateDiffInDays(a, b) {
 
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
+

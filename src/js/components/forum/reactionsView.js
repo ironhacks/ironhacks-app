@@ -20,6 +20,7 @@ const Reactions = styled('div')`
   align-items: center;
   height: 30px;
   background-color: ${props => props.theme.backgroundColor};
+  border-radius: ${Constants.universalBorderRadius};
   display: inline-flex;
   align-items: center;
   padding: 0 10px;
@@ -60,18 +61,17 @@ class ReactionsView extends React.Component {
   componentWillMount() {
     if( this.state.commentData ) {
       const creationDate = DateFormater.getFirebaseDate(this.state.commentData.createdAt);
-      const creationDistance = DateFormater.getDatesDifference(creationDate);
-      const days = creationDistance === 0 ? 'Today' : `${creationDistance} days ago.`;
+      const date = DateFormater.getReactionViewformat(creationDate);
       if (this.state.commentData.reactions) {
         const { likes, dislikes } = this.state.commentData.reactions;
         this.setState({
-          days,
+          date,
           likes,
           dislikes
         })
       } else {
         this.setState({
-          days,
+          date,
         })
       }
     } else {
@@ -87,18 +87,17 @@ class ReactionsView extends React.Component {
     .then((doc) => {
       const data = doc.data();
       const creationDate = DateFormater.getFirebaseDate(data.createdAt);
-      const creationDistance = DateFormater.getDatesDifference(creationDate);
-      const days = creationDistance === 0 ? 'Today' : `${creationDistance} days ago.`;
+      const date = DateFormater.getReactionViewformat(creationDate);
       if (data.reactions) {
         const { likes, dislikes } = data.reactions;
         _this.setState({
-          days,
+          date,
           likes,
           dislikes
         })
       } else {
         _this.setState({
-          days,
+          date,
         })
       }
     })
@@ -113,10 +112,10 @@ class ReactionsView extends React.Component {
         <div>
         <Reactions>
           {!this.state.totalComments && 
-            <span>{`${this.state.days} ${this.state.likes || this.state.dislikes ? '|' : ''}`}</span>
+            <span>{`${this.state.date} ${this.state.likes || this.state.dislikes ? '|' : ''}`}</span>
           }
           {this.state.totalComments && 
-            <span>{`${this.state.days} | ${this.state.totalComments - 1} comments ${this.state.likes || this.state.dislikes ? '|' : ''}`}</span>
+            <span>{`${this.state.date} | ${this.state.totalComments - 1} comments ${this.state.likes || this.state.dislikes ? '|' : ''}`}</span>
           }
           {this.state.likes && 
             <React.Fragment>

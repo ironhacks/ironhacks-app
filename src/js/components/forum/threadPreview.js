@@ -80,16 +80,16 @@ class ThreadPreview extends React.Component {
   
   render() {
     const { referrer } = this.state;
-    if (referrer) return <Redirect push to={{ pathname: referrer, state: { thread: this.props.thread.data()}}} />;
+    if (referrer) return <Redirect push to={{ pathname: referrer, state: { thread: this.props.thread}}} />;
     return (
       <ThemeProvider theme={theme}>
         <PreviewContainer to={'forum/thread/' + this.props.thread.id} onClick={this.handleClick}>
-          <h2>{this.props.thread.data().title}</h2>
-          <span className='author-name'>{this.props.thread.data().authorName}</span>
+          <h2>{this.props.thread.title}</h2>
+          <span className='author-name'>{this.props.thread.authorName}</span>
           <Separator/>
           <ReactionsView 
-            commentId={this.props.thread.data().comments[0]}
-            totalComments={this.props.thread.data().comments.length}
+            commentId={this.props.thread.comments[0]}
+            totalComments={this.props.thread.comments.length}
           />
         </PreviewContainer>
       </ThemeProvider>
