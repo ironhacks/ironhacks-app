@@ -66,7 +66,7 @@ const UserImage = styled('div')`
   margin-right: 15px;
   font-weight: 800;
   font-style: normal;
-  background-color: gray;
+  background-color: #FFCE35;
   border-radius: 20px;
 `;
 
@@ -116,9 +116,14 @@ class CommentView extends React.Component {
   constructor(props) {
     super(props);
     const { user } = props;
+    const { authorName } = props.commentData;7
+    const splitedName = authorName.split(' ')
+    const profileLetters = splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1)
     this.state = {
       user,
+      profileLetters,
     };
+
 
     this.firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
@@ -143,7 +148,23 @@ class CommentView extends React.Component {
   }
 
   deleteThread = () => {
-
+    // const threadRef = this.firestore.collection("threads").doc(this.props.commentData.threadId);
+    // threadRef.get()
+    // .then((doc) => {
+    //   const threadData = doc.data();
+    //   threadData.comments = threadData.comments.filter((comment) => (comment != this.props.commentData.id));
+    //   threadRef.update(threadData);
+    // }).catch(function(error) {
+    //   console.error("Error adding document: ", error);
+    // });
+    // this.firestore.collection("comments")
+    // .doc(this.props.commentData.id)
+    // .delete()
+    // .then(() => {
+    //   this.props.reloadComments();
+    // }).catch(function(error) {
+    //   console.error("Error adding document: ", error);
+    // });
   }
 
   deleteSingleComment = () => {
@@ -171,7 +192,7 @@ class CommentView extends React.Component {
       <ThemeProvider theme={theme}>
         <CommentContainer>
           <UserName>
-            <UserImage>{this.state.user.profileLetters}</UserImage>
+            <UserImage>{this.state.profileLetters}</UserImage>
             <span>{this.props.commentData.authorName}</span>
           </UserName>
           <Separator/>
