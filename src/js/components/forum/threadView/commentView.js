@@ -3,6 +3,8 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
+//Router
+import { Redirect } from 'react-router-dom';
 //Showdown (markdown converter)
 import Showdown from 'showdown';
 //Styled components
@@ -140,54 +142,67 @@ class CommentView extends React.Component {
   };
 
   deleteComment = () => {
+    console.log(this.props)
     if(this.props.title) {
       //Is the head, must delete the whole thread.
+      console.log("cabeza")
+      this.deleteThread()
     } else {
       this.deleteSingleComment()
     }
   }
 
   deleteThread = () => {
-    // const threadRef = this.firestore.collection("threads").doc(this.props.commentData.threadId);
-    // threadRef.get()
-    // .then((doc) => {
-    //   const threadData = doc.data();
-    //   threadData.comments = threadData.comments.filter((comment) => (comment != this.props.commentData.id));
-    //   threadRef.update(threadData);
-    // }).catch(function(error) {
-    //   console.error("Error adding document: ", error);
-    // });
-    // this.firestore.collection("comments")
-    // .doc(this.props.commentData.id)
-    // .delete()
-    // .then(() => {
-    //   this.props.reloadComments();
-    // }).catch(function(error) {
-    //   console.error("Error adding document: ", error);
-    // });
-  }
-
-  deleteSingleComment = () => {
     const threadRef = this.firestore.collection("threads").doc(this.props.commentData.threadId);
     threadRef.get()
     .then((doc) => {
       const threadData = doc.data();
-      threadData.comments = threadData.comments.filter((comment) => (comment != this.props.commentData.id));
-      threadRef.update(threadData);
+      const comments = threadData.comments;
+      Promise.all(
+        // Array of Promises
+        comments.map(commentId => this.deleteSingleComment(commentId))
+      )
+      .then(() => {
+        threadRef.delete()
+        .then(() => {
+          this.setState({navigateToForum: true});
+        });
+      })
+      .catch((error) => {
+        console.log(`Something failed: `, error.message)
+      });
     }).catch(function(error) {
       console.error("Error adding document: ", error);
     });
-    this.firestore.collection("comments")
-    .doc(this.props.commentData.id)
-    .delete()
-    .then(() => {
-      this.props.reloadComments();
+
+  }
+
+  deleteSingleComment = (comment) => {
+    const _this = this;
+    const commentId = comment || this.props.commentData.id
+    const threadRef = this.firestore.collection("threads").doc(this.props.commentData.threadId);
+    return threadRef.get()
+    .then((doc) => {
+      const threadData = doc.data();
+      threadData.comments = threadData.comments.filter((comment) => (comment != commentId));
+      threadRef.update(threadData);
+      return _this.firestore.collection("comments")
+      .doc(commentId)
+      .delete()
+      .then(() => {
+        if ( !comment )
+          _this.props.reloadComments();
+      }).catch(function(error) {
+        console.error("Error adding document: ", error);
+      });
     }).catch(function(error) {
       console.error("Error adding document: ", error);
     });
   };
 
   render() {
+    if (this.state.navigateToForum) return <Redirect push to='/forum'/>;
+
     return (
       <ThemeProvider theme={theme}>
         <CommentContainer>

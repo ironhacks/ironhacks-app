@@ -138,7 +138,7 @@ class UserProfile extends React.Component {
       // Array of "Promises"
       templateFiles.map(file => this.putStorageFile(file, name))
     )
-    .then((url) => {
+    .then(() => {
       this.createGitHubRepository(name);
     })
     .catch((error) => {

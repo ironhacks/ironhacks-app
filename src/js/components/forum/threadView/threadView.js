@@ -155,7 +155,7 @@ class ThreadView extends React.Component {
           {this.state.head && 
             <CommentView
               commentData={this.state.head}
-              title={this.props.location.state.title}
+              title={this.state.thread.title}
               user={this.state.user}
               reloadComments={this.getComments}/>}
           <SectionSeparator/>
