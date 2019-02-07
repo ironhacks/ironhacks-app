@@ -7,7 +7,7 @@ import { withCookies } from 'react-cookie';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
 //Router
-import {Link, Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 //Custom Components
 import ThreadPreview from './threadPreview.js'
 import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js'

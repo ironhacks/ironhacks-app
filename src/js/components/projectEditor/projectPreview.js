@@ -13,7 +13,7 @@ import ReloadIcon from './img/reload-icon.svg';
 import NewTabIcon from './img/multi-tab.svg';
 
 const PreviewContainer = styled('div')`
-  display: flex;
+  display: ${(props) => props.hidden ? 'none' : 'flex'};
   border-radius: ${Constants.universalBorderRadius};
   background-color: #1C2022;
   flex-direction: column;
@@ -97,9 +97,13 @@ class ProjectPreview extends React.Component {
     this.setState({projectURL: projectURL});
   }
 
+  openInANewTab = (e) => {
+    this.props.hidePreview();
+  }
+
   render() {
     return (
-      <PreviewContainer>
+      <PreviewContainer hidden={this.props.hidden}>
         <div className="iframe-header">
           <button onClick={this.reloadFrame}>
             <img src={ReloadIcon} alt='reload-icon'/>
@@ -108,6 +112,7 @@ class ProjectPreview extends React.Component {
           <a 
             href={this.state.projectURL}
             target='_blank'
+            onClick={this.openInANewTab}
             >
             <img src={NewTabIcon} alt='reload-icon'/>
           </a>

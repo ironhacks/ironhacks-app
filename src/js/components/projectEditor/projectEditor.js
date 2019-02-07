@@ -44,6 +44,7 @@ const theme = Constants.AppSectionTheme;
 
 //Section container
 const SectionContainer = styled('div')`
+  position: relative;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -109,6 +110,34 @@ const Editor = styled(CodeMirror)`
   }
 `;
 
+const ShowPreview = styled('button')`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 15px;
+  top: 15px;
+  height: 30px;
+  width: 30px;
+  border: none;
+  cursor: pointer;
+  padding-left: 8px;
+  background-color: lightslategrey;
+  border-radius: 15px;
+
+  i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+
+    &.left {
+      transform: rotate(135deg);
+      -webkit-transform: rotate(135deg);
+    }
+  }
+`;
+
 const editorModeMIMERel = {
   html: 'xml',
   css: 'css',
@@ -136,6 +165,7 @@ class ProjectEditor extends React.Component {
       user,
       readOnly,
       hackerId,
+      hidePreview: true,
       currentHack: cookies.get('currentHack') || null,
       editorContent: '',
       editorMode: 'xml',
@@ -472,6 +502,14 @@ class ProjectEditor extends React.Component {
     });
   }
 
+  hidePreview = () => {
+    this.setState({hidePreview: true});
+  }
+
+  showPreview = () => {
+    this.setState({hidePreview: false});
+  }
+
   saveStat = (stat) => {
     stat.userId = this.state.user.uid;
     stat.metadata.hackId = this.state.currentHack;
@@ -538,15 +576,22 @@ class ProjectEditor extends React.Component {
                 onChange={this.onChangeEditor}
               />}
             </EditorContainer>
-            <div className="preview-container">
-              {this.state.proyectPath &&
+            {this.state.proyectPath &&
+              <div className="preview-container">
                 <ProjectPreview 
+                  hidden={this.state.hidePreview}
+                  hidePreview={this.hidePreview}
                   projectURL={this.state.proyectPath}
                   projectName={this.state.projectName}
                   reloadFrame={this.reloadFrame}
                 />
-              }
-            </div>
+              </div>
+            }
+            {this.state.hidePreview &&
+              <ShowPreview onClick={this.showPreview}>
+                <i className="left"></i>
+              </ShowPreview>
+            }
         </SectionContainer> 
       </ThemeProvider>
     );
