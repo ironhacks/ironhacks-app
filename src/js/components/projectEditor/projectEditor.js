@@ -165,7 +165,7 @@ class ProjectEditor extends React.Component {
       user,
       readOnly,
       hackerId,
-      hidePreview: true,
+      hidePreview: false,
       currentHack: cookies.get('currentHack') || null,
       editorContent: '',
       editorMode: 'xml',

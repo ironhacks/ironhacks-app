@@ -304,7 +304,9 @@ class Header extends React.Component {
             <RightAlignDiv className='col-5'>
               <UserMenuDropper onClick={this.showUserMenu} >{this.state.user.displayName}</UserMenuDropper>
               <UserMenu display={this.state.showUserMenu} innerRef={this.userMenuRef}>
-                <NavButton to="/profile" onClick={this.hideMenus}>Profile</NavButton>
+                {this.props.location.pathname !== "/hackSelection" &&
+                  <NavButton to="/profile" onClick={this.hideMenus}>Profile</NavButton>
+                }
                 <UserMenuButton onClick={this.logout}>Sign Out</UserMenuButton>
               </UserMenu>
             </RightAlignDiv>

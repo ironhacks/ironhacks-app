@@ -63,12 +63,14 @@ class TimeLine extends React.Component {
   constructor(props) {
     super(props);
     const { phases } = props;
+    console.log(phases)
     this.state = {
       phases,
     }
   }
 
   componentWillMount() {
+    console.log(DateFormater.getCurrentPhase(this.state.phases))
     const currentPhase = DateFormater.getCurrentPhase(this.state.phases).index;
     this.setState({currentPhase})
   }
@@ -79,6 +81,7 @@ class TimeLine extends React.Component {
   }
 
   render() {
+    console.log(this.props, this.state)
     return (
       <TimeLineContainer>
         {this.state.phases.map((phase, i) => {

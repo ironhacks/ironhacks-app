@@ -26,13 +26,10 @@ const SectionContainer = styled('div')`
   width: 100%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
+  overflow: scroll;
 
   .flex {
     display: flex;
-  }
-
-  .sponsors-div {
-    min-height: 125px;
   }
 `;
 //Header
@@ -71,6 +68,11 @@ const NewThreadButton = styled('button')`
       color: black;
     }
   }
+
+  @media (max-width: 1300px) {
+    width: 145px;
+    font-size: 12px;
+  }
 `;
 //SearchBar Container
 const SearchBar = styled('form')`
@@ -105,7 +107,6 @@ const SearchBar = styled('form')`
 //ThemeProviderreads Holder
 const ForumThreads = styled('div')`
   margin-bottom 10px;
-  overflow: auto;
 `;
 //ForumHeader
 const ForumHeader = styled('div')`
@@ -300,7 +301,7 @@ class Forum extends React.Component {
 
     return (
       <ThemeProvider theme={theme}>
-        <SectionContainer className='container-fluid d-flex flex-column'>
+        <SectionContainer className='container-fluid'>
           <div className="row">
             <div className='col-12'>
             	<MainHeader>Purdue Unal Fall 2018</MainHeader>
@@ -322,7 +323,7 @@ class Forum extends React.Component {
               <button><img src={searchIcon} alt='searchIcon'/></button>
             </SearchBar>
           </Control>
-          <div className="row flex-grow-1">
+          <div className="row">
             <ForumThreads className='col-8 offset-2'>
               <ForumHeader><h2>General discussion</h2></ForumHeader>
               {this.state.threads.map((thread, index) => {
