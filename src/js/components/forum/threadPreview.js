@@ -11,7 +11,6 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 //Custom Components
 import ReactionsView from './reactionsView.js';
-import ReactionPicker from './reactionPicker.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 import { registerStats } from '../../utilities/registerStat.js';

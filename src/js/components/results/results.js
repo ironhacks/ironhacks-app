@@ -86,13 +86,6 @@ const SectionContainer = styled('div')`
   }
 `;
 
-const AdminControlls = styled('div')`
-  display: flex;
-  width: 100%;
-  padding: 0 10% 0 10%;
-
-`;
-
 class Results extends React.Component {
   constructor(props) {
     super(props);
@@ -153,7 +146,6 @@ class Results extends React.Component {
         });
         return;
       }
-      const getResults = window.firebase.functions().httpsCallable('getPhaseResults');
       _this.getResults(this.state.currentPhase)
     })
     .catch(function(error) {
@@ -196,11 +188,11 @@ class Results extends React.Component {
     const { currentHack: hackId, currentPhase: phase} = this.state;
     saveLikedCompetitors({
       userId: this.state.user.uid,
-      hackId: this.state.currentHack,
-      phase: this.state.currentPhase,
+      hackId,
+      phase,
       likedCompetitors}
     ).then((response) => {
-      this.getResults(phase);
+      _this.getResults(phase);
     })
   }
 

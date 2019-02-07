@@ -3,9 +3,8 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-import { Link } from "react-router-dom";
 //Styled components
-import styled, {ThemeProvider} from 'styled-components';
+import styled from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 

@@ -233,7 +233,6 @@ class UserProfile extends React.Component {
     .doc(this.state.currentHack)
     .get()
     .then((doc) => {
-      const initDate = new window.firebase.firestore.Timestamp(doc.data().phases[0].codingStartDate.seconds, doc.data().phases[0].codingStartDate.nanoseconds);
       _this.setState({hackData: doc.data()});
     })
     .catch(function(error) {

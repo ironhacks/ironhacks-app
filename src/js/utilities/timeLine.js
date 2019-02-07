@@ -6,7 +6,6 @@ import React from 'react';
 //Styled components
 import styled, { css } from 'styled-components';
 //Custom Constants
-import * as Constants from '../../constants.js';
 import * as DateFormater from './dateFormater.js';
 
 const TimeLineContainer = styled('div')`
@@ -75,7 +74,7 @@ class TimeLine extends React.Component {
   }
 
   onPhaseClick = (phase) => {
-    this.setState({currentPhase: parseInt(phase)})
+    this.setState({currentPhase: parseInt(phase, 10)})
     this.props.onClick(phase)
   }
 
@@ -84,7 +83,6 @@ class TimeLine extends React.Component {
       <TimeLineContainer>
         {this.state.phases.map((phase, i) => {
           const startDate = new window.firebase.firestore.Timestamp(phase.codingStartDate.seconds, phase.codingStartDate.nanoseconds);
-          const day = startDate.toDate().getDate();
           return (
             <PhaseItem
              key={phase.index}

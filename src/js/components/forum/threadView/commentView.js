@@ -11,7 +11,6 @@ import Showdown from 'showdown';
 import styled, {ThemeProvider} from 'styled-components';
 //Custom Components
 import ReactionsView from '../reactionsView.js';
-import TagView from '../tagView.js';
 import ReactionPicker from '../reactionPicker.js';
 import TrashIcon from '..//img/trash.svg';
 //Custom Constants
@@ -41,11 +40,7 @@ const Separator = styled('div')`
   margin-top: 10px;
   margin-bottom: 10px;
 `;
-// Right section
-const RightAlignDiv = styled('div')`
-  display: flex;
-  justify-content: flex-end;
-`;
+
 const UserName = styled('div')`
   display: flex;
   align-items: center;
@@ -118,7 +113,7 @@ class CommentView extends React.Component {
   constructor(props) {
     super(props);
     const { user } = props;
-    const { authorName } = props.commentData;7
+    const { authorName } = props.commentData;
     const splitedName = authorName.split(' ')
     const profileLetters = splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1)
     this.state = {
@@ -184,7 +179,7 @@ class CommentView extends React.Component {
     return threadRef.get()
     .then((doc) => {
       const threadData = doc.data();
-      threadData.comments = threadData.comments.filter((comment) => (comment != commentId));
+      threadData.comments = threadData.comments.filter((comment) => (comment !== commentId));
       threadRef.update(threadData);
       return _this.firestore.collection("comments")
       .doc(commentId)

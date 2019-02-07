@@ -4,10 +4,7 @@
 
 import React from 'react';
 //Styled components
-import styled, {ThemeProvider} from 'styled-components';
-//Custom Constants
-import * as Constants from '../../../constants.js';
-import * as Texts from './staticTexts.js';
+import styled from 'styled-components';
 
 import PersonalScoreItem from './personalScoreItem.js';
 

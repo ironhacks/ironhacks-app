@@ -4,7 +4,7 @@
 
 import React from 'react';
 //Styled components
-import styled, { ThemeProvider, css } from 'styled-components';
+import styled, { css } from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 import * as Texts from './staticTexts.js';

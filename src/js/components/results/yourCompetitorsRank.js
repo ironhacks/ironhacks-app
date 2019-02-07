@@ -3,13 +3,12 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-import { Link } from "react-router-dom";
 //Styled components
 import styled from 'styled-components';
 import ComperitorRow from './comperitorRow.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
-import * as Texts from './staticTexts.js';
+// import * as Texts from './staticTexts.js';
 
 
 const SectionContainer = styled('div')`

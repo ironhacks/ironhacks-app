@@ -254,7 +254,7 @@ class ProjectEditor extends React.Component {
         hackData,
         currentPhase,
       });
-      if(currentPhase != -1) 
+      if(currentPhase !== -1) 
         _this.getCountDown()
     })
     .catch(function(error) {
@@ -406,7 +406,7 @@ class ProjectEditor extends React.Component {
 
   startCreateNewFileFlow = async () => {
     this.saveProject();
-    const {value: filePath, error} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
+    const {value: filePath} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
     if(filePath) {
       const file = this.createNewFile(filePath);
       this.putStorageFile(file, this.state.projectName);
@@ -529,7 +529,7 @@ class ProjectEditor extends React.Component {
               {!this.state.readOnly && 
                 <div className="control">
                   <Button primary onClick={this.saveProject}> Save and run </Button>
-                  {this.state.currentPhase != -1 &&
+                  {this.state.currentPhase !== -1 &&
                     <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
                   }
                   <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
@@ -547,7 +547,7 @@ class ProjectEditor extends React.Component {
                   projectName={this.state.projectName.toUpperCase()}/>  
               }
               <div className="hack-status">
-                <h3>Current phase: {this.state.currentPhase != -1 ? this.state.currentPhase : 'Tutorial stage'}</h3>
+                <h3>Current phase: {this.state.currentPhase !== -1 ? this.state.currentPhase : 'Tutorial stage'}</h3>
                 <p>
                   Remaining time: <br/>
                   {`${this.state.timer.days}:${this.state.timer.hours}:${this.state.timer.minutes}:${this.state.timer.seconds}`}
