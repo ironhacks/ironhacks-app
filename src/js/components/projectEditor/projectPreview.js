@@ -119,7 +119,6 @@ class ProjectPreview extends React.Component {
         <div className="smooth-borders">
           {this.props.projectURL && <iframe src={this.props.projectURL} title='The Project Preview'/>}
         </div>
-
       </PreviewContainer>
     );
   }

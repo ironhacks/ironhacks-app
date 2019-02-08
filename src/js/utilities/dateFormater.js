@@ -5,7 +5,6 @@ export const getCurrentPhase = (phasesDates) => {
   for (const key in phasesDates) {
     const startDate = new window.firebase.firestore.Timestamp(phasesDates[key].codingStartDate.seconds, phasesDates[key].codingStartDate.nanoseconds).toDate();
     const endDate = new window.firebase.firestore.Timestamp(phasesDates[key].codingStartEnd.seconds, phasesDates[key].codingStartEnd.nanoseconds).toDate();
-    console.log(startDate, endDate)
     if(phasesDates[key].index === 0 && today < startDate) return -1;
     if (today > startDate && today < endDate) {
       return phasesDates[key];

@@ -74,10 +74,9 @@ class ComperitorRow extends React.Component {
 
   onLikeClick = () => {
     this.setState((prevState, props) => {
-      const isLiked = !prevState.isLiked;
+      const isLiked = this.props.onLike(this.props.hackerId);
       return {isLiked};
     });
-    this.props.onLike(this.props.hackerId)
   }
 
   render() {

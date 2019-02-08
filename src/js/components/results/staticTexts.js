@@ -4,25 +4,28 @@ export const treatmentText = {
 	0: {
 		header: <div>
 			<p>
-				On this page, you can review the evaluations for your app in a very detailed way for each category: Technology, Analytics, and Visualization. Below are the results for Phase 1. Remember that the InfoVisdimension matters the most.
+				Below you can review the evaluation for your app in three categories: (1) Technology, (2) Analytics, and (3) Visualization. <strong>Remember that Visualization matters the most in this hack.</strong>
 			</p>
 			<p>
-				There are two views: (1) "your personal feedback" (private and confidential) and (2) "your peers" (where you can see other's apps (the actual code) and pick your top 3 favorite appin the competition). You can select the different views by clicking on the tabs below.
+				There are two views: (1) Your peers and (2) Your personal feedback. You can select both views for the current phase and also past completed phases!
 			</p>
 		</div>,
 		ranking: {
 			instructions: <div>
 				<p>
-					<strong>Check out others' work:</strong> Also, please take a look at your fellow participants’ solutions. <br/> Below, you find a table with your peers in your hacking group with three  things to inspect or take action upon: 1) A link to their app, 2) A rating of how similar they are compared to you on scale from 0 (not similar at all to 1 very similar) and 3) a like button. 
+					Check out others' work: Also, please take a look at your peers’ solutions.  
+				</p>
+				<p>
+					Below, you find a table with your peers: with a 1) a link to their app, and 1) a like button.  We will describe each in more detail. 
 				</p>
 				<ul>
-					<li>The link in the first column takes you to their code. <strong>Click on the link</strong> to check out your fellow participants’ solutions.! You can <strong>inspect</strong> it, and also <strong>reuse</strong> it if you want to! <strong>We encourage you to re-use components from your peers!</strong>
+					<li>The link in the first column takes you to their code. Click on the link to check out your fellow participants’ solutions.! You can inspect it, and also reuse it if you want to! We encourage you to re-use components from your peers!
 					</li>
-					<li><strong>Give a like</strong> to your <strong>top 3 that you consider reusing:</strong> Select those that you consider to inspect further because they are useful and you want to reuse them! It is very important that you rate your most favorite app as it will give us an idea how much you try to improve! Keep in mind that this will also tell us how much you try to improve and develop a unique app! 
+					<li>The like button in the third column should be used to select the top 3 that you consider reusing. Select those that you consider to inspect further because they are useful and you want to reuse them! <strong>It is very important that select them by 11.59 pm of evaluation day. Afterwards, none of the other apps will be available for inspection.</strong>
 					</li>
 				</ul>
-				<p><strong>How to read the similarity rankings?</strong> We use similarity scores to measure how similar your app, and the other hacker’s app is with respect of the visual components of your app. So the more dissimilar from others  you are the better! Try to become more dissimilar and start exploring those that are dissimilar! The rating in the second column evaluates their similarity on scale from 0 ((not similar at all) to 10 (very similar). <br/>
-					<strong>Remember:</strong> Please write down the number of the hackers that you liked! You might want to look at those in the next round again. To make your app unique consider recombining your own ideas with those you find in other apps! Do not worry <strong>you can reuse up to 50%</strong> of others code!
+				<p>
+					<strong>Remember: Please do not forget to select and follow your top 3 apps. They are not available anymore after 11.59 pm of the evaluation day.</strong>To make your app unique consider recombining your own ideas with those you find in other apps! Do not worry, you can reuse up to 50% of others code! 
 				</p>
 			</div>,
 		}
@@ -39,15 +42,18 @@ export const treatmentText = {
 		ranking: {
 			instructions: <div>
 				<p>
-					There is a view <strong>"Your peers"</strong> (showing what other's are doing). You can select the different views by clicking on the tabs below. <br/>
-					<strong>Check out your peers that compete with you:</strong> Below, you find a table with your peers in your hacking group with three columns: 1) A link to their app, and 2) a like button.  
+					Below, you find a table with your peers: with 1) a link to their app, 2) A similarity rating of how similar they are compared to you on scale <strong>from 0 (not similar at all)</strong> to <strong>10 (very similar)</strong> and 3) a like button.  We will describe each in more detail.  
 				</p>
 				<ul>
-					<li>Click on the link to check out other's code! You can inspect it, and also reuse it if you want to! It is allowed and actually encouraged! Go for it, learn from others. Only 50 % of the code needs to be from yourself! Do not worry! ".  Please take a look at your fellow participants’ solutions. Keep in mind: We encourage you to re-use components from your peers! The more you recombine existing work in novel ways the better. 
+					<li>The link in the first column takes you to their code. Click on the link to check out your fellow participants’ solutions.! You can inspect it, and also reuse it if you want to! We encourage you to re-use components from your peers!
 					</li>
-					<li>The second column gives you the opportunity to select your top 3 apps: Select those that you consider to inspect further because they are useful and you want to learn from there! It is very important that you rate your most favorite app as it will give us an idea how much you try to improve! 
+					<li>The second column rates them in terms of similarity. We use similarity rating focused on the <strong>visual components</strong> of your and your peer’s app. A rating of 0 means that the other app is very similar. A rating of 10 implies that the other app is very dissimilar. <strong>Keep in mind that more dissimilar can lead to greater excellence!</strong>
+					</li>
+					<li>The like button in the third column should be used to select the top 3 that you consider reusing. Select those that you consider to inspect further because they are useful and you want to reuse them! <strong>It is very important that select them by 11.59 pm of evaluation day. Afterwards, none of the other apps will be available for inspection.</strong>
 					</li>
 				</ul>
+				<p><strong>Remember: Please do not forget to select and follow your top 3 apps. They are not available anymore after 11.59 pm of the evaluation day. </strong>	To make your app unique consider recombining your own ideas with those you find in other apps! Do not worry, you can reuse up to 50% of others code!
+				</p>
 			</div>,
 		}
 	}
@@ -57,8 +63,11 @@ export const personalFeddback = {
 	title: "Personal feedback",
 	subTitle: <div>
 		<p>
-			How to read your personal feedback. <strong>There are three different scrollable tables that give you a rough idea of how well your app is improving in terms of minimum requirements and also excellence. Keep in mind: Fulfilling the minimum requirements is not enough. Keep pushing to increase the excellence of your app.</strong> The more novel and unique your app the higher your reward eventually. And remember: The InfoVis Dimension matters the most. Stand out from the crowd!! 
-
+			How to read your personal feedback. There are three rows that describe your apps performance in the three task dimensions: (1) Technology, (2) Analytics, (3) Visualization. The maximum requirements points that you can achieve <strong>74</strong>, the maximum excellence points are <strong>150</strong>. Keep in mind that Visualizations matters the most.
+		</p>
+		<p><strong>Keep pushing to earn more points. The more points you more likely you earn more money, reputation, and also skills.</strong>
+		</p>
+		<p>Remember that your personal feedback are private and confidential. And you shouldn't share with others how many points you have earned. 
 		</p>
 	</div>,
 	technology: {
@@ -78,7 +87,7 @@ export const personalFeddback = {
 		</p>,
 		weight: '25%',
 	},
-	infoVis: {
+	visualization: {
 		por: <p>As specified in the task (www.ironhacks.com/task), you were asked to visualize and rank correctly the districts with respect to three parameters (distance, safety, afforability). Here we considered the  The value describes how many correct ranks you have identified for all 4 ranking decision parameters. For more details go the the section of Analytics in the section of requirements (www.ironhacks.com/task).
 		</p>,
 		efeA: <p>

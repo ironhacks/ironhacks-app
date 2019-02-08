@@ -85,7 +85,6 @@ class TimeLine extends React.Component {
     return (
       <TimeLineContainer>
         {this.state.phases.map((phase, i) => {
-          const startDate = new window.firebase.firestore.Timestamp(phase.codingStartDate.seconds, phase.codingStartDate.nanoseconds);
           return (
             <PhaseItem
              key={phase.index}

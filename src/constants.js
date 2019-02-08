@@ -222,7 +222,7 @@ export const personalFeddbackTheme = {
     backgroundColor: '#40AA69',
     lightBackgroundColor: '#9acf93'
   },
-  infoVis: {
+  visualization: {
     backgroundColor: '#018B7D',
     lightBackgroundColor: '#7ac2ba',
   },

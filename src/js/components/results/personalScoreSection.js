@@ -35,7 +35,7 @@ class PersonalScoreSection extends React.Component {
       <SectionContainer>
         <PersonalScoreItem type='technology' score={this.props.scores.tech}/>
         <PersonalScoreItem type='analytics' score={this.props.scores.analytics}/>
-        <PersonalScoreItem type='infoVis' score={this.props.scores.InfoVis}/>
+        <PersonalScoreItem type='visualization' score={this.props.scores.InfoVis}/>
       </SectionContainer>
     );
   }

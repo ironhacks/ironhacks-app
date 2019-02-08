@@ -21,12 +21,13 @@ const ItemContainer = styled('div')`
   }
 
   h3 {
+    font-size: 30px;
     margin: 15px 0 12px 0;
   }
 
   span {
     &.category-weight {
-      font-size: 14px;
+      font-size: 20px;
       margin-bottom: 10px;
       margin-top: -8px;
     }
@@ -78,6 +79,7 @@ const VerticalContainer = styled('div')`
   flex-grow: 1;
 
   .horizontal {
+    width: 100%;
     display: flex;
     flex-direction: row;
   }
@@ -97,6 +99,12 @@ const SubSection = styled('div')`
     flex-direction: column;
     align-items: center;
     width: 100%;
+    text-align: center;
+  }
+
+  span {
+    margin-top: -20px;
+    margin-bottom: 5px;
   }
 
   .score {
@@ -152,19 +160,17 @@ class PersonalScoreItem extends React.Component {
         <Contents type={this.props.type} active={this.state.active}>
           <SubSection type={this.props.type}>
             <div className="sub-category-text">
-              <h3>Progress on Requirements</h3>
-              {Texts.personalFeddback[this.props.type].por}
+              <h3>Points on Requirements</h3>
             </div>
             <div className="score">
               <h3>{this.props.score[0]}</h3>
               <span>Total points</span>
             </div>
           </SubSection>
-          {this.props.type !== 'infoVis' && 
+          {this.props.type !== 'visualization' && 
           <SubSection type={this.props.type}>
             <div className='sub-category-text'>
-              <h3>Effort for excellence</h3>
-              {Texts.personalFeddback[this.props.type].efe}
+              <h3>Points for Excellence</h3>
             </div>
             <div className="score">
               <h3>{this.props.score[1].toString().slice(0, 5)}</h3>
@@ -172,13 +178,12 @@ class PersonalScoreItem extends React.Component {
             </div>
           </SubSection>
           }
-          {this.props.type === 'infoVis' && 
+          {this.props.type === 'visualization' && 
             <VerticalContainer type={this.props.type}>
-              <h3>Effort for excellence</h3>
               <div className="horizontal">
                 <SubSection type={this.props.type}>
                   <div className="sub-category-text">
-                    {Texts.personalFeddback[this.props.type].efeA}
+                    <h3>D3.JS Points for Excellence</h3>
                   </div>
                   <div className="score">
                     <h3>{this.props.score[1].toString().slice(0, 5)}</h3>
@@ -187,7 +192,8 @@ class PersonalScoreItem extends React.Component {
                 </SubSection>
                 <SubSection type={this.props.type}>
                   <div className="sub-category-text">
-                    {Texts.personalFeddback[this.props.type].efeB}
+                    <h3 >UX Points for Excellence</h3>
+                    <span>(rated in phase 5 only)</span>
                   </div>
                   <div className="score">
                     <h3>{this.props.score[2].toString().slice(0, 5)}</h3>

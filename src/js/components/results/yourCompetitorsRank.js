@@ -6,20 +6,28 @@ import React from 'react';
 //Styled components
 import styled from 'styled-components';
 import ComperitorRow from './comperitorRow.js';
+import swal from 'sweetalert2';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 // import * as Texts from './staticTexts.js';
 
 
 const SectionContainer = styled('div')`
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
   width: 100%;
+  padding-bottom: 60px;
   border-radius: ${Constants.universalBorderRadius};
 
   .save-button {
+    position: absolute;
+    bottom: 15px; 
+    right: 0;
+    width: 150px;
+    height: 40px;
     margin-top: 10px;
     border: none;
     border-radius: ${Constants.universalBorderRadius};
@@ -72,16 +80,29 @@ class YourCompetitorsRank extends React.Component {
     
   }
 
-  onLike = (hakerId) => {
+  onLike = (hackerId) => {
     const likedUsers = this.state.likedUsers;
-    likedUsers[hakerId] = !likedUsers[hakerId];
-    this.setState({likedUsers});
+    if (likedUsers[hackerId]) {
+      delete likedUsers[hackerId]
+      this.setState({likedUsers});      
+      return false;
+    } else {
+      if ( Object.keys(likedUsers).length === 3) {
+        swal("You can only like 3 projects.")
+        return false;
+      } else {
+        likedUsers[hackerId] = !likedUsers[hackerId];
+        this.setState({likedUsers});
+        return true;
+      }
+    }
   }
 
   saveLikes = () => {
     let likedUsers= [];
     for(const k in this.state.likedUsers) {
-      if (this.state.likedUsers[k]) likedUsers.push(k);
+      if (this.state.likedUsers[k]) 
+        likedUsers.push(k);
     }
     this.props.onLikedCompetitors(likedUsers);
   }
@@ -95,7 +116,7 @@ class YourCompetitorsRank extends React.Component {
               <th>Hacker</th>
               <th>Project Link</th>
               {this.props.treatment === "1" && 
-              <th>similarity</th>
+              <th>Similarity Rating</th>
               }
               <th></th>
             </tr>

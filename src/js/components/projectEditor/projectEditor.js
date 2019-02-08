@@ -51,12 +51,13 @@ const SectionContainer = styled('div')`
   height: ${props => props.theme.containerHeight};
   background-color: #1C2022;
   color: rgb(255, 255, 255, 0.4);
-
-  .preview-container {
-    width: 40%;
-    height: 100%;
-  }
 `;
+
+const PreviewContainer = styled('div')`
+  display: ${(props) => props.hidden ? 'none' : 'block'}
+  width: 40%;
+  height: 100%;
+`
 
 const ProjectContent = styled('div')`
   position: relative;
@@ -91,7 +92,7 @@ const ProjectContent = styled('div')`
 `;
 
 const EditorContainer = styled('div')`
-  width: 40%;
+  width: ${(props) => props.large ? '80%' : '40%'};
   height: 100%;
 
   .CodeMirror {
@@ -264,7 +265,7 @@ class ProjectEditor extends React.Component {
 
   getCountDown = () => {
     const _this = this;
-    const phase = this.state.hackData.phases[this.state.currentPhase]
+    const phase = this.state.hackData.phases[this.state.currentPhase - 1]
     const countDownDate = new window.firebase.firestore.Timestamp(phase.codingStartEnd.seconds, phase.codingStartEnd.nanoseconds).toDate();
     const timer = setInterval(function() {
 
@@ -334,11 +335,12 @@ class ProjectEditor extends React.Component {
   }
 
   startPushNavigation = () => {
+    const _this = this;
     this.saveProject();
-    swal(Constants.surveyRedirecAlertContent)
+     swal(Constants.surveyRedirecAlertContent)
     .then((result) => {
       if(!result.dismiss) {
-        swal(Constants.pushSurveyAlertContent(`${commitSurveys[this.state.currentPhase]}?user_email=${this.state.user.email}`))
+        swal(Constants.pushSurveyAlertContent(`${commitSurveys[_this.state.currentPhase]}?email=${_this.state.user.email}&user_id=${_this.state.user.uid}`))
         .then((result) => {
           if(!result.dismiss) {
             swal(Constants.commitContentAlertContent)
@@ -554,7 +556,7 @@ class ProjectEditor extends React.Component {
                 </p>
               </div>
             </ProjectContent>
-            <EditorContainer>
+            <EditorContainer large={this.state.hidePreview}>
               {!this.state.loadingFiles && <Editor
                 value={this.state.projectFiles[this.state.selectedFile].content}
                 options={{
@@ -577,7 +579,7 @@ class ProjectEditor extends React.Component {
               />}
             </EditorContainer>
             {this.state.proyectPath &&
-              <div className="preview-container">
+              <PreviewContainer hidden={this.state.hidePreview}>
                 <ProjectPreview 
                   hidden={this.state.hidePreview}
                   hidePreview={this.hidePreview}
@@ -585,7 +587,7 @@ class ProjectEditor extends React.Component {
                   projectName={this.state.projectName}
                   reloadFrame={this.reloadFrame}
                 />
-              </div>
+              </PreviewContainer>
             }
             {this.state.hidePreview &&
               <ShowPreview onClick={this.showPreview}>

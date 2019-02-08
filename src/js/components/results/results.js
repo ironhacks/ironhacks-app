@@ -83,6 +83,31 @@ const SectionContainer = styled('div')`
         text-align: center;
       }
     }
+
+    h3 {
+      &.super-cool-banner {
+        font-size: 20px;
+        text-align: center;
+        -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+        -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+        animation-name: example;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        
+        @-webkit-keyframes example {
+          from {color: red;}
+          to {color: yellow;}
+        }
+
+        /* Standard syntax */
+        @keyframes example {
+          from {color: #caa32a;}
+          to {color: red;}
+        }
+      }
+
+    }
   }
 `;
 
@@ -212,7 +237,7 @@ class Results extends React.Component {
       <ThemeProvider theme={theme}>
         <SectionContainer>
           <div className="top-container">
-            <h1>Welcome back to your dashboard</h1>
+            <h1>Your dashboard</h1>
             {Texts.treatmentText[this.state.treatment].header}
             <h3>Please select the phase you want to check.</h3>
             {this.state.hackData && 
@@ -227,7 +252,7 @@ class Results extends React.Component {
                 className={`tab-button ${this.state.currentSection === 'yourCompetitors' ? 'selected' : ''}`}
                 onClick={this.changeSection}
                 id='yourCompetitors'>
-                Your competitors
+                Your Peers
               </button>
               <button
                 className={`tab-button ${this.state.currentSection === 'personalFeedback' ? 'selected' : ''}`}
@@ -245,8 +270,9 @@ class Results extends React.Component {
             }
             {!this.state.gettingResults && this.state.results && this.state.currentSection === 'yourCompetitors' &&
               <React.Fragment>
-                <h2>Your Peers</h2>
+                <h2>Your Competitors</h2>
                 {Texts.treatmentText[this.state.treatment].ranking.instructions}
+                <h3 className='super-cool-banner'>*** Keep in mind: The more dissimilar your app, the more likely you earn excellence ***</h3>
                 <YourCompetitorsRank
                   treatment={this.state.treatment}
                   scores={this.state.results}
