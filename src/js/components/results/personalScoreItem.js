@@ -8,6 +8,7 @@ import styled, { css } from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 import * as Texts from './staticTexts.js';
+import { registerStats } from '../../utilities/registerStat.js';
 
 const ItemContainer = styled('div')`
   display: flex;
@@ -146,11 +147,22 @@ class PersonalScoreItem extends React.Component {
   toggleSection = () => {
     this.setState((prevState, props) => {
       const active = !prevState.active;
+      // const statData = {
+      //   userId: this.state.userId,
+      //   event: 'on-phase-click',
+      //   metadata: {
+      //     location: 'results-page',
+      //     phase: phase + 1,
+      //     hackId: this.state.currentHack,
+      //   }
+      // }
       return { active };
     })
   }
 
+  
   render() {
+    console.log(this.props)
     return (
       <ItemContainer type={this.props.type}>
         <Title type={this.props.type} onClick={this.toggleSection}>  

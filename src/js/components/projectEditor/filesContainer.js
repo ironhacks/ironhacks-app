@@ -14,9 +14,9 @@ import fileIcon from './img/file-icon.svg';
 import folderIcon from './img/folder-icon.svg';
 //Section container
 const MainContainer = styled('div')`
+  display: flex;
+  flex-grow: 1;
   width: 100%;
-  min-height: 200px;
-  max-height: 250px;
   overflow: auto;
   background-color: ${props => props.backgroundColor ? props.backgroundColor : Constants.projectEditorBgColor};
   display: flex;

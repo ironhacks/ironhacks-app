@@ -61,6 +61,8 @@ const PreviewContainer = styled('div')`
 
 const ProjectContent = styled('div')`
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 20%;
   height: 100%;
   background-color: ${Constants.projectEditorBgColor};
@@ -81,8 +83,7 @@ const ProjectContent = styled('div')`
   }
 
   .hack-status {
-    position: absolute;
-    bottom: 10px;
+    margin-bottom: 10px;
     padding: 20px;
 
     h3, p {

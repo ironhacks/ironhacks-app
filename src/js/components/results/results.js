@@ -14,6 +14,7 @@ import * as Constants from '../../../constants.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
 import Loader from '../../utilities/loader.js';
 import TimeLine from '../../utilities/timeLine.js';
+import { registerStats } from '../../utilities/registerStat.js';
 
 const theme = Constants.AppSectionTheme;
 
@@ -180,22 +181,40 @@ class Results extends React.Component {
 
   changeSection = (event) => {
     this.setState({currentSection: event.target.id});
+    const statData = {
+      event: 'on-result-tab-section-click',
+      userId: this.state.user.uid,
+      metadata: {
+        target: `${event.target.id === 'yourCompetitors' ? 'your-peers-tab' : 'personal-feedback'}`,
+        location: 'results-page',
+      }
+    }
+    this.saveStat(statData)
   }
   
   onPhaseSelection = (phase) => {
     this.setState({selectedPhase: phase + 1})
     this.getResults(phase + 1);
+    const statData = {
+      event: 'on-phase-click',
+      metadata: {
+        location: 'results-page',
+        phase: phase + 1,
+      }
+    }
+    this.saveStat(statData)
   }
 
   getResults = (phase) => {
+    const endDate = DateFormater.getFirebaseDate(this.state.hackData.phases[phase - 1].codingStartEnd);
     this.setState({gettingResults: true})
     const getResults = window.firebase.functions().httpsCallable('getPhaseResults');
     const _this = this;
-
     getResults({
+      phase,
+      endDate: endDate.getTime(),
       userId: this.state.user.uid,
       hackId: this.state.currentHack,
-      phase: phase,
       forumId: this.state.forumId}
     ).then((response) => {
       const { userResults: results } = response.data;
@@ -213,14 +232,19 @@ class Results extends React.Component {
     const { currentHack: hackId, currentPhase: phase} = this.state;
     saveLikedCompetitors({
       userId: this.state.user.uid,
+      phase: phase - 1,
       hackId,
-      phase,
       likedCompetitors}
     ).then((response) => {
       _this.getResults(phase);
     })
   }
 
+  saveStat = (stat) => {
+    stat.userId = this.state.user.uid;
+    stat.metadata.hackId = this.state.currentHack;
+    registerStats(stat);
+  }
 
   render() {
     if(this.state.loading){
@@ -272,7 +296,7 @@ class Results extends React.Component {
               <React.Fragment>
                 <h2>Your Competitors</h2>
                 {Texts.treatmentText[this.state.treatment].ranking.instructions}
-                <h3 className='super-cool-banner'>*** Keep in mind: The more dissimilar your app, the more likely you earn excellence ***</h3>
+                <h3 className='super-cool-banner'>*** Keep in mind: You can earn excellence if you learn and reuse from others’ apps that are dissimilar ***</h3>
                 <YourCompetitorsRank
                   treatment={this.state.treatment}
                   scores={this.state.results}
@@ -285,7 +309,7 @@ class Results extends React.Component {
               <React.Fragment>
                 <h2>{Texts.personalFeddback.title}</h2>
                 {Texts.personalFeddback.subTitle}
-                <PersonalScoreSection scores={this.state.results}/>
+                <PersonalScoreSection scores={this.state.results} userId={this.state.user.uid} hackId={this.state.currentHack}/>
               </React.Fragment>
             }
             {!this.state.gettingResults && !this.state.results && <h2 className='no-results'>Not results for this phase yet.</h2>}

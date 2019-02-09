@@ -21,19 +21,6 @@ const SectionContainer = styled('div')`
   width: 100%;
   padding-bottom: 60px;
   border-radius: ${Constants.universalBorderRadius};
-
-  .save-button {
-    position: absolute;
-    bottom: 15px; 
-    right: 0;
-    width: 150px;
-    height: 40px;
-    margin-top: 10px;
-    border: none;
-    border-radius: ${Constants.universalBorderRadius};
-    background-color: #FFD75F;
-    cursor: pointer;
-  }
 `;
 
 const Table = styled('table')`
@@ -66,6 +53,20 @@ const Table = styled('table')`
     background-color: #e6b92f;
     border-radius: 4px;
   }
+`;
+
+const SaveLikesButton = styled('button')`
+  position: absolute;
+  display: ${(props => props.hidden ? 'none' : 'block')}
+  bottom: 15px; 
+  right: 0;
+  width: 150px;
+  height: 40px;
+  margin-top: 10px;
+  border: none;
+  border-radius: ${Constants.universalBorderRadius};
+  background-color: #FFD75F;
+  cursor: pointer;
 `;
 
 class YourCompetitorsRank extends React.Component {
@@ -136,7 +137,7 @@ class YourCompetitorsRank extends React.Component {
             })}
           </tbody>
         </Table>
-        <button onClick={this.saveLikes} className='save-button'>Save likes</button>
+        <SaveLikesButton onClick={this.saveLikes} hidden={this.props.scores.filtered}>Save likes</SaveLikesButton>
       </SectionContainer>
     );
   }
