@@ -69,8 +69,27 @@ class ThreadView extends React.Component {
   };
 
   componentDidMount(){
-    this.getComments();
+    if(!this.state.thread) {
+      this.getThreadData();    
+    } else {
+      this.getComments();
+    }
   };
+
+  getThreadData = () => {
+    const _this = this;
+    this.firestore.collection('threads')
+    .doc(this.props.match.params.threadId)
+    .get()
+    .then((doc) => { 
+      const thread = doc.data();
+      thread.id = doc.id;
+      _this.setState({thread}, _this.getComments());
+    })
+    .catch(function(error) {  
+        console.error('Error getting documents: ', error);
+    });
+   };
   //This functions get all the comments from a specific thread.
   //TODO: We are asking for the thread twice, one on the main forum and second here, we must reduce that to one query.
   //TODO:  This query is not efficient when the db has a good amount of comments, we must find a way to make it scalable.
@@ -148,6 +167,7 @@ class ThreadView extends React.Component {
   };
 
   render() {
+    console.log(this.state , this.props)
     return (
       <ThemeProvider theme={theme}>
       <SectionContainer>

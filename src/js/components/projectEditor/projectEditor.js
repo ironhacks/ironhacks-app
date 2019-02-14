@@ -151,8 +151,8 @@ const storageRef = window.firebase.storage().ref();
 const commitSurveys = {
   1: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_exR2GmwUUS07XUN',
   2: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_2hHiUsFZ0Urzbmt',
-  3: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8HYZoJadcow0Lad',
-  4 :'https://purdue.ca1.qualtrics.com/jfe/form/SV_3La7PbTVxqJkVh3',
+  3: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8IgnHWN5eqeyYlL',
+  4: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_3La7PbTVxqJkVh3',
   5: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_bxSTjywdbM3zf0x',
 }
 
@@ -167,6 +167,7 @@ class ProjectEditor extends React.Component {
       user,
       readOnly,
       hackerId,
+      editorKey: Math.random(),
       hidePreview: false,
       currentHack: cookies.get('currentHack') || null,
       editorContent: '',
@@ -349,7 +350,10 @@ class ProjectEditor extends React.Component {
               const { value } = result;
               if (value) {
                 this.pushToGitHub(value)
-                swal(Constants.loadingAlertContent);
+                swal(Constants.loadingAlertContent)
+                .then((result) => {
+                  swal(Constants.onSuccessAlertContent)
+                })
               };
             });
           }
@@ -403,7 +407,8 @@ class ProjectEditor extends React.Component {
       }
       const selectedFile = name;
       const editorMode = editorModeMIMERel[splitedFileName[splitedFileName.length - 1]];
-      return {projectFiles, selectedFile, editorMode};
+
+      return { projectFiles, selectedFile, editorMode, editorKey: Math.random() };
     });
   }
 
@@ -559,6 +564,7 @@ class ProjectEditor extends React.Component {
             </ProjectContent>
             <EditorContainer large={this.state.hidePreview}>
               {!this.state.loadingFiles && <Editor
+                key={this.state.editorKey}
                 value={this.state.projectFiles[this.state.selectedFile].content}
                 options={{
                     lineNumbers: true,

@@ -12,6 +12,7 @@ import ProjectCard from './projectCard.js';
 import Separator from '../../utilities/separator.js';
 import TimeLine from '../../utilities/timeLine.js';
 import * as TemplateFiles from './newProjectFileTemplates/templates.js';
+import Examples from './d3Examples.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 import Loader from '../../utilities/loader.js';
@@ -241,7 +242,6 @@ class UserProfile extends React.Component {
   };
 
   onPhaseSelection = (phase) => {
-
   }
 
   render() {
@@ -282,6 +282,8 @@ class UserProfile extends React.Component {
             currentPhase={this.state.currentPhase}
           />
         }
+        <Examples user={this.state.user}/>
+        <h2 className='padding'>D3.js Examples</h2>
         <h2 className='padding'>Projects</h2>
         <span className='padding'>Bellow you will find the current hack status. You can also manage your projects from here.</span>
         <Separator primary className='padding'/>

@@ -1,4 +1,4 @@
-//CSS color constants
+7//CSS color constants
 export const mainBgColor = '#FFCE35';
 export const buttonHighlightedBgColor = '#E6B92F'
 export const mainTextColor = 'black';
@@ -104,6 +104,8 @@ export const cloudFunctionsProdEndPoint = 'https://us-central1-ironhacks-platfor
 
 export const projectEditorBgColor = '#24282A';
 
+export const permanentFiles = ['index.html', 'main.css', 'main.js', 'map.js', 'visualization.js'];
+
 //-- Alerts constructors: --
 export const createNewFileFlowAlertContent = (validator) => {
   return {
@@ -199,11 +201,23 @@ export const commitCanceledAlertContent = {
   title: "Error",
   type: "error",
   text: "Your commit was canceled.",
-  confirmButtonText: 'Ok',
+  confirmButtonText: 'OK',
   confirmButtonColor: mainBgColor,
   showCloseButton: true,
   allowOutsideClick: false,
 };
+
+
+export const onSuccessAlertContent = {
+  title: "Success",
+  type: "success",
+  text: "Your project is ready to be evaluated.",
+  confirmButtonText: 'OK',
+  confirmButtonColor: mainBgColor,
+  showCloseButton: true,
+  allowOutsideClick: false,
+};
+
 
 export const loadingAlertContent = {
   title: "Sending...",

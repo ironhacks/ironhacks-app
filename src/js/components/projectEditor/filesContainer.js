@@ -10,8 +10,9 @@ import * as Constants from '../../../constants.js';
 import {Treebeard, decorators} from 'react-treebeard';
 
 import fileIcon from './img/file-icon.svg';
-// import newFileIcon from './img/new-file-icon.svg';
+import trashIcon from './img/trash-icon.svg';
 import folderIcon from './img/folder-icon.svg';
+
 //Section container
 const MainContainer = styled('div')`
   display: flex;
@@ -24,6 +25,7 @@ const MainContainer = styled('div')`
   padding: 0 20px 0 20px;
 
   * li {
+    width: 100%;
     cursor: pointer;
   }
 `;
@@ -31,6 +33,9 @@ const MainContainer = styled('div')`
 const TreeStyles = {
   tree: {
     base: {
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'left',
       listStyle: 'none',
       backgroundColor: `${props => props.backgroundColor ? props.backgroundColor : Constants.projectEditorBgColor}`,
       margin: 0,
@@ -65,11 +70,15 @@ const TreeStyles = {
           position: 'absolute',
           top: '50%',
           left: '50%',
-          margin: '-7px 0 0 -7px',
-          height: '14px'
+          margin: '-10px 0 0 -7px',
+          height: '10px',
+          width: '10px',
+          svg: {
+            verticalAlign: 'unset',
+          }
         },
-        height: 14,
-        width: 14,
+        height: 10,
+        width: 10,
         arrow: {
           fill: '#9DA5AB',
           strokeWidth: 0
@@ -109,16 +118,34 @@ const TreeStyles = {
 const NodeHeader = styled('div')`
   display: inline-block;
 
-  div {
+  .node-item {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     font-family: 'Muli';
     font-size: 14px;
     
-    img {
-      height: 14px;
-      width: 14px;
-      margin-right: 5px;
+    div {
+      img {
+        height: 14px;
+        width: 14px;
+        margin-right: 5px;
+      }
+
+      &.item-control {
+        position: absolute;
+        right: 0;
+
+        button {
+          border: none;
+          background-color: transparent; 
+        }
+
+        img {
+          margin-right: 0;
+        }
+      }
     }
   }
 `;
@@ -128,13 +155,22 @@ decorators.Header = ({style, node}) => {
   const iconType = node.children ? 'folder' : 'file';
   return (
     <NodeHeader>
-      <div>
-        <img src={iconType === 'file' ? fileIcon : folderIcon} alt='item-icon'/>
-        {node.name}
+      <div className='node-item'>
+        <div className='item-name'>
+          <img src={iconType === 'file' ? fileIcon : folderIcon} alt='item-icon'/>
+          {node.name}
+        </div>
+        
       </div>
     </NodeHeader>
   );
 };
+
+// {!Constants.permanentFiles.includes(node.name) && !node.children &&
+//         <div className='item-control'>
+//           <button><img src={trashIcon} alt="delete-file"/></button>
+//         </div>
+//         }
 
 class FilesContainer extends React.Component {
   constructor(props){

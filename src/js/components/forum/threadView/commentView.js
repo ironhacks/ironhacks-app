@@ -140,7 +140,6 @@ class CommentView extends React.Component {
     console.log(this.props)
     if(this.props.title) {
       //Is the head, must delete the whole thread.
-      console.log("cabeza")
       this.deleteThread()
     } else {
       this.deleteSingleComment()

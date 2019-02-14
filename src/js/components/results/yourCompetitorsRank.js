@@ -76,11 +76,7 @@ class YourCompetitorsRank extends React.Component {
       likedUsers: [],
     }
   }
-
-  componentDidMount() {
-    
-  }
-
+  
   onLike = (hackerId) => {
     const likedUsers = this.state.likedUsers;
     if (likedUsers[hackerId]) {
