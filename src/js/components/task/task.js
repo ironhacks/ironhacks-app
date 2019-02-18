@@ -19,6 +19,7 @@ const SectionContainer = styled('div')`
   width: 100%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
+  overflow-y: scroll;
 
   .task-div {
     margin-top: 30px;

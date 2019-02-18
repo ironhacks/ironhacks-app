@@ -11,8 +11,8 @@ import * as Constants from '../../../constants.js';
 //import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 
 const Select = styled('select')`
-  height: 30px;
-  width: 120px;
+  height: 45px;
+  padding: 0 10px;
   display: flex;
   justify-content: flex-end;
   background-color: #F2F2F2;

@@ -24,33 +24,31 @@ const theme = Constants.AppSectionTheme;
 //Section container
 const SectionContainer = styled('div')`
   width: 100%;
+  padding: 0 10%;
   height: ${props => props.theme.containerHeight};
   background-color: ${props => props.theme.backgroundColor};
-  overflow: scroll;
-
-  .flex {
-    display: flex;
-  }
+  overflow-y: scroll;
 `;
 //Header
 const MainHeader = styled('h1')`
-  display: flex;
-  justify-content: center;
+  width: 100%;
+  text-align: center;
   padding-top: 20px;
   padding-bottom: 40px;
   font-weight: 800;
 `;
 //Controls
 const Control = styled('div')`
+  display: flex;
+  align-items: center;
   height: 30px;
   margin-bottom: 15px;
 `;
 //New thread button
 const NewThreadButton = styled('button')`
-  height: 30px;
+  height: 45px;
   font-weight: 700;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 0 15px;
   border: none;
   border-radius: ${Constants.universalBorderRadius}
   background-color: ${Constants.mainBgColor};
@@ -70,14 +68,15 @@ const NewThreadButton = styled('button')`
   }
 
   @media (max-width: 1300px) {
-    width: 145px;
     font-size: 12px;
   }
 `;
 //SearchBar Container
 const SearchBar = styled('form')`
-  height: 30px;
+  height: 45px;
   display: flex;
+  min-witdh: 300px;
+  margin-left: auto;
   justify-content: flex-end;
 
   input {
@@ -104,10 +103,6 @@ const SearchBar = styled('form')`
     }
   }
 `;
-//ThemeProviderreads Holder
-const ForumThreads = styled('div')`
-  margin-bottom 10px;
-`;
 //ForumHeader
 const ForumHeader = styled('div')`
   width: 100%;
@@ -123,14 +118,6 @@ const ForumHeader = styled('div')`
     margin-bottom: 0;
   }
 `;
-//Section separator -- TODO: move to a separate file
-// const SectionSeparator = styled('div')`
-//   background-color: ${Constants.mainBgColor}
-//   height: 1px;
-//   width 100%;
-//   margin-top: calc(${Constants.threadPreviewBottomMargin} + 10px);
-//   margin-bottom: calc(${Constants.threadPreviewBottomMargin} + 10px);
-// `;
 
 class Forum extends React.Component {
   constructor(props){
@@ -301,47 +288,34 @@ class Forum extends React.Component {
 
     return (
       <ThemeProvider theme={theme}>
-        <SectionContainer className='container-fluid'>
-          <div className="row">
-            <div className='col-12'>
-            	<MainHeader>Purdue Unal Fall 2018</MainHeader>
-            </div>
-          </div>
-          <Control className="row">
-            <div className='col-4 offset-2 flex'>
-              <NewThreadButton onClick={this.saveStat}>Create a new thread</NewThreadButton>
-              {this.props.user.isAdmin 
-                && this.state.hacks 
-                && <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
-              {this.props.user.isAdmin 
-                && this.state.hacks 
-                && this.state.hacks[this.state.selectedHack].forums
-                && <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
-            </div>
-            <SearchBar className='col-4'>
+        <SectionContainer>
+          <MainHeader>Purdue Unal Spring 2019</MainHeader>
+          <h2>General discussion</h2>
+          <p>Welcome to the Ironhacks forum! Feel free to talk about anything related with the task. You can also share code here.</p>
+          <Control>
+            <NewThreadButton onClick={this.saveStat}>START A NEW TOPIC</NewThreadButton>
+            {this.props.user.isAdmin 
+              && this.state.hacks 
+              && <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
+            {this.props.user.isAdmin 
+              && this.state.hacks 
+              && this.state.hacks[this.state.selectedHack].forums
+              && <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
+            <SearchBar>
               <input type='text' placeholder='Search...'/>
               <button><img src={searchIcon} alt='searchIcon'/></button>
             </SearchBar>
           </Control>
-          <div className="row">
-            <ForumThreads className='col-8 offset-2'>
-              <ForumHeader><h2>General discussion</h2></ForumHeader>
-              {this.state.threads.map((thread, index) => {
-                return(
-                  <ThreadPreview
-                    key={thread.id}
-                    thread={thread}
-                    user={this.props.user}
-                  />
-                )
-              })}
-            </ForumThreads>
-          </div>
-          <div className="row sponsors-div">
-            <div className='col-8 offset-2'>
-              <SponsorsBanner></SponsorsBanner>
-            </div>
-          </div>
+          {this.state.threads.map((thread, index) => {
+            return(
+              <ThreadPreview
+                key={thread.id}
+                thread={thread}
+                user={this.props.user}
+              />
+            )
+          })}
+          <SponsorsBanner></SponsorsBanner>
         </SectionContainer>
       </ThemeProvider>
     );

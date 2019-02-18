@@ -13,7 +13,8 @@ export const getCurrentPhase = (phasesDates) => {
 }
 
 export const getReactionViewformat = (date) => {
-  return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+  const minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+  return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} - ${date.getHours()}:${minutes}`
 }
 
 export const getDatesDifference = (date) => {

@@ -39,13 +39,13 @@ class SponsorsBanner extends React.Component {
     return (
       <ThemeProvider theme={theme}>
             <BannerContainer>
-              <img src={githubLogo} alt='githubLogo'/>
-              <img src={nsfLogo} alt='nsfLogo'/>
-              <img src={redhatLogo} alt='redHatLogo'/>
-              <img src={socrataLogo} alt='socrataLogo'/>
-              <img src={techNexusLogo} alt='techNexusLogo'/>
-              <img src={UNALLogo} alt='UNALLogo'/>
-              <img src={PurdueLogo} alt='PurdueLogo'/>
+              <a href="https://github.com" rel="noopener noreferrer"><img src={githubLogo} alt='githubLogo'/></a>
+              <a href="https://www.nsf.gov" rel="noopener noreferrer"><img src={nsfLogo} alt='nsfLogo'/></a>
+              <a href="https://www.redhat.com/en" rel="noopener noreferrer"><img src={redhatLogo} alt='redHatLogo'/></a>
+              <a href="https://socrata.com/" rel="noopener noreferrer"><img src={socrataLogo} alt='socrataLogo'/></a>
+              <a href="https://www.technexus.com/" rel="noopener noreferrer"><img src={techNexusLogo} alt='techNexusLogo'/></a>
+              <a href="http://unal.edu.co/" rel="noopener noreferrer"><img src={UNALLogo} alt='UNALLogo'/></a>
+              <a href="https://www.purdue.edu/" rel="noopener noreferrer"><img src={PurdueLogo} alt='PurdueLogo'/></a>
             </BannerContainer>
       </ThemeProvider>
     );

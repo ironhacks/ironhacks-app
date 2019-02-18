@@ -14,8 +14,12 @@ import DislikeReaction from './img/dislike-reaction.svg';
 import LikeReaction from './img/like-reaction.svg';
 
 const theme = Constants.ReactionsViewTheme;
-//Reactions displayer
-const Reactions = styled('div')`
+
+const Container = styled('div')`
+  display: flex;
+`;
+
+const ItemData = styled('div')`
   display: flex;
   align-items: center;
   height: 30px;
@@ -23,26 +27,24 @@ const Reactions = styled('div')`
   border-radius: ${Constants.universalBorderRadius};
   display: inline-flex;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 9px;
+
+  span {
+    margin: 0;
+  }
+`;
+
+const Reactions = styled('div')`
+  height: 30px;
+  margin-left: auto;
 
   img {
     height: 14px;
     width 22px;
     object-fit: contain;
   }
-
-  span {
-    margin: 0;
-  }
 `;
-//Reaction view Props:
-/*
-* likes : Number = The amount of likes.
-* dislikes : Number = The amount of dislikes.
-* hearts : Number = The amount of Hearts.
-* comments : Number = The amount of comments.
-*
-*/
+
 class ReactionsView extends React.Component {
   constructor(props){
     super(props);
@@ -98,6 +100,8 @@ class ReactionsView extends React.Component {
       } else {
         _this.setState({
           date,
+          likes: [3,3,3,3],
+          dislikes: [3,3,3,3,3],
         })
       }
     })
@@ -109,14 +113,16 @@ class ReactionsView extends React.Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <div>
-        <Reactions>
-          {!this.state.totalComments && 
-            <span>{`${this.state.date} ${this.state.likes || this.state.dislikes ? '|' : ''}`}</span>
-          }
-          {this.state.totalComments && 
-            <span>{`${this.state.date} | ${this.state.totalComments - 1} comments ${this.state.likes || this.state.dislikes ? '|' : ''}`}</span>
-          }
+        <Container>
+          <ItemData>
+            {!this.state.totalComments && 
+              <span>{`${this.state.date}`}</span>
+            }
+            {this.state.totalComments && 
+              <span>{`${this.state.date} | ${this.state.totalComments - 1} comments`}</span>
+            }
+          </ItemData>
+          <Reactions>
           {this.state.likes && 
             <React.Fragment>
               <span>{`${this.state.likes.length}`}</span>
@@ -129,8 +135,8 @@ class ReactionsView extends React.Component {
               <img src={DislikeReaction} alt='likeReaction'/>
             </React.Fragment>
           }
-        </Reactions>
-        </div>
+          </Reactions>
+        </Container>
       </ThemeProvider>
     );
   }

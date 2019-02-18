@@ -8,7 +8,7 @@ import React from 'react';
 import styled, {ThemeProvider} from 'styled-components';
 import PropTypes from 'prop-types';
 //Router
-import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 //Custom Components
 import ReactionsView from './reactionsView.js';
 //Custom Constants
@@ -22,28 +22,54 @@ const PreviewContainer = styled('div')`
   display: flex;
   flex-direction: column;
   border-radius: ${Constants.universalBorderRadius};
-  background-color: ${props => props.theme.backgroundColor};
+  background-color: white;
   margin-bottom: ${Constants.threadPreviewBottomMargin};
   padding: 10px 15px;
+  border: 1px solid #DADADA;
   transition: background-color 0.2s;
 
-  &:hover {
-    cursor: pointer;
-    background-color: ${props => props.theme.highlightedTextBgColor};
+    background-color: #fff8e4;
+  :nth-child(odd) {
   }
 
   h2 {
     font-size: 20px;
     font-weight: 700;
-    margin-top: 10px;
-    margin-bottom: 0;
-    line-height: 15px;
+    margin: 0;
+    line-height: 17px;
+
+    a {
+      color: black;
+    }
+
+    .author-name {
+      font-weight: 600;
+      font-style: italic;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
   }
 
-  .author-name {
-    font-style: italic;
-    margin-bottom: 10px;
-  }
+`;
+
+const UserName = styled('div')`
+  height: 60px;
+  display: flex;
+  align-items: center;
+`;
+
+const UserImage = styled('div')`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  margin-right: 15px;
+  font-weight: 800;
+  font-style: normal;
+  background-color: #FFCE35;
+  border-radius: 20px;
 `;
 
 const Separator = styled('div')`
@@ -55,7 +81,11 @@ const Separator = styled('div')`
 class ThreadPreview extends React.Component {
   constructor(props) {
     super(props);
+    const { authorName } = props.thread;
+    const splitedName = authorName.split(' ')
+    const profileLetters = splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1)
     this.state = {
+      profileLetters,
       navigate: false,
       referrer: null,
     };
@@ -75,17 +105,21 @@ class ThreadPreview extends React.Component {
       },
     };
     registerStats(statData);
-    this.setState({referrer: 'forum/thread/' + this.props.thread.id});
   }
   
   render() {
-    const { referrer } = this.state;
-    if (referrer) return <Redirect push to={{ pathname: referrer, state: { thread: this.props.thread}}} />;
     return (
       <ThemeProvider theme={theme}>
-        <PreviewContainer to={'forum/thread/' + this.props.thread.id} onClick={this.handleClick}>
-          <h2>{this.props.thread.title}</h2>
-          <span className='author-name'>{this.props.thread.authorName}</span>
+        <PreviewContainer>
+          <UserName>
+            <UserImage>{this.state.profileLetters}</UserImage>
+            <h2><Link 
+              to={{ pathname: `forum/thread/${this.props.thread.id}`, state: { thread: this.props.thread}}}
+              onClick={this.handleClick}>{this.props.thread.title}
+            </Link><br/>
+            <span className='author-name'>Posted by: {this.props.thread.authorName}</span>
+            </h2>
+          </UserName>
           <Separator/>
           <ReactionsView 
             commentId={this.props.thread.comments[0]}
