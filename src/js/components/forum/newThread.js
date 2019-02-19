@@ -29,6 +29,18 @@ const SectionContainer = styled('div')`
 const Header = styled('div')`
   width 100%;
   margin-top: 25px;
+
+  label {
+    font-weight: 700;
+    font-size: 18px;
+
+    span {
+      font-weight: 500;
+      font-style: italic;
+      font-size: 12px;
+      color: #c02222;
+    }
+  }
 `;
 
 const EditorContainer = styled('div')`
@@ -111,7 +123,7 @@ class NewThread extends React.Component {
       currentHack: cookies.get('currentHack') || null,
       forum: cookies.get('currentForum') || null,
       user,
-      titleValue: "",
+      title: "",
       markdown: "",
       mustNavigate: false,
       selectedHack: 0,
@@ -255,6 +267,7 @@ class NewThread extends React.Component {
 //---------------------------------------- Admin features ------------------------------------------
 
   render() {
+    console.log(this.state)
     if (this.state.loading) {
       return (
         <ThemeProvider theme={theme}>
@@ -269,8 +282,9 @@ class NewThread extends React.Component {
       <ThemeProvider theme={theme}>
         <SectionContainer>
           <Header>
-            <h1>New Thread</h1>
+            <h1>New Topic</h1>
             <p> Bellow you will find a <strong><i>Markdown Editor</i></strong>, so you can style your Thread using Markdown syntax <strong>(If you don't know Markdown, please check <a target="_blank" rel="noopener noreferrer" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">this!</a>)</strong>. Write on the left, you will see the preview on the right.</p>
+            <label>Title <span>REQUIRED</span></label><br/>
             <TitleInput type='text' placeholder='Thread Title..' onChange={this.handleInputChange} name='title'/>
             {this.props.user.isAdmin && 
             <AdminSection>

@@ -25,8 +25,6 @@ const ItemData = styled('div')`
   height: 30px;
   background-color: ${props => props.theme.backgroundColor};
   border-radius: ${Constants.universalBorderRadius};
-  display: inline-flex;
-  align-items: center;
   padding: 0 9px;
 
   span {
@@ -35,6 +33,8 @@ const ItemData = styled('div')`
 `;
 
 const Reactions = styled('div')`
+  display: flex;
+  align-items: center;
   height: 30px;
   margin-left: auto;
 
@@ -124,10 +124,10 @@ class ReactionsView extends React.Component {
           </ItemData>
           <Reactions>
           {this.state.likes && 
-            <React.Fragment>
+            <div className=>
               <span>{`${this.state.likes.length}`}</span>
               <img src={LikeReaction} alt='likeReaction'/>
-            </React.Fragment>
+            </div>
           }
           {this.state.dislikes  && 
             <React.Fragment>
