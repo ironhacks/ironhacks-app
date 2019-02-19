@@ -103,21 +103,6 @@ const SearchBar = styled('form')`
     }
   }
 `;
-//ForumHeader
-const ForumHeader = styled('div')`
-  width: 100%;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-  margin-bottom: ${Constants.threadPreviewBottomMargin};
-  background-color: ${Constants.forumHeaderColor}
-  border-radius: ${Constants.universalBorderRadius}
-
-  h2 {
-    margin-bottom: 0;
-  }
-`;
 
 class Forum extends React.Component {
   constructor(props){

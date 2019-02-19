@@ -188,6 +188,7 @@ class Header extends React.Component {
     }
     this.getUserName()
     this.userMenuRef = React.createRef();
+    this.navMenuRef = React.createRef();
   }
 
   componentDidMount() {
@@ -199,8 +200,9 @@ class Header extends React.Component {
   };
 
   handleClickOutside = (event) => {
-    const ref = this.userMenuRef.current;
-    if (ref && !ref.contains(event.target)) {
+    const userMenuRef = this.userMenuRef.current;
+    const navMenuRef = this.navMenuRef.current
+    if (userMenuRef && !userMenuRef.contains(event.target) && navMenuRef && !navMenuRef.contains(event.target)) {
       this.setState({
         showMenu: 'none',
         showUserMenu: 'none'
@@ -276,7 +278,7 @@ class Header extends React.Component {
               <div className="col-5"/> 
               :
               <div className="col-5 menu">
-                <NavContainer display={this.state.showMenu}>
+                <NavContainer display={this.state.showMenu} innerRef={this.navMenuRef}>
                   <button onClick={this.showMenu}>
                     <img src={menuIcon} alt='menu_icon'/>
                   </button>

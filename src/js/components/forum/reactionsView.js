@@ -23,25 +23,10 @@ const ItemData = styled('div')`
   display: flex;
   align-items: center;
   height: 30px;
-  background-color: ${props => props.theme.backgroundColor};
   border-radius: ${Constants.universalBorderRadius};
-  padding: 0 9px;
 
   span {
     margin: 0;
-  }
-`;
-
-const Reactions = styled('div')`
-  display: flex;
-  align-items: center;
-  height: 30px;
-  margin-left: auto;
-
-  img {
-    height: 14px;
-    width 22px;
-    object-fit: contain;
   }
 `;
 
@@ -64,18 +49,9 @@ class ReactionsView extends React.Component {
     if( this.state.commentData ) {
       const creationDate = DateFormater.getFirebaseDate(this.state.commentData.createdAt);
       const date = DateFormater.getReactionViewformat(creationDate);
-      if (this.state.commentData.reactions) {
-        const { likes, dislikes } = this.state.commentData.reactions;
-        this.setState({
-          date,
-          likes,
-          dislikes
-        })
-      } else {
-        this.setState({
-          date,
-        })
-      }
+      this.setState({
+        date,
+      })
     } else {
       this.getComment();
     }
@@ -90,20 +66,9 @@ class ReactionsView extends React.Component {
       const data = doc.data();
       const creationDate = DateFormater.getFirebaseDate(data.createdAt);
       const date = DateFormater.getReactionViewformat(creationDate);
-      if (data.reactions) {
-        const { likes, dislikes } = data.reactions;
-        _this.setState({
-          date,
-          likes,
-          dislikes
-        })
-      } else {
-        _this.setState({
-          date,
-          likes: [3,3,3,3],
-          dislikes: [3,3,3,3,3],
-        })
-      }
+      _this.setState({
+        date,
+      })
     })
     .catch(function(error) {
         console.error("Error getting documents: ", error);
@@ -116,26 +81,12 @@ class ReactionsView extends React.Component {
         <Container>
           <ItemData>
             {!this.state.totalComments && 
-              <span>{`${this.state.date}`}</span>
+              <span>{`Posted ${this.state.date}`}</span>
             }
             {this.state.totalComments && 
-              <span>{`${this.state.date} | ${this.state.totalComments - 1} comments`}</span>
+              <span>{`Posted ${this.state.date} | ${this.state.totalComments - 1} comments`}</span>
             }
           </ItemData>
-          <Reactions>
-          {this.state.likes && 
-            <div className=>
-              <span>{`${this.state.likes.length}`}</span>
-              <img src={LikeReaction} alt='likeReaction'/>
-            </div>
-          }
-          {this.state.dislikes  && 
-            <React.Fragment>
-              <span>{this.state.dislikes.length}</span>
-              <img src={DislikeReaction} alt='likeReaction'/>
-            </React.Fragment>
-          }
-          </Reactions>
         </Container>
       </ThemeProvider>
     );

@@ -6,123 +6,144 @@ import React from 'react';
 
 //Styled components
 import styled from 'styled-components';
-//Custom Constants
-import * as Constants from '../../../constants.js';
 // Images
 import DislikeReaction from './img/dislike-reaction.svg';
 import LikeReaction from './img/like-reaction.svg';
-import Smile from './img/smile.svg';
 
-//Picker displayer
-const ReactionIcon = styled('div')`
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 30px;
+const Reactions = styled('div')`
   display: flex;
   align-items: center;
-  padding-right: 15px;
-  margin-top: 5px;
+  height: 30px;
+  margin-left: auto;
+  cursor: pointer; 
 
-  button {
-    border: none;
-    border-radius: ${Constants.universalBorderRadius};
-    background-color: transparent;
-    transition: background-color 0.3s;
-
-    &:hover {
-      cursor: pointer;
-      background-color: #ffe085;
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  img {
-    height: 25px;
-    width 25px;
-    object-fit: contain;
-  }
-`;
-
-const Picker = styled('div')`
-  display: ${props => props.display};
-  align-items: center;
-  justify-content: space-around;
-  position: absolute;
-  top: 40px;
-  right: 20px;
-  background-color: #f9f9f9;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  border-radius: ${Constants.universalBorderRadius};
-  padding: 5px 5px;
-  z-index: 1;
-
-  button {
-    padding: 5px 8px; 
-    &:hover {
-      cursor: pointer;
-      background-color: #ffe085;
-    }
-  }
-
-  img {
-    margin-left: 6px;
+  .reaction-counter {
+    position: relative
+    display: flex;
+    align-items: center;
+    border: 1px solid #808080;
+    border-radius: 4px;
     
-    &:first-child {
-      margin: 0;
+    span {  
+      padding: 0 5px;
+      width: 24px
+
+      img {
+        height: 24px;
+        width auto;
+        padding: 5px 0;
+        object-fit: contain;
+      }
+
+      &:nth-child(1) {
+      }
+
+      &:nth-child(2) {
+        color: black;
+        text-align: center;
+      }
+    }
+
+    .tooltiptext {
+      visibility: hidden;
+      background-color: #e2e0da;
+      color: #fff;
+      text-align: center;
+      border-radius: 4px;
+      padding: 5px 0;
+      position: absolute;
+      width: 150px;
+      bottom: 120%;
+      left: 50%; 
+      margin-left: -75px;
+      z-index: 1;
+    }
+
+    &:hover {
+      .tooltiptext {
+        visibility: visible;
+      } 
+    }
+
+    &:last-child {
+      margin-left: 10px;
     }
   }
 `;
+
 class ReactionPicker extends React.Component {
   constructor(props){
+    const { commentData } = props;
     super(props)
     this.state = {
-      showPicker: 'none',
+      commentData,
     }
-    this.picker = React.createRef();
   }
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+  componentWillMount() {
+    if ( this.state.commentData ) {
+      if (this.state.commentData.reactions) {
+        const { likes, dislikes } = this.state.commentData.reactions;
+        this.setState({
+          likes: likes.length,
+          dislikes: dislikes.length,
+        });
+      } else {
+        this.setState({
+          likes: 0,
+          dislikes: 0,
+        });
+      }
+    } else {
+      this.getComment();
+    }
+  }
+
+  getComment = () => {
+    const _this = this;
+    this.firestore.collection('comments')
+    .doc(this.state.commentId)
+    .get()
+    .then((doc) => {
+      const data = doc.data();
+      if (data.reactions) {
+        const { likes, dislikes } = data.reactions;
+        _this.setState({
+          likes: likes.length,
+          dislikes: dislikes.length,
+        })
+      } else {
+        _this.setState({
+          likes: 0,
+          dislikes: 0,
+        })
+      }
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
   };
 
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  };
-
-  handleClickOutside = (event) => {
-    const ref = this.picker.current;
-    if (ref && !ref.contains(event.target)) {
-      this.hideReactionPicker();
-    }
-  }
-
-  toggleReactionMenu = (event) => {
-    if(this.state.showPicker === 'none'){
-      this.setState({showPicker: 'flex'})
-    }else{
-      this.setState({showPicker: 'none'})
-    }
-  }
-
-  hideReactionPicker = () => {
-    this.setState({showPicker: 'none'})
-  }
+  handleReactionClick = (event) => {
+    console.log(event.target.id)
+  } 
 
   render() {
     return (
-      <ReactionIcon>
-          <button onClick={this.toggleReactionMenu}>
-            <span>+ </span><img src={Smile} alt='smile'/>
-          </button>
-          <Picker display={this.state.showPicker} innerRef={this.picker}>
-            <button><img src={LikeReaction} alt='like'/></button>
-            <button><img src={DislikeReaction} alt='dislike'/></button>
-        </Picker>
-      </ReactionIcon>
+      <Reactions>
+      {this.state.likes >= 0 && 
+        <div className='reaction-counter' onClick={this.handleReactionClick}>
+          <span><img id='likes' src={LikeReaction} alt='likeReaction'/></span>
+          <span id='likes'>{`${this.state.likes}`}</span>
+        </div>
+      }
+      {this.state.dislikes >= 0 && 
+        <div className='reaction-counter' onClick={this.handleReactionClick}>
+          <span><img id='dislikes' src={DislikeReaction} alt='dislikeReaction'/></span>
+          <span id='dislikes'>{this.state.dislikes}</span>
+        </div>
+      }
+      </Reactions>
     );
   }
 }

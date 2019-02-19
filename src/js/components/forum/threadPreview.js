@@ -1,4 +1,4 @@
-// IronHacks Platform
+  // IronHacks Platform
 // threadPreview.js - Preview that will be displayed on the Forum section
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 //Custom Components
 import ReactionsView from './reactionsView.js';
+import ReactionPicker from './reactionPicker.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 import { registerStats } from '../../utilities/registerStat.js';
@@ -48,6 +49,10 @@ const PreviewContainer = styled('div')`
       margin-bottom: 10px;
       font-size: 15px;
     }
+  }
+  
+  .stats {
+    display: flex;
   }
 
 `;
@@ -89,6 +94,14 @@ class ThreadPreview extends React.Component {
       navigate: false,
       referrer: null,
     };
+
+    this.firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    this.firestore.settings(settings);
+  }
+
+  componentWillMount() {
+    this.getComment();
   }
 
   static contextTypes = {
@@ -106,6 +119,22 @@ class ThreadPreview extends React.Component {
     };
     registerStats(statData);
   }
+
+  getComment = () => {
+    const _this = this;
+    this.firestore.collection('comments')
+    .doc(this.props.thread.comments[0])
+    .get()
+    .then((doc) => {
+      const commentData = doc.data();
+      _this.setState({
+        commentData,
+      })
+    })
+    .catch(function(error) {
+        console.error("Error getting documents: ", error);
+    });
+  };
   
   render() {
     return (
@@ -121,10 +150,18 @@ class ThreadPreview extends React.Component {
             </h2>
           </UserName>
           <Separator/>
-          <ReactionsView 
-            commentId={this.props.thread.comments[0]}
-            totalComments={this.props.thread.comments.length}
-          />
+          <div className='stats'>
+          {this.state.commentData && 
+            <ReactionsView 
+              commentId={this.props.thread.comments[0]}
+              totalComments={this.props.thread.comments.length}
+              commentData={this.state.commentData}
+            />
+          }
+          {this.state.commentData && 
+            <ReactionPicker commentData={this.state.commentData}/>
+          }
+          </div>
         </PreviewContainer>
       </ThemeProvider>
     );
@@ -132,3 +169,6 @@ class ThreadPreview extends React.Component {
 }
 
 export default ThreadPreview;
+          // <ReactionPicker
+          //   commentData={this.state.commentData}
+          // />

@@ -33,6 +33,10 @@ const CommentContainer = styled('div')`
       width: 100%;
     }
   }
+
+  .flex {
+    display: flex;
+  }
 `;
 const Separator = styled('div')`
   height: 1px;
@@ -208,10 +212,12 @@ class CommentView extends React.Component {
           <h2>{this.props.title}</h2>
           <div className='comment-content' dangerouslySetInnerHTML={{__html:this.decodeBody(this.atou(this.props.commentData.body))}}/>
           <Separator/>
-          <ReactionsView 
-            commentData={this.props.commentData}
-          />
-          <ReactionPicker/>
+          <div className='flex'>
+            <ReactionsView 
+              commentData={this.props.commentData}
+            />
+            <ReactionPicker commentData={this.props.commentData}/>
+          </div>
           {this.props.commentData.author === this.state.user.uid && 
             <DeleteButton><img src={TrashIcon} alt="trash-icon" onClick={this.deleteComment}/></DeleteButton>
           }
