@@ -15,14 +15,24 @@ const Reactions = styled('div')`
   align-items: center;
   height: 30px;
   margin-left: auto;
-  cursor: pointer; 
+
+  .liked-disliked {
+    margin-right: 10px;
+    line-height: 45px;
+    font-size: 12px;
+    height: 100%;
+    font-style: italic;
+  }
 
   .reaction-counter {
+
     position: relative
     display: flex;
     align-items: center;
     border: 1px solid #808080;
     border-radius: 4px;
+    transition: background-color 0.3s;
+    cursor: pointer;
     
     span {  
       padding: 0 5px;
@@ -60,6 +70,8 @@ const Reactions = styled('div')`
     }
 
     &:hover {
+      background-color: #e2e0da;
+
       .tooltiptext {
         visibility: visible;
       } 
@@ -71,27 +83,32 @@ const Reactions = styled('div')`
   }
 `;
 
+const reverseReaction = {
+  likes: 'dislikes',
+  dislikes: 'likes',
+}
+
 class ReactionPicker extends React.Component {
   constructor(props){
-    const { commentData } = props;
     super(props)
-    this.state = {
-      commentData,
-    }
+    console.log(props)
+    this.firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    this.firestore.settings(settings);
   }
 
   componentWillMount() {
-    if ( this.state.commentData ) {
-      if (this.state.commentData.reactions) {
-        const { likes, dislikes } = this.state.commentData.reactions;
+    if ( this.props.commentData ) {
+      if (this.props.commentData.reactions) {
+        const { likes, dislikes } = this.props.commentData.reactions;
         this.setState({
-          likes: likes.length,
-          dislikes: dislikes.length,
+          likes: likes,
+          dislikes: dislikes,
         });
       } else {
         this.setState({
-          likes: 0,
-          dislikes: 0,
+          likes: [],
+          dislikes: [],
         });
       }
     } else {
@@ -102,20 +119,20 @@ class ReactionPicker extends React.Component {
   getComment = () => {
     const _this = this;
     this.firestore.collection('comments')
-    .doc(this.state.commentId)
+    .doc(this.props.commentId)
     .get()
     .then((doc) => {
       const data = doc.data();
       if (data.reactions) {
         const { likes, dislikes } = data.reactions;
         _this.setState({
-          likes: likes.length,
-          dislikes: dislikes.length,
+          likes: likes,
+          dislikes: dislikes,
         })
       } else {
         _this.setState({
-          likes: 0,
-          dislikes: 0,
+          likes: [],
+          dislikes: [],
         })
       }
     })
@@ -125,22 +142,52 @@ class ReactionPicker extends React.Component {
   };
 
   handleReactionClick = (event) => {
-    console.log(event.target.id)
+    console.log(this.props)
+    const _this = this;
+    const reactionType = event.target.id;
+    const updatedData = {
+      likes: this.state.likes,
+      dislikes: this.state.dislikes,
+    };
+    if(updatedData[reactionType].includes(this.props.user.uid)) {
+      updatedData[reactionType] = updatedData[reactionType].filter( element => element !== this.props.user.uid)
+    } else {
+      updatedData[reactionType].push(this.props.user.uid);
+      updatedData[reverseReaction[reactionType]] = updatedData[reverseReaction[reactionType]].filter( element => element !== this.props.user.uid)
+    }
+    this.firestore.collection('comments')
+    .doc(this.props.commentId)
+    .update({
+      'reactions.likes': updatedData.likes,
+      'reactions.dislikes': updatedData.dislikes,
+    })
+    .then((response) => {
+      this.setState({likes: updatedData.likes, dislikes: updatedData. dislikes});
+    })
+    .catch(function(error) {
+        console.error("Error updating documents: ", error);
+    });
   } 
 
   render() {
     return (
       <Reactions>
-      {this.state.likes >= 0 && 
-        <div className='reaction-counter' onClick={this.handleReactionClick}>
-          <span><img id='likes' src={LikeReaction} alt='likeReaction'/></span>
-          <span id='likes'>{`${this.state.likes}`}</span>
+      {this.state.likes.includes(this.props.user.uid) && 
+        <span className='liked-disliked'>You liked this.</span>
+      }
+      {this.state.dislikes.includes(this.props.user.uid) && 
+        <span className='liked-disliked'>You disliked this.</span>
+      }
+      {this.state.likes.length >= 0 && 
+        <div className='reaction-counter' id='likes' onClick={this.handleReactionClick}>
+          <span id='likes'><img id='likes' src={LikeReaction} alt='likeReaction'/></span>
+          <span id='likes'>{`${this.state.likes.length}`}</span>
         </div>
       }
-      {this.state.dislikes >= 0 && 
-        <div className='reaction-counter' onClick={this.handleReactionClick}>
-          <span><img id='dislikes' src={DislikeReaction} alt='dislikeReaction'/></span>
-          <span id='dislikes'>{this.state.dislikes}</span>
+      {this.state.dislikes.length >= 0 && 
+        <div className='reaction-counter' onClick={this.handleReactionClick} id='dislikes'>
+          <span id='dislikes'><img id='dislikes' src={DislikeReaction} alt='dislikeReaction'/></span>
+          <span id='dislikes'>{this.state.dislikes.length}</span>
         </div>
       }
       </Reactions>

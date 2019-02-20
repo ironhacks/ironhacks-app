@@ -159,7 +159,11 @@ class ThreadPreview extends React.Component {
             />
           }
           {this.state.commentData && 
-            <ReactionPicker commentData={this.state.commentData}/>
+            <ReactionPicker
+              commentData={this.state.commentData}
+              commentId={this.props.thread.comments[0]}
+              user={this.props.user}
+            />
           }
           </div>
         </PreviewContainer>
