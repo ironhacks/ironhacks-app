@@ -139,7 +139,6 @@ class Forum extends React.Component {
         thread.id = doc.id;
         threads.push(thread);
       });
-      console.log(threads)
       threads = _this.sortThreads(threads);
       _this.setState({threads: threads});
     })

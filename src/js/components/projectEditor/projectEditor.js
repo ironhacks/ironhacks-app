@@ -153,7 +153,8 @@ const commitSurveys = {
   2: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_2hHiUsFZ0Urzbmt',
   3: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8IgnHWN5eqeyYlL',
   4: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_3PhdvoDMbShZbPn',
-  5: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_6usomOXT2lRTXRb',
+  5: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_6R0ytiGxG2WTjs9',
+  7: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_6usomOXT2lRTXRb',
 }
 
 

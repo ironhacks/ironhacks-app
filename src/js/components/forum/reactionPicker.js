@@ -91,7 +91,6 @@ const reverseReaction = {
 class ReactionPicker extends React.Component {
   constructor(props){
     super(props)
-    console.log(props)
     this.firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     this.firestore.settings(settings);
@@ -142,7 +141,6 @@ class ReactionPicker extends React.Component {
   };
 
   handleReactionClick = (event) => {
-    console.log(this.props)
     const _this = this;
     const reactionType = event.target.id;
     const updatedData = {
