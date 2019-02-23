@@ -145,24 +145,25 @@ class PersonalScoreItem extends React.Component {
   }
 
   toggleSection = () => {
+    const statData = {
+      userId: this.state.userId,
+      event: 'on-personal-item-click',
+      metadata: {
+        location: 'results-page/personal-score',
+        phase: this.props.phase + 1,
+        hackId: this.state.currentHack,
+        type: this.props.type,
+      }
+    }
+    registerStats(statData);
     this.setState((prevState, props) => {
       const active = !prevState.active;
-      // const statData = {
-      //   userId: this.state.userId,
-      //   event: 'on-phase-click',
-      //   metadata: {
-      //     location: 'results-page',
-      //     phase: phase + 1,
-      //     hackId: this.state.currentHack,
-      //   }
-      // }
       return { active };
     })
   }
 
   
   render() {
-    console.log(this.props)
     return (
       <ItemContainer type={this.props.type}>
         <Title type={this.props.type} onClick={this.toggleSection}>  

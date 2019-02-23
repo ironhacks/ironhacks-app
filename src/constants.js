@@ -1,4 +1,4 @@
-7//CSS color constants
+//CSS color constants
 export const mainBgColor = '#FFCE35';
 export const buttonHighlightedBgColor = '#E6B92F'
 export const mainTextColor = 'black';

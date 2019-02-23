@@ -71,24 +71,20 @@ const UserImage = styled('div')`
   border-radius: 20px;
 `;
 
-const ConverterConfig = {
-  tables: true,
-  simplifiedAutoLink: true,
-  prefixHeaderId: true, //Add a prefix to the generated header ids. Passing a string will prefix that string to the header id. Setting to true will add a generic 'section' prefix.
-  strikethrough: true, //Enable support for strikethrough syntax. ~~strikethrough~~ as <del>strikethrough</del>
-  headerLevelStart: 3, // #foo parse to <h3>foo</h3>
-  tasklists: true,
-};
 
+const Control = styled('div')`
+  position: absolute;
+  display: flex;
+  top: 10px;
+  right: 15px;
+  height: 30px;
+
+`;
 
 const DeleteButton = styled('button')`
-  position: absolute;
-  top: 0;
-  right: 70px;
   height: 30px;
   display: flex;
   align-items: center;
-  margin-top: 5px;
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -106,6 +102,14 @@ const DeleteButton = styled('button')`
   }
 `;
 
+const ConverterConfig = {
+  tables: true,
+  simplifiedAutoLink: true,
+  prefixHeaderId: true, //Add a prefix to the generated header ids. Passing a string will prefix that string to the header id. Setting to true will add a generic 'section' prefix.
+  strikethrough: true, //Enable support for strikethrough syntax. ~~strikethrough~~ as <del>strikethrough</del>
+  headerLevelStart: 3, // #foo parse to <h3>foo</h3>
+  tasklists: true,
+};
 //Comment view Props (inside commentData):
 /*
 * authorName : String = The name of the autor.
@@ -216,10 +220,17 @@ class CommentView extends React.Component {
             <ReactionsView 
               commentData={this.props.commentData}
             />
-            <ReactionPicker commentData={this.props.commentData}/>
+            <ReactionPicker 
+              commentData={this.props.commentData}
+              commentId={this.props.commentData.id}
+              user={this.state.user}
+            />
           </div>
           {this.props.commentData.author === this.state.user.uid && 
-            <DeleteButton><img src={TrashIcon} alt="trash-icon" onClick={this.deleteComment}/></DeleteButton>
+            <Control>
+              <DeleteButton><img src={TrashIcon} alt="trash-icon" onClick={this.deleteComment}/></DeleteButton>
+              <DeleteButton><img src={TrashIcon} alt="trash-icon" onClick={this.deleteComment}/></DeleteButton>
+            </Control>
           }
         </CommentContainer>
       </ThemeProvider>

@@ -145,6 +145,7 @@ class Results extends React.Component {
       _this.setState({
         hackData,
         currentPhase,
+        selectedPhase: currentPhase, 
       });
       _this.getForumData();
     })
@@ -206,6 +207,8 @@ class Results extends React.Component {
   }
 
   getResults = (phase) => {
+    console.log(phase)
+    console.log(this.state.hackData.phases)
     const endDate = DateFormater.getFirebaseDate(this.state.hackData.phases[phase - 1].codingStartEnd);
     this.setState({gettingResults: true})
     const getResults = window.firebase.functions().httpsCallable('getPhaseResults');
@@ -229,10 +232,10 @@ class Results extends React.Component {
   saveLikedCompetitors = (likedCompetitors) => {
     const saveLikedCompetitors = window.firebase.functions().httpsCallable('saveLikedCompetitors');
     const _this = this;
-    const { currentHack: hackId, currentPhase: phase} = this.state;
+    const { currentHack: hackId, selectedPhase: phase} = this.state;
     saveLikedCompetitors({
       userId: this.state.user.uid,
-      phase: phase - 1,
+      phase,
       hackId,
       likedCompetitors}
     ).then((response) => {
@@ -256,7 +259,6 @@ class Results extends React.Component {
         </ThemeProvider>
       );
     }
-
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
@@ -309,7 +311,11 @@ class Results extends React.Component {
               <React.Fragment>
                 <h2>{Texts.personalFeddback.title}</h2>
                 {Texts.personalFeddback.subTitle}
-                <PersonalScoreSection scores={this.state.results} userId={this.state.user.uid} hackId={this.state.currentHack}/>
+                <PersonalScoreSection
+                  scores={this.state.results}
+                  userId={this.state.user.uid}
+                  hackId={this.state.currentHack}
+                  currentPhase={this.state.selectedPhase}/>
               </React.Fragment>
             }
             {!this.state.gettingResults && !this.state.results && <h2 className='no-results'>Not results for this phase yet.</h2>}

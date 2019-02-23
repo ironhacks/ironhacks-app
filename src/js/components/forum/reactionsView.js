@@ -9,9 +9,6 @@ import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
-// Images
-import DislikeReaction from './img/dislike-reaction.svg';
-import LikeReaction from './img/like-reaction.svg';
 
 const theme = Constants.ReactionsViewTheme;
 

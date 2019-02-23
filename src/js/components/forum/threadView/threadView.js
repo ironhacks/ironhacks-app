@@ -167,7 +167,6 @@ class ThreadView extends React.Component {
   };
 
   render() {
-    console.log(this.state , this.props)
     return (
       <ThemeProvider theme={theme}>
       <SectionContainer>

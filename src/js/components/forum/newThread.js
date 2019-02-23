@@ -10,6 +10,7 @@ import styled, {ThemeProvider} from 'styled-components';
 //Custom Constants
 import * as Constants from '../../../constants.js';
 //Custom components
+import BreadCrumbs from '../../utilities/breadCrumbs.js';
 import ForumSelector from './forumSelector.js'
 import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 import Loader from '../../utilities/loader.js';
@@ -18,6 +19,7 @@ const theme = Constants.AppSectionTheme;
 
 //Section container
 const SectionContainer = styled('div')`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -267,7 +269,6 @@ class NewThread extends React.Component {
 //---------------------------------------- Admin features ------------------------------------------
 
   render() {
-    console.log(this.state)
     if (this.state.loading) {
       return (
         <ThemeProvider theme={theme}>
@@ -281,6 +282,7 @@ class NewThread extends React.Component {
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
+          <BreadCrumbs sections={[]} current='newThread'/>
           <Header>
             <h1>New Topic</h1>
             <p> Bellow you will find a <strong><i>Markdown Editor</i></strong>, so you can style your Thread using Markdown syntax <strong>(If you don't know Markdown, please check <a target="_blank" rel="noopener noreferrer" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">this!</a>)</strong>. Write on the left, you will see the preview on the right.</p>

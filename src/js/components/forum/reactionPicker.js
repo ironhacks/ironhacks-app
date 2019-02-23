@@ -7,8 +7,10 @@ import React from 'react';
 //Styled components
 import styled from 'styled-components';
 // Images
-import DislikeReaction from './img/dislike-reaction.svg';
 import LikeReaction from './img/like-reaction.svg';
+import LikeReactionHighLighted from './img/like-reaction-highlight.svg';
+import DislikeReaction from './img/dislike-reaction.svg';
+import DislikeReactionHighLighted from './img/dislike-reaction-highlight.svg';
 
 const Reactions = styled('div')`
   display: flex;
@@ -16,70 +18,77 @@ const Reactions = styled('div')`
   height: 30px;
   margin-left: auto;
 
-  .liked-disliked {
-    margin-right: 10px;
-    line-height: 45px;
-    font-size: 12px;
-    height: 100%;
-    font-style: italic;
+`;
+
+const ReactionCounter = styled('div')`
+  position: relative
+  display: flex;
+  align-items: center;
+  border: 1px solid;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+
+  &#likes {
+    border-color: ${(props) => props.highLighted ? '#88a923' : '#808080'};
+  }
+  
+  &#dislikes {
+    border-color: ${(props) => props.highLighted ? '#ff916d' : '#808080'}; 
   }
 
-  .reaction-counter {
+  span {  
+    padding: 0 5px;
+    width: 24px
 
-    position: relative
-    display: flex;
-    align-items: center;
-    border: 1px solid #808080;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-    cursor: pointer;
-    
-    span {  
-      padding: 0 5px;
-      width: 24px
+    img {
+      height: 24px;
+      width auto;
+      padding: 5px 0;
+      object-fit: contain;
+    }
 
-      img {
-        height: 24px;
-        width auto;
-        padding: 5px 0;
-        object-fit: contain;
+    &:nth-child(1) {
+    }
+
+    &:nth-child(2) {
+      text-align: center;
+      
+      &#likes {
+        color: ${(props) => props.highLighted ? '#88a923' : '#808080'};
       }
-
-      &:nth-child(1) {
-      }
-
-      &:nth-child(2) {
-        color: black;
-        text-align: center;
+      
+      &#dislikes {
+        color: ${(props) => props.highLighted ? '#ff916d' : '#808080'}; 
       }
     }
+  }
+
+  .tooltiptext {
+    visibility: hidden;
+    background-color: #e2e0da;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 0;
+    position: absolute;
+    width: 150px;
+    bottom: 120%;
+    left: 50%; 
+    margin-left: -75px;
+    z-index: 1;
+  }
+
+  &:hover {
+    background-color: #e2e0da;
 
     .tooltiptext {
-      visibility: hidden;
-      background-color: #e2e0da;
-      color: #fff;
-      text-align: center;
-      border-radius: 4px;
-      padding: 5px 0;
-      position: absolute;
-      width: 150px;
-      bottom: 120%;
-      left: 50%; 
-      margin-left: -75px;
-      z-index: 1;
-    }
+      visibility: visible;
+    } 
+  }
 
-    &:hover {
-      background-color: #e2e0da;
-
-      .tooltiptext {
-        visibility: visible;
-      } 
-    }
-
-    &:last-child {
-      margin-left: 10px;
-    }
+  &:last-child {
+    margin-left: 10px;
   }
 `;
 
@@ -100,14 +109,20 @@ class ReactionPicker extends React.Component {
     if ( this.props.commentData ) {
       if (this.props.commentData.reactions) {
         const { likes, dislikes } = this.props.commentData.reactions;
+        const isLiked = likes.includes(this.props.user.uid);
+        const isDisliked = dislikes.includes(this.props.user.uid);
         this.setState({
           likes: likes,
           dislikes: dislikes,
+          isLiked,
+          isDisliked,
         });
       } else {
         this.setState({
           likes: [],
           dislikes: [],
+          isLiked: false,
+          isDisliked: false,
         });
       }
     } else {
@@ -124,14 +139,20 @@ class ReactionPicker extends React.Component {
       const data = doc.data();
       if (data.reactions) {
         const { likes, dislikes } = data.reactions;
+        const isLiked = likes.includes(this.props.user.uid);
+        const isDisliked = dislikes.includes(this.props.user.uid);
         _this.setState({
-          likes: likes,
-          dislikes: dislikes,
+          likes,
+          dislikes,
+          isLiked,
+          isDisliked,
         })
       } else {
         _this.setState({
           likes: [],
           dislikes: [],
+          isLiked: false,
+          isDisliked: false,
         })
       }
     })
@@ -160,7 +181,14 @@ class ReactionPicker extends React.Component {
       'reactions.dislikes': updatedData.dislikes,
     })
     .then((response) => {
-      this.setState({likes: updatedData.likes, dislikes: updatedData. dislikes});
+      const isLiked = updatedData.likes.includes(_this.props.user.uid);
+      const isDisliked = updatedData.dislikes.includes(_this.props.user.uid);
+      _this.setState({
+        likes: updatedData.likes,
+        dislikes: updatedData.dislikes,
+        isLiked,
+        isDisliked,
+      });
     })
     .catch(function(error) {
         console.error("Error updating documents: ", error);
@@ -170,23 +198,17 @@ class ReactionPicker extends React.Component {
   render() {
     return (
       <Reactions>
-      {this.state.likes.includes(this.props.user.uid) && 
-        <span className='liked-disliked'>You liked this.</span>
-      }
-      {this.state.dislikes.includes(this.props.user.uid) && 
-        <span className='liked-disliked'>You disliked this.</span>
-      }
       {this.state.likes.length >= 0 && 
-        <div className='reaction-counter' id='likes' onClick={this.handleReactionClick}>
-          <span id='likes'><img id='likes' src={LikeReaction} alt='likeReaction'/></span>
+        <ReactionCounter id='likes' onClick={this.handleReactionClick} highLighted={this.state.isLiked}>
+          <span id='likes'><img id='likes' src={this.state.isLiked ? LikeReactionHighLighted : LikeReaction} alt='likeReaction'/></span>
           <span id='likes'>{`${this.state.likes.length}`}</span>
-        </div>
+        </ReactionCounter>
       }
       {this.state.dislikes.length >= 0 && 
-        <div className='reaction-counter' onClick={this.handleReactionClick} id='dislikes'>
-          <span id='dislikes'><img id='dislikes' src={DislikeReaction} alt='dislikeReaction'/></span>
+        <ReactionCounter id='dislikes' onClick={this.handleReactionClick} highLighted={this.state.isDisliked}>
+          <span id='dislikes'><img id='dislikes' src={this.state.isDisliked ? DislikeReactionHighLighted : DislikeReaction} alt='dislikeReaction'/></span>
           <span id='dislikes'>{this.state.dislikes.length}</span>
-        </div>
+        </ReactionCounter>
       }
       </Reactions>
     );

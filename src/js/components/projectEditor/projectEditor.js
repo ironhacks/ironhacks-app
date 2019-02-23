@@ -126,6 +126,7 @@ const ShowPreview = styled('button')`
   padding-left: 8px;
   background-color: lightslategrey;
   border-radius: 15px;
+  z-index: 2;
 
   i {
     border: solid black;
@@ -154,7 +155,8 @@ const commitSurveys = {
   3: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8IgnHWN5eqeyYlL',
   4: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_3PhdvoDMbShZbPn',
   5: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_6R0ytiGxG2WTjs9',
-  7: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_6usomOXT2lRTXRb',
+  6: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8rhPwaWZHGUz49v',
+  7: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_dbZU35dwHd0QKY5',
 }
 
 
@@ -268,6 +270,7 @@ class ProjectEditor extends React.Component {
 
   getCountDown = () => {
     const _this = this;
+    //console.log(this.state.hackData.phases, this.state.currentPhase)
     const phase = this.state.hackData.phases[this.state.currentPhase - 1]
     const countDownDate = new window.firebase.firestore.Timestamp(phase.codingStartEnd.seconds, phase.codingStartEnd.nanoseconds).toDate();
     const timer = setInterval(function() {
