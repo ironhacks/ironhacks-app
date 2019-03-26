@@ -10,7 +10,7 @@
 /build
 
 # firebase confing
-/.firebase
+.firebase
 
 # misc
 .DS_Store
