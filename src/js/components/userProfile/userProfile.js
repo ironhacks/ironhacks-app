@@ -275,13 +275,7 @@ class UserProfile extends React.Component {
             </p>
           </div>
         </ProfileContainer>
-        {this.state.hackData && 
-          <TimeLine
-            phases={this.state.hackData.phases}
-            onClick={this.onPhaseSelection}
-            currentPhase={this.state.currentPhase}
-          />
-        }
+        
         <Examples user={this.state.user}/>
         <h2 className='padding'>D3.js Examples</h2>
         <h2 className='padding'>Projects</h2>
@@ -298,5 +292,13 @@ class UserProfile extends React.Component {
     );
   }
 }
+
+// {this.state.hackData && 
+//           <TimeLine
+//             phases={this.state.hackData.phases}
+//             onClick={this.onPhaseSelection}
+//             currentPhase={this.state.currentPhase}
+//           />
+//         }
 
 export default withCookies(UserProfile);

@@ -69,7 +69,8 @@ class TimeLine extends React.Component {
   }
 
   componentWillMount() {
-    const currentPhase = DateFormater.getCurrentPhase(this.state.phases).index;
+    const phase = DateFormater.getCurrentPhase(this.state.phases) || 0;
+    const currentPhase = phase.index || 0;
     this.setState({currentPhase})
   }
 

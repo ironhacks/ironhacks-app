@@ -534,9 +534,6 @@ class ProjectEditor extends React.Component {
       <ThemeProvider theme={theme}>
         <SectionContainer>
             <ProjectContent>
-              {this.state.readOnly && 
-                <h2>{this.props.location.query.alias}</h2>
-              }
               <h2>{this.state.projectName.toUpperCase()}</h2>
               {!this.state.readOnly && 
                 <div className="control">
