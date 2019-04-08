@@ -10,56 +10,56 @@ const PriorHacksData = [
 				"country": "COL",
 			},
 			{
-				"name": "J",
+				"name": "Jhonatan Sandoval Velasco",
+				"place": "RUNNER UP",
+				"contact": "jjpulidos@unal.edu.co",
+				"country": "COL",
+			},
+			{
+				"name": "Juan Pulido",
 				"place": "THIRD PLACE",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "N",
-				"place": "THIRD PLACE",
+				"name": "Andres Felipe Castellanos Neira",
+				"place": "10th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "G",
-				"place": "THIRD PLACE",
+				"name": "Johan Sebastian Salamanca Gonzalez",
+				"place": "9th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "D",
-				"place": "THIRD PLACE",
+				"name": "Oscar Tinjaca",
+				"place": "5th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "R",
-				"place": "THIRD PLACE",
+				"name": "Cristian Yair Carreño León",
+				"place": "7th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "W",
-				"place": "THIRD PLACE",
+				"name": "Sergio Andrés Ruiz",
+				"place": "6th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "Y",
-				"place": "THIRD PLACE",
+				"name": "Jorge Camilo Colmenares Santos",
+				"place": "4th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "U",
-				"place": "THIRD PLACE",
-				"contact": "jjpulidos@unal.edu.co",
-				"country": "COL",
-			},
-			{
-				"name": "Z",
-				"place": "THIRD PLACE",
+				"name": "Diego Farid Cortes Gutierrez",
+				"place": "8th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
@@ -76,56 +76,56 @@ const PriorHacksData = [
 				"country": "COL",
 			},
 			{
-				"name": "J",
+				"name": "Jhonatan Sandoval Velasco",
+				"place": "RUNNER UP",
+				"contact": "jjpulidos@unal.edu.co",
+				"country": "COL",
+			},
+			{
+				"name": "Juan Pulido",
 				"place": "THIRD PLACE",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "N",
-				"place": "THIRD PLACE",
+				"name": "Andres Felipe Castellanos Neira",
+				"place": "10th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "G",
-				"place": "THIRD PLACE",
+				"name": "Johan Sebastian Salamanca Gonzalez",
+				"place": "9th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "D",
-				"place": "THIRD PLACE",
+				"name": "Oscar Tinjaca",
+				"place": "5th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "R",
-				"place": "THIRD PLACE",
+				"name": "Cristian Yair Carreño León",
+				"place": "7th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "W",
-				"place": "THIRD PLACE",
+				"name": "Sergio Andrés Ruiz",
+				"place": "6th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "Y",
-				"place": "THIRD PLACE",
+				"name": "Jorge Camilo Colmenares Santos",
+				"place": "4th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "U",
-				"place": "THIRD PLACE",
-				"contact": "jjpulidos@unal.edu.co",
-				"country": "COL",
-			},
-			{
-				"name": "Z",
-				"place": "THIRD PLACE",
+				"name": "Diego Farid Cortes Gutierrez",
+				"place": "8th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
@@ -142,56 +142,56 @@ const PriorHacksData = [
 				"country": "COL",
 			},
 			{
-				"name": "J",
+				"name": "Jhonatan Sandoval Velasco",
+				"place": "RUNNER UP",
+				"contact": "jjpulidos@unal.edu.co",
+				"country": "COL",
+			},
+			{
+				"name": "Juan Pulido",
 				"place": "THIRD PLACE",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "N",
-				"place": "THIRD PLACE",
+				"name": "Jorge Camilo Colmenares Santos",
+				"place": "4th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "G",
-				"place": "THIRD PLACE",
+				"name": "Oscar Tinjaca",
+				"place": "5th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "D",
-				"place": "THIRD PLACE",
+				"name": "Sergio Andrés Ruiz",
+				"place": "6th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "R",
-				"place": "THIRD PLACE",
+				"name": "Cristian Yair Carreño León",
+				"place": "7th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "W",
-				"place": "THIRD PLACE",
+				"name": "Diego Farid Cortes Gutierrez",
+				"place": "8th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "Y",
-				"place": "THIRD PLACE",
+				"name": "Johan Sebastian Salamanca Gonzalez",
+				"place": "9th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
 			{
-				"name": "U",
-				"place": "THIRD PLACE",
-				"contact": "jjpulidos@unal.edu.co",
-				"country": "COL",
-			},
-			{
-				"name": "Z",
-				"place": "THIRD PLACE",
+				"name": "Andres Felipe Castellanos Neira",
+				"place": "10th",
 				"contact": "jjpulidos@unal.edu.co",
 				"country": "COL",
 			},
@@ -200,3 +200,18 @@ const PriorHacksData = [
 ]
 
 export default PriorHacksData;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

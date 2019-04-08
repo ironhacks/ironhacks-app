@@ -6,10 +6,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 //Styled components
 import styled, {ThemeProvider} from 'styled-components';
+import PreviousHackItem from './previousHackItem.js';
 //Custom Constants
 import * as Constants from '../../../constants.js';
-//Customs svg
 import PriorHacksData from './priorHacksData.js';
+//Customs svg
 import bulbImg from './img/bulb.svg';
 import UNAL2019 from './img/purdue-UNAL-2019.jpeg';
 import COLFlag from './img/flags/col.svg';
@@ -171,7 +172,6 @@ const HackSelector = styled('div')`
     }
 
   }
-
 `;
 
 const HackCard = styled('div')`
@@ -297,36 +297,7 @@ class Landing extends React.Component {
               return <button onClick={this.changeHack} id={i} key={i}>{hack.name}</button>
             })}
           </HackSelector>
-          <HackCard>
-            <div>
-              <h2>{PriorHacksData[this.state.selectedHack].name}</h2>
-              <p>{PriorHacksData[this.state.selectedHack].description}</p>
-            </div>
-            <div>
-              <img src={UNAL2019} alt="unal_2019"/>
-            </div>
-          </HackCard>
-          <h2>Ranks:</h2>
-          <Table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>Hacker Name</th>
-                <th>Place</th>
-                <th>Contact</th>
-              </tr>
-            </thead>
-            <tbody>
-              {PriorHacksData[this.state.selectedHack].ranks.map((winner) => (
-                <tr key={winner.name + winner.contact}>
-                  <td><img src={COLFlag} alt="col-flag"/></td>
-                  <td>{winner.name}</td>
-                  <td>{winner.place}</td>
-                  <td>{winner.contact}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <PreviousHackItem selectedHack={this.state.selectedHack} />
         </SectionContainer>
         <SectionContainer className='FAQ'>
           <div>
