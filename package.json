@@ -1,0 +1,53 @@
+{
+  "name": "ironhacks-platform",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "/",
+  "dependencies": {
+    "bootstrap": "^4.1.2",
+    "codemirror": "^5.40.2",
+    "draft-js": "^0.10.5",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.21",
+    "react": "^16.4.1",
+    "react-codemirror2": "^5.1.0",
+    "react-cookie": "^3.0.4",
+    "react-day-picker": "^7.2.3",
+    "react-dom": "^16.4.1",
+    "react-mde": "^5.8.0",
+    "react-moment": "^0.7.9",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4",
+    "react-treebeard": "^3.1.0",
+    "showdown": "^1.8.6",
+    "styled-components": "^3.4.0",
+    "sweetalert2": "^7.29.0",
+    "@emotion/core": "^0.13.1",
+    "@emotion/styled": "^0.10.6",
+    "@babel/runtime": "^7.0.0",
+    "deep-equal": "^1.0.1",
+    "prop-types": "^15.6.2",
+    "shallowequal": "^1.1.0",
+    "velocity-react": "^1.4.1"
+  },
+  "dependenciesComments": {
+    "bootstrap": "Css library",
+    "draft-js": "Dependency from react-mde",
+    "moment": "Parse, validate, manipulate, and display dates and times in JavaScript.",
+    "moment-timezone": "Allows timezone use for moment",
+    "react-day-picker": "Calendar Library",
+    "react-moment": "React component for the moment date library.",
+    "react-mde": "Markdown editor",
+    "react-router-dom": "Router, it allow us to navigate through pages",
+    "showdown": "Markdown to HMTL parser, also react-mde's dependency"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.6"
+  }
+}

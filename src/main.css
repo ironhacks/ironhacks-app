@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css?family=Muli:300,400,600,700,900');
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+
+body {
+  font-family: 'Muli', sans-serif;
+  font-size: 16px;
+}
+
+h1, h2, h3 {
+  font-family: 'Muli', sans-serif;
+  font-weight: 800;
+}
+
+.surveyAlert {
+  width: 98vw !important;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.surveyAlert .swal2-content {
+  position: relative;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.surveyAlert .swal2-content #swal2-content {
+  position: relative;
+	display: flex !important;
+	flex-direction: column;
+	flex-grow: 1;
+	width: 100%;
+  height: 100%;
+}
+
+.surveyAlert .swal2-content #swal2-content iframe {
+  border: none;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+}
