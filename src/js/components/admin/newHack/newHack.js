@@ -122,7 +122,7 @@ class NewHack extends React.Component {
   };
 
   onPhaseClick = (phaseIndex, phaseStage) => {
-    var range;
+    let range;
     if(phaseStage === 'coding') {
       range = {
         from: this.state.phases[phaseIndex - 1].coding.start,
@@ -288,7 +288,6 @@ class NewHack extends React.Component {
     });
   };
 // --------------------- Create Hack Process ------------------------ //
-
 
   render() {
     if (this.state.mustNavigate) return <Redirect to={{ pathname: '/admin/dashboard/' + this.state.hackName, state: { hack: this.state.hack, hackId: this.state.hackId}}}/>;
