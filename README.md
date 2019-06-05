@@ -1,1 +1,363 @@
 # the-ironhacks-platform
+
+-- Platform description wording --
+
+# Preparation
+
+The Ironhacks Platform (the platform) use the following firebase services: 
+
++ [Authentication](https://firebase.google.com/docs/auth)
++ [Cloud Firestore](https://firebase.google.com/docs/firestore)
++ [Storage](https://firebase.google.com/docs/storage)
++ [Hosting](https://firebase.google.com/docs/hosting)
++ [Cloud Functions](https://firebase.google.com/docs/functions)
++ [Firebase Auth UI](https://firebase.google.com/docs/auth/web/firebaseui) 
+
+We assume you are familiarized with all these services, how they work, and how to code using them. If you are not familiarized with them please check the Firebase documentation.
+
+The platform also use the following frameworks/third party libraries:
+
++ [React](https://reactjs.org/docs/getting-started.html)
++ [react-router-dom](https://reacttraining.com/react-router/)
++ [Styled-components](https://www.styled-components.com/)
++ [react-codemirror2](https://github.com/scniro/react-codemirror2)
++ [Bootstrap](https://getbootstrap.com/) *Deprecated - we are removing this library in future versions. If you are going to update the repo, __don't use it.__*
++ [Moment-js](https://momentjs.com/)
++ [react-moment](https://github.com/headzoo/react-moment#readme)
++ [react-day-picker](https://react-day-picker.js.org/)
++ [react-mde](https://github.com/andrerpena/react-mde#readme)
+
+We assume you are familiarized with all these librarires, how they work, and how to code using them. If you are not familiarized with them please check the documentation of each one.
+
+# Project structure
+
+The platform is a follow the react-creat-app structure:
+
+- ./
+- .gitignore
+- firebase.json
+- package.json
+- readme.md
+- public/
+  - All the standard react-create-app files
+- source/
+  - img/ 
+    - Global images
+  - js/
+    - source files and entry point.
+
+We will get into details on the contents bellow.
+
+# Setting up the dev environment
+
+You must have installed [node.js](https://nodejs.org/en/) on your local machine. *We assume you already have a firebase project up with the platform*
+
+The first thing you must do is clone this repository to you local machine and install all the npm packages:
+
+```bash
+git clone https://github.com/RCODI/the-ironhacks-platform.git
+cd the-ironhacks-platform
+npm i
+```
+
+Now yoy can start the local server via npm start:
+
+```bash
+npm start
+```
+
+## Database structure
+
+The database is split in 2 services, the Cloud Firestore and the storage. 
+
+### Cloud Store
+
+Here we have all the data related with the platform: userdata, hacks data, etc. To get used to the inner structure please read the firebase docs. 
+
+Strucure explanation: 
+
+| colection     | description   | Document id | Doc data |
+| ------------- |:-------------:| :-------------:|:-------------:| 
+| admins        | The list of users that are administrators. | Random |  |
+| adminHackData | This is the "sencible" hack data, this collection can only be accessed by admins. | Random | registered users, phase results, task document ( encoded on base64 encoded ascii), white list |
+| comments | Each document on this collection represent a comment on a thread in the forum. | Random | Author UID, Author name, body (the comment itself, encoded on base64 encoded ascii), creation date (createdAt), thread id where the comment was posted |
+| Forums | Each document represent a forum (which is the abstration of a treatment) in a hack | Random | hack to which the forum belongs, the name of the forum (this is how the admin identifies the forum), list of participants UIDs, treatment identifier |
+| Hacks | This is the public data of a hack, every user can query this data. | Random | the name of the hack, the phases dates, and the tutorial document (encoded on base64 encoded ascii) |
+| stats | You can store here any stat you want to collect from the platform, the current available list can be found on the stats section | Random | date, event (name of the stats), metadata (a json with the specific data of the stat, for example: a name of a file, the type of a section, etc.), user UID (the user who performed the action |
+| Threads |   Each document on this collection represent a thread on a forum. | Random | author UID, author name, comments IDs ( the list of comments posted on the thread), creation date, forum ID, hackID, title |
+| whitelists | Here we store all the hacks a give user can participate on | user Email | whitelist: hacks |
+
+There is one additional collection that requires a bit more explanation: Users.
+
+And its first level, the users collections contains the users documents, each document represents the data of a user: 
+
+- email
+- hacks (a list of hacks ids, these are the hacks where the user is currently participating on)
+- forums (the forums where the participant belongs)
+- name
+
+And then, a user can have an aditional collection, called projects, this collection is inside the user document, and contains the data of the user's projects. The Id of the document is the project name, and each document inside this colections represent a file path in the storage. We will talk more about this on the project editor section.
+
+### Storage
+
+Here we store the projects of the users, you can think of it as our massive storage unit.
+
+Each user has a folder on the rootpath of the storage, the name of that folder is the user id. Inside of it you will find all the projects of that user, each one in its own folder, the name of the folder will be the name of the project. Inside the project foldar are all the files of the project.
+
+### Creating admins
+
+In order to create an admin user, you first must register a normal one, to do this just follow the sign up flow on the plaform. Once you register your admin (using any email and password) got to the firebase console and do the following:
+
++ Go to the "Authentication" tab
++ Find the user you want to make an admin and copy the user UID string (make sure yoy copy the full string)
++ Go to the database tab
++ Click on cloud firestore (if there is no db, follow the instructions to create an empty one)
++ go to the "admins" collection (if there is not, create one, be sure you name it "admins" without the quoutes"
++ Create a new document with the following configuration:
+  + As document Id: the user UID that you copyed before.
+  + As first field: name - Type: string - value: the name of the admin
+  + Click save.
+  
+Once you save the document, return to the platform and refresh the page, you know should be able to see the admin tab on the top of the page.
+
+This is the only way to create admins.
+
+# Entry points
+
+The entry points are the files that are called first in oder to do something, although you should understand this as the normal flow on a react app, we are going to put it here as the entry point of the documentation.
+
+Once you start the dev server using ```npm start```, the react app will start at the ```index.js``` file located on the src folder:
+
+```javascript 
+// DO NOT MODIFY THE CONTENT NOR THE NAME OF THIS FILE.
+// IronHacks Platform
+// index.js - Main entry point
+// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { unregister } from './registerServiceWorker';
+
+import IronHacksApp from './ironhackApp.js';
+
+import { BrowserRouter } from 'react-router-dom' // Router
+
+// Bootstrap 4
+import 'bootstrap/dist/css/bootstrap-reboot.min.css';
+import 'bootstrap/dist/css/bootstrap-grid.min.css';
+
+//Main CSS
+import './main.css';
+
+ReactDOM.render((
+  <BrowserRouter>
+    <IronHacksApp/>
+  </BrowserRouter>
+), document.getElementById('root'));
+
+unregister();
+
+// DO NOT MODIFY THE CONTENT NOR THE NAME OF THIS FILE.
+``` 
+
+*This is the only time we are going to put a entire file here, just beacouse this one is very small*
+
+Here the we just import bootstrap and the global css, then we just go to the IronhacksApp component, which is the actual entry point of the app.
+
+### ironhackApp.js
+
+This file is the root component of the platform, here we can find the user authentication handlers:
+
+isUserConnected
+``` javascript
+// This funciton calls Firebase SDK to know if there is an active user session
+  isUserConected = () => {
+    const _this = this;
+    window.firebase.auth().onAuthStateChanged((user) => {
+      if(user){
+        const splitedName = user.displayName.split(' ');
+        const profileLetters = splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1)
+        user.profileLetters = profileLetters;
+        _this.setState({user: user});
+        _this.isAdmin(); //We only check this to display specific ui items.
+      }else{
+        _this.setState({user: false, mustNavigate: true});
+      }
+    });
+  };
+```
+and isAdmin
+``` javascript
+  //check on the DB if the current user is admin.
+  isAdmin = () => {
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    const _this = this;
+    //Updating the current hack:
+    firestore.collection('admins').doc(this.state.user.uid)
+    .get()
+    .then(function(doc) {
+      //Is admin.
+        _this.setState((prevState, props) => {
+        prevState.user.isAdmin = true;
+        prevState.mustNavigate = true;
+        return prevState;
+      })
+    }) 
+    .catch(function(error) {
+      // The user can't read the admins collection, therefore, is not admin.
+        _this.setState((prevState, props) => {
+        prevState.user.isAdmin = false;
+        prevState.mustNavigate = true;
+        return prevState;
+      })
+    });
+  };
+```
+
+isUserConnected will ask to the firebase auth object if there is a user currently logged, if yes, we will check on the db if the user is and admin. (this function actually access to the admins collection directly, which could be seen as a security issue, but is not. Normal users are only able to read, a document in that colection if they are actually admins, otherwhise the database will deny the query. To do that we use this rule:
+
+``` javascript
+match /admins/{userId} {
+      allow read, write: if exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      }
+```
+
+*To check the complete set of rules, please check the Database section.*
+
+Now the important thing here is the routes, let's dive into that:
+
+# Routes
+
+We use react-router-dom in order to manage the routes and the context of the app, check their docummentation if you feel rusty on that.
+
+``` jsx
+render() {
+    //If this.user is null, means that we didn't receive response from firebase auth, therefore we show a loader:
+    if(!this.state.mustNavigate){
+      return(
+        <LoaderContainer>
+          <Loader/>
+        </LoaderContainer>
+      );
+    }else{
+      return (
+        <CookiesProvider>
+          <div className='App'>
+            <Switch>
+              <Route exact path='/' render={() => null}/> 
+              <Route exact path='/login' render={() => null}/>
+              <Route exact path='/404' render={() => null}/>
+              <Route exact path='/projectEditor/:proyectName/preview' render={() => null}/>
+              {!this.state.user && <Redirect to='/'/>}
+              <Route render={(props) => (<Header user={this.state.user} {...props}/>)}/>
+            </Switch>
+            <Switch>
+              <Route path='/login' component={Login}/>
+              <Route path='/hackSelection' render={(props) => (<HackSelection user={this.state.user} {...props}/>)}/>
+              <Route path='/profile' render={(props) => (<UserProfile user={this.state.user} {...props}/>)}/>
+              <Route exact path='/forum' render={(props) => (<Forum user={this.state.user} {...props}/>)}/>
+              <Route exact path='/forum/new' render={(props) => (<NewThread user={this.state.user} {...props}/>)}/>
+              <Route path='/forum/thread/:threadId' render={(props) => (<ThreadViewWithRouter user={this.state.user} {...props}/>)}/>
+              <Route exact path='/admin/newHack' component={NewHack}/>
+              <Route path='/admin/dashboard/:hackId' component={AdminDashboard}/>
+              <Route path='/admin' component={Admin}/>
+              <Route path='/tutorial' render={(props) => (<Tutorial user={this.state.user} {...props}/>)}/>
+              <Route path='/task' render={(props) => (<Task user={this.state.user} {...props}/>)}/>
+              <Route exact path='/quizzes' component={Quizzes}/>
+              <Route path='/quizzes/:quizName' render={(props) => (<QuizForm user={this.state.user} {...props}/>)}/>
+              <Route path='/results' render={(props) => (<Results user={this.state.user} {...props}/>)}/>
+              <Route exact path='/projectEditor/:proyectName' render={(props) => (<ProjectEditor user={this.state.user} {...props}/>)}/>
+              <Route exact path='/projectEditor/:proyectName/preview' render={(props) => (<ProjectPreview user={this.state.user} {...props}/>)}/>
+              <Route exact path='/404' component={NotFound}/> 
+              {this.state.user.admin && <Redirect to='/admin'/>}
+              <Route exact path='/' component={Landing}/>
+              {this.state.user && <Redirect to='/404'/>}
+              {<Redirect to='/'/>}
+            </Switch>
+            <Switch>
+              <Route exact path='/' render={() => null}/>
+              <Route exact path='/login' render={() => null}/>
+              <Route exact path='/404' render={() => null}/>
+              <Route exact path='/projectEditor/:proyectName/preview' render={() => null}/>
+              <Route component={Footer}/>
+            </Switch>
+          </div>
+        </CookiesProvider>
+      );
+    }
+  };
+```
+Here we have all the posible routes on the platform, we use 3 switches becouse the header and the footer are only shown when there is a user logged. We also hide them on the preview of a project.
+
+In the second switch we find all the sections of the platform, from here we are going to explain every single rounte using it path and it's file, starting with the login.
+
+# Login - login.js
+*full path: ./source/js/components/login/login.js
+
+On this view we create and diplay the firebaseAuthUI instance, we start on the initAuthUI function:
+
+``` javascript
+initAuthUI(){ 
+    //Config object
+    const uiConfig = {
+      signInFlow: 'redirect', 
+      signInOptions: [
+        window.firebase.auth.EmailAuthProvider.PROVIDER_ID
+      ],
+      callbacks : {
+        signInSuccessWithAuthResult : (authResult, redirectUrl) => {
+          var user = {
+            name: authResult.user.displayName,
+            email: authResult.user.email,
+            uid: authResult.user.uid
+          }
+          this.setState({user: user});
+          if(authResult.additionalUserInfo.isNewUser === true){
+            this.saveUserOnDB(user);
+            user.isAdmin = false;
+            return false;
+          }else{
+            this.isAdmin(user);
+            return false;
+          }
+        },
+        signInFailure: function(error) {
+          console.log(error);
+        }
+      },
+      tosUrl: '/tos',
+      privacyPolicyUrl: '/pp',
+      credentialHelper: window.firebaseui.auth.CredentialHelper.NONE, // Disableing credentialHelper
+    }
+    //Making sure there is only one AuthUI instance
+    if(window.firebaseui.auth.AuthUI.getInstance()) {
+      const ui = window.firebaseui.auth.AuthUI.getInstance()
+      ui.start('#firebaseui-auth-container', uiConfig)
+    } else {
+      const ui = new window.firebaseui.auth.AuthUI(window.firebase.auth())
+      ui.start('#firebaseui-auth-container', uiConfig)
+    }
+  };
+```
+Make sure you read the docs of the firebaseAuthUI in order to undestand the config object. Keep in mind we only allow users to log in using email and password, this is important to the hack white list feature.
+
+Currently there is not a tos nor a pp web. We are working on that.
+
+Once a normal user logs we redirect the user to a different place accoding with its role, if is an admin we redirect to the admin panel, if not, we redirect to the select hack view.
+
+# hackSelection.js
+
+In this view the user can do 2 things, register into a new available hack, or enter into hack he already register on. First we fetch the available hacks from the database: 
+
+``` javascript
+//Query all the hacks objects from the db.
+  getHacks = () => {
+    ...
+  }
+```
+
+### Selecting a hack:
+
