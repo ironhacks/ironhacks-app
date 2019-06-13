@@ -12,26 +12,14 @@ import * as Showdown from "showdown"; // Markdown reader
 
 import './css/react-mde-all.css'; //Custom Editor stylesheet
 
-interface AppState {
-    mdeState: ReactMdeTypes.MdeState;
-}
-
 const Editor = styled(ReactMde)`
-  height: 100%;
+  min-height: 500px;
+  padding-top: 1px;
+  position: relative;
   width: 100%;
 `;
 
-const ConverterConfig = {
-  tables: true,
-  simplifiedAutoLink: true,
-  prefixHeaderId: true, //Add a prefix to the generated header ids. Passing a string will prefix that string to the header id. Setting to true will add a generic 'section' prefix.
-  strikethrough: true, //Enable support for strikethrough syntax. ~~strikethrough~~ as <del>strikethrough</del>
-  tasklists: true,
-};
-
-class MarkdownEditor extends React.Component<{}, AppState> {
-
-  converter: Showdown.Converter;
+class MarkdownEditor extends React.Component {
 
   constructor(props) {
     super(props);
@@ -40,10 +28,16 @@ class MarkdownEditor extends React.Component<{}, AppState> {
         markdown: this.props.withContent ? this.props.withContent : '',
       },
     };
-    this.converter = new Showdown.Converter(ConverterConfig);
+    this.converter = new Showdown.Converter({
+      tables: true,
+      simplifiedAutoLink: true, 
+      prefixHeaderId: true, //Add a prefix to the generated header ids. Passing a string will prefix that string to the header id. Setting to true will add a generic 'section' prefix.
+      strikethrough: true, //Enable support for strikethrough syntax. ~~strikethrough~~ as <del>strikethrough</del>
+      tasklists: true
+    });
   };
 
-  handleValueChange = (mdeState: ReactMdeTypes.MdeState) => {
+  handleValueChange = (mdeState) => {
     this.props.onEditorChange(mdeState.markdown);
     this.setState({mdeState});
   };
