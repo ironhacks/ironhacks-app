@@ -18,11 +18,6 @@ const CardContainer = styled('button')`
   border: none;
   background-color: white; 
   padding: 0;
-  cursor: pointer;
-   
-  &:hover {
-    background-color: #eeede10;
-  }
 
   &.newHackCard {
     display: flex;

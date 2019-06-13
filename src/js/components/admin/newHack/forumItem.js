@@ -1,10 +1,12 @@
 // IronHacks Platform
-// forumItem.js
+// forum.js
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
 //Styled components
 import styled from 'styled-components';
+//Custom Constants
+//import * as Constants from '../../../../constants.js';
 
 
 // Images

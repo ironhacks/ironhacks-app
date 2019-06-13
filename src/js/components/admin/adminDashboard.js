@@ -51,7 +51,7 @@ const ControlPanelItem = styled('div')`
   transition: color 0.5s, background-color 0.5s;
 
   &:hover {
-    background-color: #e2e0da;
+    background-color: gray;
     color: ${Constants.mainBgColor};
   }
 
@@ -59,19 +59,6 @@ const ControlPanelItem = styled('div')`
     margin-top: 70px;
     border-top: 1px solid black;
     justify-content: space-around;
-  }
-
-  a {
-    width: 100%;
-    height: 100%;
-    line-height: 65px;
-    color: black;
-    text-decoration: none;
-
-    &:hover {
-      color: black;
-      text-decoration: none;
-    }
   }
 
   img {
