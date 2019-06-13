@@ -45,12 +45,6 @@ const Header = styled('div')`
   }
 `;
 
-const EditorContainer = styled('div')`
-  position: relative;
-  width 100%;
-  height: 1px;
-  flex-grow: 1;
-`;
 const AdminSection = styled('div')`
   display: flex;
   flex-direction: column;
@@ -86,7 +80,7 @@ const PublishControlsRow = styled('div')`
   display: flex;
   flex-direction: row-reverse;
   width 100%;
-  height: 60px;
+  min-height: 60px;
   padding: 15px 0 15px 0;
 
   button {
@@ -310,9 +304,7 @@ class NewThread extends React.Component {
             </AdminSection>
             }
           </Header>
-          <EditorContainer>
-            <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>
-          </EditorContainer>
+          <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>  
           <PublishControlsRow>
             <button disabled={this.state.title === "" || this.state.markdown === ""} onClick={this.handleSubmit}>Submit</button>
           </PublishControlsRow>
