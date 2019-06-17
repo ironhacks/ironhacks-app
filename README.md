@@ -26,6 +26,7 @@ The platform also use the following frameworks/third party libraries:
 + [react-moment](https://github.com/headzoo/react-moment#readme)
 + [react-day-picker](https://react-day-picker.js.org/)
 + [react-mde](https://github.com/andrerpena/react-mde#readme)
++ [sweetalert2](https://sweetalert2.github.io/)
 
 We assume you are familiarized with all these librarires, how they work, and how to code using them. If you are not familiarized with them please check the documentation of each one.
 
@@ -295,7 +296,7 @@ Here we have all the posible routes on the platform, we use 3 switches becouse t
 In the second switch we find all the sections of the platform, from here we are going to explain every single rounte using it path and it's file, starting with the login.
 
 # Login - login.js
-*full path: ./source/js/components/login/login.js
+*full path: ./src/js/components/login/login.js
 
 On this view we create and diplay the firebaseAuthUI instance, we start on the initAuthUI function:
 
@@ -349,8 +350,11 @@ Currently there is not a tos nor a pp web. We are working on that.
 Once a normal user logs we redirect the user to a different place accoding with its role, if is an admin we redirect to the admin panel, if not, we redirect to the select hack view.
 
 # hackSelection.js
+*On ./src/js/components/login/hackSelection.js*
 
-In this view the user can do 2 things, register into a new available hack, or enter into hack he already register on. First we fetch the available hacks from the database: 
+The hack selection allows the platform to display data according with the hack the usesr select, for example, the tutorial and task documments, the results, the projects, the contents of the forum, among with other stuff. In order to do this, we store in cookies the ID of the hack that is selected here, we call that hack the "selected hack".
+
+In this view the user can do 2 things, register into a new available hack, or enter into hack he already register on. Before the user can do any of those, we first we fetch the available hacks from the database:
 
 ``` javascript
 //Query all the hacks objects from the db.
@@ -359,5 +363,147 @@ In this view the user can do 2 things, register into a new available hack, or en
   }
 ```
 
+the ```getHacks``` function will retrieve the hacks available for a specific user, that means that only the hacks in which the user is whitelisted will be retieved. The hacks in which the user is already registered will be store in the ```registeredHacks``` array, the rest will be store in the ```availableHacks```.
+
 ### Selecting a hack:
+  
+When a user is already registered into a hack, the selecting proccess consist on setting a cookie on the browser, saving the selected hack data. This is done by the ```setHack``` function:
+
+```javasript
+setHack = (hackIndex) => {
+    this.setState({status: "Creating participant profile..."});
+    const hackId = this.state.registeredHacks[hackIndex] ? this.state.registeredHacks[hackIndex].id : this.state.availableHacks[hackIndex].id;
+    const _this = this;
+    this.firestore.collection('users')
+    .doc(this.props.user.uid)
+    .get()
+    .then((doc) => {
+      const { cookies } = _this.props;
+      cookies.set('currentHack', hackId);
+      cookies.set('currentForum', doc.data().forums[hackId].id);
+      _this.setState({mustNavigate: true});
+    })
+  }
+```
+The ```hackIndex``` parameter is a non negative int, which represents the index of the hack in the ```registeredHacks``` or the ```availableHacks``` arrays.
+
+However, if the user is no registered in the hack, the ```goToPresurvey``` function is called instead:
+
+### Registering process:
+
+```javascript 
+swal(Constants.preSurveyAlertContent('qualtrics-survey-url?user_email=' + this.props.user.email))
+    .then((result) => {
+      if(!result.dismiss) {
+        this.callRegistrationFuncion(hackIndex);
+      };
+    });
+```
+To register in a hack, the user must first fill the registration survey, the content of this survey is defined by the researcher. Notice that we send thorugh the URL the of the participant, we use this in order to identify each responce on the qualtrics dashboard. Please read the qualtrics integration documentation to see how to configure the qualtrics project in order to store the data.
+
+The survey is displayed on an iframe, this is done to avoid the necesity to redirect the user to an external website. In order to detect when the survey is done, we set an event listener to the document: 
+
+``` javascript
+componentDidMount() {
+    this.getHacks()
+    window.addEventListener("message", this.recieveMessage)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("message", this.recieveMessage); 
+  }
+
+  recieveMessage = (event) => {
+    if(event.data === 'quizDone'){
+      swal.clickConfirm();
+    }
+  }
+```
+
+This listener captures a message sended by the qualtric iframe once the user reach the end of the survey and call the receiveMessage, this will trigger the ```swal.clickConfirm()``` functions, which closes the sweetAlert modal.
+
+Then, as it shows in the first function, once the modal is closed with a success status, we call the ```callRegistrationFunction``` function:
+
+``` javascript
+ callRegistrationFuncion = (hackIndex) => {
+    this.setState({loading:true, status: "Starting registration process..."});
+    const _this = this;
+    const hackId = _this.state.availableHacks[hackIndex].id
+    const registerUserFunc = window.firebase.functions().httpsCallable('registerUser');
+    registerUserFunc({hackId: hackId}).then((result) => {
+      const projectName = _this.state.availableHacks[hackIndex].data().name.replace(/\s/g, '');
+      _this.createNewProject(projectName, hackId, hackIndex);
+    });
+  }
+```
+This function recieve as parameter the hackIndex, corresponding to the hackID within the ```registeredHacks``` array.
+
+Once this is done, we start the creation of the users hack project. This is a project that is bind to a hack, specifically, to the hack that the user is registering on, this allow the user to push the project to evaluation. The user can create additional projects that are not binded to any hack in particullar.
+
+This process starts with the ```createNewProject``` function:
+
+```javascript
+createNewProject = (name, hackId, hackIndex) => {
+    this.setState({status: "Creating participant projects (1/2)..."});
+    // Accesing to all the blob template variables:
+    const files = TemplateFiles.files;
+    Promise.all(
+      // Array of "Promises"
+      files.map(file => this.putStorageFile(file, name))
+    )
+    ...
+  }
+
+  createGitHubRepository = (name, hackId, hackIndex) => {
+    this.setState({status: "Creating participant profile (2/2)..."});
+    // Accesing to all the pain text template variables:
+    const templateFiles = 
+    [
+       {
+          name: 'index.html',
+          content: TemplateFiles.indexContent,
+        },
+        ...
+    ]
+    let projectName = `${hackId}-${this.state.user.uid}-${name}`;
+    const _this = this;
+    const newRepoConfig = {
+      name: projectName,
+      description: 'Repo description',
+      private: true,
+      auto_init: true,
+    }
+    const createGitHubRepo = window.firebase.functions().httpsCallable('createGitHubRepo');
+    createGitHubRepo(newRepoConfig)
+    .then((result) => {
+      if(result.status === 500){
+        console.error(result.data.error);
+      }else{
+        _this.setState({status: "Uploading files..."});
+        const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
+        commitToGitHub({name: projectName, files: templateFiles, commitMessage: 'init commit'})
+        .then((result) => {
+          if(result.status === 500){
+            console.error(result.error);
+          }else{
+            _this.setHack(hackIndex);
+          }
+        })
+      }
+    });
+  }
+```
+
+This function will pull the templateFiles and specify the creation props. Please check the [Octonode documentation](https://github.com/pksunkara/octonode) to undestand the props structure. First we create an empty repo (auto initilized), and then we make a commit with the templeate files. Please refer to the [Backend docs](https://github.com/RCODI/the-ironhacks-platform-backend) to undertant the cloud functions.
+
+The template files are pulled from:
+
+```javascript
+import * as TemplateFiles from './newHackTemplates/templates.js';
+```
+
+*Please check the file to undestand how the templates are done.*
+
+Once the Github project is created, we call the ```setHack``` function that will redirect the user to the forum.
+
 
