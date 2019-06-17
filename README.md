@@ -123,6 +123,8 @@ Once you save the document, return to the platform and refresh the page, you kno
 
 This is the only way to create admins.
 
+***NOTE:*** We will go first through the non-admin user flow. Please go down to check the admin flow.
+
 # Entry points
 
 The entry points are the files that are called first in oder to do something, although you should understand this as the normal flow on a react app, we are going to put it here as the entry point of the documentation.
@@ -506,4 +508,7 @@ import * as TemplateFiles from './newHackTemplates/templates.js';
 
 Once the Github project is created, we call the ```setHack``` function that will redirect the user to the forum.
 
+# The Forum
 
+
+The forum is the first view a user will see once logged. Here the user
