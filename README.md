@@ -623,4 +623,52 @@ And that's it for the forum view. The user can also create a new thread by click
 
 This view implements the ```MarkdownEditor``` component, this is a custom wrapper we do to implement the ```react-mde ``` . Please check the [react-mde docs](https://github.com/andrerpena/react-mde#readme) to undestant the library.
 
+If the user is an admin, we display the admin controls, this is basically two selectors that allows the admin to select the hack and the forum in which the new thread will be posted, we handle that interaction using the same components we use in the forum view.
 
+For both, the user and the admin, the submition process is the same:
+
+```javascript
+handleSubmit = (event) => {
+    event.preventDefault();
+    let hackId, forumId;
+    if(this.props.user.isAdmin){
+      hackId = this.state.hacks[this.state.selectedHack].id;
+      forumId = this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id
+    }else{
+      hackId = this.state.currentHack;
+      forumId = this.state.forum;
+    }
+    const currentDate = new Date(); //We use the same date in both the thread and the comment, so on the db the stats show that they were created at the same time.
+    const _this = this;
+    const codedBody = this.utoa(this.state.markdown);
+    //TODO: add forum id
+    this.firestore.collection("threads").add({
+      title: this.state.title,
+      author: this.props.user.uid,
+      authorName: this.props.user.displayName,
+      createdAt: currentDate,
+      hackId: hackId,
+      forumId: forumId,
+    })
+    .then(function(docRef) {
+      const threadRef = docRef.id;
+      _this.firestore.collection("comments").add({
+        author: _this.props.user.uid,
+        authorName: _this.props.user.displayName,
+        body: codedBody,
+        createdAt: currentDate,
+        threadId: docRef.id,
+        forumId: forumId,  
+      }) // Adding double reference on the thread.
+      .then(function(docRef) {
+        _this.firestore.collection("threads").doc(threadRef).update({
+          comments: [docRef.id],
+        })
+        _this.setState({mustNavigate: true, threadRef: threadRef});
+      })
+    })  
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+  };
+```
