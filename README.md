@@ -508,7 +508,119 @@ import * as TemplateFiles from './newHackTemplates/templates.js';
 
 Once the Github project is created, we call the ```setHack``` function that will redirect the user to the forum.
 
-# The Forum
+# The Forum - forum.js
+*on ./src/js/component/forum/forum.js*
+
+The forum is the first view a user will see once logged. Here the user can read and post threads related with the task.
+
+This component imports (among others) the following component:
+```javascript
+import ThreadPreview from './threadPreview.js'
+import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js'
+import ForumSelector from './forumSelector.js'
+import { registerStats } from '../../utilities/registerStat.js';
+import * as DateFormater from '../../utilities/dateFormater.js';
+```
+
++ ```ThreadPreview``` Is a presentational component, it will show a the preview data of a thread: title, author, create date, comment counter and reaction counter, when the user clicks a preview card, will be redirected to the ```ThreadView```.
++ ```SponsorsBanner``` compomponet is also a presentational one, and is just the logos of the sponsors of your contest. 
++ ```ForumSelector``` is also a presentational compoment that shows the available forums (if any) when the user is an admin, we reuse this component to show also the available hacks. (So yes, it will be renamed in future updates)
++ ```registerStats``` is the utility we call to save a stat in the database.
++ ```DateFormater``` is also a utility, we use it to translate javascript date objects to readable text, among other stuff.
+
+The initial state of the app set up the hack and forumID:
+```javascript
+constructor(props){
+  ...
+  this.state = {
+    currentHack: cookies.get('currentHack') || null,
+    forum: cookies.get('currentForum') || null,
+    threads: [],
+    selectedHack: 0,
+  }
+  ...
+};
+```
+```threads``` array will store all the threads on the user forum, we obtain them via ```getThreads = ()```:
+
+If the user is an admin, we first retrieve all the hacks that exist on the database:
+
+```javascript
+getHacks = () => {
+    ...
+    this.firestore.collection("hacks")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const hackData = doc.data()
+        hackData.id = doc.id;  
+        hacks.push(hackData);
+      });
+      _this.setState({hacks: hacks, selectedHack: 0});
+      _this.getForums();
+    })
+    ...
+  };
+```
+
+Then we pull the forums for that specific hack:
+
+```javascript
+getForums = (hackIndex) => {
+  const _this = this;
+  const forums = [];
+  const index = hackIndex ? hackIndex : 0;
+  this.firestore.collection('forums')
+  .where('hack', '==', this.state.hacks[index].id)
+  .get()
+  .then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      data.id = doc.id;
+      forums.push(data);
+    });
+    _this.setState((prevState, props) => {
+      prevState.hacks[index].forums = forums;
+      return prevState;
+    })
+    _this.getThreadsAdmin(0);
+  })
+  .catch(function(error) {
+      console.error("Error getting documents: ", error);
+  });
+};
+```
+To finally pull the threads using the selected forum (index 0 by defaut). If the user is an admin, we use ``` getThreadsAdmin = (forumIndex)```to pull the threads, other wise we use:
+
+```javascript
+getThreads = () => {
+  const _this = this;
+  let threads = [];
+  this.firestore.collection('threads')
+  .where('forumId', '==', this.state.forum)
+  .get()
+  .then(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+      const thread = doc.data();
+      thread.id = doc.id;
+      threads.push(thread);
+    });
+    threads = _this.sortThreads(threads);
+    _this.setState({threads: threads});
+  })
+  .catch(function(error) {
+      console.error("Error getting documents: ", error);
+  });
+};
+```
+
+Once the state us update with the threads, we display a preview of them using ```ThreadPreview```.
+
+And that's it for the forum view. The user can also create a new thread by clicking the "Start a new topic" button, this will redirect the user to the ```NewThread``` view:
+
+### Create a new thread - newThread.js
+*on ./src/js/component/forum/newThread.js*
+
+This view implements the ```MarkdownEditor``` component, this is a custom wrapper we do to implement the ```react-mde ``` . Please check the [react-mde docs](https://github.com/andrerpena/react-mde#readme) to undestant the library.
 
 
-The forum is the first view a user will see once logged. Here the user
