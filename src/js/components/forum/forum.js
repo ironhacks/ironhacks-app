@@ -162,7 +162,7 @@ class Forum extends React.Component {
   //Query all the hacks objects from the db.
   getHacks = () => {
     const _this = this;
-    var hacks = [];
+    let hacks = [];
     this.firestore.collection("hacks")
     .get()
     .then((querySnapshot) => {
@@ -170,9 +170,10 @@ class Forum extends React.Component {
         const hackData = doc.data()
         hackData.id = doc.id;  
         hacks.push(hackData);
-        _this.firestore.collection('adminHackData').doc(doc.id)
+        //_this.firestore.collection('adminHackData').doc(doc.id)
       });
       _this.setState({hacks: hacks, selectedHack: 0});
+      console.log(hacks)
       _this.getForums();
     })
     .catch(function(error) {
@@ -228,12 +229,8 @@ class Forum extends React.Component {
   };
 
   onHackSelection = (hackIndex) => {
-    if(this.state.hacks[hackIndex].forums){
-      this.setState({selectedHack: hackIndex});
-    }else{
-      this.setState({selectedHack: hackIndex});
-      this.getForums(hackIndex);
-    };
+    this.setState({selectedHack: hackIndex, forum: 0});
+    this.getForums(hackIndex);
   }; 
 
   onForumSelection = (forumIndex) => {

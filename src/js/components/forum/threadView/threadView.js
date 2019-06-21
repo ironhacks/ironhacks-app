@@ -27,6 +27,7 @@ const SectionContainer = styled('div')`
   }
   
   .control {
+    position: relative;
     display: flex;
     flex-direction: row-reverse;
     margin-top: 10px;
@@ -44,11 +45,6 @@ const SectionSeparator = styled('div')`
   width 100%;
   margin-top: calc(${Constants.threadPreviewBottomMargin} + 10px);
   margin-bottom: calc(${Constants.threadPreviewBottomMargin} + 10px);
-`;
-const CommentEditor = styled('div')`
-  height: 400px;
-  padding: 0px;
-  margin-bottom: 15px;
 `;
 
 class ThreadView extends React.Component {
@@ -91,8 +87,6 @@ class ThreadView extends React.Component {
     });
    };
   //This functions get all the comments from a specific thread.
-  //TODO: We are asking for the thread twice, one on the main forum and second here, we must reduce that to one query.
-  //TODO:  This query is not efficient when the db has a good amount of comments, we must find a way to make it scalable.
   getComments = () => {
     const _this = this;
     this.firestore.collection('comments')
@@ -186,9 +180,7 @@ class ThreadView extends React.Component {
               reloadComments={this.getComments}/> 
           ))}
         </ThreadSection>
-        <CommentEditor>
-          <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>
-        </CommentEditor>
+        <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>
         <div className='control'>
           <Button primary width='150px' onClick={this.handleSubmit}>Submit</Button>
         </div>

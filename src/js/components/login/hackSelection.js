@@ -66,7 +66,11 @@ class HackSelection extends React.Component {
 
   componentDidMount() {
     this.getHacks()
-    window.addEventListener("message", this.recieveMessage)
+    window.addEventListener("message", this.recieveMessage);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("message", this.recieveMessage); 
   }
 
   recieveMessage = (event) => {
