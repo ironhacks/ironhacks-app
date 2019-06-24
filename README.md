@@ -629,46 +629,218 @@ For both, the user and the admin, the submition process is the same:
 
 ```javascript
 handleSubmit = (event) => {
-    event.preventDefault();
-    let hackId, forumId;
-    if(this.props.user.isAdmin){
-      hackId = this.state.hacks[this.state.selectedHack].id;
-      forumId = this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id
-    }else{
-      hackId = this.state.currentHack;
-      forumId = this.state.forum;
-    }
-    const currentDate = new Date(); //We use the same date in both the thread and the comment, so on the db the stats show that they were created at the same time.
-    const _this = this;
-    const codedBody = this.utoa(this.state.markdown);
-    //TODO: add forum id
-    this.firestore.collection("threads").add({
-      title: this.state.title,
-      author: this.props.user.uid,
-      authorName: this.props.user.displayName,
+  event.preventDefault();
+  let hackId, forumId;
+  if(this.props.user.isAdmin){
+    hackId = this.state.hacks[this.state.selectedHack].id;
+    forumId = this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id
+  }else{
+    hackId = this.state.currentHack;
+    forumId = this.state.forum;
+  }
+  const currentDate = new Date(); //We use the same date in both the thread and the comment, so on the db the stats show that they were created at the same time.
+  const _this = this;
+  const codedBody = this.utoa(this.state.markdown);
+  //TODO: add forum id
+  this.firestore.collection("threads").add({
+    title: this.state.title,
+    author: this.props.user.uid,
+    authorName: this.props.user.displayName,
+    createdAt: currentDate,
+    hackId: hackId,
+    forumId: forumId,
+  })
+  .then(function(docRef) {
+    const threadRef = docRef.id;
+    _this.firestore.collection("comments").add({
+      author: _this.props.user.uid,
+      authorName: _this.props.user.displayName,
+      body: codedBody,
       createdAt: currentDate,
-      hackId: hackId,
-      forumId: forumId,
-    })
+      threadId: docRef.id,
+      forumId: forumId,  
+    }) // Adding double reference on the thread.
     .then(function(docRef) {
-      const threadRef = docRef.id;
-      _this.firestore.collection("comments").add({
-        author: _this.props.user.uid,
-        authorName: _this.props.user.displayName,
-        body: codedBody,
-        createdAt: currentDate,
-        threadId: docRef.id,
-        forumId: forumId,  
-      }) // Adding double reference on the thread.
-      .then(function(docRef) {
-        _this.firestore.collection("threads").doc(threadRef).update({
-          comments: [docRef.id],
-        })
-        _this.setState({mustNavigate: true, threadRef: threadRef});
+      _this.firestore.collection("threads").doc(threadRef).update({
+        comments: [docRef.id],
       })
-    })  
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
-  };
+      _this.setState({mustNavigate: true, threadRef: threadRef});
+    })
+  })  
+  .catch(function(error) {
+    console.error("Error adding document: ", error);
+  });
+};
 ```
+We encode the content of the thread (AKA the first comment / thread head) using base64 and then we push it to the DB, this creates first a document on the ```threads``` collection, then we create a second document on the ```comments``` collection, this is the only comment that will have a referece to the forum documment, we use this reference to identify it as the thread head. Finally we refresh the ```comments``` array of the thread documment. 
+
+Finally we redirect the user to ```ThreadView```.
+
+### Thread View - threadView.js
+*on ./src/js/component/forum/threadView/threadView.js*
+
+```threadView``` is a very simple component, it retrieve the data for a given thread (using the id on the url) and then proceed to dispaly all the comments on that thread:
+
+```javascript
+getThreadData = () => {
+  const _this = this;
+  this.firestore.collection('threads')
+  .doc(this.props.match.params.threadId)
+  .get()
+  .then((doc) => { 
+    const thread = doc.data();
+    thread.id = doc.id;
+    _this.setState({thread}, _this.getComments());
+  })
+  ...
+};
+```
+
+```getThreadData``` get the ```threadId``` from the url and then ask to the database for the data, then calls ```getComments``` to obatain all the comments:
+
+```javascript
+getComments = () => {
+  const _this = this;
+  this.firestore.collection('comments')
+  .where('threadId', '==', this.props.match.params.threadId)
+  .orderBy('createdAt', 'asc')
+  .get()
+  .then(function(querySnapshot) { 
+    let comments = [];
+    let head;
+    querySnapshot.forEach(function(doc) {
+      const comment = doc.data();
+      comment.id = doc.id;
+      if (comment.forumId) { 
+        head = comment
+      }else {
+        comments.push(comment);
+      }
+    });
+    //updating the rest of the comments:
+    _this.setState((prevState, props) => {
+      return({
+        head,
+        comments,
+      })
+    });
+  })
+  ...
+};
+```
+
+```getComments``` gets all the comments of a given thread, arrenged by date. It also identify the head of the thread and set everything in the state of the componente.
+
+We show every comment (including the head) using the ```commentView``` component:
+
+### Comment View - commentView.js
+*on ./src/js/component/forum/threadView/commentView.js*
+
+The main purpuse of this component is to display a the content of a comment, this is a very straigh forward taks that is done on the ```render``` function using props. However, this component also handles the "state" of the comments: the reactions and the delete process. 
+
+Let's start by the delete process: an user can delete it's own comments and threads, this is handled by two functions:
+
+#### Deleting a comment
+
+```javascript
+deleteSingleComment = (comment) => {
+  const _this = this;
+  const commentId = comment || this.props.commentData.id
+  const threadRef = this.firestore.collection("threads").doc(this.props.commentData.threadId);
+  return threadRef.get()
+  .then((doc) => {
+    const threadData = doc.data();
+    threadData.comments = threadData.comments.filter((comment) => (comment !== commentId));
+    threadRef.update(threadData);
+    return _this.firestore.collection("comments")
+    .doc(commentId)
+    .delete()
+    .then(() => {
+      if ( !comment )
+        _this.props.reloadComments();
+    })
+    ...
+};
+```
+
+#### Deleting a thread
+
+Here we first remove the commentID reference from the thread documment and then we delete the comment from the database. After this we reaload the comment to refresh the view.
+
+To delete the whole thread we use ```deleteThread```:
+
+```javascript
+const threadRef = this.firestore.collection("threads").doc(this.props.commentData.threadId);
+    threadRef.get()
+    .then((doc) => {
+      const threadData = doc.data();
+      const comments = threadData.comments;
+      Promise.all(
+        // Array of Promises
+        comments.map(commentId => this.deleteSingleComment(commentId))
+      )
+      .then(() => {
+        threadRef.delete()
+        .then(() => {
+          this.setState({navigateToForum: true});
+        });
+      })
+    ...
+```
+
+What we do here is call ```deleteSingleComment``` to delete all the comments on the thread, and then delete the thread document itself. At the end we redirect the user to the forum main page. 
+
+*Note: An admin can delete all threads or comments.*
+
+#### Reactions
+*on ./src/js/component/forum/reactionView.js*
+
+A user can "react" to a comment or a thread, this reaction are the "like" or "dislike" buttons. This is handle by the ```ReactionPicker``` component.
+
+When a user clicks on a reaction button ```handleReactionClick``` is triggered:
+
+```javascript
+handleReactionClick = (event) => {
+  const _this = this;
+  const reactionType = event.target.id;
+  const updatedData = {
+    likes: this.state.likes,
+    dislikes: this.state.dislikes,
+  };
+  if(updatedData[reactionType].includes(this.props.user.uid)) {
+    updatedData[reactionType] = updatedData[reactionType].filter( element => element !== this.props.user.uid)
+  } else {
+    updatedData[reactionType].push(this.props.user.uid);
+    updatedData[reverseReaction[reactionType]] = updatedData[reverseReaction[reactionType]].filter( element => element !== this.props.user.uid)
+  }
+  this.firestore.collection('comments')
+  .doc(this.props.commentId)
+  .update({
+    'reactions.likes': updatedData.likes,
+    'reactions.dislikes': updatedData.dislikes,
+  })
+  .then((response) => {
+    const isLiked = updatedData.likes.includes(_this.props.user.uid);
+    const isDisliked = updatedData.dislikes.includes(_this.props.user.uid);
+    _this.setState({
+      likes: updatedData.likes,
+      dislikes: updatedData.dislikes,
+      isLiked,
+      isDisliked,
+    });
+  })
+  .catch(function(error) {
+      console.error("Error updating documents: ", error);
+  });
+} 
+```
+
+This function will add, remove or reverse a reaction, according with the user interaction.
+
+---
+
+Whit this we finish the main components of the forum.
+
+We are going to proceed now with the project editor.
+
+# The Project Editor

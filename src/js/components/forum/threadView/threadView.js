@@ -87,8 +87,6 @@ class ThreadView extends React.Component {
     });
    };
   //This functions get all the comments from a specific thread.
-  //TODO: We are asking for the thread twice, one on the main forum and second here, we must reduce that to one query.
-  //TODO:  This query is not efficient when the db has a good amount of comments, we must find a way to make it scalable.
   getComments = () => {
     const _this = this;
     this.firestore.collection('comments')
