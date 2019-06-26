@@ -161,6 +161,7 @@ const commitSurveys = {
 
 
 class ProjectEditor extends React.Component {
+
   constructor(props){
     super(props);
     const { cookies, user } = props;
@@ -223,30 +224,45 @@ class ProjectEditor extends React.Component {
 
   getProjectFiles = () => {
     let remainingFiles = Object.keys(this.state.projectFiles).length
+    const projectFiles = { ...this.state.projectFiles};
     const _this = this;
     for (const file in this.state.projectFiles){
       const xhr = new XMLHttpRequest();
       xhr.responseType = 'blob';
-      xhr.onload = function(event) {
-        const blob = xhr.response;
-          _this.setState((prevState, props) => {
-          const reader = new FileReader();
-          reader.addEventListener('loadend', () => {
-            prevState.projectFiles[file].content = reader.result
-          })
-          prevState.projectFiles[file].blob = blob;
-          reader.readAsText(blob);
-          remainingFiles -= 1;
-          if(remainingFiles === 0){
-            prevState.loadingFiles = false;
-          };
-          return prevState;
-        })
+      xhr.onload = function() {
+        projectFiles[file].blob = xhr.response;
+        remainingFiles--;
+        if(remainingFiles === 0) _this.readProjectFilesBlobs(projectFiles);
       };
       xhr.open('GET', this.state.projectFiles[file].url);
       xhr.send();
     };
   }
+
+  readProjectFilesBlobs = (projectFiles) => {
+    const pendingReadings = [];
+    for (const path in projectFiles){
+      pendingReadings.push(this.readBlob({...projectFiles[path], path})); 
+    }
+
+    Promise.all(pendingReadings)
+    .then((results) => {
+      const reducedProjectFiles = results.reduce((pf, {path, ...file} ) => ({
+        ...pf,
+        [path] : file,
+      }), {});
+      this.setState({projectFiles: reducedProjectFiles, loadingFiles: false})
+    }) 
+  }
+
+  readBlob = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener('loadend', () => {
+      file.content = reader.result
+      resolve(file);
+    })
+    reader.readAsText(file.blob);
+  })
 
   getCurrentHackInfo = () => {
     const _this = this;

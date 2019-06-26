@@ -4,31 +4,31 @@
   "private": true,
   "homepage": "/",
   "dependencies": {
-    "bootstrap": "^4.1.2",
-    "codemirror": "^5.40.2",
+    "@babel/runtime": "^7.4.5",
+    "@emotion/core": "^0.13.1",
+    "@emotion/styled": "^0.10.6",
+    "bootstrap": "^4.3.1",
+    "codemirror": "^5.48.0",
+    "deep-equal": "^1.0.1",
     "draft-js": "^0.10.5",
-    "moment": "^2.22.2",
-    "moment-timezone": "^0.5.21",
-    "react": "^16.4.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.25",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
     "react-codemirror2": "^5.1.0",
-    "react-cookie": "^3.0.4",
-    "react-day-picker": "^7.2.3",
-    "react-dom": "^16.4.1",
+    "react-cookie": "^3.1.2",
+    "react-day-picker": "^7.3.0",
+    "react-dom": "^16.8.6",
     "react-mde": "^5.8.0",
     "react-moment": "^0.7.9",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
-    "react-treebeard": "^3.1.0",
-    "showdown": "^1.8.6",
-    "styled-components": "^3.4.0",
-    "sweetalert2": "^7.29.0",
-    "@emotion/core": "^0.13.1",
-    "@emotion/styled": "^0.10.6",
-    "@babel/runtime": "^7.0.0",
-    "deep-equal": "^1.0.1",
-    "prop-types": "^15.6.2",
+    "react-treebeard": "^3.2.2",
     "shallowequal": "^1.1.0",
-    "velocity-react": "^1.4.1"
+    "showdown": "^1.9.0",
+    "styled-components": "^3.4.10",
+    "sweetalert2": "^7.33.1",
+    "velocity-react": "^1.4.3"
   },
   "dependenciesComments": {
     "bootstrap": "Css library",
@@ -48,6 +48,6 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "jshint": "^2.9.6"
+    "jshint": "^2.10.2"
   }
 }
