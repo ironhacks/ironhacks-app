@@ -176,7 +176,6 @@ class CommentView extends React.Component {
     }).catch(function(error) {
       console.error("Error adding document: ", error);
     });
-
   }
 
   deleteSingleComment = (comment) => {
@@ -228,7 +227,6 @@ class CommentView extends React.Component {
           </div>
           {this.props.commentData.author === this.state.user.uid && 
             <Control>
-              <DeleteButton><img src={TrashIcon} alt="trash-icon" onClick={this.deleteComment}/></DeleteButton>
               <DeleteButton><img src={TrashIcon} alt="trash-icon" onClick={this.deleteComment}/></DeleteButton>
             </Control>
           }

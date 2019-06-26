@@ -23,7 +23,6 @@ const MainContainer = styled('div')`
   display: flex;
   flex-direction: column;
   padding: 0 20px 0 20px;
-
   * li {
     width: 100%;
     cursor: pointer;
@@ -117,7 +116,6 @@ const TreeStyles = {
 
 const NodeHeader = styled('div')`
   display: inline-block;
-
   .node-item {
     width: 100%;
     display: flex;
@@ -132,16 +130,13 @@ const NodeHeader = styled('div')`
         width: 14px;
         margin-right: 5px;
       }
-
       &.item-control {
         position: absolute;
         right: 0;
-
         button {
           border: none;
           background-color: transparent; 
         }
-
         img {
           margin-right: 0;
         }
@@ -165,12 +160,6 @@ decorators.Header = ({style, node}) => {
     </NodeHeader>
   );
 };
-
-// {!Constants.permanentFiles.includes(node.name) && !node.children &&
-//         <div className='item-control'>
-//           <button><img src={trashIcon} alt="delete-file"/></button>
-//         </div>
-//         }
 
 class FilesContainer extends React.Component {
   constructor(props){
