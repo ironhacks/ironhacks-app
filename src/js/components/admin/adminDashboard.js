@@ -136,7 +136,7 @@ class AdminDashboard extends React.Component {
     });
   };
 //--------------------------- SETTINGS SECTION ----------------------------//
-  //This function handle the tutorial docuement update.
+  //This function handle the whitelist update.
   onSaveSettings = (whiteList) => {
     this.updateHackSettings(whiteList);
   };
