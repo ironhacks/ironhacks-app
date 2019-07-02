@@ -352,6 +352,329 @@ Currently there is not a tos nor a pp web. We are working on that.
 
 Once a normal user logs we redirect the user to a different place accoding with its role, if is an admin we redirect to the admin panel, if not, we redirect to the select hack view.
 
+# Administrating the platform
+*On ./src/js/components/admin/admin.js*
+
+The task of an administrator is to create and maganage the hacks that are in the platform. A Hack is a cyclic coding contest, we call each cycle a phase. A phase is divided into 2 parts: coding and evaluation. The participants will try to solve the challenge during the coding stage and push their advances at the end of the stage. During the evaluation stage, the administrator will review the projects and provide a score for each participant, the participants will have access to that score at the start of the next phase, and so on til the end of the hack.
+
+We pull the data of all hacks using ```getHacks```
+
+```javascript
+getHacks = () => {
+  const firestore = window.firebase.firestore();
+  const settings = {timestampsInSnapshots: true};
+  firestore.settings(settings);
+  const _this = this;
+  var hacks = [];
+  firestore.collection("hacks").get().then(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+      // doc.data() is never undefined for query doc snapshots
+      const hackData = doc.data()
+      hackData.id = doc.id;  
+      firestore.collection('adminHackData').doc(doc.id)
+      .get()
+      .then(function(doc) {
+        hackData['whiteList'] = doc.data().whiteList;
+        hackData['task'] = doc.data().task;
+        hacks.push(hackData);
+        _this.setState({hacks: hacks});
+      });
+    });
+  })
+  .catch(function(error) {
+      console.error("Error getting documents: ", error);
+  });
+};
+```
+
+We also merge the public hack data (that we pulled from the ```hacks``` collection) with the admin hack data (that we pulled from ```adminHackData```).
+
+Let's start by the creation of a hack. When an admin login in the platform, is redirected to the ```admin``` view, this view displays the current hacks (if any) and allows the admin to start the creation process on a new hack.
+
+## Creating a new hack
+*On ./src/js/components/admin/newHack/newHack.js*
+Once the admin clicks on "add hack" we redirect him to the ```newHack``` view, in this view we ask for the basic data of the hack:
+
++ The name of the hack
++ The dates of the phases (must be at least 1)
++ Forums names and treatments (Must be at least 1)
+
+```javascript
+constructor(props){
+  super(props);
+  this.state = {
+    hackName : '',
+    selectedPhase: 0,
+    from: undefined,
+    to: undefined,
+    isCalendarManagingFocus: false,
+    phases: [{coding: {start: new Date(), end: new Date()}, evaluation: {start: new Date(), end: new Date()}}],
+    forums: [{name: '', treatment: 0, participants: []}],
+    isCreateEnable: true,
+    mustNavigate: false
+  }
+  //References
+  this.calendarContainerRef = React.createRef();  
+};
+```
+
+From the contructor of the component we can visualize all the data we are getting from the view: 
+
++ ```hackName```: Name of the hack, pulled from a normal input.
++ ```selectedPhase```: We we show the [```react-day-picker```](https://react-day-picker.js.org/), we bind the phase using this index, for example, if the index is 3, that means that the user is picking phase's 3 dates.
++ ```from```: The start date for a phase stage.
++ ```to```: The finish date for a phase stage.
++ ```isCalendarManagingFocus```: We use this to handle the opacity of the [```react-day-picker```](https://react-day-picker.js.org/) component.
++ ```phases```: Array of objects representing the phases of the hack.
++ ```forums```: Array of objects representing the forums of the hack.
++ ```isCreateEnable```: We set this to true when all the minimun data to create a hack is provided, so we enable the ```create hack``` button.
+
+Then, we process al the data using the ```createHack``` function:
+
+```javascript
+createHack = () => {
+  //Mapping phases object to create the json representation of it.
+  const phases = this.state.phases.map((item, index) => {
+    return {
+      index: index,
+      codingStartDate: item.coding.start,
+      codingStartEnd: item.coding.end,
+      evaluationStartDate: item.evaluation.start,
+      evaluationStartend: item.evaluation.end,
+    }
+  })
+
+  const hackInstance = {
+    name: this.state.hackName,
+    phases: phases,
+    tutorial: {
+      doc: '',
+      start: new Date(),
+      end: new Date(),
+    },
+  }
+
+  const adminData = {
+    task: {
+      doc: '',
+      releaseDate: new Date(),
+    },
+    whiteList: [],
+  }
+
+  this.setState({hack: hackInstance});
+  //db Reference
+  const firestore = window.firebase.firestore();
+  const settings = {timestampsInSnapshots: true};
+  firestore.settings(settings);
+  const _this = this;
+  //TODO: add forum id
+  firestore.collection('hacks').add(hackInstance)
+  .then(function(docRef) {
+    const hackRef = docRef.id;
+    _this.setState({hackId: hackRef});
+    //Adding each forum to the hack:
+    // Get a new write batch
+    const batch = firestore.batch();
+    _this.state.forums.forEach((forum) => {
+      forum.hack = hackRef;
+      const newForumRef = firestore.collection('forums').doc();
+      batch.set(newForumRef, forum);
+    })
+    const adminDataRef = firestore.collection('adminHackData').doc(hackRef);
+    batch.set(adminDataRef, adminData);
+    // Commit the batch
+    batch.commit().then(function () {
+        //TODO: Update the UI to give feedback to the user
+        _this.setState({mustNavigate: true})
+    });
+  })  
+  .catch(function(error) {
+    console.error("Error adding document: ", error);
+  });
+};
+```
+
+Here we merge all the data into one object: ```hackInstance``` and push it to Firebase, this process affects multiple collections: We first create the object on the ```hacks``` collection, then we create all the forums on the ```forums``` collection, once we obtain the reference of all the forums documents, we create an aditional document on ```adminHackData``` where we upload all the forums references.
+
+Once this is done, we redirect the admin to the admis dashboard. Keep in mind that this is an 'empty' hack, it doesn't have a task or a tutorial document, neither a whitelist (a participant list). All this data must be added from the admin dashboard:
+
+## The Admin Dashboard:
+*On ./src/js/components/admin/adminDashboard.js*
+
+There are 3 main actions that and admin can perform on the dashboard:
+
++ Manage the whitelist.
++ Create and publish the taks document.
++ Create and publish the turotial document.
+
+Let's start by the whitelist:
+
+### The Whitelist
+*On ./src/js/components/admin/sections/settings/admSettingsSection.js*
+
+The whitelist is composed by emails, each email bellongs to a participant, if a user's email matchs with an item on a whitelist, that hack will appear on the ```hackSelection``` section, and the user will be able to register in that hack.
+
+```javascript
+constructor(props){
+  super(props);
+  let whiteList = [''];
+  if(this.props.hack.whiteList && this.props.hack.whiteList.length > 0){
+    whiteList = this.props.hack.whiteList;
+  }
+    this.state = {
+    whiteList: whiteList,
+  }
+}
+```
+
+The whitelist is just an array of strings, we pull the whitelist from the props, and if there is any item, we load it to the state.
+
+When the user saves the list, we call the ```saveChanges``` function:
+
+```javascript
+saveChanges = () => {
+  let normalizeWhiteList = this.state.whiteList;
+  normalizeWhiteList = this.normalizeEmailArray(normalizeWhiteList);
+  this.props.onSaveSettings(normalizeWhiteList);
+  this.setState({whiteList: normalizeWhiteList});
+};
+```
+
+We first normalized the email array, the ```normalizeEmailArray``` function first check that the email is a valid email and then remove the duplicates on the list. Then we call a function on the ```AdminDashboard``` component:
+
+*On ./src/js/components/admin/adminDashboard.js*
+```javascript
+onSaveSettings = (whiteList) => {
+  this.updateHackSettings(whiteList);
+};
+
+updateHackSettings = (whiteList) => {
+  //db Reference
+  const firestore = window.firebase.firestore();
+  const settings = {timestampsInSnapshots: true};
+  firestore.settings(settings);
+  const _this = this;
+  //Updating the whiteList collection:
+  var batch = firestore.batch();
+  whiteList.forEach((email) => {
+    const data = {whiteList: window.firebase.firestore.FieldValue.arrayUnion(_this.state.hackId)}
+    const whiteListDoc = firestore.collection('whiteLists').doc(email);
+    batch.set(whiteListDoc, data, {merge: true});
+  })
+  // Adding whiteList cross reference to the hack object on firebase:
+  const hackWhiteListObject = {
+    whiteList:  whiteList
+  }
+  const hackRef = firestore.collection('adminHackData').doc(this.state.hackId);
+  batch.set(hackRef, hackWhiteListObject, {merge: true});
+  batch.commit()
+  .then(() => {
+    //TODO: update UI to provide feedback to the user.
+    //Updating local stage
+    this.setState((prevState, props) => {
+      prevState.hack.whiteList = {whiteList: whiteList}
+      return {hack: prevState.hack};
+    })
+  })  
+  .catch(function(error) {
+    console.error("Error adding document: ", error);
+  });
+};
+```
+
+```onSaveSettings``` call's ```updateHackSettings``` which actually updates the database. First we update the users whitelist object on the ```whitelists``` collection, then we update the ```adminHackData``` collection.
+
+### The Task Document
+*On ./src/js/components/admin/sections/task/admTaskSection.js*
+
+The task document is a markdown document (just like this one), we use [```react-mde```](https://github.com/andrerpena/react-mde#readme) to provide an editor with a preview. 
+
+```javascript
+onEditorChange = (markdown) => {
+  this.props.onTaskMarkdownUpdate(markdown);
+};
+
+render() {
+  return (
+    <ThemeProvider theme={theme}>
+      <SectionContainer>
+        <h2>Task document editor</h2>
+        <p>Here you can edit and preview the Task document. You can also publish the document or schedule it (check bellow).</p>
+        <EditorContainer>
+          <MarkdownEditor editorLayout='horizontal' onEditorChange={this.onEditorChange} withContent={this.props.previousDocument}/>
+        </EditorContainer>
+        <p>Here you will find the instrictions to publish your task.</p>
+        <AvailableActionsDiv>
+          <Button 
+            primary
+            width='150px' 
+            margin='0 0 0 15px'
+            onClick={this.props.updateTaskDocument}>
+            Publish Task
+          </Button>
+        </AvailableActionsDiv>
+      </SectionContainer>
+    </ThemeProvider>
+  );
+}
+```
+As you see, this is a pure presentational component, it just take the content of the [```react-mde```](https://github.com/andrerpena/react-mde#readme) editor and send it to the parent component (```AdminDashboard```), this will update the state of the ```AdminDashboard``` component and when the user saves the document we call ```updateTaksDocument```:
+
+*On ./src/js/components/admin/adminDashboard.js*
+```javascript
+updateTaskDocument = () => {
+  //db Reference
+  const firestore = window.firebase.firestore();
+  const settings = {timestampsInSnapshots: true};
+  firestore.settings(settings);
+  //Updating the current hack:
+  const hackRef = firestore.collection('adminHackData').doc(this.state.hackId);
+  const hackTask = this.state.hack.task;
+  hackTask.doc = this.utoa(this.state.taskMarkdown)
+  hackRef.update({
+    task: hackTask,
+  })
+  ...
+};
+```
+
+Here we encode the plain text of the task on base64 and then we update the document on the ```adminHackData``` collection.
+
+### The Tutorial Document
+*On ./src/js/components/admin/sections/tutorial/admTutorialSection.js*
+
+The tutorial document works *almost in the same way* that the task document, the only difference being that we store the tutorial document on the ```hacks``` collection, rather than the ```adminHackData```:
+
+*On ./src/js/components/admin/adminDashboard.js*
+```javascript
+onTutorialMarkdownUpdate = (markdown) => {
+  this.setState({tutorialMarkdown: markdown});
+};
+
+updateTutorialDocument = () => {
+  //db Reference
+  const firestore = window.firebase.firestore();
+  const settings = {timestampsInSnapshots: true};
+  firestore.settings(settings);
+  //Updating the current hack:
+  const hackRef = firestore.collection('hacks').doc(this.state.hackId);
+  var hackTutorial = this.state.hack.tutorial;
+  hackTutorial.doc = this.utoa(this.state.tutorialMarkdown)
+  hackRef.update({
+    tutorial: hackTutorial,
+  })
+  .then(() => {
+    //TODO: update UI to provide feedback to the user.
+  })  
+  .catch(function(error) {
+    console.error("Error adding document: ", error);
+  });
+};
+```
+
+Now lest jump into the participant flow:
+
 # hackSelection.js
 *On ./src/js/components/login/hackSelection.js*
 
@@ -1363,4 +1686,9 @@ The text editor is an implementation of the [```react-codemirror2```](https://gi
 </PreviewContainer>
 ```
 
-The preview component is a simple presentational component that shows an Iframe pointing to the project preview URL, we handle that preview on the backend, serving all the files for a given project through cloud functions. PLease check the backend repo to understand how we achieve that result. 
+The preview component is a simple presentational component that shows an Iframe pointing to the project preview URL, we handle that preview on the backend, serving all the files for a given project through cloud functions. Please check the backend repo to understand how we achieve that result. 
+
+We update the preview iframe by adding an empty space on the url.
+
+---
+
