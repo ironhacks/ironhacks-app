@@ -27,6 +27,7 @@ The platform also use the following frameworks/third party libraries:
 + [react-day-picker](https://react-day-picker.js.org/)
 + [react-mde](https://github.com/andrerpena/react-mde#readme)
 + [sweetalert2](https://sweetalert2.github.io/)
++ [react-treebeard](https://github.com/storybookjs/react-treebeard)
 
 We assume you are familiarized with all these librarires, how they work, and how to code using them. If you are not familiarized with them please check the documentation of each one.
 
@@ -298,7 +299,7 @@ Here we have all the posible routes on the platform, we use 3 switches becouse t
 In the second switch we find all the sections of the platform, from here we are going to explain every single rounte using it path and it's file, starting with the login.
 
 # Login - login.js
-*full path: ./src/js/components/login/login.js
+*full path: ./src/js/components/login/login.js*
 
 On this view we create and diplay the firebaseAuthUI instance, we start on the initAuthUI function:
 
@@ -391,7 +392,7 @@ The ```hackIndex``` parameter is a non negative int, which represents the index 
 
 However, if the user is no registered in the hack, the ```goToPresurvey``` function is called instead:
 
-### Registering process:
+### Registration process:
 
 ```javascript 
 swal(Constants.preSurveyAlertContent('qualtrics-survey-url?user_email=' + this.props.user.email))
@@ -440,71 +441,111 @@ Then, as it shows in the first function, once the modal is closed with a success
 ```
 This function recieve as parameter the hackIndex, corresponding to the hackID within the ```registeredHacks``` array.
 
-Once this is done, we start the creation of the users hack project. This is a project that is bind to a hack, specifically, to the hack that the user is registering on, this allow the user to push the project to evaluation. The user can create additional projects that are not binded to any hack in particullar.
+Once this is done, we start the creation of the users hack project. This is a project that is bind to a hack, specifically, to the hack that the user is registering on, this allow the user to push the project to evaluation. The user can create additional projects that are not binded to any hack in particullar from the ```UserProfile``` view.
 
 This process starts with the ```createNewProject``` function:
 
 ```javascript
 createNewProject = (name, hackId, hackIndex) => {
-    this.setState({status: "Creating participant projects (1/2)..."});
-    // Accesing to all the blob template variables:
-    const files = TemplateFiles.files;
-    Promise.all(
-      // Array of "Promises"
-      files.map(file => this.putStorageFile(file, name))
-    )
-    ...
-  }
-
-  createGitHubRepository = (name, hackId, hackIndex) => {
-    this.setState({status: "Creating participant profile (2/2)..."});
-    // Accesing to all the pain text template variables:
-    const templateFiles = 
-    [
-       {
-          name: 'index.html',
-          content: TemplateFiles.indexContent,
-        },
-        ...
-    ]
-    let projectName = `${hackId}-${this.state.user.uid}-${name}`;
-    const _this = this;
-    const newRepoConfig = {
-      name: projectName,
-      description: 'Repo description',
-      private: true,
-      auto_init: true,
-    }
-    const createGitHubRepo = window.firebase.functions().httpsCallable('createGitHubRepo');
-    createGitHubRepo(newRepoConfig)
-    .then((result) => {
-      if(result.status === 500){
-        console.error(result.data.error);
-      }else{
-        _this.setState({status: "Uploading files..."});
-        const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
-        commitToGitHub({name: projectName, files: templateFiles, commitMessage: 'init commit'})
-        .then((result) => {
-          if(result.status === 500){
-            console.error(result.error);
-          }else{
-            _this.setHack(hackIndex);
-          }
-        })
-      }
-    });
-  }
-```
-
-This function will pull the templateFiles and specify the creation props. Please check the [Octonode documentation](https://github.com/pksunkara/octonode) to undestand the props structure. First we create an empty repo (auto initilized), and then we make a commit with the templeate files. Please refer to the [Backend docs](https://github.com/RCODI/the-ironhacks-platform-backend) to undertant the cloud functions.
-
-The template files are pulled from:
+  this.setState({status: "Creating participant projects (1/2)..."});
+  // Accesing to all the blob template variables:
+  const files = TemplateFiles.files;
+  Promise.all(
+    // Array of "Promises"
+    files.map(file => this.putStorageFile(file, name))
+  )
+  .then((url) => {
+    this.createGitHubRepository(name, hackId, hackIndex);
+  })
+  ...
+}
+``` 
+The process is divided in two steps, we first get the template files blobs from the ```Template``` object. The template files are pulled from:
 
 ```javascript
 import * as TemplateFiles from './newHackTemplates/templates.js';
 ```
 
 *Please check the file to undestand how the templates are done.*
+
+Then we push the files to ```Firebase Storage``` using the ```putStorageFile``` function:
+
+```javascript
+putStorageFile = (file, projectName) => {
+  //Uploading each template file to storage
+  const storageRef = window.firebase.storage().ref();
+  const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)   
+  const _this = this;
+  // the return value will be a Promise
+  return pathRef.put(file.blob)
+  .then((snapshot) => {
+    // Get the download URL
+    pathRef.getDownloadURL().then(function(url) {
+      const fileURL = url;
+      const fileJson = {};
+      const fullPath = file.path + file.name;
+      fileJson[fullPath] = {url: fileURL}
+      const firestore = window.firebase.firestore();
+      const settings = {timestampsInSnapshots: true};
+      firestore.settings(settings);
+      firestore.collection("users")
+      .doc(_this.state.user.uid)
+      .collection('projects')
+      .doc(projectName)
+      .set(fileJson, {merge: true})
+      .then(function(doc) {
+        _this.setState({projectList: {}});
+      })
+    })
+  ...
+}
+ ```
+Here we put the file on the storage and save de download URL on the user's project document, we will use that URL on the project editor in order to display the contents of the file on the editor.
+
+Once we put all the files on the storage, we create the Github repository:
+
+```javascript
+createGitHubRepository = (name, hackId, hackIndex) => {
+  this.setState({status: "Creating participant profile (2/2)..."});
+  // Accesing to all the pain text template variables:
+  const templateFiles = 
+  [
+     {
+        name: 'index.html',
+        content: TemplateFiles.indexContent,
+      },
+      ...
+  ]
+  let projectName = `${hackId}-${this.state.user.uid}-${name}`;
+  const _this = this;
+  const newRepoConfig = {
+    name: projectName,
+    description: 'Repo description',
+    private: true,
+    auto_init: true,
+  }
+  const createGitHubRepo = window.firebase.functions().httpsCallable('createGitHubRepo');
+  createGitHubRepo(newRepoConfig)
+  .then((result) => {
+    if(result.status === 500){
+      console.error(result.data.error);
+    }else{
+      _this.setState({status: "Uploading files..."});
+      const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
+      commitToGitHub({name: projectName, files: templateFiles, commitMessage: 'init commit'})
+      .then((result) => {
+        if(result.status === 500){
+          console.error(result.error);
+        }else{
+          _this.setHack(hackIndex);
+        }
+      })
+    }
+  });
+}
+```
+
+This function will pull the templateFiles and specify the creation props. Please check the [Octonode documentation](https://github.com/pksunkara/octonode) to undestand the props structure. First we create an empty repo (auto initilized), and then we make a commit with the templeate files. Please refer to the [Backend docs](https://github.com/RCODI/the-ironhacks-platform-backend) to understant the cloud functions.
 
 Once the Github project is created, we call the ```setHack``` function that will redirect the user to the forum.
 
@@ -844,3 +885,482 @@ Whit this we finish the main components of the forum.
 We are going to proceed now with the project editor.
 
 # The Project Editor
+
+Before jump into the actual project editor, let's check how to create a new project:
+
+### Creating a new project
+*On: ./src/js/component/userProfile/userProfile.js*
+
+The user can create a non-binded project by clicking the "Create new project" button. Once the user provides a name for the project, we just mimic the same process we do when a user is registered into a hack. Please refer to that section to check it.
+
+Once the project is created, or when the user clicks in an already existing project, we redirect it to the ```ProjectEditor```.
+
+## The Editor
+*On: ./src/js/component/projectEditor/projectEditor.js*
+
+The project editor is composed by 3 different components: The control section (where the user select files, save the project, push to evaulation, among other stuff), the text editor and the preview.
+
+Before go into those sections, let's check the initialization of the component:
+
+```javascript
+constructor(props){
+  super(props);
+  const { cookies, user } = props;
+  const hackerId = props.location.query ? props.location.query.hackerId : null;
+  const readOnly = hackerId ? true : false;
+  this.state = {
+    user,
+    readOnly,
+    hackerId,
+    editorKey: Math.random(),
+    hidePreview: false,
+    currentHack: cookies.get('currentHack') || null,
+    editorContent: '',
+    editorMode: 'xml',
+    loadingFiles: true,
+    selectedFile: 'index.html',
+    projectFiles: [],
+    currentAlert: null,
+    creatingFile: false,
+    projectName: this.props.match.params.proyectName,
+    timer: {seconds: 0, minutes: 0, hours: 0, days: 0},
+  }
+  this.firestore = window.firebase.firestore();
+}
+```
+
+The state of the component is quite large, let's breack it down: 
+
+The first thing we do is to check if there is a hackerID on the props, if yes, that means that the user that is looking the project is not the owner, in this particular case, this beheaviour is due to the treatment we gave to the experiment, this is triggered when a user clicks on a specific link on the results page.
+
+Then we set the state object:
+
++ ```user```: The user data pulled from the props
++ ```readOnly```: Explain above
++ ```hackerId```: Explain above
++ ```editorKey```: this is a random number generated everytime we change the currend file on the editor, this effectively re-render the codemirror component, erasing the text history, so even if the user hit ```control + z``` the previous file will not be rendered. 
++ ```hidePreview```: If this is true, the Preview component will be hide adn be opened on a new tab.
++ ```currentHack```: currentHackID, pulled from cookies if any, or setted later.
++ ```editorContent```: the text is going to be displayed on the editor.
++ ```editorMode```: specify the highlight plugin (xml, css, javascript),
++ ```loadingFiles```: if true, a spinner will be rendered on the FilesComponent.
++ ```selectedFile```: the name of the current selected file.
++ ```projectFiles```: and array with all the files objects.
++ ```creatingFile```: if true, the creating file flow is running.
++ ```projectName```: Just the project name.
++ ```timer```: count down to next phase.
+
+After set the state, we initialize some data:
+
+```javascript
+componentDidMount() {
+  this.getProjectPreviewPath();
+  this.getProjectFilesUrls();
+  this.getCurrentHackInfo();
+  window.addEventListener("message", this.recieveMessage)
+}
+```
+
+First we compose the preview URL, the preview URL is predictable, we "calculated" and the we put ir on the state.
+
+```javascript
+getProjectPreviewPath = () => {
+  // Create a reference with an initial file path and name
+  const userId = this.state.hackerId || this.state.user.uid;
+  const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`; 
+  this.setState({proyectPath: proyectPath});
+}
+```
+
+Then we pull the project data from firebase, first by getting the URLs from the firestore databes:
+
+```javascript
+getProjectFilesUrls = () => {
+  const firestore = window.firebase.firestore();
+  const settings = {timestampsInSnapshots: true};
+  firestore.settings(settings);
+  const _this = this;
+  const userId = this.state.hackerId || this.state.user.uid;
+  //Updating the current hack:
+  firestore.collection('users')
+  .doc(userId)
+  .collection('projects')
+  .doc(this.state.projectName)
+  .get()
+  .then(function(doc) {
+    _this.setState({projectFiles: doc.data()})
+    _this.getProjectFiles();
+  }) 
+  .catch(function(error) {
+    console.error(error)
+  });
+}
+```
+
+And then pulling the files from the storage:
+
+```javascript
+getProjectFiles = () => {
+  let remainingFiles = Object.keys(this.state.projectFiles).length
+  const projectFiles = { ...this.state.projectFiles};
+  const _this = this;
+  for (const file in this.state.projectFiles){
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = function() {
+      projectFiles[file].blob = xhr.response;
+      remainingFiles--;
+      if(remainingFiles === 0) _this.readProjectFilesBlobs(projectFiles);
+    };
+    xhr.open('GET', this.state.projectFiles[file].url);
+    xhr.send();
+  };
+}
+```
+
+We normalized the blobs by using ```readProjectFilesBlobs```, this chain of functions will read all the blobs we pulled here, create an array of objects that contains the parced data, the blob and the path of each file. Then we update the state to re-render the different componets that display this data.
+
+Last thing we do is get the current hack info, we use this data to display the countdown timer for the next phase:
+
+```javascript
+getCurrentHackInfo = () => {
+  const _this = this;
+  this.firestore.collection('hacks')
+  .doc(this.state.currentHack)
+  .get()
+  .then((doc) => {
+    const hackData = doc.data();
+    const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+    _this.setState({
+      hackData,
+      currentPhase,
+    });
+    if(currentPhase !== -1) 
+      _this.getCountDown()
+  })
+  .catch(function(error) {
+      console.error("Error getting documents: ", error);
+  })
+};
+```
+
+Know we can start with each of the 3 components that compose the Project editor, starting by the Control section:
+
+### The Control Section
+*On: ./src/js/component/projectEditor/projectEditor.js*
+
+```jsx
+<ProjectContent>
+  <h2>{this.state.projectName.toUpperCase()}</h2>
+  {!this.state.readOnly && 
+    <div className="control">
+      <Button primary onClick={this.saveProject}> Save and run </Button>
+      {this.state.currentPhase !== -1 &&
+        <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
+      }
+      <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
+    </div>
+  }
+  <h3>Files:</h3>
+  {this.state.loadingFiles ? <Loader 
+      backgroundColor={Constants.projectEditorBgColor}
+      dark
+      small
+    /> : 
+    <FilesContainer files={this.state.projectFiles}
+      onFileSelection={this.onFileSelection}
+      selectedFile={this.state.selectedFile}
+      projectName={this.state.projectName.toUpperCase()}/>  
+  }
+  <div className="hack-status">
+    <h3>Current phase: {this.state.currentPhase !== -1 ? this.state.currentPhase : 'Tutorial stage'}</h3>
+    <p>
+      Remaining time: <br/>
+      {`${this.state.timer.days}:${this.state.timer.hours}:${this.state.timer.minutes}:${this.state.timer.seconds}`}
+    </p>
+  </div>
+</ProjectContent>
+```
+
+There are some key action that the user can perform here:
+
+- ```saveProject``` by clicking Save and run.
+- ```startPushNavigation``` by clicking Push to evaluation.
+- ```startCreateNewFileFlow``` by clicking Create new file.
+
+There is also the ```FilesContainer``` component, which allows the user to navigate through the diferent files of the project.
+
+Let's start by the Save and run button:
+
+```javascript
+saveProject = () => {
+  this.saveStat({event: 'save-and-run', metadata: {action: 'click'}})
+  // Raw string is the default if no format is provided
+  const newBlobs = this.updateProjectBlobs();
+  const _this = this;
+  Promise.all(
+    newBlobs.map(item => this.uploadBlogToFirebase(item))
+  )
+  .then((url) => {
+    _this.setState((prevState, props) => {
+      const proyectPath = prevState.proyectPath + ' ';
+      const projectFiles = prevState.projectFiles;
+      if(projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
+        projectFiles[prevState.selectedFile].content =  projectFiles[prevState.selectedFile].unSavedContent;
+      }
+      return {projectFiles, proyectPath};
+    });
+  })
+  .catch((error) => {
+    console.log(`Some failed: `, error.message)
+  });
+}
+```
+
+First, the function will save and stat on the db. Then we obtain the blobs of the modified files in the project using the ```uploadBlogToFirebase``` function: 
+
+```javascript
+updateProjectBlobs = () => {
+  let newBlobs = [];
+  for(const fileName in this.state.projectFiles){
+    if(this.state.projectFiles[fileName].didChange){
+      const path = `${this.state.user.uid}/${this.state.projectName}/${fileName}`
+      const newContent = this.state.projectFiles[fileName].unSavedContent;
+      const updatedBlob = new Blob([newContent], {
+          type: this.state.projectFiles[fileName].blob.type
+      });
+      newBlobs.push({path: path, blob: updatedBlob});
+    }
+  }
+  return newBlobs;
+}
+```
+
+This function will take the modified file from the state of the component and then will compose an array of objects, each one with the updated blob and the path of each file.
+
+Right after that we update the firebase storage usign ```uploadBlogToFirebase```:
+
+```javascript
+uploadBlogToFirebase = (blob) => {
+  const indexRef = storageRef.child(blob.path);
+  return indexRef.put(blob.blob).then(function(snapshot) {
+  }).catch(function(error) {
+      console.error("Error updating documents: ", error);
+  });
+}
+```
+
+And to finish we update the state of the component, reseting the updated blobs and forcing the iframe to reload the preview:
+
+```javascript
+.then((url) => {
+  _this.setState((prevState, props) => {
+    const proyectPath = prevState.proyectPath + ' ';
+    const projectFiles = prevState.projectFiles;
+    if(projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
+      projectFiles[prevState.selectedFile].content =  projectFiles[prevState.selectedFile].unSavedContent;
+    }
+    return {projectFiles, proyectPath};
+  });
+})
+```
+---
+
+The next one is ```startPushNavigation```, before a user can push the project to evaluation, a phase survey must be filled, we do this using ```sweetalert``` as we did on the ```hackSelection``` section, please check it out to understant how we detect changes on the modal.
+
+We load the 
+
+```javascript
+startPushNavigation = () => {
+  const _this = this;
+  this.saveProject();
+   swal(Constants.surveyRedirecAlertContent)
+  .then((result) => {
+    if(!result.dismiss) {
+      swal(Constants.pushSurveyAlertContent(`${commitSurveys[_this.state.currentPhase]}?email=${_this.state.user.email}&user_id=${_this.state.user.uid}`))
+      .then((result) => {
+        if(!result.dismiss) {
+          swal(Constants.commitContentAlertContent)
+          .then((result) => {
+            const { value } = result;
+            if (value) {
+              this.pushToGitHub(value)
+              swal(Constants.loadingAlertContent)
+              .then((result) => {
+                swal(Constants.onSuccessAlertContent)
+              })
+            };
+          });
+        }
+      });
+    };
+  }); 
+}
+```
+
+Once the user finish the survey, we ask him for a commit message, and then we call ```pushToGithub``` using the messagge as parameter.
+
+```javascript
+pushToGitHub = (commitMessage) => {
+  const composedCommitMessage = commitMessage;
+  const files = [];
+  for (const key in this.state.projectFiles) {
+    files.push({name: key, content: this.state.projectFiles[key].content})
+  }
+  let projectName = this.state.user.isAdmin ? 
+    `admin-${this.state.user.uid}-${this.state.projectName}` : 
+    `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
+  const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
+  commitToGitHub({name: projectName, files:files, commitMessage: composedCommitMessage})
+  .then((result) => {
+    if(result.status === 500){
+      console.error(result.error);
+    }else{
+      swal.clickConfirm();
+    }
+  })
+}
+```
+
+Here we build the name of the repo, if is a user, we will use the current hack as prefix, if is an admin, we just use the userID. Then we call the ```commitToGitHub``` cloud function to finish the job. Check the backend repo to understand how it works.
+
+---
+
+The last button calls ```startCreateNewFileFlow```:
+
+```javascript
+startCreateNewFileFlow = async () => {
+  this.saveProject();
+  const {value: filePath} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
+  if(filePath) {
+    const file = this.createNewFile(filePath);
+    this.putStorageFile(file, this.state.projectName);
+  }
+}
+```
+
+This will promt a ```sweetalert``` modal asking for the path of the file, we send the ```fileNameValidator``` function as a parameter to verify the path introduced is a valid one:
+
+```javascript
+fileNameValidator = (fileName) => {
+  if (fileName) {
+    const name = fileName.toLowerCase();
+    const splitedFileName = name.split('/')
+    if (splitedFileName.includes('file') || splitedFileName.includes('folder')) {
+      return true && '"File" or "folder" are not valid names.';
+    }
+    if (this.state.projectFiles.hasOwnProperty(fileName)) {
+      return true && 'File already exists.'
+    }
+    return false;
+  } else {
+    return !fileName && 'You need to write something!'
+  }
+}
+```
+Here we just check if the file already exist, we also set the words 'file' and 'folder' as not valid ones.
+
+If the path is valid, we proceed with the file creation calling ```createNewFile```:
+
+```javascript
+createNewFile = (filePath) => {
+  const splitedPath = filePath.split('/')
+  const newFile = {
+    name: splitedPath[splitedPath.length - 1],
+    path: filePath,
+    blob: new Blob([`${splitedPath[splitedPath.length - 1]} create by: ${this.state.user.displayName}`], {type: this.getMIME(splitedPath[splitedPath.length - 1])}),
+  };
+  return newFile;
+}
+```
+
+The function will pop the file name from the path and create a new blob. The content of the blob is just the name of the file and the author, we match the extention of the file to determine the MIME type using ```getMIME```.
+
+Once the file object is created, we return it and continue with the file creation process, the last step is to put the file into the Firebase storage, we do this using ```putStorageFile``` this is the same function we used on the registration process, you can check it out there.
+
+---
+
+Now we can talk about the files container:
+
+#### Files container
+*On: ./src/js/component/projectEditor/filesContainer.js*
+
+```jsx
+<FilesContainer files={this.state.projectFiles}
+  onFileSelection={this.onFileSelection}
+  selectedFile={this.state.selectedFile}
+  projectName={this.state.projectName.toUpperCase()}
+/>
+```
+
+The files container is our implementation of the [```react-treebeard```](https://github.com/storybookjs/react-treebeard) component.
+This component will take all the file paths on the project and build the treebeard object representation of them, we then send this representation to create the instance of the treebeard component:
+
+```jsx
+<MainContainer>
+  <Treebeard className='component'
+    data={this.state.data}
+    decorators={decorators}
+    onToggle={this.onToggle}
+    style={TreeStyles}
+  />
+</MainContainer>
+```
+
+We create our own styles and decorators, check the source file to understant them.
+
+### The Text Editor
+
+```jsx
+<EditorContainer large={this.state.hidePreview}>
+  {!this.state.loadingFiles && <Editor
+    key={this.state.editorKey}
+    value={this.state.projectFiles[this.state.selectedFile].content}
+    options={{
+        lineNumbers: true,
+        mode: this.state.editorMode,
+        lint: true,
+        gutters: [
+         'CodeMirror-lint-markers',
+       ],
+        theme: 'material',
+        tabSize: 2,
+        lineWrapping: true,
+        matchBrackets: true,
+        matchTags: true,
+        autoCloseTags: true,
+        autoCloseBrackets: true,
+        readOnly: this.state.readOnly,
+    }}
+    onChange={this.onChangeEditor}
+  />}
+</EditorContainer>
+```
+
+The text editor is an implementation of the [```react-codemirror2```](https://github.com/scniro/react-codemirror2) component, please check their docs to understant how the component works.
+
+### The Preview
+*On ./src/js/components/projectEditor/projectPreview.js*
+
+```jsx
+<PreviewContainer hidden={this.props.hidden}>
+  <div className="iframe-header">
+    <button onClick={this.reloadFrame}>
+      <img src={ReloadIcon} alt='reload-icon'/>
+    </button>
+    <input defaultValue={`www.ironhacks.com/projectEditor/${this.state.projectName}/preview`} readOnly />
+    <a 
+      href={this.state.projectURL}
+      target='_blank'
+      onClick={this.openInANewTab}
+      >
+      <img src={NewTabIcon} alt='reload-icon'/>
+    </a>
+  </div>
+  <div className="smooth-borders">
+    {this.props.projectURL && <iframe src={this.props.projectURL} title='The Project Preview'/>}
+  </div>
+</PreviewContainer>
+```
+
+The preview component is a simple presentational component that shows an Iframe pointing to the project preview URL, we handle that preview on the backend, serving all the files for a given project through cloud functions. PLease check the backend repo to understand how we achieve that result. 

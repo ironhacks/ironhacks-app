@@ -179,7 +179,6 @@ class ProjectEditor extends React.Component {
       loadingFiles: true,
       selectedFile: 'index.html',
       projectFiles: [],
-      currentAlert: null,
       creatingFile: false,
       projectName: this.props.match.params.proyectName,
       timer: {seconds: 0, minutes: 0, hours: 0, days: 0},
@@ -382,8 +381,8 @@ class ProjectEditor extends React.Component {
     }); 
   }
 
-  pushToGitHub = (commiteMessage) => {
-    const composedCommitMessage = commiteMessage + '\n\n\n Final commit phase 1.';
+  pushToGitHub = (commitMessage) => {
+    const composedCommitMessage = commitMessage + '\n\n\n Final commit phase 1.';
     const files = [];
     for (const key in this.state.projectFiles) {
       files.push({name: key, content: this.state.projectFiles[key].content})
@@ -405,6 +404,8 @@ class ProjectEditor extends React.Component {
   uploadBlogToFirebase = (blob) => {
     const indexRef = storageRef.child(blob.path);
     return indexRef.put(blob.blob).then(function(snapshot) {
+    }).catch(function(error) {
+        console.error("Error updating documents: ", error);
     });
   }
 
