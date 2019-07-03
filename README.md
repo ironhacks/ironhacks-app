@@ -13,9 +13,9 @@ The Ironhacks Platform (the platform) use the following firebase services:
 + [Cloud Functions](https://firebase.google.com/docs/functions)
 + [Firebase Auth UI](https://firebase.google.com/docs/auth/web/firebaseui) 
 
-We assume you are familiarized with all these services, how they work, and how to code using them. If you are not familiarized with them please check the Firebase documentation.
+We assume you are familiarized with all these services, how they work and how to code using them. If you are not familiarized with them please check the Firebase documentation.
 
-The platform also use the following frameworks/third party libraries:
+The platform also uses the following frameworks/third party libraries:
 
 + [React](https://reactjs.org/docs/getting-started.html)
 + [react-router-dom](https://reacttraining.com/react-router/)
@@ -29,11 +29,11 @@ The platform also use the following frameworks/third party libraries:
 + [sweetalert2](https://sweetalert2.github.io/)
 + [react-treebeard](https://github.com/storybookjs/react-treebeard)
 
-We assume you are familiarized with all these librarires, how they work, and how to code using them. If you are not familiarized with them please check the documentation of each one.
+We assume you are familiarized with all these librarires, how they work and how to code using them. If you are not familiarized with them please check the documentation of each one.
 
 # Project structure
 
-The platform is a follow the react-creat-app structure:
+The platform is as follows a react-create-app structure:
 
 - ./
 - .gitignore
@@ -74,20 +74,20 @@ The database is split in 2 services, the Cloud Firestore and the storage.
 
 ### Cloud Store
 
-Here we have all the data related with the platform: userdata, hacks data, etc. To get used to the inner structure please read the firebase docs. 
+Here we have all the data related with the platform: user data, hacks data, etc. To get used to the inner structure please read the firebase docs. 
 
 Strucure explanation: 
 
-| colection     | description   | Document id | Doc data |
+| collection     | description   | Document id | Doc data |
 | ------------- |:-------------:| :-------------:|:-------------:| 
 | admins        | The list of users that are administrators. | Random |  |
-| adminHackData | This is the "sencible" hack data, this collection can only be accessed by admins. | Random | registered users, phase results, task document ( encoded on base64 encoded ascii), white list |
+| adminHackData | This is the "sensible" hack data, this collection can only be accessed by admins. | Random | registered users, phase results, task document ( encoded on base64 encoded ascii), white list |
 | comments | Each document on this collection represent a comment on a thread in the forum. | Random | Author UID, Author name, body (the comment itself, encoded on base64 encoded ascii), creation date (createdAt), thread id where the comment was posted |
-| Forums | Each document represent a forum (which is the abstration of a treatment) in a hack | Random | hack to which the forum belongs, the name of the forum (this is how the admin identifies the forum), list of participants UIDs, treatment identifier |
+| Forums | Each document represent a forum (which is the abstraction of a treatment) in a hack | Random | hack to which the forum belongs, the name of the forum (this is how the admin identifies the forum), list of participants' UIDs, treatment identifier |
 | Hacks | This is the public data of a hack, every user can query this data. | Random | the name of the hack, the phases dates, and the tutorial document (encoded on base64 encoded ascii) |
-| stats | You can store here any stat you want to collect from the platform, the current available list can be found on the stats section | Random | date, event (name of the stats), metadata (a json with the specific data of the stat, for example: a name of a file, the type of a section, etc.), user UID (the user who performed the action |
-| Threads |   Each document on this collection represent a thread on a forum. | Random | author UID, author name, comments IDs ( the list of comments posted on the thread), creation date, forum ID, hackID, title |
-| whitelists | Here we store all the hacks a give user can participate on | user Email | whitelist: hacks |
+| stats | You can store here any stat you want to collect from the platform, the current available list can be found on the stats section | Random | date, event (name of the stats), metadata (a json with the specific data of the stat, for example: name of a file,  type of a section, etc.), user UID (the user who performed the action) |
+| Threads |   Each document on this collection represents a thread on a forum. | Random | author UID, author name, comments IDs ( the list of comments posted on the thread), creation date, forum ID, hackID, title |
+| whitelists | Here we store all the hacks that a user can participate in | user Email | whitelist: hacks |
 
 There is one additional collection that requires a bit more explanation: Users.
 
@@ -98,17 +98,17 @@ And its first level, the users collections contains the users documents, each do
 - forums (the forums where the participant belongs)
 - name
 
-And then, a user can have an aditional collection, called projects, this collection is inside the user document, and contains the data of the user's projects. The Id of the document is the project name, and each document inside this colections represent a file path in the storage. We will talk more about this on the project editor section.
+And then, a user can have an additional collection, called projects, this collection is inside the user document, and contains the data of the user's projects. The Id of the document is the project name, and each document inside this colections represent a file path in the storage. We will talk more about this on the project editor section.
 
 ### Storage
 
 Here we store the projects of the users, you can think of it as our massive storage unit.
 
-Each user has a folder on the rootpath of the storage, the name of that folder is the user id. Inside of it you will find all the projects of that user, each one in its own folder, the name of the folder will be the name of the project. Inside the project foldar are all the files of the project.
+Each user has a folder on the rootpath of the storage, the name of that folder is the user id. Inside of it you will find all the projects of that user, each one in its own folder, the name of the folder will be the name of the project. Inside the project folder are all the files of the project.
 
 ### Creating admins
 
-In order to create an admin user, you first must register a normal one, to do this just follow the sign up flow on the plaform. Once you register your admin (using any email and password) got to the firebase console and do the following:
+In order to create an admin user, you first must register as a normal one, to do this just follow the sign up flow on the plaform. Once you register your admin (using any email and password) go to the firebase console and do the following:
 
 + Go to the "Authentication" tab
 + Find the user you want to make an admin and copy the user UID string (make sure yoy copy the full string)
@@ -116,11 +116,11 @@ In order to create an admin user, you first must register a normal one, to do th
 + Click on cloud firestore (if there is no db, follow the instructions to create an empty one)
 + go to the "admins" collection (if there is not, create one, be sure you name it "admins" without the quoutes"
 + Create a new document with the following configuration:
-  + As document Id: the user UID that you copyed before.
+  + As document Id: the user UID that you copied before.
   + As first field: name - Type: string - value: the name of the admin
   + Click save.
   
-Once you save the document, return to the platform and refresh the page, you know should be able to see the admin tab on the top of the page.
+Once you save the document, return to the platform and refresh the page, you now should be able to see the admin tab on the top of the page.
 
 This is the only way to create admins.
 
@@ -128,12 +128,12 @@ This is the only way to create admins.
 
 # Entry points
 
-The entry points are the files that are called first in oder to do something, although you should understand this as the normal flow on a react app, we are going to put it here as the entry point of the documentation.
+The entry points are the files that are called first in order to do something, although you should understand this as the normal flow on a react app, we are going to put it here as the entry point of the documentation.
 
 Once you start the dev server using ```npm start```, the react app will start at the ```index.js``` file located on the src folder:
 
 ```javascript 
-// DO NOT MODIFY THE CONTENT NOR THE NAME OF THIS FILE.
+// DO NOT MODIFY THE CONTENT OR THE NAME OF THIS FILE.
 // IronHacks Platform
 // index.js - Main entry point
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
@@ -161,12 +161,12 @@ ReactDOM.render((
 
 unregister();
 
-// DO NOT MODIFY THE CONTENT NOR THE NAME OF THIS FILE.
+// DO NOT MODIFY THE CONTENT OR THE NAME OF THIS FILE.
 ``` 
 
-*This is the only time we are going to put a entire file here, just beacouse this one is very small*
+*This is the only time we are going to put a entire file here, just because this one is very small*
 
-Here the we just import bootstrap and the global css, then we just go to the IronhacksApp component, which is the actual entry point of the app.
+Here we just import bootstrap and the global css, then we just go to the IronhacksApp component, which is the actual entry point of the app.
 
 ### ironhackApp.js
 
@@ -221,7 +221,7 @@ and isAdmin
   };
 ```
 
-isUserConnected will ask to the firebase auth object if there is a user currently logged, if yes, we will check on the db if the user is and admin. (this function actually access to the admins collection directly, which could be seen as a security issue, but is not. Normal users are only able to read, a document in that colection if they are actually admins, otherwhise the database will deny the query. To do that we use this rule:
+isUserConnected will ask firebase auth object if there is a user currently logged in, if yes, we will check on the db if the user is an admin. (this function actually accesses to the admins collection directly, which could be seen as a security issue, but is not. Normal users are only able to read, a document in that collection if they are actually admins, otherwise the database will deny the query. To do that we use this rule:
 
 ``` javascript
 match /admins/{userId} {
@@ -235,7 +235,7 @@ Now the important thing here is the routes, let's dive into that:
 
 # Routes
 
-We use react-router-dom in order to manage the routes and the context of the app, check their docummentation if you feel rusty on that.
+We use react-router-dom in order to manage the routes and the context of the app, check their documentation if you feel rusty on that.
 
 ``` jsx
 render() {
@@ -294,14 +294,14 @@ render() {
     }
   };
 ```
-Here we have all the posible routes on the platform, we use 3 switches becouse the header and the footer are only shown when there is a user logged. We also hide them on the preview of a project.
+Here we have all the possible routes on the platform, we use 3 switches because the header and the footer are only shown when there is a user logged. We also hide them on the preview of a project.
 
-In the second switch we find all the sections of the platform, from here we are going to explain every single rounte using it path and it's file, starting with the login.
+In the second switch we find all the sections of the platform, from here we are going to explain every single route using its path and its file, starting with the login.
 
 # Login - login.js
 *full path: ./src/js/components/login/login.js*
 
-On this view we create and diplay the firebaseAuthUI instance, we start on the initAuthUI function:
+On this view we create and display the firebaseAuthUI instance, we start on the initAuthUI function:
 
 ``` javascript
 initAuthUI(){ 
@@ -346,11 +346,11 @@ initAuthUI(){
     }
   };
 ```
-Make sure you read the docs of the firebaseAuthUI in order to undestand the config object. Keep in mind we only allow users to log in using email and password, this is important to the hack white list feature.
+Make sure you read the docs of the firebaseAuthUI in order to understand the config object. Keep in mind we only allow users to log in using email and password, this is important to the hack white list feature.
 
 Currently there is not a tos nor a pp web. We are working on that.
 
-Once a normal user logs we redirect the user to a different place accoding with its role, if is an admin we redirect to the admin panel, if not, we redirect to the select hack view.
+Once a normal user logs we redirect the user to a different place according to his/her role, if is an admin we redirect to the admin panel, if not, we redirect to the select hack view.
 
 # Administrating the platform
 *On ./src/js/components/admin/admin.js*
@@ -389,7 +389,7 @@ getHacks = () => {
 
 We also merge the public hack data (that we pulled from the ```hacks``` collection) with the admin hack data (that we pulled from ```adminHackData```).
 
-Let's start by the creation of a hack. When an admin login in the platform, is redirected to the ```admin``` view, this view displays the current hacks (if any) and allows the admin to start the creation process on a new hack.
+Let's start by the creation of a hack. When an admin logins in the platform, he/she is redirected to the ```admin``` view, this view displays the current hacks (if any) and allows the admin to start the creation process on a new hack.
 
 ## Creating a new hack
 *On ./src/js/components/admin/newHack/newHack.js*
@@ -418,7 +418,7 @@ constructor(props){
 };
 ```
 
-From the contructor of the component we can visualize all the data we are getting from the view: 
+From the constructor of the component we can visualize all the data we are getting from the view: 
 
 + ```hackName```: Name of the hack, pulled from a normal input.
 + ```selectedPhase```: We we show the [```react-day-picker```](https://react-day-picker.js.org/), we bind the phase using this index, for example, if the index is 3, that means that the user is picking phase's 3 dates.
@@ -427,9 +427,9 @@ From the contructor of the component we can visualize all the data we are gettin
 + ```isCalendarManagingFocus```: We use this to handle the opacity of the [```react-day-picker```](https://react-day-picker.js.org/) component.
 + ```phases```: Array of objects representing the phases of the hack.
 + ```forums```: Array of objects representing the forums of the hack.
-+ ```isCreateEnable```: We set this to true when all the minimun data to create a hack is provided, so we enable the ```create hack``` button.
++ ```isCreateEnable```: We set this to true when all the minimum data to create a hack is provided, so we enable the ```create hack``` button.
 
-Then, we process al the data using the ```createHack``` function:
+Then, we process all the data using the ```createHack``` function:
 
 ```javascript
 createHack = () => {
@@ -495,14 +495,14 @@ createHack = () => {
 };
 ```
 
-Here we merge all the data into one object: ```hackInstance``` and push it to Firebase, this process affects multiple collections: We first create the object on the ```hacks``` collection, then we create all the forums on the ```forums``` collection, once we obtain the reference of all the forums documents, we create an aditional document on ```adminHackData``` where we upload all the forums references.
+Here we merge all the data into one object: ```hackInstance``` and push it to Firebase, this process affects multiple collections: We first create the object on the ```hacks``` collection, then we create all the forums on the ```forums``` collection, once we obtain the reference of all the forums documents, we create an additional document on ```adminHackData``` where we upload all the forums references.
 
-Once this is done, we redirect the admin to the admis dashboard. Keep in mind that this is an 'empty' hack, it doesn't have a task or a tutorial document, neither a whitelist (a participant list). All this data must be added from the admin dashboard:
+Once this is done, we redirect the admin to the admis dashboard. Keep in mind that this is an 'empty' hack, it doesn't have a task or a tutorial document or a whitelist (a participant list). All this data must be added from the admin dashboard.
 
 ## The Admin Dashboard:
 *On ./src/js/components/admin/adminDashboard.js*
 
-There are 3 main actions that and admin can perform on the dashboard:
+There are 3 main actions that an admin can perform on the dashboard:
 
 + Manage the whitelist.
 + Create and publish the taks document.
@@ -513,7 +513,7 @@ Let's start by the whitelist:
 ### The Whitelist
 *On ./src/js/components/admin/sections/settings/admSettingsSection.js*
 
-The whitelist is composed by emails, each email bellongs to a participant, if a user's email matchs with an item on a whitelist, that hack will appear on the ```hackSelection``` section, and the user will be able to register in that hack.
+The whitelist is composed by emails, each email belongs to a participant, if a user's email matches with an item on a whitelist, that hack will appear on the ```hackSelection``` section, and the user will be able to register in that hack.
 
 ```javascript
 constructor(props){
@@ -541,7 +541,7 @@ saveChanges = () => {
 };
 ```
 
-We first normalized the email array, the ```normalizeEmailArray``` function first check that the email is a valid email and then remove the duplicates on the list. Then we call a function on the ```AdminDashboard``` component:
+We first normalize the email array, the ```normalizeEmailArray``` function first check that the email is a valid email and then remove the duplicates on the list. Then we call a function on the ```AdminDashboard``` component:
 
 *On ./src/js/components/admin/adminDashboard.js*
 ```javascript
@@ -619,7 +619,7 @@ render() {
   );
 }
 ```
-As you see, this is a pure presentational component, it just take the content of the [```react-mde```](https://github.com/andrerpena/react-mde#readme) editor and send it to the parent component (```AdminDashboard```), this will update the state of the ```AdminDashboard``` component and when the user saves the document we call ```updateTaksDocument```:
+As you see, this is a pure presentational component, it just takes the content of the [```react-mde```](https://github.com/andrerpena/react-mde#readme) editor and send it to the parent component (```AdminDashboard```), this will update the state of the ```AdminDashboard``` component and when the user saves the document we call ```updateTaskDocument```:
 
 *On ./src/js/components/admin/adminDashboard.js*
 ```javascript
@@ -644,7 +644,7 @@ Here we encode the plain text of the task on base64 and then we update the docum
 ### The Tutorial Document
 *On ./src/js/components/admin/sections/tutorial/admTutorialSection.js*
 
-The tutorial document works *almost in the same way* that the task document, the only difference being that we store the tutorial document on the ```hacks``` collection, rather than the ```adminHackData```:
+The tutorial document works *almost in the same way* as the task document, the only difference being that we store the tutorial document on the ```hacks``` collection, rather than the ```adminHackData```:
 
 *On ./src/js/components/admin/adminDashboard.js*
 ```javascript
@@ -673,14 +673,14 @@ updateTutorialDocument = () => {
 };
 ```
 
-Now lest jump into the participant flow:
+Now lets jump into the participant flow:
 
 # hackSelection.js
 *On ./src/js/components/login/hackSelection.js*
 
-The hack selection allows the platform to display data according with the hack the usesr select, for example, the tutorial and task documments, the results, the projects, the contents of the forum, among with other stuff. In order to do this, we store in cookies the ID of the hack that is selected here, we call that hack the "selected hack".
+The hack selection allows the platform to display data according to the hack the users select, for example, the tutorial and task documents, the results, the projects, the contents of the forum, among with other stuff. In order to do this, we store in cookies the ID of the hack that is selected here, we call that hack the "selected hack".
 
-In this view the user can do 2 things, register into a new available hack, or enter into hack he already register on. Before the user can do any of those, we first we fetch the available hacks from the database:
+In this view the user can do 2 things, register into a new available hack, or enter into hack he already register on. Before the user can do any of those, we first fetch the available hacks from the database:
 
 ``` javascript
 //Query all the hacks objects from the db.
@@ -689,11 +689,11 @@ In this view the user can do 2 things, register into a new available hack, or en
   }
 ```
 
-the ```getHacks``` function will retrieve the hacks available for a specific user, that means that only the hacks in which the user is whitelisted will be retieved. The hacks in which the user is already registered will be store in the ```registeredHacks``` array, the rest will be store in the ```availableHacks```.
+the ```getHacks``` function will retrieve the hacks available for a specific user, that means, only the hacks in which the user is whitelisted will be retrieved. The hacks in which the user is already registered will be stored in the ```registeredHacks``` array, the rest will be stored in the ```availableHacks```.
 
 ### Selecting a hack:
   
-When a user is already registered into a hack, the selecting proccess consist on setting a cookie on the browser, saving the selected hack data. This is done by the ```setHack``` function:
+When a user is already registered into a hack, the selecting process consists of setting a cookie on the browser, saving the selected hack data. This is done by the ```setHack``` function:
 
 ```javasript
 setHack = (hackIndex) => {
@@ -713,7 +713,7 @@ setHack = (hackIndex) => {
 ```
 The ```hackIndex``` parameter is a non negative int, which represents the index of the hack in the ```registeredHacks``` or the ```availableHacks``` arrays.
 
-However, if the user is no registered in the hack, the ```goToPresurvey``` function is called instead:
+However, if the user is not registered in the hack, the ```goToPresurvey``` function is called instead:
 
 ### Registration process:
 
@@ -725,9 +725,9 @@ swal(Constants.preSurveyAlertContent('qualtrics-survey-url?user_email=' + this.p
       };
     });
 ```
-To register in a hack, the user must first fill the registration survey, the content of this survey is defined by the researcher. Notice that we send thorugh the URL the of the participant, we use this in order to identify each responce on the qualtrics dashboard. Please read the qualtrics integration documentation to see how to configure the qualtrics project in order to store the data.
+To register in a hack, the user must first fill the registration survey, the content of this survey is defined by the researcher. Notice that we send thorugh the URL of the participant, we use this in order to identify each responce on the qualtrics dashboard. Please read the qualtrics integration documentation to see how to configure the qualtrics project in order to store the data.
 
-The survey is displayed on an iframe, this is done to avoid the necesity to redirect the user to an external website. In order to detect when the survey is done, we set an event listener to the document: 
+The survey is displayed on an iframe, this is done to avoid the necessity to redirect the user to an external website. In order to detect when the survey is done, we set an event listener to the document: 
 
 ``` javascript
 componentDidMount() {
@@ -746,7 +746,7 @@ componentDidMount() {
   }
 ```
 
-This listener captures a message sended by the qualtric iframe once the user reach the end of the survey and call the receiveMessage, this will trigger the ```swal.clickConfirm()``` functions, which closes the sweetAlert modal.
+This listener captures a message sent by the qualtric iframe once the user reach the end of the survey and call the receiveMessage, this will trigger the ```swal.clickConfirm()``` functions, which closes the sweetAlert modal.
 
 Then, as it shows in the first function, once the modal is closed with a success status, we call the ```callRegistrationFunction``` function:
 
@@ -762,9 +762,9 @@ Then, as it shows in the first function, once the modal is closed with a success
     });
   }
 ```
-This function recieve as parameter the hackIndex, corresponding to the hackID within the ```registeredHacks``` array.
+This function recieves as parameter the hackIndex, corresponding to the hackID within the ```registeredHacks``` array.
 
-Once this is done, we start the creation of the users hack project. This is a project that is bind to a hack, specifically, to the hack that the user is registering on, this allow the user to push the project to evaluation. The user can create additional projects that are not binded to any hack in particullar from the ```UserProfile``` view.
+Once this is done, we start the creation of the users hack project. This is a project that is bound to a hack, specifically, to the hack that the user is registering on, this allows the user to push the project to evaluation. The user can create additional projects that are not binded to any hack in particullar from the ```UserProfile``` view.
 
 This process starts with the ```createNewProject``` function:
 
@@ -789,7 +789,7 @@ The process is divided in two steps, we first get the template files blobs from 
 import * as TemplateFiles from './newHackTemplates/templates.js';
 ```
 
-*Please check the file to undestand how the templates are done.*
+*Please check the file to understand how the templates are done.*
 
 Then we push the files to ```Firebase Storage``` using the ```putStorageFile``` function:
 
@@ -823,7 +823,7 @@ putStorageFile = (file, projectName) => {
   ...
 }
  ```
-Here we put the file on the storage and save de download URL on the user's project document, we will use that URL on the project editor in order to display the contents of the file on the editor.
+Here we put the file on the storage and save the download URL on the user's project document, we will use that URL on the project editor in order to display the contents of the file on the editor.
 
 Once we put all the files on the storage, we create the Github repository:
 
@@ -868,7 +868,7 @@ createGitHubRepository = (name, hackId, hackIndex) => {
 }
 ```
 
-This function will pull the templateFiles and specify the creation props. Please check the [Octonode documentation](https://github.com/pksunkara/octonode) to undestand the props structure. First we create an empty repo (auto initilized), and then we make a commit with the templeate files. Please refer to the [Backend docs](https://github.com/RCODI/the-ironhacks-platform-backend) to understant the cloud functions.
+This function will pull the templateFiles and specify the creation props. Please check the [Octonode documentation](https://github.com/pksunkara/octonode) to undestand the props structure. First we create an empty repo (auto initilized), and then we make a commit with the template files. Please refer to the [Backend docs](https://github.com/RCODI/the-ironhacks-platform-backend) to understand the cloud functions.
 
 Once the Github project is created, we call the ```setHack``` function that will redirect the user to the forum.
 
@@ -886,11 +886,11 @@ import { registerStats } from '../../utilities/registerStat.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
 ```
 
-+ ```ThreadPreview``` Is a presentational component, it will show a the preview data of a thread: title, author, create date, comment counter and reaction counter, when the user clicks a preview card, will be redirected to the ```ThreadView```.
-+ ```SponsorsBanner``` compomponet is also a presentational one, and is just the logos of the sponsors of your contest. 
-+ ```ForumSelector``` is also a presentational compoment that shows the available forums (if any) when the user is an admin, we reuse this component to show also the available hacks. (So yes, it will be renamed in future updates)
++ ```ThreadPreview``` Is a presentational component, it will show the preview data of a thread: title, author, create date, comment counter and reaction counter, when the user clicks a preview card, will be redirected to the ```ThreadView```.
++ ```SponsorsBanner``` component is also a presentational one, and is just the logos of the sponsors of your contest. 
++ ```ForumSelector``` is also a presentational compoment that shows the available forums (if any). When the user is an admin, we reuse this component to show also the available hacks. (So yes, it will be renamed in future updates)
 + ```registerStats``` is the utility we call to save a stat in the database.
-+ ```DateFormater``` is also a utility, we use it to translate javascript date objects to readable text, among other stuff.
++ ```DateFormatter``` is also a utility, we use it to translate javascript date objects to readable text, among other stuff.
 
 The initial state of the app set up the hack and forumID:
 ```javascript
@@ -954,7 +954,7 @@ getForums = (hackIndex) => {
   });
 };
 ```
-To finally pull the threads using the selected forum (index 0 by defaut). If the user is an admin, we use ``` getThreadsAdmin = (forumIndex)```to pull the threads, other wise we use:
+To finally pull the threads using the selected forum (index 0 by default). If the user is an admin, we use ``` getThreadsAdmin = (forumIndex)```to pull the threads, other wise we use:
 
 ```javascript
 getThreads = () => {
@@ -978,18 +978,18 @@ getThreads = () => {
 };
 ```
 
-Once the state us update with the threads, we display a preview of them using ```ThreadPreview```.
+Once the state is updated with the threads, we display a preview of them using ```ThreadPreview```.
 
 And that's it for the forum view. The user can also create a new thread by clicking the "Start a new topic" button, this will redirect the user to the ```NewThread``` view:
 
 ### Create a new thread - newThread.js
 *on ./src/js/component/forum/newThread.js*
 
-This view implements the ```MarkdownEditor``` component, this is a custom wrapper we do to implement the ```react-mde ``` . Please check the [react-mde docs](https://github.com/andrerpena/react-mde#readme) to undestant the library.
+This view implements the ```MarkdownEditor``` component, this is a custom wrapper we do to implement the ```react-mde ``` . Please check the [react-mde docs](https://github.com/andrerpena/react-mde#readme) to undestand the library.
 
 If the user is an admin, we display the admin controls, this is basically two selectors that allows the admin to select the hack and the forum in which the new thread will be posted, we handle that interaction using the same components we use in the forum view.
 
-For both, the user and the admin, the submition process is the same:
+For both, the user and the admin, the submission process is the same:
 
 ```javascript
 handleSubmit = (event) => {
@@ -1036,14 +1036,14 @@ handleSubmit = (event) => {
   });
 };
 ```
-We encode the content of the thread (AKA the first comment / thread head) using base64 and then we push it to the DB, this creates first a document on the ```threads``` collection, then we create a second document on the ```comments``` collection, this is the only comment that will have a referece to the forum documment, we use this reference to identify it as the thread head. Finally we refresh the ```comments``` array of the thread documment. 
+We encode the content of the thread (AKA the first comment / thread head) using base64 and then we push it to the DB, this creates first a document on the ```threads``` collection, then we create a second document on the ```comments``` collection, this is the only comment that will have a reference to the forum document, we use this reference to identify it as the thread head. Finally we refresh the ```comments``` array of the thread documment. 
 
 Finally we redirect the user to ```ThreadView```.
 
 ### Thread View - threadView.js
 *on ./src/js/component/forum/threadView/threadView.js*
 
-```threadView``` is a very simple component, it retrieve the data for a given thread (using the id on the url) and then proceed to dispaly all the comments on that thread:
+```threadView``` is a very simple component, it retrieves the data for a given thread (using the id on the url) and then proceed to display all the comments on that thread:
 
 ```javascript
 getThreadData = () => {
@@ -1060,7 +1060,7 @@ getThreadData = () => {
 };
 ```
 
-```getThreadData``` get the ```threadId``` from the url and then ask to the database for the data, then calls ```getComments``` to obatain all the comments:
+```getThreadData``` get the ```threadId``` from the url and then ask to the database for the data, then calls ```getComments``` to obtain all the comments:
 
 ```javascript
 getComments = () => {
@@ -1093,16 +1093,16 @@ getComments = () => {
 };
 ```
 
-```getComments``` gets all the comments of a given thread, arrenged by date. It also identify the head of the thread and set everything in the state of the componente.
+```getComments``` gets all the comments of a given thread, arranged by date. It also identify the head of the thread and set everything in the state of the componente.
 
 We show every comment (including the head) using the ```commentView``` component:
 
 ### Comment View - commentView.js
 *on ./src/js/component/forum/threadView/commentView.js*
 
-The main purpuse of this component is to display a the content of a comment, this is a very straigh forward taks that is done on the ```render``` function using props. However, this component also handles the "state" of the comments: the reactions and the delete process. 
+The main purpose of this component is to display a the content of a comment, this is a very straight forward task that is done on the ```render``` function using props. However, this component also handles the "state" of the comments: the reactions and the delete process. 
 
-Let's start by the delete process: an user can delete it's own comments and threads, this is handled by two functions:
+Let's start by the delete process: a user can delete his/her own comments and threads, this is handled by two functions:
 
 #### Deleting a comment
 
@@ -1129,7 +1129,7 @@ deleteSingleComment = (comment) => {
 
 #### Deleting a thread
 
-Here we first remove the commentID reference from the thread documment and then we delete the comment from the database. After this we reaload the comment to refresh the view.
+Here we first remove the commentID reference from the thread documment and then we delete the comment from the database. After this we reload the comment to refresh the view.
 
 To delete the whole thread we use ```deleteThread```:
 
@@ -1159,7 +1159,7 @@ What we do here is call ```deleteSingleComment``` to delete all the comments on 
 #### Reactions
 *on ./src/js/component/forum/reactionView.js*
 
-A user can "react" to a comment or a thread, this reaction are the "like" or "dislike" buttons. This is handle by the ```ReactionPicker``` component.
+A user can "react" to a comment or a thread, these reactions are the "like" or "dislike" buttons. This is handled by the ```ReactionPicker``` component.
 
 When a user clicks on a reaction button ```handleReactionClick``` is triggered:
 
@@ -1199,17 +1199,17 @@ handleReactionClick = (event) => {
 } 
 ```
 
-This function will add, remove or reverse a reaction, according with the user interaction.
+This function will add, remove or reverse a reaction, according to the user interaction.
 
 ---
 
-Whit this we finish the main components of the forum.
+With this we finish the main components of the forum.
 
 We are going to proceed now with the project editor.
 
 # The Project Editor
 
-Before jump into the actual project editor, let's check how to create a new project:
+Before we jump into the actual project editor, let's check how to create a new project:
 
 ### Creating a new project
 *On: ./src/js/component/userProfile/userProfile.js*
@@ -1221,9 +1221,9 @@ Once the project is created, or when the user clicks in an already existing proj
 ## The Editor
 *On: ./src/js/component/projectEditor/projectEditor.js*
 
-The project editor is composed by 3 different components: The control section (where the user select files, save the project, push to evaulation, among other stuff), the text editor and the preview.
+The project editor is composed of 3 different components: The control section (where the user selects files, save the project, push to evaulation, among other stuff), the text editor and the preview.
 
-Before go into those sections, let's check the initialization of the component:
+Before we go into those sections, let's check the initialization of the component:
 
 ```javascript
 constructor(props){
@@ -1254,21 +1254,21 @@ constructor(props){
 
 The state of the component is quite large, let's breack it down: 
 
-The first thing we do is to check if there is a hackerID on the props, if yes, that means that the user that is looking the project is not the owner, in this particular case, this beheaviour is due to the treatment we gave to the experiment, this is triggered when a user clicks on a specific link on the results page.
+The first thing we do is to check if there is a hackerID on the props, if yes, that means that the user that is viewing the project is not the owner, in this particular case, this beheaviour is due to the treatment we gave to the experiment, this is triggered when a user clicks on a specific link on the results page.
 
 Then we set the state object:
 
 + ```user```: The user data pulled from the props
 + ```readOnly```: Explain above
 + ```hackerId```: Explain above
-+ ```editorKey```: this is a random number generated everytime we change the currend file on the editor, this effectively re-render the codemirror component, erasing the text history, so even if the user hit ```control + z``` the previous file will not be rendered. 
-+ ```hidePreview```: If this is true, the Preview component will be hide adn be opened on a new tab.
-+ ```currentHack```: currentHackID, pulled from cookies if any, or setted later.
++ ```editorKey```: this is a random number generated everytime we change the current file on the editor, this effectively re-renders the codemirror component, erasing the text history, so even if the user hits ```control + z``` the previous file will not be rendered. 
++ ```hidePreview```: If this is true, the Preview component will be hidden and be opened on a new tab.
++ ```currentHack```: currentHackID, pulled from cookies if any, or settled later.
 + ```editorContent```: the text is going to be displayed on the editor.
 + ```editorMode```: specify the highlight plugin (xml, css, javascript),
 + ```loadingFiles```: if true, a spinner will be rendered on the FilesComponent.
 + ```selectedFile```: the name of the current selected file.
-+ ```projectFiles```: and array with all the files objects.
++ ```projectFiles```: and array with all the file objects.
 + ```creatingFile```: if true, the creating file flow is running.
 + ```projectName```: Just the project name.
 + ```timer```: count down to next phase.
@@ -1284,7 +1284,7 @@ componentDidMount() {
 }
 ```
 
-First we compose the preview URL, the preview URL is predictable, we "calculated" and the we put ir on the state.
+First we compose the preview URL, the preview URL is predictable, we "calculated" and then we put it on the state.
 
 ```javascript
 getProjectPreviewPath = () => {
@@ -1341,7 +1341,7 @@ getProjectFiles = () => {
 }
 ```
 
-We normalized the blobs by using ```readProjectFilesBlobs```, this chain of functions will read all the blobs we pulled here, create an array of objects that contains the parced data, the blob and the path of each file. Then we update the state to re-render the different componets that display this data.
+We normalized the blobs by using ```readProjectFilesBlobs```, this chain of functions will read all the blobs we pulled here, create an array of objects that contains the parsed data, the blob and the path of each file. Then we update the state to re-render the different components that display this data.
 
 Last thing we do is get the current hack info, we use this data to display the countdown timer for the next phase:
 
@@ -1367,7 +1367,7 @@ getCurrentHackInfo = () => {
 };
 ```
 
-Know we can start with each of the 3 components that compose the Project editor, starting by the Control section:
+Now we can start with each of the 3 components that compose the Project editor, starting by the Control section:
 
 ### The Control Section
 *On: ./src/js/component/projectEditor/projectEditor.js*
@@ -1405,13 +1405,13 @@ Know we can start with each of the 3 components that compose the Project editor,
 </ProjectContent>
 ```
 
-There are some key action that the user can perform here:
+There are some key actions that the user can perform here:
 
 - ```saveProject``` by clicking Save and run.
 - ```startPushNavigation``` by clicking Push to evaluation.
 - ```startCreateNewFileFlow``` by clicking Create new file.
 
-There is also the ```FilesContainer``` component, which allows the user to navigate through the diferent files of the project.
+There is also the ```FilesContainer``` component, which allows the user to navigate through the different files of the project.
 
 Let's start by the Save and run button:
 
@@ -1461,7 +1461,7 @@ updateProjectBlobs = () => {
 
 This function will take the modified file from the state of the component and then will compose an array of objects, each one with the updated blob and the path of each file.
 
-Right after that we update the firebase storage usign ```uploadBlogToFirebase```:
+Right after that we update the firebase storage using ```uploadBlogToFirebase```:
 
 ```javascript
 uploadBlogToFirebase = (blob) => {
@@ -1473,7 +1473,7 @@ uploadBlogToFirebase = (blob) => {
 }
 ```
 
-And to finish we update the state of the component, reseting the updated blobs and forcing the iframe to reload the preview:
+And to finish we update the state of the component, resetting the updated blobs and forcing the iframe to reload the preview:
 
 ```javascript
 .then((url) => {
@@ -1489,9 +1489,9 @@ And to finish we update the state of the component, reseting the updated blobs a
 ```
 ---
 
-The next one is ```startPushNavigation```, before a user can push the project to evaluation, a phase survey must be filled, we do this using ```sweetalert``` as we did on the ```hackSelection``` section, please check it out to understant how we detect changes on the modal.
+The next one is ```startPushNavigation```, before a user can push the project to evaluation, a phase survey must be filled, we do this using ```sweetalert``` as we did on the ```hackSelection``` section, please check it out to understand how we detect changes on the modal.
 
-We load the 
+We load the survey using below code, 
 
 ```javascript
 startPushNavigation = () => {
@@ -1521,7 +1521,7 @@ startPushNavigation = () => {
 }
 ```
 
-Once the user finish the survey, we ask him for a commit message, and then we call ```pushToGithub``` using the messagge as parameter.
+Once the user finishes the survey, we ask him for a commit message, and then we call ```pushToGithub``` using the message as parameter.
 
 ```javascript
 pushToGitHub = (commitMessage) => {
@@ -1562,7 +1562,7 @@ startCreateNewFileFlow = async () => {
 }
 ```
 
-This will promt a ```sweetalert``` modal asking for the path of the file, we send the ```fileNameValidator``` function as a parameter to verify the path introduced is a valid one:
+This will prompt a ```sweetalert``` modal asking for the path of the file, we send the ```fileNameValidator``` function as a parameter to verify the path introduced is a valid one:
 
 ```javascript
 fileNameValidator = (fileName) => {
@@ -1630,7 +1630,7 @@ This component will take all the file paths on the project and build the treebea
 </MainContainer>
 ```
 
-We create our own styles and decorators, check the source file to understant them.
+We create our own styles and decorators, check the source file to understand them.
 
 ### The Text Editor
 
@@ -1660,7 +1660,7 @@ We create our own styles and decorators, check the source file to understant the
 </EditorContainer>
 ```
 
-The text editor is an implementation of the [```react-codemirror2```](https://github.com/scniro/react-codemirror2) component, please check their docs to understant how the component works.
+The text editor is an implementation of the [```react-codemirror2```](https://github.com/scniro/react-codemirror2) component, please check their docs to understand how the component works.
 
 ### The Preview
 *On ./src/js/components/projectEditor/projectPreview.js*
