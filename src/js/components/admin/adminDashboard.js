@@ -10,6 +10,7 @@ import { Link, Switch, Route } from "react-router-dom";
 //Custom components
 import Loader from '../../utilities/loader.js';
 import SettingsSection from './sections/settings/admSettingsSection.js';
+import QualtricsIntegrationSection from './sections/qualtricsIntegration/qualtricsIntegrationSection.js';
 import TaskSection from './sections/task/admTaskSection.js';
 import TutorialSection from './sections/tutorial/admTutorialSection.js';
 //Custom Constants
@@ -256,7 +257,7 @@ class AdminDashboard extends React.Component {
                 <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/forums/'}>Forums</Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/qualtrics/'}>Qualtrics Integration</Link>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/qualtrics-integration/'}>Qualtrics Integration</Link>
               </ControlPanelItem>
               <ControlPanelItem>
                 <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/tutorial/'}>Tutorial</Link>
@@ -299,6 +300,11 @@ class AdminDashboard extends React.Component {
                           previousDocument={this.state.hack.task ? this.atou(this.state.hack.task.doc) : ''}
                           onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
                           updateTaskDocument={this.updateTaskDocument}
+                        />}/>
+                      <Route 
+                      path={this.props.match.url + '/qualtrics-integration'}
+                      render={()=> 
+                        <QualtricsIntegrationSection 
                         />}/>
                   </Switch>
                   : <Loader />}
