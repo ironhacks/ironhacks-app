@@ -1,5 +1,5 @@
 // IronHacks Platform
-// admSettingsSection.js - Results Component
+// admSettingsSection.js
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
@@ -106,7 +106,7 @@ class AdmSettingsSection extends React.Component {
   };
 
   saveChanges = () => {
-    var normalizeWhiteList = this.state.whiteList;
+    let normalizeWhiteList = this.state.whiteList;
     normalizeWhiteList = this.normalizeEmailArray(normalizeWhiteList);
     this.props.onSaveSettings(normalizeWhiteList);
     this.setState({whiteList: normalizeWhiteList});

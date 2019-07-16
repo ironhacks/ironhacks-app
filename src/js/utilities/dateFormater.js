@@ -1,10 +1,8 @@
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 export const getCurrentPhase = (phasesDates) => {
-  console.log(phasesDates)
   const today = new Date();
   for (const key in phasesDates) {
-    console.log(phasesDates[key])
     const startDate = new window.firebase.firestore.Timestamp(phasesDates[key].codingStartDate.seconds, phasesDates[key].codingStartDate.nanoseconds).toDate();
     const endDate = new window.firebase.firestore.Timestamp(phasesDates[key].codingStartEnd.seconds, phasesDates[key].codingStartEnd.nanoseconds).toDate();
     if(phasesDates[key].index === 0 && today < startDate) return -1;
