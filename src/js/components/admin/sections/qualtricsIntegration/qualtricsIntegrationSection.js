@@ -40,23 +40,37 @@ class AdmQualtricsIntegrationSection extends React.Component {
     }
   }
 
-  handleInputChange = (event) => {
+  handleInputChange = (event, phaseIndex) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
+    console.log(phaseIndex)
+    if (phaseIndex !== undefined){
+      this.setState((props, prevState) => {
+        const { hack }  = prevState;
+        console.log(console.log(hack))
+        hack.phases[phaseIndex].commitSurveyLink = target.value
+        return hack;
+      });
+    } else {
+      this.setState({
+        [name]: value
+      });
+    }
+  }
 
-    this.setState({
-      [name]: value
-    });
+  saveSurveys = (event) => {
+    event.preventDefault();
+    console.log("ll")
+
   }
 
   render() {
-    console.log(this.state.hack.phases)
+    
     return (
       <SectionContainer onSubmit={this.saveSurveys}>
         <h2>Quatrics Integration</h2>
         <p>Bellow you can provide some Qualtrics survey links to complement your hack. These surveys are splited in two main types: Reseach related surveys and tutorial quizzes.</p>
-        <p>TODO: PUT HERE THE PATH TO GET THE LINKS FROM QUALTRICS.</p>
         <Separator primary/>
         <h3>Research proccess</h3>
         <p>These surveys are mean to be used by you to control the experiment develompent, you can think of them as "breackpoints" during he contest used to ask questions to the partipants.</p>
@@ -73,11 +87,11 @@ class AdmQualtricsIntegrationSection extends React.Component {
         {this.state.hack.phases.map((phase) => {
           return (
           <label key={phase.index}>
-            Registration survey link:
+            Phase {phase.index + 1} survey link:
             <input 
               name={`phase-survey-${phase.index}`}
               type="text"
-              onChange={this.handleInputChange}
+              onChange={(e) => this.handleInputChange(e, phase.index)}
               placeholder={`Phase ${phase.index + 1} survey link`}/>
           </label>)
           })}
@@ -101,7 +115,8 @@ class AdmQualtricsIntegrationSection extends React.Component {
             onChange={this.handleInputChange}
             placeholder="Survey link"/>
         </label>
-        <Button>Save</Button>
+        <Separator primary/>
+        <Button type='submit'>Save Changes</Button>
       </SectionContainer>
     );
   }
