@@ -82,6 +82,7 @@ const VerticalSeparator = styled('div')`
 `;
 const SectionHeader = styled('div')`
   min-height: 140px;
+  padding: 25px 50px 50px 50px;
   border-bottom: 1px solid black;
 `;
 const SectionBody = styled('div')`
@@ -304,7 +305,8 @@ class AdminDashboard extends React.Component {
                       <Route 
                       path={this.props.match.url + '/qualtrics-integration'}
                       render={()=> 
-                        <QualtricsIntegrationSection 
+                        <QualtricsIntegrationSection
+                          hack={this.state.hack}
                         />}/>
                   </Switch>
                   : <Loader />}

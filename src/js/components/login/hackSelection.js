@@ -120,7 +120,7 @@ class HackSelection extends React.Component {
   }
 
   goToPresurvey = (hackIndex) => {
-    swal(Constants.preSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_1HZrbxWIcPvZkUJ?user_email=' + this.props.user.email))
+    swal(Constants.preSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_bpgQ1M3IdKQuovz?user_email=' + this.props.user.email))
     .then((result) => {
       if(!result.dismiss) {
         this.callRegistrationFuncion(hackIndex);
