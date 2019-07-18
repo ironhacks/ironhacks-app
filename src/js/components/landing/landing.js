@@ -12,8 +12,8 @@ import * as Constants from '../../../constants.js';
 import PriorHacksData from './priorHacksData.js';
 //Customs svg
 import bulbImg from './img/bulb.svg';
-import UNAL2019 from './img/purdue-UNAL-2019.jpeg';
-import COLFlag from './img/flags/col.svg';
+//import UNAL2019 from './img/purdue-UNAL-2019.jpeg';
+//import COLFlag from './img/flags/col.svg';
 
 const theme = Constants.AppSectionTheme;
 
@@ -174,63 +174,6 @@ const HackSelector = styled('div')`
   }
 `;
 
-const HackCard = styled('div')`
-  display: flex;
-  height: 400px;
-  width: 100%;
-  border-radius: 4px;
-  margin-top: 50px;
-
-  div {
-    height: 100%;
-    width: 50%;
-    padding: 25px;
-
-    img {
-      object-fit: contain;
-      height: 100%;
-      width: 100%;
-    }
-  }
-`;
-
-const Table = styled('table')`
-  border-collapse: collapse;
-  border-radius: 1em;
-  overflow: hidden;
-  width: 100%;
-  
-  thead {
-    background-color: #FFD75F;
-  }
-
-  tr {
-    position: relative;
-    height: 60px;
-
-    :nth-child(even) {
-      background-color: #fff1c7;
-    }
-
-    td, th {
-      text-align: center;
-    
-      img {
-        width: 30px;
-        height: 30px;
-      }
-
-      a {
-        padding: 10px;
-        font-weight: 700;
-        color: white;
-        background-color: #e6b92f;
-        border-radius: 4px;
-      }
-    }
-  }
-`;
-
 class Landing extends React.Component {
   constructor(props) {
     super(props)
@@ -241,7 +184,7 @@ class Landing extends React.Component {
   }
 
   changeHack = (event) => {
-    this.setState({selectedHack: parseInt(event.target.id)})
+    this.setState({selectedHack: parseInt(event.target.id, 10)})
   }
 
   render() {

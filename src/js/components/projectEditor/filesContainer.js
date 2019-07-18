@@ -10,7 +10,7 @@ import * as Constants from '../../../constants.js';
 import {Treebeard, decorators} from 'react-treebeard';
 
 import fileIcon from './img/file-icon.svg';
-import trashIcon from './img/trash-icon.svg';
+//import trashIcon from './img/trash-icon.svg';
 import folderIcon from './img/folder-icon.svg';
 
 //Section container

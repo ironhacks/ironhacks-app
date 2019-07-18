@@ -7,7 +7,7 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import ReactMde, {ReactMdeTypes} from 'react-mde'; //react-mde
+import ReactMde from 'react-mde'; //react-mde
 import * as Showdown from "showdown"; // Markdown reader
 
 import './css/react-mde-all.css'; //Custom Editor stylesheet
