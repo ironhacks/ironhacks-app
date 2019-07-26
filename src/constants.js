@@ -152,7 +152,7 @@ export const pushSurveyAlertContent = (url) => {
 
 export const preSurveyAlertContent = (url) => {
   return {
-    title: 'Pre survey UNAL',
+    title: 'Resgistration survey',
     html: `<iframe src='${url}' title='Qualtrics survey'/>`,
     showCloseButton: true,
     showConfirmButton: false,

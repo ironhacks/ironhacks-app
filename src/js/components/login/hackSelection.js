@@ -119,13 +119,17 @@ class HackSelection extends React.Component {
     })
   }
 
-  goToPresurvey = (hackIndex) => {
-    swal(Constants.preSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_bpgQ1M3IdKQuovz?user_email=' + this.props.user.email))
-    .then((result) => {
-      if(!result.dismiss) {
-        this.callRegistrationFuncion(hackIndex);
-      };
-    });
+  goToPresurvey = (hackIndex, registrationSurvey) => {
+    if(registrationSurvey) {
+      swal(Constants.preSurveyAlertContent(registrationSurvey + '?user_email=' + this.props.user.email))
+      .then((result) => {
+        if(!result.dismiss) {
+          this.callRegistrationFuncion(hackIndex);
+        };
+      });
+    } else {
+      this.callRegistrationFuncion(hackIndex);
+    }
   }
 
   callRegistrationFuncion = (hackIndex) => {
@@ -278,6 +282,7 @@ class HackSelection extends React.Component {
         </ThemeProvider>
       );
     }
+    console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
       <SectionContainer className="container-fluid">

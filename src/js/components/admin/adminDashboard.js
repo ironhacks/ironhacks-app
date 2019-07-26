@@ -94,6 +94,7 @@ class AdminDashboard extends React.Component {
     this.state = {
       hack: null,
       hackId: '',
+      loading: false,
     }
   }
 
@@ -144,6 +145,7 @@ class AdminDashboard extends React.Component {
   };
 
   updateHackSettings = (whiteList) => {
+    this.setState({loading: true})
     //db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
@@ -164,11 +166,9 @@ class AdminDashboard extends React.Component {
     batch.set(hackRef, hackWhiteListObject, {merge: true});
     batch.commit()
     .then(() => {
-      //TODO: update UI to provide feedback to the user.
-      //Updating local stage
       this.setState((prevState, props) => {
-        prevState.hack.whiteList = {whiteList: whiteList}
-        return {hack: prevState.hack};
+        prevState.hack.whiteList = whiteList
+        return {hack: prevState.hack , loading: false};
       })
     })  
     .catch(function(error) {
@@ -183,6 +183,7 @@ class AdminDashboard extends React.Component {
   };
 
   updateTutorialDocument = () => {
+    this.setState({loading: true})
     //db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
@@ -195,7 +196,7 @@ class AdminDashboard extends React.Component {
       tutorial: hackTutorial,
     })
     .then(() => {
-      //TODO: update UI to provide feedback to the user.
+      this.setState({loading: false})
     })  
     .catch(function(error) {
       console.error("Error adding document: ", error);
@@ -209,6 +210,7 @@ class AdminDashboard extends React.Component {
   };
 
   updateTaskDocument = () => {
+    this.setState({loading: true})
     //db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
@@ -221,13 +223,36 @@ class AdminDashboard extends React.Component {
       task: hackTask,
     })
     .then(() => {
-      //TODO: update UI to provide feedback to the user.
+      this.setState({loading: false})
     })  
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
   };
 //--------------------------- TASK SECTION ----------------------------//
+//--------------------------- QUALTRICS SECTION ----------------------------//
+  updateQualtricsLinks = (updatedHackData) => {
+    this.setState({loading: true})
+    //db Reference
+    const firestore = window.firebase.firestore();
+    const settings = {timestampsInSnapshots: true};
+    firestore.settings(settings);
+    //Updating the current hack:
+    const hackRef = firestore.collection('hacks').doc(this.state.hackId);
+    hackRef.update({
+      phases: updatedHackData.phases,
+      registrationSurvey: updatedHackData.registrationSurvey || '',
+      postHackSurvey: updatedHackData.postHackSurvey || '',
+      quizzes: updatedHackData.quizzes || null,
+    })
+    .then(() => {
+      this.setState({loading: false})
+    })  
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+  };
+//--------------------------- QUALTRICS SECTION ----------------------------//
 //--------------------------- MARKDOWN UTILITIES --------------------------//
   // ucs-2 string to base64 encoded ascii
   utoa = (str) => {
@@ -252,7 +277,7 @@ class AdminDashboard extends React.Component {
                 <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/settings/'}><img src={SettingsIcon} alt='Settings'/></Link>
               </ControlPanelItem>
               <ControlPanelItem>
-                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/stats/'}>Stats</Link>
+                <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/settings/'}>Whitelist</Link>
               </ControlPanelItem>
               <ControlPanelItem>
                 <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/forums/'}>Forums</Link>
@@ -277,7 +302,7 @@ class AdminDashboard extends React.Component {
               </SectionHeader>
               <div className='row no-gutters flex-grow-1 overflow'>
                 <SectionBody className='col-md-12'>
-                  {this.state.hack ? 
+                  {(this.state.hack && !this.state.loading) ? 
                   <Switch>
                     <Route 
                         path={this.props.match.url + '/settings'}
@@ -307,6 +332,7 @@ class AdminDashboard extends React.Component {
                       render={()=> 
                         <QualtricsIntegrationSection
                           hack={this.state.hack}
+                          onUpdate={this.updateQualtricsLinks}
                         />}/>
                   </Switch>
                   : <Loader />}
