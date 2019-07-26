@@ -358,27 +358,42 @@ class ProjectEditor extends React.Component {
   startPushNavigation = () => {
     const _this = this;
     this.saveProject();
-     swal(Constants.surveyRedirecAlertContent)
-    .then((result) => {
-      if(!result.dismiss) {
-        swal(Constants.pushSurveyAlertContent(`${commitSurveys[_this.state.currentPhase]}?email=${_this.state.user.email}&user_id=${_this.state.user.uid}`))
-        .then((result) => {
-          if(!result.dismiss) {
-            swal(Constants.commitContentAlertContent)
-            .then((result) => {
-              const { value } = result;
-              if (value) {
-                this.pushToGitHub(value)
-                swal(Constants.loadingAlertContent)
-                .then((result) => {
-                  swal(Constants.onSuccessAlertContent)
-                })
-              };
-            });
-          }
-        });
-      };
-    }); 
+    console.log(this.state)
+    if(this.state.hackData.phases[this.state.currentPhase - 1].commitSurveyLink){
+      swal(Constants.surveyRedirecAlertContent)
+      .then((result) => {
+        if(!result.dismiss) {
+          swal(Constants.pushSurveyAlertContent(`${this.state.hackData.phases[this.state.currentPhase - 1].commitSurveyLink}?email=${_this.state.user.email}&user_id=${_this.state.user.uid}`))
+          .then((result) => {
+            if(!result.dismiss) {
+              swal(Constants.commitContentAlertContent)
+              .then((result) => {
+                const { value } = result;
+                if (value) {
+                  this.pushToGitHub(value)
+                  swal(Constants.loadingAlertContent)
+                  .then((result) => {
+                    swal(Constants.onSuccessAlertContent)
+                  })
+                };
+              });
+            }
+          });
+        };
+      }); 
+    } else {
+      swal(Constants.commitContentAlertContent)
+      .then((result) => {
+        const { value } = result;
+        if (value) {
+          this.pushToGitHub(value)
+          swal(Constants.loadingAlertContent)
+          .then((result) => {
+            swal(Constants.onSuccessAlertContent)
+          })
+        };
+      });
+    }
   }
 
   pushToGitHub = (commitMessage) => {

@@ -23,11 +23,6 @@ const SectionContainer = styled('div')`
   height: 100%;
   padding: 25px 50px 50px 50px;
 `;
-const EditorContainer = styled('div')`
-  height: 500px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-`;
 
 class AdmTaskSection extends React.Component { 
   onEditorChange = (markdown) => {
@@ -40,9 +35,7 @@ class AdmTaskSection extends React.Component {
         <SectionContainer>
           <h2>Task document editor</h2>
           <p>Here you can edit and preview the Task document. You can also publish the document or schedule it (check bellow).</p>
-          <EditorContainer>
-            <MarkdownEditor editorLayout='horizontal' onEditorChange={this.onEditorChange} withContent={this.props.previousDocument}/>
-          </EditorContainer>
+          <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange} withContent={this.props.previousDocument}/>
           <p>Here you will find the instrictions to publish your task.</p>
           <AvailableActionsDiv>
             <Button 

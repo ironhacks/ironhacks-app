@@ -22,11 +22,6 @@ const SectionContainer = styled('div')`
   padding: 25px 50px 50px 50px;
   height: ${props => props.theme.containerHeight};
 `;
-const EditorContainer = styled('div')`
-  height: 500px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-`;
 
 class AdmTutorialSection extends React.Component {
   state = {previousDocument: this.props.previousDocument};
@@ -41,9 +36,7 @@ class AdmTutorialSection extends React.Component {
         <SectionContainer>
           <h2>Tutorial document editor</h2>
           <p>Here you can edit and preview the tutorial document. You can also publish the document or schedule it (check bellow).</p>
-          <EditorContainer>
-            <MarkdownEditor editorLayout='horizontal' onEditorChange={this.onEditorChange} withContent={this.state.previousDocument}/>
-          </EditorContainer>
+          <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange} withContent={this.state.previousDocument}/>
           <p>Here you will find the instrictions to publish your task.</p>
           <AvailableActionsDiv>
             <Button 
