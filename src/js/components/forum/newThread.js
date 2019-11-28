@@ -213,7 +213,6 @@ class NewThread extends React.Component {
         const hackData = doc.data()
         hackData.id = doc.id;  
         hacks.push(hackData);
-        _this.firestore.collection('adminHackData').doc(doc.id)
       });
       _this.setState({hacks: hacks});
       _this.getForums();
