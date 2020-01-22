@@ -177,7 +177,7 @@ class ProjectEditor extends React.Component {
       editorContent: '',
       editorMode: 'xml',
       loadingFiles: true,
-      selectedFile: 'index.html',
+      selectedFile: 'js/main.js',
       projectFiles: [],
       creatingFile: false,
       projectName: this.props.match.params.proyectName,
@@ -318,9 +318,11 @@ class ProjectEditor extends React.Component {
   }
 
   saveProject = () => {
+    console.log("on save");
     this.saveStat({event: 'save-and-run', metadata: {action: 'click'}})
     // Raw string is the default if no format is provided
     const newBlobs = this.updateProjectBlobs();
+    console.log(newBlobs, "blobs");
     const _this = this;
     Promise.all(
       newBlobs.map(item => this.uploadBlogToFirebase(item))
@@ -418,7 +420,9 @@ class ProjectEditor extends React.Component {
 
   uploadBlogToFirebase = (blob) => {
     const indexRef = storageRef.child(blob.path);
-    return indexRef.put(blob.blob).then(function(snapshot) {
+    return indexRef.put(blob.blob)
+    .then(function(snapshot) {
+      console.log("blob uploaded")
     }).catch(function(error) {
         console.error("Error updating documents: ", error);
     });
