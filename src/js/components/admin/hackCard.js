@@ -40,7 +40,7 @@ const CardContainer = styled('button')`
   };
 
   h3 {
-    line-height: 12px;
+    line-height: 16px;
     margin: 0 0 0 15px;
   };
 
@@ -58,7 +58,7 @@ const Separator = styled('div')`
 
 class HackCard extends React.Component {
   onHackCardClick = () => {
-    this.props.onClick(this.props.index);
+    this.props.onClick(this.props.index, this.props.hack.registrationSurvey);
   };
 
   render() {

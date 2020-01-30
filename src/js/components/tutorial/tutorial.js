@@ -68,7 +68,12 @@ class Tutorial extends React.Component {
     .doc(this.state.currentHack)
     .get()
     .then((doc) => {
-      _this.setState({tutorial: doc.data().tutorial, hackName: doc.data().name});
+      if(doc.data().tutorial){
+        _this.setState({tutorial: doc.data().tutorial, hackName: doc.data().name});
+      }else{
+        //no task on the response, task not available yet.
+        _this.setState({noTutorial: true});
+      }
     })
     .catch(function(error) {
       console.error("Error getting documents: ", error);
@@ -92,6 +97,7 @@ class Tutorial extends React.Component {
           <div className='row'>
             <div className='col-md-8 offset-md-2 tutorial-div'>
               {this.state.tutorial && <div dangerouslySetInnerHTML={{__html:this.decodeBody(this.atou(this.state.tutorial.doc))}}/>}
+              {this.state.noTutorial && <h1>Task is not available yet!</h1>}
             </div>
           </div>
         </SectionContainer>

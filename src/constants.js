@@ -98,9 +98,9 @@ export const Error404Theme = {
   backgroundColor: "white",
   textColor: "black"
 }
-//Proyect Editor
+//Project Editor
 export const cloudFunctionsDevEndPoint = 'localhost:5000';
-export const cloudFunctionsProdEndPoint = 'https://us-central1-ironhacks-platform-dev.cloudfunctions.net';
+export const cloudFunctionsProdEndPoint = 'https://us-central1-the-ironhacks-platform-dev.cloudfunctions.net';
 
 export const projectEditorBgColor = '#24282A';
 
@@ -152,7 +152,7 @@ export const pushSurveyAlertContent = (url) => {
 
 export const preSurveyAlertContent = (url) => {
   return {
-    title: 'Pre survey UNAL',
+    title: 'Resgistration survey',
     html: `<iframe src='${url}' title='Qualtrics survey'/>`,
     showCloseButton: true,
     showConfirmButton: false,

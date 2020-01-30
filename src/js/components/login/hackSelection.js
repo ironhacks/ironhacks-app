@@ -70,7 +70,7 @@ class HackSelection extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("message", this.recieveMessage); 
+    window.removeEventListener("message", this.recieveMessage);
   }
 
   recieveMessage = (event) => {
@@ -86,7 +86,7 @@ class HackSelection extends React.Component {
     .doc(_this.state.user.uid)
     .get()
     .then((user) => {
-      _this.firestore.collection("whiteLists")
+      _this.firestore.collection("whitelists")
       .doc(_this.props.user.email)
       .get()
       .then(function(doc) {
@@ -119,13 +119,17 @@ class HackSelection extends React.Component {
     })
   }
 
-  goToPresurvey = (hackIndex) => {
-    swal(Constants.preSurveyAlertContent('https://purdue.ca1.qualtrics.com/jfe/form/SV_1HZrbxWIcPvZkUJ?user_email=' + this.props.user.email))
-    .then((result) => {
-      if(!result.dismiss) {
-        this.callRegistrationFuncion(hackIndex);
-      };
-    });
+  goToPresurvey = (hackIndex, registrationSurvey) => {
+    if(registrationSurvey) {
+      swal(Constants.preSurveyAlertContent(registrationSurvey + '?user_email=' + this.props.user.email))
+      .then((result) => {
+        if(!result.dismiss) {
+          this.callRegistrationFuncion(hackIndex);
+        };
+      });
+    } else {
+      this.callRegistrationFuncion(hackIndex);
+    }
   }
 
   callRegistrationFuncion = (hackIndex) => {
@@ -173,7 +177,7 @@ class HackSelection extends React.Component {
   createGitHubRepository = (name, hackId, hackIndex) => {
     this.setState({status: "Creating participant profile (2/2)..."});
     // Accesing to all the pain text template variables:
-    const templateFiles = 
+    const templateFiles =
     [
        {
           name: 'index.html',
@@ -231,7 +235,7 @@ class HackSelection extends React.Component {
   putStorageFile = (file, projectName) => {
     //Uploading each template file to storage
     const storageRef = window.firebase.storage().ref();
-    const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)   
+    const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)
     const _this = this;
     // the return value will be a Promise
     return pathRef.put(file.blob)
@@ -278,6 +282,7 @@ class HackSelection extends React.Component {
         </ThemeProvider>
       );
     }
+    console.log(this.state)
     return (
       <ThemeProvider theme={theme}>
       <SectionContainer className="container-fluid">

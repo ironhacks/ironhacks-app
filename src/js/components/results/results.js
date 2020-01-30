@@ -1,20 +1,14 @@
-// IronHacks Platform
-// results.js - Results Component
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
 import { withCookies } from 'react-cookie';
-//Styled components
 import styled, {ThemeProvider} from 'styled-components';
-import * as Texts from './staticTexts.js';
-import PersonalScoreSection from './personalScoreSection.js';
-import YourCompetitorsRank from './yourCompetitorsRank.js';
-//Custom Constants
 import * as Constants from '../../../constants.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
 import Loader from '../../utilities/loader.js';
 import TimeLine from '../../utilities/timeLine.js';
 import { registerStats } from '../../utilities/registerStat.js';
+import PersonalScoreSection from './personalScoreSection.js';
+import YourCompetitorsRank from './yourCompetitorsRank.js';
+import * as Texts from './staticTexts.js';
 
 const theme = Constants.AppSectionTheme;
 
@@ -63,7 +57,7 @@ const SectionContainer = styled('div')`
           background-color: white;
           border-top: 3px solid ${Constants.mainBgColor};
           border-right: 1px solid rgb(225, 228, 232);
-          border-left: 1px solid rgb(224, 228, 232);          
+          border-left: 1px solid rgb(224, 228, 232);
           border-bottom: 1px solid white;
         }
     }
@@ -95,7 +89,7 @@ const SectionContainer = styled('div')`
         animation-duration: 1s;
         animation-iteration-count: infinite;
         animation-direction: alternate;
-        
+
         @-webkit-keyframes example {
           from {color: red;}
           to {color: yellow;}
@@ -126,7 +120,7 @@ class Results extends React.Component {
       loading: true,
       currentSection: 'yourCompetitors',
     }
-  
+
     this.firestore = window.firebase.firestore();
   }
 
@@ -141,11 +135,11 @@ class Results extends React.Component {
     .get()
     .then((doc) => {
       const hackData = doc.data();
-      let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+      //let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
       _this.setState({
         hackData,
-        currentPhase,
-        selectedPhase: currentPhase, 
+        currentPhase: 4,
+        selectedPhase: 3,
       });
       _this.getForumData();
     })
@@ -161,7 +155,7 @@ class Results extends React.Component {
     .get()
     .then((doc) => {
       const data = doc.data();
-      const { treatment, participants } = data; 
+      const { treatment, participants } = data;
       _this.setState({
         treatment,
         participants,
@@ -192,7 +186,7 @@ class Results extends React.Component {
     }
     this.saveStat(statData)
   }
-  
+
   onPhaseSelection = (phase) => {
     this.setState({selectedPhase: phase + 1})
     this.getResults(phase + 1);
@@ -266,7 +260,7 @@ class Results extends React.Component {
             <h1>Your dashboard</h1>
             {Texts.treatmentText[this.state.treatment].header}
             <h3>Please select the phase you want to check.</h3>
-            {this.state.hackData && 
+            {this.state.hackData &&
               <TimeLine
                 phases={this.state.hackData.phases}
                 onClick={this.onPhaseSelection}
@@ -289,9 +283,9 @@ class Results extends React.Component {
             </div>
           </div>
           <div className="selected-section">
-            {this.state.gettingResults && 
+            {this.state.gettingResults &&
               <div className='results-loader'>
-                <Loader status="Fetching results..."/>  
+                <Loader status="Fetching results..."/>
               </div>
             }
             {!this.state.gettingResults && this.state.results && this.state.currentSection === 'yourCompetitors' &&

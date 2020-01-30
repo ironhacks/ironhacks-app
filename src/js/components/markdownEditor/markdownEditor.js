@@ -7,13 +7,14 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import ReactMde, {ReactMdeTypes} from 'react-mde'; //react-mde
+import ReactMde from 'react-mde'; //react-mde
 import * as Showdown from "showdown"; // Markdown reader
 
 import './css/react-mde-all.css'; //Custom Editor stylesheet
 
 const Editor = styled(ReactMde)`
-  min-height: 500px;
+  height: 500px;
+  max-height: 500px;
   padding-top: 1px;
   position: relative;
   width: 100%;
