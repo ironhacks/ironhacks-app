@@ -7,6 +7,12 @@ import './static/bootstrap-reboot.css';
 import './static/bootstrap-grid.css';
 import './main.css';
 
+// Add these lines:
+if (process.env.NODE_ENV !== 'production') {
+  localStorage.setItem('debug', 'ironhacks:*');
+}
+
+
 ReactDOM.render((
   <BrowserRouter>
     <App/>

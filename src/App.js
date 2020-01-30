@@ -23,11 +23,15 @@ import UserProfile from './js/components/userProfile/userProfile.js';
 import ProjectEditor from './js/components/projectEditor/projectEditor.js';
 import ProjectPreview from './js/components/projectEditor/projectPreview.js';
 import NotFound from './js/utilities/404.js';
+import Log from './js/utilities/debugLog';
+
 
 const LoaderContainer = styled('div')`
   width: 100vw;
   height: 100vh;
 `;
+
+Log.info('Application Loaded');
 
 //The main purpose of this class is to identify if there is a logged user and redirect him to the proper view.
 class IronHacksApp extends React.Component {
