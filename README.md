@@ -668,7 +668,15 @@ handleSubmit = (event) => {
       })
     })  
     .catch(function(error) {
-      console.error("Error adding document: ", error);
+      ...
     });
   };
 ```
+We encode the content of the thread (AKA the first comment / thread head) using base64 and then we push it to the DB, this creates first a document on the ```threads``` collection, then we create a second document on the ```comments``` collection, this is the only comment that will have a referece to the forum documment, we use this reference to identify it as the thread head. Finally we refresh the ```comments``` array of the thread documment. 
+
+Finally we redirect the user to ```ThreadView```.
+
+### Thread View - threadView.js
+*on ./src/js/component/forum/threadView/threadView.js*
+
+  
