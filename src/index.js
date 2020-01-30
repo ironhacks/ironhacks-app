@@ -9,7 +9,7 @@ import './main.css';
 
 ReactDOM.render((
   <BrowserRouter>
-    <IronHacksApp/>
+    <App/>
   </BrowserRouter>
 ), document.getElementById('root'));
 
