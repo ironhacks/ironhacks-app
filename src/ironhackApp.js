@@ -1,13 +1,7 @@
-// IronHacks Platform
-// ironhackApp.js - Main router
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { Switch, Route, Redirect} from "react-router-dom";
-//Styled components
 import styled from 'styled-components';
-// Custom Components
 import Loader from './js/utilities/loader.js';
 import Header from './js/components/header/header.js';
 import Footer from './js/components/footer/footer.js';
@@ -81,7 +75,7 @@ class IronHacksApp extends React.Component {
         prevState.mustNavigate = true;
         return prevState;
       })
-    }) 
+    })
     .catch(function(error) {
       // The user can't read the admins collection, therefore, is not admin.
         _this.setState((prevState, props) => {
@@ -101,11 +95,13 @@ class IronHacksApp extends React.Component {
         </LoaderContainer>
       );
     }else{
+      // Here we have all the posible routes on the platform, we use 3 switches becouse the header and the footer are only shown when there is a user logged.
+      // We also hide them on the preview of a project.
       return (
         <CookiesProvider>
           <div className='App'>
             <Switch>
-              <Route exact path='/' render={() => null}/> 
+              <Route exact path='/' render={() => null}/>
               <Route exact path='/login' render={() => null}/>
               <Route exact path='/404' render={() => null}/>
               <Route exact path='/projectEditor/:proyectName/preview' render={() => null}/>
@@ -129,7 +125,7 @@ class IronHacksApp extends React.Component {
               <Route path='/results' render={(props) => (<Results user={this.state.user} {...props}/>)}/>
               <Route exact path='/projectEditor/:proyectName' render={(props) => (<ProjectEditor user={this.state.user} {...props}/>)}/>
               <Route exact path='/projectEditor/:proyectName/preview' render={(props) => (<ProjectPreview user={this.state.user} {...props}/>)}/>
-              <Route exact path='/404' component={NotFound}/> 
+              <Route exact path='/404' component={NotFound}/>
               {this.state.user.admin && <Redirect to='/admin'/>}
               <Route exact path='/' component={Landing}/>
               {this.state.user && <Redirect to='/404'/>}

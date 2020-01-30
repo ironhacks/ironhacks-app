@@ -1,27 +1,18 @@
-// IronHacks Platform
-// results.js - Results Component
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-//Styled components
 import styled, {ThemeProvider} from 'styled-components';
-//Router
 import { Link, Switch, Route } from "react-router-dom";
-//Custom components
 import Loader from '../../utilities/loader.js';
 import SettingsSection from './sections/settings/admSettingsSection.js';
 import QualtricsIntegrationSection from './sections/qualtricsIntegration/qualtricsIntegrationSection.js';
 import TaskSection from './sections/task/admTaskSection.js';
 import TutorialSection from './sections/tutorial/admTutorialSection.js';
-//Custom Constants
 import * as Constants from '../../../constants.js';
-//Image references
+
 import HouseIcon from './img/house-black-icon.svg';
 import SettingsIcon from './img/settings-icon.svg';
 
 const theme = Constants.AppSectionTheme;
 
-//Section container
 const SectionContainer = styled('div')`
   width: 100%;
   height: ${props => props.theme.containerHeight};
@@ -34,14 +25,15 @@ const SectionContainer = styled('div')`
   .overflow {
     overflow: auto;
   }
-
 `;
+
 const ControlPanel = styled('div')`
   height 100%;
   max-height: 100%;
   border-right: 1px solid black;
   overflow: auto;
 `;
+
 const ControlPanelItem = styled('div')`
   width: 100%;
   height: 70px;
@@ -75,19 +67,23 @@ const ControlPanelItem = styled('div')`
     }
   }
 `;
+
 const VerticalSeparator = styled('div')`
   width: 2px;
   height: 25px;
   background-color: black;
 `;
+
 const SectionHeader = styled('div')`
   min-height: 140px;
   padding: 25px 50px 50px 50px;
   border-bottom: 1px solid black;
 `;
+
 const SectionBody = styled('div')`
   overflow: auto;
 `;
+
 class AdminDashboard extends React.Component {
   constructor(props){
     super(props);
@@ -124,7 +120,7 @@ class AdminDashboard extends React.Component {
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           const hackData = doc.data()
-          const hackId = doc.id;  
+          const hackId = doc.id;
           firestore.collection('adminHackData').doc(hackId)
           .get()
           .then(function(doc) {
@@ -133,7 +129,7 @@ class AdminDashboard extends React.Component {
             _this.setState({hack: hackData, hackId: hackId});
           });
         });
-    }) 
+    })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
@@ -155,7 +151,7 @@ class AdminDashboard extends React.Component {
     var batch = firestore.batch();
     whiteList.forEach((email) => {
       const data = {whiteList: window.firebase.firestore.FieldValue.arrayUnion(_this.state.hackId)}
-      const whiteListDoc = firestore.collection('whiteLists').doc(email);
+      const whiteListDoc = firestore.collection('whitelists').doc(email);
       batch.set(whiteListDoc, data, {merge: true});
     })
     // Adding whiteList cross reference to the hack object on firebase:
@@ -170,7 +166,7 @@ class AdminDashboard extends React.Component {
         prevState.hack.whiteList = whiteList
         return {hack: prevState.hack , loading: false};
       })
-    })  
+    })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
@@ -197,7 +193,7 @@ class AdminDashboard extends React.Component {
     })
     .then(() => {
       this.setState({loading: false})
-    })  
+    })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
@@ -224,7 +220,7 @@ class AdminDashboard extends React.Component {
     })
     .then(() => {
       this.setState({loading: false})
-    })  
+    })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
@@ -247,7 +243,7 @@ class AdminDashboard extends React.Component {
     })
     .then(() => {
       this.setState({loading: false})
-    })  
+    })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
@@ -272,7 +268,7 @@ class AdminDashboard extends React.Component {
             <ControlPanel className='col-md-2'>
               <ControlPanelItem >
                 <img src={HouseIcon} alt='Home'/>
-                <span>Proyect Overview </span>
+                <span>Project Overview </span>
                 <VerticalSeparator/>
                 <Link to={'/admin/dashboard/' + this.props.match.params.hackId + '/settings/'}><img src={SettingsIcon} alt='Settings'/></Link>
               </ControlPanelItem>
@@ -302,34 +298,34 @@ class AdminDashboard extends React.Component {
               </SectionHeader>
               <div className='row no-gutters flex-grow-1 overflow'>
                 <SectionBody className='col-md-12'>
-                  {(this.state.hack && !this.state.loading) ? 
+                  {(this.state.hack && !this.state.loading) ?
                   <Switch>
-                    <Route 
+                    <Route
                         path={this.props.match.url + '/settings'}
-                        render={()=> 
-                          <SettingsSection 
+                        render={()=>
+                          <SettingsSection
                             hack={this.state.hack}
                             onSaveSettings={this.onSaveSettings}
                           />}/>
-                    <Route 
+                    <Route
                       path={this.props.match.url + '/tutorial'}
-                      render={()=> 
-                        <TutorialSection 
+                      render={()=>
+                        <TutorialSection
                           previousDocument={this.state.hack.tutorial ? this.atou(this.state.hack.tutorial.doc) : ''}
                           onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
                           updateTutorialDocument={this.updateTutorialDocument}
                         />}/>
-                      <Route 
+                      <Route
                       path={this.props.match.url + '/task'}
-                      render={()=> 
-                        <TaskSection 
+                      render={()=>
+                        <TaskSection
                           previousDocument={this.state.hack.task ? this.atou(this.state.hack.task.doc) : ''}
                           onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
                           updateTaskDocument={this.updateTaskDocument}
                         />}/>
-                      <Route 
+                      <Route
                       path={this.props.match.url + '/qualtrics-integration'}
-                      render={()=> 
+                      render={()=>
                         <QualtricsIntegrationSection
                           hack={this.state.hack}
                           onUpdate={this.updateQualtricsLinks}

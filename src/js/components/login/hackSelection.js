@@ -70,7 +70,7 @@ class HackSelection extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("message", this.recieveMessage); 
+    window.removeEventListener("message", this.recieveMessage);
   }
 
   recieveMessage = (event) => {
@@ -86,7 +86,7 @@ class HackSelection extends React.Component {
     .doc(_this.state.user.uid)
     .get()
     .then((user) => {
-      _this.firestore.collection("whiteLists")
+      _this.firestore.collection("whitelists")
       .doc(_this.props.user.email)
       .get()
       .then(function(doc) {
@@ -177,7 +177,7 @@ class HackSelection extends React.Component {
   createGitHubRepository = (name, hackId, hackIndex) => {
     this.setState({status: "Creating participant profile (2/2)..."});
     // Accesing to all the pain text template variables:
-    const templateFiles = 
+    const templateFiles =
     [
        {
           name: 'index.html',
@@ -235,7 +235,7 @@ class HackSelection extends React.Component {
   putStorageFile = (file, projectName) => {
     //Uploading each template file to storage
     const storageRef = window.firebase.storage().ref();
-    const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)   
+    const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}${file.name}`)
     const _this = this;
     // the return value will be a Promise
     return pathRef.put(file.blob)

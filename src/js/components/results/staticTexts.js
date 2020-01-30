@@ -13,10 +13,10 @@ export const treatmentText = {
 		ranking: {
 			instructions: <div>
 				<p>
-					Check out others' work: Also, please take a look at your peers’ solutions.  
+					Check out others work: Also, please take a look at your peers solutions.  
 				</p>
 				<p>
-					Below, you find a table with your peers: with a 1) a link to their app, and 1) a like button.  We will describe each in more detail. 
+					Below, you find a table with your peers: with a 1) a link to their app, and 1) a like button.  We will describe each in more detail.
 				</p>
 				<ul>
 					<li>The link in the first column takes you to their code. Click on the link to check out your fellow participants’ solutions.! You can inspect it, and also reuse it if you want to! We encourage you to re-use components from your peers!
@@ -25,7 +25,7 @@ export const treatmentText = {
 					</li>
 				</ul>
 				<p>
-					<strong>Remember: Please do not forget to select and follow your top 3 apps. They are not available anymore after 11.59 pm of the evaluation day.</strong>To make your app unique consider recombining your own ideas with those you find in other apps! Do not worry, you can reuse up to 50% of others code! 
+					<strong>Remember: Please do not forget to select and follow your top 3 apps. They are not available anymore after 11.59 pm of the evaluation day.</strong>To make your app unique consider recombining your own ideas with those you find in other apps! Do not worry, you can reuse up to 50% of others code!
 				</p>
 			</div>,
 		}
@@ -42,7 +42,7 @@ export const treatmentText = {
 		ranking: {
 			instructions: <div>
 				<p>
-					Below, you find a table with your peers: with 1) a link to their app, 2) A similarity rating of how similar they are compared to you on scale <strong>from 0 (not similar at all)</strong> to <strong>10 (very similar)</strong> and 3) a like button.  We will describe each in more detail.  
+					Below, you find a table with your peers: with 1) a link to their app, 2) A similarity rating of how similar they are compared to you on scale <strong>from 0 (not similar at all)</strong> to <strong>10 (very similar)</strong> and 3) a like button.  We will describe each in more detail.
 				</p>
 				<ul>
 					<li>The link in the first column takes you to their code. Click on the link to check out your fellow participants’ solutions.! You can inspect it, and also reuse it if you want to! We encourage you to re-use components from your peers!
@@ -67,7 +67,7 @@ export const personalFeddback = {
 		</p>
 		<p><strong>Keep pushing to earn more points. The more points you more likely you earn more money, reputation, and also skills.</strong>
 		</p>
-		<p>Remember that your personal feedback are private and confidential. And you shouldn't share with others how many points you have earned. 
+		<p>Remember that your personal feedback are private and confidential. And you shouldn't share with others how many points you have earned.
 		</p>
 	</div>,
 	technology: {
