@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+#  readlink {}
+
+# grep --count
+
+find \
+  -path "*/node_modules" -prune \
+  -o -type f \
+  -name "*.js" \
+  -printf "\nMODULE_PATH=\"%h\" MODULE_FILENAME=\"%p\" \nP: %P\nf: %f\n" \
+  -exec grep -E -e "import.*from" --line-number --with-filename --initial-tab {} \;

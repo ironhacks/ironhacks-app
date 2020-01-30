@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# EXPO HELPER
+# -------------
+BASE_DIR="$(npm prefix)"
+
+source ${BASE_DIR}/../.env
+
+
+# tsc --removeComments  --module ESNext --target ESNEXT --pretty
+# ts build --removeComments  --jsx react-native --module ESNext --target ESNEXT --pretty --declaration  **/*.ts **/*.tsx
+#!/bin/bash
+
+BASE_DIR="$(npm prefix)"
+source ${BASE_DIR}/../.env
+
+
+if [ "$RUN_TYPE_NOC" == "yes" ]; then
+
+    # --------------------------------- #
+    # USE REGULAR TS BY SETTING --NO-C  #
+    # --------------------------------- #
+    $BASE_PATH/./node_modules/.bin/ts \
+      build \
+        --removeComments \
+        --jsx react-native \
+        --module ESNext \
+        --target ESNEXT \
+        --pretty \
+        --declaration \
+        **/*.ts \
+        **/*.tsx \
+        "$@"
+
+
+else
+
+    #  -------------------------------- #
+    # USES TSC BY DEFAULT               #
+    #  -------------------------------- #
+    $BASE_PATH/./node_modules/.bin/tsc \
+      --removeComments \
+      --module ESNext \
+      --target ESNEXT \
+      --skipLibCheck \
+      --stripInternal \
+      --pretty \
+      "$@"
+
+fi

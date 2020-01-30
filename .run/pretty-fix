@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# =========================
+#  PRETTIER FORMAT UTILITY
+# -------------------------
+BASE_PATH="$(npm prefix)"
+[[ -f "${BASE_PATH}/./.npmrc" ]] && . ${BASE_PATH}/./.npmrc
+PRETTY_CONFIG_PATH="${BASE_PATH}/.prettierrc.toml"
+PRETTY_IGNORE_PATH="${BASE_PATH}/.prettierignore"
+PRETTY_ARGS="$@"
+
+if [ "$BASE_PATH" != "$INIT_CWD" ]; then
+  cd ${INIT_CWD}
+fi
+
+${BASE_PATH}/./node_modules/.bin/prettier \
+  --config "${PRETTY_CONFIG_PATH}" \
+  --ignore-path "${PRETTY_IGNORE_PATH}" \
+  --write \
+    ${PRETTY_ARGS}
+
+exit 0

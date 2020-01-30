@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# =========================
+#  PRETTIER FORMAT UTILITY
+# -------------------------
+BASE_PATH="$(npm prefix)"
+[[ -f "${BASE_PATH}/./.npmrc" ]] && . ${BASE_PATH}/./.npmrc
+PRETTY_CONFIG_PATH="${BASE_PATH}/.prettierrc.toml"
+PRETTY_IGNORE_PATH="${BASE_PATH}/.prettierignore"
+PRETTY_ARGS="$@"
+
+# -c, --check              Check if the given files are formatted
+# -l, --list-different     Print the names of files that are
+# --write                  Edit files in-place. (Beware!)
+# --stdin-filepath <string>
+# --with-node-modules      Process files inside 'node_modules' directory.
+
+# prettier  --arrow-parens always --end-of-line lf --html-whitespace-sensitivity strict --jsx-single-quote --no-bracket-spacing --space-before-function-paren --no-semi --quote-props consistent --print-width 100 --prose-wrap=always --single-quote --trailing-comma none
+
+# MANUAL CONFIG WHEN NOCONFIG
+get_pretty_flags () {
+  PRETTY_FLAGS=""
+  PRETTY_FLAGS="${PRETTY_FLAGS} --arrow-parens always"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --end-of-line lf"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --html-whitespace-sensitivity strict"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --jsx-single-quote"
+  # PRETTY_FLAGS="${PRETTY_FLAGS} --no-braces-spacing"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --no-bracket-spacing"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --space-before-function-paren"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --no-semi"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --quote-props consistent"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --print-width 100"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --prose-wrap=always"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --single-quote"
+  PRETTY_FLAGS="${PRETTY_FLAGS} --trailing-comma none"
+
+  echo "${PRETTY_FLAGS}"
+}
+
+run_pretty () {
+  RUN_PRETY_ARGS=${1:-'--help'}
+  # PRETTY_FLAGS="$(get_pretty_flags)"
+
+  echo "prettier ${PRETTY_FLAGS} ${RUN_PRETY_ARGS}"
+
+  ${BASE_PATH}/./node_modules/.bin/prettier \
+    --config "${PRETTY_CONFIG_PATH}" \
+    --ignore-path "${PRETTY_IGNORE_PATH}" \
+      ${RUN_PRETY_ARGS}
+}
+
+
+if [ "$BASE_PATH" == "$INIT_CWD" ]; then
+
+  run_pretty "${PRETTY_ARGS}"
+
+else
+
+  cd ${INIT_CWD}
+
+  run_pretty "${PRETTY_ARGS}"
+
+fi
+
+
+
+exit 0
+
+# --list-different
+# --check
+# --write
+# --config
+# --plugin
+# --loglevel
+# --file-info

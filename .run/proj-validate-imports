@@ -1,0 +1,82 @@
+#!/bin/bash
+
+BASE_PATH="$PWD"
+DEBUG_CHECK_IMPORTS="YES"
+
+
+check_import_path_is_file () {
+ IMPORT_PATH=${1:-'FALSE'}
+ echo $IMPORT_PATH | grep "/" --count
+}
+
+check_imports () {
+  DEBUG_CHECK_IMPORTS="NO"
+  MODULE_SOURCE="${1:?'Module Source required'}"
+  MODULE_SOURCE_DIR="$(dirname $MODULE_SOURCE)"
+  MODULE_SOURCE_FILENAME="$(basename $MODULE_SOURCE)"
+  MODULE_SOURCE_ABSDIR=$(dirname -- "$(readlink -f -- "$MODULE_SOURCE")")
+  MODULE_SOURCE_ABSPATH="$MODULE_SOURCE_ABSDIR/$MODULE_SOURCE_FILENAME"
+  MODULE_IMPORT_NAME="${2:?'Module import name required'}"
+  MODULE_IMPORT_PATH="${3:-'NOT FOUND'}"
+  MODULE_IMPORT_DIR="$(dirname $MODULE_IMPORT_PATH)"
+  MODULE_IMPORT_FILENAME="$(basename $MODULE_IMPORT_PATH)"
+  MODULE_IMPORT_ABSDIR=$(dirname -- "$(readlink -f -- "$MODULE_SOURCE_ABSDIR/$MODULE_IMPORT_PATH")")
+  MODULE_IMPORT_ABSPATH="$MODULE_IMPORT_ABSDIR/$MODULE_IMPORT_FILENAME.js"
+
+  MODULE_IS_FILE=$(echo $MODULE_IMPORT_PATH | grep "/" --count)
+
+  [[ "$MODULE_IMPORT_PATH" == "NOT FOUND" ]] && echo -e "MODULE PATH NOT SET\n from $MODULE_SOURCE - import $MODULE_IMPORT_PATH" && DEBUG_CHECK_IMPORTS="YES"
+
+  if [ $MODULE_IS_FILE = 0 ]; then
+    if [ $DEBUG_CHECK_IMPORTS == "YES" ]; then
+        echo "skipping module $MODULE_IMPORT_PATH - is not file [src:$MODULE_SOURCE path:$MODULE_IMPORT_PATH]"
+    fi
+  else
+    [[ ! -d $MODULE_SOURCE_ABSDIR ]] && echo "Module Source Directory not found" && DEBUG_CHECK_IMPORTS="YES"
+    [[ -d $MODULE_SOURCE_ABSDIR ]] && cd $MODULE_SOURCE_ABSDIR
+
+    [[ ! -d $MODULE_IMPORT_DIR ]] && echo "Module not found - SRC:$MODULE_SOURCE PATH:$MODULE_IMPORT_PATH DIRNAME:$MODULE_IMPORT_DIR" && DEBUG_CHECK_IMPORTS="YES"
+    [[ -d $MODULE_IMPORT_DIR ]] && cd "$MODULE_IMPORT_DIR"
+
+    if [ ! -f $MODULE_IMPORT_FILENAME.js ]; then
+      if [ -d $MODULE_IMPORT_FILENAME ]; then
+        if [ -f $MODULE_IMPORT_FILENAME/index.js ]; then
+          echo "Module $MODULE_IMPORT_FILENAME at $MODULE_IMPORT_FILENAME/index.js EXISTS"
+          DEBUG_CHECK_IMPORTS="NO"
+        else
+          echo "Module Direcoroy $MODULE_IMPORT_FILENAME exists but index.js NOT FOUND"
+          DEBUG_CHECK_IMPORTS="YES"
+        fi
+      else
+        echo "Module File $MODULE_IMPORT_FILENAME.js and Directory $MODULE_IMPORT_FILENAME NOT FOUND"
+        DEBUG_CHECK_IMPORTS="YES"
+      fi
+    else
+      echo "Module $MODULE_IMPORT_FILENAME EXISTS"
+      DEBUG_CHECK_IMPORTS="NO"
+    fi
+  fi
+
+  if [ $DEBUG_CHECK_IMPORTS == "YES" ]; then
+    echo "checking
+    MODULE_SOURCE = $MODULE_SOURCE
+    MODULE_IMPORT_NAME = $MODULE_IMPORT_NAME
+    MODULE_IMPORT_PATH = $MODULE_IMPORT_PATH
+    ---
+    MODULE_SOURCE_DIR = $MODULE_SOURCE_DIR
+    MODULE_SOURCE_FILENAME = $MODULE_SOURCE_FILENAME
+    MODULE_SOURCE_ABSDIR = $MODULE_SOURCE_ABSDIR
+    MODULE_SOURCE_ABSPATH = $MODULE_SOURCE_ABSPATH
+    MODULE_IMPORT_DIR = $MODULE_IMPORT_DIR
+    MODULE_IMPORT_FILENAME = $MODULE_IMPORT_FILENAME (assuming .js)
+    MODULE_IMPORT_ABSDIR = $MODULE_IMPORT_ABSDIR
+    MODULE_IMPORT_ABSPATH = $MODULE_IMPORT_ABSPATH"
+  fi
+}
+
+
+
+check_imports $1 $2 $3
+
+
+exit 0

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# -------------------------
+# react-native run-android
+# regex filters -
+# its simple RegExp /[\(*\)]{1}/gim
+# filter HOCS ^[^(]+$.
+# Exclude list: [/GetContext*/, /Jss*/]
+# -------------------------
+BASE_PATH="$(npm prefix)"
+
+[[ -f .npmrc ]] && source .npmrc
+[[ -f .env ]] && source .env
+
+if [ ! -z $RUN_REACT_DEVTOOLS ]; then
+
+  [[ ! -z $APP_REACT_DEVTOOLS_RUNNING ]] \
+      && echo "React Devtools already running"
+
+  [[ -z $APP_REACT_DEVTOOLS_RUNNING ]] \
+      && APP_REACT_DEVTOOLS_RUNNING="yes" \
+      && NODE_ENV="development" node $BASE_PATH/node_modules/.bin/react-devtools &
+fi
+
+export APP_REACT_DEVTOOLS_RUNNING

@@ -1,0 +1,50 @@
+#!/bin/bash
+
+__get_help_words () {
+  grep '-' \
+    | sed -E \
+      '{
+        s/, --/\n--/g
+        ; s/- //
+        ; s/^\s*-/-/g
+        ; s/^\s*//g
+        ; s/ .*$//g
+      }' \
+    | sort --version-sort \
+    | xargs echo -e
+
+}
+
+# npm scripts words
+_get_npm_script_script_words () {
+  npm run \
+    | grep -v -e '^    ' \
+    | grep -v -e '^\w' \
+    |  sed 's/^\s*\b//g; s/ //g' \
+    | sort -u \
+    | xargs
+}
+
+_get_npm_script_help_words () {
+  npm -l \
+    | grep -E -e '^\s\s\s+' \
+    | sed -E -e 's/<[a-zA-Z@:.-= ]+>//g; s/[]@,:.[/|")(=]//g' \
+    | sed -e "s/'//g" \
+    | sed "s/\`//g; s/^\s*//g ; s/  */ /g; s/\t/ /g" \
+    | sort -u \
+    | xargs echo -e
+}
+
+# COMPLETION_COMMAND_NAME=${1?"No command selected"}
+# COMPLETION_WORDS="$(${COMPLETION_COMMAND_NAME} --help | __get_help_words )"
+# echo -e "Completion Word: '${COMPLETION_COMMAND_NAME}'"
+# complete -W "${COMPLETION_WORDS}" ${COMPLETION_COMMAND_NAME}
+# echo -e "n\Wordlist: $COMPLETION_WORDS\n"
+
+# NPM_HELP_COMMAND_WORDS="$(_get_npm_script_help_words)"
+# complete -W $NPM_RUN_SCRIPTS_WORDS
+
+# NPM_RUN_SCRIPTS_WORDS="$(_get_npm_script_script_words)"
+# complete -W "${NPM_RUN_SCRIPTS_WORDS}" run
+complete -W "$(_get_npm_script_script_words)" run
+echo -e "$(_get_npm_script_script_words)" > .runscripts_complete
