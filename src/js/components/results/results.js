@@ -141,11 +141,11 @@ class Results extends React.Component {
     .get()
     .then((doc) => {
       const hackData = doc.data();
-      let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+      //let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
       _this.setState({
         hackData,
-        currentPhase,
-        selectedPhase: currentPhase, 
+        currentPhase: 4,
+        selectedPhase: 3, 
       });
       _this.getForumData();
     })
