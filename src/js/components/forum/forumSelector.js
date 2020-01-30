@@ -3,12 +3,12 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
-//Custom components
-//import MarkdownEditor from '../markdownEditor/markdownEditor.js';
+// Custom components
+// import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 
 const Select = styled('select')`
   height: 30px;
@@ -22,16 +22,15 @@ const Select = styled('select')`
   margin-left: 10px;
 `;
 class ForumSelector extends React.Component {
-  
   onChange = (event) => {
-    this.props.onSelection(event.target.value)
+    this.props.onSelection(event.target.value);
   }
 
   render() {
     return (
       <Select onChange={this.onChange}>
         {this.props.selector.map((selector, i) => {
-          return <option key={selector.name} value={i}>{selector.name}</option> 
+          return <option key={selector.name} value={i}>{selector.name}</option>;
         })}
       </Select>
     );

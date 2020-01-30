@@ -1,6 +1,6 @@
 import React from 'react';
-import { CookiesProvider } from 'react-cookie';
-import { Switch, Route, Redirect} from "react-router-dom";
+import {CookiesProvider} from 'react-cookie';
+import {Switch, Route, Redirect} from 'react-router-dom';
 import styled from 'styled-components';
 import Loader from './js/utilities/loader.js';
 import Header from './js/components/header/header.js';
@@ -33,7 +33,7 @@ const LoaderContainer = styled('div')`
 
 Log.info('Application Loaded');
 
-//The main purpose of this class is to identify if there is a logged user and redirect him to the proper view.
+// The main purpose of this class is to identify if there is a logged user and redirect him to the proper view.
 class IronHacksApp extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +43,7 @@ class IronHacksApp extends React.Component {
     };
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.isUserConected();
   };
 
@@ -51,54 +51,54 @@ class IronHacksApp extends React.Component {
   isUserConected = () => {
     const _this = this;
     window.firebase.auth().onAuthStateChanged((user) => {
-      if(user){
+      if (user) {
         const splitedName = user.displayName.split(' ');
-        const profileLetters = splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1)
+        const profileLetters = splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1);
         user.profileLetters = profileLetters;
         _this.setState({user: user});
-        _this.isAdmin(); //We only check this to display specific ui items.
-      }else{
+        _this.isAdmin(); // We only check this to display specific ui items.
+      } else {
         _this.setState({user: false, mustNavigate: true});
       }
     });
   };
-  //check on the DB if the current user is admin.
+  // check on the DB if the current user is admin.
   isAdmin = () => {
-    //db Reference
+    // db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
     const _this = this;
-    //Updating the current hack:
+    // Updating the current hack:
     firestore.collection('admins').doc(this.state.user.uid)
-    .get()
-    .then(function(doc) {
-      //Is admin.
-        _this.setState((prevState, props) => {
-        prevState.user.isAdmin = true;
-        prevState.mustNavigate = true;
-        return prevState;
-      })
-    })
-    .catch(function(error) {
-      // The user can't read the admins collection, therefore, is not admin.
-        _this.setState((prevState, props) => {
-        prevState.user.isAdmin = false;
-        prevState.mustNavigate = true;
-        return prevState;
-      })
-    });
+        .get()
+        .then(function(doc) {
+          // Is admin.
+          _this.setState((prevState, props) => {
+            prevState.user.isAdmin = true;
+            prevState.mustNavigate = true;
+            return prevState;
+          });
+        })
+        .catch(function(error) {
+          // The user can't read the admins collection, therefore, is not admin.
+          _this.setState((prevState, props) => {
+            prevState.user.isAdmin = false;
+            prevState.mustNavigate = true;
+            return prevState;
+          });
+        });
   };
 
   render() {
-    //If this.user is null, means that we didn't receive response from firebase auth, therefore we show a loader:
-    if(!this.state.mustNavigate){
-      return(
+    // If this.user is null, means that we didn't receive response from firebase auth, therefore we show a loader:
+    if (!this.state.mustNavigate) {
+      return (
         <LoaderContainer>
           <Loader/>
         </LoaderContainer>
       );
-    }else{
+    } else {
       // Here we have all the posible routes on the platform, we use 3 switches becouse the header and the footer are only shown when there is a user logged.
       // We also hide them on the preview of a project.
       return (

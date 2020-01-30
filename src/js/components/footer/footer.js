@@ -4,9 +4,9 @@
 
 import React from 'react';
 
-//Styled components
+// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
 
 const theme = Constants.FooterTheme;
@@ -16,7 +16,7 @@ const FooterContainer = styled('div')`
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  height: ${props => props.theme.containerHeight};
+  height: ${(props) => props.theme.containerHeight};
   width: 100%;
   background-color: ${Constants.mainBgColor}
 
@@ -36,7 +36,6 @@ const FooterContainer = styled('div')`
 `;
 
 class Footer extends React.Component {
-  
   render() {
     return (
       <ThemeProvider theme={theme}>

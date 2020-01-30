@@ -3,20 +3,20 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { withCookies } from 'react-cookie';
-//Styled components
+import {Link, Redirect} from 'react-router-dom';
+import {withCookies} from 'react-cookie';
+// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
-import { registerStats } from '../../utilities/registerStat.js';
+import {registerStats} from '../../utilities/registerStat.js';
 
 import menuIcon from './img/menu-icon.svg';
 
 const theme = Constants.HeaderTheme;
 
 const HeaderContainer = styled('div')`
-  height: ${props => props.theme.containerHeight};
+  height: ${(props) => props.theme.containerHeight};
   background-color: ${Constants.mainBgColor}
 
   .menu {
@@ -50,7 +50,7 @@ const NavContainer = styled('nav')`
     left 15px;
 
     .links-container {
-      display: ${props => props.display}; 
+      display: ${(props) => props.display}; 
       flex-direction: column;
       align-items: start;
       border-radius: ${Constants.universalBorderRadius}; 
@@ -104,7 +104,7 @@ const NavContainer = styled('nav')`
 `;
 // Left buttons
 const NavButton = styled(Link)`
-  color: ${props => props.theme.textColor};
+  color: ${(props) => props.theme.textColor};
   padding: 10px 10px;
   text-align: center;
   text-decoration: none;
@@ -115,7 +115,7 @@ const NavButton = styled(Link)`
 
   &:hover {
     text-decoration: none;
-    color: ${props => props.theme.hoverTextColor};
+    color: ${(props) => props.theme.hoverTextColor};
   }
 `;
 // User menu (right menu)
@@ -127,7 +127,7 @@ const UserMenuDropper = styled('button')`
   font-weight: 700;
 `;
 const UserMenu = styled('div')`
-  display: ${props => props.display};
+  display: ${(props) => props.display};
   flex-direction: column;
   align-items: left;
   position: absolute;
@@ -179,14 +179,14 @@ const RightAlignDiv = styled('div')`
   justify-content: flex-end;
 `;
 class Header extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       showUserMenu: 'none',
       showMenu: 'none',
       user: props.user,
-    }
-    this.getUserName()
+    };
+    this.getUserName();
     this.userMenuRef = React.createRef();
     this.navMenuRef = React.createRef();
   }
@@ -201,32 +201,32 @@ class Header extends React.Component {
 
   handleClickOutside = (event) => {
     const userMenuRef = this.userMenuRef.current;
-    const navMenuRef = this.navMenuRef.current
+    const navMenuRef = this.navMenuRef.current;
     if (userMenuRef && !userMenuRef.contains(event.target) && navMenuRef && !navMenuRef.contains(event.target)) {
       this.setState({
         showMenu: 'none',
-        showUserMenu: 'none'
-      })
+        showUserMenu: 'none',
+      });
     }
   }
 
   getUserName = () => {
-    return window.firebase.auth().currentUser.displayName
+    return window.firebase.auth().currentUser.displayName;
   };
 
   showUserMenu = () => {
-    if(this.state.showUserMenu === 'none'){
-      this.setState({showUserMenu: 'flex'})
-    }else{
-      this.setState({showUserMenu: 'none'})
+    if (this.state.showUserMenu === 'none') {
+      this.setState({showUserMenu: 'flex'});
+    } else {
+      this.setState({showUserMenu: 'none'});
     }
   };
 
   showMenu = () => {
-    if(this.state.showMenu === 'none'){
-      this.setState({showMenu: 'flex'})
-    }else{
-      this.setState({showMenu: 'none'})
+    if (this.state.showMenu === 'none') {
+      this.setState({showMenu: 'flex'});
+    } else {
+      this.setState({showMenu: 'none'});
     }
   };
 
@@ -242,12 +242,12 @@ class Header extends React.Component {
     registerStats(statData);
     this.setState({
       showMenu: 'none',
-      showUserMenu: 'none'
-    })
+      showUserMenu: 'none',
+    });
   }
 
   logout = () => {
-    this.removeCookies();    
+    this.removeCookies();
     window.firebase.auth().signOut().then(function() {
     }, function(error) {
       console.error('Sign Out Error', error);
@@ -255,18 +255,18 @@ class Header extends React.Component {
   };
 
   removeCookies = () => {
-    const { cookies } = this.props;
-    if(cookies.get('currentHack')){
+    const {cookies} = this.props;
+    if (cookies.get('currentHack')) {
       cookies.remove('currentHack');
     }
-    if(cookies.get('currentForum')){
+    if (cookies.get('currentForum')) {
       cookies.remove('currentForum');
     }
   }
 
   render() {
-    if(this.state.signOut === true){
-      return(
+    if (this.state.signOut === true) {
+      return (
         <Redirect to='/'/>
       );
     };
@@ -274,9 +274,8 @@ class Header extends React.Component {
       <ThemeProvider theme={theme}>
         <div className="container-fluid">
           <HeaderContainer className="row">
-            {this.props.location.pathname === '/hackSelection' ? 
-              <div className="col-5"/> 
-              :
+            {this.props.location.pathname === '/hackSelection' ?
+              <div className="col-5"/> :
               <div className="col-5 menu">
                 <NavContainer display={this.state.showMenu} innerRef={this.navMenuRef}>
                   <button onClick={this.showMenu}>
@@ -306,7 +305,7 @@ class Header extends React.Component {
             <RightAlignDiv className='col-5'>
               <UserMenuDropper onClick={this.showUserMenu} >{this.state.user.displayName}</UserMenuDropper>
               <UserMenu display={this.state.showUserMenu} innerRef={this.userMenuRef}>
-                {this.props.location.pathname !== "/hackSelection" &&
+                {this.props.location.pathname !== '/hackSelection' &&
                   <NavButton to="/profile" onClick={this.hideMenus}>Profile</NavButton>
                 }
                 <UserMenuButton onClick={this.logout}>Sign Out</UserMenuButton>

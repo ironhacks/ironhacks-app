@@ -3,7 +3,7 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
 
 import PersonalScoreItem from './personalScoreItem.js';
@@ -19,15 +19,15 @@ const SectionContainer = styled('div')`
 `;
 
 class PersonalScoreSection extends React.Component {
-  constructor(props){
-    super(props)
-    this.state =  {
-      
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    };
   }
 
   componentDidMount() {
-    
+
   }
 
   render() {

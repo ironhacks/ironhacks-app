@@ -1,9 +1,9 @@
 // IronHacks Platform
 // buttons.js
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../constants.js';
 
 const Button = styled('button')`

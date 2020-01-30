@@ -3,13 +3,13 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-import { Link } from "react-router-dom";
-//Styled components
-import styled  from 'styled-components';
+import {Link} from 'react-router-dom';
+// Styled components
+import styled from 'styled-components';
 
-//IMG 
-import FullHeart from '../../../img/full-heart.svg'
-import EmptyHeart from '../../../img/empty-heart.svg'
+// IMG
+import FullHeart from '../../../img/full-heart.svg';
+import EmptyHeart from '../../../img/empty-heart.svg';
 
 const Row = styled('tr')`
   position: relative;
@@ -61,11 +61,11 @@ const LikeButton = styled('button')`
   }
 `;
 class ComperitorRow extends React.Component {
-  constructor(props){
-    super(props)
-    this.state =  {
+  constructor(props) {
+    super(props);
+    this.state = {
       isLiked: false,
-    }
+    };
   }
 
   onLikeClick = () => {
@@ -80,20 +80,20 @@ class ComperitorRow extends React.Component {
       <Row>
         <td>{this.props.hacker}</td>
         <td>
-          <Link 
-            to={{ 
+          <Link
+            to={{
               pathname: `/projectEditor/${this.props.hackName}`,
-              query: { hackerId: this.props.hackerId, alias: "Hacker 1"}
+              query: {hackerId: this.props.hackerId, alias: 'Hacker 1'},
             }}>
             LINK
           </Link>
         </td>
-        {this.props.score && 
+        {this.props.score &&
           <td>{this.props.score.toString().slice(0, 5)}</td>
         }
         <td>
           <LikeButton onClick={this.onLikeClick}>
-            <img src={this.state.isLiked ? FullHeart : EmptyHeart} alt="liked"/> 
+            <img src={this.state.isLiked ? FullHeart : EmptyHeart} alt="liked"/>
           </LikeButton>
         </td>
       </Row>

@@ -3,10 +3,10 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Custom Constants
-//import * as Constants from '../../../../constants.js';
+// Custom Constants
+// import * as Constants from '../../../../constants.js';
 
 
 // Images
@@ -44,19 +44,17 @@ const ForumItemContainer = styled('div')`
 `;
 
 class ForumItem extends React.Component {
-
   onNameChange = (e) => {
-    const name = e.target.value
-    this.props.onForumItemUpdate(name, false, this.props.forumIndex)
+    const name = e.target.value;
+    this.props.onForumItemUpdate(name, false, this.props.forumIndex);
   };
 
   onTreatmentChange = (e) => {
-    const treatment = e.target.value
-    this.props.onForumItemUpdate(false, treatment, this.props.forumIndex)
+    const treatment = e.target.value;
+    this.props.onForumItemUpdate(false, treatment, this.props.forumIndex);
   };
 
   render() {
-    
     return (
       <ForumItemContainer>
         <div>

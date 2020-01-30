@@ -1,31 +1,31 @@
 // IronHacks Platform
-// createThread.js - Editor to create a new Thread 
+// createThread.js - Editor to create a new Thread
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { withCookies } from 'react-cookie';
-//Styled components
+import {Redirect} from 'react-router-dom';
+import {withCookies} from 'react-cookie';
+// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
-//Custom components
+// Custom components
 import BreadCrumbs from '../../utilities/breadCrumbs.js';
-import ForumSelector from './forumSelector.js'
+import ForumSelector from './forumSelector.js';
 import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 import Loader from '../../utilities/loader.js';
 
 const theme = Constants.AppSectionTheme;
 
-//Section container
+// Section container
 const SectionContainer = styled('div')`
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
   padding: 0 10%;
-  height: ${props => props.theme.containerHeight};
-  background-color: ${props => props.theme.backgroundColor};
+  height: ${(props) => props.theme.containerHeight};
+  background-color: ${(props) => props.theme.backgroundColor};
   overflow: auto;
 `;
 const Header = styled('div')`
@@ -75,7 +75,7 @@ const AdminSection = styled('div')`
     }
   }
 `;
-//Publish controls row
+// Publish controls row
 const PublishControlsRow = styled('div')`
   display: flex;
   flex-direction: row-reverse;
@@ -99,7 +99,7 @@ const PublishControlsRow = styled('div')`
     }
   }
 `;
-//Title intpu
+// Title intpu
 const TitleInput = styled('input')`
   width: 50%;
   height: 30px;
@@ -112,26 +112,26 @@ const TitleInput = styled('input')`
 `;
 
 class NewThread extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    const { cookies, user } = props;
+    const {cookies, user} = props;
     this.state = {
       currentHack: cookies.get('currentHack') || null,
       forum: cookies.get('currentForum') || null,
       user,
-      title: "",
-      markdown: "",
+      title: '',
+      markdown: '',
       mustNavigate: false,
       selectedHack: 0,
       selectedForum: 0,
-    };    
+    };
     this.firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     this.firestore.settings(settings);
   };
 
-  componentDidMount(){
-    if(this.props.user.isAdmin){
+  componentDidMount() {
+    if (this.props.user.isAdmin) {
       this.getHacks();
     };
   }
@@ -144,28 +144,28 @@ class NewThread extends React.Component {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-    
+
     this.setState({
-      [name]: value
+      [name]: value,
     });
   };
 
-  //This function handle the sumbit process
+  // This function handle the sumbit process
   handleSubmit = (event) => {
     event.preventDefault();
-    let hackId, forumId;
-    if(this.props.user.isAdmin){
+    let hackId; let forumId;
+    if (this.props.user.isAdmin) {
       hackId = this.state.hacks[this.state.selectedHack].id;
-      forumId = this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id
-    }else{
+      forumId = this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id;
+    } else {
       hackId = this.state.currentHack;
       forumId = this.state.forum;
     }
-    const currentDate = new Date(); //We use the same date in both the thread and the comment, so on the db the stats show that they were created at the same time.
+    const currentDate = new Date(); // We use the same date in both the thread and the comment, so on the db the stats show that they were created at the same time.
     const _this = this;
     const codedBody = this.utoa(this.state.markdown);
-    //TODO: add forum id
-    this.firestore.collection("threads").add({
+    // TODO: add forum id
+    this.firestore.collection('threads').add({
       title: this.state.title,
       author: this.props.user.uid,
       authorName: this.props.user.displayName,
@@ -173,53 +173,53 @@ class NewThread extends React.Component {
       hackId: hackId,
       forumId: forumId,
     })
-    .then(function(docRef) {
-      const threadRef = docRef.id;
-      _this.firestore.collection("comments").add({
-        author: _this.props.user.uid,
-        authorName: _this.props.user.displayName,
-        body: codedBody,
-        createdAt: currentDate,
-        threadId: docRef.id,
-        forumId: forumId,  
-      }) // Adding double reference on the thread.
-      .then(function(docRef) {
-        _this.firestore.collection("threads").doc(threadRef).update({
-          comments: [docRef.id],
+        .then(function(docRef) {
+          const threadRef = docRef.id;
+          _this.firestore.collection('comments').add({
+            author: _this.props.user.uid,
+            authorName: _this.props.user.displayName,
+            body: codedBody,
+            createdAt: currentDate,
+            threadId: docRef.id,
+            forumId: forumId,
+          }) // Adding double reference on the thread.
+              .then(function(docRef) {
+                _this.firestore.collection('threads').doc(threadRef).update({
+                  comments: [docRef.id],
+                });
+                _this.setState({mustNavigate: true, threadRef: threadRef});
+              });
         })
-        _this.setState({mustNavigate: true, threadRef: threadRef});
-      })
-    })  
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
+        .catch(function(error) {
+          console.error('Error adding document: ', error);
+        });
   };
   // ucs-2 string to base64 encoded ascii
   utoa = (str) => {
-      return window.btoa(unescape(encodeURIComponent(str)));
+    return window.btoa(unescape(encodeURIComponent(str)));
   };
 
-//---------------------------------------- Admin features ------------------------------------------
+  // ---------------------------------------- Admin features ------------------------------------------
 
-  //Query all the hacks objects from the db.
+  // Query all the hacks objects from the db.
   getHacks = () => {
-    this.setState({loading: true})
+    this.setState({loading: true});
     const _this = this;
-    var hacks = [];
-    this.firestore.collection("hacks")
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const hackData = doc.data()
-        hackData.id = doc.id;  
-        hacks.push(hackData);
-      });
-      _this.setState({hacks: hacks});
-      _this.getForums();
-    })
-    .catch(function(error) {
-        console.error("Error getting documents: ", error);
-    });
+    const hacks = [];
+    this.firestore.collection('hacks')
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const hackData = doc.data();
+            hackData.id = doc.id;
+            hacks.push(hackData);
+          });
+          _this.setState({hacks: hacks});
+          _this.getForums();
+        })
+        .catch(function(error) {
+          console.error('Error getting documents: ', error);
+        });
   };
 
   getForums = (hackIndex) => {
@@ -227,51 +227,51 @@ class NewThread extends React.Component {
     const forums = [];
     const index = hackIndex || 0;
     this.firestore.collection('forums')
-    .where('hack', '==', this.state.hacks[index].id)
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const forum = doc.data();
-        forum.id = doc.id;
-        forums.push(forum);
-      });
-      _this.setState((prevState, props) => {
-        const hacks = prevState.hacks;
-        hacks[index].forums = forums;
-        return {hacks, loading: false};
-      })
-    })
-    .catch(function(error) {
-        console.error("Error getting documents: ", error);
-    });
+        .where('hack', '==', this.state.hacks[index].id)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const forum = doc.data();
+            forum.id = doc.id;
+            forums.push(forum);
+          });
+          _this.setState((prevState, props) => {
+            const hacks = prevState.hacks;
+            hacks[index].forums = forums;
+            return {hacks, loading: false};
+          });
+        })
+        .catch(function(error) {
+          console.error('Error getting documents: ', error);
+        });
   };
 
   onHackSelection = (hackIndex) => {
-    if(this.state.hacks[hackIndex].forums){
+    if (this.state.hacks[hackIndex].forums) {
       this.setState({selectedHack: hackIndex});
-    }else{
+    } else {
       this.setState({selectedHack: hackIndex});
       this.getForums(hackIndex);
     };
   };
 
   onForumSelection = (forumIndex) => {
-    this.setState({selectedForum: forumIndex})
+    this.setState({selectedForum: forumIndex});
   }
 
-//---------------------------------------- Admin features ------------------------------------------
+  // ---------------------------------------- Admin features ------------------------------------------
 
   render() {
     if (this.state.loading) {
       return (
         <ThemeProvider theme={theme}>
-        <SectionContainer>
-          <Loader/>
-        </SectionContainer>
+          <SectionContainer>
+            <Loader/>
+          </SectionContainer>
         </ThemeProvider>
       );
     }
-    if (this.state.mustNavigate) return <Redirect to={{ pathname: '/forum/thread/' + this.state.threadRef, state: { title: this.state.titleValue}}}/>;
+    if (this.state.mustNavigate) return <Redirect to={{pathname: '/forum/thread/' + this.state.threadRef, state: {title: this.state.titleValue}}}/>;
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
@@ -281,31 +281,31 @@ class NewThread extends React.Component {
             <p> Bellow you will find a <strong><i>Markdown Editor</i></strong>, so you can style your Thread using Markdown syntax <strong>(If you don't know Markdown, please check <a target="_blank" rel="noopener noreferrer" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">this!</a>)</strong>. Write on the left, you will see the preview on the right.</p>
             <label>Title <span>REQUIRED</span></label><br/>
             <TitleInput type='text' placeholder='Thread Title..' onChange={this.handleInputChange} name='title'/>
-            {this.props.user.isAdmin && 
+            {this.props.user.isAdmin &&
             <AdminSection>
               <div>
                 <h3>Admin Tools</h3>
                 <p> Here you can pick on which hack and forum you will post your thread. You can also pin a post from here. (A pinned post will appear at the top of the forum, as a good practice, try to avoid having more than 3 pinned posts.)</p>
               </div>
               <div className='hackSelector'>
-              <span>Hack:</span>
-              {this.props.user.isAdmin 
-              && this.state.hacks 
-              && <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
-              <span>Forum:</span>
-              {this.props.user.isAdmin 
-                && this.state.hacks 
-                && this.state.hacks[this.state.selectedHack].forums
-                && <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
-              <input type='checkbox' onChange={this.handleInputChange} name='pinned'/>
-              <span>Pin this thread.</span>
+                <span>Hack:</span>
+                {this.props.user.isAdmin &&
+              this.state.hacks &&
+              <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
+                <span>Forum:</span>
+                {this.props.user.isAdmin &&
+                this.state.hacks &&
+                this.state.hacks[this.state.selectedHack].forums &&
+                <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
+                <input type='checkbox' onChange={this.handleInputChange} name='pinned'/>
+                <span>Pin this thread.</span>
               </div>
             </AdminSection>
             }
           </Header>
-          <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>  
+          <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange}/>
           <PublishControlsRow>
-            <button disabled={this.state.title === "" || this.state.markdown === ""} onClick={this.handleSubmit}>Submit</button>
+            <button disabled={this.state.title === '' || this.state.markdown === ''} onClick={this.handleSubmit}>Submit</button>
           </PublishControlsRow>
         </SectionContainer>
       </ThemeProvider>

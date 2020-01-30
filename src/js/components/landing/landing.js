@@ -3,21 +3,21 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-//Styled components
+import {Link} from 'react-router-dom';
+// Styled components
 import styled, {ThemeProvider} from 'styled-components';
 import PreviousHackItem from './previousHackItem.js';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
 import PriorHacksData from './priorHacksData.js';
-//Customs svg
+// Customs svg
 import bulbImg from './img/bulb.svg';
-//import UNAL2019 from './img/purdue-UNAL-2019.jpeg';
-//import COLFlag from './img/flags/col.svg';
+// import UNAL2019 from './img/purdue-UNAL-2019.jpeg';
+// import COLFlag from './img/flags/col.svg';
 
 const theme = Constants.AppSectionTheme;
 
-//Section container
+// Section container
 const SectionContainer = styled('div')`
   width: 100%;
   
@@ -127,7 +127,7 @@ const LoginButton = styled(Link)`
   trasition: color: 0.5s;
 
   &:hover {
-    background-color: ${props => props.theme.hoverTextColor};
+    background-color: ${(props) => props.theme.hoverTextColor};
     color: ${Constants.invertedHighlightedTextColor};
     text-decoration: none;
   }
@@ -176,90 +176,91 @@ const HackSelector = styled('div')`
 
 class Landing extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     const selectedHack = PriorHacksData.length - 1;
     this.state = {
       selectedHack,
-    }
+    };
   }
 
   changeHack = (event) => {
-    this.setState({selectedHack: parseInt(event.target.id, 10)})
+    this.setState({selectedHack: parseInt(event.target.id, 10)});
   }
 
   render() {
     return (
       <ThemeProvider theme={theme}>
-      <React.Fragment>
-        <SectionContainer className='full-hight'>
-          <HomeTitle>
-            <HomeText>
-              <h1><span>PURDUE </span>IRONHACKS</h1>
-              <h2>Hack for innovation and join the open data movement.</h2>
-              <div>
-                <LoginButton to='/login?mode=select'>Sign up here now</LoginButton>
-                <LoginButton to='/login'>Sign in</LoginButton>
-              </div>
-            </HomeText>
-            <img src={bulbImg} alt='searchIcon'/>
-          </HomeTitle>
-        </SectionContainer>
-        <SectionContainer className='FAQ'>
-          <div>
-            <i className="zmdi zmdi-comments"></i>
-            <h3>WHY SHOULD I PARTICIPATE?</h3>
-            <p>In IronHacks, you learn new skills, win prizes ($$$), get exposed to tech organizations, and win internships. Most importantly, you become part of a global movement of open data to make an impact in areas such as safety, health, or travel.</p>
-          </div>
-          <div>
-            <i className="zmdi zmdi-settings"></i>
-            <h3>WHAT IS IRONHACKS?</h3>
-            <p>IronHacks is a unique one month, 5-stage innovative hacking program for individuals who want to create impact from open data. During the iterative hacking process, you will learn new skills, have the chance to learn from others, and receive feedback from IronHacks experts! Turn your ideas into web apps that make data actionable and useful!</p>
-          </div>
-          <div>
+        <React.Fragment>
+          <SectionContainer className='full-hight'>
+            <HomeTitle>
+              <HomeText>
+                <h1><span>PURDUE </span>IRONHACKS</h1>
+                <h2>Hack for innovation and join the open data movement.</h2>
+                <div>
+                  <LoginButton to='/login?mode=select'>Sign up here now</LoginButton>
+                  <LoginButton to='/login'>Sign in</LoginButton>
+                </div>
+              </HomeText>
+              <img src={bulbImg} alt='searchIcon'/>
+            </HomeTitle>
+          </SectionContainer>
+          <SectionContainer className='FAQ'>
+            <div>
+              <i className="zmdi zmdi-comments"></i>
+              <h3>WHY SHOULD I PARTICIPATE?</h3>
+              <p>In IronHacks, you learn new skills, win prizes ($$$), get exposed to tech organizations, and win internships. Most importantly, you become part of a global movement of open data to make an impact in areas such as safety, health, or travel.</p>
+            </div>
+            <div>
+              <i className="zmdi zmdi-settings"></i>
+              <h3>WHAT IS IRONHACKS?</h3>
+              <p>IronHacks is a unique one month, 5-stage innovative hacking program for individuals who want to create impact from open data. During the iterative hacking process, you will learn new skills, have the chance to learn from others, and receive feedback from IronHacks experts! Turn your ideas into web apps that make data actionable and useful!</p>
+            </div>
+            <div>
               <i className="zmdi zmdi-accounts"></i>
-            <h3>HOW CAN I GET INVOLVED?</h3>
-            <p>There are many ways to get involved: As hack participants, as industry sponsor, or as researcher. To learn more about upcoming hacks, please send an email to opendigital@purdue.edu.</p>
-          </div>
-        </SectionContainer>
-        <SectionContainer className='about' id='about'>
-          <div>
-            <p>IronHacks is an open data hacking program that combines experiential learning with real-world data-driven problem solving. During a 5-stage virtual competition, students utilize open data to create novel and useful interactive visualizations and analytic “apps” that solve civic challenges.</p>
-            
-          </div>
-          <div>
-             <img src="" alt=""/>
-          </div>
-        </SectionContainer>
-        <SectionContainer className='ranking' id='ranking'>
-          <h1>Prior Hacks</h1>
-          <Separator/>
-          <HackSelector>
-            {PriorHacksData.map((hack, i) => {
-              if(this.state.selectedHack === (i)) 
-              return <button className='selected' disabled id={i} key={i}>{hack.name}</button>
-              return <button onClick={this.changeHack} id={i} key={i}>{hack.name}</button>
-            })}
-          </HackSelector>
-          <PreviousHackItem selectedHack={this.state.selectedHack} />
-        </SectionContainer>
-        <SectionContainer className='FAQ'>
-          <div>
-            <i className="zmdi zmdi-comments"></i>
-            <h3>WHY SHOULD I PARTICIPATE?</h3>
-            <p>In IronHacks, you learn new skills, win prizes ($$$), get exposed to tech organizations, and win internships. Most importantly, you become part of a global movement of open data to make an impact in areas such as safety, health, or travel.</p>
-          </div>
-          <div>
-            <i className="zmdi zmdi-settings"></i>
-            <h3>WHAT IS IRONHACKS?</h3>
-            <p>IronHacks is a unique one month, 5-stage innovative hacking program for individuals who want to create impact from open data. During the iterative hacking process, you will learn new skills, have the chance to learn from others, and receive feedback from IronHacks experts! Turn your ideas into web apps that make data actionable and useful!</p>
-          </div>
-          <div>
+              <h3>HOW CAN I GET INVOLVED?</h3>
+              <p>There are many ways to get involved: As hack participants, as industry sponsor, or as researcher. To learn more about upcoming hacks, please send an email to opendigital@purdue.edu.</p>
+            </div>
+          </SectionContainer>
+          <SectionContainer className='about' id='about'>
+            <div>
+              <p>IronHacks is an open data hacking program that combines experiential learning with real-world data-driven problem solving. During a 5-stage virtual competition, students utilize open data to create novel and useful interactive visualizations and analytic “apps” that solve civic challenges.</p>
+
+            </div>
+            <div>
+              <img src="" alt=""/>
+            </div>
+          </SectionContainer>
+          <SectionContainer className='ranking' id='ranking'>
+            <h1>Prior Hacks</h1>
+            <Separator/>
+            <HackSelector>
+              {PriorHacksData.map((hack, i) => {
+                if (this.state.selectedHack === (i)) {
+                  return <button className='selected' disabled id={i} key={i}>{hack.name}</button>;
+                }
+                return <button onClick={this.changeHack} id={i} key={i}>{hack.name}</button>;
+              })}
+            </HackSelector>
+            <PreviousHackItem selectedHack={this.state.selectedHack} />
+          </SectionContainer>
+          <SectionContainer className='FAQ'>
+            <div>
+              <i className="zmdi zmdi-comments"></i>
+              <h3>WHY SHOULD I PARTICIPATE?</h3>
+              <p>In IronHacks, you learn new skills, win prizes ($$$), get exposed to tech organizations, and win internships. Most importantly, you become part of a global movement of open data to make an impact in areas such as safety, health, or travel.</p>
+            </div>
+            <div>
+              <i className="zmdi zmdi-settings"></i>
+              <h3>WHAT IS IRONHACKS?</h3>
+              <p>IronHacks is a unique one month, 5-stage innovative hacking program for individuals who want to create impact from open data. During the iterative hacking process, you will learn new skills, have the chance to learn from others, and receive feedback from IronHacks experts! Turn your ideas into web apps that make data actionable and useful!</p>
+            </div>
+            <div>
               <i className="zmdi zmdi-accounts"></i>
-            <h3>HOW CAN I GET INVOLVED?</h3>
-            <p>There are many ways to get involved: As hack participants, as industry sponsor, or as researcher. To learn more about upcoming hacks, please send an email to opendigital@purdue.edu.</p>
-          </div>
-        </SectionContainer>
-      </React.Fragment>
+              <h3>HOW CAN I GET INVOLVED?</h3>
+              <p>There are many ways to get involved: As hack participants, as industry sponsor, or as researcher. To learn more about upcoming hacks, please send an email to opendigital@purdue.edu.</p>
+            </div>
+          </SectionContainer>
+        </React.Fragment>
       </ThemeProvider>
     );
   }

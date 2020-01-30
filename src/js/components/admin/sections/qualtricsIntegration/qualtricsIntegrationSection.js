@@ -3,14 +3,14 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Router
-import { Link } from "react-router-dom";
-//Customs components  
+// Router
+import {Link} from 'react-router-dom';
+// Customs components
 import Separator from '../../../../utilities/separator.js';
 import Button from '../../../../utilities/button.js';
-//Section container
+// Section container
 const SectionContainer = styled('form')`
   width: 100%;
   height: 100%;
@@ -32,28 +32,28 @@ const SectionContainer = styled('form')`
 `;
 
 class AdmQualtricsIntegrationSection extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-      const { hack } = props
-      this.state = {
-        hack,
-    }
+    const {hack} = props;
+    this.state = {
+      hack,
+    };
   }
 
   handleInputChange = (event, phaseIndex) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-    if (phaseIndex !== undefined){
+    if (phaseIndex !== undefined) {
       this.setState((props, prevState) => {
-        const { hack }  = prevState;
-        hack.phases[phaseIndex].commitSurveyLink = target.value
+        const {hack} = prevState;
+        hack.phases[phaseIndex].commitSurveyLink = target.value;
         return hack;
       });
     } else {
       this.setState((props, prevState) => {
-        const { hack }  = prevState;
-        hack[name] = target.value
+        const {hack} = prevState;
+        hack[name] = target.value;
         return hack;
       });
     }
@@ -61,7 +61,7 @@ class AdmQualtricsIntegrationSection extends React.Component {
 
   saveSurveys = (event) => {
     event.preventDefault();
-    this.props.onUpdate(this.state.hack)
+    this.props.onUpdate(this.state.hack);
   }
 
   render() {
@@ -75,7 +75,7 @@ class AdmQualtricsIntegrationSection extends React.Component {
         <p>You can place a Qualtrics survey on 3 different places: at the registration process (as part of it), any time a participant submit a project to evaluation (per phase) and when the hack ends.</p>
         <label>
           Registration survey link:
-          <input 
+          <input
             name="registrationSurvey"
             type="text"
             onChange={this.handleInputChange}
@@ -85,20 +85,20 @@ class AdmQualtricsIntegrationSection extends React.Component {
         <Separator/>
         {this.state.hack.phases.map((phase) => {
           return (
-          <label key={phase.index}>
+            <label key={phase.index}>
             Phase {phase.index + 1} survey link:
-            <input 
-              name={`phase-survey-${phase.index}`}
-              type="text"
-              onChange={(e) => this.handleInputChange(e, phase.index)}
-              defaultValue={this.state.hack.phases[phase.index].commitSurveyLink || ''}
-              placeholder={`Phase ${phase.index + 1} survey link`}/>
-          </label>)
-          })}
+              <input
+                name={`phase-survey-${phase.index}`}
+                type="text"
+                onChange={(e) => this.handleInputChange(e, phase.index)}
+                defaultValue={this.state.hack.phases[phase.index].commitSurveyLink || ''}
+                placeholder={`Phase ${phase.index + 1} survey link`}/>
+            </label>);
+        })}
         <Separator />
         <label>
           Post hack survey link:
-          <input 
+          <input
             name="postHackSurvey"
             type="text"
             onChange={this.handleInputChange}
@@ -109,7 +109,7 @@ class AdmQualtricsIntegrationSection extends React.Component {
         <p>These surveys are displayed on the <Link to="/quizzes">Quizzes</Link> section, participant can test their abilities using them.</p>
         <label>
           Quiz survey link:
-          <input 
+          <input
             name="quizzSurvey"
             type="text"
             onChange={this.handleInputChange}

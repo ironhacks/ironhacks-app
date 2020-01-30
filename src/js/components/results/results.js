@@ -1,22 +1,22 @@
 import React from 'react';
-import { withCookies } from 'react-cookie';
+import {withCookies} from 'react-cookie';
 import styled, {ThemeProvider} from 'styled-components';
 import * as Constants from '../../../constants.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
 import Loader from '../../utilities/loader.js';
 import TimeLine from '../../utilities/timeLine.js';
-import { registerStats } from '../../utilities/registerStat.js';
+import {registerStats} from '../../utilities/registerStat.js';
 import PersonalScoreSection from './personalScoreSection.js';
 import YourCompetitorsRank from './yourCompetitorsRank.js';
 import * as Texts from './staticTexts.js';
 
 const theme = Constants.AppSectionTheme;
 
-//Section container
+// Section container
 const SectionContainer = styled('div')`
   width: 100%;
-  height: ${props => props.theme.containerHeight};
-  background-color: ${props => props.theme.backgroundColor};
+  height: ${(props) => props.theme.containerHeight};
+  background-color: ${(props) => props.theme.backgroundColor};
   overflow: auto;
 
   .top-container {
@@ -109,7 +109,7 @@ const SectionContainer = styled('div')`
 class Results extends React.Component {
   constructor(props) {
     super(props);
-    const { cookies, user } = props;
+    const {cookies, user} = props;
     this.state = {
       user,
       currentHack: cookies.get('currentHack') || null,
@@ -119,7 +119,7 @@ class Results extends React.Component {
       scores: null,
       loading: true,
       currentSection: 'yourCompetitors',
-    }
+    };
 
     this.firestore = window.firebase.firestore();
   }
@@ -131,47 +131,47 @@ class Results extends React.Component {
   getCurrentHackInfo = () => {
     const _this = this;
     this.firestore.collection('hacks')
-    .doc(this.state.currentHack)
-    .get()
-    .then((doc) => {
-      const hackData = doc.data();
-      //let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
-      _this.setState({
-        hackData,
-        currentPhase: 4,
-        selectedPhase: 3,
-      });
-      _this.getForumData();
-    })
-    .catch(function(error) {
-        console.error("Error getting documents: ", error);
-    })
+        .doc(this.state.currentHack)
+        .get()
+        .then((doc) => {
+          const hackData = doc.data();
+          // let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+          _this.setState({
+            hackData,
+            currentPhase: 4,
+            selectedPhase: 3,
+          });
+          _this.getForumData();
+        })
+        .catch(function(error) {
+          console.error('Error getting documents: ', error);
+        });
   }
 
   getForumData = () => {
     const _this = this;
-    this.firestore.collection("forums")
-    .doc(this.state.forumId)
-    .get()
-    .then((doc) => {
-      const data = doc.data();
-      const { treatment, participants } = data;
-      _this.setState({
-        treatment,
-        participants,
-      });
-      if( this.state.currentPhase === -1 ){
-        this.setState({
-          results: false,
-          loading: false,
+    this.firestore.collection('forums')
+        .doc(this.state.forumId)
+        .get()
+        .then((doc) => {
+          const data = doc.data();
+          const {treatment, participants} = data;
+          _this.setState({
+            treatment,
+            participants,
+          });
+          if ( this.state.currentPhase === -1 ) {
+            this.setState({
+              results: false,
+              loading: false,
+            });
+            return;
+          }
+          _this.getResults(this.state.currentPhase);
+        })
+        .catch(function(error) {
+          console.error('Error getting documents: ', error);
         });
-        return;
-      }
-      _this.getResults(this.state.currentPhase)
-    })
-    .catch(function(error) {
-        console.error("Error getting documents: ", error);
-    });
   }
 
   changeSection = (event) => {
@@ -182,29 +182,29 @@ class Results extends React.Component {
       metadata: {
         target: `${event.target.id === 'yourCompetitors' ? 'your-peers-tab' : 'personal-feedback'}`,
         location: 'results-page',
-      }
-    }
-    this.saveStat(statData)
+      },
+    };
+    this.saveStat(statData);
   }
 
   onPhaseSelection = (phase) => {
-    this.setState({selectedPhase: phase + 1})
+    this.setState({selectedPhase: phase + 1});
     this.getResults(phase + 1);
     const statData = {
       event: 'on-phase-click',
       metadata: {
         location: 'results-page',
         phase: phase + 1,
-      }
-    }
-    this.saveStat(statData)
+      },
+    };
+    this.saveStat(statData);
   }
 
   getResults = (phase) => {
-    console.log(phase)
-    console.log(this.state.hackData.phases)
+    console.log(phase);
+    console.log(this.state.hackData.phases);
     const endDate = DateFormater.getFirebaseDate(this.state.hackData.phases[phase - 1].codingStartEnd);
-    this.setState({gettingResults: true})
+    this.setState({gettingResults: true});
     const getResults = window.firebase.functions().httpsCallable('getPhaseResults');
     const _this = this;
     getResults({
@@ -212,29 +212,29 @@ class Results extends React.Component {
       endDate: endDate.getTime(),
       userId: this.state.user.uid,
       hackId: this.state.currentHack,
-      forumId: this.state.forumId}
+      forumId: this.state.forumId},
     ).then((response) => {
-      const { userResults: results } = response.data;
+      const {userResults: results} = response.data;
       _this.setState({
         results,
         loading: false,
         gettingResults: false,
       });
-    })
+    });
   }
 
   saveLikedCompetitors = (likedCompetitors) => {
     const saveLikedCompetitors = window.firebase.functions().httpsCallable('saveLikedCompetitors');
     const _this = this;
-    const { currentHack: hackId, selectedPhase: phase} = this.state;
+    const {currentHack: hackId, selectedPhase: phase} = this.state;
     saveLikedCompetitors({
       userId: this.state.user.uid,
       phase,
       hackId,
-      likedCompetitors}
+      likedCompetitors},
     ).then((response) => {
       _this.getResults(phase);
-    })
+    });
   }
 
   saveStat = (stat) => {
@@ -244,12 +244,12 @@ class Results extends React.Component {
   }
 
   render() {
-    if(this.state.loading){
+    if (this.state.loading) {
       return (
         <ThemeProvider theme={theme}>
-        <SectionContainer>
-          <Loader status="Fetching results..."/>
-        </SectionContainer>
+          <SectionContainer>
+            <Loader status="Fetching results..."/>
+          </SectionContainer>
         </ThemeProvider>
       );
     }

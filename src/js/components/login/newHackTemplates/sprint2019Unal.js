@@ -1,4 +1,4 @@
-/// New project template
+// / New project template
 export const indexContent = `<!DOCTYPE html>
     <html>
     <head>
@@ -38,13 +38,13 @@ export const indexContent = `<!DOCTYPE html>
      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwWYDB9v1MopiTtPpUXMDaCwAlOQbtn3c&callback=onGoogleMapResponse"
       ></script>
     </body>
-  </html>`
+  </html>`;
 
 export const mainJSContent = `/*
     Feel free to put your custom js here.
   */
 
-  console.log("Hello Ironhacks!")`
+  console.log("Hello Ironhacks!")`;
 
 export const mapJSContent = `var map;
 
@@ -53,7 +53,7 @@ export const mapJSContent = `var map;
       center: {lat: -34.397, lng: 150.644},
       zoom: 8
     });
-  }`
+  }`;
 
 export const visualizationJSContent = `
   var el   = document.getElementById("d3Example");
@@ -183,7 +183,7 @@ export const visualizationJSContent = `
           .attr("y", y)
           .attr("height", function(value) { return height - y(value); });
     }
-  });`
+  });`;
 
 export const mainCSSContent = `body {
   font-family: 'Muli', sans-serif;
@@ -252,7 +252,7 @@ rect:first-child {
   width: 100%;
   height: 500px;
 }
-`
+`;
 export const d3Data = `year,age,sex,people
 1850,0,1,1483789
 1850,0,2,1450376
@@ -823,37 +823,37 @@ export const d3Data = `year,age,sex,people
 2000,85,1,970357
 2000,85,2,1981156
 2000,90,1,336303
-2000,90,2,1064581`
+2000,90,2,1064581`;
 
 export const files = [
   {
     name: 'index.html',
     path: '',
-    blob: new Blob([indexContent], {type: 'text/html'})
+    blob: new Blob([indexContent], {type: 'text/html'}),
   },
   {
     name: 'main.js',
     path: 'js/',
-    blob: new Blob([mainJSContent], {type: 'text/javascript'})
+    blob: new Blob([mainJSContent], {type: 'text/javascript'}),
   },
   {
     name: 'map.js',
     path: 'js/',
-    blob: new Blob([mapJSContent], {type: 'text/javascript'})
+    blob: new Blob([mapJSContent], {type: 'text/javascript'}),
   },
   {
     name: 'visualization.js',
     path: 'js/',
-    blob: new Blob([visualizationJSContent], {type: 'text/javascript'})
+    blob: new Blob([visualizationJSContent], {type: 'text/javascript'}),
   },
   {
     name: 'main.css',
     path: 'css/',
-    blob: new Blob([mainCSSContent], {type: 'text/css'})
+    blob: new Blob([mainCSSContent], {type: 'text/css'}),
   },
   {
     name: 'population.csv',
     path: 'data/',
-    blob: new Blob([d3Data], {type: 'text/csv'})
+    blob: new Blob([d3Data], {type: 'text/csv'}),
   },
-]
+];

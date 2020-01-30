@@ -3,18 +3,18 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-import { Link } from 'react-router-dom';
-//Custom Constants
+import {Link} from 'react-router-dom';
+// Custom Constants
 import * as Constants from '../../../constants.js';
 const theme = Constants.AppSectionTheme;
 
-//Section container
+// Section container
 const SectionContainer = styled('div')`
   width: 100%;
-  height: ${props => props.theme.containerHeight};
-  background-color: ${props => props.theme.backgroundColor};
+  height: ${(props) => props.theme.containerHeight};
+  background-color: ${(props) => props.theme.backgroundColor};
 `;
 
 const Title = styled('div')`
@@ -48,7 +48,6 @@ const QuizButton = styled(Link)`
 
 
 class Quizzes extends React.Component {
-  
   render() {
     return (
       <ThemeProvider theme={theme}>
@@ -67,7 +66,7 @@ class Quizzes extends React.Component {
               <QuizButton to='quizzes/d3'>D3.js</QuizButton>
             </ButtonContainer>
           </div>
-        </SectionContainer> 
+        </SectionContainer>
       </ThemeProvider>
     );
   }

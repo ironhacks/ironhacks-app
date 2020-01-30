@@ -3,9 +3,9 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
 
 import ReloadIcon from './img/reload-icon.svg';
@@ -77,22 +77,22 @@ class ProjectPreview extends React.Component {
       projectName: this.props.projectName || false,
       projectURL: this.props.projectURL || false,
       user: this.props.user,
-    }
+    };
   }
 
   componentWillMount() {
-    if(!this.state.projectURL) {
+    if (!this.state.projectURL) {
       this.getProjectPreviewPath();
     }
   }
-  
+
   reloadFrame = () => {
     this.props.reloadFrame();
   }
 
   getProjectPreviewPath = () => {
     // Create a reference with an initial file path and name
-    const projectURL = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`; 
+    const projectURL = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`;
     this.setState({projectURL: projectURL});
   }
 
@@ -108,11 +108,11 @@ class ProjectPreview extends React.Component {
             <img src={ReloadIcon} alt='reload-icon'/>
           </button>
           <input defaultValue={`www.ironhacks.com/projectEditor/${this.state.projectName}/preview`} readOnly />
-          <a 
+          <a
             href={this.state.projectURL}
             target='_blank'
             onClick={this.openInANewTab}
-            >
+          >
             <img src={NewTabIcon} alt='reload-icon'/>
           </a>
         </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import PriorHacksData from './priorHacksData.js';
-//Country flags
+// Country flags
 import UNAL2019 from './img/purdue-UNAL-2019.jpeg';
 import COLFlag from './img/flags/col.svg';
 
@@ -75,13 +75,13 @@ const Table = styled('table')`
 `;
 
 const PreviousHackItem = (props) => {
-	console.log(props.selectedHack)
-	return (
-		PriorHacksData.map((hack, i) => {
-			console.log(i === props.selectedHack)
+  console.log(props.selectedHack);
+  return (
+    PriorHacksData.map((hack, i) => {
+      console.log(i === props.selectedHack);
       return (
-			<HackCard selected={i === props.selectedHack} key={hack.name + i}>
-				<HackInfo>
+        <HackCard selected={i === props.selectedHack} key={hack.name + i}>
+          <HackInfo>
 	        <div>
 	          <h2>{hack.name}</h2>
 	          <p>{hack.description}</p>
@@ -111,10 +111,10 @@ const PreviousHackItem = (props) => {
 	          ))}
 	        </tbody>
 	      </Table>
-			</HackCard>
-      )
+        </HackCard>
+      );
     })
-	)
-}
+  );
+};
 
 export default PreviousHackItem;

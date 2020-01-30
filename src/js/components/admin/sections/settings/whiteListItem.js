@@ -3,9 +3,9 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../../../constants.js';
 // Images
 import trashCanIcon from '../../../../../img/trash.svg';
@@ -21,9 +21,9 @@ const ItemContainer = styled('div')`
   input {
     width: 60%;
     height: 100%;
-    background-color: ${(props) => 
+    background-color: ${(props) =>
       props.isValid ? Constants.mainBgColor : 'red'
-    };
+};
     border: 1px solid #999999;
     border-right: none; 
     border-radius: ${Constants.universalBorderRadius} 0px 0px ${Constants.universalBorderRadius};
@@ -34,9 +34,9 @@ const ItemContainer = styled('div')`
   button {
     height: 100%;
     width: 30px;
-    background-color: ${(props) => 
+    background-color: ${(props) =>
       props.isValid ? Constants.mainBgColor : 'red'
-    };
+};
     border: 1px solid #999999;
     border-left: none;
     border-radius: 0px ${Constants.universalBorderRadius} ${Constants.universalBorderRadius} 0px;
@@ -59,17 +59,16 @@ const WhiteListItemInput = styled('input')`
   justify-content: space-between;
   align-items: center;
   border-radius: ${Constants.universalBorderRadius};
-  background-color: ${(props) => 
+  background-color: ${(props) =>
     props.isValid ? Constants.mainBgColor : 'red'
   };
 `
 ^*/
 class WhiteListItem extends React.Component {
-
   onWhiteListItemChange = (e) => {
-    if(e.target.value === ''){
-      this.props.onWhiteListItemDelete(this.props.index);  
-    }else{
+    if (e.target.value === '') {
+      this.props.onWhiteListItemDelete(this.props.index);
+    } else {
       this.setState({email: e.target.value});
     }
   };
@@ -79,7 +78,7 @@ class WhiteListItem extends React.Component {
   };
 
   onBlur = () => {
-    if(this.state){
+    if (this.state) {
       this.props.onChange(this.state.email, this.props.index);
     }
   };

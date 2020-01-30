@@ -4,9 +4,9 @@
 
 import React from 'react';
 
-//Styled components
+// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
 
@@ -28,14 +28,14 @@ const ItemData = styled('div')`
 `;
 
 class ReactionsView extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    const { commentId, totalComments, commentData } = props;
+    const {commentId, totalComments, commentData} = props;
     this.state = {
       commentData,
       commentId,
       totalComments,
-    }
+    };
 
     this.firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
@@ -43,12 +43,12 @@ class ReactionsView extends React.Component {
   }
 
   componentWillMount() {
-    if( this.state.commentData ) {
+    if ( this.state.commentData ) {
       const creationDate = DateFormater.getFirebaseDate(this.state.commentData.createdAt);
       const date = DateFormater.getReactionViewformat(creationDate);
       this.setState({
         date,
-      })
+      });
     } else {
       this.getComment();
     }
@@ -57,19 +57,19 @@ class ReactionsView extends React.Component {
   getComment = () => {
     const _this = this;
     this.firestore.collection('comments')
-    .doc(this.state.commentId)
-    .get()
-    .then((doc) => {
-      const data = doc.data();
-      const creationDate = DateFormater.getFirebaseDate(data.createdAt);
-      const date = DateFormater.getReactionViewformat(creationDate);
-      _this.setState({
-        date,
-      })
-    })
-    .catch(function(error) {
-        console.error("Error getting documents: ", error);
-    });
+        .doc(this.state.commentId)
+        .get()
+        .then((doc) => {
+          const data = doc.data();
+          const creationDate = DateFormater.getFirebaseDate(data.createdAt);
+          const date = DateFormater.getReactionViewformat(creationDate);
+          _this.setState({
+            date,
+          });
+        })
+        .catch(function(error) {
+          console.error('Error getting documents: ', error);
+        });
   };
 
   render() {
@@ -77,10 +77,10 @@ class ReactionsView extends React.Component {
       <ThemeProvider theme={theme}>
         <Container>
           <ItemData>
-            {!this.state.totalComments && 
+            {!this.state.totalComments &&
               <span>{`Posted ${this.state.date}`}</span>
             }
-            {this.state.totalComments && 
+            {this.state.totalComments &&
               <span>{`Posted ${this.state.date} | ${this.state.totalComments - 1} comments`}</span>
             }
           </ItemData>

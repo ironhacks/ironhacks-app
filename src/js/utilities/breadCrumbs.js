@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link }from 'react-router-dom';
-//Styled components
+import {Link} from 'react-router-dom';
+// Styled components
 import styled from 'styled-components';
-import HomeIcon from '../../img/home-icon.svg'
+import HomeIcon from '../../img/home-icon.svg';
 
 const Container = styled('div')`
   display: flex;
@@ -50,22 +50,21 @@ const Container = styled('div')`
 `;
 
 const sections = {
-  newThread: "New Thread",
-}
+  newThread: 'New Thread',
+};
 
 const sectionsEndPoints = {
-  newThread: "newThread",
-}
+  newThread: 'newThread',
+};
 
 class BreadCrumbs extends React.Component {
-
   returnToDetails = (event) => {
     event.preventDefault();
     this.props.returnToDetails();
   }
 
   render() {
-    return(
+    return (
       <Container >
         <img src={HomeIcon} alt="homeicon"/>
         <Link to={'/forum'}>Home</Link>
@@ -75,12 +74,12 @@ class BreadCrumbs extends React.Component {
               <i className="right"/>
               <Link to={sectionsEndPoints[section]}>{sections[sections]}</Link>
             </React.Fragment>
-          ) 
+          );
         })}
         <i className="right"/>
         <span className='current'>{sections[this.props.current]}</span>
       </Container>
-    )
+    );
   }
 }
 

@@ -3,12 +3,12 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
-import styled, { css } from 'styled-components';
-//Custom Constants
+// Styled components
+import styled, {css} from 'styled-components';
+// Custom Constants
 import * as Constants from '../../../constants.js';
 import * as Texts from './staticTexts.js';
-import { registerStats } from '../../utilities/registerStat.js';
+import {registerStats} from '../../utilities/registerStat.js';
 
 const ItemContainer = styled('div')`
   display: flex;
@@ -133,15 +133,15 @@ const SubSection = styled('div')`
 
 
 class PersonalScoreItem extends React.Component {
-  constructor(props){
-    super(props)
-    this.state =  {
+  constructor(props) {
+    super(props);
+    this.state = {
       active: false,
-    }
+    };
   }
 
   componentDidMount() {
-    
+
   }
 
   toggleSection = () => {
@@ -153,20 +153,20 @@ class PersonalScoreItem extends React.Component {
         phase: this.props.phase + 1,
         hackId: this.state.currentHack,
         type: this.props.type,
-      }
-    }
+      },
+    };
     registerStats(statData);
     this.setState((prevState, props) => {
       const active = !prevState.active;
-      return { active };
-    })
+      return {active};
+    });
   }
 
-  
+
   render() {
     return (
       <ItemContainer type={this.props.type}>
-        <Title type={this.props.type} onClick={this.toggleSection}>  
+        <Title type={this.props.type} onClick={this.toggleSection}>
           <h2>{this.props.type.toUpperCase()}</h2>
           <span className='category-weight'>{`(${Texts.personalFeddback[this.props.type].weight} of total points)`}</span>
         </Title>
@@ -180,7 +180,7 @@ class PersonalScoreItem extends React.Component {
               <span>Total points</span>
             </div>
           </SubSection>
-          {this.props.type !== 'visualization' && 
+          {this.props.type !== 'visualization' &&
           <SubSection type={this.props.type}>
             <div className='sub-category-text'>
               <h3>Points for Excellence</h3>
@@ -191,7 +191,7 @@ class PersonalScoreItem extends React.Component {
             </div>
           </SubSection>
           }
-          {this.props.type === 'visualization' && 
+          {this.props.type === 'visualization' &&
             <VerticalContainer type={this.props.type}>
               <div className="horizontal">
                 <SubSection type={this.props.type}>

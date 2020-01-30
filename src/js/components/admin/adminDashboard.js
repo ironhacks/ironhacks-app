@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {ThemeProvider} from 'styled-components';
-import { Link, Switch, Route } from "react-router-dom";
+import {Link, Switch, Route} from 'react-router-dom';
 import Loader from '../../utilities/loader.js';
 import SettingsSection from './sections/settings/admSettingsSection.js';
 import QualtricsIntegrationSection from './sections/qualtricsIntegration/qualtricsIntegrationSection.js';
@@ -15,8 +15,8 @@ const theme = Constants.AppSectionTheme;
 
 const SectionContainer = styled('div')`
   width: 100%;
-  height: ${props => props.theme.containerHeight};
-  background-color: ${props => props.theme.backgroundColor};
+  height: ${(props) => props.theme.containerHeight};
+  background-color: ${(props) => props.theme.backgroundColor};
 
   .full-height {
     height: 100%;
@@ -85,20 +85,20 @@ const SectionBody = styled('div')`
 `;
 
 class AdminDashboard extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       hack: null,
       hackId: '',
       loading: false,
-    }
+    };
   }
 
-  componentDidMount(){
-    //Check if there is a hack instance on the component state, if not, ask for it.
-    if(!this.props.location.state){
+  componentDidMount() {
+    // Check if there is a hack instance on the component state, if not, ask for it.
+    if (!this.props.location.state) {
       this.getHack();
-    }else{
+    } else {
       this.setState({
         hack: this.props.location.state.hack,
         hackId: this.props.location.state.hackId,
@@ -107,133 +107,133 @@ class AdminDashboard extends React.Component {
   };
 
   getHack = () => {
-    //db Reference
+    // db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
     const _this = this;
-    //Updating the current hack:
+    // Updating the current hack:
     firestore.collection('hacks')
-    .where('name', '==', this.props.match.params.hackId)
-    .limit(1)
-    .get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          const hackData = doc.data()
-          const hackId = doc.id;
-          firestore.collection('adminHackData').doc(hackId)
-          .get()
-          .then(function(doc) {
-            hackData['whiteList'] = doc.data().whiteList;
-            hackData['task'] = doc.data().task;
-            _this.setState({hack: hackData, hackId: hackId});
+        .where('name', '==', this.props.match.params.hackId)
+        .limit(1)
+        .get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            const hackData = doc.data();
+            const hackId = doc.id;
+            firestore.collection('adminHackData').doc(hackId)
+                .get()
+                .then(function(doc) {
+                  hackData['whiteList'] = doc.data().whiteList;
+                  hackData['task'] = doc.data().task;
+                  _this.setState({hack: hackData, hackId: hackId});
+                });
           });
+        })
+        .catch(function(error) {
+          console.error('Error adding document: ', error);
         });
-    })
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
   };
-//--------------------------- SETTINGS SECTION ----------------------------//
-  //This function handle the whitelist update.
+  // --------------------------- SETTINGS SECTION ----------------------------//
+  // This function handle the whitelist update.
   onSaveSettings = (whiteList) => {
     this.updateHackSettings(whiteList);
   };
 
   updateHackSettings = (whiteList) => {
-    this.setState({loading: true})
-    //db Reference
+    this.setState({loading: true});
+    // db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
     const _this = this;
-    //Updating the whiteList collection:
-    var batch = firestore.batch();
+    // Updating the whiteList collection:
+    const batch = firestore.batch();
     whiteList.forEach((email) => {
-      const data = {whiteList: window.firebase.firestore.FieldValue.arrayUnion(_this.state.hackId)}
+      const data = {whiteList: window.firebase.firestore.FieldValue.arrayUnion(_this.state.hackId)};
       const whiteListDoc = firestore.collection('whitelists').doc(email);
       batch.set(whiteListDoc, data, {merge: true});
-    })
+    });
     // Adding whiteList cross reference to the hack object on firebase:
     const hackWhiteListObject = {
-      whiteList:  whiteList
-    }
+      whiteList: whiteList,
+    };
     const hackRef = firestore.collection('adminHackData').doc(this.state.hackId);
     batch.set(hackRef, hackWhiteListObject, {merge: true});
     batch.commit()
-    .then(() => {
-      this.setState((prevState, props) => {
-        prevState.hack.whiteList = whiteList
-        return {hack: prevState.hack , loading: false};
-      })
-    })
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
+        .then(() => {
+          this.setState((prevState, props) => {
+            prevState.hack.whiteList = whiteList;
+            return {hack: prevState.hack, loading: false};
+          });
+        })
+        .catch(function(error) {
+          console.error('Error adding document: ', error);
+        });
   };
-//--------------------------- SETTIGS SECTION ----------------------------//
-//--------------------------- TUTORIAL SECTION ----------------------------//
-  //This function handle the tutorial docuement update.
+  // --------------------------- SETTIGS SECTION ----------------------------//
+  // --------------------------- TUTORIAL SECTION ----------------------------//
+  // This function handle the tutorial docuement update.
   onTutorialMarkdownUpdate = (markdown) => {
     this.setState({tutorialMarkdown: markdown});
   };
 
   updateTutorialDocument = () => {
-    this.setState({loading: true})
-    //db Reference
+    this.setState({loading: true});
+    // db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
-    //Updating the current hack:
+    // Updating the current hack:
     const hackRef = firestore.collection('hacks').doc(this.state.hackId);
-    var hackTutorial = this.state.hack.tutorial;
-    hackTutorial.doc = this.utoa(this.state.tutorialMarkdown)
+    const hackTutorial = this.state.hack.tutorial;
+    hackTutorial.doc = this.utoa(this.state.tutorialMarkdown);
     hackRef.update({
       tutorial: hackTutorial,
     })
-    .then(() => {
-      this.setState({loading: false})
-    })
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
+        .then(() => {
+          this.setState({loading: false});
+        })
+        .catch(function(error) {
+          console.error('Error adding document: ', error);
+        });
   };
-//--------------------------- TUTORIAL SECTION ----------------------------//
-//--------------------------- TASK SECTION ----------------------------//
-  //This function handle the tutorial docuement update.
+  // --------------------------- TUTORIAL SECTION ----------------------------//
+  // --------------------------- TASK SECTION ----------------------------//
+  // This function handle the tutorial docuement update.
   onTaskMarkdownUpdate = (markdown) => {
     this.setState({taskMarkdown: markdown});
   };
 
   updateTaskDocument = () => {
-    this.setState({loading: true})
-    //db Reference
+    this.setState({loading: true});
+    // db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
-    //Updating the current hack:
+    // Updating the current hack:
     const hackRef = firestore.collection('adminHackData').doc(this.state.hackId);
     const hackTask = this.state.hack.task;
-    hackTask.doc = this.utoa(this.state.taskMarkdown)
+    hackTask.doc = this.utoa(this.state.taskMarkdown);
     hackRef.update({
       task: hackTask,
     })
-    .then(() => {
-      this.setState({loading: false})
-    })
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
+        .then(() => {
+          this.setState({loading: false});
+        })
+        .catch(function(error) {
+          console.error('Error adding document: ', error);
+        });
   };
-//--------------------------- TASK SECTION ----------------------------//
-//--------------------------- QUALTRICS SECTION ----------------------------//
+  // --------------------------- TASK SECTION ----------------------------//
+  // --------------------------- QUALTRICS SECTION ----------------------------//
   updateQualtricsLinks = (updatedHackData) => {
-    this.setState({loading: true})
-    //db Reference
+    this.setState({loading: true});
+    // db Reference
     const firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
-    //Updating the current hack:
+    // Updating the current hack:
     const hackRef = firestore.collection('hacks').doc(this.state.hackId);
     hackRef.update({
       phases: updatedHackData.phases,
@@ -241,24 +241,24 @@ class AdminDashboard extends React.Component {
       postHackSurvey: updatedHackData.postHackSurvey || '',
       quizzes: updatedHackData.quizzes || null,
     })
-    .then(() => {
-      this.setState({loading: false})
-    })
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
+        .then(() => {
+          this.setState({loading: false});
+        })
+        .catch(function(error) {
+          console.error('Error adding document: ', error);
+        });
   };
-//--------------------------- QUALTRICS SECTION ----------------------------//
-//--------------------------- MARKDOWN UTILITIES --------------------------//
+  // --------------------------- QUALTRICS SECTION ----------------------------//
+  // --------------------------- MARKDOWN UTILITIES --------------------------//
   // ucs-2 string to base64 encoded ascii
   utoa = (str) => {
-      return window.btoa(unescape(encodeURIComponent(str)));
+    return window.btoa(unescape(encodeURIComponent(str)));
   };
   // base64 encoded ascii to ucs-2 string
   atou = (str) => {
-      return decodeURIComponent(escape(window.atob(str)));
+    return decodeURIComponent(escape(window.atob(str)));
   };
-//--------------------------- MARKDOWN UTILITIES --------------------------//
+  // --------------------------- MARKDOWN UTILITIES --------------------------//
 
   render() {
     return (
@@ -290,23 +290,23 @@ class AdminDashboard extends React.Component {
             </ControlPanel>
             <div className='col-md-10 full-height'>
               <div className='d-flex flex-column full-height'>
-              <SectionHeader className='row no-gutters'>
-                <div className='col-md-12'>
-                  <h2>{this.state.hack ? this.state.hack.name : 'Loading'}</h2>
-                  <span>Hack Dashboard</span>
-                </div>
-              </SectionHeader>
-              <div className='row no-gutters flex-grow-1 overflow'>
-                <SectionBody className='col-md-12'>
-                  {(this.state.hack && !this.state.loading) ?
+                <SectionHeader className='row no-gutters'>
+                  <div className='col-md-12'>
+                    <h2>{this.state.hack ? this.state.hack.name : 'Loading'}</h2>
+                    <span>Hack Dashboard</span>
+                  </div>
+                </SectionHeader>
+                <div className='row no-gutters flex-grow-1 overflow'>
+                  <SectionBody className='col-md-12'>
+                    {(this.state.hack && !this.state.loading) ?
                   <Switch>
                     <Route
-                        path={this.props.match.url + '/settings'}
-                        render={()=>
-                          <SettingsSection
-                            hack={this.state.hack}
-                            onSaveSettings={this.onSaveSettings}
-                          />}/>
+                      path={this.props.match.url + '/settings'}
+                      render={()=>
+                        <SettingsSection
+                          hack={this.state.hack}
+                          onSaveSettings={this.onSaveSettings}
+                        />}/>
                     <Route
                       path={this.props.match.url + '/tutorial'}
                       render={()=>
@@ -315,7 +315,7 @@ class AdminDashboard extends React.Component {
                           onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
                           updateTutorialDocument={this.updateTutorialDocument}
                         />}/>
-                      <Route
+                    <Route
                       path={this.props.match.url + '/task'}
                       render={()=>
                         <TaskSection
@@ -323,17 +323,17 @@ class AdminDashboard extends React.Component {
                           onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
                           updateTaskDocument={this.updateTaskDocument}
                         />}/>
-                      <Route
+                    <Route
                       path={this.props.match.url + '/qualtrics-integration'}
                       render={()=>
                         <QualtricsIntegrationSection
                           hack={this.state.hack}
                           onUpdate={this.updateQualtricsLinks}
                         />}/>
-                  </Switch>
-                  : <Loader />}
-                </SectionBody>
-              </div>
+                  </Switch> :
+                  <Loader />}
+                  </SectionBody>
+                </div>
               </div>
             </div>
           </div>

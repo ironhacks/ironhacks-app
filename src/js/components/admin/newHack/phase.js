@@ -3,12 +3,12 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Custom Constants
-//import * as Constants from '../../../../constants.js';
+// Custom Constants
+// import * as Constants from '../../../../constants.js';
 
-//Custom components
+// Custom components
 import PhaseInterval from './phaseInterval.js';
 
 const PhaseItem = styled('div')`
@@ -20,26 +20,25 @@ const PhaseItem = styled('div')`
 
 class Phase extends React.Component {
   onCodingHandler = () => {
-    this.props.onFocusHandler(this.props.phaseIndex, 'coding')
+    this.props.onFocusHandler(this.props.phaseIndex, 'coding');
   };
 
   onEvaluationHandler = () => {
-    this.props.onFocusHandler(this.props.phaseIndex, 'evaluation')
+    this.props.onFocusHandler(this.props.phaseIndex, 'evaluation');
   }
 
   render() {
-    
     return (
       <PhaseItem>
-        <PhaseInterval intervalName='Coding' 
+        <PhaseInterval intervalName='Coding'
           phaseIndex={this.props.phaseIndex}
-          start={this.props.dates.coding.start} 
+          start={this.props.dates.coding.start}
           end={this.props.dates.coding.end}
           onClick={this.onCodingHandler}
         />
         <PhaseInterval intervalName='Evaluation'
           phaseIndex={this.props.phaseIndex}
-          start={this.props.dates.evaluation.start} 
+          start={this.props.dates.evaluation.start}
           end={this.props.dates.evaluation.end}
           onClick={this.onEvaluationHandler}
         />

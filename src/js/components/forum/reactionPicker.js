@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-//Styled components
+// Styled components
 import styled from 'styled-components';
 // Images
 import LikeReaction from './img/like-reaction.svg';
@@ -95,11 +95,11 @@ const ReactionCounter = styled('div')`
 const reverseReaction = {
   likes: 'dislikes',
   dislikes: 'likes',
-}
+};
 
 class ReactionPicker extends React.Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     this.firestore.settings(settings);
@@ -108,7 +108,7 @@ class ReactionPicker extends React.Component {
   componentWillMount() {
     if ( this.props.commentData ) {
       if (this.props.commentData.reactions) {
-        const { likes, dislikes } = this.props.commentData.reactions;
+        const {likes, dislikes} = this.props.commentData.reactions;
         const isLiked = likes.includes(this.props.user.uid);
         const isDisliked = dislikes.includes(this.props.user.uid);
         this.setState({
@@ -133,32 +133,32 @@ class ReactionPicker extends React.Component {
   getComment = () => {
     const _this = this;
     this.firestore.collection('comments')
-    .doc(this.props.commentId)
-    .get()
-    .then((doc) => {
-      const data = doc.data();
-      if (data.reactions) {
-        const { likes, dislikes } = data.reactions;
-        const isLiked = likes.includes(this.props.user.uid);
-        const isDisliked = dislikes.includes(this.props.user.uid);
-        _this.setState({
-          likes,
-          dislikes,
-          isLiked,
-          isDisliked,
+        .doc(this.props.commentId)
+        .get()
+        .then((doc) => {
+          const data = doc.data();
+          if (data.reactions) {
+            const {likes, dislikes} = data.reactions;
+            const isLiked = likes.includes(this.props.user.uid);
+            const isDisliked = dislikes.includes(this.props.user.uid);
+            _this.setState({
+              likes,
+              dislikes,
+              isLiked,
+              isDisliked,
+            });
+          } else {
+            _this.setState({
+              likes: [],
+              dislikes: [],
+              isLiked: false,
+              isDisliked: false,
+            });
+          }
         })
-      } else {
-        _this.setState({
-          likes: [],
-          dislikes: [],
-          isLiked: false,
-          isDisliked: false,
-        })
-      }
-    })
-    .catch(function(error) {
-        console.error("Error getting documents: ", error);
-    });
+        .catch(function(error) {
+          console.error('Error getting documents: ', error);
+        });
   };
 
   handleReactionClick = (event) => {
@@ -168,48 +168,48 @@ class ReactionPicker extends React.Component {
       likes: this.state.likes,
       dislikes: this.state.dislikes,
     };
-    if(updatedData[reactionType].includes(this.props.user.uid)) {
-      updatedData[reactionType] = updatedData[reactionType].filter( element => element !== this.props.user.uid)
+    if (updatedData[reactionType].includes(this.props.user.uid)) {
+      updatedData[reactionType] = updatedData[reactionType].filter( (element) => element !== this.props.user.uid);
     } else {
       updatedData[reactionType].push(this.props.user.uid);
-      updatedData[reverseReaction[reactionType]] = updatedData[reverseReaction[reactionType]].filter( element => element !== this.props.user.uid)
+      updatedData[reverseReaction[reactionType]] = updatedData[reverseReaction[reactionType]].filter( (element) => element !== this.props.user.uid);
     }
     this.firestore.collection('comments')
-    .doc(this.props.commentId)
-    .update({
-      'reactions.likes': updatedData.likes,
-      'reactions.dislikes': updatedData.dislikes,
-    })
-    .then((response) => {
-      const isLiked = updatedData.likes.includes(_this.props.user.uid);
-      const isDisliked = updatedData.dislikes.includes(_this.props.user.uid);
-      _this.setState({
-        likes: updatedData.likes,
-        dislikes: updatedData.dislikes,
-        isLiked,
-        isDisliked,
-      });
-    })
-    .catch(function(error) {
-        console.error("Error updating documents: ", error);
-    });
-  } 
+        .doc(this.props.commentId)
+        .update({
+          'reactions.likes': updatedData.likes,
+          'reactions.dislikes': updatedData.dislikes,
+        })
+        .then((response) => {
+          const isLiked = updatedData.likes.includes(_this.props.user.uid);
+          const isDisliked = updatedData.dislikes.includes(_this.props.user.uid);
+          _this.setState({
+            likes: updatedData.likes,
+            dislikes: updatedData.dislikes,
+            isLiked,
+            isDisliked,
+          });
+        })
+        .catch(function(error) {
+          console.error('Error updating documents: ', error);
+        });
+  }
 
   render() {
     return (
       <Reactions>
-      {this.state.likes.length >= 0 && 
+        {this.state.likes.length >= 0 &&
         <ReactionCounter id='likes' onClick={this.handleReactionClick} highLighted={this.state.isLiked}>
           <span id='likes'><img id='likes' src={this.state.isLiked ? LikeReactionHighLighted : LikeReaction} alt='likeReaction'/></span>
           <span id='likes'>{`${this.state.likes.length}`}</span>
         </ReactionCounter>
-      }
-      {this.state.dislikes.length >= 0 && 
+        }
+        {this.state.dislikes.length >= 0 &&
         <ReactionCounter id='dislikes' onClick={this.handleReactionClick} highLighted={this.state.isDisliked}>
           <span id='dislikes'><img id='dislikes' src={this.state.isDisliked ? DislikeReactionHighLighted : DislikeReaction} alt='dislikeReaction'/></span>
           <span id='dislikes'>{this.state.dislikes.length}</span>
         </ReactionCounter>
-      }
+        }
       </Reactions>
     );
   }

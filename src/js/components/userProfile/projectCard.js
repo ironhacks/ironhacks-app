@@ -3,13 +3,13 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
 import Button from '../../utilities/button.js';
 
-//Section container
+// Section container
 const CardContainer = styled('button')`
   height: 180px;
   width: 30%;
@@ -115,11 +115,11 @@ const Separator = styled('div')`
 `;
 
 class ProjectCard extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       showNewProjectForm: false,
-    }
+    };
   }
 
   onProjectCardClick = () => {
@@ -128,7 +128,7 @@ class ProjectCard extends React.Component {
 
   showNewProjectForm = () => {
     this.setState((prevState, props) => {
-      return ({showNewProjectForm: !prevState.showNewProjectForm})
+      return ({showNewProjectForm: !prevState.showNewProjectForm});
     });
   };
 
@@ -138,18 +138,22 @@ class ProjectCard extends React.Component {
 
   validateName = () => {
     const whiteSpaces = /\s/;
-    const alphaNumeric = /^[a-z0-9]+$/i
-    if (this.state.newProjectName === '')
-      return {error: "You must write something!"}
-    if (whiteSpaces.test(this.state.newProjectName))
-      return {error: "Name can't contain spaces."};
-    const duplicatedName = this.props.projects.some((project) => 
-      (project.name === this.state.newProjectName))
-    if (duplicatedName)
-        return {error: 'A project with that name already exists'};
-    if (alphaNumeric.test(this.state.newProjectName))
+    const alphaNumeric = /^[a-z0-9]+$/i;
+    if (this.state.newProjectName === '') {
+      return {error: 'You must write something!'};
+    }
+    if (whiteSpaces.test(this.state.newProjectName)) {
+      return {error: 'Name can\'t contain spaces.'};
+    }
+    const duplicatedName = this.props.projects.some((project) =>
+      (project.name === this.state.newProjectName));
+    if (duplicatedName) {
+      return {error: 'A project with that name already exists'};
+    }
+    if (alphaNumeric.test(this.state.newProjectName)) {
       return {result: true};
-    return {error: "Name can only contain letters and numbers."};
+    }
+    return {error: 'Name can only contain letters and numbers.'};
   }
 
   duplicatedName = (name) => {
@@ -158,49 +162,49 @@ class ProjectCard extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { result, error } = this.validateName();
-    if(result){
+    const {result, error} = this.validateName();
+    if (result) {
       this.props.onSave(this.state.newProjectName);
       this.setState({nameError: null});
-    }else {
+    } else {
       this.setState({nameError: error});
     }
   }
 
   render() {
-    if(this.props.newProject === true){
-      if(!this.state.showNewProjectForm) {
+    if (this.props.newProject === true) {
+      if (!this.state.showNewProjectForm) {
         return (
           <CardContainer className='newProject' onClick={this.showNewProjectForm}>
             <span>+</span>
             <span>Create new project</span>
           </CardContainer>
-        )
-      }else{
+        );
+      } else {
         return (
           <NewProjectForm>
             <form onSubmit={this.handleSubmit}>
               <h3>Project name:</h3>
               <input type='text' placeholder='Awasome project' onChange={this.handleNameInput}/>
-              {this.state.nameError && 
+              {this.state.nameError &&
                 <p className="name-error">
                   {this.state.nameError}
                 </p>
               }
               <div className='control'>
-                <input 
+                <input
                   type="submit"
                   value="Create"/>
-                <Button 
-                  width='80px' 
+                <Button
+                  width='80px'
                   onClick={this.showNewProjectForm}>
                   Cancel
                 </Button>
               </div>
             </form>
           </NewProjectForm>
-        )
-      }  
+        );
+      }
     }
 
     return (

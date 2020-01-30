@@ -1,17 +1,10 @@
-  // IronHacks Platform
-// login.js - Loging page
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-//Styled components
+import {Redirect} from 'react-router-dom';
 import styled, {ThemeProvider} from 'styled-components';
-//Custom Constants
 import * as Constants from '../../constants.js';
 
 const theme = Constants.Error404Theme;
 
-//Section container
 const SectionContainer = styled('div')`
   width: 100%;
   height: 100vh;
@@ -21,7 +14,7 @@ const SectionContainer = styled('div')`
   align-items: center;
   justify-content: center;
 
-  > h1 {  
+  > h1 {
     font-size: 60px;
     font-weight: 900;
     line-height: 40px;
@@ -35,16 +28,24 @@ const SectionContainer = styled('div')`
     font-weight: 300;
   }
 `;
+
+
+/**
+ * 404 Error Page
+ *
+ * @component
+ */
 class Login extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       navigate: false,
     };
   }
+
   render() {
-    if(this.state.navigate === true){
-      return(
+    if (this.state.navigate === true) {
+      return (
         <Redirect to='/hackSelection'/>
       );
     }
@@ -54,8 +55,8 @@ class Login extends React.Component {
           <h2><span>PURDUE </span>IRONHACKS</h2>
           <h1>404 PAGE NOT FOUND :'(</h1>
         </SectionContainer>
-        </ThemeProvider>
-      );
+      </ThemeProvider>
+    );
   }
 }
 

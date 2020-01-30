@@ -5,7 +5,7 @@ const COLOURS = {
   trace: 'lightblue',
   info: 'cyan',
   warn: 'pink',
-  error: 'red'
+  error: 'red',
 }; // choose better colours :)
 
 class Log {
@@ -17,8 +17,11 @@ class Log {
     // Set the colour of the message based on the level
     createDebug.color = COLOURS[level];
 
-    if(source) { createDebug(source, message); }
-    else { createDebug(message); }
+    if (source) {
+      createDebug(source, message);
+    } else {
+      createDebug(message);
+    }
   }
 
   trace(message, source) {

@@ -3,11 +3,11 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
 import ComperitorRow from './comperitorRow.js';
 import swal from 'sweetalert2';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
 // import * as Texts from './staticTexts.js';
 
@@ -57,7 +57,7 @@ const Table = styled('table')`
 
 const SaveLikesButton = styled('button')`
   position: absolute;
-  display: ${(props => props.hidden ? 'none' : 'block')}
+  display: ${((props) => props.hidden ? 'none' : 'block')}
   bottom: 15px; 
   right: 0;
   width: 150px;
@@ -70,22 +70,22 @@ const SaveLikesButton = styled('button')`
 `;
 
 class YourCompetitorsRank extends React.Component {
-  constructor(props){
-    super(props)
-    this.state =  {
+  constructor(props) {
+    super(props);
+    this.state = {
       likedUsers: [],
-    }
+    };
   }
-  
+
   onLike = (hackerId) => {
     const likedUsers = this.state.likedUsers;
     if (likedUsers[hackerId]) {
-      delete likedUsers[hackerId]
-      this.setState({likedUsers});      
+      delete likedUsers[hackerId];
+      this.setState({likedUsers});
       return false;
     } else {
       if ( Object.keys(likedUsers).length === 3) {
-        swal("You can only like 3 projects.")
+        swal('You can only like 3 projects.');
         return false;
       } else {
         likedUsers[hackerId] = !likedUsers[hackerId];
@@ -96,10 +96,11 @@ class YourCompetitorsRank extends React.Component {
   }
 
   saveLikes = () => {
-    let likedUsers= [];
-    for(const k in this.state.likedUsers) {
-      if (this.state.likedUsers[k]) 
+    const likedUsers= [];
+    for (const k in this.state.likedUsers) {
+      if (this.state.likedUsers[k]) {
         likedUsers.push(k);
+      }
     }
     this.props.onLikedCompetitors(likedUsers);
   }
@@ -112,7 +113,7 @@ class YourCompetitorsRank extends React.Component {
             <tr>
               <th>Hacker</th>
               <th>Project Link</th>
-              {this.props.treatment === "1" && 
+              {this.props.treatment === '1' &&
               <th>Similarity Rating</th>
               }
               <th></th>
@@ -126,7 +127,7 @@ class YourCompetitorsRank extends React.Component {
                   hacker={this.props.participants[key]}
                   hackerId={key}
                   hackName={this.props.hackName}
-                  score={this.props.treatment === "1" ? this.props.scores.similarity[key] : null}
+                  score={this.props.treatment === '1' ? this.props.scores.similarity[key] : null}
                   onLike={this.onLike}
                 />
               );

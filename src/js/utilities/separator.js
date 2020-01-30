@@ -1,9 +1,9 @@
 // IronHacks Platform
 // seratator.js
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../constants.js';
 
 const Separator = styled('div')`
@@ -11,9 +11,9 @@ const Separator = styled('div')`
   height: 1px;
   margin-top: 15px;
   margin-bottom: 10px;
-  background-color: ${(props) => 
+  background-color: ${(props) =>
     props.primary ? Constants.mainBgColor : 'lightgray'
-  };
+};
 `;
 
 export default Separator;

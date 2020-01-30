@@ -28,22 +28,22 @@ export const js = `console.log("You can add you custom js here.")
 export const indexBlob = {
   name: 'index.html',
   path: '',
-  blob: new Blob([index], {type: 'text/html'})
+  blob: new Blob([index], {type: 'text/html'}),
 };
 
 export const ContestCssBlob = {
   name: 'main.css',
   path: 'css/',
-  blob: new Blob([css], {type: 'text/css'})
+  blob: new Blob([css], {type: 'text/css'}),
 };
 
 export const jsBlob = {
   name: 'main.js',
   path: 'js/',
-  blob: new Blob([js], {type: 'text/javascript'})
+  blob: new Blob([js], {type: 'text/javascript'}),
 };
 
-//Contest Template:
+// Contest Template:
 
 export const contestIndex = `<!DOCTYPE html>
 <html>
@@ -116,65 +116,65 @@ p {
 export const contestIndexBlob = {
   name: 'index.html',
   path: '',
-  blob: new Blob([contestIndex], {type: 'text/html'})
+  blob: new Blob([contestIndex], {type: 'text/html'}),
 };
 
 export const contestAnalitycalBlob = {
   name: 'analitycal.html',
   path: '',
-  blob: new Blob([contestAnalitycal], {type: 'text/html'})
+  blob: new Blob([contestAnalitycal], {type: 'text/html'}),
 };
 
 export const contestMapBlob = {
   name: 'map.html',
   path: '',
-  blob: new Blob([contestMap], {type: 'text/html'})
+  blob: new Blob([contestMap], {type: 'text/html'}),
 };
 
 export const contestVisualizationBlob = {
   name: 'visualization.html',
   path: '',
-  blob: new Blob([contestVisualization], {type: 'text/html'})
+  blob: new Blob([contestVisualization], {type: 'text/html'}),
 };
 
 export const contestIntegrationBlob = {
   name: 'integration.html',
   path: '',
-  blob: new Blob([contestIntegration], {type: 'text/html'})
+  blob: new Blob([contestIntegration], {type: 'text/html'}),
 };
 
 export const cssBlob = {
   name: 'main.css',
   path: 'css/',
-  blob: new Blob([css], {type: 'text/css'})
+  blob: new Blob([css], {type: 'text/css'}),
 };
 
 export const contestJsBlob = {
   name: 'main.js',
   path: 'js/',
-  blob: new Blob([contestMainJS], {type: 'text/javascript'})
+  blob: new Blob([contestMainJS], {type: 'text/javascript'}),
 };
 
 export const contestMapJsBlob = {
   name: 'map.js',
   path: 'js/',
-  blob: new Blob([contestMainJS], {type: 'text/javascript'})
+  blob: new Blob([contestMainJS], {type: 'text/javascript'}),
 };
 
 export const contestIntegrationJsBlob = {
   name: 'integration.js',
   path: 'js/',
-  blob: new Blob([contestMainJS], {type: 'text/javascript'})
+  blob: new Blob([contestMainJS], {type: 'text/javascript'}),
 };
 
 export const contestAnalitycalJsBlob = {
   name: 'analitycal.js',
   path: 'js/',
-  blob: new Blob([contestMainJS], {type: 'text/javascript'})
+  blob: new Blob([contestMainJS], {type: 'text/javascript'}),
 };
 
 export const contestVisualizationJsBlob = {
   name: 'visualization.js',
   path: 'js/',
-  blob: new Blob([contestMainJS], {type: 'text/javascript'})
+  blob: new Blob([contestMainJS], {type: 'text/javascript'}),
 };

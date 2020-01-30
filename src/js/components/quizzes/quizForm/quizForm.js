@@ -3,23 +3,23 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled, {ThemeProvider} from 'styled-components';
 
-import { Redirect } from 'react-router-dom';
-//Custom Constants
+import {Redirect} from 'react-router-dom';
+// Custom Constants
 import * as Constants from '../../../../constants.js';
 import Button from '../../../utilities/button.js';
 
 const theme = Constants.AppSectionTheme;
-//Section container
+// Section container
 const SectionContainer = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: ${props => props.theme.containerHeight};
-  background-color: ${props => props.theme.backgroundColor};
+  height: ${(props) => props.theme.containerHeight};
+  background-color: ${(props) => props.theme.backgroundColor};
   overflow: auto;
 
   iframe {
@@ -40,25 +40,25 @@ const quizzesURLS = {
   javascript_jquery: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_1Xkpq23Qu5j7P01',
   d3: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_0ep4CDeW4BYTckR',
   google_maps: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_eEe3JnzCkS2ppnn',
-}
+};
 
 class QuizFrom extends React.Component {
-  constructor(props){ 
+  constructor(props) {
     super(props);
     this.state = {
       showReturnButton: 'none',
       mustNavigate: false,
       user: this.props.user,
       quiz: quizzesURLS[props.match.params.quizName],
-    }
+    };
   }
-  
+
   componentDidMount() {
-    window.addEventListener("message", this.recieveMessage)
+    window.addEventListener('message', this.recieveMessage);
   }
 
   recieveMessage = (event) => {
-    if(event.data === 'quizDone'){
+    if (event.data === 'quizDone') {
       this.setState({showReturnButton: 'block'});
     }
   }
@@ -68,10 +68,10 @@ class QuizFrom extends React.Component {
   }
 
   render() {
-    if(this.state.mustNavigate){
-      return(
+    if (this.state.mustNavigate) {
+      return (
         <Redirect push to='/quizzes'/>
-      )
+      );
     }
     return (
       <ThemeProvider theme={theme}>

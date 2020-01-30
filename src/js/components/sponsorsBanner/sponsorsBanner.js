@@ -4,24 +4,24 @@
 
 import React from 'react';
 
-//Styled components
+// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
-//Importing logos
+// Importing logos
 import githubLogo from './img/github.jpg';
 import nsfLogo from './img/nsf.jpg';
 import redhatLogo from './img/red-hat.jpg';
 import socrataLogo from './img/socrata.png';
 import techNexusLogo from './img/tech-nexus-logo.png';
 import UNALLogo from './img/universidad-nacional-de-colombia.png';
-import PurdueLogo from './img/purdue-sig-black-gold.png'
+import PurdueLogo from './img/purdue-sig-black-gold.png';
 
 const theme = Constants.SponsorBannerTheme;
 
 const BannerContainer = styled('div')`
-  min-height: ${props => props.theme.containerHeight};
-  background-color: ${props => props.theme.backgroundColor};
+  min-height: ${(props) => props.theme.containerHeight};
+  background-color: ${(props) => props.theme.backgroundColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,19 +34,18 @@ const BannerContainer = styled('div')`
 `;
 
 class SponsorsBanner extends React.Component {
-  
   render() {
     return (
       <ThemeProvider theme={theme}>
-            <BannerContainer>
-              <a href="https://github.com" rel="noopener noreferrer"><img src={githubLogo} alt='githubLogo'/></a>
-              <a href="https://www.nsf.gov" rel="noopener noreferrer"><img src={nsfLogo} alt='nsfLogo'/></a>
-              <a href="https://www.redhat.com/en" rel="noopener noreferrer"><img src={redhatLogo} alt='redHatLogo'/></a>
-              <a href="https://socrata.com/" rel="noopener noreferrer"><img src={socrataLogo} alt='socrataLogo'/></a>
-              <a href="https://www.technexus.com/" rel="noopener noreferrer"><img src={techNexusLogo} alt='techNexusLogo'/></a>
-              <a href="http://unal.edu.co/" rel="noopener noreferrer"><img src={UNALLogo} alt='UNALLogo'/></a>
-              <a href="https://www.purdue.edu/" rel="noopener noreferrer"><img src={PurdueLogo} alt='PurdueLogo'/></a>
-            </BannerContainer>
+        <BannerContainer>
+          <a href="https://github.com" rel="noopener noreferrer"><img src={githubLogo} alt='githubLogo'/></a>
+          <a href="https://www.nsf.gov" rel="noopener noreferrer"><img src={nsfLogo} alt='nsfLogo'/></a>
+          <a href="https://www.redhat.com/en" rel="noopener noreferrer"><img src={redhatLogo} alt='redHatLogo'/></a>
+          <a href="https://socrata.com/" rel="noopener noreferrer"><img src={socrataLogo} alt='socrataLogo'/></a>
+          <a href="https://www.technexus.com/" rel="noopener noreferrer"><img src={techNexusLogo} alt='techNexusLogo'/></a>
+          <a href="http://unal.edu.co/" rel="noopener noreferrer"><img src={UNALLogo} alt='UNALLogo'/></a>
+          <a href="https://www.purdue.edu/" rel="noopener noreferrer"><img src={PurdueLogo} alt='PurdueLogo'/></a>
+        </BannerContainer>
       </ThemeProvider>
     );
   }

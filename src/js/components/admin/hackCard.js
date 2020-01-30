@@ -3,12 +3,12 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
+// Styled components
 import styled from 'styled-components';
-//Custom Constants
+// Custom Constants
 import * as Constants from '../../../constants.js';
 
-//Section container
+// Section container
 const CardContainer = styled('button')`
   height: 150px;
   width: 30%;
@@ -62,19 +62,19 @@ class HackCard extends React.Component {
   };
 
   render() {
-    if(this.props.newHack === true){
+    if (this.props.newHack === true) {
       return (
         <CardContainer className='newHackCard' onClick={this.props.onClick}>
           <span>+</span>
           <span>Add Hack</span>
         </CardContainer>
-      )
+      );
     }
 
     return (
       <CardContainer onClick={this.onHackCardClick}>
         <h3>{this.props.hack.name}</h3>
-        <span>{"Phases: " + this.props.hack.phases.length}</span>
+        <span>{'Phases: ' + this.props.hack.phases.length}</span>
         <Separator/>
       </CardContainer>
     );

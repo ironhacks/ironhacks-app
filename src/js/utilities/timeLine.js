@@ -3,9 +3,9 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-//Styled components
-import styled, { css } from 'styled-components';
-//Custom Constants
+// Styled components
+import styled, {css} from 'styled-components';
+// Custom Constants
 import * as DateFormater from './dateFormater.js';
 
 const TimeLineContainer = styled('div')`
@@ -62,21 +62,21 @@ const PhaseItem = styled('button')`
 class TimeLine extends React.Component {
   constructor(props) {
     super(props);
-    const { phases } = props;
+    const {phases} = props;
     this.state = {
       phases,
-    }
+    };
   }
 
   componentWillMount() {
     const phase = DateFormater.getCurrentPhase(this.state.phases) || 0;
     const currentPhase = phase.index || 0;
-    this.setState({currentPhase})
+    this.setState({currentPhase});
   }
 
   onPhaseClick = (phase) => {
-    this.setState({currentPhase: parseInt(phase, 10)})
-    this.props.onClick(phase)
+    this.setState({currentPhase: parseInt(phase, 10)});
+    this.props.onClick(phase);
   }
 
   render() {
@@ -85,15 +85,15 @@ class TimeLine extends React.Component {
         {this.state.phases.map((phase, i) => {
           return (
             <PhaseItem
-             key={phase.index}
-             selected={i === this.state.currentPhase || i === this.props.currentPhase  - 1}
-             onClick={() => this.onPhaseClick(phase.index)}>
+              key={phase.index}
+              selected={i === this.state.currentPhase || i === this.props.currentPhase - 1}
+              onClick={() => this.onPhaseClick(phase.index)}>
               <p>PHASE {i+1}</p>
               {this.props.currentPhase - 1 === i && <p className='current'>CURRENT PHASE</p>}
             </PhaseItem>
-          )
+          );
         })}
-          
+
       </TimeLineContainer>
     );
   }
