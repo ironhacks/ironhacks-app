@@ -1,18 +1,20 @@
 {
-  "name": "ironhacks-platform",
-  "version": "2.0.2",
+  "name": "ironhacks-app",
+  "version": "2.0.1",
+  "license": "GPL-3.0",
   "keywords": [
     "react",
     "hackathon",
     "code-editor"
   ],
+  "main": "./src/index.js",
   "author": "Matt Harris <charrismatic@protonmail.com> (https://charrismatic.github.io/)",
   "private": true,
   "homepage": "/",
   "dependencies": {
     "@babel/runtime": "^7.8.4",
     "@emotion/core": "^10.0.27",
-    "@emotion/styled": "^10.0.27",
+    "@emotion/styled": "^10.0.10",
     "@testing-library/dom": ">=5",
     "ajv": "^6.11.0",
     "ajv-keywords": "^3.4.1",
@@ -36,11 +38,7 @@
     "showdown": "^1.9.1",
     "styled-components": "^3.4.10",
     "sweetalert2": "^7.33.1",
-    "velocity-react": "^1.4.3",
-    "webpack": "^5.0.0-beta.13"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "velocity-react": "^1.4.3"
   },
   "browserslist": {
     "production": [
@@ -53,18 +51,18 @@
       "last 1 safari version"
     ]
   },
-  "dependenciesComments": {
-    "bootstrap": "Css library",
-    "draft-js": "Dependency from react-mde",
-    "moment": "Parse, validate, manipulate, and display dates and times in JavaScript.",
-    "moment-timezone": "Allows timezone use for moment",
-    "react-day-picker": "Calendar Library",
-    "react-moment": "React component for the moment date library.",
-    "react-mde": "Markdown editor",
-    "react-router-dom": "Router, it allow us to navigate through pages",
-    "showdown": "Markdown to HMTL parser, also react-mde's dependency"
-  },
   "scripts": {
+    "bump": "npm version patch",
+    "info": ".bin/_info",
+    "jest": "node_modules/.bin/jest",
+    "jsonlint": "jsonlint -s -p",
+    "lint": ".bin/_lint",
+    "lint:proj": ".run/lint-project",
+    "lint:watch": ".run/lint-watch",
+    "pretty": ".bin/_pretty",
+    "pretty:check": ".run/pretty-check",
+    "pretty:fix": ".run/pretty-fix",
+    "pretty:list": ".run/pretty-list",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -78,17 +76,20 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "7.2.1",
-    "@typescript-eslint/eslint-plugin": "2.18.0",
-    "@typescript-eslint/parser": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^2",
+    "@typescript-eslint/parser": "^2",
     "babel-eslint": "^10.0.3",
-    "eslint": "6.0.0",
+    "debug": "^4.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0",
     "eslint-config-react-app": "^5.1.0",
-    "eslint-loader": "3.0.3",
     "eslint-plugin-flowtype": "^3.13.0",
     "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "jshint": "^2.11.0"
+    "jshint": "^2.11.0",
+    "prettier": "1.19.1",
+    "typescript": "^3.7.5"
   }
 }
