@@ -1,7 +1,0 @@
-#!/bin/bash
-
-REACT_DEBUGGER="node /data/library/React_Library/react-native-debugger/npm-package/bin/rndebugger-open --expo --open"
-
-echo "REACT_DEBUGGER=\"node /data/library/React_Library/react-native-debugger/npm-package/bin/rndebugger-open --expo --open\""
-
-export REACT_DEBUGGER

@@ -3,10 +3,8 @@
 
 # -------------------------
 # ESLINT
-#  js-beautify --indent-size 2 --brace-style end-expand,preserve-inline --max-preserve-newlines 2 --space_after_named_function --break-chained-methods --good-stuff --replace "$@"# @### 
+#  js-beautify --indent-size 2 --brace-style end-expand,preserve-inline --max-preserve-newlines 2 --space_after_named_function --break-chained-methods --good-stuff --replace "$@"# @###
 # -------------------------
-
-
 
 BASE_PATH="$(npm prefix)"
 NODE_RUN_ENV=

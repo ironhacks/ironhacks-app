@@ -9,6 +9,10 @@ PRETTY_CONFIG_PATH="${BASE_PATH}/.prettierrc.toml"
 PRETTY_IGNORE_PATH="${BASE_PATH}/.prettierignore"
 PRETTY_ARGS="$*"
 
+if [ "$PRETTY_ARGS" == "" ]; then
+  PRETTY_ARGS="${LINT_DIRS//,//**/*.js }/**/*.js"
+fi
+
 if [ "$BASE_PATH" != "$INIT_CWD" ]; then
   cd ${INIT_CWD}
 fi

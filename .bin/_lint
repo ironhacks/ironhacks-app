@@ -4,9 +4,9 @@
 # ESLINT
 # -------------------------
 BASE_PATH="$(npm prefix)"
-[[ -f "${BASE_PATH}/./.npmrc" ]] && . ${BASE_PATH}/./.npmrc
 NODE_RUN_ENV=
 NODE_RUN_FLAGS=
+[[ -f "${BASE_PATH}/./.npmrc" ]] && . ${BASE_PATH}/./.npmrc
 LINT_ARGS="$@"
 # ${NODE_RUN_ENV} node ${NODE_RUN_FLAGS}
 
@@ -24,7 +24,7 @@ run_lint () {
 }
 
 get_proj_dirs () {
-  DEFAULT_DIRS="Config,Life,Model,Screens,Theme,Utilities,Components"
+  DEFAULT_DIRS="src,public"
   LINT_DIRS="${1:-$DEFAULT_DIRS}"
   echo ${LINT_DIRS//,/ }
 }
@@ -34,7 +34,7 @@ if [ "$BASE_PATH" == "$INIT_CWD" ]; then
   run_lint "${LINT_ARGS}"
 else
   cd ${INIT_CWD}
-  
+
   run_lint "${LINT_ARGS}"
 fi
 
