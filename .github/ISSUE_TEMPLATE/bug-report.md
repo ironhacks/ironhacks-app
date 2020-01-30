@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Describe the issue you are experiencing
-title: ''
+title: "[BUG] "
 labels: bug
 assignees: ''
 
@@ -14,9 +14,9 @@ Describe the problem in one sentence
 Include the following information if known: the url/interface/filename the bug occurred, any information about the state of the application when it occurred, any relevant error messages or logs, any additional details that would help the developers recreate the issue on their machine.
 
 **Steps To Reproduce**
-1. Go to '...'
-2. Click on '....'
-3. Then '....'
+1. Starting here: 
+2. Do this action:
+3. Then  '....'
 
 **Expected behavior**
 What is was supposed to happen instead.
