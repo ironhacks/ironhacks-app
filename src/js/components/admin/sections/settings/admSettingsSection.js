@@ -48,12 +48,9 @@ const NewWhiteListItem = styled('input')`
 class AdmSettingsSection extends React.Component {
   constructor(props){
     super(props);
-    let whiteList = [''];
-    if(this.props.hack.whiteList && this.props.hack.whiteList.length > 0){
-      whiteList = this.props.hack.whiteList;
-    }
-      this.state = {
-      whiteList: whiteList,
+    const { whiteList } = props.hack || [''] 
+    this.state = {
+      whiteList,
     }
   }
 

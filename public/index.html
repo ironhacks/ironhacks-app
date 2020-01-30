@@ -1,65 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <!--
-      manifest.json provides metadata used when your web app is added to the
-      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="theme-color" content="#000000">
+<!--
+  manifest.json provides metadata used when your web app is added to the
+  homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+-->
+<link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+<!--
+  Notice the use of %PUBLIC_URL% in the tags above.
+  It will be replaced with the URL of the `public` folder during the build.
+  Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Ironhacks Platform</title>
-    <!--Firebase-->
-    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-functions.js"></script>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyCkcfwdASmN50otDinZUiRBdkj8umKZt0Y",
-        authDomain: "ironhacks-platform-dev.firebaseapp.com",
-        databaseURL: "https://ironhacks-platform-dev.firebaseio.com",
-        projectId: "ironhacks-platform-dev",        
-        storageBucket: "ironhacks-platform-dev.appspot.com",
-      };
-      firebase.initializeApp(config);
-      //We leave the firebase reference on the window objecto to access to it globally.
-    </script>
-    <!-- Firebase ui -->
-    <script src="https://cdn.firebase.com/libs/firebaseui/3.3.0/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
-    <!-- needed for markdown editor-->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <!-- Material design icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+  work correctly both with client-side routing and a non-root public URL.
+  Learn how to configure a non-root public URL by running `npm run build`.
+-->
+<title>Ironhacks Platform</title>
+<link rel="stylesheet" type="text/css" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-functions.js"></script>
+<script src="https://cdn.firebase.com/libs/firebaseui/3.3.0/firebaseui.js"></script>
+</head>
+<body>
+<noscript>
+  You need to enable JavaScript to run this app.
+</noscript>
+<div id="root"></div>
+<script>
+// Init Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyA6EnVRUF1W1QD4qvx-6yjcQ2A4YNrihqY",
+  authDomain: "the-ironhacks-platform-dev.firebaseapp.com",
+  databaseURL: "https://the-ironhacks-platform-dev.firebaseio.com",
+  projectId: "the-ironhacks-platform-dev",
+  storageBucket: "the-ironhacks-platform-dev.appspot.com",
+  messagingSenderId: "314398832566",
+  appId: "1:314398832566:web:da5dfef4755d4745aab317"
+};
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+firebase.initializeApp(firebaseConfig);
+</script>
+</body>
 </html>

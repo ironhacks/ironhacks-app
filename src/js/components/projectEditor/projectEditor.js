@@ -177,7 +177,7 @@ class ProjectEditor extends React.Component {
       editorContent: '',
       editorMode: 'xml',
       loadingFiles: true,
-      selectedFile: 'index.html',
+      selectedFile: 'js/main.js',
       projectFiles: [],
       creatingFile: false,
       projectName: this.props.match.params.proyectName,
@@ -318,9 +318,11 @@ class ProjectEditor extends React.Component {
   }
 
   saveProject = () => {
+    console.log("on save");
     this.saveStat({event: 'save-and-run', metadata: {action: 'click'}})
     // Raw string is the default if no format is provided
     const newBlobs = this.updateProjectBlobs();
+    console.log(newBlobs, "blobs");
     const _this = this;
     Promise.all(
       newBlobs.map(item => this.uploadBlogToFirebase(item))
@@ -358,27 +360,42 @@ class ProjectEditor extends React.Component {
   startPushNavigation = () => {
     const _this = this;
     this.saveProject();
-     swal(Constants.surveyRedirecAlertContent)
-    .then((result) => {
-      if(!result.dismiss) {
-        swal(Constants.pushSurveyAlertContent(`${commitSurveys[_this.state.currentPhase]}?email=${_this.state.user.email}&user_id=${_this.state.user.uid}`))
-        .then((result) => {
-          if(!result.dismiss) {
-            swal(Constants.commitContentAlertContent)
-            .then((result) => {
-              const { value } = result;
-              if (value) {
-                this.pushToGitHub(value)
-                swal(Constants.loadingAlertContent)
-                .then((result) => {
-                  swal(Constants.onSuccessAlertContent)
-                })
-              };
-            });
-          }
-        });
-      };
-    }); 
+    console.log(this.state)
+    if(this.state.hackData.phases[this.state.currentPhase - 1].commitSurveyLink){
+      swal(Constants.surveyRedirecAlertContent)
+      .then((result) => {
+        if(!result.dismiss) {
+          swal(Constants.pushSurveyAlertContent(`${this.state.hackData.phases[this.state.currentPhase - 1].commitSurveyLink}?email=${_this.state.user.email}&user_id=${_this.state.user.uid}`))
+          .then((result) => {
+            if(!result.dismiss) {
+              swal(Constants.commitContentAlertContent)
+              .then((result) => {
+                const { value } = result;
+                if (value) {
+                  this.pushToGitHub(value)
+                  swal(Constants.loadingAlertContent)
+                  .then((result) => {
+                    swal(Constants.onSuccessAlertContent)
+                  })
+                };
+              });
+            }
+          });
+        };
+      }); 
+    } else {
+      swal(Constants.commitContentAlertContent)
+      .then((result) => {
+        const { value } = result;
+        if (value) {
+          this.pushToGitHub(value)
+          swal(Constants.loadingAlertContent)
+          .then((result) => {
+            swal(Constants.onSuccessAlertContent)
+          })
+        };
+      });
+    }
   }
 
   pushToGitHub = (commitMessage) => {
@@ -403,7 +420,9 @@ class ProjectEditor extends React.Component {
 
   uploadBlogToFirebase = (blob) => {
     const indexRef = storageRef.child(blob.path);
-    return indexRef.put(blob.blob).then(function(snapshot) {
+    return indexRef.put(blob.blob)
+    .then(function(snapshot) {
+      console.log("blob uploaded")
     }).catch(function(error) {
         console.error("Error updating documents: ", error);
     });

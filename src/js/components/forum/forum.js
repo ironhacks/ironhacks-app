@@ -114,6 +114,7 @@ class Forum extends React.Component {
       threads: [],
       selectedHack: 0,
     }
+    console.log(this.state)
     this.firestore = window.firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     this.firestore.settings(settings);
@@ -270,7 +271,7 @@ class Forum extends React.Component {
     return (
       <ThemeProvider theme={theme}>
         <SectionContainer>
-          <MainHeader>Purdue Unal Spring 2019</MainHeader>
+          <MainHeader>Ironhacks Platform Demo</MainHeader>
           <h2>General discussion</h2>
           <p>Welcome to the Ironhacks forum! Feel free to talk about anything related with the task. You can also share code here.</p>
           <Control>

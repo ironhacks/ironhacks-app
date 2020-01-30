@@ -10,7 +10,7 @@ import styled, {ThemeProvider} from 'styled-components';
 //Custom components
 import ProjectCard from './projectCard.js';
 import Separator from '../../utilities/separator.js';
-import TimeLine from '../../utilities/timeLine.js';
+//import TimeLine from '../../utilities/timeLine.js';
 import * as TemplateFiles from './newProjectFileTemplates/templates.js';
 import Examples from './d3Examples.js';
 //Custom Constants
