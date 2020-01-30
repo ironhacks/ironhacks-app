@@ -1,6 +1,12 @@
 {
   "name": "ironhacks-platform",
-  "version": "0.1.0",
+  "version": "2.0.1",
+   "keywords": [
+    "react",
+    "hackathon",
+    "code-editor"
+  ],
+  "author": "Matt Harris <charrismatic@protonmail.com> (https://charrismatic.github.io/)",
   "private": true,
   "homepage": "/",
   "dependencies": {
@@ -63,6 +69,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ironhacks/ironhacks-app"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
