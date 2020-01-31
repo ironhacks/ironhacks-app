@@ -224,14 +224,16 @@ class ProjectEditor extends React.Component {
     let remainingFiles = Object.keys(this.state.projectFiles).length;
     const projectFiles = {...this.state.projectFiles};
     const _this = this;
+    const processFile = (file, res) => {
+      projectFiles[file].blob = res;
+      remainingFiles--;
+      if (remainingFiles === 0) _this.readProjectFilesBlobs(projectFiles);
+    }
+
     for (const file in this.state.projectFiles) {
       const xhr = new XMLHttpRequest();
       xhr.responseType = 'blob';
-      xhr.onload = function() {
-        projectFiles[file].blob = xhr.response;
-        remainingFiles--;
-        if (remainingFiles === 0) _this.readProjectFilesBlobs(projectFiles);
-      };
+      xhr.onload = processFile(file, xhr.response);
       xhr.open('GET', this.state.projectFiles[file].url);
       xhr.send();
     };
