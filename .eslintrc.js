@@ -103,10 +103,20 @@ module.exports = {
     'react',
   ],
   'rules': {
+    "max-len": [
+      "error",
+      {
+        "code": 160,
+        "tabWidth": 2,
+        "ignoreUrls": true,
+      },
+    ],
      "require-jsdoc": ["error", {
         "require": {
             "FunctionDeclaration": true,
             "MethodDefinition": false,
+            "ignoreComments": true,
+            "ignoreTrailingComments": false,
             "ClassDeclaration": true,
             "ArrowFunctionExpression": false,
             "FunctionExpression": false

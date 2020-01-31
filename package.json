@@ -18,6 +18,7 @@
     "@testing-library/dom": ">=5",
     "ajv": "^6.11.0",
     "ajv-keywords": "^3.4.1",
+    "apisauce": "^1.1.1",
     "codemirror": "^5.51.0",
     "deep-equal": "^1.1.1",
     "draft-js": "^0.10.5",
@@ -64,6 +65,8 @@
     "pretty:fix": ".run/pretty-fix",
     "pretty:list": ".run/pretty-list",
     "start": "react-scripts start",
+    "react:debugger": ".run/react-debugger",
+    "react:reactotron": ".run/react-reactotron",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
@@ -90,6 +93,8 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "jshint": "^2.11.0",
     "prettier": "1.19.1",
+    "reactotron-apisauce": "^3.0.0",
+    "reactotron-react-js": "^3.3.7",
     "typescript": "^3.7.5"
   }
 }
