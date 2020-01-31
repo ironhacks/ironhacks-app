@@ -32,12 +32,12 @@ const ReactionCounter = styled('div')`
   &#likes {
     border-color: ${(props) => props.highLighted ? '#88a923' : '#808080'};
   }
-  
+
   &#dislikes {
-    border-color: ${(props) => props.highLighted ? '#ff916d' : '#808080'}; 
+    border-color: ${(props) => props.highLighted ? '#ff916d' : '#808080'};
   }
 
-  span {  
+  span {
     padding: 0 5px;
     width: 24px
 
@@ -53,13 +53,13 @@ const ReactionCounter = styled('div')`
 
     &:nth-child(2) {
       text-align: center;
-      
+
       &#likes {
         color: ${(props) => props.highLighted ? '#88a923' : '#808080'};
       }
-      
+
       &#dislikes {
-        color: ${(props) => props.highLighted ? '#ff916d' : '#808080'}; 
+        color: ${(props) => props.highLighted ? '#ff916d' : '#808080'};
       }
     }
   }
@@ -74,7 +74,7 @@ const ReactionCounter = styled('div')`
     position: absolute;
     width: 150px;
     bottom: 120%;
-    left: 50%; 
+    left: 50%;
     margin-left: -75px;
     z-index: 1;
   }
@@ -84,7 +84,7 @@ const ReactionCounter = styled('div')`
 
     .tooltiptext {
       visibility: visible;
-    } 
+    }
   }
 
   &:last-child {
@@ -105,7 +105,7 @@ class ReactionPicker extends React.Component {
     this.firestore.settings(settings);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if ( this.props.commentData ) {
       if (this.props.commentData.reactions) {
         const {likes, dislikes} = this.props.commentData.reactions;

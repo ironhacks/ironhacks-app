@@ -19,7 +19,7 @@ const PreviewContainer = styled('div')`
   width: 100%;
   height: 100%;
   padding: 10px;
-  
+
   .iframe-header {
     display: flex;
     align-items: center;
@@ -36,11 +36,11 @@ const PreviewContainer = styled('div')`
       height: 20px;
       width: 20px;
       border: none;
-    
+
       img {
         display: block;
         height: 100%;
-        width: 100%;    
+        width: 100%;
       }
     }
 
@@ -70,17 +70,21 @@ const PreviewContainer = styled('div')`
   }
 `;
 
+
+/**
+ *
+ */
 class ProjectPreview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       projectName: this.props.projectName || false,
-      projectURL: this.props.projectURL || false,
+      projectURL: this.props.projectURL || false,
       user: this.props.user,
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.state.projectURL) {
       this.getProjectPreviewPath();
     }

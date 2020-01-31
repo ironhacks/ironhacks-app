@@ -42,7 +42,7 @@ class ReactionsView extends React.Component {
     this.firestore.settings(settings);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if ( this.state.commentData ) {
       const creationDate = DateFormater.getFirebaseDate(this.state.commentData.createdAt);
       const date = DateFormater.getReactionViewformat(creationDate);

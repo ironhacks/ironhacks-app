@@ -50,7 +50,7 @@ const PreviewContainer = styled('div')`
       font-size: 15px;
     }
   }
-  
+
   .stats {
     display: flex;
   }
@@ -100,7 +100,7 @@ class ThreadPreview extends React.Component {
     this.firestore.settings(settings);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getComment();
   }
 
