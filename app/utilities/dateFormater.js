@@ -2,10 +2,22 @@ const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 export const getCurrentPhase = (phasesDates) => {
   const today = new Date();
-  for (const key in phasesDates) {
-    const startDate = new window.firebase.firestore.Timestamp(phasesDates[key].codingStartDate.seconds, phasesDates[key].codingStartDate.nanoseconds).toDate();
-    const endDate = new window.firebase.firestore.Timestamp(phasesDates[key].codingStartEnd.seconds, phasesDates[key].codingStartEnd.nanoseconds).toDate();
-    if (phasesDates[key].index === 0 && today < startDate) return -1;
+
+  for (const key of phasesDates) {
+    const startDate = new window.firebase.firestore.Timestamp(
+        phasesDates[key].codingStartDate.seconds,
+        phasesDates[key].codingStartDate.nanoseconds,
+    ).toDate();
+
+    const endDate = new window.firebase.firestore.Timestamp(
+        phasesDates[key].codingStartEnd.seconds,
+        phasesDates[key].codingStartEnd.nanoseconds,
+    ).toDate();
+
+    if (phasesDates[key].index === 0 && today < startDate ) {
+      return -1;
+    }
+
     if (today > startDate && today < endDate) {
       return phasesDates[key];
     }
@@ -33,4 +45,3 @@ function dateDiffInDays(a, b) {
 
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
-

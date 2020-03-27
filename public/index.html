@@ -23,15 +23,28 @@
 </noscript>
 <div id="root"></div>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyA6EnVRUF1W1QD4qvx-6yjcQ2A4YNrihqY",
-  authDomain: "the-ironhacks-platform-dev.firebaseapp.com",
-  databaseURL: "https://the-ironhacks-platform-dev.firebaseio.com",
-  projectId: "the-ironhacks-platform-dev",
-  storageBucket: "the-ironhacks-platform-dev.appspot.com",
-  messagingSenderId: "314398832566",
-  appId: "1:314398832566:web:da5dfef4755d4745aab317"
-};
+// const firebaseConfig = {
+//   apiKey: "AIzaSyA6EnVRUF1W1QD4qvx-6yjcQ2A4YNrihqY",
+//   authDomain: "the-ironhacks-platform-dev.firebaseapp.com",
+//   databaseURL: "https://the-ironhacks-platform-dev.firebaseio.com",
+//   projectId: "the-ironhacks-platform-dev",
+//   storageBucket: "the-ironhacks-platform-dev.appspot.com",
+//   messagingSenderId: "314398832566",
+//   appId: "1:314398832566:web:da5dfef4755d4745aab317"
+// };
+
+firebase.initializeApp({
+  "projectId": "the-ironhacks-platform-dev",
+  "appId": "1:314398832566:web:da5dfef4755d4745aab317",
+  "databaseURL": "https://the-ironhacks-platform-dev.firebaseio.com",
+  "storageBucket": "the-ironhacks-platform-dev.appspot.com",
+  "locationId": "us-central",
+  "apiKey": "AIzaSyA6EnVRUF1W1QD4qvx-6yjcQ2A4YNrihqY",
+  "authDomain": "the-ironhacks-platform-dev.firebaseapp.com",
+  "messagingSenderId": "314398832566"
+});
+
+
 
 firebase.initializeApp(firebaseConfig);
 </script>

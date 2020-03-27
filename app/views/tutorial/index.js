@@ -1,21 +1,11 @@
-// IronHacks Platform
-// tutorial.js - Tutorial editor and visualizer
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
 import {withCookies} from 'react-cookie';
-// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-// Showdown (markdown converter)
 import Showdown from 'showdown';
-// Custom Constants
-import * as Constants from '../../../constants.js';
-// Custom components
+import * as Constants from '../../constants.js';
 // import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 
 const theme = Constants.AppSectionTheme;
-
-// Section container
 const SectionContainer = styled('div')`
   width: 100%;
   height: ${(props) => props.theme.containerHeight};
@@ -38,20 +28,27 @@ const SectionContainer = styled('div')`
 const ConverterConfig = {
   tables: true,
   simplifiedAutoLink: true,
-  prefixHeaderId: true, // Add a prefix to the generated header ids. Passing a string will prefix that string to the header id. Setting to true will add a generic 'section' prefix.
-  strikethrough: true, // Enable support for strikethrough syntax. ~~strikethrough~~ as <del>strikethrough</del>
-  headerLevelStart: 3, // #foo parse to <h3>foo</h3>
+  prefixHeaderId: true,
+  strikethrough: true,
+  headerLevelStart: 3,
   tasklists: true,
 };
 
+/**
+ *
+ *
+ */
 class Tutorial extends React.Component {
   constructor(props) {
     super(props);
     const {cookies} = props;
+
     this.state = {
       hackName: '',
-      currentHack: cookies.get('currentHack') || null,
-      forum: cookies.get('currentForum') || null,
+      // currentHack: cookies.get('currentHack') || null,
+      currentHack: 'mmHJrWzmx4rCyQ2YpJWL',
+      // forum: cookies.get('currentForum') || null,
+      forum: 'qJmgIAFB6FtazeS66vJu',
     };
   }
 
@@ -59,10 +56,8 @@ class Tutorial extends React.Component {
     this.getTutorialDocument();
   }
 
-  getTutorialDocument = () => {
+  getTutorialDocument() {
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     const _this = this;
     firestore.collection('hacks')
         .doc(this.state.currentHack)

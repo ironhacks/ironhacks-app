@@ -1,20 +1,19 @@
 import debug from 'debug';
 
-const BASE = 'ironhacks';
 const COLOURS = {
   trace: 'lightblue',
   info: 'cyan',
   warn: 'pink',
   error: 'red',
-}; // choose better colours :)
+};
 
+
+// Log Utility Class
 class Log {
+  // Set the prefix which will cause debug to enable the message
   generateMessage(level, message, source) {
-    // Set the prefix which will cause debug to enable the message
-    const namespace = `${BASE}:${level}`;
-    const createDebug = debug(namespace);
-
-    // Set the colour of the message based on the level
+    const BASE = 'ironhacks';
+    const createDebug = debug(`${BASE}:${level}`);
     createDebug.color = COLOURS[level];
 
     if (source) {

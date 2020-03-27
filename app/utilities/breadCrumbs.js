@@ -58,6 +58,7 @@ const sectionsEndPoints = {
 };
 
 class BreadCrumbs extends React.Component {
+
   returnToDetails = (event) => {
     event.preventDefault();
     this.props.returnToDetails();
