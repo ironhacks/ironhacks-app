@@ -27,3 +27,5 @@ yarn-error.log*
 \.npmrc
 
 \.env
+
+\.devtools-lock

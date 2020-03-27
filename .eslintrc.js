@@ -103,24 +103,27 @@ module.exports = {
     'react',
   ],
   'rules': {
+    "operator-linebreak": ["error", "before"],
     "max-len": [
       "error",
       {
         "code": 160,
         "tabWidth": 2,
         "ignoreUrls": true,
+        "ignoreComments": true,
+        "ignoreTrailingComments": false,
       },
     ],
-     "require-jsdoc": ["error", {
+     "require-jsdoc": [
+       "error", {
         "require": {
-            "FunctionDeclaration": true,
-            "MethodDefinition": false,
-            "ignoreComments": true,
-            "ignoreTrailingComments": false,
-            "ClassDeclaration": true,
-            "ArrowFunctionExpression": false,
-            "FunctionExpression": false
+          "FunctionDeclaration": false,
+          "FunctionExpression": false,
+          "MethodDefinition": false,
+          "ClassDeclaration": false,
+          "ArrowFunctionExpression": false,
         }
-    }]
+      }
+    ]
   }
 };

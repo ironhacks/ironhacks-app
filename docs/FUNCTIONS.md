@@ -61,8 +61,6 @@ and isAdmin
   isAdmin = () => {
     //db Reference
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     const _this = this;
     //Updating the current hack:
     firestore.collection('admins').doc(this.state.user.uid)
@@ -207,13 +205,6 @@ We pull the data of all hacks using ```getHacks```
 ```javascript
 getHacks = () => {
   const firestore = window.firebase.firestore();
-
-  const settings = {
-    timestampsInSnapshots: true
-  };
-
-  var hacks = [];
-
   firestore.collection("hacks").get().then(function(querySnapshot) {
     querySnapshot.forEach(function(doc) {
       // doc.data() is never undefined for query doc snapshots
@@ -311,8 +302,6 @@ createHack = () => {
   this.setState({hack: hackInstance});
   //db Reference
   const firestore = window.firebase.firestore();
-  const settings = {timestampsInSnapshots: true};
-  firestore.settings(settings);
   const _this = this;
   //TODO: add forum id
   firestore.collection('hacks').add(hackInstance)
@@ -398,8 +387,6 @@ onSaveSettings = (whiteList) => {
 updateHackSettings = (whiteList) => {
   //db Reference
   const firestore = window.firebase.firestore();
-  const settings = {timestampsInSnapshots: true};
-  firestore.settings(settings);
   const _this = this;
   //Updating the whiteList collection:
   var batch = firestore.batch();
@@ -472,8 +459,6 @@ As you see, this is a pure presentational component, it just take the content of
 updateTaskDocument = () => {
   //db Reference
   const firestore = window.firebase.firestore();
-  const settings = {timestampsInSnapshots: true};
-  firestore.settings(settings);
   //Updating the current hack:
   const hackRef = firestore.collection('adminHackData').doc(this.state.hackId);
   const hackTask = this.state.hack.task;
@@ -501,8 +486,6 @@ onTutorialMarkdownUpdate = (markdown) => {
 updateTutorialDocument = () => {
   //db Reference
   const firestore = window.firebase.firestore();
-  const settings = {timestampsInSnapshots: true};
-  firestore.settings(settings);
   //Updating the current hack:
   const hackRef = firestore.collection('hacks').doc(this.state.hackId);
   var hackTutorial = this.state.hack.tutorial;
@@ -655,8 +638,6 @@ putStorageFile = (file, projectName) => {
       const fullPath = file.path + file.name;
       fileJson[fullPath] = {url: fileURL}
       const firestore = window.firebase.firestore();
-      const settings = {timestampsInSnapshots: true};
-      firestore.settings(settings);
       firestore.collection("users")
       .doc(_this.state.user.uid)
       .collection('projects')
@@ -1146,8 +1127,6 @@ Then we pull the project data from firebase, first by getting the URLs from the 
 ```javascript
 getProjectFilesUrls = () => {
   const firestore = window.firebase.firestore();
-  const settings = {timestampsInSnapshots: true};
-  firestore.settings(settings);
   const _this = this;
   const userId = this.state.hackerId || this.state.user.uid;
   //Updating the current hack:

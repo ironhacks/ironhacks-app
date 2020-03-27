@@ -7,7 +7,7 @@
     "hackathon",
     "code-editor"
   ],
-  "main": "./src/index.js",
+  "main": "./app/index.js",
   "author": "Matt Harris <charrismatic@protonmail.com> (https://charrismatic.github.io/)",
   "private": true,
   "homepage": "/",
