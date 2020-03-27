@@ -126,8 +126,6 @@ class NewThread extends React.Component {
       selectedForum: 0,
     };
     this.firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    this.firestore.settings(settings);
   };
 
   componentDidMount() {

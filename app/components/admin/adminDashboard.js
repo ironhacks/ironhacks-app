@@ -109,8 +109,6 @@ class AdminDashboard extends React.Component {
   getHack = () => {
     // db Reference
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     const _this = this;
     // Updating the current hack:
     firestore.collection('hacks')
@@ -144,8 +142,6 @@ class AdminDashboard extends React.Component {
     this.setState({loading: true});
     // db Reference
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     const _this = this;
     // Updating the whiteList collection:
     const batch = firestore.batch();
@@ -182,8 +178,6 @@ class AdminDashboard extends React.Component {
     this.setState({loading: true});
     // db Reference
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     // Updating the current hack:
     const hackRef = firestore.collection('hacks').doc(this.state.hackId);
     const hackTutorial = this.state.hack.tutorial;
@@ -209,8 +203,6 @@ class AdminDashboard extends React.Component {
     this.setState({loading: true});
     // db Reference
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     // Updating the current hack:
     const hackRef = firestore.collection('adminHackData').doc(this.state.hackId);
     const hackTask = this.state.hack.task;
@@ -231,8 +223,6 @@ class AdminDashboard extends React.Component {
     this.setState({loading: true});
     // db Reference
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     // Updating the current hack:
     const hackRef = firestore.collection('hacks').doc(this.state.hackId);
     hackRef.update({

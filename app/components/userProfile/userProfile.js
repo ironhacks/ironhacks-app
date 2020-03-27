@@ -111,8 +111,6 @@ class UserProfile extends React.Component {
   // Query all the hacks objects from the db.
   getProjects = () => {
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     const _this = this;
     const projects = [];
     firestore.collection('users')
@@ -202,8 +200,6 @@ class UserProfile extends React.Component {
             const fullPath = file.path + file.name;
             fileJson[fullPath] = {url: fileURL};
             const firestore = window.firebase.firestore();
-            const settings = {timestampsInSnapshots: true};
-            firestore.settings(settings);
             firestore.collection('users')
                 .doc(_this.state.user.uid)
                 .collection('projects')

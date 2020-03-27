@@ -55,8 +55,6 @@ class Admin extends React.Component {
   // Query all the hacks objects from the db.
   getHacks = () => {
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     const _this = this;
     const hacks = [];
     firestore.collection('hacks').get().then(function(querySnapshot) {

@@ -3,17 +3,13 @@
 // Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-// Router
 import {Redirect} from 'react-router-dom';
-// Showdown (markdown converter)
-import Showdown from 'showdown';
-// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-// Custom Components
+import Showdown from 'showdown';
+
 import ReactionsView from '../reactionsView.js';
 import ReactionPicker from '../reactionPicker.js';
-import TrashIcon from '..//img/trash.svg';
-// Custom Constants
+import TrashIcon from '../../img/trash.svg';
 import * as Constants from '../../../../constants.js';
 
 const theme = Constants.CommentViewTheme;
@@ -131,8 +127,6 @@ class CommentView extends React.Component {
 
 
     this.firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    this.firestore.settings(settings);
   }
 
   decodeBody = (markdown) => {

@@ -1,16 +1,10 @@
-// IronHacks Platform
-// proyectEditor.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 import React from 'react';
 import {withCookies} from 'react-cookie';
 import swal from 'sweetalert2';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import {JSHINT} from 'jshint';
-// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-// Custom Constants
 import * as Constants from '../../../constants.js';
-// codemirror css
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/mode/xml/xml';
@@ -29,9 +23,6 @@ import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/matchtags';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
-
-
-// Custom components
 import ProjectPreview from './projectPreview.js';
 import FilesContainer from './filesContainer.js';
 import Loader from '../../utilities/loader.js';
@@ -44,101 +35,101 @@ const theme = Constants.AppSectionTheme;
 
 // Section container
 const SectionContainer = styled('div')`
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: ${(props) => props.theme.containerHeight};
-  background-color: #1C2022;
-  color: rgb(255, 255, 255, 0.4);
+position: relative;
+display: flex;
+flex-direction: row;
+width: 100%;
+height: ${(props) => props.theme.containerHeight};
+background-color: #1C2022;
+color: rgb(255, 255, 255, 0.4);
 `;
 
 const PreviewContainer = styled('div')`
-  display: ${(props) => props.hidden ? 'none' : 'block'}
-  width: 40%;
-  height: 100%;
+display: ${(props) => props.hidden ? 'none' : 'block'}
+width: 40%;
+height: 100%;
 `;
 
 const ProjectContent = styled('div')`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 20%;
-  height: 100%;
-  background-color: ${Constants.projectEditorBgColor};
-  padding-top: 20px;
+position: relative;
+display: flex;
+flex-direction: column;
+width: 20%;
+height: 100%;
+background-color: ${Constants.projectEditorBgColor};
+padding-top: 20px;
 
-  h2, h3 {
-    margin-left: 20px;
-  }
+h2, h3 {
+  margin-left: 20px;
+}
 
-  .control {
-    width: 100%;
-    bottom: 20px;
-    padding: 0 20px 0 20px;
+.control {
+  width: 100%;
+  bottom: 20px;
+  padding: 0 20px 0 20px;
 
-    button {
-      margin-bottom: 10px;
-    }
-  }
-
-  .hack-status {
+  button {
     margin-bottom: 10px;
-    padding: 20px;
-
-    h3, p {
-      margin: 0;
-    }
   }
+}
+
+.hack-status {
+  margin-bottom: 10px;
+  padding: 20px;
+
+  h3, p {
+    margin: 0;
+  }
+}
 `;
 
 const EditorContainer = styled('div')`
-  width: ${(props) => props.large ? '80%' : '40%'};
-  height: 100%;
+width: ${(props) => props.large ? '80%' : '40%'};
+height: 100%;
 
-  .CodeMirror {
-    width: 100%;
-    height: 100%;      
-  }
+.CodeMirror {
+  width: 100%;
+  height: 100%;
+}
 `;
 
 const Editor = styled(CodeMirror)`
-  width: 100%;
-  height: 100%;
+width: 100%;
+height: 100%;
 
-  .CodeMirror-matchingtag {
-    background-color: transparent;
-    text-decoration: underline;
-  }
+.CodeMirror-matchingtag {
+  background-color: transparent;
+  text-decoration: underline;
+}
 `;
 
 const ShowPreview = styled('button')`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  right: 15px;
-  top: 15px;
-  height: 30px;
-  width: 30px;
-  border: none;
-  cursor: pointer;
-  padding-left: 8px;
-  background-color: lightslategrey;
-  border-radius: 15px;
-  z-index: 2;
+position: absolute;
+display: flex;
+justify-content: center;
+align-items: center;
+right: 15px;
+top: 15px;
+height: 30px;
+width: 30px;
+border: none;
+cursor: pointer;
+padding-left: 8px;
+background-color: lightslategrey;
+border-radius: 15px;
+z-index: 2;
 
-  i {
-    border: solid black;
-    border-width: 0 3px 3px 0;
-    display: inline-block;
-    padding: 3px;
+i {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
 
-    &.left {
-      transform: rotate(135deg);
-      -webkit-transform: rotate(135deg);
-    }
+  &.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
   }
+}
 `;
 
 const editorModeMIMERel = {
@@ -149,17 +140,10 @@ const editorModeMIMERel = {
 
 const storageRef = window.firebase.storage().ref();
 
-const commitSurveys = {
-  1: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_exR2GmwUUS07XUN',
-  2: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_2hHiUsFZ0Urzbmt',
-  3: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8IgnHWN5eqeyYlL',
-  4: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_3PhdvoDMbShZbPn',
-  5: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_6R0ytiGxG2WTjs9',
-  6: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8rhPwaWZHGUz49v',
-  7: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_dbZU35dwHd0QKY5',
-};
 
-
+/**
+*
+*/
 class ProjectEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -182,6 +166,16 @@ class ProjectEditor extends React.Component {
       projectName: this.props.match.params.proyectName,
       timer: {seconds: 0, minutes: 0, hours: 0, days: 0},
     };
+
+    this.commitSurveys = {
+      1: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_exR2GmwUUS07XUN',
+      2: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_2hHiUsFZ0Urzbmt',
+      3: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8IgnHWN5eqeyYlL',
+      4: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_3PhdvoDMbShZbPn',
+      5: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_6R0ytiGxG2WTjs9',
+      6: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_8rhPwaWZHGUz49v',
+      7: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_dbZU35dwHd0QKY5',
+    };
     this.firestore = window.firebase.firestore();
   }
 
@@ -192,35 +186,33 @@ class ProjectEditor extends React.Component {
     window.addEventListener('message', this.recieveMessage);
   }
 
-  getProjectPreviewPath = () => {
+  getProjectPreviewPath() {
     // Create a reference with an initial file path and name
     const userId = this.state.hackerId || this.state.user.uid;
     const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`;
     this.setState({proyectPath: proyectPath});
   }
 
-  getProjectFilesUrls = () => {
+  getProjectFilesUrls() {
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     const _this = this;
     const userId = this.state.hackerId || this.state.user.uid;
     // Updating the current hack:
     firestore.collection('users')
-        .doc(userId)
-        .collection('projects')
-        .doc(this.state.projectName)
-        .get()
-        .then(function(doc) {
-          _this.setState({projectFiles: doc.data()});
-          _this.getProjectFiles();
-        })
-        .catch(function(error) {
-          console.error(error);
-        });
+    .doc(userId)
+    .collection('projects')
+    .doc(this.state.projectName)
+    .get()
+    .then(function(doc) {
+      _this.setState({projectFiles: doc.data()});
+      _this.getProjectFiles();
+    })
+    .catch(function(error) {
+      console.error(error);
+    });
   }
 
-  getProjectFiles = () => {
+  getProjectFiles() {
     let remainingFiles = Object.keys(this.state.projectFiles).length;
     const projectFiles = {...this.state.projectFiles};
     const _this = this;
@@ -228,9 +220,9 @@ class ProjectEditor extends React.Component {
       projectFiles[file].blob = res;
       remainingFiles--;
       if (remainingFiles === 0) _this.readProjectFilesBlobs(projectFiles);
-    }
+    };
 
-    for (const file in this.state.projectFiles) {
+    for (const file of this.state.projectFiles) {
       const xhr = new XMLHttpRequest();
       xhr.responseType = 'blob';
       xhr.onload = processFile(file, xhr.response);
@@ -239,20 +231,23 @@ class ProjectEditor extends React.Component {
     };
   }
 
-  readProjectFilesBlobs = (projectFiles) => {
+  readProjectFilesBlobs(projectFiles) {
     const pendingReadings = [];
-    for (const path in projectFiles) {
+    for (const path of projectFiles) {
       pendingReadings.push(this.readBlob({...projectFiles[path], path}));
     }
 
     Promise.all(pendingReadings)
-        .then((results) => {
-          const reducedProjectFiles = results.reduce((pf, {path, ...file} ) => ({
-            ...pf,
-            [path]: file,
-          }), {});
-          this.setState({projectFiles: reducedProjectFiles, loadingFiles: false});
-        });
+    .then((results) => {
+      const reducedProjectFiles = results.reduce((pf, {path, ...file} ) => ({
+        ...pf,
+        [path]: file,
+      }), {});
+      this.setState({
+        projectFiles: reducedProjectFiles,
+        loadingFiles: false,
+      });
+    });
   }
 
   readBlob = (file) => new Promise((resolve, reject) => {
@@ -264,28 +259,28 @@ class ProjectEditor extends React.Component {
     reader.readAsText(file.blob);
   })
 
-  getCurrentHackInfo = () => {
+  getCurrentHackInfo() {
     const _this = this;
     this.firestore.collection('hacks')
-        .doc(this.state.currentHack)
-        .get()
-        .then((doc) => {
-          const hackData = doc.data();
-          const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
-          _this.setState({
-            hackData,
-            currentPhase,
-          });
-          if (currentPhase !== -1) {
-            _this.getCountDown();
-          }
-        })
-        .catch(function(error) {
-          console.error('Error getting documents: ', error);
-        });
+    .doc(this.state.currentHack)
+    .get()
+    .then((doc) => {
+      const hackData = doc.data();
+      const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+      _this.setState({
+        hackData,
+        currentPhase,
+      });
+      if (currentPhase !== -1) {
+        _this.getCountDown();
+      }
+    })
+    .catch(function(error) {
+      console.error('Error getting documents: ', error);
+    });
   };
 
-  getCountDown = () => {
+  getCountDown() {
     const _this = this;
     // console.log(this.state.hackData.phases, this.state.currentPhase)
     const phase = this.state.hackData.phases[this.state.currentPhase - 1];
@@ -318,7 +313,7 @@ class ProjectEditor extends React.Component {
     }
   }
 
-  saveProject = () => {
+  saveProject() {
     console.log('on save');
     this.saveStat({event: 'save-and-run', metadata: {action: 'click'}});
     // Raw string is the default if no format is provided
@@ -326,24 +321,24 @@ class ProjectEditor extends React.Component {
     console.log(newBlobs, 'blobs');
     const _this = this;
     Promise.all(
-        newBlobs.map((item) => this.uploadBlogToFirebase(item)),
+      newBlobs.map((item) => this.uploadBlogToFirebase(item)),
     )
-        .then((url) => {
-          _this.setState((prevState, props) => {
-            const proyectPath = prevState.proyectPath + ' ';
-            const projectFiles = prevState.projectFiles;
-            if (projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
-              projectFiles[prevState.selectedFile].content = projectFiles[prevState.selectedFile].unSavedContent;
-            }
-            return {projectFiles, proyectPath};
-          });
-        })
-        .catch((error) => {
-          console.log(`Some failed: `, error.message);
-        });
+    .then((url) => {
+      _this.setState((prevState, props) => {
+        const proyectPath = prevState.proyectPath + ' ';
+        const projectFiles = prevState.projectFiles;
+        if (projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
+          projectFiles[prevState.selectedFile].content = projectFiles[prevState.selectedFile].unSavedContent;
+        }
+        return {projectFiles, proyectPath};
+      });
+    })
+    .catch((error) => {
+      console.log(`Some failed: `, error.message);
+    });
   }
 
-  updateProjectBlobs = () => {
+  updateProjectBlobs() {
     const newBlobs = [];
     for (const fileName in this.state.projectFiles) {
       if (this.state.projectFiles[fileName].didChange) {
@@ -358,7 +353,7 @@ class ProjectEditor extends React.Component {
     return newBlobs;
   }
 
-  startPushNavigation = () => {
+  startPushNavigation() {
     const _this = this;
     this.saveProject();
     console.log(this.state);
@@ -385,41 +380,47 @@ class ProjectEditor extends React.Component {
             };
           });
     } else {
-      swal(Constants.commitContentAlertContent)
-          .then((result) => {
-            const {value} = result;
-            if (value) {
-              this.pushToGitHub(value);
-              swal(Constants.loadingAlertContent)
-                  .then((result) => {
-                    swal(Constants.onSuccessAlertContent);
-                  });
-            };
+      swal(Constants.commitContentAlertContent).then((result) => {
+        const {value} = result;
+        if (value) {
+          this.pushToGitHub(value);
+          swal(Constants.loadingAlertContent).then((result) => {
+            swal(Constants.onSuccessAlertContent);
           });
+        };
+      });
     }
   }
 
-  pushToGitHub = (commitMessage) => {
+  pushToGitHub(commitMessage) {
     const composedCommitMessage = commitMessage + '\n\n\n Final commit phase 1.';
     const files = [];
-    for (const key in this.state.projectFiles) {
-      files.push({name: key, content: this.state.projectFiles[key].content});
+
+    for (const key of this.state.projectFiles) {
+      files.push({
+        name: key,
+        content: this.state.projectFiles[key].content,
+      });
     }
+
     const projectName = this.state.user.isAdmin ?
-      `admin-${this.state.user.uid}-${this.state.projectName}` :
-      `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
+    `admin-${this.state.user.uid}-${this.state.projectName}` :
+    `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
     const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
-    commitToGitHub({name: projectName, files: files, commitMessage: composedCommitMessage})
-        .then((result) => {
-          if (result.status === 500) {
-            console.error(result.error);
-          } else {
-            swal.clickConfirm();
-          }
-        });
+    commitToGitHub({
+      name: projectName,
+      files: files,
+      commitMessage: composedCommitMessage},
+    ).then((result) => {
+      if (result.status === 500) {
+        console.error(result.error);
+      } else {
+        swal.clickConfirm();
+      }
+    });
   }
 
-  uploadBlogToFirebase = (blob) => {
+  uploadBlogToFirebase(blob) {
     const indexRef = storageRef.child(blob.path);
     return indexRef.put(blob.blob)
         .then(function(snapshot) {
@@ -429,7 +430,7 @@ class ProjectEditor extends React.Component {
         });
   }
 
-  onChangeEditor = (editor, data, value) => {
+  onChangeEditor(editor, data, value) {
     this.setState((prevState, props) => {
       const projectFiles = prevState.projectFiles;
       projectFiles[prevState.selectedFile].unSavedContent = value;
@@ -438,7 +439,7 @@ class ProjectEditor extends React.Component {
     });
   }
 
-  onFileSelection = (name) => {
+  onFileSelection(name) {
     const splitedFileName = name.split('.');
     this.saveStat({event: 'view-file', metadata: {filename: name}});
     this.setState((prevState, props) => {
@@ -453,7 +454,7 @@ class ProjectEditor extends React.Component {
     });
   }
 
-  startCreateNewFileFlow = async () => {
+   async startCreateNewFileFlow() {
     this.saveProject();
     const {value: filePath} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
     if (filePath) {
@@ -489,7 +490,7 @@ class ProjectEditor extends React.Component {
     }
   }
 
-  getMIME = (fileName) => {
+  getMIME(fileName) {
     const splitedName = fileName.split('.');
     const extention = splitedName.pop();
     const extToMimes = {
@@ -510,56 +511,54 @@ class ProjectEditor extends React.Component {
     return false;
   }
 
-  putStorageFile = (file, projectName) => {
+  putStorageFile(file, projectName) {
     this.setState({loadingFiles: true});
     const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}`);
     const _this = this;
     // the return value will be a Promise
     return pathRef.put(file.blob)
-        .then((snapshot) => {
-          // Get the download URL
-          pathRef.getDownloadURL().then(function(url) {
-            const fileURL = url;
-            const fileJson = {};
-            const fullPath = file.path;
-            fileJson[fullPath] = {url: fileURL};
-            const firestore = window.firebase.firestore();
-            const settings = {timestampsInSnapshots: true};
-            firestore.settings(settings);
-            firestore.collection('users')
-                .doc(_this.state.user.uid)
-                .collection('projects')
-                .doc(projectName)
-                .set(fileJson, {merge: true})
-                .then(function(doc) {
-                  _this.getProjectFilesUrls();
-                });
-          })
-              .catch(function(error) {
-                console.error('Error getting documents: ', error);
-              });
-        }).catch(function(error) {
-        }).catch((error) => {
-          console.log('One failed:', file, error.message);
+    .then((snapshot) => {
+      // Get the download URL
+      pathRef.getDownloadURL().then(function(url) {
+        const fileURL = url;
+        const fileJson = {};
+        const fullPath = file.path;
+        fileJson[fullPath] = {url: fileURL};
+        const firestore = window.firebase.firestore();
+        firestore.collection('users')
+        .doc(_this.state.user.uid)
+        .collection('projects')
+        .doc(projectName)
+        .set(fileJson, {merge: true})
+        .then(function(doc) {
+          _this.getProjectFilesUrls();
         });
+      })
+      .catch(function(error) {
+        console.error('Error getting documents: ', error);
+      });
+    }).catch(function(error) {
+    }).catch((error) => {
+      console.log('One failed:', file, error.message);
+    });
   };
 
-  reloadFrame = () => {
+  reloadFrame() {
     this.setState((prevState, props) => {
       const proyectPath = prevState.proyectPath + ' ';
       return {proyectPath};
     });
   }
 
-  hidePreview = () => {
+  hidePreview() {
     this.setState({hidePreview: true});
   }
 
-  showPreview = () => {
+  showPreview() {
     this.setState({hidePreview: false});
   }
 
-  saveStat = (stat) => {
+  saveStat(stat) {
     stat.userId = this.state.user.uid;
     stat.metadata.hackId = this.state.currentHack;
     stat.metadata.projectName = this.state.projectName;
@@ -573,13 +572,13 @@ class ProjectEditor extends React.Component {
           <ProjectContent>
             <h2>{this.state.projectName.toUpperCase()}</h2>
             {!this.state.readOnly &&
-                <div className="control">
-                  <Button primary onClick={this.saveProject}> Save and run </Button>
-                  {this.state.currentPhase !== -1 &&
-                    <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
-                  }
-                  <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
-                </div>
+              <div className="control">
+                <Button primary onClick={this.saveProject}> Save and run </Button>
+                {this.state.currentPhase !== -1 &&
+                  <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
+                }
+                <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
+              </div>
             }
             <h3>Files:</h3>
             {this.state.loadingFiles ? <Loader
@@ -587,15 +586,15 @@ class ProjectEditor extends React.Component {
               dark
               small
             /> :
-                <FilesContainer files={this.state.projectFiles}
-                  onFileSelection={this.onFileSelection}
-                  selectedFile={this.state.selectedFile}
-                  projectName={this.state.projectName.toUpperCase()}/>
+            <FilesContainer files={this.state.projectFiles}
+              onFileSelection={this.onFileSelection}
+              selectedFile={this.state.selectedFile}
+              projectName={this.state.projectName.toUpperCase()}/>
             }
             <div className="hack-status">
               <h3>Current phase: {this.state.currentPhase !== -1 ? this.state.currentPhase : 'Tutorial stage'}</h3>
               <p>
-                  Remaining time: <br/>
+                Remaining time: <br/>
                 {`${this.state.timer.days}:${this.state.timer.hours}:${this.state.timer.minutes}:${this.state.timer.seconds}`}
               </p>
             </div>
@@ -624,20 +623,20 @@ class ProjectEditor extends React.Component {
             />}
           </EditorContainer>
           {this.state.proyectPath &&
-              <PreviewContainer hidden={this.state.hidePreview}>
-                <ProjectPreview
-                  hidden={this.state.hidePreview}
-                  hidePreview={this.hidePreview}
-                  projectURL={this.state.proyectPath}
-                  projectName={this.state.projectName}
-                  reloadFrame={this.reloadFrame}
-                />
-              </PreviewContainer>
+            <PreviewContainer hidden={this.state.hidePreview}>
+              <ProjectPreview
+                hidden={this.state.hidePreview}
+                hidePreview={this.hidePreview}
+                projectURL={this.state.proyectPath}
+                projectName={this.state.projectName}
+                reloadFrame={this.reloadFrame}
+              />
+            </PreviewContainer>
           }
           {this.state.hidePreview &&
-              <ShowPreview onClick={this.showPreview}>
-                <i className="left"></i>
-              </ShowPreview>
+            <ShowPreview onClick={this.showPreview}>
+              <i className="left"></i>
+            </ShowPreview>
           }
         </SectionContainer>
       </ThemeProvider>

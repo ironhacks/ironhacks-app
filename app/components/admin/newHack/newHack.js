@@ -258,8 +258,6 @@ class NewHack extends React.Component {
     this.setState({hack: hackInstance});
     // db Reference
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     const _this = this;
     // TODO: add forum id
     firestore.collection('hacks').add(hackInstance)

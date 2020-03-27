@@ -1,12 +1,5 @@
-// IronHacks Platform
-// ReactionsView.js -
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-
-// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-// Custom Constants
 import * as Constants from '../../../constants.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
 
@@ -27,6 +20,10 @@ const ItemData = styled('div')`
   }
 `;
 
+
+/**
+ *
+ */
 class ReactionsView extends React.Component {
   constructor(props) {
     super(props);
@@ -38,8 +35,6 @@ class ReactionsView extends React.Component {
     };
 
     this.firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    this.firestore.settings(settings);
   }
 
   componentDidMount() {
@@ -54,7 +49,7 @@ class ReactionsView extends React.Component {
     }
   }
 
-  getComment = () => {
+  getComment() {
     const _this = this;
     this.firestore.collection('comments')
         .doc(this.state.commentId)

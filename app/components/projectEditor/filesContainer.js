@@ -1,19 +1,10 @@
-// IronHacks Platform
-// filesContainer.js -
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-// Styled components
 import styled from 'styled-components';
-// Custom Constants
 import * as Constants from '../../../constants.js';
 import {Treebeard, decorators} from 'react-treebeard';
-
 import fileIcon from './img/file-icon.svg';
-// import trashIcon from './img/trash-icon.svg';
 import folderIcon from './img/folder-icon.svg';
 
-// Section container
 const MainContainer = styled('div')`
   display: flex;
   flex-grow: 1;
@@ -123,7 +114,7 @@ const NodeHeader = styled('div')`
     align-items: center;
     font-family: 'Muli';
     font-size: 14px;
-    
+
     div {
       img {
         height: 14px;
@@ -135,7 +126,7 @@ const NodeHeader = styled('div')`
         right: 0;
         button {
           border: none;
-          background-color: transparent; 
+          background-color: transparent;
         }
         img {
           margin-right: 0;
@@ -161,6 +152,11 @@ decorators.Header = ({style, node}) => {
   );
 };
 
+/**
+ *  Filetree Container
+ *
+ *  @component
+ */
 class FilesContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -179,12 +175,12 @@ class FilesContainer extends React.Component {
     this.generateFilesTree();
   }
 
-  onFileClick = (file, name) => {
+  onFileClick(file, name) {
     this.props.onClick(file);
     this.setState({selectedFile: name});
   }
 
-  generateFilesTree = () => {
+  generateFilesTree() {
     const filesPaths = Object.keys(this.props.files);
     const {children: filesTree} = this.state.data;
     filesPaths.forEach((filePath) => {
@@ -196,7 +192,7 @@ class FilesContainer extends React.Component {
     }));
   };
 
-  generateTreeBeardData = (filesTree, filePath) => {
+  generateTreeBeardData(filesTree, filePath) {
     const splitedPath = filePath.split('/');
     if (splitedPath.length === 1) {
       filesTree.push({
@@ -215,10 +211,18 @@ class FilesContainer extends React.Component {
 
     if (splitedPath.length === 0) {
       if (filesTree[filesTree.length - 1].name !== fileName) {
-filesTree[filesTree.length - 1].children ? filesTree[filesTree.lenght - 1].children.push({name: fileName, path: filePath}) : filesTree[filesTree.length - 1].children = [{name: fileName, path: filePath}];
+        filesTree[filesTree.length - 1].children ?
+            filesTree[filesTree.lenght - 1].children.push({
+              name: fileName,
+              path: filePath,
+            }) : filesTree[filesTree.length - 1].children = [{
+              name: fileName,
+              path: filePath,
+            }];
       }
       return;
     }
+
     splitedPath.forEach((component) => {
       filesTree.some((folder, index) => {
         if (folder.name === component) {
@@ -241,7 +245,7 @@ filesTree[filesTree.length - 1].children ? filesTree[filesTree.lenght - 1].child
     filesTree.push({name: fileName, path: filePath});
   };
 
-  getPath = (obj, val, path) => {
+  getPath(obj, val, path) {
     path = path || '';
     let fullpath = '';
     for (const b in obj) {
@@ -254,14 +258,16 @@ filesTree[filesTree.length - 1].children ? filesTree[filesTree.lenght - 1].child
     return fullpath;
   };
 
-  onToggle = (node, toggled) => {
+  onToggle(node, toggled) {
     if (this.state.cursor) {
       this.setState({cursor: {active: false}});
     };
+
     node.active = true;
     if (node.children) {
       node.toggled = toggled;
     }
+
     this.setState((prevState, props) => {
       const state = {
         cursor: node,

@@ -25,7 +25,7 @@ const SectionContainer = styled('div')`
   .editor {
     margin: 20px 0;
   }
-  
+
   .control {
     position: relative;
     display: flex;
@@ -60,8 +60,6 @@ class ThreadView extends React.Component {
     };
 
     this.firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    this.firestore.settings(settings);
   };
 
   componentDidMount() {

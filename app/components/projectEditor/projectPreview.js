@@ -1,13 +1,6 @@
-// IronHacks Platform
-// ProjectPreview.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-// Styled components
 import styled from 'styled-components';
-// Custom Constants
 import * as Constants from '../../../constants.js';
-
 import ReloadIcon from './img/reload-icon.svg';
 import NewTabIcon from './img/multi-tab.svg';
 

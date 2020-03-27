@@ -60,8 +60,6 @@ class HackSelection extends React.Component {
       loading: false,
     };
     this.firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    this.firestore.settings(settings);
   };
 
   componentDidMount() {
@@ -247,8 +245,6 @@ class HackSelection extends React.Component {
             const fullPath = file.path + file.name;
             fileJson[fullPath] = {url: fileURL};
             const firestore = window.firebase.firestore();
-            const settings = {timestampsInSnapshots: true};
-            firestore.settings(settings);
             firestore.collection('users')
                 .doc(_this.state.user.uid)
                 .collection('projects')

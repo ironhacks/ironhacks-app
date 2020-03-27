@@ -21,7 +21,7 @@ const SectionContainer = styled('div')`
   align-items: center;
   justify-content: center;
 
-  > h1 {  
+  > h1 {
     font-size: 60px;
     font-weight: 900;
     line-height: 40px;
@@ -92,9 +92,7 @@ class Login extends React.Component {
   saveUserOnDB = (user) => {
     // db Reference
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
     const _this = this;
-    firestore.settings(settings);
     firestore.collection('users').doc(user.uid).set({
       name: user.name,
       email: user.email,
@@ -110,8 +108,6 @@ class Login extends React.Component {
   isAdmin = (user) => {
     // db Reference
     const firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    firestore.settings(settings);
     const _this = this;
     const _user = user;
     // Updating the current hack:

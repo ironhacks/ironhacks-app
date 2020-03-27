@@ -50,16 +50,16 @@ const NavContainer = styled('nav')`
     left 15px;
 
     .links-container {
-      display: ${(props) => props.display}; 
+      display: ${(props) => props.display};
       flex-direction: column;
       align-items: start;
-      border-radius: ${Constants.universalBorderRadius}; 
+      border-radius: ${Constants.universalBorderRadius};
       background-color: #f9f9f9;
       min-width: 160px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       z-index: 1;
     }
-    
+
     a {
       text-align: left;
       font-weight: 600;
@@ -72,7 +72,7 @@ const NavContainer = styled('nav')`
       }
 
       &:last-child {
-        border-bottom: none;        
+        border-bottom: none;
       }
     }
 
@@ -142,7 +142,7 @@ const UserMenu = styled('div')`
     font-size: 16px;
     font-weight: 600;
     text-align: left;
-  
+
     &:hover {
       background-color: lightgray;
     }
@@ -178,6 +178,10 @@ const RightAlignDiv = styled('div')`
   display: flex;
   justify-content: flex-end;
 `;
+
+/**
+ *
+ */
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -199,10 +203,13 @@ class Header extends React.Component {
     document.removeEventListener('mousedown', this.handleClickOutside);
   };
 
-  handleClickOutside = (event) => {
+  handleClickOutside = (event) => { 
     const userMenuRef = this.userMenuRef.current;
     const navMenuRef = this.navMenuRef.current;
-    if (userMenuRef && !userMenuRef.contains(event.target) && navMenuRef && !navMenuRef.contains(event.target)) {
+    if (userMenuRef && !userMenuRef.contains(event.target)
+        && navMenuRef
+        && !navMenuRef.contains(event.target)) {
+
       this.setState({
         showMenu: 'none',
         showUserMenu: 'none',

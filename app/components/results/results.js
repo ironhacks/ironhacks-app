@@ -5,10 +5,12 @@ import * as Constants from '../../../constants.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
 import Loader from '../../utilities/loader.js';
 import TimeLine from '../../utilities/timeLine.js';
+import log from '../../../util/log';
 import {registerStats} from '../../utilities/registerStat.js';
 import PersonalScoreSection from './personalScoreSection.js';
 import YourCompetitorsRank from './yourCompetitorsRank.js';
 import * as Texts from './staticTexts.js';
+import Reactotron from 'reactotron-react-js';
 
 const theme = Constants.AppSectionTheme;
 
@@ -106,14 +108,19 @@ const SectionContainer = styled('div')`
   }
 `;
 
+/**
+ *
+ */
 class Results extends React.Component {
   constructor(props) {
     super(props);
     const {cookies, user} = props;
     this.state = {
       user,
-      currentHack: cookies.get('currentHack') || null,
-      forumId: cookies.get('currentForum') || null,
+      currentHack: 'mmHJrWzmx4rCyQ2YpJWL',
+      // currentHack: cookies.get('currentHack') || null,
+      forumId: '8JKHD71CFYS2SzI52UQ9',
+      // forumId: cookies.get('currentForum') || null,
       hackData: null,
       treatment: null,
       scores: null,
@@ -130,16 +137,19 @@ class Results extends React.Component {
 
   getCurrentHackInfo = () => {
     const _this = this;
-    this.firestore.collection('hacks')
-        .doc(this.state.currentHack)
+    const hacks = this.firestore.collection('hacks');
+    const currentHack = this.state.currentHack;
+    Reactotron.log(hacks);
+    hacks.doc(currentHack)
         .get()
         .then((doc) => {
           const hackData = doc.data();
+          log.info(doc);
           // let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
           _this.setState({
             hackData,
-            currentPhase: 4,
-            selectedPhase: 3,
+            currentPhase: 6,
+            selectedPhase: 1,
           });
           _this.getForumData();
         })
@@ -160,7 +170,7 @@ class Results extends React.Component {
             treatment,
             participants,
           });
-          if ( this.state.currentPhase === -1 ) {
+          if (this.state.currentPhase === -1 ) {
             this.setState({
               results: false,
               loading: false,

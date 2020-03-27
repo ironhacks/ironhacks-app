@@ -1,12 +1,5 @@
-// IronHacks Platform
-// reactionPicker.js -
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-
-// Styled components
 import styled from 'styled-components';
-// Images
 import LikeReaction from './img/like-reaction.svg';
 import LikeReactionHighLighted from './img/like-reaction-highlight.svg';
 import DislikeReaction from './img/dislike-reaction.svg';
@@ -97,12 +90,19 @@ const reverseReaction = {
   dislikes: 'likes',
 };
 
+/**
+ *
+ */
 class ReactionPicker extends React.Component {
   constructor(props) {
     super(props);
     this.firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    this.firestore.settings(settings);
+    this.state = {
+      likes: [],
+      dislikes: [],
+      isLiked: false,
+      isDisliked: false,
+    };
   }
 
   componentDidMount() {
@@ -130,7 +130,7 @@ class ReactionPicker extends React.Component {
     }
   }
 
-  getComment = () => {
+  getComment() {
     const _this = this;
     this.firestore.collection('comments')
         .doc(this.props.commentId)
@@ -161,7 +161,7 @@ class ReactionPicker extends React.Component {
         });
   };
 
-  handleReactionClick = (event) => {
+  handleReactionClick(event) {
     const _this = this;
     const reactionType = event.target.id;
     const updatedData = {

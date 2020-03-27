@@ -84,7 +84,7 @@ const SearchBar = styled('form')`
     height: 100%;
     background-color: #F2F2F2;
     border: 1px solid #999999;
-    border-right: none; 
+    border-right: none;
     border-radius: ${Constants.universalBorderRadius} 0px 0px ${Constants.universalBorderRadius};
     padding-left: 10px;
   }
@@ -116,8 +116,6 @@ class Forum extends React.Component {
     };
     console.log(this.state);
     this.firestore = window.firebase.firestore();
-    const settings = {timestampsInSnapshots: true};
-    this.firestore.settings(settings);
   };
 
   componentDidMount() {
