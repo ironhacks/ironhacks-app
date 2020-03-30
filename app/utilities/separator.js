@@ -1,10 +1,8 @@
-// IronHacks Platform
-// seratator.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-// Styled components
 import styled from 'styled-components';
-// Custom Constants
-import * as Constants from '../../constants.js';
+
+import {Theme} from '../theme';
+const colors = Theme.COLORS;
+
 
 const Separator = styled('div')`
   width: 100%;
@@ -12,7 +10,7 @@ const Separator = styled('div')`
   margin-top: 15px;
   margin-bottom: 10px;
   background-color: ${(props) =>
-    props.primary ? Constants.mainBgColor : 'lightgray'
+    props.primary ? colors.mainBgColor : 'lightgray'
 };
 `;
 

@@ -1,14 +1,15 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import styled, {ThemeProvider} from 'styled-components';
-import * as Constants from '../../constants.js';
+import {Theme} from '../../theme';
 
-const theme = Constants.Error404Theme;
+const styles = Theme.STYLES.Error404Theme;
+const colors = Theme.COLORS;
 
 const SectionContainer = styled('div')`
   width: 100%;
   height: 100vh;
-  background-color: ${Constants.mainBgColor};
+  background-color: ${colors.mainBgColor};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,7 +51,7 @@ class Login extends React.Component {
       );
     }
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer>
           <h2><span>PURDUE </span>IRONHACKS</h2>
           <h1>404 PAGE NOT FOUND :'(</h1>

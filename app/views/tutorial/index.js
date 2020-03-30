@@ -1,29 +1,8 @@
 import React from 'react';
 import {withCookies} from 'react-cookie';
-import styled, {ThemeProvider} from 'styled-components';
 import Showdown from 'showdown';
-import * as Constants from '../../constants.js';
+import {SectionContainer} from '../../layouts/section-container';
 // import MarkdownEditor from '../markdownEditor/markdownEditor.js';
-
-const theme = Constants.AppSectionTheme;
-const SectionContainer = styled('div')`
-  width: 100%;
-  height: ${(props) => props.theme.containerHeight};
-  background-color: ${(props) => props.theme.backgroundColor};
-  overflow: auto;
-
-  .tutorial-div {
-    margin-top: 30px;
-
-    h1, h2, h3, h4, h5 {
-      color: ${Constants.mainBgColor};
-    }
-
-    a {
-      font-size: 13px;
-    }
-  }
-`;
 
 const ConverterConfig = {
   tables: true,
@@ -34,11 +13,8 @@ const ConverterConfig = {
   tasklists: true,
 };
 
-/**
- *
- *
- */
-class Tutorial extends React.Component {
+
+class TutorialScreen extends React.Component {
   constructor(props) {
     super(props);
     const {cookies} = props;
@@ -87,18 +63,12 @@ class Tutorial extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
-        <SectionContainer className='container-fluid'>
-          <div className='row'>
-            <div className='col-md-8 offset-md-2 tutorial-div'>
-              {this.state.tutorial && <div dangerouslySetInnerHTML={{__html: this.decodeBody(this.atou(this.state.tutorial.doc))}}/>}
-              {this.state.noTutorial && <h1>Task is not available yet!</h1>}
-            </div>
-          </div>
-        </SectionContainer>
-      </ThemeProvider>
+      <SectionContainer className='container-fluid'>
+        {this.state.tutorial && <div dangerouslySetInnerHTML={{__html: this.decodeBody(this.atou(this.state.tutorial.doc))}}/>}
+        {this.state.noTutorial && <h1>Task is not available yet!</h1>}
+      </SectionContainer>
     );
   }
 }
 
-export default withCookies(Tutorial);
+export default withCookies(TutorialScreen);

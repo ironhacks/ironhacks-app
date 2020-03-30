@@ -4,9 +4,9 @@
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function(global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory) :
-  (global = global || self, factory(global.bootstrap = {}, global.jQuery));
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery'))
+  : typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory)
+  : (global = global || self, factory(global.bootstrap = {}, global.jQuery));
 }(this, (function(exports, $) {
   $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
@@ -286,9 +286,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Alert =
+  const Alert
   /* #__PURE__*/
-  function() {
+  = function() {
     function Alert(element) {
       this._element = element;
     } // Getters
@@ -456,9 +456,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Button =
+  const Button
   /* #__PURE__*/
-  function() {
+  = function() {
     function Button(element) {
       this._element = element;
     } // Getters
@@ -707,9 +707,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Carousel =
+  const Carousel
   /* #__PURE__*/
-  function() {
+  = function() {
     function Carousel(element, config) {
       this._items = null;
       this._interval = null;
@@ -1265,9 +1265,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Collapse =
+  const Collapse
   /* #__PURE__*/
-  function() {
+  = function() {
     function Collapse(element, config) {
       this._isTransitioning = false;
       this._element = element;
@@ -4272,9 +4272,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Dropdown =
+  const Dropdown
   /* #__PURE__*/
-  function() {
+  = function() {
     function Dropdown(element, config) {
       this._element = element;
       this._popper = null;
@@ -4783,9 +4783,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Modal =
+  const Modal
   /* #__PURE__*/
-  function() {
+  = function() {
     function Modal(element, config) {
       this._config = this._getConfig(config);
       this._element = element;
@@ -5537,9 +5537,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Tooltip =
+  const Tooltip
   /* #__PURE__*/
-  function() {
+  = function() {
     function Tooltip(element, config) {
       if (typeof Popper === 'undefined') {
         throw new TypeError('Bootstrap\'s tooltips require Popper.js (https://popper.js.org/)');
@@ -6218,9 +6218,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Popover =
+  const Popover
   /* #__PURE__*/
-  function(_Tooltip) {
+  = function(_Tooltip) {
     _inheritsLoose(Popover, _Tooltip);
 
     function Popover() {
@@ -6406,9 +6406,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const ScrollSpy =
+  const ScrollSpy
   /* #__PURE__*/
-  function() {
+  = function() {
     function ScrollSpy(element, config) {
       const _this = this;
 
@@ -6700,9 +6700,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Tab =
+  const Tab
   /* #__PURE__*/
-  function() {
+  = function() {
     function Tab(element) {
       this._element = element;
     } // Getters
@@ -6936,9 +6936,9 @@
    * ------------------------------------------------------------------------
    */
 
-  const Toast =
+  const Toast
   /* #__PURE__*/
-  function() {
+  = function() {
     function Toast(element, config) {
       this._element = element;
       this._config = this._getConfig(config);

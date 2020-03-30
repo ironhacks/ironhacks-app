@@ -3,9 +3,9 @@
 * Released under the MIT License.
 */
 (function(global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.Sweetalert2 = factory());
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
+	: typeof define === 'function' && define.amd ? define(factory)
+	: (global.Sweetalert2 = factory());
 }(this, (function() {
   function _typeof(obj) {
     if (typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol') {
@@ -1178,9 +1178,9 @@
   const deprecationWarning = '"setDefaults" & "resetDefaults" methods are deprecated in favor of "mixin" method and will be removed in the next major release. For new projects, use "mixin". For past projects already using "setDefaults", support will be provided through an additional package.';
   let defaults = {};
   function withGlobalDefaults(ParentSwal) {
-    const SwalWithGlobalDefaults =
+    const SwalWithGlobalDefaults
   /* #__PURE__*/
-  function(_ParentSwal) {
+  = function(_ParentSwal) {
     _inherits(SwalWithGlobalDefaults, _ParentSwal);
 
     function SwalWithGlobalDefaults() {

@@ -47,7 +47,7 @@ export const FooterTheme = {
   hoverTextColor: Colors.highlightedTextColor,
 };
 
-export const AppSectionTheme = {
+export const SectionStyles = {
   containerHeight: 'calc(100vh - ' + HeaderTheme.containerHeight + ' - ' + FooterTheme.containerHeight + ')',
   backgroundColor: 'white',
   textColor: 'black',
@@ -92,7 +92,7 @@ export const SponsorBannerTheme = {
 };
 
 // QUIZZES
-export const QuizzesTheme = {
+export const QuizViewStyles = {
   backgroundColor: 'white',
   containerHeight: '125px',
 };

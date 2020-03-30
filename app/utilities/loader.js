@@ -1,16 +1,8 @@
-// IronHacks Platform
-// loader.js - This is just a css loader. Can be used on any container.
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-// Custom Constants
-import * as Constants from '../../constants.js';
+import {Theme} from '../../theme';
+const styles = Theme.STYLES.LoaderTheme;
 
-const theme = Constants.LoaderTheme;
-
-// Section container
 const SectionContainer = styled('div')`
   width: 100%;
   height: ${(props) => props.small ? '50%' : '100%'};
@@ -56,13 +48,13 @@ const Spinner = styled('div')`
 class Loader extends React.Component {
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer backgroundColor={this.props.backgroundColor ? this.props.backgroundColor : null} small={this.props.small}>
           <Spinner
             dark={this.props.dark}
             small={this.props.small}/>
-          {this.props.status &&
-            <span>{this.props.status}</span>
+          {this.props.status
+            && <span>{this.props.status}</span>
           }
         </SectionContainer>
       </ThemeProvider>

@@ -2,9 +2,10 @@ import React from 'react';
 import {withCookies} from 'react-cookie';
 import Showdown from 'showdown';
 import styled, {ThemeProvider} from 'styled-components';
-import * as Constants from '../../constants.js';
+import {Theme} from '../../theme';
 
-const theme = Constants.AppSectionTheme;
+const styles = Theme.STYLES.AppSectionTheme;
+const colors = Theme.COLORS;
 
 const SectionContainer = styled('div')`
   width: 100%;
@@ -16,7 +17,7 @@ const SectionContainer = styled('div')`
     margin-top: 30px;
 
     h1, h2, h3, h4, h5 {
-      color: ${Constants.mainBgColor};
+      color: ${colors.mainBgColor};
     }
 
     a {
@@ -37,9 +38,7 @@ const ConverterConfig = {
   tasklists: true,
 };
 
-/**
- *
- */
+
 class Task extends React.Component {
   constructor(props) {
     super(props);
@@ -88,7 +87,7 @@ class Task extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer className='container-fluid'>
           <div className='row'>
             <div className='col-md-8 offset-md-2 task-div'>

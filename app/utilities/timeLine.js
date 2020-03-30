@@ -1,11 +1,10 @@
-// IronHacks Platform
 // timeLine.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled, {css} from 'styled-components';
-// Custom Constants
+
 import * as DateFormater from './dateFormater.js';
 
 const TimeLineContainer = styled('div')`

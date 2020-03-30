@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-// Styled components
+
 import styled from 'styled-components';
-import HomeIcon from '../../img/home-icon.svg';
+import HomeIcon from '../assets/svg/home-icon.svg';
 
 const Container = styled('div')`
   display: flex;
@@ -58,7 +58,6 @@ const sectionsEndPoints = {
 };
 
 class BreadCrumbs extends React.Component {
-
   returnToDetails = (event) => {
     event.preventDefault();
     this.props.returnToDetails();

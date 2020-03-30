@@ -7,7 +7,7 @@ import Reactotron from 'reactotron-react-js';
 import NotFound from './js/utilities/404.js';
 import Loader from './js/utilities/loader.js';
 import Task from './views/task';
-import Tutorial from './views/tutorial';
+import TutorialScreen from './views/tutorial';
 import Admin from './js/components/admin/admin.js';
 import AdminDashboard from './js/components/admin/adminDashboard.js';
 import Footer from './js/components/footer/footer.js';
@@ -149,7 +149,7 @@ class IronHacksApp extends React.Component {
               <Route path='/admin' component={Admin}/>
 
               <Route path='/task' render={(props) => (<Task user={this.state.user} {...props}/>)}/>
-              <Route path='/tutorial' render={(props) => (<Tutorial user={this.state.user} {...props}/>)}/>
+              <Route path='/tutorial' render={(props) => (<TutorialScreen user={this.state.user} {...props}/>)}/>
               <Route path='/results' render={(props) => (<Results user={this.state.user} {...props}/>)}/>
 
               <Route path='/quizzes/:quizName' render={(props) => (<QuizForm user={this.state.user} {...props}/>)}/>
