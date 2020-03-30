@@ -430,7 +430,7 @@ onEditorChange = (markdown) => {
 
 render() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={styles}>
       <SectionContainer>
         <h2>Task document editor</h2>
         <p>Here you can edit and preview the Task document. You can also publish the document or schedule it (check bellow).</p>
@@ -1117,7 +1117,7 @@ First we compose the preview URL, the preview URL is predictable, we "calculated
 getProjectPreviewPath = () => {
   // Create a reference with an initial file path and name
   const userId = this.state.hackerId || this.state.user.uid;
-  const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`;
+  const proyectPath = `${colors.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`;
   this.setState({proyectPath: proyectPath});
 }
 ```

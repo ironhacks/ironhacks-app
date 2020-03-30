@@ -1,0 +1,30 @@
+#!/bin/bash
+
+BASE_DIR="$(npm prefix)"
+NPM_MODULE_DIR=node_modules
+# REACT_MODULES_PATTERN=/react-*
+
+# REACT_MODULES_PATH="$BASE_DIR/${REACT_TEMP_DIR}/${REACT_MODULES_PATTERN}"
+# NPM_MODULE_PATH="${BASE_DIR}/${NPM_MODULE_DIR}"
+
+# cd ${BASE_DIR}
+
+patch-package \
+&& rm -rf node_modules/react-navigation/node_modules/react-native \
+&& rm -rf node_modules/react-navigation/node_modules/@types \
+&& rm -rf node_modules/react-navigation/node_modules/examples \
+&& rm -rf node_modules/react-navigation/node_modules/react-native-gesture-handler \
+&& rm -rf node_modules/react-navigation/node_modules/react \
+echo "Done."
+
+echo -e "\n SYSTEM \n"
+echo -e "Hostname: $HOSTNAME \nDate: $(date)\n"
+echo -e " LAST 20 LOGINS -\n---"
+command last -waiFd -20
+
+## #12: How Do I Verify No Accounts Have Empty Passwords?
+awk -F: '($2 == "") {print}' /etc/shadow
+
+# LIST USER TABLE
+echo -e "\n[USER TABLE]\n" echo -e "UID GID USER HOME WKDIR SHELL\n--- --- ---- ---- ------ -----" \
+| awk -F: '{print $3, $4, $1, $2, $6, $7, $9 }' /etc/passwd | column -t | sort --version-sort

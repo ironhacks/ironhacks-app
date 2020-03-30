@@ -1,0 +1,109 @@
+#!/bin/bash
+
+echo $0
+
+BASE_DIR="$(npm prefix)"
+
+echo "Running preinstall script"
+
+# if-present
+# # When using the npm run-script command, if the script is not defined in the package.json file, then npm exits with an error code.
+# If if-present is set to true, then the error code is not returned. This is useful for when you optionally want to run a script,
+# but don't care if it is not present.
+# So, for example, maybe you have a script (script A) that is present in some of your projects, but not all,
+# and you use another generic script (script B) to run it.
+# This way if script A isn't present, then script B won't get an error and can safely keep executing."
+# npm c set if-present true
+#
+# npat
+# Whether or not to run a package's tests on installation.
+# Default: false
+
+# npm_package_config_use_yarn
+echo "Check if package should use yarn or npm"
+
+# 1. USE_YARN SET MANUALLY IN CONFIG
+if [ ! "$(npm config get use_yarn)" == "undefined" ] && [ ! "$(npm config get use_yarn)" == "false" ]; then
+  echo "config use yarn was set to $(npm config get use_yarn)"
+  NPM_PROJECT_USES_YARN=1
+fi
+
+# 2. FOUND USE_YARN VALUE IN RUNTIME ENVIRONMENT
+if [ $npm_package_config_use_yarn ]; then
+  NPM_PROJECT_USES_YARN=1
+fi
+
+# 3. YARN WAS USED TO FIRST INSTALL THE PROJECT
+[[ -f "$BASE_DIR/yarn.lock" ]] && echo -e "\n\tYarn Lock Exists\n"  && NPM_PROJECT_USES_YARN=1 NPM_PROJECT_HAS_YARNLOCK=1
+
+
+if [ -z $NPM_PROJECT_USES_YARN ]; then
+  echo "NPM_PROJECT_USES_YARN FALSE"
+else
+  if [ ! "$(basename $npm_execpath)" == "yarn.js" ]; then
+    echo "** NPM_PROJECT_USES_YARN  **"
+    echo "Project uses yarn but the install exec path is set to $npm_execpath"
+    echo "\nYou should use 'yarn' to install with this project\n"
+    exit 1
+  fi
+  exit 0
+fi
+
+
+[[ -f "$BASE_DIR/package-lock.json" ]] && echo "Package Lock Exists" && exit 0
+
+
+# TEST => SHOULD BE
+# npm_config_user_agent => yarn/<1.16.0 npm>
+# npm_config_registry =>  https://registry.yarnpkg.com
+
+# USEFUL NPM INSTALL FLAGS
+# --dry-run
+# --tag
+# --force
+# --no-shrinkwrap
+# --no-optional
+# --no-package-lock
+#  npm config scoping
+# npm config set module-name:foo baz
+# = user
+# This is the UID to use when a package script is run as root. So if you don't want the script to have root permissions,
+# set this to the UID of the user that has the correct permission level and access for the application. Running a package script as root can be dangerous!
+#
+# Default: "nobody"
+# Type: String or Number
+# userconfig
+# This is the location of a user-level configuration file. Each user on a system can have different settings for the npm install, and the file should be located at the path given in userconfig.
+#
+# Default: ~/.npmrc
+# Type: path
+# umask
+# This is the mask value to use when setting the file creation mode for both files and directories. The type of file/directory being created depends on the mask value used. If it is a directory or an executable, then the umask value is masked against 0777. For all other files, the umask value is masked against 0666. The defaults are 0755 and 0644 respectively, which is a fairly conservative mask for each file type.
+#
+# Default: 022
+# Type: Octal numeric string in range 0000..0777 (0..511)
+# save
+# Using this flag with npm saves the given package to the local package.json file under dependencies. Alternatively, using this flag with the npm rm command will remove a dependency from the dependencies section of the package.json file.
+#
+# Note that this only works when a package.json file is present in the current directory.
+#
+# Default: false
+# Type: Boolean
+# save-bundle
+# If a package is saved at install time by using the --save, --save-dev, or --save-optional flags,
+# then also put it in the bundleDependencies list. When used with the npm rm command, it removes it from the bundledDependencies list.
+#
+# Default: false
+# Type: Boolean
+# scope
+# Using scope tells npm what scope to use for a scoped registry. This could be useful when using a private registry for the first time. Example:
+# npm login --scope=@organization --registry=registry.example.com
+#
+# This causes @organization to be mapped to this registry for future installations of packages specified according to the pattern @organization/package.
+# sign-git-tag
+# When executing the npm version command and using this flag, the -s flag will be used during tagging to add a signature. In order for this to work, you must have already set up GPG keys in your git configs.
+#
+# tag
+# When installing a package from npm and not specifying the version, this tag will be used instead.
+# Default: latest
+# Type: String
