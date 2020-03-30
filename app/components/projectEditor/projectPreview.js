@@ -4,6 +4,7 @@ import {Theme} from '../../theme';
 import ReloadIcon from '../../assets/svg/reload-icon.svg';
 import NewTabIcon from '../../assets/svg/multi-tab.svg';
 const colors = Theme.COLORS;
+const units = Theme.UNITS;
 
 const PreviewContainer = styled('div')`
   display: ${(props) => props.hidden ? 'none' : 'flex'};
@@ -64,13 +65,10 @@ const PreviewContainer = styled('div')`
   }
 `;
 
-
-/**
- *
- */
 class ProjectPreview extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       projectName: this.props.projectName || false,
       projectURL: this.props.projectURL || false,
@@ -84,17 +82,16 @@ class ProjectPreview extends React.Component {
     }
   }
 
-  reloadFrame = () => {
+  reloadFrame() {
     this.props.reloadFrame();
   }
 
-  getProjectPreviewPath = () => {
-    // Create a reference with an initial file path and name
+  getProjectPreviewPath() {
     const projectURL = `${colors.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`;
     this.setState({projectURL: projectURL});
   }
 
-  openInANewTab = (e) => {
+  openInANewTab(e) {
     this.props.hidePreview();
   }
 
@@ -108,7 +105,7 @@ class ProjectPreview extends React.Component {
           <input defaultValue={`www.ironhacks.com/projectEditor/${this.state.projectName}/preview`} readOnly />
           <a
             href={this.state.projectURL}
-            target='_blank'
+            target="blank"
             onClick={this.openInANewTab}
           >
             <img src={NewTabIcon} alt='reload-icon'/>

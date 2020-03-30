@@ -11,25 +11,25 @@ import cleanup from 'rollup-plugin-cleanup';
 import uglify from 'rollup-plugin-uglify';
 import html from 'rollup-plugin-html';
 
-// import copy from 'rollup-plugin-copy-assets';
-// import copy from 'rollup-plugin-copy';
-const fs = require('fs');
-
 
 // ============================================================================
 // IMPORT MODULES
 // ============================================================================
 // import { module as Markdown } from './source/modules//config.module.js';
 // import { module as Utility } from './source/modules/utilities/config.module.js';
-import { module as Main } from './src/modules/main/config.module.js';
-import { module as Options } from './src/modules/options/config.module.js';
-import { module as Popup } from './src/modules/popup/config.module.js';
+import {module as Main} from './src/modules/main/config.module.js';
+import {module as Options} from './src/modules/options/config.module.js';
+import {module as Popup} from './src/modules/popup/config.module.js';
 
 
 // ============================================================================
 // IMPORT CONFIG
 // ============================================================================
 import * as PKG_CONFIG from './package.json';
+
+// import copy from 'rollup-plugin-copy-assets';
+// import copy from 'rollup-plugin-copy';
+const fs = require('fs');
 
 
 // ============================================================================
@@ -47,21 +47,21 @@ const DEPLOY_DEST = './releases/campaign-manager' + '-v' + PKG_CONFIG.version + 
 // ============================================================================
 // BUNDLE PRE BUILD SCRIPT
 // ============================================================================
-var cleanup_options = {
+const cleanup_options = {
   comments: 'none',
   maxEmptyLines: 1,
-  extensions: ['.js']
+  extensions: ['.js'],
 };
 
-var html_options = {
+const html_options = {
   collapseWhitespace: true,
   collapseBooleanAttributes: true,
   conservativeCollapse: true,
-  minifyJS: true
-}
+  minifyJS: true,
+};
 
-var bundle = [];
-var all_assets = [];
+const bundle = [];
+const all_assets = [];
 
 // ============================================================================
 // REQUIRED MODULE LIST
@@ -73,20 +73,20 @@ const mods = [
   // Utility
 ];
 
-for (var mod of mods ){
+for (const mod of mods ) {
   var config = {};
-  config.input = MOD_PATH + mod.name + '/'  + mod.input;
+  config.input = MOD_PATH + mod.name + '/' + mod.input;
   config.output = {
     name: mod.name,
     file: MOD_DEST + mod.output,
     format: mod.format,
-    sourcemap: mod.sourcemap
+    sourcemap: mod.sourcemap,
   };
 
   // --------------------------------------------------------------------------
   // PLUGINS
   // --------------------------------------------------------------------------
-  var pluginArr = [];
+  const pluginArr = [];
 
   // --------------------------------------------------------------------------
   pluginArr.push(filesize());
@@ -95,7 +95,7 @@ for (var mod of mods ){
   pluginArr.push(cleanup(cleanup_options));
 
   if (mod.assets) {
-    var asset_paths = [];
+    const asset_paths = [];
     var asset;
     for ( asset of mod.assets ) {
       console.log('assets', asset);
@@ -103,22 +103,22 @@ for (var mod of mods ){
       var asset_dest = MOD_DEST + asset;
     }
 
-    fs.copyFile(asset_src, asset_dest,(err) => {
-        if (err) throw err;
-        console.log(asset_src + ' was copied to ' + asset_dest);
-      });
+    fs.copyFile(asset_src, asset_dest, (err) => {
+      if (err) throw err;
+      console.log(asset_src + ' was copied to ' + asset_dest);
+    });
   }
 
   if (mod.html) {
     console.log('html', mod.html);
     pluginArr.push(html({
       include: mod.html,
-      htmlMinifierOptions: html_options
+      htmlMinifierOptions: html_options,
     }));
   }
 
   // --------------------------------------------------------------------------
-  if (BUILD_ENV === 'production'){
+  if (BUILD_ENV === 'production') {
     pluginArr.push(uglify());
   }
 
@@ -134,20 +134,24 @@ for (var mod of mods ){
 
 // ----------------------------------------------------------------------------
 if (process.env.ROLLUP_COPY_DEPENDENCIES) {
-  if (! fs.existsSync('./build/assets/styles')){
-    fs.mkdir('./build/assets/styles', { recursive: true }, (err) => { if (err) throw err; });
+  if (! fs.existsSync('./build/assets/styles')) {
+    fs.mkdir('./build/assets/styles', {recursive: true}, (err) => {
+      if (err) throw err;
+    });
   }
 
-  if (! fs.existsSync('./build/assets/scripts')){
-    fs.mkdir('./build/assets/scripts', { recursive: true }, (err) => { if (err) throw err; });
+  if (! fs.existsSync('./build/assets/scripts')) {
+    fs.mkdir('./build/assets/scripts', {recursive: true}, (err) => {
+      if (err) throw err;
+    });
   }
 
-  all_assets.push({src: "./assets/bootstrap/bootstrap.min.css", dest: "./build/assets/styles/bootstrap.min.css"  });
-  all_assets.push({src: "./assets/bootstrap/bootstrap.min.js",  dest: './build/assets/scripts/bootstrap.min.js'   });
-  all_assets.push({src: './assets/flat-ui/flat-ui.min.css',     dest: './build/assets/styles/flat-ui.min.css'     });
+  all_assets.push({src: './assets/bootstrap/bootstrap.min.css', dest: './build/assets/styles/bootstrap.min.css'});
+  all_assets.push({src: './assets/bootstrap/bootstrap.min.js', dest: './build/assets/scripts/bootstrap.min.js'});
+  all_assets.push({src: './assets/flat-ui/flat-ui.min.css', dest: './build/assets/styles/flat-ui.min.css'});
   all_assets.push({src: './assets/flat-ui/flat-ui-checkbox.js', dest: './build/assets/scripts/flat-ui-checkbox.js'});
-  all_assets.push({src: './assets/jquery/jquery-1.8.3.min.js',  dest: './build/assets/scripts/jquery-1.8.3.min.js'});
-  all_assets.push({src: './assets/styles/panel.css',            dest: './build/assets/styles/panel.css'           });
+  all_assets.push({src: './assets/jquery/jquery-1.8.3.min.js', dest: './build/assets/scripts/jquery-1.8.3.min.js'});
+  all_assets.push({src: './assets/styles/panel.css', dest: './build/assets/styles/panel.css'});
 
   // all_assets.push(PKG_CONFIG.assets);
   for (asset of all_assets) {
@@ -167,4 +171,4 @@ if (process.env.ROLLUP_DEBUG) {
 }
 
 
-export { bundle as default };
+export {bundle as default};

@@ -47,11 +47,11 @@ module.exports = {
   // maxWorkers: '50%',
   // An array of directory names to be searched recursively up from the requiring module's location
   moduleDirectories: [
-     'node_modules',
+    'node_modules',
   ],
   // An array of file extensions your modules use
   moduleFileExtensions: [
-     'js',
+    'js',
   //   'json',
   //   'jsx',
   //   'ts',
@@ -131,7 +131,7 @@ module.exports = {
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [
-    'node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base)',
+    'node_modules/(?!(jest-)?react-native|react-clone-referenced-element|sentry-expo|native-base)',
   ],
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,

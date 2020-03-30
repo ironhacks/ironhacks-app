@@ -287,8 +287,8 @@ class AdminDashboard extends React.Component {
                 </SectionHeader>
                 <div className='row no-gutters flex-grow-1 overflow'>
                   <SectionBody className='col-md-12'>
-                    {(this.state.hack && !this.state.loading) ?
-                  <Switch>
+                    {(this.state.hack && !this.state.loading)
+                  ? <Switch>
                     <Route
                       path={this.props.match.url + '/settings'}
                       render={()=>
@@ -319,8 +319,8 @@ class AdminDashboard extends React.Component {
                           hack={this.state.hack}
                           onUpdate={this.updateQualtricsLinks}
                         />}/>
-                  </Switch> :
-                  <Loader />}
+                  </Switch>
+                  : <Loader />}
                   </SectionBody>
                 </div>
               </div>

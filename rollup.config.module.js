@@ -1,4 +1,5 @@
-export var module = {
+
+module.export = {
   name: 'main',
   input: 'index.js',
   output: 'main.js',
@@ -6,7 +7,7 @@ export var module = {
   sourcemap: false,
   assets: [
     'README.md',
-    'manifest.json'
+    'manifest.json',
   ],
-  watch: false
+  watch: false,
 };

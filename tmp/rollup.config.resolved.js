@@ -24,7 +24,7 @@ const package_config = {
 //  - esModule, exports, freeze, indent, namespaceToStringTag,
 //  - noConflict, preferConst, strict
 const module_list = [
-{
+  {
     name: 'getPkg',
     path: './',
     dest: './build/',
@@ -34,7 +34,7 @@ const module_list = [
     sourcemap: false,
     assets: false,
     watch: false,
-},
+  },
 // {
 //   name: 'findUp',
 //   path: './',
@@ -119,13 +119,13 @@ const terser_options = {
 };
 
 
-var plugins = [ replace({'process.env.NODE_ENV': JSON.stringify(NODE_ENV)}),
+const plugins = [replace({'process.env.NODE_ENV': JSON.stringify(NODE_ENV)}),
   // babel({
   //   exclude:'node_modules/**',
   //   runtimeHelpers: false,
   // }),
   resolve(resolve_options),
-  commonjs(commonjs_options)
+  commonjs(commonjs_options),
 ];
 
 if (NODE_ENV === 'PRODUCTION' && package_config.uglify) {
@@ -133,10 +133,9 @@ if (NODE_ENV === 'PRODUCTION' && package_config.uglify) {
 }
 
 
-
-var modules = [];
-var config;
-for (var mod of module_list) {
+const modules = [];
+let config;
+for (const mod of module_list) {
   console.log('modules', mod);
   config = {};
   config.input = mod.path + mod.input;
@@ -160,4 +159,4 @@ for (var mod of module_list) {
   modules.push(config);
 }
 
-export { modules as default };
+export {modules as default};

@@ -1,10 +1,6 @@
-/**
- *  User metrics reporting
- *
- *  @function registerStats
- *
- *  @param {Object} statData user metrics
- */
+// *  User metrics reporting
+// *  @function registerStats
+// *  @param {Object} statData user metrics
 export const registerStats = (statData) => {
   if (process.env.NODE_ENV !== 'production') {
     console.log('statData', statData);

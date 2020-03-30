@@ -2,11 +2,10 @@ import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {withCookies} from 'react-cookie';
 import styled, {ThemeProvider} from 'styled-components';
-
 import {registerStats} from '../../utilities/registerStat.js';
 import {Theme} from '../../theme';
-const colors = Theme.COLORS;
 import menuIcon from '../../assets/svg/$1.svg';
+const colors = Theme.COLORS;
 
 const styles = Theme.STYLES.HeaderTheme;
 
@@ -205,7 +204,6 @@ class Header extends React.Component {
     if (userMenuRef && !userMenuRef.contains(event.target)
         && navMenuRef
         && !navMenuRef.contains(event.target)) {
-
       this.setState({
         showMenu: 'none',
         showUserMenu: 'none',
@@ -230,7 +228,7 @@ class Header extends React.Component {
       this.setState({showMenu: 'flex'});
     } else {
       this.setState({showMenu: 'none'});
-    }
+    }gs;
   };
 
   hideMenus = (event) => {
@@ -258,7 +256,7 @@ class Header extends React.Component {
   };
 
   removeCookies = () => {
-    const {cookies} = this.props;\
+    const {cookies} = this.props;
     if (cookies.get('currentHack')) {
       cookies.remove('currentHack');
     }
@@ -308,8 +306,8 @@ class Header extends React.Component {
             <RightAlignDiv className='col-5'>
               <UserMenuDropper onClick={this.showUserMenu} >{this.state.user.displayName}</UserMenuDropper>
               <UserMenu display={this.state.showUserMenu} innerRef={this.userMenuRef}>
-                {this.props.location.pathname !== '/hackSelection' &&
-                  <NavButton to="/profile" onClick={this.hideMenus}>Profile</NavButton>
+                {this.props.location.pathname !== '/hackSelection'
+                  && <NavButton to="/profile" onClick={this.hideMenus}>Profile</NavButton>
                 }
                 <UserMenuButton onClick={this.logout}>Sign Out</UserMenuButton>
               </UserMenu>

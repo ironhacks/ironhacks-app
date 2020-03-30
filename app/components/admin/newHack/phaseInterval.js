@@ -7,7 +7,6 @@ const colors = Theme.COLORS;
 const units = Theme.UNITS;
 
 
-
 const PhaseIntervalContainer = styled('div')`
   display: flex;
   flex-direction: row;

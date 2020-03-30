@@ -4,14 +4,14 @@ import {Theme} from '../../theme';
 import {Treebeard, decorators} from 'react-treebeard';
 import fileIcon from '../../assets/svg/file-icon.svg';
 import folderIcon from '../../assets/svg/folder-icon.svg';
-const  = Theme.COLORS;
+const _c = Theme.COLORS;
 
 const MainContainer = styled('div')`
   display: flex;
   flex-grow: 1;
   width: 100%;
   overflow: auto;
-  background-color: ${(props) => props.backgroundColor ? props.backgroundColor : colors.projectEditorBgColor};
+  background-color: ${(props) => props.backgroundColor ? props.backgroundColor : _c.projectEditorBgColor};
   display: flex;
   flex-direction: column;
   padding: 0 20px 0 20px;
@@ -28,7 +28,7 @@ const TreeStyles = {
       'align-items': 'center',
       'justify-content': 'left',
       'listStyle': 'none',
-      'backgroundColor': `${(props) => props.backgroundColor ? props.backgroundColor : colors.projectEditorBgColor}`,
+      'backgroundColor': `${(props) => props.backgroundColor ? props.backgroundColor : _c.projectEditorBgColor}`,
       'margin': 0,
       'padding': 0,
       'color': '#9DA5AB',
@@ -212,8 +212,8 @@ class FilesContainer extends React.Component {
 
     if (splitedPath.length === 0) {
       if (filesTree[filesTree.length - 1].name !== fileName) {
-        filesTree[filesTree.length - 1].children ?
-            filesTree[filesTree.lenght - 1].children.push({
+        filesTree[filesTree.length - 1].children
+            ? filesTree[filesTree.lenght - 1].children.push({
               name: fileName,
               path: filePath,
             }) : filesTree[filesTree.length - 1].children = [{

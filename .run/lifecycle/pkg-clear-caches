@@ -5,18 +5,19 @@ BASE_DIR="$(npm prefix)"
 [[ -f .npmrc ]] && source .npmrc
 [[ -f .env ]] && source .env
 
-
 # __clear_metro_cachedir () {
 #   rm -rf $BASE_DIR/metro-bundler-cache-*
 #   npm start -- --reset-cache
 # }
+
 #
 # __clear_react_packager__() {
 #   rm -rf $BASE_DIR/./node_modules/react-native-packager-cache-*
 # }
-# __clear_react__() {
-#   rm -rf $BASE_DIR/./node_modules/react-*
-# }
+
+__clear_react__() {
+  rm -rf $BASE_DIR/./node_modules/react-*
+}
 
 __clear_npm_all__ () {
   rm -rf $BASE_DIR/./node_modules

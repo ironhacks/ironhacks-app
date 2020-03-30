@@ -1,18 +1,40 @@
 #!/bin/bash
+.settings-view .checkbox .setting-title,
+atom-pane-container atom-pane .item-views .pane-item {
+  color: #00c64d;
+  background-color: #1d262f;
+}
+
+.settings-view.pane-item a {
+  color: #88ffeb;
+}
+.settings-view .setting-description {
+  color: #0c927c;
+}
+.settings-view .settings-panel label {
+  color: #ff6969;
+  text-shadow: 0px 1px 5px rgba(0,0,0,0.4);
+}
+
+settings-view .text {
+  color: #ffc500;
+}
+
 
 # -------------------------
 # ESLINT-WATCH - GLOBAL INSTALL
 # --plugin
-# --watch-ignore RegExp        Regex string of folders to ignore when watching - default: /.git|node_modules|bower_components/
-# --watch-delay Int            Delay(ms) for watcher to wait to trigger re-lint - default: 300
+# --watch-ignore RegExp     Regex string of folders to ignore when watching - default: /.git|node_modules|bower_components/
+# --watch-delay Int         Delay(ms) for watcher to wait to trigger re-lint - default: 300
 # -------------------------
 
 BASE_PATH="$(npm prefix)"
+
 [[ -f "${BASE_PATH}/./.npmrc" ]] && . ${BASE_PATH}/./.npmrc
 
 NODE_RUN_ENV=""
 LINT_DIRS="${LINT_DIRS}"
-LINT_ARGS="$@"
+LINT_ARGS="$*"
 
 ${NODE_RUN_ENV} \
  esw \

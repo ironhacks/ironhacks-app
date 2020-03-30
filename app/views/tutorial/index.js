@@ -18,12 +18,11 @@ class TutorialScreen extends React.Component {
   constructor(props) {
     super(props);
     const {cookies} = props;
-
     this.state = {
       hackName: '',
       // currentHack: cookies.get('currentHack') || null,
       currentHack: 'mmHJrWzmx4rCyQ2YpJWL',
-      // forum: cookies.get('currentForum') || null,
+      // forum: cookies.get('currentForum') || n
       forum: 'qJmgIAFB6FtazeS66vJu',
     };
   }
@@ -42,7 +41,6 @@ class TutorialScreen extends React.Component {
           if (doc.data().tutorial) {
             _this.setState({tutorial: doc.data().tutorial, hackName: doc.data().name});
           } else {
-            // no task on the response, task not available yet.
             _this.setState({noTutorial: true});
           }
         })

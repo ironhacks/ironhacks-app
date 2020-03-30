@@ -1,27 +1,18 @@
 // forum.js - forum main Component
-
-
 import React from 'react';
 import {withCookies} from 'react-cookie';
-
 import styled, {ThemeProvider} from 'styled-components';
-// Router
 import {Redirect} from 'react-router-dom';
-
 import ThreadPreview from './threadPreview.js';
 import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js';
 import ForumSelector from './forumSelector.js';
 import {registerStats} from '../../utilities/registerStat.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
-
 import {Theme} from '../../theme';
-// Image references
 import searchIcon from '../../assets/svg/searchIcon.svg';
+
 const colors = Theme.COLORS;
-
 const styles = Theme.STYLES.AppSectionTheme;
-
-// Section container
 const SectionContainer = styled('div')`
   width: 100%;
   padding: 0 10%;
@@ -29,7 +20,6 @@ const SectionContainer = styled('div')`
   background-color: ${(props) => props.theme.backgroundColor};
   overflow-y: scroll;
 `;
-// Header
 const MainHeader = styled('h1')`
   width: 100%;
   text-align: center;
@@ -37,14 +27,12 @@ const MainHeader = styled('h1')`
   padding-bottom: 40px;
   font-weight: 800;
 `;
-// Controls
 const Control = styled('div')`
   display: flex;
   align-items: center;
   height: 30px;
   margin-bottom: 15px;
 `;
-// New thread button
 const NewThreadButton = styled('button')`
   height: 45px;
   font-weight: 700;
@@ -71,7 +59,6 @@ const NewThreadButton = styled('button')`
     font-size: 12px;
   }
 `;
-// SearchBar Container
 const SearchBar = styled('form')`
   height: 45px;
   display: flex;
@@ -114,7 +101,6 @@ class Forum extends React.Component {
       threads: [],
       selectedHack: 0,
     };
-    console.log(this.state);
     this.firestore = window.firebase.firestore();
   };
 
@@ -169,7 +155,6 @@ class Forum extends React.Component {
             const hackData = doc.data();
             hackData.id = doc.id;
             hacks.push(hackData);
-            // _this.firestore.collection('adminHackData').doc(doc.id)
           });
           _this.setState({hacks: hacks, selectedHack: 0});
           console.log(hacks);

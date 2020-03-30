@@ -7,7 +7,7 @@ const Button = styled('button')`
   height: ${(props) => props.height ? props.height : '30px'};
   margin: ${(props) => props.margin ? props.margin : '0'};
   background-color: ${(props) => props.primary ? colors.mainBgColor : 'lightgray'};
-  border-radius: ${units.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius}l;
   border: none;
 `;
 

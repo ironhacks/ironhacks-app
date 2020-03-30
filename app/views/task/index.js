@@ -26,8 +26,11 @@ const SectionContainer = styled('div')`
   }
 `;
 
-// prefixHeaderId  Add a prefix to the generated header ids. Passing a string will prefix that string to the header id. Setting to true will add a generic 'section' prefix.
-// strikethrough  Enable support for strikethrough syntax. ~~strikethrough~~ as <del>strikethrough</del>
+// prefixHeaderId  Add a prefix to the generated header ids.
+// Passing a string will prefix that string to the header id.
+// Setting to true will add a generic 'section' prefix.
+// strikethrough  Enable support for strikethrough syntax.
+// ~~strikethrough~~ as <del>strikethrough</del>
 // headerLevelStart  foo parse to <h3>foo</h3>
 const ConverterConfig = {
   tables: true,

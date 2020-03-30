@@ -1,4 +1,4 @@
-import React from 'react';
+mport React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import {CookiesProvider} from 'react-cookie';
 import styled from 'styled-components';
@@ -79,7 +79,6 @@ class IronHacksApp extends React.Component {
       return prevState;
     });
   }
-
   _isAdmin() {
     this.firestore.collection('admins')
         .doc(this.state.user.uid)
@@ -91,9 +90,6 @@ class IronHacksApp extends React.Component {
           this._setUpdateAdmin(false);
         });
   };
-
-
-  // Check firebase for active user session
   isUserConected() {
     window.firebase
         .auth()
@@ -119,10 +115,6 @@ class IronHacksApp extends React.Component {
         </LoaderContainer>
       );
     } else {
-      // Here we have all the posible routes on the platform,
-      // we use 3 switches becouse the header and the footer
-      // are only shown when there is a user logged.
-      // We also hide them on the preview of a project.
       return (
         <CookiesProvider>
           <div className='App'>
