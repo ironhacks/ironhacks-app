@@ -1,14 +1,15 @@
-// IronHacks Platform
 // yourCompetitorsRank.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled from 'styled-components';
 import ComperitorRow from './comperitorRow.js';
 import swal from 'sweetalert2';
-// Custom Constants
-import * as Constants from '../../../constants.js';
+
+import {Theme} from '../../theme';
+const colors = Theme.COLORS;
+const units = Theme.UNITS;
 // import * as Texts from './staticTexts.js';
 
 
@@ -20,7 +21,7 @@ const SectionContainer = styled('div')`
   justify-content: space-around;
   width: 100%;
   padding-bottom: 60px;
-  border-radius: ${Constants.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius};
 `;
 
 const Table = styled('table')`
@@ -28,7 +29,7 @@ const Table = styled('table')`
   border-radius: 1em;
   overflow: hidden;
   width: 100%;
-  
+
   thead {
     background-color: #FFD75F;
   }
@@ -58,13 +59,13 @@ const Table = styled('table')`
 const SaveLikesButton = styled('button')`
   position: absolute;
   display: ${((props) => props.hidden ? 'none' : 'block')}
-  bottom: 15px; 
+  bottom: 15px;
   right: 0;
   width: 150px;
   height: 40px;
   margin-top: 10px;
   border: none;
-  border-radius: ${Constants.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius};
   background-color: #FFD75F;
   cursor: pointer;
 `;
@@ -113,8 +114,8 @@ class YourCompetitorsRank extends React.Component {
             <tr>
               <th>Hacker</th>
               <th>Project Link</th>
-              {this.props.treatment === '1' &&
-              <th>Similarity Rating</th>
+              {this.props.treatment === '1'
+              && <th>Similarity Rating</th>
               }
               <th></th>
             </tr>

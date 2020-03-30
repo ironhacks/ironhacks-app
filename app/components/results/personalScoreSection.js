@@ -1,9 +1,8 @@
-// IronHacks Platform
 // personalScoreSection.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled from 'styled-components';
 
 import PersonalScoreItem from './personalScoreItem.js';

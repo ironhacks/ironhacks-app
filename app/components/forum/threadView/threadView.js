@@ -1,18 +1,17 @@
-// IronHacks Platform
 // threadView.js - Here is where a user is directed when he clicks on a thread from the forum.
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import styled, {ThemeProvider} from 'styled-components';
-// Custom constants
-import * as Constants from '../../../../constants.js';
-// Custom components
+
+import {Theme} from '../../theme';
+
 import Button from '../../../utilities/button.js';
 import CommentView from './commentView.js';
 import MarkdownEditor from '../../markdownEditor/markdownEditor.js';
 
-const theme = Constants.AppSectionTheme;
+const styles = Theme.STYLES.AppSectionTheme;
 
 // Section container
 const SectionContainer = styled('div')`
@@ -40,11 +39,11 @@ margin-top: 20px;
   overflow: auto;
 `;
 const SectionSeparator = styled('div')`
-  background-color: ${Constants.mainBgColor}
+  background-color: ${colors.mainBgColor}
   height: 1px;
   width 100%;
-  margin-top: calc(${Constants.threadPreviewBottomMargin} + 10px);
-  margin-bottom: calc(${Constants.threadPreviewBottomMargin} + 10px);
+  margin-top: calc(${colors.threadPreviewBottomMargin} + 10px);
+  margin-bottom: calc(${colors.threadPreviewBottomMargin} + 10px);
 `;
 
 class ThreadView extends React.Component {
@@ -160,11 +159,11 @@ class ThreadView extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer>
           <ThreadSection>
-            {this.state.head &&
-            <CommentView
+            {this.state.head
+            && <CommentView
               commentData={this.state.head}
               title={this.state.thread.title}
               user={this.state.user}

@@ -1,25 +1,25 @@
-// IronHacks Platform
 // forum.js - forum main Component
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 import {withCookies} from 'react-cookie';
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
 // Router
 import {Redirect} from 'react-router-dom';
-// Custom Components
+
 import ThreadPreview from './threadPreview.js';
 import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js';
 import ForumSelector from './forumSelector.js';
 import {registerStats} from '../../utilities/registerStat.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
-// Custom Constants
-import * as Constants from '../../../constants.js';
-// Image references
-import searchIcon from './img/searchIcon.svg';
 
-const theme = Constants.AppSectionTheme;
+import {Theme} from '../../theme';
+// Image references
+import searchIcon from '../../assets/svg/searchIcon.svg';
+const colors = Theme.COLORS;
+
+const styles = Theme.STYLES.AppSectionTheme;
 
 // Section container
 const SectionContainer = styled('div')`
@@ -50,12 +50,12 @@ const NewThreadButton = styled('button')`
   font-weight: 700;
   padding: 0 15px;
   border: none;
-  border-radius: ${Constants.universalBorderRadius}
-  background-color: ${Constants.mainBgColor};
+  border-radius: ${units.universalBorderRadius}
+  background-color: ${colors.mainBgColor};
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: ${Constants.buttonHighlightedBgColor};
+    background-color: ${colors.buttonHighlightedBgColor};
   }
 
   a {
@@ -85,7 +85,7 @@ const SearchBar = styled('form')`
     background-color: #F2F2F2;
     border: 1px solid #999999;
     border-right: none;
-    border-radius: ${Constants.universalBorderRadius} 0px 0px ${Constants.universalBorderRadius};
+    border-radius: ${units.universalBorderRadius} 0px 0px ${units.universalBorderRadius};
     padding-left: 10px;
   }
 
@@ -94,7 +94,7 @@ const SearchBar = styled('form')`
     background-color: #F2F2F2;
     border: 1px solid #999999;
     border-left: none;
-    border-radius: 0px ${Constants.universalBorderRadius} ${Constants.universalBorderRadius} 0px;
+    border-radius: 0px ${units.universalBorderRadius} ${units.universalBorderRadius} 0px;
     padding-left: 10px;
 
     img {
@@ -266,20 +266,20 @@ class Forum extends React.Component {
     }
 
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer>
           <MainHeader>Ironhacks Platform Demo</MainHeader>
           <h2>General discussion</h2>
           <p>Welcome to the Ironhacks forum! Feel free to talk about anything related with the task. You can also share code here.</p>
           <Control>
             <NewThreadButton onClick={this.saveStat}>START A NEW TOPIC</NewThreadButton>
-            {this.props.user.isAdmin &&
-              this.state.hacks &&
-              <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
-            {this.props.user.isAdmin &&
-              this.state.hacks &&
-              this.state.hacks[this.state.selectedHack].forums &&
-              <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
+            {this.props.user.isAdmin
+              && this.state.hacks
+              && <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
+            {this.props.user.isAdmin
+              && this.state.hacks
+              && this.state.hacks[this.state.selectedHack].forums
+              && <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
             <SearchBar>
               <input type='text' placeholder='Search...'/>
               <button><img src={searchIcon} alt='searchIcon'/></button>

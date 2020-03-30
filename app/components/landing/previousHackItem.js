@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import PriorHacksData from './priorHacksData.js';
 // Country flags
 import UNAL2019 from './img/purdue-UNAL-2019.jpeg';
-import COLFlag from './img/flags/col.svg';
+import COLFlag from '../../assets/svg/col.svg';
 
 
 const HackCard = styled('div')`

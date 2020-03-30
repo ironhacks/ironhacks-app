@@ -1,15 +1,8 @@
-// IronHacks Platform
-// comperitorRow.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
 import {Link} from 'react-router-dom';
-// Styled components
 import styled from 'styled-components';
-
-// IMG
-import FullHeart from '../../../img/full-heart.svg';
-import EmptyHeart from '../../../img/empty-heart.svg';
+import FullHeart from '../../assets/svg/full-heart.svg';
+import EmptyHeart from '../../assets/svg/empty-heart.svg';
 
 const Row = styled('tr')`
   position: relative;
@@ -41,7 +34,7 @@ const LikeButton = styled('button')`
   width: 35px;
   height: 35px;
   cursor: pointer;
-  
+
   &:hover, &:active, &:focus {
     outline: 0;
     outline: none;
@@ -88,8 +81,8 @@ class ComperitorRow extends React.Component {
             LINK
           </Link>
         </td>
-        {this.props.score &&
-          <td>{this.props.score.toString().slice(0, 5)}</td>
+        {this.props.score
+          && <td>{this.props.score.toString().slice(0, 5)}</td>
         }
         <td>
           <LikeButton onClick={this.onLikeClick}>

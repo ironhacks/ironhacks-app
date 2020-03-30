@@ -1,15 +1,15 @@
-// IronHacks Platform
 // footer.js - Footer
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 
-// Styled components
-import styled, {ThemeProvider} from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../constants.js';
 
-const theme = Constants.FooterTheme;
+import styled, {ThemeProvider} from 'styled-components';
+
+import {Theme} from '../../theme';
+const colors = Theme.COLORS;
+
+const styles = Theme.STYLES.FooterTheme;
 
 const FooterContainer = styled('div')`
   display: flex;
@@ -18,7 +18,7 @@ const FooterContainer = styled('div')`
   padding: 0 20px;
   height: ${(props) => props.theme.containerHeight};
   width: 100%;
-  background-color: ${Constants.mainBgColor}
+  background-color: ${colors.mainBgColor}
 
   span {
     font-size: 12px;
@@ -38,7 +38,7 @@ const FooterContainer = styled('div')`
 class Footer extends React.Component {
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <FooterContainer>
           <span>Version 2.0.1</span>
           <span>RESEARCH CENTER FOR OPEN DIGITAL INNOVATION | RCODI<br/>

@@ -1,22 +1,22 @@
-// IronHacks Platform
 // userProfile.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import {withCookies} from 'react-cookie';
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
-// Custom components
+
 import ProjectCard from './projectCard.js';
 import Separator from '../../utilities/separator.js';
 // import TimeLine from '../../utilities/timeLine.js';
 import * as TemplateFiles from './newProjectFileTemplates/templates.js';
 import Examples from './d3Examples.js';
-// Custom Constants
-import * as Constants from '../../../constants.js';
+
+import {Theme} from '../../theme';
 import Loader from '../../utilities/loader.js';
-const theme = Constants.AppSectionTheme;
+const colors = Theme.COLORS;
+const styles = Theme.STYLES.AppSectionTheme;
 
 // Section container
 const SectionContainer = styled('div')`
@@ -150,9 +150,9 @@ class UserProfile extends React.Component {
     this.setState({status: 'Creating repository...'});
     // Accesing to all the pain text template variables:
     const templateFiles = [{name: 'index.html', content: TemplateFiles.index}, {name: 'js/main.js', content: TemplateFiles.js}, {name: 'css/main.css', content: TemplateFiles.css}];
-    const projectName = this.state.user.isAdmin ?
-      `admin-${this.state.user.uid}-${name}` :
-      `${this.state.currentHack}-${this.state.user.uid}-${name}`;
+    const projectName = this.state.user.isAdmin
+      ? `admin-${this.state.user.uid}-${name}`
+      : `${this.state.currentHack}-${this.state.user.uid}-${name}`;
     const _this = this;
     const newRepoConfig = {
       name: projectName,
@@ -244,7 +244,7 @@ class UserProfile extends React.Component {
   render() {
     if (this.state.loading) {
       return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={styles}>
           <SectionContainer>
             <Loader status={this.state.status}/>
           </SectionContainer>
@@ -255,7 +255,7 @@ class UserProfile extends React.Component {
     if (this.state.navigateToProject === true) return <Redirect push to={`projectEditor/${this.state.projects[this.state.selectedProject].name}`}/>;
     if (this.state.navigateToCreatedProject === true) return <Redirect push to={`projectEditor/${this.state.newProjectName}`}/>;
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer>
           <ProfileContainer>
             <span>{this.state.user.profileLetters}</span>

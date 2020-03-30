@@ -1,19 +1,11 @@
-// IronHacks Platform
-// admSettingsSection.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-// Styled components
 import styled from 'styled-components';
-// Router
 // import { Switch, Route, Redirect} from "react-router-dom";
-// Customs components
 import Separator from '../../../../utilities/separator.js';
 import WhiteListItem from './whiteListItem.js';
 import AvailableActionsDiv from '../../../../utilities/availableActionsDiv.js';
 import Button from '../../../../utilities/button.js';
-// Custom Constants
-// import * as Constants from '../../../../../constants.js';
+// import {Theme} from '../../theme';
 
 // Section container
 const SectionContainer = styled('div')`

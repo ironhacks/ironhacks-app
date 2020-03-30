@@ -1,15 +1,16 @@
-// IronHacks Platform
 // personalScoreItem.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled, {css} from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../constants.js';
+
+import {Theme} from '../../theme';
 import * as Texts from './staticTexts.js';
 import {registerStats} from '../../utilities/registerStat.js';
-
+const colors = Theme.COLORS;
+const units = Theme.UNITS;
+const styles = Theme.STYLES.personalFeddbackTheme;
 const ItemContainer = styled('div')`
   display: flex;
   width: 100%;
@@ -48,7 +49,7 @@ const Title = styled('button')`
   padding-top: 15px;
   margin-top: -1px;
   border: none;
-  background-color: ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
+  background-color: ${(props) => styles[props.type].backgroundColor};
   cursor: pointer;
 `;
 
@@ -58,11 +59,11 @@ const Contents = styled('div')`
   flex-direction: row;
   width: 100%;
   overflow: hidden;
-  border-right: solid 1px ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
-  border-left: solid 1px ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
-  border-bottom: solid 1px ${(props) => Constants.personalFeddbackTheme[props.type].backgroundColor};
+  border-right: solid 1px ${(props) => styles[props.type].backgroundColor};
+  border-left: solid 1px ${(props) => styles[props.type].backgroundColor};
+  border-bottom: solid 1px ${(props) => styles[props.type].backgroundColor};
 
-  
+
   transition: max-height 1s ease-out;
   ${(props) => (props.active && css`
     transition: max-height 1s ease-in 0s;
@@ -114,7 +115,7 @@ const SubSection = styled('div')`
     align-items: center;
     justify-content: center;
     width: 100%;
-    background-color: ${(props) => Constants.personalFeddbackTheme[props.type].lightBackgroundColor};
+    background-color: ${(props) => styles[props.type].lightBackgroundColor};
 
     h3 {
       font-size: 45px;
@@ -180,8 +181,8 @@ class PersonalScoreItem extends React.Component {
               <span>Total points</span>
             </div>
           </SubSection>
-          {this.props.type !== 'visualization' &&
-          <SubSection type={this.props.type}>
+          {this.props.type !== 'visualization'
+          && <SubSection type={this.props.type}>
             <div className='sub-category-text'>
               <h3>Points for Excellence</h3>
             </div>
@@ -191,8 +192,8 @@ class PersonalScoreItem extends React.Component {
             </div>
           </SubSection>
           }
-          {this.props.type === 'visualization' &&
-            <VerticalContainer type={this.props.type}>
+          {this.props.type === 'visualization'
+            && <VerticalContainer type={this.props.type}>
               <div className="horizontal">
                 <SubSection type={this.props.type}>
                   <div className="sub-category-text">

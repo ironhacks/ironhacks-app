@@ -6,12 +6,11 @@ import SettingsSection from './sections/settings/admSettingsSection.js';
 import QualtricsIntegrationSection from './sections/qualtricsIntegration/qualtricsIntegrationSection.js';
 import TaskSection from './sections/task/admTaskSection.js';
 import TutorialSection from './sections/tutorial/admTutorialSection.js';
-import * as Constants from '../../../constants.js';
-
-import HouseIcon from './img/house-black-icon.svg';
-import SettingsIcon from './img/settings-icon.svg';
-
-const theme = Constants.AppSectionTheme;
+import {Theme} from '../../theme';
+import SettingsIcon from '../../assets/svg/settings-icon.svg';
+import HouseIcon from '../../assets/svg/home-icon.svg';
+const colors = Theme.COLORS;
+const styles = Theme.STYLES.AppSectionTheme;
 
 const SectionContainer = styled('div')`
   width: 100%;
@@ -45,7 +44,7 @@ const ControlPanelItem = styled('div')`
 
   &:hover {
     background-color: gray;
-    color: ${Constants.mainBgColor};
+    color: ${colors.mainBgColor};
   }
 
   &:first-child {
@@ -252,7 +251,7 @@ class AdminDashboard extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer className='container-fuild'>
           <div className='row no-gutters full-height'>
             <ControlPanel className='col-md-2'>

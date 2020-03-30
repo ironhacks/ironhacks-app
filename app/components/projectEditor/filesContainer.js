@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as Constants from '../../../constants.js';
+import {Theme} from '../../theme';
 import {Treebeard, decorators} from 'react-treebeard';
-import fileIcon from './img/file-icon.svg';
-import folderIcon from './img/folder-icon.svg';
+import fileIcon from '../../assets/svg/file-icon.svg';
+import folderIcon from '../../assets/svg/folder-icon.svg';
+const  = Theme.COLORS;
 
 const MainContainer = styled('div')`
   display: flex;
   flex-grow: 1;
   width: 100%;
   overflow: auto;
-  background-color: ${(props) => props.backgroundColor ? props.backgroundColor : Constants.projectEditorBgColor};
+  background-color: ${(props) => props.backgroundColor ? props.backgroundColor : colors.projectEditorBgColor};
   display: flex;
   flex-direction: column;
   padding: 0 20px 0 20px;
@@ -27,7 +28,7 @@ const TreeStyles = {
       'align-items': 'center',
       'justify-content': 'left',
       'listStyle': 'none',
-      'backgroundColor': `${(props) => props.backgroundColor ? props.backgroundColor : Constants.projectEditorBgColor}`,
+      'backgroundColor': `${(props) => props.backgroundColor ? props.backgroundColor : colors.projectEditorBgColor}`,
       'margin': 0,
       'padding': 0,
       'color': '#9DA5AB',

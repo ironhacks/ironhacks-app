@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as Constants from '../../../constants.js';
-import ReloadIcon from './img/reload-icon.svg';
-import NewTabIcon from './img/multi-tab.svg';
+import {Theme} from '../../theme';
+import ReloadIcon from '../../assets/svg/reload-icon.svg';
+import NewTabIcon from '../../assets/svg/multi-tab.svg';
+const colors = Theme.COLORS;
 
 const PreviewContainer = styled('div')`
   display: ${(props) => props.hidden ? 'none' : 'flex'};
-  border-radius: ${Constants.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius};
   background-color: #1C2022;
   flex-direction: column;
   width: 100%;
@@ -20,7 +21,7 @@ const PreviewContainer = styled('div')`
     width: 100%;
     height: 40px;
     background-color: #F2F2F2;
-    border-radius: ${Constants.universalBorderRadius} ${Constants.universalBorderRadius} 0 0;
+    border-radius: ${units.universalBorderRadius} ${units.universalBorderRadius} 0 0;
     padding: 0 10px;
 
     button, a {
@@ -53,7 +54,7 @@ const PreviewContainer = styled('div')`
     flex-grow: 1;
     width: 100%
     overflow: hidden;
-    border-radius: 0 0 ${Constants.universalBorderRadius} ${Constants.universalBorderRadius};
+    border-radius: 0 0 ${units.universalBorderRadius} ${units.universalBorderRadius};
 
     iframe {
       border: none;
@@ -89,7 +90,7 @@ class ProjectPreview extends React.Component {
 
   getProjectPreviewPath = () => {
     // Create a reference with an initial file path and name
-    const projectURL = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`;
+    const projectURL = `${colors.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`;
     this.setState({projectURL: projectURL});
   }
 

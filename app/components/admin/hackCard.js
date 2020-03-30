@@ -1,14 +1,14 @@
-// IronHacks Platform
 // newHack.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
-import styled from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../constants.js';
 
-// Section container
+import styled from 'styled-components';
+
+import {Theme} from '../../theme';
+const colors = Theme.COLORS;
+
+
 const CardContainer = styled('button')`
   height: 150px;
   width: 30%;
@@ -16,7 +16,7 @@ const CardContainer = styled('button')`
   text-align: left;
   box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);
   border: none;
-  background-color: white; 
+  background-color: white;
   padding: 0;
 
   &.newHackCard {
@@ -26,11 +26,11 @@ const CardContainer = styled('button')`
     align-items: center;
 
     span {
-      color: ${Constants.mainBgColor};
+      color: ${colors.mainBgColor};
       font-size: 20px;
       font-weight: 800;
       margin: 0;
-      
+
       &:first-child {
         line-height: 40px;
         font-size: 40px;
@@ -53,7 +53,7 @@ const Separator = styled('div')`
   width: 100%;
   height: 1px;
   margin-top: 25px;
-  background-color: ${Constants.mainBgColor};
+  background-color: ${colors.mainBgColor};
 `;
 
 class HackCard extends React.Component {

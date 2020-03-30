@@ -1,20 +1,20 @@
-// IronHacks Platform
 // WhiteListItem.js - WhiteListItem
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../../../constants.js';
-// Images
-import trashCanIcon from '../../../../../img/trash.svg';
+
+import {Theme} from '../../theme';
+import trashCanIcon from '../../../../assets/svg/trash.svg';
+const colors = Theme.COLORS;
+const units = Theme.units;
 
 const ItemContainer = styled('div')`
   width: 20%;
   height: 30px;
   margin-right: 15px;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
   display: flex;
   justify-content: flex-end;
 
@@ -22,11 +22,11 @@ const ItemContainer = styled('div')`
     width: 60%;
     height: 100%;
     background-color: ${(props) =>
-      props.isValid ? Constants.mainBgColor : 'red'
+      props.isValid ? colors.mainBgColor : 'red'
 };
     border: 1px solid #999999;
-    border-right: none; 
-    border-radius: ${Constants.universalBorderRadius} 0px 0px ${Constants.universalBorderRadius};
+    border-right: none;
+    border-radius: ${units.universalBorderRadius} 0px 0px ${units.universalBorderRadius};
     padding-left: 10px;
 
   }
@@ -35,11 +35,11 @@ const ItemContainer = styled('div')`
     height: 100%;
     width: 30px;
     background-color: ${(props) =>
-      props.isValid ? Constants.mainBgColor : 'red'
+      props.isValid ? colors.mainBgColor : 'red'
 };
     border: 1px solid #999999;
     border-left: none;
-    border-radius: 0px ${Constants.universalBorderRadius} ${Constants.universalBorderRadius} 0px;
+    border-radius: 0px ${units.universalBorderRadius} ${units.universalBorderRadius} 0px;
 
     img {
       width: 100%;
@@ -58,9 +58,9 @@ const WhiteListItemInput = styled('input')`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-radius: ${Constants.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius};
   background-color: ${(props) =>
-    props.isValid ? Constants.mainBgColor : 'red'
+    props.isValid ? colors.mainBgColor : 'red'
   };
 `
 ^*/

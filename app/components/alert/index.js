@@ -75,8 +75,8 @@ export const successFinalCommitAlert = (phase) => {
   return {
     title: 'Success',
     type: 'success',
-    text: 'Thanks for making your final commit for phase ' + phase +
-        '! Your app will be considered for evaluation! Stay tuned and wait for feedback in your dashboard!',
+    text: 'Thanks for making your final commit for phase ' + phase
+        + '! Your app will be considered for evaluation! Stay tuned and wait for feedback in your dashboard!',
     confirmButtonText: 'Ok',
     confirmButtonColor: Colors.mainBgColor,
     showCloseButton: true,

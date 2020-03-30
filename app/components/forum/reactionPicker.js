@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import LikeReaction from './img/like-reaction.svg';
-import LikeReactionHighLighted from './img/like-reaction-highlight.svg';
-import DislikeReaction from './img/dislike-reaction.svg';
-import DislikeReactionHighLighted from './img/dislike-reaction-highlight.svg';
+import LikeReaction from '../../assets/svg/like-reaction.svg';
+import LikeReactionHighLighted from '../../assets/svg/like-reaction-highlight.svg';
+import DislikeReaction from '../../assets/svg/dislike-reaction.svg';
+import DislikeReactionHighLighted from '../../assets/svg/dislike-reaction-highlight.svg';
 
 const Reactions = styled('div')`
   display: flex;
@@ -198,14 +198,14 @@ class ReactionPicker extends React.Component {
   render() {
     return (
       <Reactions>
-        {this.state.likes.length >= 0 &&
-        <ReactionCounter id='likes' onClick={this.handleReactionClick} highLighted={this.state.isLiked}>
+        {this.state.likes.length >= 0
+        && <ReactionCounter id='likes' onClick={this.handleReactionClick} highLighted={this.state.isLiked}>
           <span id='likes'><img id='likes' src={this.state.isLiked ? LikeReactionHighLighted : LikeReaction} alt='likeReaction'/></span>
           <span id='likes'>{`${this.state.likes.length}`}</span>
         </ReactionCounter>
         }
-        {this.state.dislikes.length >= 0 &&
-        <ReactionCounter id='dislikes' onClick={this.handleReactionClick} highLighted={this.state.isDisliked}>
+        {this.state.dislikes.length >= 0
+        && <ReactionCounter id='dislikes' onClick={this.handleReactionClick} highLighted={this.state.isDisliked}>
           <span id='dislikes'><img id='dislikes' src={this.state.isDisliked ? DislikeReactionHighLighted : DislikeReaction} alt='dislikeReaction'/></span>
           <span id='dislikes'>{this.state.dislikes.length}</span>
         </ReactionCounter>

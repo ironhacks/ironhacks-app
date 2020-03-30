@@ -1,16 +1,7 @@
-// IronHacks Platform
-// forum.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-// Styled components
 import styled from 'styled-components';
-// Custom Constants
-// import * as Constants from '../../../../constants.js';
-
-
-// Images
-import forumIcon from './img/forum-icon.svg';
+// import {Theme} from '../../theme';
+import forumIcon from '../../assets/svg/forum-icon.svg';
 
 const ForumItemContainer = styled('div')`
   display: flex;

@@ -1,16 +1,12 @@
-// IronHacks Platform
 // admSettingsSection.js - Results Component
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
 
 import React from 'react';
-// Styled components
 import styled from 'styled-components';
-// Router
 import {Link} from 'react-router-dom';
-// Customs components
 import Separator from '../../../../utilities/separator.js';
 import Button from '../../../../utilities/button.js';
-// Section container
+
+
 const SectionContainer = styled('form')`
   width: 100%;
   height: 100%;

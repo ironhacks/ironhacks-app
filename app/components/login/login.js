@@ -1,21 +1,21 @@
-// IronHacks Platform
 // login.js - Loging page
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 import {Redirect} from 'react-router-dom';
-// Styled components
-import styled, {ThemeProvider} from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../constants.js';
 
-const theme = Constants.LoginTheme;
+import styled, {ThemeProvider} from 'styled-components';
+
+import {Theme} from '../../theme';
+const colors = Theme.COLORS;
+
+const styles = Theme.STYLES.LoginTheme;
 
 // Section container
 const SectionContainer = styled('div')`
   width: 100%;
   height: 100vh;
-  background-color: ${Constants.mainBgColor};
+  background-color: ${colors.mainBgColor};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -151,7 +151,7 @@ class Login extends React.Component {
       }
     }
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer>
           <h1><span>PURDUE </span>IRONHACKS</h1>
           <h2>Hack for innovation and join the open data movement.</h2>

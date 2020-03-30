@@ -4,7 +4,7 @@ import swal from 'sweetalert2';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import {JSHINT} from 'jshint';
 import styled, {ThemeProvider} from 'styled-components';
-import * as Constants from '../../../constants.js';
+import {Theme} from '../../theme';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/mode/xml/xml';
@@ -29,9 +29,10 @@ import Loader from '../../utilities/loader.js';
 import Button from '../../utilities/button.js';
 import * as DateFormater from '../../utilities/dateFormater.js';
 import {registerStats} from '../../utilities/registerStat.js';
+const colors = Theme.COLORS;
 
 window.JSHINT = JSHINT;
-const theme = Constants.AppSectionTheme;
+const styles = Theme.STYLES.AppSectionTheme;
 
 // Section container
 const SectionContainer = styled('div')`
@@ -56,7 +57,7 @@ display: flex;
 flex-direction: column;
 width: 20%;
 height: 100%;
-background-color: ${Constants.projectEditorBgColor};
+background-color: ${colors.projectEditorBgColor};
 padding-top: 20px;
 
 h2, h3 {
@@ -189,7 +190,7 @@ class ProjectEditor extends React.Component {
   getProjectPreviewPath() {
     // Create a reference with an initial file path and name
     const userId = this.state.hackerId || this.state.user.uid;
-    const proyectPath = `${Constants.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`;
+    const proyectPath = `${colors.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`;
     this.setState({proyectPath: proyectPath});
   }
 
@@ -199,17 +200,17 @@ class ProjectEditor extends React.Component {
     const userId = this.state.hackerId || this.state.user.uid;
     // Updating the current hack:
     firestore.collection('users')
-    .doc(userId)
-    .collection('projects')
-    .doc(this.state.projectName)
-    .get()
-    .then(function(doc) {
-      _this.setState({projectFiles: doc.data()});
-      _this.getProjectFiles();
-    })
-    .catch(function(error) {
-      console.error(error);
-    });
+        .doc(userId)
+        .collection('projects')
+        .doc(this.state.projectName)
+        .get()
+        .then(function(doc) {
+          _this.setState({projectFiles: doc.data()});
+          _this.getProjectFiles();
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
   }
 
   getProjectFiles() {
@@ -238,16 +239,16 @@ class ProjectEditor extends React.Component {
     }
 
     Promise.all(pendingReadings)
-    .then((results) => {
-      const reducedProjectFiles = results.reduce((pf, {path, ...file} ) => ({
-        ...pf,
-        [path]: file,
-      }), {});
-      this.setState({
-        projectFiles: reducedProjectFiles,
-        loadingFiles: false,
-      });
-    });
+        .then((results) => {
+          const reducedProjectFiles = results.reduce((pf, {path, ...file} ) => ({
+            ...pf,
+            [path]: file,
+          }), {});
+          this.setState({
+            projectFiles: reducedProjectFiles,
+            loadingFiles: false,
+          });
+        });
   }
 
   readBlob = (file) => new Promise((resolve, reject) => {
@@ -262,22 +263,22 @@ class ProjectEditor extends React.Component {
   getCurrentHackInfo() {
     const _this = this;
     this.firestore.collection('hacks')
-    .doc(this.state.currentHack)
-    .get()
-    .then((doc) => {
-      const hackData = doc.data();
-      const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
-      _this.setState({
-        hackData,
-        currentPhase,
-      });
-      if (currentPhase !== -1) {
-        _this.getCountDown();
-      }
-    })
-    .catch(function(error) {
-      console.error('Error getting documents: ', error);
-    });
+        .doc(this.state.currentHack)
+        .get()
+        .then((doc) => {
+          const hackData = doc.data();
+          const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+          _this.setState({
+            hackData,
+            currentPhase,
+          });
+          if (currentPhase !== -1) {
+            _this.getCountDown();
+          }
+        })
+        .catch(function(error) {
+          console.error('Error getting documents: ', error);
+        });
   };
 
   getCountDown() {
@@ -321,21 +322,21 @@ class ProjectEditor extends React.Component {
     console.log(newBlobs, 'blobs');
     const _this = this;
     Promise.all(
-      newBlobs.map((item) => this.uploadBlogToFirebase(item)),
+        newBlobs.map((item) => this.uploadBlogToFirebase(item)),
     )
-    .then((url) => {
-      _this.setState((prevState, props) => {
-        const proyectPath = prevState.proyectPath + ' ';
-        const projectFiles = prevState.projectFiles;
-        if (projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
-          projectFiles[prevState.selectedFile].content = projectFiles[prevState.selectedFile].unSavedContent;
-        }
-        return {projectFiles, proyectPath};
-      });
-    })
-    .catch((error) => {
-      console.log(`Some failed: `, error.message);
-    });
+        .then((url) => {
+          _this.setState((prevState, props) => {
+            const proyectPath = prevState.proyectPath + ' ';
+            const projectFiles = prevState.projectFiles;
+            if (projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
+              projectFiles[prevState.selectedFile].content = projectFiles[prevState.selectedFile].unSavedContent;
+            }
+            return {projectFiles, proyectPath};
+          });
+        })
+        .catch((error) => {
+          console.log(`Some failed: `, error.message);
+        });
   }
 
   updateProjectBlobs() {
@@ -403,9 +404,9 @@ class ProjectEditor extends React.Component {
       });
     }
 
-    const projectName = this.state.user.isAdmin ?
-    `admin-${this.state.user.uid}-${this.state.projectName}` :
-    `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
+    const projectName = this.state.user.isAdmin
+    ? `admin-${this.state.user.uid}-${this.state.projectName}`
+    : `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
     const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
     commitToGitHub({
       name: projectName,
@@ -454,7 +455,7 @@ class ProjectEditor extends React.Component {
     });
   }
 
-   async startCreateNewFileFlow() {
+  async startCreateNewFileFlow() {
     this.saveProject();
     const {value: filePath} = await swal(Constants.createNewFileFlowAlertContent(this.fileNameValidator));
     if (filePath) {
@@ -517,30 +518,30 @@ class ProjectEditor extends React.Component {
     const _this = this;
     // the return value will be a Promise
     return pathRef.put(file.blob)
-    .then((snapshot) => {
-      // Get the download URL
-      pathRef.getDownloadURL().then(function(url) {
-        const fileURL = url;
-        const fileJson = {};
-        const fullPath = file.path;
-        fileJson[fullPath] = {url: fileURL};
-        const firestore = window.firebase.firestore();
-        firestore.collection('users')
-        .doc(_this.state.user.uid)
-        .collection('projects')
-        .doc(projectName)
-        .set(fileJson, {merge: true})
-        .then(function(doc) {
-          _this.getProjectFilesUrls();
+        .then((snapshot) => {
+          // Get the download URL
+          pathRef.getDownloadURL().then(function(url) {
+            const fileURL = url;
+            const fileJson = {};
+            const fullPath = file.path;
+            fileJson[fullPath] = {url: fileURL};
+            const firestore = window.firebase.firestore();
+            firestore.collection('users')
+                .doc(_this.state.user.uid)
+                .collection('projects')
+                .doc(projectName)
+                .set(fileJson, {merge: true})
+                .then(function(doc) {
+                  _this.getProjectFilesUrls();
+                });
+          })
+              .catch(function(error) {
+                console.error('Error getting documents: ', error);
+              });
+        }).catch(function(error) {
+        }).catch((error) => {
+          console.log('One failed:', file, error.message);
         });
-      })
-      .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      });
-    }).catch(function(error) {
-    }).catch((error) => {
-      console.log('One failed:', file, error.message);
-    });
   };
 
   reloadFrame() {
@@ -567,15 +568,15 @@ class ProjectEditor extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer>
           <ProjectContent>
             <h2>{this.state.projectName.toUpperCase()}</h2>
-            {!this.state.readOnly &&
-              <div className="control">
+            {!this.state.readOnly
+              && <div className="control">
                 <Button primary onClick={this.saveProject}> Save and run </Button>
-                {this.state.currentPhase !== -1 &&
-                  <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
+                {this.state.currentPhase !== -1
+                  && <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
                 }
                 <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
               </div>
@@ -585,8 +586,8 @@ class ProjectEditor extends React.Component {
               backgroundColor={Constants.projectEditorBgColor}
               dark
               small
-            /> :
-            <FilesContainer files={this.state.projectFiles}
+            />
+            : <FilesContainer files={this.state.projectFiles}
               onFileSelection={this.onFileSelection}
               selectedFile={this.state.selectedFile}
               projectName={this.state.projectName.toUpperCase()}/>
@@ -622,8 +623,8 @@ class ProjectEditor extends React.Component {
               onChange={this.onChangeEditor}
             />}
           </EditorContainer>
-          {this.state.proyectPath &&
-            <PreviewContainer hidden={this.state.hidePreview}>
+          {this.state.proyectPath
+            && <PreviewContainer hidden={this.state.hidePreview}>
               <ProjectPreview
                 hidden={this.state.hidePreview}
                 hidePreview={this.hidePreview}
@@ -633,8 +634,8 @@ class ProjectEditor extends React.Component {
               />
             </PreviewContainer>
           }
-          {this.state.hidePreview &&
-            <ShowPreview onClick={this.showPreview}>
+          {this.state.hidePreview
+            && <ShowPreview onClick={this.showPreview}>
               <i className="left"></i>
             </ShowPreview>
           }

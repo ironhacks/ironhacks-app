@@ -1,14 +1,15 @@
-// IronHacks Platform
 // quizzes.js - Quiz picker and visualizer
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
 import {Link} from 'react-router-dom';
-// Custom Constants
-import * as Constants from '../../../constants.js';
-const theme = Constants.AppSectionTheme;
+import {Theme} from '../../theme';
+
+const styles = Theme.STYLES.QuizViewStyles;
+const colors = Theme.COLORS;
+const units = Theme.UNITS;
 
 // Section container
 const SectionContainer = styled('div')`
@@ -38,8 +39,8 @@ const QuizButton = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${Constants.mainBgColor};
-  border-radius: ${Constants.universalBorderRadius};
+  background-color: ${colors.mainBgColor};
+  border-radius: ${units.universalBorderRadius};
   color: black;
   width: 50%;
   height: 35px;
@@ -50,7 +51,7 @@ const QuizButton = styled(Link)`
 class Quizzes extends React.Component {
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer className="container-fluid">
           <div className="row">
             <Title className='col-12'>

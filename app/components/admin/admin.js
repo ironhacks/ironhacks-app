@@ -1,18 +1,18 @@
-// IronHacks Platform
 // admin.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 import {Redirect} from 'react-router-dom';
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
-// Custom components
+
 import HackCard from './hackCard.js';
 import Separator from '../../utilities/separator.js';
-// Custom Constants
-import * as Constants from '../../../constants.js';
 
-const theme = Constants.AppSectionTheme;
+import {Theme} from '../../theme';
+const colors = Theme.COLORS;
+
+const styles = Theme.STYLES.AppSectionTheme;
 
 // Section container
 const SectionContainer = styled('div')`
@@ -105,7 +105,7 @@ class Admin extends React.Component {
     }
 
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer className="container-fluid">
           <div className="row">
             <div className='col-md-8 offset-md-2'>

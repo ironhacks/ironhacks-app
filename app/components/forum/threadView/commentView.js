@@ -1,6 +1,5 @@
-// IronHacks Platform
 // commentView.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 import {Redirect} from 'react-router-dom';
@@ -9,17 +8,19 @@ import Showdown from 'showdown';
 
 import ReactionsView from '../reactionsView.js';
 import ReactionPicker from '../reactionPicker.js';
-import TrashIcon from '../../img/trash.svg';
-import * as Constants from '../../../../constants.js';
+import TrashIcon from '../assets/svg/trash.svg';
+import {Theme} from '../../theme';
 
-const theme = Constants.CommentViewTheme;
+const styles = Theme.STYLES.CommentViewTheme;
+const colors = Theme.COLORS;
+const units = Theme.UNITS;
 
 const CommentContainer = styled('div')`
   position: relative;
   height: ${(props) => props.theme.containerHeight};
-  border-radius: ${Constants.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius};
   background-color: ${(props) => props.theme.backgroundColor};
-  margin-bottom: ${Constants.commentViewBottomMargin};
+  margin-bottom: ${units.commentViewBottomMargin};
   padding: 10px 15px 10px 15px;
 
   .comment-content {
@@ -84,7 +85,7 @@ const DeleteButton = styled('button')`
   border: none;
   background-color: transparent;
   cursor: pointer;
-  border-radius: ${Constants.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius};
   transition: background-color 0.3s;
 
   img {
@@ -200,7 +201,7 @@ class CommentView extends React.Component {
     if (this.state.navigateToForum) return <Redirect push to='/forum'/>;
 
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <CommentContainer>
           <UserName>
             <UserImage>{this.state.profileLetters}</UserImage>
@@ -220,8 +221,8 @@ class CommentView extends React.Component {
               user={this.state.user}
             />
           </div>
-          {this.props.commentData.author === this.state.user.uid &&
-            <Control>
+          {this.props.commentData.author === this.state.user.uid
+            && <Control>
               <DeleteButton><img src={TrashIcon} alt="trash-icon" onClick={this.deleteComment}/></DeleteButton>
             </Control>
           }

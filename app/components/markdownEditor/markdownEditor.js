@@ -1,8 +1,7 @@
-// IronHacks Platform
 // markdownEditor.js - Plain Markdown Editor
 // We are using react-mde: https://github.com/andrerpena/react-mde
 // Please refer to react-mde github for further documentation
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 

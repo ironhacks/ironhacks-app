@@ -1,13 +1,14 @@
-// IronHacks Platform
 // projectCard.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../constants.js';
+
+import {Theme} from '../../theme';
 import Button from '../../utilities/button.js';
+const colors = Theme.COLORS;
+const units = Theme.UNITS;
 
 // Section container
 const CardContainer = styled('button')`
@@ -17,7 +18,7 @@ const CardContainer = styled('button')`
   text-align: left;
   box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);
   border: none;
-  background-color: white; 
+  background-color: white;
   padding: 0;
 
   &.newProject {
@@ -27,11 +28,11 @@ const CardContainer = styled('button')`
     align-items: center;
 
     span {
-      color: ${Constants.mainBgColor};
+      color: ${colors.mainBgColor};
       font-size: 20px;
       font-weight: 800;
       margin: 0;
-      
+
       &:first-child {
         line-height: 40px;
         font-size: 40px;
@@ -57,7 +58,7 @@ const NewProjectForm = styled('div')`
   text-align: left;
   box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);
   border: none;
-  background-color: white; 
+  background-color: white;
   padding: 0;
 
   .name-error {
@@ -76,7 +77,7 @@ const NewProjectForm = styled('div')`
     height: 100%;
 
     h3 {
-      color: ${Constants.mainBgColor};
+      color: ${colors.mainBgColor};
       margin-left: 0;
       margin-bottom: 15px;
     };
@@ -92,8 +93,8 @@ const NewProjectForm = styled('div')`
         height: 30px;
         margin-left: 5px;
         padding: 0 10px;
-        background-color: ${Constants.mainBgColor};
-        border-radius: ${Constants.universalBorderRadius};
+        background-color: ${colors.mainBgColor};
+        border-radius: ${units.universalBorderRadius};
         border: none;
       }
     }
@@ -111,7 +112,7 @@ const Separator = styled('div')`
   width: 100%;
   height: 1px;
   margin-top: 25px;
-  background-color: ${Constants.mainBgColor};
+  background-color: ${colors.mainBgColor};
 `;
 
 class ProjectCard extends React.Component {
@@ -186,8 +187,8 @@ class ProjectCard extends React.Component {
             <form onSubmit={this.handleSubmit}>
               <h3>Project name:</h3>
               <input type='text' placeholder='Awasome project' onChange={this.handleNameInput}/>
-              {this.state.nameError &&
-                <p className="name-error">
+              {this.state.nameError
+                && <p className="name-error">
                   {this.state.nameError}
                 </p>
               }

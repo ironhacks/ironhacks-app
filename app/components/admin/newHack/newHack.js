@@ -1,27 +1,18 @@
-// IronHacks Platform
-// newHack.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
 import {Redirect} from 'react-router-dom';
-// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-// Date Picker
 import DayPicker, {DateUtils} from 'react-day-picker';
-// Custom Constants
-import * as Constants from '../../../../constants.js';
-// Custom Components
+import {Theme} from '../../theme';
 import Separator from '../../../utilities/separator.js';
 import Button from '../../../utilities/button.js';
 import Phase from './phase.js';
 import ForumItem from './forumItem.js';
 
-// DatePicker css
 import 'react-day-picker/lib/style.css';
 
-const theme = Constants.AppSectionTheme;
+const styles = Theme.STYLES.AppSectionTheme;
 
-// Section container
+
 const SectionContainer = styled('div')`
   width: 100%;
   height: ${(props) => props.theme.containerHeight};
@@ -292,7 +283,7 @@ class NewHack extends React.Component {
     const {from, to} = this.state;
     const modifiers = {start: from, end: to};
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer className='container-fluid'>
           <div className='row'>
             <div className='col-md-8 offset-md-2'>

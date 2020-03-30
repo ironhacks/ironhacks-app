@@ -1,23 +1,16 @@
-// IronHacks Platform
-// createThread.js - Editor to create a new Thread
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import {withCookies} from 'react-cookie';
-// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../constants.js';
-// Custom components
 import BreadCrumbs from '../../utilities/breadCrumbs.js';
 import ForumSelector from './forumSelector.js';
 import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 import Loader from '../../utilities/loader.js';
+import {Theme} from '../../theme';
+const colors = Theme.COLORS;
+const units = Theme.UNITS;
+const styles = colors.AppSectionTheme;
 
-const theme = Constants.AppSectionTheme;
-
-// Section container
 const SectionContainer = styled('div')`
   position: relative;
   display: flex;
@@ -52,9 +45,9 @@ const AdminSection = styled('div')`
   padding: 10px 15px;
   margin: 15px 0;
   background-color: #FEF8ED;
-  border-radius: ${Constants.universalBorderRadius};
-  border-top: solid 1px ${Constants.mainBgColor};
-  border-bottom: solid 1px ${Constants.mainBgColor};
+  border-radius: ${units.universalBorderRadius};
+  border-top: solid 1px ${colors.mainBgColor};
+  border-bottom: solid 1px ${colors.mainBgColor};
 
   .hackSelector {
     width: 100%;
@@ -85,8 +78,8 @@ const PublishControlsRow = styled('div')`
 
   button {
     padding: 0 10px;
-    background-color: ${Constants.mainBgColor};
-    border-radius: ${Constants.universalBorderRadius};
+    background-color: ${colors.mainBgColor};
+    border-radius: ${units.universalBorderRadius};
     border: none;
     cursor: pointer;
     border: none;
@@ -105,7 +98,7 @@ const TitleInput = styled('input')`
   height: 30px;
   background-color: #F2F2F2;
   border: 1px solid #999999;
-  border-radius: ${Constants.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius};
   padding-left: 10px;
   margin-bottom: 10px;
 
@@ -262,7 +255,7 @@ class NewThread extends React.Component {
   render() {
     if (this.state.loading) {
       return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={styles}>
           <SectionContainer>
             <Loader/>
           </SectionContainer>
@@ -271,7 +264,7 @@ class NewThread extends React.Component {
     }
     if (this.state.mustNavigate) return <Redirect to={{pathname: '/forum/thread/' + this.state.threadRef, state: {title: this.state.titleValue}}}/>;
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer>
           <BreadCrumbs sections={[]} current='newThread'/>
           <Header>
@@ -279,22 +272,22 @@ class NewThread extends React.Component {
             <p> Bellow you will find a <strong><i>Markdown Editor</i></strong>, so you can style your Thread using Markdown syntax <strong>(If you don't know Markdown, please check <a target="_blank" rel="noopener noreferrer" href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">this!</a>)</strong>. Write on the left, you will see the preview on the right.</p>
             <label>Title <span>REQUIRED</span></label><br/>
             <TitleInput type='text' placeholder='Thread Title..' onChange={this.handleInputChange} name='title'/>
-            {this.props.user.isAdmin &&
-            <AdminSection>
+            {this.props.user.isAdmin
+            && <AdminSection>
               <div>
                 <h3>Admin Tools</h3>
                 <p> Here you can pick on which hack and forum you will post your thread. You can also pin a post from here. (A pinned post will appear at the top of the forum, as a good practice, try to avoid having more than 3 pinned posts.)</p>
               </div>
               <div className='hackSelector'>
                 <span>Hack:</span>
-                {this.props.user.isAdmin &&
-              this.state.hacks &&
-              <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
+                {this.props.user.isAdmin
+              && this.state.hacks
+              && <ForumSelector onSelection={this.onHackSelection} selector={this.state.hacks}/>}
                 <span>Forum:</span>
-                {this.props.user.isAdmin &&
-                this.state.hacks &&
-                this.state.hacks[this.state.selectedHack].forums &&
-                <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
+                {this.props.user.isAdmin
+                && this.state.hacks
+                && this.state.hacks[this.state.selectedHack].forums
+                && <ForumSelector onSelection={this.onForumSelection} selector={this.state.hacks[this.state.selectedHack].forums}/>}
                 <input type='checkbox' onChange={this.handleInputChange} name='pinned'/>
                 <span>Pin this thread.</span>
               </div>

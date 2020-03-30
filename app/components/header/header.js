@@ -1,29 +1,25 @@
-// IronHacks Platform
-// header.js - Navigation bar
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {withCookies} from 'react-cookie';
-// Styled components
 import styled, {ThemeProvider} from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../constants.js';
+
 import {registerStats} from '../../utilities/registerStat.js';
+import {Theme} from '../../theme';
+const colors = Theme.COLORS;
+import menuIcon from '../../assets/svg/$1.svg';
 
-import menuIcon from './img/menu-icon.svg';
-
-const theme = Constants.HeaderTheme;
+const styles = Theme.STYLES.HeaderTheme;
 
 const HeaderContainer = styled('div')`
   height: ${(props) => props.theme.containerHeight};
-  background-color: ${Constants.mainBgColor}
+  background-color: ${colors.mainBgColor}
 
   .menu {
     display: flex;
     align-items: center;
   }
 `;
+
 const NavContainer = styled('nav')`
   display: flex;
   align-items: center;
@@ -53,7 +49,7 @@ const NavContainer = styled('nav')`
       display: ${(props) => props.display};
       flex-direction: column;
       align-items: start;
-      border-radius: ${Constants.universalBorderRadius};
+      border-radius: ${units.universalBorderRadius};
       background-color: #f9f9f9;
       min-width: 160px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -87,7 +83,7 @@ const NavContainer = styled('nav')`
       padding: 0;
       border: none;
       background-color: transparent;
-      border-radius: ${Constants.universalBorderRadius};
+      border-radius: ${units.universalBorderRadius};
       cursor: pointer;
       transition: background-color 0.3s;
 
@@ -102,7 +98,7 @@ const NavContainer = styled('nav')`
     }
   }
 `;
-// Left buttons
+
 const NavButton = styled(Link)`
   color: ${(props) => props.theme.textColor};
   padding: 10px 10px;
@@ -118,7 +114,7 @@ const NavButton = styled(Link)`
     color: ${(props) => props.theme.hoverTextColor};
   }
 `;
-// User menu (right menu)
+
 const UserMenuDropper = styled('button')`
   cursor: pointer;
   border: none;
@@ -126,6 +122,7 @@ const UserMenuDropper = styled('button')`
   color: black;
   font-weight: 700;
 `;
+
 const UserMenu = styled('div')`
   display: ${(props) => props.display};
   flex-direction: column;
@@ -148,6 +145,7 @@ const UserMenu = styled('div')`
     }
   }
 `;
+
 const UserMenuButton = styled('button')`
   border: none;
   background-color: transparent;
@@ -160,7 +158,7 @@ const UserMenuButton = styled('button')`
     background-color: lightgray;
   }
 `;
-// Center Logo
+
 const IronHacksCenterLogo = styled('div')`
   height: 100%;
   display: flex;
@@ -173,15 +171,13 @@ const IronHacksCenterLogo = styled('div')`
     margin: 0;;
   }
 `;
-// Right section
+
 const RightAlignDiv = styled('div')`
   display: flex;
   justify-content: flex-end;
 `;
 
-/**
- *
- */
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -203,7 +199,7 @@ class Header extends React.Component {
     document.removeEventListener('mousedown', this.handleClickOutside);
   };
 
-  handleClickOutside = (event) => { 
+  handleClickOutside = (event) => {
     const userMenuRef = this.userMenuRef.current;
     const navMenuRef = this.navMenuRef.current;
     if (userMenuRef && !userMenuRef.contains(event.target)
@@ -262,7 +258,7 @@ class Header extends React.Component {
   };
 
   removeCookies = () => {
-    const {cookies} = this.props;
+    const {cookies} = this.props;\
     if (cookies.get('currentHack')) {
       cookies.remove('currentHack');
     }
@@ -278,12 +274,12 @@ class Header extends React.Component {
       );
     };
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <div className="container-fluid">
           <HeaderContainer className="row">
-            {this.props.location.pathname === '/hackSelection' ?
-              <div className="col-5"/> :
-              <div className="col-5 menu">
+            {this.props.location.pathname === '/hackSelection'
+              ? <div className="col-5"/>
+              : <div className="col-5 menu">
                 <NavContainer display={this.state.showMenu} innerRef={this.navMenuRef}>
                   <button onClick={this.showMenu}>
                     <img src={menuIcon} alt='menu_icon'/>

@@ -1,21 +1,21 @@
-// IronHacks Platform
 // landing.js - Landing page
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 import {Link} from 'react-router-dom';
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
 import PreviousHackItem from './previousHackItem.js';
-// Custom Constants
-import * as Constants from '../../../constants.js';
+
+import {Theme} from '../../theme';
 import PriorHacksData from './priorHacksData.js';
 // Customs svg
-import bulbImg from './img/bulb.svg';
+import bulbImg from '../../assets/svg/bulb.svg';
+const colors = Theme.COLORS;
 // import UNAL2019 from './img/purdue-UNAL-2019.jpeg';
-// import COLFlag from './img/flags/col.svg';
+// import COLFlag from '../../assets/svg/col.svg';
 
-const theme = Constants.AppSectionTheme;
+const styles = Theme.STYLES.AppSectionTheme;
 
 // Section container
 const SectionContainer = styled('div')`
@@ -24,7 +24,7 @@ const SectionContainer = styled('div')`
   padding: 65px 200px 65px 200px;
 
   &:nth-child(odd) {
-    background-color: ${Constants.mainBgColor};
+    background-color: ${colors.mainBgColor};
   }
 
   &.full-hight {
@@ -128,7 +128,7 @@ const LoginButton = styled(Link)`
 
   &:hover {
     background-color: ${(props) => props.theme.hoverTextColor};
-    color: ${Constants.invertedHighlightedTextColor};
+    color: ${colors.invertedHighlightedTextColor};
     text-decoration: none;
   }
 `;
@@ -136,7 +136,7 @@ const LoginButton = styled(Link)`
 const Separator = styled('div')`
   width: 100%;
   height: 1px;
-  background-color: ${Constants.mainBgColor};
+  background-color: ${colors.mainBgColor};
 `;
 
 const HackSelector = styled('div')`
@@ -189,7 +189,7 @@ class Landing extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <React.Fragment>
           <SectionContainer className='full-hight'>
             <HomeTitle>

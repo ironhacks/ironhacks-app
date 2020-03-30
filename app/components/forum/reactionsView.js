@@ -1,9 +1,10 @@
 import React from 'react';
 import styled, {ThemeProvider} from 'styled-components';
-import * as Constants from '../../../constants.js';
+import {Theme} from '../../theme';
 import * as DateFormater from '../../utilities/dateFormater.js';
+const colors = Theme.COLORS;
 
-const theme = Constants.ReactionsViewTheme;
+const styles = Theme.STYLES.ReactionsViewTheme;
 
 const Container = styled('div')`
   display: flex;
@@ -13,7 +14,7 @@ const ItemData = styled('div')`
   display: flex;
   align-items: center;
   height: 30px;
-  border-radius: ${Constants.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius};
 
   span {
     margin: 0;
@@ -69,14 +70,14 @@ class ReactionsView extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <Container>
           <ItemData>
-            {!this.state.totalComments &&
-              <span>{`Posted ${this.state.date}`}</span>
+            {!this.state.totalComments
+              && <span>{`Posted ${this.state.date}`}</span>
             }
-            {this.state.totalComments &&
-              <span>{`Posted ${this.state.date} | ${this.state.totalComments - 1} comments`}</span>
+            {this.state.totalComments
+              && <span>{`Posted ${this.state.date} | ${this.state.totalComments - 1} comments`}</span>
             }
           </ItemData>
         </Container>

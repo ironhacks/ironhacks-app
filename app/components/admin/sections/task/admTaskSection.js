@@ -1,9 +1,8 @@
-// IronHacks Platform
 // admTaskSection.js - Results Component
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
 // Router
 // import { Switch, Route, Redirect} from "react-router-dom";
@@ -12,10 +11,10 @@ import MarkdownEditor from '../../../markdownEditor/markdownEditor.js';
 import AvailableActionsDiv from '../../../../utilities/availableActionsDiv.js';
 import Button from '../../../../utilities/button.js';
 
-// Custom Constants
-import * as Constants from '../../../../../constants.js';
 
-const theme = Constants.adminInnerSectionsTheme;
+import {Theme} from '../../theme';
+
+const styles = Theme.STYLES.adminInnerSectionsTheme;
 
 // Section container
 const SectionContainer = styled('div')`
@@ -31,7 +30,7 @@ class AdmTaskSection extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer>
           <h2>Task document editor</h2>
           <p>Here you can edit and preview the Task document. You can also publish the document or schedule it (check bellow).</p>

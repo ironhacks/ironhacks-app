@@ -1,22 +1,22 @@
-// IronHacks Platform
 // hackSelection.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import {withCookies} from 'react-cookie';
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
 import swal from 'sweetalert2';
-// Custom components
+
 import HackCard from '../admin/hackCard.js';
 import Separator from '../../utilities/separator.js';
 import Loader from '../../utilities/loader.js';
 import * as TemplateFiles from './newHackTemplates/sprint2019Unal.js';
-// Custom Constants
-import * as Constants from '../../../constants.js';
 
-const theme = Constants.AppSectionTheme;
+import {Theme} from '../../theme';
+const colors = Theme.COLORS;
+
+const styles = Theme.STYLES.AppSectionTheme;
 
 // Section container
 const SectionContainer = styled('div')`
@@ -175,8 +175,8 @@ class HackSelection extends React.Component {
   createGitHubRepository = (name, hackId, hackIndex) => {
     this.setState({status: 'Creating participant profile (2/2)...'});
     // Accesing to all the pain text template variables:
-    const templateFiles =
-    [
+    const templateFiles
+    = [
       {
         name: 'index.html',
         content: TemplateFiles.indexContent,
@@ -271,7 +271,7 @@ class HackSelection extends React.Component {
     }
     if (this.state.loading) {
       return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={styles}>
           <SectionContainer className="container-fluid">
             <Loader status={this.state.status} />
           </SectionContainer>
@@ -280,7 +280,7 @@ class HackSelection extends React.Component {
     }
     console.log(this.state);
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer className="container-fluid">
           <div className="row">
             <div className='col-md-8 offset-md-2'>

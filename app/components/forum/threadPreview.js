@@ -1,30 +1,30 @@
-// IronHacks Platform
 // threadPreview.js - Preview that will be displayed on the Forum section
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
 import PropTypes from 'prop-types';
 // Router
 import {Link} from 'react-router-dom';
-// Custom Components
+
 import ReactionsView from './reactionsView.js';
 import ReactionPicker from './reactionPicker.js';
-// Custom Constants
-import * as Constants from '../../../constants.js';
-import {registerStats} from '../../utilities/registerStat.js';
 
-const theme = Constants.ThreadPreviewTheme;
+import {Theme} from '../../theme';
+import {registerStats} from '../../utilities/registerStat.js';
+const colors = Theme.COLORS;
+
+const styles = Theme.STYLES.ThreadPreviewTheme;
 
 const PreviewContainer = styled('div')`
   position: relative;
   display: flex;
   flex-direction: column;
-  border-radius: ${Constants.universalBorderRadius};
+  border-radius: ${units.universalBorderRadius};
   background-color: white;
-  margin-bottom: ${Constants.threadPreviewBottomMargin};
+  margin-bottom: ${colors.threadPreviewBottomMargin};
   padding: 10px 15px;
   border: 1px solid #DADADA;
   transition: background-color 0.2s;
@@ -136,7 +136,7 @@ class ThreadPreview extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <PreviewContainer>
           <UserName>
             <UserImage>{this.state.profileLetters}</UserImage>
@@ -149,15 +149,15 @@ class ThreadPreview extends React.Component {
           </UserName>
           <Separator/>
           <div className='stats'>
-            {this.state.commentData &&
-            <ReactionsView
+            {this.state.commentData
+            && <ReactionsView
               commentId={this.props.thread.comments[0]}
               totalComments={this.props.thread.comments.length}
               commentData={this.state.commentData}
             />
             }
-            {this.state.commentData &&
-            <ReactionPicker
+            {this.state.commentData
+            && <ReactionPicker
               commentData={this.state.commentData}
               commentId={this.props.thread.comments[0]}
               user={this.props.user}

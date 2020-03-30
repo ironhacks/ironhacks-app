@@ -2,20 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import {registerStats} from '../../utilities/registerStat.js';
 
-import ExampleA from './d3examplesGif/a.gif';
-import ExampleB from './d3examplesGif/b.gif';
-import ExampleC from './d3examplesGif/c.gif';
-import ExampleD from './d3examplesGif/d.gif';
-import ExampleE from './d3examplesGif/e.gif';
-import ExampleF from './d3examplesGif/f.png';
-import ExampleG from './d3examplesGif/g.gif';
-import ExampleH from './d3examplesGif/h.gif';
-import ExampleI from './d3examplesGif/i.gif';
-import ExampleJ from './d3examplesGif/j.png';
-import ExampleK from './d3examplesGif/k.png';
-import ExampleL from './d3examplesGif/l.gif';
-import ExampleM from './d3examplesGif/m.png';
-import ExampleN from './d3examplesGif/n.gif';
+import ExampleA from '../../assets/viz-charts-animated/gif/a.gif';
+import ExampleB from '../../assets/viz-charts-animated/gif/b.gif';
+import ExampleC from '../../assets/viz-charts-animated/gif/c.gif';
+import ExampleD from '../../assets/viz-charts-animated/gif/d.gif';
+import ExampleE from '../../assets/viz-charts-animated/gif/e.gif';
+import ExampleF from '../../assets/viz-charts-animated/gif/f.png';
+import ExampleG from '../../assets/viz-charts-animated/gif/g.gif';
+import ExampleH from '../../assets/viz-charts-animated/gif/h.gif';
+import ExampleI from '../../assets/viz-charts-animated/gif/i.gif';
+import ExampleJ from '../../assets/viz-charts-animated/gif/j.png';
+import ExampleK from '../../assets/viz-charts-animated/gif/k.png';
+import ExampleL from '../../assets/viz-charts-animated/gif/l.gif';
+import ExampleM from '../../assets/viz-charts-animated/gif/m.png';
+import ExampleN from '../../assets/viz-charts-animated/gif/n.gif';
 
 const D3Examples = styled('div')`
   display: flex;

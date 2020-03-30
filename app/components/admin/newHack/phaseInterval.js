@@ -1,16 +1,12 @@
-// IronHacks Platform
-// phaseInterval.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
-
 import React from 'react';
-// Styled components
 import styled from 'styled-components';
 import moment from 'moment';
-// Custom Constants
-import * as Constants from '../../../../constants.js';
+import {Theme} from '../../theme';
+import calendarIcon from '../../assets/svg/calendar-icon.svg';
+const colors = Theme.COLORS;
+const units = Theme.UNITS;
 
-// Images
-import calendarIcon from './img/calendar-icon.svg';
+
 
 const PhaseIntervalContainer = styled('div')`
   display: flex;
@@ -41,10 +37,10 @@ const SetDateButton = styled('button')`
   border-bottom: ${(props) => (props.borderBottom ? '2px solid gray' : 'none')}
   border-left: ${(props) => (props.borderLeft ? '2px solid gray' : 'none')}
   border-radius: ${(props) => {
-    const topLeft = props.borderLeft ? Constants.universalBorderRadius : '0';
-    const topRight = props.borderRight ? Constants.universalBorderRadius : '0';
-    const bottomLeft = props.borderLeft ? Constants.universalBorderRadius : '0';
-    const bottomRight = props.borderRight ? Constants.universalBorderRadius : '0';
+    const topLeft = props.borderLeft ? units.universalBorderRadius : '0';
+    const topRight = props.borderRight ? units.universalBorderRadius : '0';
+    const bottomLeft = props.borderLeft ? units.universalBorderRadius : '0';
+    const bottomRight = props.borderRight ? units.universalBorderRadius : '0';
     return topLeft + ' ' + topRight + ' ' + bottomRight + ' ' + bottomLeft;
   }}
   padding-left: ${(props) => props.central ? '25px' : 'O'}
@@ -52,7 +48,7 @@ const SetDateButton = styled('button')`
   background-color: lightgray;
   font-weight: 300;
 `;
-// ${Constants.universalBorderRadius} 0px 0px ${Constants.universalBorderRadius}
+// ${units.universalBorderRadius} 0px 0px ${units.universalBorderRadius}
 
 class PhaseInterval extends React.Component {
   isSelected = () => {

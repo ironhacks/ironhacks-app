@@ -1,13 +1,12 @@
-// IronHacks Platform
 // sponsorBanner.js - The sponsor banner is the placer where the sponsor's logos are displayed. It apppears on the forum and the profile view.
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
 
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../constants.js';
+
+import {Theme} from '../../theme';
 // Importing logos
 import githubLogo from './img/github.jpg';
 import nsfLogo from './img/nsf.jpg';
@@ -16,8 +15,9 @@ import socrataLogo from './img/socrata.png';
 import techNexusLogo from './img/tech-nexus-logo.png';
 import UNALLogo from './img/universidad-nacional-de-colombia.png';
 import PurdueLogo from './img/purdue-sig-black-gold.png';
+const colors = Theme.COLORS;
 
-const theme = Constants.SponsorBannerTheme;
+const styles = Theme.STYLES.SponsorBannerTheme;
 
 const BannerContainer = styled('div')`
   min-height: ${(props) => props.theme.containerHeight};
@@ -36,7 +36,7 @@ const BannerContainer = styled('div')`
 class SponsorsBanner extends React.Component {
   render() {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <BannerContainer>
           <a href="https://github.com" rel="noopener noreferrer"><img src={githubLogo} alt='githubLogo'/></a>
           <a href="https://www.nsf.gov" rel="noopener noreferrer"><img src={nsfLogo} alt='nsfLogo'/></a>

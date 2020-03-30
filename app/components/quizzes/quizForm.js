@@ -1,17 +1,16 @@
-// IronHacks Platform
 // quizzes.js - Quiz picker and visualizer
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled, {ThemeProvider} from 'styled-components';
 
 import {Redirect} from 'react-router-dom';
-// Custom Constants
-import * as Constants from '../../../../constants.js';
+
+import {Theme} from '../../theme';
 import Button from '../../../utilities/button.js';
 
-const theme = Constants.AppSectionTheme;
+const styles = Theme.STYLES.AppSectionTheme;
 // Section container
 const SectionContainer = styled('div')`
   display: flex;
@@ -74,7 +73,7 @@ class QuizFrom extends React.Component {
       );
     }
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer showReturnButton={this.state.showReturnButton}>
           <iframe title='quizForm' src={`${this.state.quiz}?user_email=${this.state.user.email}`}/>
           <Button width='30%' onClick={this.goToMenu} primary>Return to quizzes menu</Button>

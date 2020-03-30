@@ -1,13 +1,12 @@
-// IronHacks Platform
-// hackSelector.js
-// Created by: Alejandro Díaz Vecchio - aldiazve@unal.edu.co
+
 
 import React from 'react';
-// Styled components
+
 import styled from 'styled-components';
-// Custom Constants
-import * as Constants from '../../../constants.js';
-// Custom components
+
+import {Theme} from '../../theme';
+const colors = Theme.COLORS;
+
 // import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 
 const Select = styled('select')`
@@ -17,8 +16,8 @@ const Select = styled('select')`
   justify-content: flex-end;
   background-color: #F2F2F2;
   border: 1px solid #999999;
-  border-radius: ${Constants.universalBorderRadius};
-  
+  border-radius: ${units.universalBorderRadius};
+
   margin-left: 10px;
 `;
 class ForumSelector extends React.Component {

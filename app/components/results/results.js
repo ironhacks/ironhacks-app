@@ -1,7 +1,7 @@
 import React from 'react';
 import {withCookies} from 'react-cookie';
 import styled, {ThemeProvider} from 'styled-components';
-import * as Constants from '../../../constants.js';
+import {Theme} from '../../theme';
 import * as DateFormater from '../../utilities/dateFormater.js';
 import Loader from '../../utilities/loader.js';
 import TimeLine from '../../utilities/timeLine.js';
@@ -12,9 +12,10 @@ import YourCompetitorsRank from './yourCompetitorsRank.js';
 import * as Texts from './staticTexts.js';
 import Reactotron from 'reactotron-react-js';
 
-const theme = Constants.AppSectionTheme;
+const colors = Theme.COLORS;
+const styles = Theme.STYLES.AppSectionTheme;
 
-// Section container
+
 const SectionContainer = styled('div')`
   width: 100%;
   height: ${(props) => props.theme.containerHeight};
@@ -57,7 +58,7 @@ const SectionContainer = styled('div')`
 
         &.selected {
           background-color: white;
-          border-top: 3px solid ${Constants.mainBgColor};
+          border-top: 3px solid ${colors.mainBgColor};
           border-right: 1px solid rgb(225, 228, 232);
           border-left: 1px solid rgb(224, 228, 232);
           border-bottom: 1px solid white;
@@ -108,9 +109,7 @@ const SectionContainer = styled('div')`
   }
 `;
 
-/**
- *
- */
+
 class Results extends React.Component {
   constructor(props) {
     super(props);
@@ -256,7 +255,7 @@ class Results extends React.Component {
   render() {
     if (this.state.loading) {
       return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={styles}>
           <SectionContainer>
             <Loader status="Fetching results..."/>
           </SectionContainer>
@@ -264,14 +263,14 @@ class Results extends React.Component {
       );
     }
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={styles}>
         <SectionContainer>
           <div className="top-container">
             <h1>Your dashboard</h1>
             {Texts.treatmentText[this.state.treatment].header}
             <h3>Please select the phase you want to check.</h3>
-            {this.state.hackData &&
-              <TimeLine
+            {this.state.hackData
+              && <TimeLine
                 phases={this.state.hackData.phases}
                 onClick={this.onPhaseSelection}
                 currentPhase={this.state.currentPhase}
@@ -293,16 +292,16 @@ class Results extends React.Component {
             </div>
           </div>
           <div className="selected-section">
-            {this.state.gettingResults &&
-              <div className='results-loader'>
+            {this.state.gettingResults
+              && <div className='results-loader'>
                 <Loader status="Fetching results..."/>
               </div>
             }
-            {!this.state.gettingResults && this.state.results && this.state.currentSection === 'yourCompetitors' &&
-              <React.Fragment>
+            {!this.state.gettingResults && this.state.results && this.state.currentSection === 'yourCompetitors'
+              && <React.Fragment>
                 <h2>Your Competitors</h2>
                 {Texts.treatmentText[this.state.treatment].ranking.instructions}
-                <h3 className='super-cool-banner'>*** Keep in mind: You can earn excellence if you learn and reuse from others’ apps that are dissimilar ***</h3>
+                <h3 className='super-cool-banner'>*** Keep in mind: You can earn excellence if you learn and reuse from others apps that are dissimilar ***</h3>
                 <YourCompetitorsRank
                   treatment={this.state.treatment}
                   scores={this.state.results}
@@ -311,8 +310,8 @@ class Results extends React.Component {
                   onLikedCompetitors={this.saveLikedCompetitors}/>
               </React.Fragment>
             }
-            {!this.state.gettingResults && this.state.results && this.state.currentSection === 'personalFeedback' &&
-              <React.Fragment>
+            {!this.state.gettingResults && this.state.results && this.state.currentSection === 'personalFeedback'
+              && <React.Fragment>
                 <h2>{Texts.personalFeddback.title}</h2>
                 {Texts.personalFeddback.subTitle}
                 <PersonalScoreSection
