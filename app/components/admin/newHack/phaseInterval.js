@@ -26,8 +26,8 @@ const PhaseIntervalContainer = styled('div')`
     &.interval {
       font-weight: 300;
       font-size: 20px;
-    };
-  };
+    }
+  }
 `;
 
 const SetDateButton = styled('button')`
@@ -42,8 +42,8 @@ const SetDateButton = styled('button')`
     const bottomRight = props.borderRight ? units.universalBorderRadius : '0';
     return topLeft + ' ' + topRight + ' ' + bottomRight + ' ' + bottomLeft;
   }}
-  padding-left: ${(props) => props.central ? '25px' : 'O'}
-  padding-right: ${(props) => props.central ? '25px' : 'O'}
+  padding-left: ${(props) => (props.central ? '25px' : 'O')}
+  padding-right: ${(props) => (props.central ? '25px' : 'O')}
   background-color: lightgray;
   font-weight: 300;
 `;
@@ -52,35 +52,40 @@ const SetDateButton = styled('button')`
 class PhaseInterval extends React.Component {
   isSelected = () => {
     this.props.onClick();
-  }
+  };
 
   render() {
     return (
       <PhaseIntervalContainer>
         <div>
-          <img src={calendarIcon} alt='calendar-icon'/>
-          <span className='interval'>{'Phase ' + this.props.phaseIndex + ' - ' + this.props.intervalName}</span>
+          <img src={calendarIcon} alt='calendar-icon' />
+          <span className='interval'>
+            {'Phase ' + this.props.phaseIndex + ' - ' + this.props.intervalName}
+          </span>
         </div>
         <div>
           <SetDateButton
             borderLeft
             borderTop
             borderBottom
-            onClick={this.props.onClick}>
+            onClick={this.props.onClick}
+          >
             {moment(this.props.start).format('MMM Do YYYY')}
           </SetDateButton>
           <SetDateButton
             borderTop
             borderBottom
             central
-            onClick={this.props.onClick}>
+            onClick={this.props.onClick}
+          >
             {'00:00 - 00:00'}
           </SetDateButton>
           <SetDateButton
             borderTop
             borderRight
             borderBottom
-            onClick={this.props.onClick}>
+            onClick={this.props.onClick}
+          >
             {moment(this.props.end).format('MMM Do YYYY')}
           </SetDateButton>
         </div>

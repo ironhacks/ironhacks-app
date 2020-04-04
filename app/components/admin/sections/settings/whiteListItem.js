@@ -28,7 +28,6 @@ const ItemContainer = styled('div')`
     border-right: none;
     border-radius: ${units.universalBorderRadius} 0px 0px ${units.universalBorderRadius};
     padding-left: 10px;
-
   }
 
   button {
@@ -69,7 +68,7 @@ class WhiteListItem extends React.Component {
     if (e.target.value === '') {
       this.props.onWhiteListItemDelete(this.props.index);
     } else {
-      this.setState({email: e.target.value});
+      this.setState({ email: e.target.value });
     }
   };
 
@@ -85,9 +84,18 @@ class WhiteListItem extends React.Component {
 
   render() {
     return (
-      <ItemContainer isValid={this.props.isValid} onChange={this.onWhiteListItemChange}>
-        <input type='text' defaultValue={this.props.userEmail} onBlur={this.onBlur}/>
-        <button onClick={this.onDelete}><img src={trashCanIcon} alt='searchIcon'/></button>
+      <ItemContainer
+        isValid={this.props.isValid}
+        onChange={this.onWhiteListItemChange}
+      >
+        <input
+          type='text'
+          defaultValue={this.props.userEmail}
+          onBlur={this.onBlur}
+        />
+        <button onClick={this.onDelete}>
+          <img src={trashCanIcon} alt='searchIcon' />
+        </button>
       </ItemContainer>
     );
   }

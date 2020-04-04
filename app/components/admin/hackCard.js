@@ -14,7 +14,7 @@ const CardContainer = styled('button')`
   width: 30%;
   margin: 10px;
   text-align: left;
-  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
   border: none;
   background-color: white;
   padding: 0;
@@ -35,19 +35,18 @@ const CardContainer = styled('button')`
         line-height: 40px;
         font-size: 40px;
       }
-    };
-
-  };
+    }
+  }
 
   h3 {
     line-height: 16px;
     margin: 0 0 0 15px;
-  };
+  }
 
   span {
     font-size: 12px;
     margin-left: 15px;
-  };
+  }
 `;
 const Separator = styled('div')`
   width: 100%;
@@ -75,7 +74,7 @@ class HackCard extends React.Component {
       <CardContainer onClick={this.onHackCardClick}>
         <h3>{this.props.hack.name}</h3>
         <span>{'Phases: ' + this.props.hack.phases.length}</span>
-        <Separator/>
+        <Separator />
       </CardContainer>
     );
   }

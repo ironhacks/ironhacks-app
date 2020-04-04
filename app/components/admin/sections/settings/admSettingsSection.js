@@ -40,7 +40,7 @@ const NewWhiteListItem = styled('input')`
 class AdmSettingsSection extends React.Component {
   constructor(props) {
     super(props);
-    const {whiteList} = props.hack || [''];
+    const { whiteList } = props.hack || [''];
     this.state = {
       whiteList,
     };
@@ -55,17 +55,17 @@ class AdmSettingsSection extends React.Component {
   onWhiteListItemChange = (email, index) => {
     this.setState((prevState, props) => {
       prevState.whiteList[index] = email;
-      return {whiteList: prevState.whiteList};
+      return { whiteList: prevState.whiteList };
     });
   };
 
   onWhiteListItemDelete = (index) => {
     this.setState((prevState, props) => {
       if (prevState.whiteList.length === 1) {
-        return {whiteList: ['']};
+        return { whiteList: [''] };
       } else {
         prevState.whiteList.splice(index, 1);
-        return {whiteList: prevState.whiteList};
+        return { whiteList: prevState.whiteList };
       }
     });
   };
@@ -79,7 +79,7 @@ class AdmSettingsSection extends React.Component {
       if (joinedList[0] === '') {
         joinedList.splice(0, 1);
       }
-      return {whiteList: joinedList};
+      return { whiteList: joinedList };
     });
   };
 
@@ -98,44 +98,85 @@ class AdmSettingsSection extends React.Component {
     let normalizeWhiteList = this.state.whiteList;
     normalizeWhiteList = this.normalizeEmailArray(normalizeWhiteList);
     this.props.onSaveSettings(normalizeWhiteList);
-    this.setState({whiteList: normalizeWhiteList});
+    this.setState({ whiteList: normalizeWhiteList });
   };
 
   // This function is just to verify the simplest email format: string@string.string, and is just to give and alert to the researcher in case one email is not valid.
   validateEmailStructure = (email) => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
-  }
+  };
 
   render() {
     return (
       <SectionContainer>
         <h2>{this.props.hack.name}'s Settings</h2>
-        <Separator primary/>
-        <h3><label htmlFor='whiteList'>White List</label></h3>
-        <p>The white list is an email list that the defines which users are allow to register and participate in a hack (like a participants list). Please introduce the list of emails. You can separate them by commas (,) whitespaces or by pressing intro. You can also copy-paste them directly from excel.</p>
+        <Separator primary />
+        <h3>
+          <label htmlFor='whiteList'>White List</label>
+        </h3>
+        <p>
+          The white list is an email list that the defines which users are allow
+          to register and participate in a hack (like a participants list).
+          Please introduce the list of emails. You can separate them by commas
+          (,) whitespaces or by pressing intro. You can also copy-paste them
+          directly from excel.
+        </p>
         <WhiteListContainer>
-          {this.state.whiteList && this.state.whiteList.map((item, index, arr) => {
-            if (item !== '') {
-              if (arr.length === 1 || arr.length - 1 === index) {
-                return <div className='new-item-list' key={index + item}>
-                  <WhiteListItem key={index + item} index={index} userEmail={item} onChange={this.onWhiteListItemChange} onWhiteListItemDelete={this.onWhiteListItemDelete} isValid={this.validateEmailStructure(item)}/>
-                  <NewWhiteListItem id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>
-                </div>;
+          {this.state.whiteList &&
+            this.state.whiteList.map((item, index, arr) => {
+              if (item !== '') {
+                if (arr.length === 1 || arr.length - 1 === index) {
+                  return (
+                    <div className='new-item-list' key={index + item}>
+                      <WhiteListItem
+                        key={index + item}
+                        index={index}
+                        userEmail={item}
+                        onChange={this.onWhiteListItemChange}
+                        onWhiteListItemDelete={this.onWhiteListItemDelete}
+                        isValid={this.validateEmailStructure(item)}
+                      />
+                      <NewWhiteListItem
+                        id='whiteList'
+                        placeholder='participant@email.com, participant@email.com...'
+                        onChange={this.onWhiteListChange}
+                        autoFocus
+                      />
+                    </div>
+                  );
+                } else {
+                  return (
+                    <WhiteListItem
+                      key={index + item}
+                      index={index}
+                      userEmail={item}
+                      onChange={this.onWhiteListItemChange}
+                      onWhiteListItemDelete={this.onWhiteListItemDelete}
+                      isValid={this.validateEmailStructure(item)}
+                    />
+                  );
+                }
               } else {
-                return <WhiteListItem key={index + item} index={index} userEmail={item} onChange={this.onWhiteListItemChange} onWhiteListItemDelete={this.onWhiteListItemDelete} isValid={this.validateEmailStructure(item)}/>;
+                return (
+                  <NewWhiteListItem
+                    key={index + item}
+                    id='whiteList'
+                    placeholder='participant@email.com, participant@email.com...'
+                    onChange={this.onWhiteListChange}
+                    autoFocus
+                  />
+                );
               }
-            } else {
-              return <NewWhiteListItem key={index + item} id='whiteList' placeholder='participant@email.com, participant@email.com...' onChange={this.onWhiteListChange} autoFocus/>;
-            }
-          })}
+            })}
         </WhiteListContainer>
         <AvailableActionsDiv>
           <Button
             primary
             width='150px'
             margin='0 0 0 15px'
-            onClick={this.saveChanges}>
+            onClick={this.saveChanges}
+          >
             Save
           </Button>
         </AvailableActionsDiv>

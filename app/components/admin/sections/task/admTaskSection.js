@@ -33,15 +33,23 @@ class AdmTaskSection extends React.Component {
       <ThemeProvider theme={styles}>
         <SectionContainer>
           <h2>Task document editor</h2>
-          <p>Here you can edit and preview the Task document. You can also publish the document or schedule it (check bellow).</p>
-          <MarkdownEditor editorLayout='tabbed' onEditorChange={this.onEditorChange} withContent={this.props.previousDocument}/>
+          <p>
+            Here you can edit and preview the Task document. You can also
+            publish the document or schedule it (check bellow).
+          </p>
+          <MarkdownEditor
+            editorLayout='tabbed'
+            onEditorChange={this.onEditorChange}
+            withContent={this.props.previousDocument}
+          />
           <p>Here you will find the instrictions to publish your task.</p>
           <AvailableActionsDiv>
             <Button
               primary
               width='150px'
               margin='0 0 0 15px'
-              onClick={this.props.updateTaskDocument}>
+              onClick={this.props.updateTaskDocument}
+            >
               Publish Task
             </Button>
           </AvailableActionsDiv>

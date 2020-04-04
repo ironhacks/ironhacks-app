@@ -21,15 +21,15 @@ const ForumItemContainer = styled('div')`
     &.interval {
       font-weight: 300;
       font-size: 20px;
-    };
-  };
+    }
+  }
 
   input {
     text-align: right;
     padding-right: 10px;
   }
 
-  .treatment-div{
+  .treatment-div {
     margin-top: 10px;
   }
 `;
@@ -49,14 +49,26 @@ class ForumItem extends React.Component {
     return (
       <ForumItemContainer>
         <div>
-          <img src={forumIcon} alt='forum-icon'/>
-          <span className='interval'>{'Forum ' + (this.props.forumIndex + 1)}</span>
+          <img src={forumIcon} alt='forum-icon' />
+          <span className='interval'>
+            {'Forum ' + (this.props.forumIndex + 1)}
+          </span>
         </div>
         <div>
-          <input type='text' placeholder='Forum Name' onChange={this.onNameChange}/>
+          <input
+            type='text'
+            placeholder='Forum Name'
+            onChange={this.onNameChange}
+          />
           <div className='treatment-div'>
             <span>Treatment identifier:</span>
-            <input type='number' name='treatmentIdentifier' defaultValue={this.props.treatment} min='0' onChange={this.onTreatmentChange}/>
+            <input
+              type='number'
+              name='treatmentIdentifier'
+              defaultValue={this.props.treatment}
+              min='0'
+              onChange={this.onTreatmentChange}
+            />
           </div>
         </div>
       </ForumItemContainer>
