@@ -33,7 +33,7 @@
     "react-mde": "^5.8.0",
     "react-moment": "^0.7.9",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4",
+    "react-scripts": "^3.4.1",
     "react-treebeard": "^3.2.4",
     "shallowequal": "^1.1.0",
     "showdown": "^1.9.1",
