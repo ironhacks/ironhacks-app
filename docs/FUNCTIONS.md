@@ -110,7 +110,7 @@ We use react-router-dom in order to manage the routes and the context of the app
   '/forum'
   '/forum/new'
   '/forum/thread/:threadId'
-  '/hackSelection'
+  '/select-hack'
   '/login '
   '/login'
   '/profile'
@@ -348,7 +348,7 @@ Let's start by the whitelist:
 ### The Whitelist
 *On ./src/js/components/admin/sections/settings/admSettingsSection.js*
 
-The whitelist is composed by emails, each email bellongs to a participant, if a user's email matchs with an item on a whitelist, that hack will appear on the ```hackSelection``` section, and the user will be able to register in that hack.
+The whitelist is composed by emails, each email bellongs to a participant, if a user's email matchs with an item on a whitelist, that hack will appear on the ```hackSelector``` section, and the user will be able to register in that hack.
 
 ```javascript
 constructor(props){
@@ -504,8 +504,8 @@ updateTutorialDocument = () => {
 
 Now lest jump into the participant flow:
 
-# hackSelection.js
-*On ./src/js/components/login/hackSelection.js*
+# hackSelector.js
+*On ./src/js/components/login/select-hack.js*
 
 The hack selection allows the platform to display data according with the hack the usesr select, for example, the tutorial and task documments, the results, the projects, the contents of the forum, among with other stuff. In order to do this, we store in cookies the ID of the hack that is selected here, we call that hack the "selected hack".
 
@@ -1314,7 +1314,7 @@ And to finish we update the state of the component, reseting the updated blobs a
 ```
 ---
 
-The next one is ```startPushNavigation```, before a user can push the project to evaluation, a phase survey must be filled, we do this using ```sweetalert``` as we did on the ```hackSelection``` section, please check it out to understant how we detect changes on the modal.
+The next one is ```startPushNavigation```, before a user can push the project to evaluation, a phase survey must be filled, we do this using ```sweetalert``` as we did on the ```hackSelector``` section, please check it out to understant how we detect changes on the modal.
 
 We load the
 

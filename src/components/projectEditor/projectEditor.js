@@ -217,7 +217,7 @@ class ProjectEditor extends React.Component {
     const processFile = (file, res) => {
       projectFiles[file].blob = res;
       remainingFiles--;
-      if (remainingFiles === 0) _this.readProjectFilesBlobs(projectFiles);
+      if (remainingFiles === 0) {_this.readProjectFilesBlobs(projectFiles);}
     };
 
     for (const file of this.state.projectFiles) {
@@ -638,7 +638,7 @@ class ProjectEditor extends React.Component {
             </PreviewContainer>
           }          {this.state.hidePreview
             && <ShowPreview onClick={this.showPreview}>
-            <i className="left"></i>
+            <i className="left" />
             </ShowPreview>
           }
           </SectionContainer>

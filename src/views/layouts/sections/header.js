@@ -1,10 +1,29 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
-import { registerStats }from '../../util/register-stat';
-import { Theme } from '../../theme';
-import menuIcon from '../../assets/svg/menu-icon.svg';
+// import registerStat from '../../../util/register-stat';
+import NavButton from '../navigation/nav-button'
+import { Theme } from '../../../theme';
+import menuIcon from '../../../assets/svg/menu-icon.svg';
+
+// header nav
+//  .sc-pRTZB.hrALqD.row {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   width: auto;
+//   margin: 0 1em;
+// }
+//
+// header nav --logo-left
+// .col-2 {
+//   flex: 1;
+//   text-align: left;
+//   justify-content: left;
+//   margin: 0;
+//   display: flex;
+// }
 
 const colors = Theme.COLORS;
 const styles = Theme.STYLES.HeaderTheme;
@@ -97,21 +116,6 @@ const NavContainer = styled('nav')`
   }
 `;
 
-const NavButton = styled(Link)`
-  color: ${(props) => props.theme.textColor};
-  padding: 10px 10px;
-  text-align: center;
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 15px;
-  display: inline-block;
-  transition: color 0.3s, background-color 0.3s;
-
-  &:hover {
-    text-decoration: none;
-    color: ${(props) => props.theme.hoverTextColor};
-  }
-`;
 
 const UserMenuDropper = styled('button')`
   cursor: pointer;
@@ -175,6 +179,8 @@ const RightAlignDiv = styled('div')`
   justify-content: flex-end;
 `;
 
+
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -200,10 +206,8 @@ class Header extends React.Component {
     const userMenuRef = this.userMenuRef.current;
     const navMenuRef = this.navMenuRef.current;
     if (
-      userMenuRef &&
-      !userMenuRef.contains(event.target) &&
-      navMenuRef &&
-      !navMenuRef.contains(event.target)
+      userMenuRef && !userMenuRef.contains(event.target)
+      && navMenuRef && !navMenuRef.contains(event.target)
     ) {
       this.setState({
         showMenu: 'none',
@@ -282,7 +286,7 @@ class Header extends React.Component {
       <ThemeProvider theme={styles}>
         <div className='container-fluid'>
           <HeaderContainer className='row'>
-            {this.props.location.pathname === '/hackSelection' ? (
+            {this.props.location.pathname === '/select-hack' ? (
               <div className='col-5' />
             ) : (
               <div className='col-5 menu'>
@@ -315,9 +319,9 @@ class Header extends React.Component {
                     </NavButton>
                     <span> | </span>
                     {this.state.user.isAdmin && (
-                      <NavButton to='/admin' onClick={this.hideMenus}>
-                        Admin
-                      </NavButton>
+                    <NavButton to='/admin' onClick={this.hideMenus}>
+                      Admin
+                    </NavButton>
                     )}
                   </div>
                 </NavContainer>
@@ -336,7 +340,7 @@ class Header extends React.Component {
                 display={this.state.showUserMenu}
                 innerRef={this.userMenuRef}
               >
-                {this.props.location.pathname !== '/hackSelection' && (
+                {this.props.location.pathname !== '/select-hack' && (
                   <NavButton to='/profile' onClick={this.hideMenus}>
                     Profile
                   </NavButton>

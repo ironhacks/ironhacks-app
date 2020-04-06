@@ -39,7 +39,7 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
-    Log.trace('loginPage', 'constructor', 'init');
+    Log.trace('loginPage', 'componentDidMount', 'init');
     this.initAuthUI();
   }
 
@@ -137,7 +137,7 @@ class Login extends React.Component {
         return (
           <Redirect
             to={{
-              pathname: '/hackSelection',
+              pathname: '/select-hack',
               state: { user: currentUser },
             }}
           />

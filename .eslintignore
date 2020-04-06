@@ -14,7 +14,7 @@ yarn-error.log*
 \.npmrc
 \.env
 \.devtools-lock
-
+*.min.js
 rollup.*.js
 *.config.js
 *.config.*.js

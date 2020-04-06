@@ -3,13 +3,13 @@ import React from 'react';
 import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
 import { Redirect } from 'react-router-dom';
-import ThreadPreview from './threadPreview.js';
-import SponsorsBanner from '../../components/sponsorsBanner';
-import ForumSelector from './forumSelector.js';
 import { registerStats } from '../../util/register-stat';
-import * as DateFormater from '../../util/dateFormater.js';
-import searchIcon from '../../assets/svg/searchIcon.svg';
 import { Theme } from '../../theme';
+import * as DateFormater from '../../util/dateFormater.js';
+import ForumSelector from './forumSelector.js';
+import searchIcon from '../../assets/svg/searchIcon.svg';
+import SponsorsBanner from '../../components/sponsorsBanner';
+import ThreadPreview from './threadPreview.js';
 const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
 const units = Theme.UNITS;
@@ -220,7 +220,7 @@ class Forum extends React.Component {
       });
   };
 
-  onHackSelection = (hackIndex) => {
+  onhackSelector = (hackIndex) => {
     this.setState({ selectedHack: hackIndex, forum: 0 });
     this.getForums(hackIndex);
   };
@@ -251,7 +251,7 @@ class Forum extends React.Component {
       this.props.user &&
       !this.props.user.isAdmin
     ) {
-      return <Redirect push to='/hackSelection' />;
+      return <Redirect push to='/select-hack' />;
     }
     if (this.state.startNewThreadFlow) {
       return <Redirect push to='/forum/new' />;
@@ -272,7 +272,7 @@ class Forum extends React.Component {
             </NewThreadButton>
             {this.props.user.isAdmin && this.state.hacks && (
               <ForumSelector
-                onSelection={this.onHackSelection}
+                onSelection={this.onhackSelector}
                 selector={this.state.hacks}
               />
             )}

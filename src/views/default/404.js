@@ -48,7 +48,7 @@ class PageNotFound extends React.Component {
   render() {
     if (this.state.navigate === true) {
       return (
-        <Redirect to='/hackSelection'/>
+        <Redirect to='/select-hack'/>
       );
     }
     return (

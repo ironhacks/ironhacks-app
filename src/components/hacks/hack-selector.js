@@ -7,11 +7,12 @@ import HackCard from '../../components/hack-card';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
 import * as AlertsContent from '../../components/alert';
-// import * as TemplateFiles from './newHackTemplates/sprint2019Unal.js';
+import generateHackFileTemplate from './templates';
 import { Theme } from '../../theme';
 const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
 const units = Theme.UNITS;
+
 const SectionContainer = styled('div')`
   width: 100%;
   height: ${(props) => props.theme.containerHeight};
@@ -41,7 +42,7 @@ const CardsContainer = styled('div')`
   margin-bottom: 35px;
 `;
 
-class HackSelection extends React.Component {
+class hackSelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -155,6 +156,7 @@ class HackSelection extends React.Component {
     const hackId = this.state.registeredHacks[hackIndex]
       ? this.state.registeredHacks[hackIndex].id
       : this.state.availableHacks[hackIndex].id;
+
     const _this = this;
     this.firestore
       .collection('users')
@@ -171,17 +173,17 @@ class HackSelection extends React.Component {
   createNewProject = (name, hackId, hackIndex) => {
     this.setState({ status: 'Creating participant projects (1/2)...' });
     // Accesing to all the blob template variables:
-    // const files = TemplateFiles.files;
-    Promise.all(
-      // Array of "Promises"
-      files.map((file) => this.putStorageFile(file, name))
-    )
-      .then((url) => {
-        this.createGitHubRepository(name, hackId, hackIndex);
-      })
-      .catch((error) => {
-        console.log('Something failed: ', error.message);
-      });
+    // const files = generateHackFileTemplate('all')
+    // Promise.all(
+    //   Array of "Promises"
+    //   files.map((file) => this.putStorageFile(file, name))
+    // )
+    // .then((url) => {
+    //   this.createGitHubRepository(name, hackId, hackIndex);
+    // })
+    // .catch((error) => {
+    //   console.log('Something failed: ', error.message);
+    // });
   };
 
   createGitHubRepository = (name, hackId, hackIndex) => {
@@ -224,14 +226,17 @@ class HackSelection extends React.Component {
     const createGitHubRepo = window.firebase
       .functions()
       .httpsCallable('createGitHubRepo');
-    createGitHubRepo(newRepoConfig).then((result) => {
-      if (result.status === 500) {
-        console.error(result.data.error);
+
+    createGitHubRepo(newRepoConfig).then((res) => {
+      if (res.status === 500) {
+        console.error(res.data.error);
       } else {
         _this.setState({ status: 'Uploading files...' });
+
         const commitToGitHub = window.firebase
           .functions()
           .httpsCallable('commitToGitHub');
+
         commitToGitHub({
           name: projectName,
           files: templateFiles,
@@ -371,4 +376,4 @@ class HackSelection extends React.Component {
   }
 }
 
-export default withCookies(HackSelection);
+export default withCookies(hackSelector);

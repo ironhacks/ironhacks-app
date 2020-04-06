@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { Theme } from '../../theme';
+import { Theme } from '../../../theme';
 
 const colors = Theme.COLORS;
 const styles = Theme.STYLES.FooterTheme;
@@ -13,8 +13,7 @@ const FooterContainer = styled('div')`
   height: ${(props) => props.theme.containerHeight};
   width: 100%;
   background-color: ${colors.mainBgColor} span {
-    font-size: 12px;..
-    
+  font-size: 12px;
 
     &:first-child {
       text-align: left;

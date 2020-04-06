@@ -248,7 +248,7 @@ class NewThread extends React.Component {
       });
   };
 
-  onHackSelection = (hackIndex) => {
+  onhackSelector = (hackIndex) => {
     if (this.state.hacks[hackIndex].forums) {
       this.setState({ selectedHack: hackIndex });
     } else {
@@ -335,7 +335,7 @@ class NewThread extends React.Component {
                   <span>Hack:</span>
                   {this.props.user.isAdmin && this.state.hacks && (
                     <ForumSelector
-                      onSelection={this.onHackSelection}
+                      onSelection={this.onhackSelector}
                       selector={this.state.hacks}
                     />
                   )}

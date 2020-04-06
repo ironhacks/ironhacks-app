@@ -1,5 +1,5 @@
 import React from 'react';
-import { Footer } from './layouts/sections/footer';
+import { Footer } from './views/layouts/sections/footer';
 import Reactotron from 'reactotron-react-js';
 import styled from 'styled-components';
 import { Loader } from './components/loader';
@@ -15,7 +15,7 @@ import {
  } from 'react-router-dom';
 import Log from './util/log.js';
 import { PageNotFound } from './views/default/404';
-import Header from './layouts/sections/header';
+import Header   from './views/layouts/sections/header';
 import HomePage from './views/home';
 import ThreadViewWithRouter from './views/forum/threadView/threadView';
 import UserProfile from './views/userProfile/user-profile';
@@ -24,8 +24,8 @@ import Login from './views/login';
 import Admin from './views/admin';
 import AdminDashboard from './views/admin/adminDashboard';
 import Forum from './views/forum/forum.js';
-import HackSelection from './views/login/hackSelection.js';
-import NewHack from './views/admin/newHack/newHack.js';
+import hackSelector from './components/hacks/hack-selector';
+import NewHack from './components/hacks/new-hack';
 import NewThread from './views/forum/newThread.js';
 import ProjectEditor from  './components/projectEditor/projectEditor.js';
 import ProjectPreview from './components/projectEditor/projectPreview.js';
@@ -141,7 +141,7 @@ class App extends React.Component {
             </Switch>
             <Switch>
               <Route path='/login' component={Login}/>
-              <Route path='/hackSelection' render={(props) =>                             (<HackSelection user={this.state.user} {...props}/>)}/>
+              <Route path='/select-hack' render={(props) =>                             (<hackSelector user={this.state.user} {...props}/>)}/>
               <Route path='/profile' render={(props) =>                                   (<UserProfile user={this.state.user} {...props}/>)}/>
 
               <Route exact path='/forum' render={(props) =>                               (<Forum user={this.state.user} {...props}/>)}/>

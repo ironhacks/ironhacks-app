@@ -15,8 +15,8 @@ import Login from '../views/login';
 import Admin from '../views/admin';
 import AdminDashboard from '../views/admin/adminDashboard';
 import Forum from '../views/forum/forum.js';
-import HackSelection from '../views/login/hackSelection.js';
-import NewHack from '../views/admin/newHack/newHack.js';
+import hackSelector from '../components/hacks/hack-selector.js';
+import NewHack from '../components/hacks/new-hack.js';
 import NewThread from '../views/forum/newThread.js';
 import ProjectEditor from  '../components/projectEditor/projectEditor.js';
 import ProjectPreview from '../components/projectEditor/projectPreview.js';
@@ -33,8 +33,8 @@ const AppRoutes = [ {
     path: '404',
     component: PageNotFound
   }, {
-    path: '/hackSelection',
-    component: HackSelection
+    path: '/select-hack',
+    component: hackSelector
   }, {
     path: '/profile',
     component: UserProfile

@@ -6,7 +6,7 @@ import CommentView from './commentView.js';
 import MarkdownEditor from '../../../components/markdownEditor/markdownEditor.js';
 import { Theme } from '../../../theme';
 const styles = Theme.STYLES.AppSectionTheme;
-const units = Theme.UNITS;
+// const units = Theme.UNITS;
 const colors = Theme.COLORS;
 
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 // import {Theme} from '../../theme';
-import forumIcon from '../../../assets/svg/forum-icon.svg';
+import forumIcon from '../../assets/svg/forum-icon.svg';
 
 const ForumItemContainer = styled('div')`
   display: flex;

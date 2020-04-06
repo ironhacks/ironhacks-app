@@ -2,11 +2,11 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import { Theme } from '../../../theme';
-import Separator from '../../../util/separator';
-import Button from '../../../util/button.js';
-import Phase from './phase.js';
-import ForumItem from './forumItem.js';
+import { Theme } from '../../theme';
+import Separator from '../../util/separator';
+import Button from '../../util/button.js';
+import Phase from './phase';
+import ForumItem from '../../views/forum/forum-item';
 
 import 'react-day-picker/lib/style.css';
 

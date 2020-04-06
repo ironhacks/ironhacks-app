@@ -8,21 +8,21 @@
   : typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory)
   : (global = global || self, factory(global.bootstrap = {}, global.jQuery));
 }(this, (function(exports, $) {
-  $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
+  $ = $ && $.hasOwnProperty('default') ? $.default : $;
 
   function _defineProperties(target, props) {
     for (let i = 0; i < props.length; i++) {
       const descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
-      if ('value' in descriptor) descriptor.writable = true;
+      if ('value' in descriptor) {descriptor.writable = true;}
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
 
   function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
+    if (protoProps) {_defineProperties(Constructor.prototype, protoProps);}
+    if (staticProps) {_defineProperties(Constructor, staticProps);}
     return Constructor;
   }
 
@@ -1955,14 +1955,14 @@
         const descriptor = props[i];
         descriptor.enumerable = descriptor.enumerable || false;
         descriptor.configurable = true;
-        if ('value' in descriptor) descriptor.writable = true;
+        if ('value' in descriptor) {descriptor.writable = true;}
         Object.defineProperty(target, descriptor.key, descriptor);
       }
     }
 
     return function(Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
+      if (protoProps) {defineProperties(Constructor.prototype, protoProps);}
+      if (staticProps) {defineProperties(Constructor, staticProps);}
       return Constructor;
     };
   }();
@@ -2461,7 +2461,7 @@
     const modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
     modifiersToRun.forEach(function(modifier) {
-      if (modifier['function']) {
+      if (modifier.function) {
         // eslint-disable-line dot-notation
         console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
       }
@@ -5437,7 +5437,7 @@
     for (let i = 0, len = elements.length; i < len; i++) {
       const _ret = _loop(i);
 
-      if (_ret === 'continue') continue;
+      if (_ret === 'continue') {continue;}
     }
 
     return createdDocument.body.innerHTML;

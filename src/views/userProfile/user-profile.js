@@ -7,11 +7,10 @@ import Separator from '../../util/separator.js';
 import { Theme } from '../../theme';
 import {Loader} from '../../components/loader';
 import { projectApi } from '../../services/project-api';
-import * as TemplateFiles from './lib/project-files';
 import ProjectCard from './lib/project-card';
 import Examples from './lib/d3-examples';
 
-const colors = Theme.COLORS;
+// const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
 
 const SectionContainer = styled('div')`

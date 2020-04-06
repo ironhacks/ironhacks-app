@@ -8,22 +8,22 @@
   : typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'popper.js'], factory)
   : (global = global || self, factory(global.bootstrap = {}, global.jQuery, global.Popper));
 }(this, (function(exports, $, Popper) {
-  $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
-  Popper = Popper && Popper.hasOwnProperty('default') ? Popper['default'] : Popper;
+  $ = $ && $.hasOwnProperty('default') ? $.default : $;
+  Popper = Popper && Popper.hasOwnProperty('default') ? Popper.default : Popper;
 
   function _defineProperties(target, props) {
     for (let i = 0; i < props.length; i++) {
       const descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
-      if ('value' in descriptor) descriptor.writable = true;
+      if ('value' in descriptor) {descriptor.writable = true;}
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
 
   function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
+    if (protoProps) {_defineProperties(Constructor.prototype, protoProps);}
+    if (staticProps) {_defineProperties(Constructor, staticProps);}
     return Constructor;
   }
 
@@ -2827,7 +2827,7 @@
     for (let i = 0, len = elements.length; i < len; i++) {
       const _ret = _loop(i);
 
-      if (_ret === 'continue') continue;
+      if (_ret === 'continue') {continue;}
     }
 
     return createdDocument.body.innerHTML;

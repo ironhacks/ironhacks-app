@@ -1,20 +1,8 @@
-// phase.js
-
 import React from 'react';
+import { PhaseItem } from './lib/phase-item';
+import { PhaseInterval } from './lib/phase-interval';
 
-import styled from 'styled-components';
-
-// import {Theme} from '../../theme';
-
-import PhaseInterval from './phaseInterval.js';
-
-const PhaseItem = styled('div')`
-  display: flex;
-  flex-direction: column;
-  margin: 10px 0 10px 15px;
-`;
-
-class Phase extends React.Component {
+export default class Phase extends React.Component {
   onCodingHandler = () => {
     this.props.onFocusHandler(this.props.phaseIndex, 'coding');
   };
@@ -44,5 +32,3 @@ class Phase extends React.Component {
     );
   }
 }
-
-export default Phase;

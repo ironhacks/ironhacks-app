@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
-import { Theme } from '../../../theme';
-import calendarIcon from '../../../assets/svg/calendar-icon.svg';
+import { Theme } from '../../../../theme';
+import calendarIcon from '../../../../assets/svg/calendar-icon.svg';
 const units = Theme.UNITS;
 
 const PhaseIntervalContainer = styled('div')`
@@ -45,7 +45,6 @@ const SetDateButton = styled('button')`
   background-color: lightgray;
   font-weight: 300;
 `;
-// ${units.universalBorderRadius} 0px 0px ${units.universalBorderRadius}
 
 class PhaseInterval extends React.Component {
   isSelected = () => {
@@ -92,4 +91,4 @@ class PhaseInterval extends React.Component {
   }
 }
 
-export default PhaseInterval;
+export { PhaseInterval }

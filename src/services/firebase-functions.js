@@ -13,14 +13,14 @@ const firestore = window.firebase.firestore();
 //------------------------------------------
 
 const COLLECTIONS = {
-  ADMIN_HACK_DATA: "adminHackData",
-  COMMNETS: "comments",
-  FORUMS: "forums",
-  HACKS: "hacks",
-  STATS: "stats",
-  THREADS: "threads",
-  USERS: "user",
-  WHITELISTS: "whitelists",
+  ADMIN_HACK_DATA: 'adminHackData',
+  COMMNETS: 'comments',
+  FORUMS: 'forums',
+  HACKS: 'hacks',
+  STATS: 'stats',
+  THREADS: 'threads',
+  USERS: 'user',
+  WHITELISTS: 'whitelists',
 }
 
 //------------------------------------------
@@ -34,12 +34,12 @@ export const getHackByID = async (hackID) => {
     const response = await firestore.collection(COLLECTIONS.HACKS)
     .doc(hackID)
     .get()
-    if (!response.exist) throw new Error('No Hack with that ID!');
+    if (!response.exist) {throw new Error('No Hack with that ID!');}
     hackData = response.data()
     hackData.id = response.id;
     return hackData;
   } catch ( err ) {
-    console.error("Error reading document: ", err)
+    console.error('Error reading document: ', err)
   }
 };
 
@@ -52,17 +52,17 @@ export const getHackByName = async (hackName) => {
   let hackData;
   try {
     const response = await firestore.collection(COLLECTIONS.HACKS)
-    .where("name", "==", hackName)
+    .where('name', '==', hackName)
     .limit(1)
     .get()
-    if(response.docs.length !== 1) throw new Error('No Hack with that ID!');
+    if(response.docs.length !== 1) {throw new Error('No Hack with that ID!');}
     response.docs.forEach( (doc) => {
       hackData = doc.data()
       hackData.id = doc.id;
     });
     return hackData;
   } catch ( err ) {
-    console.error("Error reading document: ", err)
+    console.error('Error reading document: ', err)
   }
 };
 
@@ -81,7 +81,7 @@ export const getAllHacks = async () => {
     });
     return hacks;
   } catch ( err ) {
-    console.error("Error reading document: ", err)
+    console.error('Error reading document: ', err)
   }
 };
 
@@ -99,7 +99,7 @@ export const getAdminHackData = async (hackObject, _hackID) => {
     hackData.task = hackAdminData.data().task
     return hackData;
   } catch ( err ) {
-    console.error("Error reading document: ", err)
+    console.error('Error reading document: ', err)
   }
 }
 

@@ -32,14 +32,14 @@
       const descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
-      if ('value' in descriptor) descriptor.writable = true;
+      if ('value' in descriptor) {descriptor.writable = true;}
       Object.defineProperty(target, descriptor.key, descriptor);
     }
   }
 
   function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
+    if (protoProps) {_defineProperties(Constructor.prototype, protoProps);}
+    if (staticProps) {_defineProperties(Constructor, staticProps);}
     return Constructor;
   }
 
@@ -73,7 +73,7 @@
         configurable: true,
       },
     });
-    if (superClass) _setPrototypeOf(subClass, superClass);
+    if (superClass) {_setPrototypeOf(subClass, superClass);}
   }
 
   function _getPrototypeOf(o) {
@@ -93,9 +93,9 @@
   }
 
   function isNativeReflectConstruct() {
-    if (typeof Reflect === 'undefined' || !Reflect.construct) return false;
-    if (Reflect.construct.sham) return false;
-    if (typeof Proxy === 'function') return true;
+    if (typeof Reflect === 'undefined' || !Reflect.construct) {return false;}
+    if (Reflect.construct.sham) {return false;}
+    if (typeof Proxy === 'function') {return true;}
 
     try {
       Date.prototype.toString.call(Reflect.construct(Date, [], function() {}));
@@ -114,7 +114,7 @@
         a.push.apply(a, args);
         const Constructor = Function.bind.apply(Parent, a);
         const instance = new Constructor();
-        if (Class) _setPrototypeOf(instance, Class.prototype);
+        if (Class) {_setPrototypeOf(instance, Class.prototype);}
         return instance;
       };
     }
@@ -141,7 +141,7 @@
   function _superPropBase(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
       object = _getPrototypeOf(object);
-      if (object === null) break;
+      if (object === null) {break;}
     }
 
     return object;
@@ -154,7 +154,7 @@
       _get = function _get(target, property, receiver) {
         const base = _superPropBase(target, property);
 
-        if (!base) return;
+        if (!base) {return;}
         const desc = Object.getOwnPropertyDescriptor(base, property);
 
         if (desc.get) {

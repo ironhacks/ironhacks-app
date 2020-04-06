@@ -92,9 +92,7 @@ const reverseReaction = {
   dislikes: 'likes',
 };
 
-/**
- *
- */
+
 class ReactionPicker extends React.Component {
   constructor(props) {
     super(props);
@@ -215,9 +213,7 @@ class ReactionPicker extends React.Component {
             <span id='likes'>
               <img
                 id='likes'
-                src={
-                  this.state.isLiked ? LikeReactionHighLighted : LikeReaction
-                }
+                src={ this.state.isLiked ? LikeReactionHighLighted : LikeReaction }
                 alt='likeReaction'
               />
             </span>

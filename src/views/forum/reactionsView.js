@@ -2,9 +2,8 @@ import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import * as DateFormater from '../../util/dateFormater.js';
 import { Theme } from '../../theme';
-const colors = Theme.COLORS;
+// const colors = Theme.COLORS;
 const units = Theme.UNITS;
-
 const styles = Theme.STYLES.ReactionsViewTheme;
 
 const Container = styled('div')`
@@ -22,9 +21,6 @@ const ItemData = styled('div')`
   }
 `;
 
-/**
- *
- */
 class ReactionsView extends React.Component {
   constructor(props) {
     super(props);
@@ -44,9 +40,7 @@ class ReactionsView extends React.Component {
         this.state.commentData.createdAt
       );
       const date = DateFormater.getReactionViewformat(creationDate);
-      this.setState({
-        date,
-      });
+      this.setState({ date });
     } else {
       this.getComment();
     }
