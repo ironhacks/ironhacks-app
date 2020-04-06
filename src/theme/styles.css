@@ -1,0 +1,9 @@
+:root {
+  --color-surface: white;
+  --color-solid: black;
+  --color-primary: #e6b92f;
+}
+
+.c-primary { color: var(--color-primary); }
+.bg-primary { background-color: var(--color-primary); }
+.bdc-primary { border-color: var(--color-primary); }

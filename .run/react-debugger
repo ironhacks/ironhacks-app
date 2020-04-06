@@ -15,16 +15,15 @@ if [ ! -z $RUN_REACT_DEBUGGER ]; then
   REACT_DEBUGGER="node /data/library/React_Library/react-native-debugger/npm-package/bin/rndebugger-open --expo --open"
   REACT_DEBUGGER_PID="$(pgrep react-debugger)"
 
-  if [ -f ${BASE_DIR}/.devtools-lock ]; then 
-
-    [[ -n $REACT_DEBUGGER_PID ]] && echo "Debugger is still running ${REACT_DEBUGGER_PID}" && exit 0
-
+  if [ -f ${BASE_DIR}/.devtools-lock ]; then
+    [[ -n $REACT_DEBUGGER_PID ]]
+      && echo "Debugger is still running ${REACT_DEBUGGER_PID}"
+      && exit 0
     echo "React Devtools already running"
   fi
 
   [[ -n $APP_REACT_DEBUGGER_RUNNING ]] \
       && echo "React Devtools already running"
-
   [[ -z $APP_REACT_DEBUGGER_RUNNING ]] \
       && ${APP_DIR}/react-native-debugger/react-native-debugger &
 

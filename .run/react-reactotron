@@ -1,6 +1,7 @@
 #!/bin/bash
 
-APP_DIR="/data/apps"
+BASE_PATH="$(npm prefix)"
+SYSTEM_APP_DIR="/data/apps"
 
 [[ -f .npmrc ]] && source .npmrc
 [[ -f .env ]] && source .env
@@ -12,9 +13,9 @@ if [ ! -z $RUN_REACT_REACTOTRON ]; then
 
   [[ -z $APP_REACT_REACTOTRON_RUNNING ]] \
       && APP_REACT_REACTOTRON_RUNNING="yes" \
-      && ${APP_DIR}/bin/reactotron &
+      && ${SYSTEM_APP_DIR}/bin/reactotron &
 
-      # && ${APP_DIR}/reactotron/Reactotron.2.17.1.AppImage &
+      ${SYSTEM_APP_DIR}/reactotron/Reactotron.2.17.1.AppImage &
 fi
 
 export APP_REACT_REACTOTRON_RUNNING

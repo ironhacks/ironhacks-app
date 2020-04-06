@@ -1,0 +1,45 @@
+.section {
+  width: 100%;
+  padding: 65px 200px 65px 200px;
+}
+
+.section.full-height {
+  height: 100vh;
+}
+
+.section.FAQ {
+  display: flex;
+  justify-content: space-between;
+  height: 500px;
+  min-height: 700px;
+  padding: 65px 200px 65px 200px;
+  text-align: center;
+}
+
+.section.FAQ div {
+  width: 30%;
+}
+
+.section.FAQ h2 {
+  margin-top: 50px;
+}
+
+.section.FAQ i {
+  color: white;
+  font-size: 10em;
+  line-height: 220px;
+  height: 220px;
+  width: 220px;
+  background-color: #ffce35;
+  border-radius: 110px;
+  margin-bottom: 15px;
+}
+
+.section.about {
+  display: flex;
+  justify-content: center;
+}
+
+.section.about h2 {
+  margin-top: 50px;
+}

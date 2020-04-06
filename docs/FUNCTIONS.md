@@ -709,8 +709,8 @@ This component imports (among others) the following component:
 import ThreadPreview from './threadPreview.js'
 import SponsorsBanner from '../sponsorsBanner/sponsorsBanner.js'
 import ForumSelector from './forumSelector.js'
-import { registerStats } from '../../utilities/registerStat.js';
-import * as DateFormater from '../../utilities/dateFormater.js';
+import { registerStats } from '../../util/register-stat';
+import * as DateFormater from '../../util/dateFormater.js';
 ```
 
 + ```ThreadPreview``` Is a presentational component, it will show a the preview data of a thread: title, author, create date, comment counter and reaction counter, when the user clicks a preview card, will be redirected to the ```ThreadView```.

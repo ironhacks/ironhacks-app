@@ -34,3 +34,8 @@ find . \
   -printf ${LINE_FORMAT}
 
 git diff --dirstat=changes,files
+
+find -type f \
+  | grep -i --color google \ # -exec cat {} \;  \
+  | tr -cd "[a-zA-Z0-9!@#$%^&*()_+-=,./<>?:;[]{}\|\s \n]" \
+  | grep -i --color
