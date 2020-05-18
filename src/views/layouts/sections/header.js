@@ -3,35 +3,20 @@ import { Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
 // import registerStat from '../../../util/register-stat';
-import NavButton from '../navigation/nav-button'
+import { NavButton } from '../navigation/nav-button'
 import { Theme } from '../../../theme';
 import menuIcon from '../../../assets/svg/menu-icon.svg';
 
-// header nav
-//  .sc-pRTZB.hrALqD.row {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   width: auto;
-//   margin: 0 1em;
-// }
-//
-// header nav --logo-left
-// .col-2 {
-//   flex: 1;
-//   text-align: left;
-//   justify-content: left;
-//   margin: 0;
-//   display: flex;
-// }
-
 const colors = Theme.COLORS;
-const styles = Theme.STYLES.HeaderTheme;
+const styles = Theme.STYLES;
 const units = Theme.UNITS;
+const themes = Theme.THEMES;
 
 const HeaderContainer = styled('div')`
   height: ${(props) => props.theme.containerHeight};
-  background-color: ${colors.mainBgColor} .menu {
+  background-color: ${colors.mainBgColor}
+
+  .menu {
     display: flex;
     align-items: center;
   }
@@ -50,8 +35,8 @@ const NavContainer = styled('nav')`
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    /* width: 100%; */
+    /* height: 100%; */
   }
 
   @media screen and (max-width: 1200px) {
@@ -60,7 +45,7 @@ const NavContainer = styled('nav')`
     align-items: start;
     width: 200px;
     top: 10px;
-    left 15px;
+    left: 15px;
 
     .links-container {
       display: ${(props) => props.display};
@@ -76,7 +61,6 @@ const NavContainer = styled('nav')`
     a {
       text-align: left;
       font-weight: 600;
-
       width: 100%;
 
       &:hover {
@@ -112,7 +96,7 @@ const NavContainer = styled('nav')`
         width: 100%;
         height: 100%;
       }
-    }
+    }primary
   }
 `;
 
@@ -161,6 +145,14 @@ const UserMenuButton = styled('button')`
   }
 `;
 
+const ironhacksLogoStyle = {
+   flex: 1,
+   textAlign: 'left',
+   justifyContent: 'left',
+   margin: 0,
+   display: 'flex',
+};
+
 const IronHacksCenterLogo = styled('div')`
   height: 100%;
   display: flex;
@@ -184,12 +176,22 @@ const RightAlignDiv = styled('div')`
 class Header extends React.Component {
   constructor(props) {
     super(props);
+
+    let user = {};
+
+    if (this.props.location.state) {
+      user = this.props.location.state.user
+    } else if (this.props.user) {
+      user = this.props.user
+    }
+
     this.state = {
       showUserMenu: 'none',
       showMenu: 'none',
-      user: props.user,
+      user: user,
     };
-    this.getUserName();
+
+
     this.userMenuRef = React.createRef();
     this.navMenuRef = React.createRef();
   }
@@ -217,9 +219,16 @@ class Header extends React.Component {
   };
 
   getUserName = () => {
-    // return window.firebase.auth().currentUser.displayName;
-    // return window.testUser.displayName;
-    return 'developer'
+    var user = window.firebase.auth().currentUser
+    console.log('user', user);
+    console.log('state user', this.state.user);
+
+    if (user) {
+      return user.displayName;
+    }
+
+    return 'unset';
+
   };
 
   showUserMenu = () => {
@@ -257,15 +266,15 @@ class Header extends React.Component {
 
   logout = () => {
     this.removeCookies();
-    // window.firebase
-    //   .auth()
-    //   .signOut()
-    //   .then(
-    //     function() {},
-    //     function(error) {
-    //       console.error('Sign Out Error', error);
-    //     }
-    //   );
+    window.firebase
+      .auth()
+      .signOut()
+      .then(
+        function() {},
+        function(error) {
+          console.error('Sign Out Error', error);
+        }
+      );
   };
 
   removeCookies = () => {
@@ -283,70 +292,92 @@ class Header extends React.Component {
       return <Redirect to='/' />;
     }
     return (
-      <ThemeProvider theme={styles}>
-        <div className='container-fluid'>
-          <HeaderContainer className='row'>
-            {this.props.location.pathname === '/select-hack' ? (
-              <div className='col-5' />
-            ) : (
-              <div className='col-5 menu'>
-                <NavContainer
-                  display={this.state.showMenu}
-                  innerRef={this.navMenuRef}
-                >
-                  <button onClick={this.showMenu}>
-                    <img src={menuIcon} alt='menu_icon' />
-                  </button>
-                  <div className='links-container'>
-                    <NavButton to='/forum' onClick={this.hideMenus}>
-                      Forum
-                    </NavButton>
-                    <span> | </span>
-                    <NavButton to='/results' onClick={this.hideMenus}>
-                      Results
-                    </NavButton>
-                    <span> | </span>
-                    <NavButton to='/tutorial' onClick={this.hideMenus}>
-                      Tutorial
-                    </NavButton>
-                    <span> | </span>
-                    <NavButton to='/quizzes' onClick={this.hideMenus}>
-                      Quizzes
-                    </NavButton>
-                    <span> | </span>
-                    <NavButton to='/task' onClick={this.hideMenus}>
-                      Task
-                    </NavButton>
-                    <span> | </span>
-                    {this.state.user.isAdmin && (
-                    <NavButton to='/admin' onClick={this.hideMenus}>
-                      Admin
-                    </NavButton>
-                    )}
-                  </div>
-                </NavContainer>
-              </div>
-            )}
+      <ThemeProvider theme={themes.HeaderTheme}>
+        <div className='container-fluid' style={styles.HeaderStyle}>
+          <HeaderContainer className='row' style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            paddingLeft: '1em',
+            paddingTop: '.4em',
+          }}>
             <div className='col-2'>
               <IronHacksCenterLogo>
                 <label>IronHacks</label>
               </IronHacksCenterLogo>
             </div>
+
+            {this.props.location.pathname === '/select-hack' ? (
+                <div className='col-5' />
+              ) : (
+                <div className='col-5 menu'>
+                  <NavContainer
+                    display={this.state.showMenu}
+                    innerRef={this.navMenuRef}
+                  >
+                    <button onClick={this.showMenu}>
+                      <img src={menuIcon} alt='menu_icon' />
+                    </button>
+
+                    <div className='links-container'>
+                      <NavButton to='/forum' onClick={this.hideMenus}>
+                        Forum
+                      </NavButton>
+                      <span> | </span>
+                      <NavButton to='/results' onClick={this.hideMenus}>
+                        Results
+                      </NavButton>
+                      <span> | </span>
+                      <NavButton to='/tutorial' onClick={this.hideMenus}>
+                        Tutorial
+                      </NavButton>
+                      <span> | </span>
+                      <NavButton to='/quizzes' onClick={this.hideMenus}>
+                        Quizzes
+                      </NavButton>
+                      <span> | </span>
+                      <NavButton to='/task' onClick={this.hideMenus}>
+                        Task
+                      </NavButton>
+                      <span> | </span>
+                      <NavButton to='/examples' onClick={this.hideMenus}>
+                        Examples
+                      </NavButton>
+                      <span> | </span>
+                      {this.state.user.isAdmin && (
+                      <NavButton to='/admin' onClick={this.hideMenus}>
+                        Admin
+                      </NavButton>
+                      )}
+                    </div>
+                  </NavContainer>
+                </div>
+              )
+          }
+
             <RightAlignDiv className='col-5'>
               <UserMenuDropper onClick={this.showUserMenu}>
-                {this.state.user.displayName}
+                {this.state.user.displayName || 'Profile'}
               </UserMenuDropper>
+
               <UserMenu
                 display={this.state.showUserMenu}
                 innerRef={this.userMenuRef}
               >
-                {this.props.location.pathname !== '/select-hack' && (
-                  <NavButton to='/profile' onClick={this.hideMenus}>
-                    Profile
-                  </NavButton>
-                )}
-                <UserMenuButton onClick={this.logout}>Sign Out</UserMenuButton>
+              {this.props.location.pathname !== '/select-hack' && (
+                <NavButton
+                  to='/profile'
+                  onClick={this.hideMenus}
+                >
+                  Profile
+                </NavButton>
+              )}
+                <UserMenuButton
+                  onClick={this.logout}
+                >
+                  Sign Out
+                </UserMenuButton>
               </UserMenu>
+
             </RightAlignDiv>
           </HeaderContainer>
         </div>
