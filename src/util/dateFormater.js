@@ -4,23 +4,25 @@ export const getCurrentPhase = (phasesDates) => {
   console.log('getCurrentPhase');
   const today = new Date();
 
-  for (const key of phasesDates) {
+  for (const item of phasesDates) {
+    console.log('key', item);
+    console.log('phasesDates', phasesDates);
     const startDate = new window.firebase.firestore.Timestamp(
-        phasesDates[key].codingStartDate.seconds,
-        phasesDates[key].codingStartDate.nanoseconds,
+        item.codingStartDate.seconds,
+        item.codingStartDate.nanoseconds,
     ).toDate();
 
     const endDate = new window.firebase.firestore.Timestamp(
-        phasesDates[key].codingStartEnd.seconds,
-        phasesDates[key].codingStartEnd.nanoseconds,
+        item.codingStartEnd.seconds,
+        item.codingStartEnd.nanoseconds,
     ).toDate();
 
-    if (phasesDates[key].index === 0 && today < startDate ) {
+    if (item.index === 0 && today < startDate ) {
       return -1;
     }
 
     if (today > startDate && today < endDate) {
-      return phasesDates[key];
+      return item;
     }
   }
 };
