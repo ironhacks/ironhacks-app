@@ -321,7 +321,7 @@ class hackSelector extends React.Component {
               <h1>Welcome to IronHacks Platform!</h1>
               <h2>My Hacks</h2>
               <span>
-                Bellow you will find the hacks you are currently participating
+                Below you will find the hacks you are currently participating
                 in. Click in any of them to go to the contest.
               </span>
               <Separator primary />
@@ -347,7 +347,7 @@ class hackSelector extends React.Component {
               <Separator />
               <h2>Available hacks for registration</h2>
               <span>
-                Bellow you will find all the availabe hacks to register in.
+                Below you will find all the availabe hacks to register in.
                 Click on one of them to start the registration process.
               </span>
               <Separator primary />
