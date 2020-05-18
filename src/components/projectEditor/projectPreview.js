@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Theme } from '../../theme';
 import ReloadIcon from '../../assets/svg/reload-icon.svg';
 import NewTabIcon from '../../assets/svg/multi-tab.svg';
-const colors = Theme.COLORS;
+import { Theme } from '../../theme';
+
 const units = Theme.UNITS;
 
 const PreviewContainer = styled('div')`
@@ -22,9 +22,7 @@ const PreviewContainer = styled('div')`
     width: 100%;
     height: 40px;
     background-color: #F2F2F2;
-    border-radius: ${units.universalBorderRadius} ${
-  units.universalBorderRadius
-} 0 0;
+    border-radius: ${units.universalBorderRadius} ${units.universalBorderRadius } 0 0;
     padding: 0 10px;
 
     button, a {
@@ -69,6 +67,8 @@ const PreviewContainer = styled('div')`
   }
 `;
 
+const BASE_URL = 'https://ironhacks.com';
+
 class ProjectPreview extends React.Component {
   constructor(props) {
     super(props);
@@ -91,7 +91,7 @@ class ProjectPreview extends React.Component {
   }
 
   getProjectPreviewPath() {
-    const projectURL = `${colors.cloudFunctionsProdEndPoint}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`;
+    const projectURL = `{${BASE_URL}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`;
     this.setState({ projectURL: projectURL });
   }
 
@@ -107,7 +107,7 @@ class ProjectPreview extends React.Component {
             <img src={ReloadIcon} alt='reload-icon' />
           </button>
           <input
-            defaultValue={`www.ironhacks.com/projectEditor/${this.state.projectName}/preview`}
+            defaultValue={`${BASE_URL}/projectEditor/${this.state.projectName}/preview`}
             readOnly
           />
           <a
