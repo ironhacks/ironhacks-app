@@ -23,7 +23,7 @@ import ProjectPreview from '../components/projectEditor/projectPreview.js';
 import QuizForm from '../components/quizzes/quizForm.js';
 import Quizzes from '../components/quizzes/quizzes.js';
 import Task from '../views/task';
-import Results from '../views/results/results.js';
+import Results from '../views/results';
 
 
 const AppRoutes = [ {
