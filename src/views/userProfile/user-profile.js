@@ -3,12 +3,11 @@ import { Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
 import Separator from '../../util/separator.js';
-// import TimeLine from '../../util/timeLine.js';
+import TimeLine from '../../util/timeLine.js';
 import { Theme } from '../../theme';
 import {Loader} from '../../components/loader';
 import { projectApi } from '../../services/project-api';
 import ProjectCard from './lib/project-card';
-import Examples from './lib/d3-examples';
 
 // const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
@@ -78,6 +77,7 @@ class UserProfile extends React.Component {
   constructor(props) {
     super(props);
     const { cookies } = props;
+
     this.state = {
       currentHack: cookies.get('currentHack') || null,
       forum: cookies.get('currentForum') || null,
@@ -95,8 +95,20 @@ class UserProfile extends React.Component {
     this.firestore = window.firebase.firestore();
   }
 
+  setProjects(projects) {
+    console.log('set projects', projects);
+    this.setState({'projects': projects})
+  }
+
   componentDidMount() {
-    this.getProjects();
+    const userid = this.state.user.uid;
+    var projectsPromise = projectApi.getProjects(userid);
+    const _this = this;
+    projectsPromise.then(function(projects){
+      console.log('projects', projects);
+      _this.setProjects(projects);
+    })
+
     if (!this.state.user.isAdmin) {
       this.getCurrentHackInfo();
     }
@@ -160,20 +172,22 @@ class UserProfile extends React.Component {
             </div>
           </ProfileContainer>
 
-          <Examples user={this.state.user} />
-          <h2 className='padding'>D3.js Examples</h2>
-          <h2 className='padding'>Projects</h2>
-          <span className='padding'>
-            Bellow you will find the current hack status. You can also manage
-            your projects from here.
-          </span>
           <Separator primary className='padding' />
+          {this.state.hackData &&
+            <TimeLine
+            phases={this.state.hackData.phases}
+            onClick={this.onPhaseSelection}
+            currentPhase={this.state.currentPhase}
+            />
+          }
+
           <CardsContainer>
             <ProjectCard
               newProject={true}
               onSave={this.createNewProject}
               projects={this.state.projects}
             />
+
             {this.state.projects.map((project, index) => {
               return (
                 <ProjectCard
@@ -185,18 +199,12 @@ class UserProfile extends React.Component {
               );
             })}
           </CardsContainer>
+
         </SectionContainer>
       </ThemeProvider>
     );
   }
 }
 
-// {this.state.hackData &&
-//           <TimeLine
-//             phases={this.state.hackData.phases}
-//             onClick={this.onPhaseSelection}
-//             currentPhase={this.state.currentPhase}
-//           />
-//         }
 
 export default withCookies(UserProfile);
