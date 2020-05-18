@@ -6,6 +6,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import ReactMde from 'react-mde'; // react-mde
+import ReactDOM from "react-dom";
 import * as Showdown from 'showdown'; // Markdown reader
 
 import './css/react-mde-all.css'; // Custom Editor stylesheet
@@ -29,8 +30,8 @@ class MarkdownEditor extends React.Component {
     this.converter = new Showdown.Converter({
       tables: true,
       simplifiedAutoLink: true,
-      prefixHeaderId: true, // Add a prefix to the generated header ids. Passing a string will prefix that string to the header id. Setting to true will add a generic 'section' prefix.
-      strikethrough: true, // Enable support for strikethrough syntax. ~~strikethrough~~ as <del>strikethrough</del>
+      prefixHeaderId: true,
+      strikethrough: true, 
       tasklists: true,
     });
   }
