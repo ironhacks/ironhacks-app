@@ -31,14 +31,11 @@ export const LandingTheme = {
   textColor: 'black',
 };
 
-
-export const HeaderTheme = {
-  containerHeight: '50px',
+export const HeaderStyle = {
+  height: '50px',
   backgroundColor: Colors.mainBgColor,
-  textColor: Colors.mainTextColor,
-  hoverTextColor: Colors.highlightedTextColor,
+  color: Colors.mainTextColor,
 };
-
 
 export const FooterTheme = {
   containerHeight: '50px',
@@ -48,13 +45,17 @@ export const FooterTheme = {
 };
 
 export const SectionStyles = {
-  containerHeight: 'calc(100vh - ' + HeaderTheme.containerHeight + ' - ' + FooterTheme.containerHeight + ')',
+  minHeight: 'calc(100vh - ' + HeaderStyle.height + ' - ' + FooterTheme.containerHeight + ')',
+  backgroundColor: 'white',
+  color: 'black',
+};
+
+export const AppSectionTheme = {
+  containerHeight: 'calc(100vh - ' + HeaderStyle.height + ' - ' + FooterTheme.containerHeight + ')',
   backgroundColor: 'white',
   textColor: 'black',
   hoverTextColor: Colors.highlightedTextColor,
 };
-
-export const AppSectionTheme = SectionStyles;
 
 export const LoginTheme = {
   containerHeight: '100vh;',
