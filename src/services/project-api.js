@@ -3,19 +3,28 @@ import { fireApi } from './fire-api';
 const firestore = window.firebase.firestore();
 
 // Query all the hacks objects from the db.
-const getProjects = async () => {
+const getProjects = async (userid) => {
+  console.log('%c getProjects', 'color: teal; font-weight: bold');
   const projects = [];
   var querySnapshot = [];
+
   try {
     querySnapshot = await firestore.collection('users')
-    .doc(this.state.user.uid)
-    .collection('projects')
-    .get();
+    querySnapshot = await window.firebase.firestore()
+      .collection('users')
+      .doc(userid)
+      .collection('projects')
+      .get();
+
+    console.log('querySnapshot', querySnapshot);
+
     await querySnapshot.forEach((doc) => {
       const projectData = doc.data();
       projectData.name = doc.id;
       projects.push(projectData);
     })
+
+
   } catch (e) {
     console.error('Error getting documents: ', e);
   } finally {
@@ -105,7 +114,9 @@ const putStorageFile = (file, projectName) => {
   const pathRef = storageRef.child(
     `${this.state.user.uid}/${projectName}/${file.path}${file.name}`
   );
+
   const _this = this;
+
   // the return value will be a Promise
   return pathRef
   .put(file.blob)
@@ -156,7 +167,7 @@ const getCurrentHackInfo = () => {
 
 
 const projectApi = {
-  getAll: getProjects,
+  getProjects: getProjects,
   new: createNewProject,
   getInfo: getCurrentHackInfo,
   createRepo: createGitHubRepository,
