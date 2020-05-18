@@ -8,7 +8,7 @@ import {fireApi} from './services/fire-api';
 import './ReactotronConfig'
 import App from './app';
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && process.env.TEST_HACK) {
   const devHackData = {
     ihdemo: {
       forumId: 'Ey3ixM3mtmsHhXIPHVff',
@@ -32,10 +32,8 @@ if (process.env.NODE_ENV !== 'production') {
 
   localStorage.setItem('debug','"development" ');
   Log.info('app loaded');
-  console.log('env', process.env);
 }
 
-console.log(fireApi);
 if (process.env.NODE_ENV !== 'production') {
   window.__DEV__ = true;
 } else {

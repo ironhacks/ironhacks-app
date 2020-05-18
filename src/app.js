@@ -21,6 +21,7 @@ import ThreadViewWithRouter from './views/forum/threadView/threadView';
 import UserProfile from './views/userProfile/user-profile';
 import TutorialScreen from './views/tutorial';
 import Login from './views/login';
+import ExamplesPage from './views/examples';
 import Admin from './views/admin';
 import AdminDashboard from './views/admin/adminDashboard';
 import Forum from './views/forum/forum.js';
@@ -32,7 +33,7 @@ import ProjectPreview from './components/projectEditor/projectPreview.js';
 import QuizForm from './components/quizzes/quizForm.js';
 import Quizzes from './components/quizzes/quizzes.js';
 import Task from './views/task';
-import Results from './views/results/results.js';
+import Results from './views/results';
 import './theme/styles.css';
 
 
@@ -54,18 +55,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // user: undefined,
-      user: testUser,
+      user: {},
+      // user: testUser,
       mustNavigate: false,
     };
-
-    // this.firestore = window.firebase.firestore();
+    this.firestore = window.firebase.firestore();
   }
 
 
    componentDidMount() {
-     Reactotron.log('[App.js] Mounted');
-     this.isUserConected();
+     this._isUserConnected();
    }
 
    _setUser(_user) {
@@ -89,33 +88,33 @@ class App extends React.Component {
 
    _isAdmin() {
     this._setUpdateAdmin(true);
-     // this.firestore.collection('admins')
-     //     .doc(this.state.user.uid)
-     //     .get()
-     //     .then((doc) => {
-     //       this._setUpdateAdmin(true);
-     //     })
-     //     .catch((error) => {
-     //       this._setUpdateAdmin(false);
-     //     });
+    this.firestore.collection('admins')
+      .doc(this.state.user.uid)
+      .get()
+      .then((doc) => {
+        this._setUpdateAdmin(true);
+      })
+      .catch((error) => {
+        this._setUpdateAdmin(false);
+      })
    }
 
-  isUserConected() {
+  _isUserConnected() {
     this._setUpdateAdmin(true);
     this._setShouldNavigate(true);
-    // window.firebase
-    //   .auth()
-    //   .onAuthStateChanged((user) => {
-    //     if (user) {
-    //       const names = user.displayName.split(' ');
-    //       user.profileLetters = names[0].slice(0, 1) + names[1].slice(0, 1);
-    //       this._setUser(user);
-    //       this._isAdmin();
-    //     } else {
-    //       this._setUser(false);
-    //       this._setShouldNavigate(true);
-    //     }
-    // });
+    window.firebase
+      .auth()
+      .onAuthStateChanged((user) => {
+        if (user) {
+          const names = user.displayName.split(' ');
+          user.profileLetters = names[0].slice(0, 1) + names[1].slice(0, 1);
+          this._setUser(user);
+          this._isAdmin();
+        } else {
+          this._setUser(false);
+          this._setShouldNavigate(true);
+        }
+    });
   }
 
 
@@ -133,45 +132,53 @@ class App extends React.Component {
        return (
          <CookiesProvider>
           <div className='App'>
+
            <Switch>
               <Route exact path='/' render={() => null}/>
               <Route path='/login' component={Login}/>
+
               {!this.state.user && <Redirect to='/'/>}
               <Route render={(props) => (<Header user={this.state.user} {...props}/>)}/>
+
             </Switch>
+
             <Switch>
+
               <Route path='/login' component={Login}/>
-              <Route path='/select-hack' render={(props) =>                             (<hackSelector user={this.state.user} {...props}/>)}/>
-              <Route path='/profile' render={(props) =>                                   (<UserProfile user={this.state.user} {...props}/>)}/>
-
-              <Route exact path='/forum' render={(props) =>                               (<Forum user={this.state.user} {...props}/>)}/>
-              <Route exact path='/forum/new' render={(props) =>                           (<NewThread user={this.state.user} {...props}/>)}/>
-              <Route path='/forum/thread/:threadId' render={(props) =>                    (<ThreadViewWithRouter user={this.state.user} {...props}/>)}/>
-
+              <Route path='/select-hack' render={(props) => (<hackSelector user={this.state.user} {...props}/>)}/>
+              <Route path='/profile' render={(props) => (<UserProfile user={this.state.user} {...props}/>)}/>
+              <Route exact path='/forum' render={(props) => (<Forum user={this.state.user} {...props}/>)}/>
+              <Route exact path='/forum/new' render={(props) => (<NewThread user={this.state.user} {...props}/>)}/>
+              <Route path='/forum/thread/:threadId' render={(props) => (<ThreadViewWithRouter user={this.state.user} {...props}/>)}/>
               <Route exact path='/admin/newHack' component={NewHack}/>
               <Route path='/admin/dashboard/:hackId' component={AdminDashboard}/>
               <Route path='/admin' component={Admin}/>
-              <Route path='/tutorial' render={(props) =>                                  (<TutorialScreen user={this.state.user} {...props}/>)}/>
-
-              <Route path='/task' render={(props) =>                                      (<Task user={this.state.user} {...props}/>)}/>
+              <Route path='/tutorial' render={(props) => (<TutorialScreen user={this.state.user} {...props}/>)}/>
+              <Route path='/task' render={(props) => (<Task user={this.state.user} {...props}/>)}/>
+              <Route path='/examples' render={(props) => (<ExamplesPage user={this.state.user} {...props}/>)}/>
               <Route exact path='/quizzes' component={Quizzes}/>
-
-              <Route path='/quizzes/:quizName' render={(props) =>                         (<QuizForm user={this.state.user} {...props}/>)}/>
-              <Route path='/results' render={(props) =>                                   (<Results user={this.state.user} {...props}/>)}/>
-              <Route exact path='/projectEditor/:proyectName' render={(props) =>          (<ProjectEditor user={this.state.user} {...props}/>)}/>
-              <Route exact path='/projectEditor/:proyectName/preview' render={(props) =>  (<ProjectPreview user={this.state.user} {...props}/>)}/>
+              <Route path='/quizzes/:quizName' render={(props) => (<QuizForm user={this.state.user} {...props}/>)}/>
+              <Route path='/results' render={(props) => (<Results user={this.state.user} {...props}/>)}/>
+              <Route exact path='/projectEditor/:proyectName' render={(props) => (<ProjectEditor user={this.state.user} {...props}/>)}/>
+              <Route exact path='/projectEditor/:proyectName/preview' render={(props) => (<ProjectPreview user={this.state.user} {...props}/>)}/>
               <Route exact path='/404' component={PageNotFound}/>
+
               {this.state.user.admin && <Redirect to='/admin'/>}
               <Route exact path='/' component={HomePage}/>
+
               {this.state.user && <Redirect to='/404'/>}
               {<Redirect to='/'/>}
             </Switch>
+
              <Switch>
+
               <Route exact path='/' render={() => null}/>
               <Route exact path='/login' render={() => null}/>
               <Route exact path='/404' render={() => null}/>
               <Route component={Footer}/>
+
             </Switch>
+
             </div>
           </CookiesProvider>
       );
