@@ -44,81 +44,81 @@ class Login extends React.Component {
   }
 
   initAuthUI() {
-    // const uiConfig = {
-    //   signInFlow: 'redirect',
-    //   signInOptions: [window.firebase.auth.EmailAuthProvider.PROVIDER_ID],
-    //   callbacks: {
-    //     signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-    //       const user = {
-    //         name: authResult.user.displayName,
-    //         email: authResult.user.email,
-    //         uid: authResult.user.uid,
-    //       };
-    //       this.setState({ user: user });
-    //       if (authResult.additionalUserInfo.isNewUser === true) {
-    //         this.saveUserOnDB(user);
-    //         user.isAdmin = false;
-    //         return false;
-    //       } else {
-    //         this.isAdmin(user);
-    //         return false;
-    //       }
-    //     },
-    //     signInFailure: function(error) {
-    //       console.log(error);
-    //     },
-    //   },
-    //   tosUrl: '/tos',
-    //   privacyPolicyUrl: '/pp',
-    //   credentialHelper: window.firebaseui.auth.CredentialHelper.NONE, // Disableing credentialHelper
-    // };
+    const uiConfig = {
+      signInFlow: 'redirect',
+      signInOptions: [window.firebase.auth.EmailAuthProvider.PROVIDER_ID],
+      callbacks: {
+        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+          const user = {
+            name: authResult.user.displayName,
+            email: authResult.user.email,
+            uid: authResult.user.uid,
+          };
+          this.setState({ user: user });
+          if (authResult.additionalUserInfo.isNewUser === true) {
+            this.saveUserOnDB(user);
+            user.isAdmin = false;
+            return false;
+          } else {
+            this.isAdmin(user);
+            return false;
+          }
+        },
+        signInFailure: function(error) {
+          console.log(error);
+        },
+      },
+      tosUrl: '/tos',
+      privacyPolicyUrl: '/pp',
+      credentialHelper: window.firebaseui.auth.CredentialHelper.NONE, // Disableing credentialHelper
+    };
 
     // Making sure there is only one AuthUI instance
-    // if (window.firebaseui.auth.AuthUI.getInstance()) {
-    //   const ui = window.firebaseui.auth.AuthUI.getInstance();
-    //   ui.start('#firebaseui-auth-container', uiConfig);
-    // } else {
-    //   const ui = new window.firebaseui.auth.AuthUI(window.firebase.auth());
-    //   ui.start('#firebaseui-auth-container', uiConfig);
-    // }
+    if (window.firebaseui.auth.AuthUI.getInstance()) {
+      const ui = window.firebaseui.auth.AuthUI.getInstance();
+      ui.start('#firebaseui-auth-container', uiConfig);
+    } else {
+      const ui = new window.firebaseui.auth.AuthUI(window.firebase.auth());
+      ui.start('#firebaseui-auth-container', uiConfig);
+    }
   }
 
   saveUserOnDB = (user) => {
-    // const firestore = window.firebase.firestore();
+    const firestore = window.firebase.firestore();
     const _this = this;
-    // firestore
-    //   .collection('users')
-    //   .doc(user.uid)
-    //   .set({ name: user.name, email: user.email })
-    //   .then(function(docRef) {
-    //     _this.setState({ mustNavigate: true });
-    //   })
-    //   .catch(function(error) {
-    //     console.error('Error adding document: ', error);
-    //   });
+    firestore
+      .collection('users')
+      .doc(user.uid)
+      .set({ name: user.name, email: user.email })
+      .then(function(docRef) {
+        _this.setState({ mustNavigate: true });
+      })
+      .catch(function(error) {
+        console.error('Error adding document: ', error);
+      });
   };
 
   isAdmin = (user) => {
-    // const firestore = window.firebase.firestore();
+    const firestore = window.firebase.firestore();
     const _this = this;
-    // const _user = user;
-    // firestore
-    //   .collection('admins')
-    //   .doc(_user.uid)
-    //   .get()
-    //   .then(function(doc) {
-    //     _this.setState((prevState, props) => {
-    //       _user.isAdmin = true;
-    //       return { user: _user, mustNavigate: true };
-    //     });
-    //   })
-    //   .catch(function(error) {
-    //     // The user can't read the admins collection, therefore, is not admin.
-    //     _this.setState((prevState, props) => {
-    //       _user.isAdmin = false;
-    //       return { user: _user, mustNavigate: true };
-    //     });
-    //   });
+    const _user = user;
+    firestore
+      .collection('admins')
+      .doc(_user.uid)
+      .get()
+      .then(function(doc) {
+        _this.setState((prevState, props) => {
+          _user.isAdmin = true;
+          return { user: _user, mustNavigate: true };
+        });
+      })
+      .catch(function(error) {
+        // The user can't read the admins collection, therefore, is not admin.
+        _this.setState((prevState, props) => {
+          _user.isAdmin = false;
+          return { user: _user, mustNavigate: true };
+        });
+      });
   };
 
   render() {
