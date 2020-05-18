@@ -1,9 +1,20 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import MarkdownEditor from '../../../../components/markdownEditor/markdownEditor.js';
-import AvailableActionsDiv from '../../../../util/availableActionsDiv.js';
 import Button from '../../../../util/button.js';
 import { Theme } from '../../../../theme';
+
+
+
+
+const AvailableActionsDiv = styled('div')`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  height: 50px;
+`;
+
 
 const styles = Theme.STYLES.adminInnerSectionsTheme;
 const SectionContainer = styled('div')`
