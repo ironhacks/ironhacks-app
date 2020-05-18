@@ -2,7 +2,7 @@ import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { Theme } from '../../theme';
 import { Page } from '../layouts/page';
-import { Section } from '../layouts/section';
+import { Section } from '../layouts/sections';
 import HeroSection from './content/hero';
 import FaqSection from './content/faq';
 import RankingSection from './content/ranking';

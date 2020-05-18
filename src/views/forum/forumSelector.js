@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Theme } from '../../theme';
-const colors = Theme.COLORS;
 const units = Theme.UNITS;
 
 // import MarkdownEditor from '../markdownEditor/markdownEditor.js';

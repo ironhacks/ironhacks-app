@@ -1,7 +1,7 @@
 import React from 'react';
 import {withCookies} from 'react-cookie';
 import Showdown from 'showdown';
-import { SectionContainer } from '../../views/layouts/section';
+import { SectionContainer } from '../layouts/sections';
 
 // import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 
