@@ -123,15 +123,14 @@ class Results extends React.Component {
       user,
       currentHack: 'mmHJrWzmx4rCyQ2YpJWL',
       // currentHack: cookies.get('currentHack') || null,
-      forumId: '8JKHD71CFYS2SzI52UQ9',
-      // forumId: cookies.get('currentForum') || null,
+      // forumId: '8JKHD71CFYS2SzI52UQ9',
+      forumId: cookies.get('currentForum') || null,
       hackData: null,
       treatment: null,
       scores: null,
       loading: true,
       currentSection: 'yourCompetitors',
     };
-
     this.firestore = window.firebase.firestore();
     this.getForumData = this.getForumData.bind(this);
     this.getResults = this.getResults.bind(this);
