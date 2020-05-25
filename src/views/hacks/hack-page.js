@@ -1,15 +1,31 @@
 import React from 'react';
-import { useParams } from "react-router-dom";
 import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
-import swal from 'sweetalert2';
-import { HackCardList } from '../../components/hacks/hack-card-list';
+import { HackNav } from './hack-nav';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
-import * as AlertsContent from '../../components/alert';
+import { withRouter } from 'react-router';
 
-// import generateHackFileTemplate from '../../components/hacks/templates';
+import ThreadViewWithRouter from '../forum/threadView/threadView';
+import TutorialScreen from '../tutorial';
+import ExamplesPage from '../examples';
+import Forum from '../forum/forum.js';
+import NewThread from '../forum/newThread.js';
+import ProjectsPage from  '../projects';
+import Task from '../task';
+import Results from '../results';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams,
+  useRouteMatch
+} from 'react-router-dom';
+
 import { Theme } from '../../theme';
+
 // const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
 // const units = Theme.UNITS;
@@ -39,10 +55,13 @@ class HackPage extends React.Component {
   constructor(props) {
     super(props);
 
-    let { slug } = useParams();
-    this.hackId = slug;
+    // let { slug } = useParams();
+    // this.hackId = slug;
+
+    this.hackId = this.props.match.params.hackId;
 
     this.state = {
+      currentView: 'task',
       user: this.props.user,
       startNewHackNav: true,
       startDashboardNav: true,
@@ -51,73 +70,55 @@ class HackPage extends React.Component {
       loading: false,
     };
 
+    const hackDataPromise = this.getHack(this.hackId);
+
+    Promise.resolve(hackDataPromise).then((hackData) => {
+       if (hackData.length > 0) {
+         this.setCurrentHack(this.hackId);
+       }
+       this.hackData = hackData;
+       this.hackName = hackData.name;
+    });
+
     this.firestore = window.firebase.firestore();
   }
 
   componentDidMount() {
-    try {
-      if (!this.state.user){
-        console.log('user not set');
-      }
-      const hackPromise = this.getHacks(this.state.user);
-      Promise.resolve(hackPromise).then((hackData) => {
-        if (hackData.length > 0) {
-          this.setHacks(hackData)
-        }
-      });
-    } catch (e) {
-      console.log('get hacks failed', e);
-    }
-    window.addEventListener('message', this.recieveMessage);
+    // try {
+      // let hackData = this.getHack(this.hackId)
+      // if (!this.state.user){
+      //   console.log('user not set');
+      // }
+      // const hackPromise = this.getHacks(this.state.user);
+      // Promise.resolve(hackPromise).then((hackData) => {
+      //   if (hackData.length > 0) {
+      //     this.setHacks(hackData)
+      //   }
+      // });
+    // } catch (e) {
+    //   console.log('get hacks failed', e);
+    // }
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    // console.log('hackpage updated', {
-    //   prevProps: prevProps,
-    //   prevState: prevState,
-    //   snapshot: snapshot
-    // });
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  // }
 
-    if (!this.state.user.uid) {
-      console.log('user UNSET');
-      if (prevProps.user.uid) {
-        console.log('user is NOW set');
-        // let hackPromise = this.getHacks(prevProps.user);
-        // Promise.resolve(hackPromise).then((hackData) => {
-        //   console.log('update got hacks', hackData);
-        // });
-        //.then((result) => {
-        // })
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('message', this.recieveMessage);
-  }
-
-  recieveMessage(event) {
-    if (
-      event.data.source !== 'react-devtools-content-script'
-      && event.data.source !== 'react-devtools-bridge'
-    ) {
-      console.log('message incoming', event.data);
-    }
-
-    if (event.data === 'quizDone') {
-      swal.clickConfirm();
-    }
-  }
+  // componentWillUnmount() {
+  // }
 
   // Query all the hacks objects from the db.
   async getHack(hackId) {
-    console.log('get hack', hackId);
-
-    let hack = await this.firestore
+    let hack = await window.firebase.firestore()
       .collection('hacks')
-      .doc(hackId);
+      .doc(hackId)
+      .get();
 
-    return hack;
+    if (hack.exists) {
+      console.log('hack result', hack.data());
+      return hack.data();
+    }
+
+    return false;
   }
 
   setHacks(hacks) {
@@ -182,6 +183,10 @@ class HackPage extends React.Component {
     // cookies.set('currentForum', doc.data().forums[_hack_id].id);
   };
 
+  updateHackView(target) {
+    console.log(this, target);
+  }
+
   render() {
     if (this.state.loading) {
       return (
@@ -201,27 +206,53 @@ class HackPage extends React.Component {
 
               <Separator primary />
 
-              <h2>Hack: { this.hackId }</h2>
-
+              <h2>
+               <strong>Hack: </strong>
+               <span>{ this.hackName } </span>
+               <span className="small">({ this.hackId })</span>
+              </h2>
               <Separator />
 
-              <h2 style={{
-                paddingTop: '1em',
-              }}>
-                Available hacks for registration
-              </h2>
-
-              <p>
-                Below you will find all the availabe hacks to register in.
-                Click on one of them to start the registration process.
-              </p>
+              <HackNav action={this.updateHackView}/>
 
               <Separator primary />
+              <Router>
+                <div>
+                <Switch>
 
-              <HackCardList
-                emptyText={'There are no hacks currently availabe.'}
-                hacks={this.state.availableHacks}
-              />
+                  <Route path="/hacks/:hackId/task">
+                    <h3>Task</h3>
+                    <Task/>
+                  </Route>
+
+                  <Route path="/hacks/:hackId/forum">
+                    <h3>Forum</h3>
+                    <Forum/>
+                  </Route>
+
+                  <Route path="/hacks/:hackId/tutorial">
+                    <h3>Tutorial</h3>
+                    <TutorialScreen/>
+                  </Route>
+
+                  <Route path="/hacks/:hackId/examples">
+                    <h3>Examples</h3>
+                    <ExamplesPage/>
+                  </Route>
+
+                  <Route path="/hacks/:hackId/projects">
+                    <h3>Projects</h3>
+                    <ProjectsPage/>
+                  </Route>
+
+                  <Route path="/hacks/:hackId/results">
+                    <h3>Results</h3>
+                    <Results/>
+                  </Route>
+                </Switch>
+                </div>
+              </Router>
+
 
             </div>
           </div>
@@ -231,4 +262,4 @@ class HackPage extends React.Component {
   }
 }
 
-export default withCookies(HackPage);
+export default withCookies(withRouter(HackPage))
