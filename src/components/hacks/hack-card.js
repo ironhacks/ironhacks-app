@@ -87,7 +87,7 @@ class HackCard extends React.Component {
   render() {
     return (
       <div className={'hack_card'}>
-        <a href={`/hacks/${this.props.hackid}`}>
+        <a href={`/hacks/${this.props.hackid}/`}>
           <div className="hack_card__header">
             <h3 className="hack_title">{this.props.name}</h3>
           </div>
