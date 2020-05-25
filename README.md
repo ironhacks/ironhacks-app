@@ -12,7 +12,7 @@ An IronHacks is a unique 21-day, 4-stage innovative hacking program for individu
 
 ## Developer Documentation
 
-If you are interested how the app works in the depth, check out the [Documentation Site](https://ironhacks.github.io/ironhacks-platform-2018/).
+If you are interested how the app works in the depth, check out the [Documentation Site](https://ironhacks.github.io/ironhacks-docs/).
 
 ## License
 
