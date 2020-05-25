@@ -1,9 +1,13 @@
+import { TemplateFiles } from '../components/project';
 import { fireApi } from './fire-api';
+
+const ProjectApi = {};
+
 
 const firestore = window.firebase.firestore();
 
 // Query all the hacks objects from the db.
-const getProjects = async (userid) => {
+ProjectApi.getProjects = async (userid) => {
   console.log('%c getProjects', 'color: teal; font-weight: bold');
   const projects = [];
   var querySnapshot = [];
@@ -33,36 +37,47 @@ const getProjects = async (userid) => {
 };
 
 
+ProjectApi.getCurrentHackInfo = async (currentHack) => {
+  // const _this = this;
+  try {
+    const hacksDoc = await this.firestore.collection('hacks').doc(currentHack).get()
+    console.log('get current hack info', hacksDoc);
+    if (hacksDoc.data){
+      return hacksDoc.data();
+    }
+  } catch (e) {
+    console.error('Error getting documents: ', e);
+    return false;
+  }
 
+    // .then((doc) => {
+    //   _this.setState({ hackData: doc.data() });
+    //   return doc.data();
+    // })
+    // .catch(function(error) {
+    //   console.error('Error getting documents: ', error);
+    // });
 
-const createNewProject = (name) => {
-  this.setState({ loading: true, status: 'Creatring project...' });
-  const templateFiles = [
-    // TemplateFiles.indexBlob,
-    // TemplateFiles.jsBlob,
-    // TemplateFiles.cssBlob,
-  ];
-  Promise.all(
-    templateFiles.map((file) => this.putStorageFile(file, name))
-  )
-  .then(() => {
-    this.createGitHubRepository(name);
-  })
-  .catch((error) => {
-    console.log('Something failed: ', error.message);
-  });
 };
 
+ProjectApi.getProjectFiles = (files) => {
+  return [
+    TemplateFiles.IndexHtmlTemplate,
+    TemplateFiles.ScriptJsTemplate,
+    TemplateFiles.StyleCssTemplate,
+  ];
+}
+
 /// they should fork a public repo from the main
-/// account instead of creating one with arbritrar files
+/// account instead of creating one with arbritrary files
 /// we can also track forks and changes better this way
-const  createGitHubRepository = (name) => {
+ProjectApi.createGitHubRepository = (name) => {
   this.setState({ status: 'Creating repository...' });
 
   const templateFiles = [
-    // { name: 'index.html', content: TemplateFiles.index },
-    // { name: 'js/main.js', content: TemplateFiles.js },
-    // { name: 'css/main.css', content: TemplateFiles.css },
+    { name: 'index.html', content: TemplateFiles.IndexHtmlTemplate },
+    { name: 'js/main.js', content: TemplateFiles.ScriptJsTemplate },
+    { name: 'css/main.css', content: TemplateFiles.StyleCssTemplate },
   ];
 
   const projectName = this.state.user.isAdmin
@@ -108,7 +123,7 @@ const  createGitHubRepository = (name) => {
     });
 }
 
-const putStorageFile = (file, projectName) => {
+ProjectApi.putStorageFile = (file, projectName) => {
   // Uploading each template file to storage
   const storageRef = window.firebase.storage().ref();
   const pathRef = storageRef.child(
@@ -151,27 +166,23 @@ const putStorageFile = (file, projectName) => {
 };
 
 
-const getCurrentHackInfo = () => {
-  const _this = this;
-  this.firestore
-  .collection('hacks')
-  .doc(this.state.currentHack)
-  .get()
-  .then((doc) => {
-    _this.setState({ hackData: doc.data() });
+ProjectApi.createNewProject = (projectName) => {
+  // this.setState({ loading: true, status: 'Creatring project...' });
+
+  const templateFiles = this.getProjectFiles();
+
+  Promise.all(
+    templateFiles.map((file) => this.putStorageFile(file, projectName))
+  )
+  .then(() => {
+    // this.createGitHubRepository(name);
+    return true;
   })
-  .catch(function(error) {
-    console.error('Error getting documents: ', error);
+  .catch((error) => {
+    console.log('Something failed: ', error.message);
+    return false;
   });
 };
 
 
-const projectApi = {
-  getProjects: getProjects,
-  new: createNewProject,
-  getInfo: getCurrentHackInfo,
-  createRepo: createGitHubRepository,
-  saveFile: putStorageFile,
-};
-
-export { projectApi }
+export { ProjectApi }
