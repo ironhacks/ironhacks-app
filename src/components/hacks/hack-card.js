@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Theme } from '../../theme';
+import './assets/style.css';
+
 const colors = Theme.COLORS;
+
 
 const CardContainer = styled('button')`
   height: 150px;
@@ -50,36 +53,64 @@ const Separator = styled('div')`
   background-color: ${colors.mainBgColor};
 `;
 
-class HackCard extends React.Component {
+
+class NewHackCard extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
   onHackCardClick() {
     this.props.onClick(this.props.index, this.props.hack.registrationSurvey);
   }
 
-  render() {
-    if (this.props.newHack === true) {
+    render() {
       return (
         <CardContainer
           className='newHackCard'
-          onClick={this.props.onClick} >
+          onClick={this.props.onClick}
+          >
           <span>+</span>
           <span>Add Hack</span>
-
         </CardContainer>
-      );
+      )
     }
 
+}
+
+
+class HackCard extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+
+  render() {
     return (
-      <CardContainer
-        onClick={this.onHackCardClick} >
+      <div className={'hack_card'}>
+        <a href={`/hacks/${this.props.hackid}`}>
+          <div className="hack_card__header">
+            <h3 className="hack_title">{this.props.name}</h3>
+          </div>
 
-        <h3>{this.props.hack.name}</h3>
-        <span>{'Phases: ' + this.props.hack.phases.length}</span>
+          <div className="hack_card__body">
+            <span>
+              {`Phases: ${this.props.phases}`}
+            </span>
+          </div>
 
-        <Separator />
-      </CardContainer>
-    );
+          <div className="hack_card__footer">
+            <Separator />
+          </div>
+        </a>
+      </div>
+    )
   }
 }
 
-export default HackCard;
+HackCard.defaultProps = {
+  name: 'Hack Name',
+  phases: 0,
+  hackid: ''
+}
+
+export { HackCard, NewHackCard }
