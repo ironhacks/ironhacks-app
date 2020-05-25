@@ -6,8 +6,8 @@ import Separator from '../../util/separator.js';
 import TimeLine from '../../util/timeLine.js';
 import { Theme } from '../../theme';
 import {Loader} from '../../components/loader';
-import { projectApi } from '../../services/project-api';
-import ProjectCard from './lib/project-card';
+import { ProjectApi } from '../../services/project-api';
+// import ProjectCard from './lib/project-card';
 
 // const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
@@ -101,26 +101,19 @@ class UserProfile extends React.Component {
   }
 
   componentDidMount() {
-    const userid = this.state.user.uid;
-    var projectsPromise = projectApi.getProjects(userid);
-    const _this = this;
-    projectsPromise.then(function(projects){
-      console.log('projects', projects);
-      _this.setProjects(projects);
-    })
+    const userid = this.state.user.userId;
+
+    // var projectsPromise = ProjectApi.getProjects(userid);
+    // const _this = this;
+    // projectsPromise.then(function(projects){
+    //   console.log('projects', projects);
+    //   _this.setProjects(projects);
+    // })
 
     if (!this.state.user.isAdmin) {
       this.getCurrentHackInfo();
     }
   }
-
-  goToProjectEditor = (index) => {
-    this.setState({
-      selectedProject: index,
-      navigateToProject: true,
-    });
-  };
-
 
   onPhaseSelection = (phase) => {};
 
@@ -180,26 +173,6 @@ class UserProfile extends React.Component {
             currentPhase={this.state.currentPhase}
             />
           }
-
-          <CardsContainer>
-            <ProjectCard
-              newProject={true}
-              onSave={this.createNewProject}
-              projects={this.state.projects}
-            />
-
-            {this.state.projects.map((project, index) => {
-              return (
-                <ProjectCard
-                  project={project}
-                  index={index}
-                  key={index}
-                  onClick={this.goToProjectEditor}
-                />
-              );
-            })}
-          </CardsContainer>
-
         </SectionContainer>
       </ThemeProvider>
     );
