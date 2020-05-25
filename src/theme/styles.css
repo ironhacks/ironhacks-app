@@ -4,6 +4,6 @@
   --color-primary: #e6b92f;
 }
 
-.c-primary { color: var(--color-primary); }
-.bg-primary { background-color: var(--color-primary); }
-.bdc-primary { border-color: var(--color-primary); }
+.c-primary { color: var(--color-primary) !important; }
+.bg-primary { background-color: var(--color-primary) !important; }
+.bdc-primary { border-color: var(--color-primary) !important; }
