@@ -75,7 +75,7 @@ const Table = styled('table')`
 const PreviousHackItem = (props) => {
   return PriorHacksData.map((hack, i) => {
     return (
-      <HackCard selected={i === props.selectedHack} key={hack.name + i}>
+      <HackCard className={i === props.selectedHack ? 'selected' : 'hide'} selected={i === props.selectedHack} key={hack.name + i}>
         <HackInfo>
           <div>
             <h2>{hack.name}</h2>

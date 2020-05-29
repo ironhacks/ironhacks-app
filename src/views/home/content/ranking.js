@@ -64,23 +64,28 @@ export default class RankingSection extends React.Component {
       <>
         <h1>Prior Hacks</h1>
         <Separator />
+
         <HackSelector>
-          {PriorHacksData.map((hack, i) => {
-            if (this.state.selectedHack === i) {
+
+          {PriorHacksData.map((hack, index) => {
+            if (this.state.selectedHack === index) {
               return (
-                <button className='selected' disabled id={i} key={i}>
+                <button className='selected' disabled id={index} key={index}>
                   {hack.name}
                 </button>
               );
             }
             return (
-              <button onClick={this.changeHack} id={i} key={i}>
+              <button onClick={this.changeHack} id={index} key={index}>
                 {hack.name}
               </button>
             );
           })}
         </HackSelector>
-        <PreviousHackItem selectedHack={this.state.selectedHack} />
+
+        <PreviousHackItem
+          selectedHack={this.state.selectedHack}
+          />
       </>
     );
   }
