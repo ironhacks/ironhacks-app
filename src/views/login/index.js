@@ -2,7 +2,6 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import { Theme } from '../../theme';
-import Log from '../../util/log';
 
 const colors = Theme.COLORS;
 const styles = Theme.STYLES.LoginTheme;
@@ -35,11 +34,12 @@ class Login extends React.Component {
     super(props);
     this.state = {
       mustNavigate: false,
-    };
+    }
+
+    this.isAdmin = this.isAdmin.bind(this);
   }
 
   componentDidMount() {
-    Log.trace('loginPage', 'componentDidMount', 'init');
     this.initAuthUI();
   }
 
@@ -83,10 +83,9 @@ class Login extends React.Component {
     }
   }
 
-  saveUserOnDB = (user) => {
-    const firestore = window.firebase.firestore();
+  saveUserOnDB(user) {
     const _this = this;
-    firestore
+    window.firebase.firestore()
       .collection('users')
       .doc(user.uid)
       .set({ name: user.name, email: user.email })
@@ -95,64 +94,60 @@ class Login extends React.Component {
       })
       .catch(function(error) {
         console.error('Error adding document: ', error);
-      });
+      })
   };
 
-  isAdmin = (user) => {
-    const firestore = window.firebase.firestore();
-    const _this = this;
+  isAdmin(user) {
     const _user = user;
-    firestore
+    const _this = this;
+    window.firebase.firestore()
       .collection('admins')
       .doc(_user.uid)
       .get()
       .then(function(doc) {
         _this.setState((prevState, props) => {
           _user.isAdmin = true;
-          return { user: _user, mustNavigate: true };
-        });
+          return {
+            user: _user,
+            mustNavigate: true
+          }
+        })
       })
       .catch(function(error) {
         // The user can't read the admins collection, therefore, is not admin.
         _this.setState((prevState, props) => {
           _user.isAdmin = false;
-          return { user: _user, mustNavigate: true };
+          return {
+            user: _user,
+            mustNavigate: true
+          }
         });
       });
-  };
+  }
 
   render() {
-    const currentUser = this.state.user;
+    const _user = this.state.user;
+
     if (this.state.mustNavigate) {
-      if (currentUser.isAdmin) {
-        return (
-          <Redirect
-            to={{
-              pathname: '/admin',
-              state: { user: currentUser },
-            }}
-          />
-        );
-      } else {
-        return (
-          <Redirect
-            to={{
-              pathname: '/select-hack',
-              state: { user: currentUser },
-            }}
-          />
-        );
-      }
+      return (
+        <Redirect
+          to={{
+            pathname: '/hacks',
+            state: { user: _user },
+          }}
+        />
+      )
+    } else {
+      return (
+        <ThemeProvider theme={styles}>
+          <SectionContainer>
+            <h1><span>PURDUE</span> IRONHACKS</h1>
+            <h2>Hack for innovation and join the open data movement.</h2>
+            <div id='firebaseui-auth-container' />
+          </SectionContainer>
+        </ThemeProvider>
+      )
     }
-    return (
-      <ThemeProvider theme={styles}>
-        <SectionContainer>
-          <h1><span>PURDUE</span> IRONHACKS</h1>
-          <h2>Hack for innovation and join the open data movement.</h2>
-          <div id='firebaseui-auth-container' />
-        </SectionContainer>
-      </ThemeProvider>
-    );
   }
 }
 

@@ -2,16 +2,12 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
-// import registerStat from '../../../util/register-stat';
 import { NavButton } from '../navigation/nav-button'
-import { HeaderNav } from '../navigation/header-nav'
 import { HeaderLogo } from '../navigation/header-logo'
-
 import { Theme } from '../../../theme';
 
 const colors = Theme.COLORS;
 const styles = Theme.STYLES;
-// const units = Theme.UNITS;
 const themes = Theme.THEMES;
 
 const HeaderContainer = styled('div')`
@@ -61,8 +57,6 @@ const UserMenuButton = styled('button')`
   }
 `;
 
-
-
 const RightAlignDiv = styled('div')`
   display: flex;
   justify-content: flex-end;
@@ -77,6 +71,7 @@ const UserMenuDropper = styled('button')`
   font-weight: 700;
 `;
 
+
 class UserMenuDropdownButton extends React.Component {
   constructor(props) {
     super(props);
@@ -89,28 +84,22 @@ class UserMenuDropdownButton extends React.Component {
       </UserMenuDropper>
     )
   }
-
 }
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
 
-    let user = {};
-
-    if (this.props.user) {
-      user = this.props.user
-    }
-
     this.state = {
       showUserMenu: 'none',
       showMenu: 'none',
-      user: user,
     };
 
-    this.displayName = this.props.user.displayName;
     this.userMenuRef = React.createRef();
     this.navMenuref = React.createRef();
+    this.showUserMenu = this.showUserMenu.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.hideMenus = this.hideMenus.bind(this);
   }
 
   componentDidMount() {
@@ -121,93 +110,54 @@ class Header extends React.Component {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  handleClickOutside = (event) => {
+  handleClickOutside(event) {
     const userMenuRef = this.userMenuRef.current;
     if (userMenuRef && !userMenuRef.contains(event.target)) {
       this.setState({
         showUserMenu: 'none',
-      });
+      })
     }
-  };
+  }
 
-  getUserName() {
-    var user = window.firebase.auth().currentUser
-    console.log('user', user);
-    console.log('state user', this.state.user);
-
-    if (user) {
-      return user.displayName;
-    }
-    return 'unset';
-  };
-
-  showUserMenu = () => {
+  showUserMenu() {
     if (this.state.showUserMenu === 'none') {
-      this.setState({ showUserMenu: 'flex' });
+      this.setState({
+        showUserMenu: 'flex'
+      })
     } else {
-      this.setState({ showUserMenu: 'none' });
+      this.setState({
+        showUserMenu: 'none'
+      })
     }
-  };
+  }
 
-  hideMenus = (event) => {
+  hideMenus(event) {
     this.setState({
       showUserMenu: 'none',
-    });
-  };
-
-  logout = () => {
-    this.removeCookies();
-    window.firebase
-      .auth()
-      .signOut()
-      .then(
-        function() {},
-        function(error) {
-          console.error('Sign Out Error', error);
-        }
-      );
-  };
-
-  removeCookies = () => {
-    const { cookies } = this.props;
-    if (cookies.get('currentHack')) {
-      cookies.remove('currentHack');
-    }
-    if (cookies.get('currentForum')) {
-      cookies.remove('currentForum');
-    }
-  };
+    })
+  }
 
   render() {
-    if (this.state.signOut === true) {
-      return <Redirect to='/' />;
-    }
     return (
       <ThemeProvider theme={themes.HeaderTheme}>
         <div className='container-fluid' style={styles.HeaderStyle}>
-          <HeaderContainer className='row' style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            paddingLeft: '1em',
-            paddingTop: '.4em',
-          }}>
+          <HeaderContainer
+            className='row'
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              paddingLeft: '1em',
+              paddingTop: '.4em',
+            }}>
 
             <div className='col-2'>
               <HeaderLogo />
             </div>
 
-            {/* SHOW MENU AFTER HACK SELECTION PAGE */}
-            <div className='col-5 menu' >
-            {this.props.location.pathname !== '/hacks' && (
-              <HeaderNav navMenuref={this.navMenuref} />
-            )}
-            </div>
-
             <RightAlignDiv className='col-5'>
-
               <UserMenuDropdownButton
                 onClick={this.showUserMenu}
-                text={this.props.user.displayName}
+                text={this.props.displayName}
               />
 
               <UserMenu
@@ -215,24 +165,23 @@ class Header extends React.Component {
                 innerRef={this.userMenuRef}
               >
 
-              {this.props.location.pathname !== '/hacks' && (
-                <NavButton
-                  to='/profile'
-                  onClick={this.hideMenus}
-                >
+                {window.location.pathname !== '/profile' && (
+                <NavButton to='/profile' onClick={this.hideMenus}>
                   Profile
                 </NavButton>
-              )}
+                )}
 
-              {this.props.user.isAdmin && (
-                <NavButton to='/admin' onClick={this.hideMenus}>
-                  Admin
-                </NavButton>
-              )}
+                {window.location.pathname !== '/admin'
+                  && this.props.isAdmin
+                  && (
+                  <NavButton to='/admin' onClick={this.hideMenus}>
+                    Admin
+                  </NavButton>
+                )}
 
-                <UserMenuButton onClick={this.logout}>
+                <NavButton to='/logout' onClick={this.hideMenus}>
                   Sign Out
-                </UserMenuButton>
+                </NavButton>
               </UserMenu>
             </RightAlignDiv>
           </HeaderContainer>
@@ -242,4 +191,4 @@ class Header extends React.Component {
   }
 }
 
-export default withCookies(Header);
+export default Header;
