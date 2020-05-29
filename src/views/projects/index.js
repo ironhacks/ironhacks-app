@@ -79,24 +79,19 @@ class ProjectsPage extends React.Component {
     const { cookies } = props;
 
     this.state = {
-      currentHack: cookies.get('currentHack') || null,
+      currentHack: this.props.hackId,
+      user: this.props.user,
       forum: cookies.get('currentForum') || null,
       startNewProjecNav: false,
       startProjectEditorNav: false,
       projects: [],
-      hackData: null,
-      user: this.props.user,
+      hackData: this.props.hackData,
     };
-
-    if (this.props.location.state) {
-      this.state.user = this.props.location.state.user;
-    }
-
+    this.goToProjectEditor = this.goToProjectEditor.bind(this);
     this.firestore = window.firebase.firestore();
   }
 
   setProjects(projects) {
-    console.log('set projects', projects);
     this.setState({'projects': projects})
   }
 
@@ -109,47 +104,39 @@ class ProjectsPage extends React.Component {
       _this.setProjects(projects);
     })
 
-    if (!this.state.user.isAdmin) {
-      this.getCurrentHackInfo();
-    }
+    // if (!this.state.user.isAdmin) {
+    //   this.getCurrentHackInfo();
+    // }
   }
 
-  goToProjectEditor = (index) => {
+  goToProjectEditor(index) {
     this.setState({
       selectedProject: index,
       navigateToProject: true,
     });
-  };
+  }
 
+  onPhaseSelection(phase) {
 
-  onPhaseSelection = (phase) => {};
+  }
 
   render() {
-    if (this.state.loading) {
-      return (
-        <ThemeProvider theme={styles}>
-          <SectionContainer>
-            <Loader status={this.state.status} />
-          </SectionContainer>
-        </ThemeProvider>
-      );
-    }
-
     if (this.state.navigateToProject === true) {
       return (
         <Redirect
-          push
-          to={`projectEditor/${
+          push to={`/projects/${
             this.state.projects[this.state.selectedProject].name
           }`}
         />
-      );
+      )
     }
+
     if (this.state.navigateToCreatedProject === true) {
       return (
-        <Redirect push to={`projectEditor/${this.state.newProjectName}`} />
+        <Redirect push to={`/projects/${this.state.newProjectName}`} />
       );
     }
+
     return (
       <ThemeProvider theme={styles}>
         <SectionContainer>
@@ -168,7 +155,7 @@ class ProjectsPage extends React.Component {
                   key={index}
                   onClick={this.goToProjectEditor}
                 />
-              );
+              )
             })}
           </CardsContainer>
         </SectionContainer>
