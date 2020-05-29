@@ -1,17 +1,21 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { withCookies } from 'react-cookie';
+// import { withCookies } from 'react-cookie';
 import { Theme } from '../../theme';
+import { Loader } from '../../components/loader';
+import { Timeline } from '../../components/timeline';
 import * as DateFormater from '../../util/dateFormater.js';
-import log from '../../util/log';
-import TimeLine from '../../util/timeLine.js';
-import { registerStats } from '../../util/register-stat';
-import {Loader} from '../../components/loader';
+import { PersonalScoreSection } from './lib/results-section-personal.js';
+import { ResultSectionCompetitors } from './lib/results-section-competitors';
+import { TreatmentTexts } from './lib/treatment-texts';
+import {
+  getPhaseResults,
+  getUserPhaseResults,
+  getAdminHackData,
+  getUserForumData,
+} from './lib/get-results';
 
-import PersonalScoreSection from './personalScoreSection.js';
-import YourCompetitorsRank from './yourCompetitorsRank.js';
-import * as Texts from './staticTexts.js';
-import Reactotron from 'reactotron-react-js';
+// import log from '../../util/log';
 
 const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
@@ -85,8 +89,8 @@ const SectionContainer = styled('div')`
       &.super-cool-banner {
         font-size: 20px;
         text-align: center;
-        -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
-        -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+        -webkit-animation-name: example;
+        -webkit-animation-duration: 4s;
         animation-name: example;
         animation-duration: 1s;
         animation-iteration-count: infinite;
@@ -101,7 +105,6 @@ const SectionContainer = styled('div')`
           }
         }
 
-        /* Standard syntax */
         @keyframes example {
           from {
             color: #caa32a;
@@ -115,261 +118,294 @@ const SectionContainer = styled('div')`
   }
 `;
 
-class Results extends React.Component {
+
+class ResultsTabSelector extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      activeSection: 'competitors',
+    }
+  }
+
+  changeSection = (event) => {
+    this.setState({
+      activeSection: event.target.id
+    })
+    this.props.callback(event.target.id);
+  }
+
+  render() {
+    return (
+      <div className='tab-container'>
+        <button
+          className={`tab-button ${this.state.activeSection === 'competitors' ? 'selected' : ''}`}
+          onClick={this.changeSection}
+          id='competitors'
+        >
+          Your Peers
+        </button>
+        <button
+          className={`tab-button ${ this.state.activeSection === 'personal' ? 'selected' : ''}`}
+          onClick={this.changeSection}
+          id='personal'
+        >
+          Personal Feedback
+        </button>
+    </div>
+    )
+  }
+}
+
+class ResultsView extends React.Component {
   constructor(props) {
     super(props);
-    const { cookies, user } = props;
+
     this.state = {
-      user,
-      currentHack: 'mmHJrWzmx4rCyQ2YpJWL',
+      user: this.props.hackUser,
+      userId: this.props.hackUserId,
+      hackId: this.props.hackId,
+      currentHack: this.props.hackId,
       // currentHack: cookies.get('currentHack') || null,
-      // forumId: '8JKHD71CFYS2SzI52UQ9',
-      forumId: cookies.get('currentForum') || null,
-      hackData: null,
-      treatment: null,
+      forumId: '8JKHD71CFYS2SzI52UQ9',
+      // forumId: cookies.get('currentForum') || null,
+      hackData: this.props.hackData,
+      hackPhases: this.props.hackPhases,
+      treatment: this.props.treatement || 0,
       scores: null,
       loading: true,
-      currentSection: 'yourCompetitors',
-    };
-    this.firestore = window.firebase.firestore();
-    this.getForumData = this.getForumData.bind(this);
-    this.getResults = this.getResults.bind(this);
-    this.saveLikedCompetitors = this.saveLikedCompetitors.bind(this);
+      currentSection: 'competitors',
+      currentPhase: 1,
+      selectedPhase: 1,
+    }
+
+    this._isMounted = false;
+    // this.firestore = window.firebase.firestore();
+    this.updateSection = this.updateSection.bind(this);
+    this.onPhaseSelection = this.onPhaseSelection.bind(this);
+    this.getHackResults = this.getHackResults.bind(this);
     this.getCurrentHackInfo = this.getCurrentHackInfo.bind(this);
   }
 
   componentDidMount() {
-    this.getCurrentHackInfo();
+    this._isMounted = true;
+    // this.getCurrentHackInfo();
+
+    // getHackResults
   }
 
-  getCurrentHackInfo = () => {
-    const hacks = this.firestore.collection('hacks');
-    const currentHack = this.state.currentHack;
-    Reactotron.log(hacks);
-    hacks
-      .doc(currentHack)
-      .get()
-      .then((doc) => {
-        const hackData = doc.data();
-        log.info(doc);
-        // let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
-        this.setState({
-          hackData,
-          currentPhase: 6,
-          selectedPhase: 1,
-        });
-        this.getForumData();
-      })
-      .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      });
-  };
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
-  getForumData = () => {
-    this.firestore
-      .collection('forums')
-      .doc(this.state.forumId)
-      .get()
-      .then((doc) => {
-        const data = doc.data();
-        const { treatment, participants } = data;
-        this.setState({
-          treatment,
-          participants,
-        });
-        if (this.state.currentPhase === -1) {
-          this.setState({
-            results: false,
-            loading: false,
-          });
-          return;
-        }
-        this.getResults(this.state.currentPhase);
-      })
-      .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      });
-  };
-
-  changeSection = (event) => {
-    this.setState({ currentSection: event.target.id });
-    const statData = {
-      event: 'on-result-tab-section-click',
-      userId: this.state.user.uid,
-      metadata: {
-        target: `${
-          event.target.id === 'yourCompetitors'
-            ? 'your-peers-tab'
-            : 'personal-feedback'
-        }`,
-        location: 'results-page',
-      },
-    };
-    this.saveStat(statData);
-  };
-
-  onPhaseSelection = (phase) => {
-    this.setState({ selectedPhase: phase + 1 });
-    this.getResults(phase + 1);
-    const statData = {
-      event: 'on-phase-click',
-      metadata: {
-        location: 'results-page',
-        phase: phase + 1,
-      },
-    };
-    this.saveStat(statData);
-  };
-
-  getResults = (phase) => {
-    console.log(phase);
-    console.log(this.state.hackData.phases);
-    const endDate = DateFormater.getFirebaseDate(
-      this.state.hackData.phases[phase - 1].codingStartEnd
-    );
-    this.setState({ gettingResults: true });
-    const getResults = window.firebase.functions()
-      .httpsCallable('getPhaseResults');
-
-    getResults({
-      phase,
-      endDate: endDate.getTime(),
-      userId: this.state.user.uid,
-      hackId: this.state.currentHack,
-      forumId: this.state.forumId,
-    }).then((response) => {
-      const { userResults: results } = response.data;
-      this.setState({
-        results,
-        loading: false,
-        gettingResults: false,
-      });
-
-    });
-  };
-
-  saveLikedCompetitors = (likedCompetitors) => {
+  userSaveLikedCompetitors(likedCompetitors) {
     const saveLikedCompetitors = window.firebase
       .functions()
-      .httpsCallable('saveLikedCompetitors');
+      .httpsCallable('saveLikedCompetitors')
 
-    const { currentHack: hackId, selectedPhase: phase } = this.state;
+    const {
+      // currentHack: hackId,
+      selectedPhase: phase
+    } = this.state;
 
     saveLikedCompetitors({
-      userId: this.state.user.uid,
+      userId: this.props.userId,
       phase,
-      hackId,
+      hackId: this.props.hackId,
       likedCompetitors,
     }).then((response) => {
-      this.getResults(phase);
-    });
-  };
+      this.getHackResults(phase);
+    })
+  }
 
-  saveStat = (stat) => {
-    stat.userId = this.state.user.uid;
-    stat.metadata.hackId = this.state.currentHack;
-    registerStats(stat);
-  };
+
+  setCurrentHackInfo(data) {
+    console.log(data);
+    if (this._isMounted) {
+      this.setState({
+        hackData: data,
+        currentPhase: 1,
+        selectedPhase: 1,
+      })
+    }
+
+    localStorage.setItem('currentHackInfo', JSON.stringify(data))
+  }
+
+  getCurrentHackInfo() {
+    let hackId = this.props.hackId;
+    console.log('get current hack info', hackId);
+    const hacks = window.firebase.firestore()
+      .collection('hacks')
+      .doc(hackId)
+      .get();
+
+    const hackData = Promise.resolve(hacks).then((doc) => {
+        const data = doc.data();
+        // let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+        // this.getForumData();
+        // this.getHackResults();
+        return data;
+      })
+      .catch(function(error) {
+        console.error('Error getting documents: ', error);
+      })
+      this.setCurrentHackInfo(hackData)
+  }
+
+
+
+  onPhaseSelection(phase) {
+    this.setState({ selectedPhase: phase + 1 });
+    this.getHackResults(phase + 1);
+  }
+
+  updateSection(id) {
+    this.setState({currentSection: id});
+  }
+
+  saveStat(stat) {
+    // stat.userId = this.state.user.uid;
+    // stat.metadata.hackId = this.state.currentHack;
+    // registerStats(stat);
+  }
+
+  _getAdminHackData() {
+    let hackDataPromise = getAdminHackData({
+      hackId: this.props.hackId,
+    });
+    let hackData = Promise.resolve(hackDataPromise).then((result)=>{
+      console.log(result);
+      return result;
+    })
+    return hackData;
+  }
+
+  async getHackResults(phase) {
+    // this.state.hackData.phases[phase - 1].codingStartEnd
+
+    let hackData = await this._getAdminHackData();
+    // Promise.resolve(hackData).then((data)=>{
+    console.log('hackData', hackData);
+    // });
+
+    this.setState({
+      results: hackData.results,
+      participants: hackData.registeredUsers,
+    });
+
+    let phaseResults = await getPhaseResults({
+      hackResults: hackData.results,
+      phase: phase,
+    });
+
+    console.log('phaseResults', phaseResults);
+
+    let userPhaseResults = getUserPhaseResults({
+      phaseResults: phaseResults,
+      userId: this.props.hackUser.uid,
+    });
+
+    console.log('userPhaseResults', userPhaseResults);
+
+    const endDate = DateFormater.getFirebaseDate(
+      this.props.hackPhases[phase - 1].codingStartEnd
+    )
+
+    let userForumData = getUserForumData()
+
+    console.log('userForumData', userForumData);
+
+
+    this.setState({ loading: false });
+
+    // const getResults = window.firebase.functions()
+    //   .httpsCallable('getPhaseResults');
+    //
+    // getPhaseResults({
+    //   phase,
+    //   endDate: endDate.getTime(),
+    //   userId: this.props.hackUser.uid,
+    //   hackId: this.props.hackId,
+    //   forumId: this.state.forumId,
+    // }).then((response) => {
+    //   console.log('response', response);
+    //   const { userResults: results } = response.data;
+    //   this.setState({
+    //     results,
+    //     loading: false,
+    //     gettingResults: true,
+    //   })
+    // })
+  }
 
   render() {
-    if (this.state.loading) {
-      return (
+    return (
         <ThemeProvider theme={styles}>
           <SectionContainer>
-            <Loader status='Fetching results...' />
-          </SectionContainer>
-        </ThemeProvider>
-      );
-    }
-    return (
-      <ThemeProvider theme={styles}>
-        <SectionContainer>
-          <div className='top-container'>
-            <h1>Your dashboard</h1>
-            {Texts.treatmentText[this.state.treatment].header}
-            <h3>Please select the phase you want to check.</h3>
-            {this.state.hackData && (
-              <TimeLine
-                phases={this.state.hackData.phases}
-                onClick={this.onPhaseSelection}
-                currentPhase={this.state.currentPhase}
-              />
-            )}
-            <div className='tab-container'>
-              <button
-                className={`tab-button ${
-                  this.state.currentSection === 'yourCompetitors'
-                    ? 'selected'
-                    : ''
-                }`}
-                onClick={this.changeSection}
-                id='yourCompetitors'
-              >
-                Your Peers
-              </button>
-              <button
-                className={`tab-button ${
-                  this.state.currentSection === 'personalFeedback'
-                    ? 'selected'
-                    : ''
-                }`}
-                onClick={this.changeSection}
-                id='personalFeedback'
-              >
-                Personal Feedback
-              </button>
-            </div>
-          </div>
-          <div className='selected-section'>
-            {this.state.gettingResults && (
-              <div className='results-loader'>
-                <Loader status='Fetching results...' />
-              </div>
-            )}
-            {!this.state.gettingResults &&
-              this.state.results &&
-              this.state.currentSection === 'yourCompetitors' && (
-                <React.Fragment>
-                  <h2>Your Competitors</h2>
-                  {
-                    Texts.treatmentText[this.state.treatment].ranking
-                      .instructions
-                  }
-                  <h3 className='super-cool-banner'>
-                    *** Keep in mind: You can earn excellence if you learn and
-                    reuse from others apps that are dissimilar ***
-                  </h3>
-                  <YourCompetitorsRank
-                    treatment={this.state.treatment}
-                    scores={this.state.results}
-                    hackName={this.state.hackData.name}
-                    participants={this.state.participants}
-                    onLikedCompetitors={this.saveLikedCompetitors}
+            <div className='top-container'>
+              {TreatmentTexts[this.state.treatment].header}
+              {this.props.hackPhases && (
+                <div>
+                  <h3>Please select the phase you want to check.</h3>
+                  <Timeline
+                    phases={this.props.hackPhases}
+                    initialPhase={1}
+                    onClick={this.onPhaseSelection}
+                    currentPhase={this.state.currentPhase}
                   />
-                </React.Fragment>
+                </div>
               )}
-            {!this.state.gettingResults &&
-              this.state.results &&
-              this.state.currentSection === 'personalFeedback' && (
-                <React.Fragment>
-                  <h2>{Texts.personalFeddback.title}</h2>
-                  {Texts.personalFeddback.subTitle}
+
+            <ResultsTabSelector
+              callback={this.updateSection}
+              />
+
+            <div className='selected-section'>
+              {this.state.loading && (
+                <div className='results-loader'>
+                  <Loader status='Fetching results...' />
+                </div>
+              )}
+              {!this.state.loading
+                && !this.state.results
+                && (
+                <h2 className='no-results'>
+                  Not results for this phase yet.
+                </h2>
+              )}
+
+              {this.state.results &&
+                this.state.currentSection === 'competitors'
+                && (
+                    <div>
+                      <ResultSectionCompetitors
+                        hackName={this.props.hackData.name}
+                        treatment={this.state.treatment}
+                        participants={this.state.participants}
+                        scores={this.state.results}
+                        onLikedCompetitors={this.userSaveLikedCompetitors}
+                      />
+                    </div>
+                )}
+
+              {this.state.results &&
+                this.state.currentSection === 'personal' && (
                   <PersonalScoreSection
+                    userId={this.props.hackUser.uid}
+                    hackId={this.props.hackId}
                     scores={this.state.results}
-                    userId={this.state.user.uid}
-                    hackId={this.state.currentHack}
                     currentPhase={this.state.selectedPhase}
                   />
-                </React.Fragment>
-              )}
-            {!this.state.gettingResults && !this.state.results && (
-              <h2 className='no-results'>Not results for this phase yet.</h2>
-            )}
-          </div>
-        </SectionContainer>
-      </ThemeProvider>
-    );
+              )
+            }
+
+
+              </div>
+            </div>
+          </SectionContainer>
+        </ThemeProvider>
+      )
   }
 }
 
-export default withCookies(Results);
+export { ResultsView }

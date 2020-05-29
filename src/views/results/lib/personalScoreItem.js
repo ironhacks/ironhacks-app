@@ -4,12 +4,14 @@ import React from 'react';
 
 import styled, { css } from 'styled-components';
 
-import { Theme } from '../../theme';
-import * as Texts from './staticTexts.js';
-import { registerStats } from '../../util/register-stat';
-const colors = Theme.COLORS;
-const units = Theme.UNITS;
+import { Theme } from '../../../theme';
+import { PersonalFeedbackContent } from './personal-feedback-content';
+import { registerStats } from '../../../util/register-stat';
+
+// const colors = Theme.COLORS;
+// const units = Theme.UNITS;
 const styles = Theme.STYLES.personalFeddbackTheme;
+
 const ItemContainer = styled('div')`
   display: flex;
   width: 100%;
@@ -161,12 +163,14 @@ class PersonalScoreItem extends React.Component {
   render() {
     return (
       <ItemContainer type={this.props.type}>
+
         <Title type={this.props.type} onClick={this.toggleSection}>
           <h2>{this.props.type.toUpperCase()}</h2>
           <span className='category-weight'>{`(${
-            Texts.personalFeddback[this.props.type].weight
+            PersonalFeedbackContent[this.props.type].weight
           } of total points)`}</span>
         </Title>
+
         <Contents type={this.props.type} active={this.state.active}>
           <SubSection type={this.props.type}>
             <div className='sub-category-text'>
@@ -177,6 +181,7 @@ class PersonalScoreItem extends React.Component {
               <span>Total points</span>
             </div>
           </SubSection>
+
           {this.props.type !== 'visualization' && (
             <SubSection type={this.props.type}>
               <div className='sub-category-text'>
@@ -188,6 +193,7 @@ class PersonalScoreItem extends React.Component {
               </div>
             </SubSection>
           )}
+
           {this.props.type === 'visualization' && (
             <VerticalContainer type={this.props.type}>
               <div className='horizontal'>
@@ -200,6 +206,7 @@ class PersonalScoreItem extends React.Component {
                     <span>Total points</span>
                   </div>
                 </SubSection>
+
                 <SubSection type={this.props.type}>
                   <div className='sub-category-text'>
                     <h3>UX Points for Excellence</h3>

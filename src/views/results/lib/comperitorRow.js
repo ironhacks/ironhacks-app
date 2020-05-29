@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import FullHeart from '../../assets/svg/full-heart.svg';
-import EmptyHeart from '../../assets/svg/empty-heart.svg';
+
+import FullHeart from '../../../assets/svg/full-heart.svg';
+import EmptyHeart from '../../../assets/svg/empty-heart.svg';
 
 const Row = styled('tr')`
   position: relative;
@@ -56,6 +57,7 @@ const LikeButton = styled('button')`
     }
   }
 `;
+
 class ComperitorRow extends React.Component {
   constructor(props) {
     super(props);
@@ -85,7 +87,9 @@ class ComperitorRow extends React.Component {
             LINK
           </Link>
         </td>
+
         {this.props.score && <td>{this.props.score.toString().slice(0, 5)}</td>}
+
         <td>
           <LikeButton onClick={this.onLikeClick}>
             <img

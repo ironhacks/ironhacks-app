@@ -3,7 +3,7 @@
 import React from 'react';
 
 import styled from 'styled-components';
-
+import { PersonalFeedbackContent } from './personal-feedback-content';
 import PersonalScoreItem from './personalScoreItem.js';
 
 const SectionContainer = styled('div')`
@@ -27,6 +27,9 @@ class PersonalScoreSection extends React.Component {
   render() {
     return (
       <SectionContainer>
+
+      <h2>{PersonalFeedbackContent.title}</h2>
+      {PersonalFeedbackContent.subTitle}
         <PersonalScoreItem
           type='technology'
           score={this.props.scores.tech}
@@ -47,4 +50,4 @@ class PersonalScoreSection extends React.Component {
   }
 }
 
-export default PersonalScoreSection;
+export { PersonalScoreSection }

@@ -1,15 +1,12 @@
-// yourCompetitorsRank.js
-
 import React from 'react';
-
 import styled from 'styled-components';
-import ComperitorRow from './comperitorRow.js';
 import swal from 'sweetalert2';
+import ComperitorRow from './comperitorRow.js';
+import { Theme } from '../../../theme';
+import { TreatmentTexts } from './treatment-texts';
 
-import { Theme } from '../../theme';
-const colors = Theme.COLORS;
+// const colors = Theme.COLORS;
 const units = Theme.UNITS;
-// import * as Texts from './staticTexts.js';
 
 const SectionContainer = styled('div')`
   position: relative;
@@ -69,12 +66,16 @@ const SaveLikesButton = styled('button')`
   cursor: pointer;
 `;
 
-class YourCompetitorsRank extends React.Component {
+
+class ResultSectionCompetitors extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       likedUsers: [],
+      treatment: 0,
     };
+
+    console.log('scores', this.props.scores)
   }
 
   onLike = (hackerId) => {
@@ -108,6 +109,16 @@ class YourCompetitorsRank extends React.Component {
   render() {
     return (
       <SectionContainer>
+        <h2>Your Competitors</h2>
+        <p>
+          {TreatmentTexts[this.state.treatment].ranking.instructions}
+        </p>
+
+        <h3 className='super-cool-banner'>
+          *** Keep in mind: You can earn excellence if you learn and
+          reuse from others apps that are dissimilar ***
+        </h3>
+
         <Table>
           <thead>
             <tr>
@@ -118,7 +129,8 @@ class YourCompetitorsRank extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {Object.keys(this.props.scores.similarity).map((key, i) => {
+            {/*
+              Object.keys(this.props.scores.similarity).map((key, i) => {
               return (
                 <ComperitorRow
                   key={i}
@@ -133,7 +145,8 @@ class YourCompetitorsRank extends React.Component {
                   onLike={this.onLike}
                 />
               );
-            })}
+            })
+          */}
           </tbody>
         </Table>
         <SaveLikesButton
@@ -147,4 +160,4 @@ class YourCompetitorsRank extends React.Component {
   }
 }
 
-export default YourCompetitorsRank;
+export { ResultSectionCompetitors }
