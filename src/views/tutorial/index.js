@@ -1,78 +1,45 @@
 import React from 'react';
-import {withCookies} from 'react-cookie';
-import Showdown from 'showdown';
-import { SectionContainer } from '../layouts/sections';
+import styled, {ThemeProvider} from 'styled-components';
+import { HackTutorial }  from './hack-tutorial';
+import { Theme } from '../../theme';
 
-// import MarkdownEditor from '../markdownEditor/markdownEditor.js';
+const styles = Theme.STYLES.AppSectionTheme;
+const colors = Theme.COLORS;
 
-const ConverterConfig = {
-  tables: true,
-  simplifiedAutoLink: true,
-  prefixHeaderId: true,
-  strikethrough: true,
-  headerLevelStart: 3,
-  tasklists: true,
-};
+const SectionContainer = styled('div')`
+  width: 100%;
+  height: ${(props) => props.theme.containerHeight};
+  background-color: ${(props) => props.theme.backgroundColor};
+  overflow-y: scroll;
 
+  .task-div {
+    margin-top: 30px;
 
-class TutorialScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    const {cookies} = props;
-    this.state = {
-      hackName: '',
-      // currentHack: cookies.get('currentHack') || null,
-      currentHack: 'mmHJrWzmx4rCyQ2YpJWL',
-      // forum: cookies.get('currentForum') || n
-      forum: 'qJmgIAFB6FtazeS66vJu',
-      noTutorial: true,
-    };
+    h1, h2, h3, h4, h5 {
+      color: ${colors.mainBgColor};
+    }
+
+    a {
+      font-size: 13px;
+    }
   }
+`;
 
-  componentDidMount() {
-    this.getTutorialDocument();
-  }
 
-  getTutorialDocument() {
-    // const firestore = window.firebase.firestore();
-    const _this = this;
-    // firestore.collection('hacks')
-    //     .doc(this.state.currentHack)
-    //     .get()
-    //     .then((doc) => {
-    //       if (doc.data().tutorial) {
-    //         _this.setState({
-    //          tutorial: doc.data().tutorial,
-    //          hackName: doc.data().name
-    //      });
-    //       } else {
-    //         _this.setState( );
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       console.error('Error getting documents: ', error);
-    //     });
-  };
-
-  decodeBody = (markdown) => {
-    const converter = new Showdown.Converter(ConverterConfig);
-    return converter.makeHtml(markdown);
-  };
-
-  atou = (str) => {
-    // base64 encoded ascii to ucs-2 string
-    return decodeURIComponent(escape(window.atob(str)));
-  };
-
+class TutorialView extends React.Component {
   render() {
     return (
-      <SectionContainer className='container-fluid'>
-        {this.state.tutorial && <div dangerouslySetInnerHTML={{
-          __html: this.decodeBody(this.atou(this.state.tutorial.doc))}}/>}
-        {this.state.noTutorial && <h1>Task is not available yet!</h1>}
-      </SectionContainer>
+      <ThemeProvider theme={styles}>
+        <SectionContainer className='container-fluid'>
+          <div className='row'>
+            <div className='col-md-8 offset-md-2 task-div'>
+              <HackTutorial tutorial={this.props.tutorial} />
+            </div>
+          </div>
+        </SectionContainer>
+      </ThemeProvider>
     );
   }
 }
 
-export default withCookies(TutorialScreen);
+export default TutorialView
