@@ -39,9 +39,9 @@ class HeaderNav extends React.Component {
         <button onClick={this.showMenu}>
           <img src={menuIcon} alt='menu_icon' />
         </button>
-        <div className='links-container'>
-        
-        </div>
+
+        {/*<div className='links-container'>
+        </div>*/}
       </NavContainerDiv>
     )
   }

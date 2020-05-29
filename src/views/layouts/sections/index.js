@@ -1,9 +1,9 @@
 import React from 'react';
 import {ThemeProvider} from 'styled-components';
-import './styles.css';
-
-// const colors = Theme.COLORS;
-// const styles = Theme.STYLES.SectionStyles;
+import '../../../assets/static/bootstrap-reboot.css';
+import '../../../assets/static/bootstrap-grid.css';
+import '../../../assets/main.css';
+import './assets/styles.css';
 
 class SectionContainer extends React.Component {
   constructor(props) {
@@ -32,7 +32,6 @@ class ThemedSectionContainer extends React.Component {
 }
 
 
-
 class Section extends React.Component {
   constructor(props) {
     super(props);
@@ -54,9 +53,6 @@ class Section extends React.Component {
     }
   }
 }
-
-
-
 
 
 export { Section, SectionContainer, ThemedSectionContainer };
