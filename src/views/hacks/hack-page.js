@@ -5,25 +5,23 @@ import { HackNav } from './hack-nav';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
 import { withRouter } from 'react-router';
-
-import ThreadViewWithRouter from '../forum/threadView/threadView';
+// import ThreadViewWithRouter from '../forum/threadView/threadView';
 import TutorialScreen from '../tutorial';
 import ExamplesPage from '../examples';
 import Forum from '../forum/forum.js';
-import NewThread from '../forum/newThread.js';
+// import NewThread from '../forum/newThread.js';
 import ProjectsPage from  '../projects';
-import Task from '../task';
-import Results from '../results';
-
+import TaskView from '../task';
+import { ResultsView } from '../results';
+import QuizListView from '../quiz/quiz-list-view';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  useParams,
-  useRouteMatch
+  // Link,
+  // useParams,
+  // useRouteMatch
 } from 'react-router-dom';
-
 import { Theme } from '../../theme';
 
 // const colors = Theme.COLORS;
@@ -55,49 +53,32 @@ class HackPage extends React.Component {
   constructor(props) {
     super(props);
 
-    // let { slug } = useParams();
-    // this.hackId = slug;
-
     this.hackId = this.props.match.params.hackId;
-
-    this.state = {
-      currentView: 'task',
-      user: this.props.user,
-      startNewHackNav: true,
-      startDashboardNav: true,
-      registeredHacks: [],
-      availableHacks: [],
-      loading: false,
-    };
 
     const hackDataPromise = this.getHack(this.hackId);
 
+    this.state = {
+      hackUserId: null,
+      hackId: this.hackId,
+      activeView: 'task',
+      user: this.props.user,
+      loading: false,
+      hackPhases: [],
+      hackTask: null,
+    };
+
+
     Promise.resolve(hackDataPromise).then((hackData) => {
-       if (hackData.length > 0) {
-         this.setCurrentHack(this.hackId);
-       }
        this.hackData = hackData;
        this.hackName = hackData.name;
+       this.state.hackPhases = hackData.phases
+       this.state.hackTutorial = hackData.tutorial.doc;
+       this.state.hackData =  hackData;
     });
-
-    this.firestore = window.firebase.firestore();
   }
 
   componentDidMount() {
-    // try {
-      // let hackData = this.getHack(this.hackId)
-      // if (!this.state.user){
-      //   console.log('user not set');
-      // }
-      // const hackPromise = this.getHacks(this.state.user);
-      // Promise.resolve(hackPromise).then((hackData) => {
-      //   if (hackData.length > 0) {
-      //     this.setHacks(hackData)
-      //   }
-      // });
-    // } catch (e) {
-    //   console.log('get hacks failed', e);
-    // }
+    this.setHackTask();
   }
 
   // componentDidUpdate(prevProps, prevState, snapshot) {
@@ -105,6 +86,7 @@ class HackPage extends React.Component {
 
   // componentWillUnmount() {
   // }
+
 
   // Query all the hacks objects from the db.
   async getHack(hackId) {
@@ -114,151 +96,132 @@ class HackPage extends React.Component {
       .get();
 
     if (hack.exists) {
-      console.log('hack result', hack.data());
-      return hack.data();
+      var hackData = hack.data();
+      return hackData;
     }
 
     return false;
   }
 
-  setHacks(hacks) {
-    this.setState({
-      availableHacks: hacks.filter((hack) => { return !hack.registered }),
-      registeredHacks: hacks.filter((hack) => { return hack.registered }),
+  setHack(hackData) {
+    if (hackData) {
+      this.setState({
+        hackData: hackData,
+        loading: false,
+      });
+    }
+  }
+
+  async getHackTask(hackId) {
+    const getTask = window.firebase.functions().httpsCallable('getTaskDoc');
+    let task = await getTask({
+      hackId: hackId,
+    })
+    return task.data.task;
+  }
+
+  setHackTask() {
+    const hackTaskPromise = this.getHackTask(this.hackId);
+    Promise.resolve(hackTaskPromise).then((hackTask) => {
+      if (hackTask.length > 0) {
+        this.setState({
+          hackTask: hackTask,
+          loading: false,
+        });
+      }
     });
   }
 
-  async getHacks(_user) {
-    if (!_user){
-      console.log('%c NO USER', 'color:red;font-weight:bold');
-      return false;
-    }
-
-    const cachedHacks =  JSON.parse(localStorage.getItem('userHacks'));
-
-    if (cachedHacks) {
-      return cachedHacks;
-    }
-
-    const fireuser = await window.firebase.firestore()
-      .collection('users')
-      .doc(_user.uid)
-      .get();
-
-    const userHacks = fireuser.data().hacks;
-
-    const whitelistDoc = await window.firebase.firestore()
-      .collection('whitelists')
-      .doc(_user.email)
-      .get();
-
-    const hackIds = whitelistDoc.data().whitelist;
-
-    let hacks = [];
-    if (hackIds && Array.isArray(hackIds)) {
-      for (let hackId of hackIds) {
-        let hackDoc = await window.firebase.firestore()
-         .collection('hacks')
-         .doc(hackId)
-         .get();
-
-        let hack = hackDoc.data();
-        hack.hackId = hackId;
-        if (userHacks.includes(hackId)) {
-          hack.registered = true;
-        }
-
-        hacks.push(hack);
-      }
-
-      localStorage.setItem('userHacks', JSON.stringify(hacks));
-      return hacks;
-
-    }
-  }
-
   setCurrentHack(_hack_id) {
-    const { cookies } = this.props;
-    cookies.set('currentHack', _hack_id);
-    // cookies.set('currentForum', doc.data().forums[_hack_id].id);
+    // const { cookies } = this.props;
+    // cookies.set('currentHack', _hack_id);
   };
 
   updateHackView(target) {
-    console.log(this, target);
+    console.log('update view', this, target);
+    // this.setState({'activeView': target})
+
   }
 
   render() {
-    if (this.state.loading) {
-      return (
-        <ThemeProvider theme={styles}>
-          <SectionContainer className='container-fluid'>
-            <Loader status={this.state.status} />
-          </SectionContainer>
-        </ThemeProvider>
-      );
-    }
-
     return (
-      <ThemeProvider theme={styles}>
+        <ThemeProvider theme={styles}>
         <SectionContainer className='container-fluid'>
-          <div className='row'>
-            <div className='col-md-8 offset-md-2'>
+          {this.state.loading ? (
+            <Loader status={this.state.status} />
+          ) : (
+            <div className='row'>
+              <div className='col-md-8 offset-md-2'>
+                <Separator primary />
+                <h2>
+                   <strong>Hack: </strong>
+                   <span>{ this.hackName } </span>
+                   <span className="small">({ this.hackId })</span>
+                  </h2>
+                  <Separator />
 
-              <Separator primary />
+                  <HackNav action={this.updateHackView}/>
 
-              <h2>
-               <strong>Hack: </strong>
-               <span>{ this.hackName } </span>
-               <span className="small">({ this.hackId })</span>
-              </h2>
-              <Separator />
+                  <Separator primary />
+                  <Router>
+                    <div>
+                    <Switch>
+                      <Route exact path="/hacks/:hackId/task">
+                        <h3>About</h3>
+                        <TaskView hackid={this.hackId} task={this.state.hackTask}  />
+                      </Route>
 
-              <HackNav action={this.updateHackView}/>
+                      <Route exact path="/hacks/:hackId/forum">
+                        <h3>Forum</h3>
+                        <Forum/>
+                      </Route>
 
-              <Separator primary />
-              <Router>
-                <div>
-                <Switch>
+                      <Route exact path="/hacks/:hackId/tutorial">
+                        <h3>Tutorial</h3>
+                        <TutorialScreen
+                          hackid={this.hackId}
+                          tutorial={this.state.hackTutorial} />
+                      </Route>
 
-                  <Route path="/hacks/:hackId/task">
-                    <h3>Task</h3>
-                    <Task/>
-                  </Route>
+                      <Route exact path="/hacks/:hackId/examples">
+                        <h3>Examples</h3>
+                        <ExamplesPage />
+                      </Route>
 
-                  <Route path="/hacks/:hackId/forum">
-                    <h3>Forum</h3>
-                    <Forum/>
-                  </Route>
+                      <Route exact path="/hacks/:hackId/quiz">
+                        <h3>Quiz</h3>
+                        <QuizListView />
+                      </Route>
 
-                  <Route path="/hacks/:hackId/tutorial">
-                    <h3>Tutorial</h3>
-                    <TutorialScreen/>
-                  </Route>
+                      <Route exact path="/hacks/:hackId/projects">
+                        <h3>Projects</h3>
+                        <ProjectsPage
+                          hackId={this.hackId}
+                          user={this.props.user}
+                          hackData={this.state.hackData}
+                        />
+                      </Route>
 
-                  <Route path="/hacks/:hackId/examples">
-                    <h3>Examples</h3>
-                    <ExamplesPage/>
-                  </Route>
-
-                  <Route path="/hacks/:hackId/projects">
-                    <h3>Projects</h3>
-                    <ProjectsPage/>
-                  </Route>
-
-                  <Route path="/hacks/:hackId/results">
-                    <h3>Results</h3>
-                    <Results/>
-                  </Route>
-                </Switch>
+                      <Route exact path="/hacks/:hackId/results">
+                        <h3>Results</h3>
+                        <ResultsView
+                          hackData={this.state.hackData}
+                          hackPhases={this.state.hackPhases}
+                          hackUser={this.props.user}
+                          hackUserId={this.props.userId}
+                          hackId={this.hackId}
+                        />
+                      </Route>
+                    </Switch>
+                    </div>
+                  </Router>
                 </div>
-              </Router>
-
-
-            </div>
-          </div>
+              </div>
+            )
+          }
         </SectionContainer>
       </ThemeProvider>
-    );
+    )
   }
 }
 

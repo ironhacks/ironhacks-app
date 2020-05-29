@@ -33,14 +33,6 @@ const SectionContainer = styled('div')`
   overflow: auto;
 `;
 
-const CardsContainer = styled('div')`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 35px;
-  margin-bottom: 35px;
-`;
 
 class HackSelectPage extends React.Component {
   constructor(props) {
@@ -74,26 +66,8 @@ class HackSelectPage extends React.Component {
     window.addEventListener('message', this.recieveMessage);
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    // console.log('hackpage updated', {
-    //   prevProps: prevProps,
-    //   prevState: prevState,
-    //   snapshot: snapshot
-    // });
-
-    if (!this.state.user.uid) {
-      console.log('user UNSET');
-      if (prevProps.user.uid) {
-        console.log('user is NOW set');
-        // let hackPromise = this.getHacks(prevProps.user);
-        // Promise.resolve(hackPromise).then((hackData) => {
-        //   console.log('update got hacks', hackData);
-        // });
-        //.then((result) => {
-        // })
-      }
-    }
-  }
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  // }
 
   componentWillUnmount() {
     window.removeEventListener('message', this.recieveMessage);
