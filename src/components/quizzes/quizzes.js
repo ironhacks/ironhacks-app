@@ -46,7 +46,7 @@ const QuizButton = styled(Link)`
   margin-bottom: 15px;
 `;
 
-class Quizzes extends React.Component {
+class QuizView extends React.Component {
   render() {
     return (
       <ThemeProvider theme={styles}>
@@ -60,9 +60,7 @@ class Quizzes extends React.Component {
             <ButtonContainer className='col-4 offset-4'>
               <QuizButton to='quizzes/html_css'>HTML & Css</QuizButton>
               <QuizButton to='quizzes/bootstrap'>Bootstrap</QuizButton>
-              <QuizButton to='quizzes/javascript_jquery'>
-                Javascript & Jquery
-              </QuizButton>
+              <QuizButton to='quizzes/javascript_jquery'>Javascript & Jquery</QuizButton>
               <QuizButton to='quizzes/google_maps'>Google Maps API</QuizButton>
               <QuizButton to='quizzes/d3'>D3.js</QuizButton>
             </ButtonContainer>
@@ -73,4 +71,4 @@ class Quizzes extends React.Component {
   }
 }
 
-export default Quizzes;
+export default QuizView;
