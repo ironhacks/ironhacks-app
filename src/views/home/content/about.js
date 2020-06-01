@@ -1,4 +1,5 @@
 import React from 'react';
+import './about.css';
 import app1 from './images/screencapture-ironhacks-github-io-showcase-2018-spring-ialemusm-2020-05-25-02_43_33.png';
 import app2 from './images/screencapture-ironhacks-github-io-showcase-2018-spring-juaccardenasgom-2020-05-25-02_42_01.png';
 import app3 from './images/screencapture-ironhacks-github-io-showcase-2018-spring-nmcasasr-2020-05-25-02_45_04.png';
@@ -10,15 +11,21 @@ export default class AboutSection extends React.Component {
     return (
       <>
         <div>
-
+	<div class="cards">
+  	<div class="card">
+          <img src={app1} alt="HTML tutorial" class="card__image"/>
+          <div class="card__content">
 	  <h2>This is winning app 1. You can click on it.</h2>
-
-	  <img src={app1} alt="HTML tutorial"/>
-
+	  </div>
+	  <div class="card__info">
+          </div>
+          </div>
+         <div class="card">
+	  <img src={app2} alt="HTML tutorial" class="card__image"/>
+          <div class="card__content">
           <h2>This is winning app 2. You can click on it.</h2>
-
-          <img src={app2} alt="HTML tutorial"/>
-
+	  </div>
+	 </div>
 	  <h2>This is winning app 3. You can click on it.</h2>
 
           <img src={app3} alt="HTML tutorial"/>
@@ -34,8 +41,8 @@ export default class AboutSection extends React.Component {
           <h2>This is winning app 6. You can click on it.</h2>
 
           <img src={app6} alt="HTML tutorial"/>
-
         </div>
+	</div>
         <div>
           <img src='' alt='' />
         </div>
