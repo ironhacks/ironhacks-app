@@ -15,7 +15,7 @@ export default class AboutSection extends React.Component {
   	<div class="card">
           <img src={app1} alt="HTML tutorial" class="card__image"/>
           <div class="card__content">
-	  <h2>This is winning app 1. You can click on it.</h2>
+	  <p>This is winning app 1. You can click on it.</p>
 	  </div>
 	  <div class="card__info">
           </div>
@@ -23,7 +23,7 @@ export default class AboutSection extends React.Component {
          <div class="card">
 	  <img src={app2} alt="HTML tutorial" class="card__image"/>
           <div class="card__content">
-          <h2>This is winning app 2. You can click on it.</h2>
+          <p>This is winning app 2. You can click on it.</p>
 	  </div>
          <div class="card__info">
           </div>
@@ -31,7 +31,7 @@ export default class AboutSection extends React.Component {
 	 <div class="card">
           <img src={app3} alt="HTML tutorial" class="card__image"/>
           <div class="card__content">
-	  <h2>This is winning app 3. You can click on it.</h2>
+	  <p>This is winning app 3. You can click on it.</p>
           </div>
           <div class="card__info">
           </div>
@@ -39,7 +39,7 @@ export default class AboutSection extends React.Component {
          <div class="card">
           <img src={app4} alt="HTML tutorial" class="card__image"/>
          <div class="card__content">
-	  <h2>This is winning app 4. You can click on it.</h2>
+	  <p>This is winning app 4. You can click on it.</p>
          </div>
 	  <div class="card__info">
           </div>
@@ -47,7 +47,7 @@ export default class AboutSection extends React.Component {
          <div class="card">
           <img src={app5} alt="HTML tutorial" class="card__image"/>
          <div class="card__content">
-          <h2>This is winning app 5. You can click on it.</h2>
+          <p>This is winning app 5. You can click on it.</p>
          </div>
          <div class="card__info">
           </div>
@@ -55,7 +55,7 @@ export default class AboutSection extends React.Component {
           <div class="card">
           <img src={app6} alt="HTML tutorial" class="card__image"/>
           <div class="card__content">
-          <h2>This is winning app 6. You can click on it.</h2>
+          <p>This is winning app 6. You can click on it.</p>
           </div> 
           <div class="card__info">
           </div>
