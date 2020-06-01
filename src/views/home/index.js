@@ -4,7 +4,7 @@ import { Section } from '../layouts/sections';
 import HeroSection from './content/hero';
 import FaqSection from './content/faq';
 import RankingSection from './content/ranking';
-import AboutSection from './content/about';
+import { ShowcaseSection } from './content/showcase-section';
 import BenefitsSection from './content/benefits';
 
 class HomePage extends React.Component {
@@ -20,7 +20,7 @@ class HomePage extends React.Component {
         </Section>
 
         <Section className='about bg-primary' id='about'>
-          <AboutSection/>
+          <ShowcaseSection/>
         </Section>
 
         <Section className='ranking' id='ranking'>

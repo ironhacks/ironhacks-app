@@ -92,7 +92,7 @@ export default class AboutSection extends React.Component {
           <div class="card__content">
           <h3>Winner 2019</h3>
           <p>This is winning app 6. You can click on it. This app is so so so awesome. You know.</p>
-          </div> 
+          </div>
           <div class="card__info">
            <div>
         <i class="material-icons">thumb_up</i>2,115
