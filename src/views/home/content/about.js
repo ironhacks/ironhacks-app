@@ -15,49 +15,91 @@ export default class AboutSection extends React.Component {
   	<div class="card">
           <img src={app1} alt="HTML tutorial" class="card__image"/>
           <div class="card__content">
-	  <p>This is winning app 1. You can click on it.</p>
+          <h3>Name | Year</h3>
+	  <p>This is winning app 1. You can click on it. This app is so so so awesome. You know.</p>
 	  </div>
 	  <div class="card__info">
+          <div>
+        <i class="material-icons">thumb_up</i>1,993
+      </div>
+           <div>
+        <a href="./" class="card__link">View Article</a>
+      </div>
           </div>
          </div>
          <div class="card">
 	  <img src={app2} alt="HTML tutorial" class="card__image"/>
           <div class="card__content">
-          <p>This is winning app 2. You can click on it.</p>
+          <h3>Name | Year</h3>
+          <p>This is winning app 2. You can click on it. This app is so so so awesome. You know.</p>
 	  </div>
          <div class="card__info">
+          <div>
+        <i class="material-icons">thumb_up</i>1,775
+      </div>
+           <div>
+        <a href="./" class="card__link">View Article</a>
+      </div>
           </div>
 	 </div>
 	 <div class="card">
           <img src={app3} alt="HTML tutorial" class="card__image"/>
           <div class="card__content">
-	  <p>This is winning app 3. You can click on it.</p>
+          <h3>Name | Year</h3>
+	  <p>This is winning app 3. You can click on it. This app is so so so awesome. You know.</p>
           </div>
           <div class="card__info">
+          <div>
+        <i class="material-icons">thumb_up</i>1,880
+      </div>
+           <div>
+        <a href="./" class="card__link">View Article</a>
+      </div>
           </div>
          </div>
          <div class="card">
           <img src={app4} alt="HTML tutorial" class="card__image"/>
          <div class="card__content">
-	  <p>This is winning app 4. You can click on it.</p>
+          <h3>Name | Year</h3>
+	  <p>This is winning app 4. You can click on it. This app is so so so awesome. You know.</p>
          </div>
 	  <div class="card__info">
+          <div>
+        <i class="material-icons">thumb_up</i>2,002
+      </div>
+           <div>
+        <a href="./" class="card__link">View Article</a>
+      </div>
           </div>
           </div>
          <div class="card">
           <img src={app5} alt="HTML tutorial" class="card__image"/>
          <div class="card__content">
-          <p>This is winning app 5. You can click on it.</p>
+         <h3>Name | Year</h3>
+          <p>This is winning app 5. You can click on it. This app is so so so awesome. You know.</p>
          </div>
          <div class="card__info">
+          <div>
+        <i class="material-icons">thumb_up</i>1,555
+      </div>
+           <div>
+        <a href="./" class="card__link">View Article</a>
+      </div>
           </div>
          </div>
           <div class="card">
           <img src={app6} alt="HTML tutorial" class="card__image"/>
           <div class="card__content">
-          <p>This is winning app 6. You can click on it.</p>
+          <h3>Name | Year</h3>
+          <p>This is winning app 6. You can click on it. This app is so so so awesome. You know.</p>
           </div> 
           <div class="card__info">
+           <div>
+        <i class="material-icons">thumb_up</i>2,115
+      </div>
+           <div>
+        <a href="./" class="card__link">View Article</a>
+      </div>
           </div>
           </div>
         </div>
