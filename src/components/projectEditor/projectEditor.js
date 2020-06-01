@@ -6,6 +6,7 @@ import {Loader} from '../../components/loader';
 import Button from '../../util/button.js';
 import * as DateFormater from '../../util/dateFormater.js';
 import {registerStats} from '../../util/register-stat';
+import { withRouter } from 'react-router';
 import swal from 'sweetalert2';
 import {JSHINT} from 'jshint';
 import {Theme} from '../../theme';
@@ -145,9 +146,13 @@ class ProjectEditor extends React.Component {
   constructor(props) {
     super(props);
     const {cookies, user} = props;
-    const hackerId = props.location.query ?
-        props.location.query.hackerId : null;
+
+    // const hackerId = props.location.query ? props.location.query.hackerId : null;
+    const hackerId = this.props.userId;
     const readOnly = hackerId ? true : false;
+
+    const projectName = this.props.match.params.projectName;
+
     this.state = {
       user,
       readOnly,
@@ -161,9 +166,14 @@ class ProjectEditor extends React.Component {
       selectedFile: 'js/main.js',
       projectFiles: [],
       creatingFile: false,
-      projectName: this.props.match.params.proyectName,
-      timer: {seconds: 0, minutes: 0, hours: 0, days: 0},
-    };
+      projectName: projectName,
+      timer: {
+        seconds: 0,
+        minutes: 0,
+        hours: 0,
+        days: 0
+      }
+    }
 
     this.commitSurveys = {
       1: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_exR2GmwUUS07XUN',
@@ -187,27 +197,34 @@ class ProjectEditor extends React.Component {
 
   getProjectPreviewPath() {
     const userId = this.state.hackerId || this.state.user.uid;
-    const proyectPath = `${colors.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`;
-    this.setState({proyectPath: proyectPath});
+    const projectPath = `${colors.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`;
+    const projectPath = `google.com`;
+
+    this.setState({
+      projectPath: projectPath
+    })
   }
 
-  getProjectFilesUrls() {
+  async getProjectFilesUrls() {
     // const firestore = window.firebase.firestore();
-    const _this = this;
     const userId = this.state.hackerId || this.state.user.uid;
-    // Updating the current hack:
-    // firestore.collection('users')
-    // .doc(userId)
-    // .collection('projects')
-    // .doc(this.state.projectName)
-    // .get()
-    // .then(function(doc) {
-    //   _this.setState({projectFiles: doc.data()});
-    //   _this.getProjectFiles();
-    // })
-    // .catch(function(error) {
-    //   console.error(error);
-    // });
+    let projects = await window.firebase.firestore()
+      .collection('users')
+      .doc(userId)
+      .collection('projects')
+      .doc(this.state.projectName)
+      .get();
+
+      this.setState({projectFiles: projects.data()});
+
+
+      // this.getProjectFiles();
+      //
+      // .then(function(doc) {
+      // })
+      // .catch(function(error) {
+      //   console.error(error);
+      // });
   }
 
   getProjectFiles() {
@@ -324,12 +341,12 @@ class ProjectEditor extends React.Component {
     )
     .then((url) => {
       _this.setState((prevState, props) => {
-        const proyectPath = prevState.proyectPath + ' ';
+        const projectPath = prevState.projectPath + ' ';
         const projectFiles = prevState.projectFiles;
         if (projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
           projectFiles[prevState.selectedFile].content = projectFiles[prevState.selectedFile].unSavedContent;
         }
-        return {projectFiles, proyectPath};
+        return {projectFiles, projectPath};
       });
     })
     .catch((error) => {
@@ -442,7 +459,13 @@ class ProjectEditor extends React.Component {
 
   onFileSelection(name) {
     const splitedFileName = name.split('.');
-    this.saveStat({event: 'view-file', metadata: {filename: name}});
+    this.saveStat({
+      event: 'view-file',
+      metadata: {
+        filename: name
+      }
+    })
+
     this.setState((prevState, props) => {
       const projectFiles = prevState.projectFiles;
       if (projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
@@ -454,7 +477,6 @@ class ProjectEditor extends React.Component {
       return {projectFiles, selectedFile, editorMode, editorKey: Math.random()};
     });
   }
-
 
   async startCreateNewFileFlow() {
     this.saveProject();
@@ -478,7 +500,7 @@ class ProjectEditor extends React.Component {
     return newFile;
   }
 
-    fileNameValidator = (fileName) => {
+  fileNameValidator = (fileName) => {
       if (fileName) {
         const name = fileName.toLowerCase();
         const splitedFileName = name.split('/');
@@ -549,8 +571,8 @@ class ProjectEditor extends React.Component {
 
     reloadFrame() {
       this.setState((prevState, props) => {
-        const proyectPath = prevState.proyectPath + ' ';
-        return {proyectPath};
+        const projectPath = prevState.projectPath + ' ';
+        return {projectPath};
       });
     }
 
@@ -573,6 +595,7 @@ class ProjectEditor extends React.Component {
       return (
         <ThemeProvider theme={styles}>
         <SectionContainer>
+        <h1>test</h1>
         <ProjectContent>
         <h2>{this.state.projectName.toUpperCase()}</h2>
         {!this.state.readOnly
@@ -603,6 +626,7 @@ class ProjectEditor extends React.Component {
         </p>
         </div>
         </ProjectContent>
+
         <EditorContainer large={this.state.hidePreview}>
         {!this.state.loadingFiles && <Editor
           key={this.state.editorKey}
@@ -626,17 +650,19 @@ class ProjectEditor extends React.Component {
           onChange={this.onChangeEditor}
           />}
           </EditorContainer>
-          {this.state.proyectPath
-            && <PreviewContainer hidden={this.state.hidePreview}>
-            <ProjectPreview
-            hidden={this.state.hidePreview}
-            hidePreview={this.hidePreview}
-            projectURL={this.state.proyectPath}
-            projectName={this.state.projectName}
-            reloadFrame={this.reloadFrame}
-            />
+
+          {this.state.projectPath && (
+            <PreviewContainer hidden={this.state.hidePreview}>
+              {/*<ProjectPreview
+                hidden={this.state.hidePreview}
+                hidePreview={this.hidePreview}
+                projectURL={this.state.projectPath}
+                projectName={this.state.projectName}
+                reloadFrame={this.reloadFrame}
+              />*/}
             </PreviewContainer>
-          }          {this.state.hidePreview
+          )}
+          {this.state.hidePreview
             && <ShowPreview onClick={this.showPreview}>
             <i className="left" />
             </ShowPreview>
@@ -646,4 +672,5 @@ class ProjectEditor extends React.Component {
         );
       }
     }
-    export default withCookies(ProjectEditor);
+
+export default withRouter(withCookies(ProjectEditor))

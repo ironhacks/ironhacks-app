@@ -29,12 +29,14 @@ class DashboardPage extends React.Component {
             user={this.props.user}
           />
         </Route>
+
         <Route path='/hacks/:hackId'>
           <HackPage
             user={this.props.user}
             userId={this.props.user.uid}
           />
         </Route>
+
         <Route exact path='/hacks'>
           <HackSelectPage user={this.props.user} />
         </Route>
@@ -42,9 +44,7 @@ class DashboardPage extends React.Component {
         <Route exact path='/profile'>
           <UserProfile user={this.props.user} />
         </Route>
-
       </Switch>
-
       <Footer />
       </main>
     )

@@ -87,8 +87,6 @@ class HackPage extends React.Component {
   // componentWillUnmount() {
   // }
 
-
-  // Query all the hacks objects from the db.
   async getHack(hackId) {
     let hack = await window.firebase.firestore()
       .collection('hacks')
@@ -127,9 +125,9 @@ class HackPage extends React.Component {
         this.setState({
           hackTask: hackTask,
           loading: false,
-        });
+        })
       }
-    });
+    })
   }
 
   setCurrentHack(_hack_id) {

@@ -6,7 +6,7 @@ import { instanceOf } from 'prop-types';
 import {
   Switch,
   Route,
-  // Redirect,
+  Redirect,
  } from 'react-router-dom';
 import { PageNotFound } from './views/default/404';
 // import AdminDashboard from './views/admin/adminDashboard';
@@ -195,49 +195,31 @@ class App extends React.Component {
               <Route exact path='/' >
                 <HomePage />
               </Route>
-
-              {this.state.user && (
-                <Route
-                  path='/hacks'
-                >
-                  <DashboardPage
-                    user={this.state.user}
-                    userIsAdmin={this.state.userIsAdmin}
-                  />
-                </Route>
-              )}
-
-              {this.state.user && (
-                <Route
-                  path='/project'
-                >
-                  <ProjectEditor
-                    user={this.state.user}
-                    userIsAdmin={this.state.userIsAdmin}
-                  />
-                </Route>
-              )}
-
-              {this.state.user && (
-                <Route
-                  path='/profile'
-                >
-                  <DashboardPage
-                    user={this.state.user}
-                    userIsAdmin={this.state.userIsAdmin}
-                  />
-                </Route>
-              )}
-
-              {this.state.user && (
-                <Route
-                  path='/logout'
-                  render={()=>(this._logout())}
-                />
-              )}
-
               <Route path='/login' component={Login}/>
               <Route exact path='/404' component={PageNotFound}/>
+              <Route path='/hacks'>
+                <DashboardPage
+                  user={this.state.user}
+                  userIsAdmin={this.state.userIsAdmin}
+                />
+              </Route>
+              <Route path='/projects/:projectName'>
+                <ProjectEditor
+                  user={this.state.user}
+                  userIsAdmin={this.state.userIsAdmin}
+                />
+              </Route>
+              <Route path='/profile'>
+                <DashboardPage
+                user={this.state.user}
+                userIsAdmin={this.state.userIsAdmin}
+                />
+              </Route>
+              <Route
+                path='/logout'
+                render={()=>(this._logout())}
+              />
+              <Redirect to='/'/>
             </Switch>
             </div>
           </CookiesProvider>
