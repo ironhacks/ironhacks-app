@@ -23,7 +23,7 @@ export default class AboutSection extends React.Component {
         <i class="material-icons">thumb_up</i>1,993
       </div>
            <div>
-        <a href="./" class="card__link">View App</a>
+        <a href="https://ironhacks.github.io/showcase-2018-spring-ialemusm/" class="card__link">View App</a>
       </div>
           </div>
          </div>
@@ -38,7 +38,7 @@ export default class AboutSection extends React.Component {
         <i class="material-icons">thumb_up</i>1,775
       </div>
            <div>
-        <a href="./" class="card__link">View App</a>
+        <a href="https://ironhacks.github.io/showcase-2018-spring-juaccardenasgom/" class="card__link">View App</a>
       </div>
           </div>
 	 </div>
@@ -53,7 +53,7 @@ export default class AboutSection extends React.Component {
         <i class="material-icons">thumb_up</i>1,880
       </div>
            <div>
-        <a href="./" class="card__link">View App</a>
+        <a href="https://ironhacks.github.io/showcase-2018-spring-nmcasasr/" class="card__link">View App</a>
       </div>
           </div>
          </div>
@@ -68,7 +68,7 @@ export default class AboutSection extends React.Component {
         <i class="material-icons">thumb_up</i>2,002
       </div>
            <div>
-        <a href="./" class="card__link">View App</a>
+        <a href="https://ironhacks.github.io/showcase-2019-spring-crabaqueropi/" class="card__link">View App</a>
       </div>
           </div>
           </div>
@@ -83,7 +83,7 @@ export default class AboutSection extends React.Component {
         <i class="material-icons">thumb_up</i>1,555
       </div>
            <div>
-        <a href="./" class="card__link">View App</a>
+        <a href="https://ironhacks.github.io/showcase-2019-spring-difcortesgu/" class="card__link">View App</a>
       </div>
           </div>
          </div>
