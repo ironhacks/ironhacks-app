@@ -181,9 +181,14 @@ module.exports = {
     "no-undef": 2,
     "no-undefined": 0,
     "no-undef-init": 1,
-    "no-unused-vars":
-
-    [ 1, { vars: "all", args: "none", ignoreRestSiblings: true } ],
+    "no-unused-vars": [
+      1,
+      {
+        vars: "all",
+        args: "none",
+        ignoreRestSiblings: true
+      }
+    ],
 
     "no-use-before-define": 0,
 
@@ -265,6 +270,7 @@ module.exports = {
     "react/react-in-jsx-scope": 1,
     "react/self-closing-comp": 1,
     "react/wrap-multilines": 0,
+    "react/no-typos": 0,
 
     // React-Hooks Plugin
     "react-hooks/rules-of-hooks": "error",
