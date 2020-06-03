@@ -1,36 +1,58 @@
 import React from 'react';
-import { Page } from '../layouts/page';
-import { Section } from '../layouts/sections';
-import HeroSection from './content/hero';
-import FaqSection from './content/faq';
-import RankingSection from './content/ranking';
+// import { Page } from '../layouts/page';
+import { LandingPage, Section } from '../../components/layout';
+import { AboutSection } from './content/about-section';
+import { ExamplesSection } from './content/examples-section';
+import { FaqSection } from './content/faq-section';
+import { FooterSection } from './content/footer-section';
+import { HeroSection } from './content/hero-section';
 import { ShowcaseSection } from './content/showcase-section';
-import BenefitsSection from './content/benefits';
+import { RulesSection } from './content/rules-section';
+import { StatsSection } from './content/stats-section';
+import { UpcomingSection } from './content/upcoming-section';
 
 class HomePage extends React.Component {
   render() {
     return (
-      <Page>
-        <Section className={'full-height bg-primary'}>
+      <LandingPage title="Home">
+        <Section id="hero" align={true}
+          sectionClass="full-height bg-primary"
+          containerClass="">
           <HeroSection/>
         </Section>
 
-        <Section className='FAQ'>
+        <Section id='home_faq'>
           <FaqSection/>
         </Section>
 
-        <Section className='about bg-primary' id='about'>
+        <Section id="home_about" sectionClass="bg-primary py-4">
+          <AboutSection/>
+        </Section>
+
+        <Section id="home_upcoming" sectionClass="py-4">
+          <UpcomingSection />
+        </Section>
+
+        <Section sectionClass='bg-primary examples_section' id='home_examples'>
+          <ExamplesSection/>
+        </Section>
+
+        <Section sectionClass='showcase_section' id='home_showcase'>
           <ShowcaseSection/>
         </Section>
 
-        <Section className='ranking' id='ranking'>
-          <RankingSection/>
+        <Section id="home_rules" sectionClass='rules_section bg-primary'>
+          <RulesSection/>
         </Section>
 
-        <Section className='FAQ bg-primary'>
-          <BenefitsSection/>
+        <Section sectionClass='stats_section' id='home_stats'>
+          <StatsSection/>
         </Section>
-      </Page>
+
+        <Section sectionClass='stats_section bg-black c-white' id='home_stats'>
+          <FooterSection/>
+        </Section>
+      </LandingPage>
     )
   }
 }
