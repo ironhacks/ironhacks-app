@@ -1,9 +1,5 @@
 import React from 'react';
 import {ThemeProvider} from 'styled-components';
-import '../../../assets/static/bootstrap-reboot.css';
-import '../../../assets/static/bootstrap-grid.css';
-import '../../../assets/main.css';
-import './assets/styles.css';
 
 class SectionContainer extends React.Component {
   constructor(props) {
