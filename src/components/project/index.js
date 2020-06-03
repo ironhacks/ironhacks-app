@@ -1,6 +1,8 @@
 import { IndexHtmlTemplate } from './templates/index-html.js';
 import { ScriptJsTemplate } from './templates/script-js.js';
 import { StyleCssTemplate } from './templates/style-css.js';
+import ProjectEditor from './editor';
+import ProjectPreview from './preview';
 
 
 const TemplateFiles = {
@@ -9,4 +11,4 @@ const TemplateFiles = {
   StyleCssTemplate,
 }
 
-export { TemplateFiles }
+export { TemplateFiles, ProjectEditor, ProjectPreview }

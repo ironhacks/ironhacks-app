@@ -1,33 +1,34 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
-import React from "react"
+import React from 'react'
+import PropTypes from 'prop-types'
+// import { Link } from 'gatsby'
+import { Link } from 'react-router-dom'
 
 const Header = ({ siteTitle }) => (
   <header
-    className={"site-header"}
+    className={'site-header'}
     style={{
-      backgroundColor: `var(--color-primary)`,
-      marginBottom: `1.45rem`,
+      backgroundColor: 'var(--color-primary)',
+      marginBottom: '1.45rem',
     }}
   >
     <div
-      className={"header_container"}
+      className={'header_container'}
       style={{
-        margin: `0 auto`,
-        maxWidth: `var(--page-width)`,
-        padding: `1.45rem 0`,
+        margin: '0 auto',
+        maxWidth: 'var(--page-width)',
+        padding: '1.45rem 0',
       }}
     >
       <div
-        className={"site-logo"}
+        className={'site-logo'}
         style={{
-          marginLeft: `3rem`,
+          marginLeft: '3rem',
         }}>
 
-        <Link to="/"
+        <Link to='/'
           style={{
-            backgroundColor: `var(--color-black)`,
-            textDecoration: `none`,
+            backgroundColor: 'var(--color-black)',
+            textDecoration: 'none',
             fontWeight: 'bold',
           }}>
             {siteTitle}
@@ -42,7 +43,7 @@ Header.propTypes = {
 }
 
 Header.defaultProps = {
-  siteTitle: ``,
+  siteTitle: '',
 }
 
 export { Header }

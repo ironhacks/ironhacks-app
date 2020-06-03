@@ -3,29 +3,28 @@ import styled from 'styled-components';
 import { Loader } from './components/loader';
 import { CookiesProvider, Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
-import {
-  Switch,
-  Route,
-  Redirect,
- } from 'react-router-dom';
+import { Switch, Route,
+  // Redirect,
+} from 'react-router-dom';
 import { PageNotFound } from './views/default/404';
-// import AdminDashboard from './views/admin/adminDashboard';
 import HomePage from './views/home';
-
-import ProjectEditor from './components/projectEditor/projectEditor.js';
+import { ProjectEditor } from './components/project';
 import { DashboardPage } from './views/dashboard';
 import Login from './views/login';
+import './styles/css/root.css'
+import './styles/css/main.css'
+import './styles/css/flex.css'
+import './styles/css/colors.css'
+import './styles/css/layout.css'
+import './styles/css/base.css'
+import './styles/css/icons.css'
+import './styles/css/charrismatic.css'
 
-import './theme/styles.css';
-import './assets/main.css';
 
 const LoaderContainer = styled('div')`
   width: 100vw;
   height: 100vh;
 `;
-
-
-
 
 class App extends React.Component {
   static propTypes = {
@@ -79,7 +78,7 @@ class App extends React.Component {
         .get();
       this._setUpdateAdmin(isAdmin.exists)
     }
-   }
+  }
 
   _setUserHackdata(hackData){
     localStorage.setItem('userHackData', JSON.stringify(hackData));
@@ -195,6 +194,40 @@ class App extends React.Component {
               <Route exact path='/' >
                 <HomePage />
               </Route>
+
+              {this.state.user && (
+                <Route path='/hacks'>
+                <DashboardPage
+                    user={this.state.user}
+                    userIsAdmin={this.state.userIsAdmin}
+                  />
+                </Route>
+              )}
+
+              {this.state.user && (
+                <Route path='/project'>
+                  <ProjectEditor
+                    user={this.state.user}
+                    userIsAdmin={this.state.userIsAdmin}
+                  />
+                </Route>
+              )}
+
+              {this.state.user && (
+                <Route path='/profile'>
+                  <DashboardPage
+                    user={this.state.user}
+                    userIsAdmin={this.state.userIsAdmin}
+                  />
+                </Route>
+              )}
+
+              {this.state.user && (
+                <Route
+                  path='/logout'
+                  render={()=>(this._logout())}
+                />
+              )}
               <Route path='/login' component={Login}/>
               <Route exact path='/404' component={PageNotFound}/>
               <Route path='/hacks'>

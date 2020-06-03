@@ -1,10 +1,10 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { mergeClasses } from "./lib/layoutUtils"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { mergeClasses } from './lib/layoutUtils'
 
 const Col = (props) => {
   const { colClass, children } = props
-  const defaultClass = "col"
+  const defaultClass = 'col'
 
   return (
     <div className={mergeClasses(defaultClass, colClass)}>{children}</div>
@@ -18,7 +18,7 @@ Col.defaultProps = {
 
 Col.propTypes = {
   colClass: PropTypes.oneOfType([PropTypes.string]),
-  flex: PropTypes.oneOfType([PropTypes.boolean]),
+  flex: PropTypes.bool,
   children: PropTypes.node.isRequired,
 }
 
