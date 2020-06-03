@@ -27,7 +27,7 @@ import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/matchtags';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
-import ProjectPreview from './projectPreview.js';
+import ProjectPreview from './preview.js';
 import FilesContainer from './filesContainer.js';
 const colors = Theme.COLORS;
 
@@ -192,22 +192,22 @@ class ProjectEditor extends React.Component {
   }
 
   getProjectFilesUrls() {
-    // const firestore = window.firebase.firestore();
+    const firestore = window.firebase.firestore();
     const _this = this;
     const userId = this.state.hackerId || this.state.user.uid;
     // Updating the current hack:
-    // firestore.collection('users')
-    // .doc(userId)
-    // .collection('projects')
-    // .doc(this.state.projectName)
-    // .get()
-    // .then(function(doc) {
-    //   _this.setState({projectFiles: doc.data()});
-    //   _this.getProjectFiles();
-    // })
-    // .catch(function(error) {
-    //   console.error(error);
-    // });
+    firestore.collection('users')
+    .doc(userId)
+    .collection('projects')
+    .doc(this.state.projectName)
+    .get()
+    .then(function(doc) {
+      _this.setState({projectFiles: doc.data()});
+      _this.getProjectFiles();
+    })
+    .catch(function(error) {
+      console.error(error);
+    });
   }
 
   getProjectFiles() {
@@ -646,4 +646,5 @@ class ProjectEditor extends React.Component {
         );
       }
     }
+
     export default withCookies(ProjectEditor);
