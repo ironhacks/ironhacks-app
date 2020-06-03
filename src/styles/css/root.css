@@ -2,6 +2,7 @@
   --color-surface: white;
   --color-solid: black;
   --color-primary: #ffce35;
+  --page-width: 1200px;
 }
 
 .c-primary { color: var(--color-primary) !important; }
