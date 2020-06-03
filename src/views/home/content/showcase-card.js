@@ -22,7 +22,7 @@ class ShowcaseCard extends React.Component {
             <span class="showcase_card__like">{this.props.likes}</span>
           </div>
           <div>
-            <a href={this.props.likes} class="card__link">View App</a>
+            <a href={this.props.url} class="card__link">View App</a>
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@ class ShowcaseCard extends React.Component {
 
 ShowcaseCard.defaultProps = {
   image: '',
-  title: 'Projet Title',
+  title: 'Project Title',
   description: 'Project Description',
   url: '',
   likes: '0',
