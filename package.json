@@ -27,6 +27,7 @@
     "react": "^16.12.0",
     "react-codemirror2": "^5.1.0",
     "react-cookie": "^3.1.2",
+    "react-countup": "^4.3.3",
     "react-day-picker": "^7.4.8",
     "react-dom": "^16.12.0",
     "react-mde": "^10.0.3",
@@ -39,7 +40,8 @@
     "showdown": "^1.9.1",
     "styled-components": "^5.1.0",
     "sweetalert2": "^7.33.1",
-    "velocity-react": "^1.4.3"
+    "velocity-react": "^1.4.3",
+    "warning": "^4.0.3"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.9.4",
@@ -63,7 +65,6 @@
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-app": "^6.2.2",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "index.js": "0.0.3",
     "jshint": "^2.11.1",
     "prettier": "^1.19.1",
     "reactotron-apisauce": "^3.0.0",
