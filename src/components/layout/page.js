@@ -1,24 +1,26 @@
-import React from "react"
-import { Header } from "./header"
-import Meta from "./meta"
-import { Footer } from "./footer"
-import { useSiteMetadata } from "../../hooks/use-site-metadata"
+import React from 'react'
+import { Header } from './header'
+// import Meta from './meta'
+import { Footer } from './footer'
+// import { useSiteMetadata } from '../../hooks/use-site-metadata'
 
 class Content extends React.Component {
   render() {
     return (
-      <main className={"page-content"}>
-        <div className={"container page_container"}>{this.props.children}</div>
+      <main className={'main'}>
+        <div className={'main_container'}>
+          {this.props.children}
+        </div>
       </main>
     )
   }
 }
 
-const Page = ({ title, children }) => {
-  const { siteTitle } = useSiteMetadata()
+// <Meta title={title} />
+const Page = ({ title, siteTitle, children }) => {
+  // const { siteTitle } = useSiteMetadata()
   return (
     <>
-      <Meta title={title} />
       <Header siteTitle={siteTitle} />
       <Content>{children}</Content>
       <Footer />
@@ -26,23 +28,22 @@ const Page = ({ title, children }) => {
   )
 }
 
-
+// <Meta title={title} />
 const BlankPage = ({ title, children }) => {
   return (
     <>
-      <Meta title={title} />
       <Content>{children}</Content>
     </>
   )
 }
 
+// <Meta title={title} />
 const LandingPage = ({ title, children }) => {
-  const { siteTitle } = useSiteMetadata()
+  // const { siteTitle } = useSiteMetadata()
   return (
     <>
-      <Meta title={title} />
       <Content>{children}</Content>
-      <Footer />
+      <Footer footerClass="bg-grey-dk4 cl-grey-lt1" />
     </>
   )
 }

@@ -1,27 +1,10 @@
-.section {
+.section  {
   width: 100%;
   padding: 65px 200px 65px 200px;
 }
 
 .section.full-height {
   height: 100vh;
-}
-
-.section.FAQ {
-  display: flex;
-  justify-content: space-between;
-  height: 500px;
-  min-height: 700px;
-  padding: 65px 200px 65px 200px;
-  text-align: center;
-}
-
-.section.FAQ div {
-  width: 30%;
-}
-
-.section.FAQ h2 {
-  margin-top: 50px;
 }
 
 .section.FAQ i {

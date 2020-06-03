@@ -1,18 +1,19 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { mergeClasses } from "./lib/layoutUtils"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { mergeClasses } from './lib/layoutUtils'
+
 
 const Section = ({ id, sectionClass, align, containerClass, children }) => {
-  let defaultClass = "section"
-  const defaultContainerClass = "container section_container"
+  let defaultClass = 'section'
+  const defaultContainerClass = 'container section_container'
+
   if (id) { defaultClass += ` ${id}_section` }
+
   if (align) {
     if (align === 'center') { defaultClass += ' flex flex-align-center' }
     else if (align === 'horiz') { defaultClass += ' flex flex-center' }
     else if (align === 'both') { defaultClass += ' flex flex-center flex-align-center' }
-    else {
-      defaultClass += ' flex flex-center flex-align-center'
-    }
+    else { defaultClass += ' flex flex-center flex-align-center' }
   }
 
   return (
@@ -29,11 +30,12 @@ Section.defaultProps = {
   containerClass: null,
   sectionClass: null,
   valign: false,
+  align: 'center',
 }
 
 Section.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.stringnumber]),
-  align: PropTypes.oneOfType([PropTypes.string]),
+  id: PropTypes.string,
+  align: PropTypes.string,
   sectionClass: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   containerClass: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   children: PropTypes.node.isRequired,
