@@ -1,8 +1,8 @@
 import React from 'react';
-import { NavContainerDiv } from '../../components/navigation/nav-container'
-import menuIcon from '../../assets/svg/menu-icon.svg';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import menuIcon from '../../assets/svg/menu-icon.svg';
+import { NavContainerDiv } from './nav-container'
 
 const NavButton = styled(Link)`
   color: ${(props) => props.theme.textColor};
@@ -55,7 +55,7 @@ class HackNav extends React.Component {
 
   updateHackNav(target) {
     this.hideMenu(target)
-    this.setState({'currentView': target});
+    this.setState({currentView: target});
     if (this.props.action) {
       this.props.action(target);
     }

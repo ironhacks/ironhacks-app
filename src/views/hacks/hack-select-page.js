@@ -8,9 +8,7 @@ import { Loader } from '../../components/loader';
 import * as AlertsContent from '../../components/alert';
 import { Theme } from '../../theme';
 
-// const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
-// const units = Theme.UNITS;
 
 const SectionContainer = styled('div')`
   width: 100%;
@@ -86,14 +84,10 @@ class HackSelectPage extends React.Component {
     }
   }
 
-  // Query all the hacks objects from the db.
   async getHack(hackId) {
-    console.log('get hack', hackId);
-
     let hack = await this.firestore
       .collection('hacks')
       .doc(hackId);
-
     return hack;
   }
 
@@ -110,7 +104,7 @@ class HackSelectPage extends React.Component {
       return false;
     }
 
-    const cachedHacks =  JSON.parse(localStorage.getItem('userHacks'));
+    const cachedHacks = JSON.parse(localStorage.getItem('userHacks'));
 
     if (cachedHacks) {
       return cachedHacks;
@@ -131,6 +125,7 @@ class HackSelectPage extends React.Component {
     const hackIds = whitelistDoc.data().whitelist;
 
     let hacks = [];
+
     if (hackIds && Array.isArray(hackIds)) {
       for (let hackId of hackIds) {
         let hackDoc = await window.firebase.firestore()
@@ -195,13 +190,13 @@ class HackSelectPage extends React.Component {
   };
 
   setCurrentHack(hackIndex) {
-    this.setState({ status: 'Creating participant profile...' });
+    this.setState({
+      status: 'Creating participant profile...'
+    })
 
     const hackId = this.state.registeredHacks[hackIndex]
       ? this.state.registeredHacks[hackIndex].id
       : this.state.availableHacks[hackIndex].id;
-
-    // const _this = this;
 
     this.firestore
       .collection('users')
@@ -212,8 +207,8 @@ class HackSelectPage extends React.Component {
         cookies.set('currentHack', hackId);
         cookies.set('currentForum', doc.data().forums[hackId].id);
         this.setState({ mustNavigate: true });
-      });
-  };
+      })
+  }
 
   render() {
     if (this.state.loading) {
@@ -223,7 +218,7 @@ class HackSelectPage extends React.Component {
             <Loader status={this.state.status} />
           </SectionContainer>
         </ThemeProvider>
-      );
+      )
     }
 
     return (
@@ -247,9 +242,7 @@ class HackSelectPage extends React.Component {
 
               <Separator />
 
-              <h2 style={{
-                paddingTop: '1em',
-              }}>
+              <h2 style={{paddingTop: '1em'}}>
                 Available hacks for registration
               </h2>
 

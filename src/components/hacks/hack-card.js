@@ -55,39 +55,32 @@ const Separator = styled('div')`
 
 
 class NewHackCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   onHackCardClick() {
-    this.props.onClick(this.props.index, this.props.hack.registrationSurvey);
+    this.props.onClick(
+      this.props.index,
+      this.props.hack.registrationSurvey
+    )
   }
 
-    render() {
-      return (
-        <CardContainer
-          className='newHackCard'
-          onClick={this.props.onClick}
-          >
-          <span>+</span>
-          <span>Add Hack</span>
-        </CardContainer>
-      )
-    }
-
+  render() {
+    return (
+      <CardContainer
+        className='newHackCard'
+        onClick={this.props.onClick}
+        >
+        <span>+</span>
+        <span>Add Hack</span>
+      </CardContainer>
+    )
+  }
 }
 
 
 class HackCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-
   render() {
     return (
       <div className={'hack_card'}>
-        <a href={`/hacks/${this.props.hackid}/`}>
+        <a href={`/hacks/${this.props.hackId}/task`}>
           <div className="hack_card__header">
             <h3 className="hack_title">{this.props.name}</h3>
           </div>
@@ -110,7 +103,7 @@ class HackCard extends React.Component {
 HackCard.defaultProps = {
   name: 'Hack Name',
   phases: 0,
-  hackid: ''
+  hackId: ''
 }
 
 export { HackCard, NewHackCard }

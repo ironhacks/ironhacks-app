@@ -1,16 +1,17 @@
 import React from 'react';
 import { withCookies } from 'react-cookie';
-import styled, { ThemeProvider } from 'styled-components';
 import { HackNav } from './hack-nav';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
 import { withRouter } from 'react-router';
-// import ThreadViewWithRouter from '../forum/threadView/threadView';
+import { Section } from '../../components/layout';
 import TutorialScreen from '../tutorial';
 import ExamplesPage from '../examples';
-import Forum from '../forum/forum.js';
+import ForumView from '../forum/forum.js';
+// import ThreadViewWithRouter from '../forum/threadView/threadView';
 // import NewThread from '../forum/newThread.js';
-import ProjectsPage from  '../projects';
+import { ProjectEditor } from '../../components/project';
+import { ProjectsPage } from  '../projects';
 import TaskView from '../task';
 import { ResultsView } from '../results';
 import QuizListView from '../quiz/quiz-list-view';
@@ -19,35 +20,7 @@ import {
   Switch,
   Route,
   // Link,
-  // useParams,
-  // useRouteMatch
 } from 'react-router-dom';
-import { Theme } from '../../theme';
-
-// const colors = Theme.COLORS;
-const styles = Theme.STYLES.AppSectionTheme;
-// const units = Theme.UNITS;
-
-const SectionContainer = styled('div')`
-  width: 100%;
-  height: ${(props) => props.theme.containerHeight};
-  background-color: ${(props) => props.theme.backgroundColor};
-
-  h1 {
-    margin-bottom: 20px;
-
-    &:first-child {
-      margin-top: 100px;
-    }
-  }
-
-  .empty-list {
-    color: gray;
-    font-style: italic;
-  }
-
-  overflow: auto;
-`;
 
 class HackPage extends React.Component {
   constructor(props) {
@@ -138,87 +111,100 @@ class HackPage extends React.Component {
   updateHackView(target) {
     console.log('update view', this, target);
     // this.setState({'activeView': target})
-
   }
 
   render() {
     return (
-        <ThemeProvider theme={styles}>
-        <SectionContainer className='container-fluid'>
-          {this.state.loading ? (
-            <Loader status={this.state.status} />
-          ) : (
+      <Section>
+        {this.state.loading ? (
+          <Loader status={this.state.status} />
+        ) : (
             <div className='row'>
-              <div className='col-md-8 offset-md-2'>
+              <div className='col'>
+                <h2 className="pt-3">
+                  <strong>Hack: </strong>
+                  <span>{ this.hackName } </span>
+                  <span className="small">({ this.hackId })</span>
+                </h2>
+
+                <Separator />
+
+                <HackNav action={this.updateHackView}/>
+
                 <Separator primary />
-                <h2>
-                   <strong>Hack: </strong>
-                   <span>{ this.hackName } </span>
-                   <span className="small">({ this.hackId })</span>
-                  </h2>
-                  <Separator />
 
-                  <HackNav action={this.updateHackView}/>
+                <Router>
+                  <Switch>
+                    <Route exact path="/hacks/:hackId/task">
+                      <TaskView
+                        hackId={this.hackId}
+                        task={this.state.hackTask}
+                      />
+                    </Route>
 
-                  <Separator primary />
-                  <Router>
-                    <div>
-                    <Switch>
-                      <Route exact path="/hacks/:hackId/task">
-                        <h3>About</h3>
-                        <TaskView hackid={this.hackId} task={this.state.hackTask}  />
-                      </Route>
+                    <Route exact path="/hacks/:hackId/forum">
+                      <ForumView
+                        hackId={this.hackId}
+                        user={this.props.user}
+                      />
+                    </Route>
 
-                      <Route exact path="/hacks/:hackId/forum">
-                        <h3>Forum</h3>
-                        <Forum/>
-                      </Route>
+                    <Route exact path="/hacks/:hackId/tutorial">
+                      <TutorialScreen
+                        hackid={this.hackId}
+                        tutorial={this.state.hackTutorial}
+                      />
+                    </Route>
 
-                      <Route exact path="/hacks/:hackId/tutorial">
-                        <h3>Tutorial</h3>
-                        <TutorialScreen
-                          hackid={this.hackId}
-                          tutorial={this.state.hackTutorial} />
-                      </Route>
+                    <Route exact path="/hacks/:hackId/examples">
+                      <ExamplesPage
+                        hackId={this.hackId}
+                      />
+                    </Route>
 
-                      <Route exact path="/hacks/:hackId/examples">
-                        <h3>Examples</h3>
-                        <ExamplesPage />
-                      </Route>
+                    <Route exact path="/hacks/:hackId/quiz">
+                      <QuizListView
+                        hackId={this.hackId}
+                        user={this.props.user}
+                        isAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
 
-                      <Route exact path="/hacks/:hackId/quiz">
-                        <h3>Quiz</h3>
-                        <QuizListView />
-                      </Route>
+                    <Route exact path="/hacks/:hackId/projects">
+                      <ProjectsPage
+                        hackId={this.hackId}
+                        user={this.props.user}
+                        userId={this.props.userId}
+                        hackData={this.state.hackData}
+                      />
+                    </Route>
 
-                      <Route exact path="/hacks/:hackId/projects">
-                        <h3>Projects</h3>
-                        <ProjectsPage
-                          hackId={this.hackId}
-                          user={this.props.user}
-                          hackData={this.state.hackData}
-                        />
-                      </Route>
+                    <Route exact path="/hacks/:hackId/projects/:projectName">
+                      <ProjectEditor
+                        hackId={this.hackId}
+                        hackData={this.state.hackData}
+                        user={this.props.user}
+                        userId={this.props.userId}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
 
-                      <Route exact path="/hacks/:hackId/results">
-                        <h3>Results</h3>
-                        <ResultsView
-                          hackData={this.state.hackData}
-                          hackPhases={this.state.hackPhases}
-                          hackUser={this.props.user}
-                          hackUserId={this.props.userId}
-                          hackId={this.hackId}
-                        />
-                      </Route>
-                    </Switch>
-                    </div>
+                    <Route exact path="/hacks/:hackId/results">
+                      <ResultsView
+                        hackData={this.state.hackData}
+                        hackPhases={this.state.hackPhases}
+                        hackUser={this.props.user}
+                        hackUserId={this.props.userId}
+                        hackId={this.hackId}
+                      />
+                    </Route>
+                  </Switch>
                   </Router>
                 </div>
               </div>
             )
           }
-        </SectionContainer>
-      </ThemeProvider>
+      </Section>
     )
   }
 }
