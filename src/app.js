@@ -3,21 +3,21 @@ import styled from 'styled-components';
 import { Loader } from './components/loader';
 import { CookiesProvider, Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
-import { Switch, Route,
-  // Redirect,
-} from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { PageNotFound } from './views/default/404';
 import HomePage from './views/home';
+import Admin from './views/admin';
 import { ProjectEditor } from './components/project';
 import { DashboardPage } from './views/dashboard';
 import Login from './views/login';
 import './styles/css/root.css'
 import './styles/css/main.css'
-import './styles/css/flex.css'
 import './styles/css/colors.css'
 import './styles/css/layout.css'
+import './styles/css/flex.css'
 import './styles/css/base.css'
 import './styles/css/icons.css'
+import './styles/css/content.css'
 import './styles/css/charrismatic.css'
 
 
@@ -149,19 +149,19 @@ class App extends React.Component {
     const filterUserData = (user) => {
       const names = user.displayName.split(' ');
       return {
-          createdAt: user.metadata.creationTime,
-          displayName: user.displayName,
-          email: user.email,
-          emailVerified: user.emailVerified,
-          phoneNumber: user.photoURL,
-          photoURL: user.photoURL,
-          profileLetters: names[0].slice(0, 1) + names[1].slice(0, 1),
-          provider: user.providerData,
-          user: user.isAnonymous,
-          userId: user.uid,
-          uid: user.uid,
-          lastLoginAt: user.metadata.lastSignInTime,
-        }
+        createdAt: user.metadata.creationTime,
+        displayName: user.displayName,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        phoneNumber: user.photoURL,
+        photoURL: user.photoURL,
+        profileLetters: names[0].slice(0, 1) + names[1].slice(0, 1),
+        provider: user.providerData,
+        user: user.isAnonymous,
+        userId: user.uid,
+        uid: user.uid,
+        lastLoginAt: user.metadata.lastSignInTime,
+      }
     }
 
     window.firebase.auth()
@@ -228,30 +228,48 @@ class App extends React.Component {
                   render={()=>(this._logout())}
                 />
               )}
+
               <Route path='/login' component={Login}/>
               <Route exact path='/404' component={PageNotFound}/>
-              <Route path='/hacks'>
+
+              {this.state.user && (
+                <Route path='/hacks'>
                 <DashboardPage
                   user={this.state.user}
                   userIsAdmin={this.state.userIsAdmin}
                 />
               </Route>
+              )}
+
+              {this.state.user && (
               <Route path='/projects/:projectName'>
                 <ProjectEditor
                   user={this.state.user}
                   userIsAdmin={this.state.userIsAdmin}
                 />
               </Route>
+              )}
+
               <Route path='/profile'>
                 <DashboardPage
-                user={this.state.user}
-                userIsAdmin={this.state.userIsAdmin}
+                  user={this.state.user}
+                  userIsAdmin={this.state.userIsAdmin}
                 />
               </Route>
+
+              {this.state.userIsAdmin && (
+                <Route exact path='/admin'>
+                  <Admin
+                    user={this.props.user}
+                  />
+                </Route>
+              )}
+
               <Route
                 path='/logout'
                 render={()=>(this._logout())}
               />
+
               <Redirect to='/'/>
             </Switch>
             </div>
