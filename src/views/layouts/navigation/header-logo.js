@@ -17,14 +17,6 @@ const IronHacksCenterLogo = styled('div')`
   }
 `;
 
-const ironhacksLogoStyle = {
-   flex: 1,
-   textAlign: 'left',
-   justifyContent: 'left',
-   margin: 0,
-   display: 'flex',
-};
-
 
 class HeaderLogo extends React.Component {
   constructor(props) {
