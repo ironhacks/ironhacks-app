@@ -93,7 +93,7 @@ const SearchBar = styled('form')`
   }
 `;
 
-class Forum extends React.Component {
+class ForumView extends React.Component {
   constructor(props) {
     super(props);
     const { cookies } = props;
@@ -246,13 +246,6 @@ class Forum extends React.Component {
   };
 
   render() {
-    if (
-      (this.state.currentHack == null || this.state.forum == null) &&
-      this.props.user &&
-      !this.props.user.isAdmin
-    ) {
-      return <Redirect push to='/select-hack' />;
-    }
     if (this.state.startNewThreadFlow) {
       return <Redirect push to='/forum/new' />;
     }
@@ -307,4 +300,4 @@ class Forum extends React.Component {
   }
 }
 
-export default withCookies(Forum);
+export default withCookies(ForumView);

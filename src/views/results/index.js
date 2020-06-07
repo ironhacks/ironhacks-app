@@ -306,10 +306,9 @@ class ResultsView extends React.Component {
     });
 
     console.log('userPhaseResults', userPhaseResults);
-
-    const endDate = DateFormater.getFirebaseDate(
-      this.props.hackPhases[phase - 1].codingStartEnd
-    )
+    // const endDate = DateFormater.getFirebaseDate(
+      // this.props.hackPhases[phase - 1].codingStartEnd
+    // )
 
     let userForumData = getUserForumData()
 
