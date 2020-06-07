@@ -8,44 +8,75 @@ class Content extends React.Component {
   render() {
     return (
       <main className={'main'}>
-        <div className={'main_container'}>
-          {this.props.children}
-        </div>
+        {this.props.children}
       </main>
     )
   }
 }
 
 // <Meta title={title} />
-const Page = ({ title, siteTitle, children }) => {
-  // const { siteTitle } = useSiteMetadata()
+const Page = ({ user, displayName, pageClass, isAdmin, children }) => {
+  const classes = ['page', pageClass].join(' ').trim();
   return (
     <>
-      <Header siteTitle={siteTitle} />
-      <Content>{children}</Content>
+      <Header
+        user={user}
+        displayName={displayName}
+        isAdmin={isAdmin}
+      />
+      <Content>
+        <div className={classes}>
+          {children}
+        </div>
+      </Content>
       <Footer />
     </>
   )
 }
 
+Page.defaultProps = {
+  pageClass: '',
+  isAdmin: false,
+  displayName: '',
+  user: {},
+}
+
+
 // <Meta title={title} />
-const BlankPage = ({ title, children }) => {
+const BlankPage = ({ pageClass, children }) => {
+  const classes = ['page', pageClass].join(' ').trim();
+  return (
+      <Content>
+        <div className={classes}>
+          {children}
+        </div>
+      </Content>
+  )
+}
+
+BlankPage.defaultProps = {
+  pageClass: '',
+}
+
+
+// <Meta title={title} />
+const LandingPage = ({ pageClass, children }) => {
+  const classes = ['page', pageClass].join(' ').trim();
   return (
     <>
-      <Content>{children}</Content>
+      <Content>
+        <div className={classes}>
+          {children}
+        </div>
+      </Content>
+      <Footer footerClass="bg-grey-dk4 cl-grey-lt1" />
     </>
   )
 }
 
-// <Meta title={title} />
-const LandingPage = ({ title, children }) => {
-  // const { siteTitle } = useSiteMetadata()
-  return (
-    <>
-      <Content>{children}</Content>
-      <Footer footerClass="bg-grey-dk4 cl-grey-lt1" />
-    </>
-  )
+
+LandingPage.defaultProps = {
+  pageClass: '',
 }
 
 export { Page, BlankPage, LandingPage }

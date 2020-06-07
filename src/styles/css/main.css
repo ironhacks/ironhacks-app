@@ -66,3 +66,7 @@ h1, h2, h3 {
 .hide {
   display: none;
 }
+
+.page.home_page {
+  font-size: 1.1em;
+}

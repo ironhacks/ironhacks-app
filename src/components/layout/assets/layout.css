@@ -1,3 +1,10 @@
+
+.home_page .section {
+  width: 100%;
+  padding-top: 5em;
+  padding-bottom: 5em;
+}
+
 .container.page_container {
   width: 100% !important;
 }
@@ -24,11 +31,6 @@
 .site_footer:last-child {
   font-weight: bold;
   text-align: right;
-}
-
-.section {
-  width: 100%;
-  padding: 65px 200px 65px 200px;
 }
 
 .section.full-height {
