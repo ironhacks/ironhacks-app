@@ -3,18 +3,18 @@
 
 BASE_PATH="$(npm prefix)"
 
+RUN_LINT_DIRS="src/components,src/config,src/theme,src/util,src/views,src/*.js"
 [[ -f "${BASE_PATH}/./.npmrc" ]] && . ${BASE_PATH}/./.npmrc
 
-LINT_DIRS="Components,Config,Model,LifeCycle,Screens,Theme,Utilities"
-pretty:check="${LINT_DIRS}"
+# pretty:check="${LINT_DIRS}"
 LINT_ARGS="$*"
 
 echo "Running linter on project dirs from .npmrc"
 echo "${RUN_LINT_DIRS}"
 
-${NODE_RUN_ENV} node ${NODE_RUN_FLAGS}
-
 RUN_SCRIPT_PATH="${BASE_PATH}/./node_modules/.bin"
+
+# ${NODE_RUN_ENV} node ${NODE_RUN_FLAGS}
 
 "${RUN_SCRIPT_PATH}/eslint" \
   --config "${BASE_PATH}/.eslintrc.js" \
@@ -24,7 +24,7 @@ RUN_SCRIPT_PATH="${BASE_PATH}/./node_modules/.bin"
   --ignore-pattern "!node_modules" \
   ${LINT_ARGS} \
       -- \
-        ${LINT_DIRS//,/ }
+        ${RUN_LINT_DIRS//,/ }
 
 
 exit 0
