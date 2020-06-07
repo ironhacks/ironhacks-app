@@ -1,52 +1,39 @@
 import React from 'react';
-import Header from '../layouts/header';
-import { Footer } from '../layouts/footer';
-import {
-  Switch,
-  Route,
-  // Redirect
-} from 'react-router-dom';
-import {
-  HackSelectPage,
-  HackPage,
-} from '../hacks';
+import { Switch, Route } from 'react-router-dom';
+import { HackSelectPage, HackPage } from '../hacks';
 import UserProfile from '../profile';
+import { Page } from '../../components/layout';
 
 
 class DashboardPage extends React.Component {
   render(){
     return (
-      <main>
-      <Header
+     <Page
         user={this.props.user}
         displayName={this.props.user.displayName}
         isAdmin={this.props.userIsAdmin}
-      />
+        >
+      <main>
+        <Switch>
+          <Route exact path='/hacks'>
+            <HackSelectPage
+              user={this.props.user}
+            />
+          </Route>
 
-      <Switch>
-        <Route exact path='/hacks'>
-          <HackSelectPage
-            user={this.props.user}
-          />
-        </Route>
+          <Route path='/hacks/:hackId'>
+            <HackPage
+              user={this.props.user}
+              userId={this.props.user.uid}
+            />
+          </Route>
 
-        <Route path='/hacks/:hackId'>
-          <HackPage
-            user={this.props.user}
-            userId={this.props.user.uid}
-          />
-        </Route>
-
-        <Route exact path='/hacks'>
-          <HackSelectPage user={this.props.user} />
-        </Route>
-
-        <Route exact path='/profile'>
-          <UserProfile user={this.props.user} />
-        </Route>
-      </Switch>
-      <Footer />
+          <Route exact path='/profile'>
+            <UserProfile user={this.props.user} />
+          </Route>
+        </Switch>
       </main>
+      </Page>
     )
   }
 }
