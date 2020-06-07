@@ -1,45 +1,36 @@
-// quizzes.js - Quiz picker and visualizer
-
 import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Theme } from '../../theme';
-
 import QuizView from './quiz-view';
+import { Section, Row, Col } from '../../components/layout';
+import { useLocation } from 'react-router-dom';
 
-
-const styles = Theme.STYLES.QuizViewStyles;
-const colors = Theme.COLORS;
-const units = Theme.UNITS;
-
-// Section container
-const SectionContainer = styled('div')`
-  width: 100%;
-  height: ${(props) => props.theme.containerHeight};
-  background-color: ${(props) => props.theme.backgroundColor};
-`;
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+// let query = useQuery();
+// let quizId = query.get('quizId');
 
 const ButtonContainer = styled('div')`
-  width: 100%
-  height: 60vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
-  overflow: auto;
+  justifyContent: flex-start;
 `;
 
 const QuizButton = styled(Link)`
   text-decoration: none;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  background-color: ${colors.mainBgColor};
-  border-radius: ${units.universalBorderRadius};
+  background-color: var(--color-primary);
+  border-radius: 4px;
   color: black;
-  width: 50%;
-  height: 35px;
+  min-height: 2em;
   margin-bottom: 15px;
+  min-width: 180px;
+  text-align: center;
+  line-height: 1;
+  padding: 0.6em;
 `;
 
 class QuizListView extends React.Component {
@@ -47,13 +38,16 @@ class QuizListView extends React.Component {
     super(props);
     // this.hackId = this.props.match.params.quid;
     // this.hackId = this.props.match.params.hackId;
+    let  { email: userEmail } = this.props.user;
+    let quizId = this.getUrlQuizId();
+
     this.state = {
-      quizId: null,
+      quizId: quizId ? quizId : null,
       quizActive: false,
+      userEmail: userEmail,
     }
     this.setQuizActive = this.setQuizActive.bind(this);
   }
-
 
   setQuizActive(event) {
     let _quizid = event.target.dataset.quizid;
@@ -62,24 +56,33 @@ class QuizListView extends React.Component {
     })
   }
 
+  getUrlQuizId() {
+    let params = (new URL(document.location)).searchParams;
+    return params.get('quizId');
+
+  }
   render() {
     return (
-      <ThemeProvider theme={styles}>
-        <SectionContainer className='container-fluid'>
-          <div className='row'>
-            <ButtonContainer className='col-4 offset-4'>
+      <Section>
+        <Row flex={true}>
+          <Col colClass="flex-10p">
+            <ButtonContainer>
               <QuizButton onClick={this.setQuizActive} data-quizid="html_css" to='?quizId=html_css'>HTML & Css</QuizButton>
               <QuizButton onClick={this.setQuizActive} data-quizid="bootstrap" to='?quizId=bootstrap'>Bootstrap</QuizButton>
               <QuizButton onClick={this.setQuizActive} data-quizid="javascript_jquery" to='?quizId=javascript_jquery'>Javascript & Jquery</QuizButton>
               <QuizButton onClick={this.setQuizActive} data-quizid="google_maps" to='?quizId=google_maps'>Google Maps API</QuizButton>
               <QuizButton onClick={this.setQuizActive} data-quizid="d3" to='?quizId=d3'>D3.js</QuizButton>
             </ButtonContainer>
-          </div>
+          </Col>
 
-          <QuizView quizId={this.state.quizId} />
-
-        </SectionContainer>
-      </ThemeProvider>
+          <Col colClass="flex-90p">
+            <QuizView
+              quizId={this.state.quizId}
+              userEmail={this.state.userEmail}
+              />
+          </Col>
+        </Row>
+      </Section>
     );
   }
 }
