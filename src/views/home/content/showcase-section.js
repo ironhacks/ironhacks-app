@@ -2,12 +2,12 @@ import React from 'react';
 import { Row, Col } from '../../../components/layout'
 import { ShowcaseCard } from './showcase-card';
 import './assets/css/showcase-section.css';
-import app1 from './images/screencapture-ironhacks-github-io-showcase-2018-spring-ialemusm-2020-05-25-02_43_33.png';
-import app2 from './images/screencapture-ironhacks-github-io-showcase-2018-spring-juaccardenasgom-2020-05-25-02_42_01.png';
-import app3 from './images/screencapture-ironhacks-github-io-showcase-2018-spring-nmcasasr-2020-05-25-02_45_04.png';
-import app4 from './images/screencapture-ironhacks-github-io-showcase-2019-spring-crabaqueropi-2020-05-25-02_41_12.png';
-import app5 from './images/screencapture-ironhacks-github-io-showcase-2019-spring-difcortesgu-2020-05-25-02_40_28.png';
-import app6 from './images/screencapture-ironhacks-github-io-showcase-2019-spring-jdrodriguezrui-2020-05-25-02_37_56.png';
+import app1 from './images/showcase-2018-spring-ialemusm.jpg';
+import app2 from './images/showcase-2018-spring-juaccardenasgom.jpg';
+import app3 from './images/showcase-2018-spring-nmcasasr.jpg';
+import app4 from './images/showcase-2019-spring-crabaqueropi.jpg';
+import app5 from './images/showcase-2019-spring-difcortesgu.jpg';
+import app6 from './images/showcase-2019-spring-jdrodriguezrui.jpg';
 
 
 class ShowcaseSection extends React.Component {
@@ -15,15 +15,22 @@ class ShowcaseSection extends React.Component {
     return (
       <>
       <Row>
-        <h2 className="title section__title h2 text-center mb-4 font-bold">
-         IronHacks Showcase
+        <Col>
+        <h2 className="title section__title h2 text-center mb-4">
+          <span className="font-extrabold">SHOWCASES</span>
         </h2>
+        <p>
+          In prior years, IronHackers with no coding experience produced
+          interactive visualizations within 10 to 21 days! Explore some of
+          those students showcases how participated in a affordable housing challenge!
+        </p>
+        </Col>
       </Row>
 
       <Row>
         <Col>
           <p>
-            <strong>Problem: </strong>
+            <strong>Civic Challenge: </strong>
             Find me a safe and affordable district to live in near the NYU Stern
             School of Business, New York.
           </p>
@@ -41,51 +48,58 @@ class ShowcaseSection extends React.Component {
         </Col>
       </Row>
       <Row>
-        <div class="cards">
+        <div className="cards max-w-900 m-auto">
+          <ShowcaseCard
+            image={app6}
+            title={'Comparing made easy'}
+            description={'A full page web design to enhance user experience and interactivity with extra points of interest around NYU'}
+            url={'https://ironhacks.github.io/showcase-2019-spring-jdrodriguezrui'}
+            likes={'2,115'}
+          />
           <ShowcaseCard
             image={app1}
-            date={''}
+            date={'Spring-2018'}
             tags={''}
-            author={''}
-            title={'Winner 2018'}
-            description={'This is winning app 1. You can click on it. This app is so so so awesome. You know.'}
+            video={'https://www.youtube.com/watch?v=Syf6vlotgEQ'}
+            author={'Ivan Lemus'}
+            title={'Ivan NYU Stern'}
+            description={'This app utilizes a simple design to highlight the most safe and affordable housing near NYU Stern'}
             url={'https://ironhacks.github.io/showcase-2018-spring-ialemusm'}
-            likes={'1,993'} />
+            likes={'1,993'}
+          />
 
           <ShowcaseCard
             image={app2}
-            title={'Winner 2018'}
-            description={'This is winning app 2. You can click on it. This app is so so so awesome. You know.'}
+            title={'Projectsito'}
+            description={'This winning app utilizes clean, modern design and visualizations to hightlight safe and affordable housing'}
             url={'https://ironhacks.github.io/showcase-2018-spring-juaccardenasgom/'}
-            likes={'1,775'} />
+            likes={'1,775'}
+          />
 
           <ShowcaseCard
             image={app3}
-            title={'Winner 2018'}
-            description={'This is winning app 3. You can click on it. This app is so so so awesome. You know.'}
+            title={'Nomadic'}
+            description={'This app utilizes simple design and functionality to achieve the core goals of the hack with an interactive dashboard'}
             url={'https://ironhacks.github.io/showcase-2018-spring-nmcasasr'}
-            likes={'1,880'} />
+            likes={'1,880'}
+          />
 
           <ShowcaseCard
             image={app4}
-            title={'Winner 2019'}
-            description={'This is winning app 4. You can click on it. This app is so so so awesome. You know.'}
+            title={'NYU-HOME'}
+            description={'This app highlights a large interactive map with sleek styling to showcase safe and affordable housing near NYU'}
             url={'https://ironhacks.github.io/showcase-2019-spring-crabaqueropi'}
-            likes={'2,002'} />
+            likes={'2,002'}
+          />
 
           <ShowcaseCard
             image={app5}
-            title={'Winner 2019'}
-            description={'This is winning app 5. You can click on it. This app is so so so awesome. You know.'}
+            title={'NYU Simplicity'}
+            description={'This app features a full screen map with simple overlay design elements to highlight affordable housing'}
             url={'https://ironhacks.github.io/showcase-2019-spring-difcortesgu'}
-            likes={'2,002'} />
+            likes={'2,002'}
+          />
 
-          <ShowcaseCard
-            image={app6}
-            title={'Winner 2019'}
-            description={'This is winning app 6. You can click on it. This app is so so so awesome. You know.'}
-            url={'https://ironhacks.github.io/showcase-2019-spring-jdrodriguezrui'}
-            likes={'2,115'} />
         </div>
        </Row>
       </>

@@ -11,6 +11,7 @@ const colors = Theme.COLORS;
 const LoginButton = styled(Link)`
   padding: 10px 10px;
   margin-right: 4px;
+  margin-top: 1em;
   text-align: center;
   text-decoration: none;
   display: inline-block;

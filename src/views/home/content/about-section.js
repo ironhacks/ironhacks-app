@@ -7,13 +7,15 @@ class AboutSection extends React.Component {
     return (
         <Row rowClass={'py-6 w-70p mx-auto'}>
           <Col>
-          <p>
-            IronHacks is an open data hacking program that combines experiential
-            learning with real-world data-driven problem solving. During a 5-stage
-            virtual competition, students utilize open data to create novel and
-            useful interactive visualizations and analytic "apps" that solve civic
-            challenges.
-          </p>
+            <h2 className="h2 text-center my-2">WHAT IS <span className="font-extrabold">IRONHACKS?</span></h2>
+            <p>
+              IronHacks is a global virtual open data hacking program that empowers programmers -
+              from beginners to professionals - to solve civic challenges during a multi-phase
+              and learning-oriented process.  The IronHacks platform offers participants a
+              no setup programming environment and many powerful features to create novel and
+              useful models and visualizations that help citizens and governments to make
+              better decisions.
+            </p>
           </Col>
         </Row>
     )

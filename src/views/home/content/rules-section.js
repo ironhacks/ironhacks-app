@@ -6,7 +6,7 @@ class RulesSection extends React.Component {
     return (
       <Row flex={true}>
         <Col>
-          <h2 className="h2">RULES</h2>
+          <h2 className="h2 text-center mb-4">RULES</h2>
 
           <p>
             Our IronHacks follow a unique 4-stage process. In order to win a prize and qualify for a certificate
@@ -14,17 +14,14 @@ class RulesSection extends React.Component {
             We are all about openness and community-think! Be part of it.
           </p>
 
-          <p>
-            One hack per participant
-          </p>
+          <p><strong>One hack per participant</strong></p>
             <p>
               To make this a fair competition, we only allow one
               hack per participant in the Fall of 2017.
             </p>
 
-            <p>
-              Code of conduct
-            </p>
+            <p><strong>Code of conduct</strong></p>
+
             <p>
               To qualify for the award, you need to be the originator &
               submitter of your app. Even though we allow you to reuse others'
@@ -33,9 +30,7 @@ class RulesSection extends React.Component {
               learn more about it during the hack).
             </p>
 
-            <p>
-              Iteration encouraged
-            </p>
+            <p><strong>Iteration encouraged</strong></p>
 
             <p>
               Your first of four submissions does not have to
@@ -44,9 +39,7 @@ class RulesSection extends React.Component {
               from experts will help you to improve.
             </p>
 
-            <p>
-              Follow the process
-            </p>
+            <p><strong>Follow the process</strong></p>
 
             <p>
               Our IronHacks follows a unique 4-stage process. In order to win a prize,
@@ -54,9 +47,7 @@ class RulesSection extends React.Component {
               community think. Be part of it!
             </p>
 
-            <p>
-              Technical requirements
-            </p>
+            <p><strong>Technical requirements</strong></p>
 
             <p>
               In each hack, the application should include at
@@ -65,9 +56,7 @@ class RulesSection extends React.Component {
               libraries like D3.js, etc.
             </p>
 
-            <p>
-              Evaluation in four categories
-            </p>
+            <p><strong>Evaluation in four categories</strong></p>
 
             <p>
               Our experts judge your application in four categories:

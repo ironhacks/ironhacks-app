@@ -49,23 +49,29 @@ class FooterSection extends React.Component {
       </Row>
 
 
-      <Row flex={true} rowClass={'py-2 fs-2 flex-align-center'}>
+      <Row flex={true} rowClass={'py-2 fs-1 flex-align-center'}>
         <Col colClass='flex-1'>
           <p>+1 765.494.2885</p>
           <p>opendigital@purdue.edu</p>
-          <p>Seng-Liang Wang Hall,</p>
-          <p>516 Northwestern Ave, West Lafayette, IN 47906</p>
+          <p>YOUNG Hall<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
+          <p>Discovery Learning Research Center, <br/>298 Nimitz Dr <br/>West Lafayette, IN 47906</p>
         </Col>
 
         <Col colClass='flex-1'>
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube-nocookie.com/embed/q2R4Tvpou0c?controls=0"
-            frameborder="0"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen />
-
+          <div className="ratio--16x9 w-full relative">
+            <iframe
+              title="IronHacks YouTube Video"
+              style={{
+                width: '100%',
+                height: '100%',
+                position: 'absolute',
+                display: 'block',
+              }}
+              src="https://www.youtube-nocookie.com/embed/q2R4Tvpou0c?controls=0"
+              frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen />
+          </div>
         </Col>
       </Row>
       </>
