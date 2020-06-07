@@ -56,7 +56,6 @@ SvgImg.propTypes = {
   baseClass: PropTypes.string,
   containerClass: PropTypes.string,
   imgClass:PropTypes.string,
-  imgComponent: PropTypes.oneOfType([PropTypes.element, PropTypes.object]),
 }
 
 
