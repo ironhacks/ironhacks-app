@@ -159,11 +159,6 @@ decorators.Header = ({ style, node }) => {
   );
 };
 
-/**
- *  Filetree Container
- *
- *  @component
- */
 class FilesContainer extends React.Component {
   constructor(props) {
     super(props);

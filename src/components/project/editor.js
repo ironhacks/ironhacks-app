@@ -4,8 +4,10 @@ import {UnControlled as CodeMirror} from 'react-codemirror2';
 import styled, {ThemeProvider} from 'styled-components';
 import {Loader} from '../../components/loader';
 import Button from '../../util/button.js';
+import { cloudFunctionsProdEndPoint } from '../../config/cloud-api';
 import * as DateFormater from '../../util/dateFormater.js';
 import {registerStats} from '../../util/register-stat';
+import { withRouter } from 'react-router';
 import swal from 'sweetalert2';
 import {JSHINT} from 'jshint';
 import {Theme} from '../../theme';
@@ -45,7 +47,7 @@ color: rgb(255, 255, 255, 0.4);
 `;
 
 const PreviewContainer = styled('div')`
-display: ${(props) => props.hidden ? 'none' : 'block'}
+display: ${(props) => props.hidden ? 'none' : 'block'};
 width: 40%;
 height: 100%;
 `;
@@ -132,6 +134,24 @@ const ShowPreview = styled('button')`
 `;
 
 
+class EditorPreviewButton extends React.Component {
+  render() {
+    return (
+      <ShowPreview onClick={()=>{
+        this.props.action()
+      }}>
+        <i className="left" />
+      </ShowPreview>
+    )
+  }
+}
+
+EditorPreviewButton.defaultProps = {
+  action: function(){
+    return true;
+  }
+}
+
 const editorModeMIMERel = {
   html: 'xml',
   css: 'css',
@@ -141,30 +161,52 @@ const editorModeMIMERel = {
 // const storageRef = window.firebase.storage().ref();
 
 
+function getMIME(fileName) {
+  const names = fileName.split('.');
+  const ext = names.pop();
+  const mimes = {
+    'txt': 'text/plain',
+    'html': 'text/html',
+    'css': 'text/css',
+    'js': 'text/javascript',
+    'md': 'text/markdown',
+    'svg': 'image/svg+xml',
+    'img': 'image/jpeg',
+    'png': 'image/png',
+    'gif': 'image/gif',
+  }
+
+  if (mimes.hasOwnProperty(ext)) {
+    return mimes[ext];
+  }
+  return false;
+}
+
+
 class ProjectEditor extends React.Component {
   constructor(props) {
     super(props);
-    const {cookies, user} = props;
-    const hackerId = props.location.query ?
-        props.location.query.hackerId : null;
-    const readOnly = hackerId ? true : false;
+
     this.state = {
-      user,
-      readOnly,
-      hackerId,
+      user: this.props.user,
+      hackerId: this.props.userId,
+      readOnly: this.props.userId ? true : false,
       editorKey: Math.random(),
       hidePreview: false,
-      currentHack: cookies.get('currentHack') || null,
+      currentHack: this.hackId,
       editorContent: '',
       editorMode: 'xml',
       loadingFiles: true,
       selectedFile: 'js/main.js',
       projectFiles: [],
+      projectFileCount: 0,
       creatingFile: false,
-      projectName: this.props.match.params.proyectName,
+      projectName: this.props.match.params.projectName,
       timer: {seconds: 0, minutes: 0, hours: 0, days: 0},
-    };
+    }
 
+    this.projectName = this.props.match.params.projectName;
+    this.hackId = this.props.hackId;
     this.commitSurveys = {
       1: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_exR2GmwUUS07XUN',
       2: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_2hHiUsFZ0Urzbmt',
@@ -175,130 +217,131 @@ class ProjectEditor extends React.Component {
       7: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_dbZU35dwHd0QKY5',
     };
 
-    // this.firestore = window.firebase.firestore();
+    this.getProjectFilesUrls = this.getProjectFilesUrls.bind(this);
+    this.getProjectFiles = this.getProjectFiles.bind(this);
+    this.getFile = this.getFile.bind(this);
   }
 
   componentDidMount() {
     this.getProjectPreviewPath();
     this.getProjectFilesUrls();
-    this.getCurrentHackInfo();
+    // this.getCurrentHackInfo();
     window.addEventListener('message', this.recieveMessage);
   }
 
   getProjectPreviewPath() {
-    const userId = this.state.hackerId || this.state.user.uid;
-    const proyectPath = `${colors.cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.state.projectName}/index.html`;
-    this.setState({proyectPath: proyectPath});
-  }
-
-  getProjectFilesUrls() {
-    const firestore = window.firebase.firestore();
-    const _this = this;
-    const userId = this.state.hackerId || this.state.user.uid;
-    // Updating the current hack:
-    firestore.collection('users')
-    .doc(userId)
-    .collection('projects')
-    .doc(this.state.projectName)
-    .get()
-    .then(function(doc) {
-      _this.setState({projectFiles: doc.data()});
-      _this.getProjectFiles();
+    const userId = this.props.userId;
+    const projectPath = `${cloudFunctionsProdEndPoint}/previewWebServer/${userId}/${this.projectName}/index.html`;
+    this.setState({
+      projectPath: projectPath
     })
-    .catch(function(error) {
-      console.error(error);
-    });
   }
 
-  getProjectFiles() {
-    let remainingFiles = Object.keys(this.state.projectFiles).length;
-    const projectFiles = {...this.state.projectFiles};
-    const _this = this;
-    const processFile = (file, res) => {
-      projectFiles[file].blob = res;
-      remainingFiles--;
-      if (remainingFiles === 0) {_this.readProjectFilesBlobs(projectFiles);}
-    };
+  async getProjectFilesUrls() {
+    const firestore = window.firebase.firestore();
+    const userId = this.state.hackerId || this.state.user.uid;
 
-    for (const file of this.state.projectFiles) {
-      const xhr = new XMLHttpRequest();
-      xhr.responseType = 'blob';
-      xhr.onload = processFile(file, xhr.response);
-      xhr.open('GET', this.state.projectFiles[file].url);
-      xhr.send();
-    };
+    let projectFileUrls = await firestore.collection('users')
+      .doc(userId)
+      .collection('projects')
+      .doc(this.state.projectName)
+      .get()
+
+    Promise.resolve(projectFileUrls).then((result)=>{
+      const projectFiles = result.data();
+      this.setState({ projectFiles: projectFiles })
+      this.getProjectFiles(projectFiles)
+    })
   }
 
-  readProjectFilesBlobs(projectFiles) {
-    const pendingReadings = [];
-    for (const path of projectFiles) {
-      pendingReadings.push(this.readBlob({...projectFiles[path], path}));
+  updateProjectFiles(data){
+    this.setState({
+      projectFiles: {[`${data.path}`] : data}
+    })
+
+    // VIEW CAN RENDER ONCE SELECTED FILE HAS CONTENT
+    let selected = this.state.selectedFile;
+    if (selected === data.path && this.state.projectFiles[selected].content) {
+      this.setState({
+        loadingFiles: false
+      })
+    }
+  }
+
+  async getFile(data) {
+    const fileUrl = Object.values(data)[0].url;
+    const fileName = Object.keys(data)[0];
+    const fetchData = await fetch(fileUrl, { method:'GET' })
+    const blobData = await fetchData.blob()
+    let reader = new FileReader();
+    reader.addEventListener('loadend', () => {
+      this.updateProjectFiles({
+        path: fileName,
+        url: fileUrl,
+        content: reader.result,
+      })
+    })
+    reader.readAsText(blobData);
+  }
+
+  getProjectFiles(files) {
+    var fileArray = [];
+    for (let key of Object.keys(files)) {
+      let item = {};
+      item[`${key}`] = files[key];
+      fileArray.push(item);
     }
 
-    Promise.all(pendingReadings)
-    .then((results) => {
-      const reducedProjectFiles = results.reduce((pf, {path, ...file} ) => ({
-        ...pf,
-        [path]: file,
-      }), {});
-      this.setState({
-        projectFiles: reducedProjectFiles,
-        loadingFiles: false,
-      });
-    });
+    for (let file of fileArray) {
+      this.getFile(file);
+    }
   }
-
-  readBlob = (file) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.addEventListener('loadend', () => {
-      file.content = reader.result;
-      resolve(file);
-    });
-    reader.readAsText(file.blob);
-  })
 
   getCurrentHackInfo() {
     const _this = this;
-    // this.firestore.collection('hacks')
-    // .doc(this.state.currentHack)
-    // .get()
-    // .then((doc) => {
-    //   const hackData = doc.data();
-    //   const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
-    //   _this.setState({
-    //     hackData,
-    //     currentPhase,
-    //   });
-    //   if (currentPhase !== -1) {
-    //     _this.getCountDown();
-    //   }
-    // })
-    // .catch(function(error) {
-    //   console.error('Error getting documents: ', error);
-    // });
+    window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.state.currentHack)
+      .get()
+      .then((doc) => {
+        const hackData = doc.data();
+        const currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
+        _this.setState({
+          hackData,
+          currentPhase,
+        });
+        if (currentPhase !== -1) {
+          _this.getCountDown();
+        }
+      })
+      .catch(function(error) {
+        console.error('Error getting documents: ', error);
+      });
   };
 
   getCountDown() {
     const _this = this;
-    // console.log(this.state.hackData.phases, this.state.currentPhase)
     const phase = this.state.hackData.phases[this.state.currentPhase - 1];
     // const countDownDate = new window.firebase.firestore.Timestamp(phase.codingStartEnd.seconds, phase.codingStartEnd.nanoseconds).toDate();
     const countDownDate = new Date();
     const timer = setInterval(function() {
-      // Get todays date and time
       const now = new Date().getTime();
-
-      // Find the distance between now and the count down date
       const distance = countDownDate - now;
-
-      // Time calculations for days, hours, minutes and seconds
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
       // Display the result in the element with id="demo"
-      _this.setState({timer: {seconds: seconds, minutes: minutes, hours: hours, days: days}});
-      // If the count down is finished, write some text
+      _this.setState({
+        timer: {
+          seconds: seconds,
+          minutes: minutes,
+          hours: hours,
+          days: days
+        }
+      });
+
       if (distance < 0) {
         clearInterval(timer);
         _this.setState({timer: null});
@@ -324,12 +367,12 @@ class ProjectEditor extends React.Component {
     )
     .then((url) => {
       _this.setState((prevState, props) => {
-        const proyectPath = prevState.proyectPath + ' ';
+        const projectPath = prevState.projectPath + ' ';
         const projectFiles = prevState.projectFiles;
         if (projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
           projectFiles[prevState.selectedFile].content = projectFiles[prevState.selectedFile].unSavedContent;
         }
-        return {projectFiles, proyectPath};
+        return {projectFiles, projectPath};
       });
     })
     .catch((error) => {
@@ -355,12 +398,16 @@ class ProjectEditor extends React.Component {
   startPushNavigation() {
     const _this = this;
     this.saveProject();
-    console.log(this.state);
     if (this.state.hackData.phases[this.state.currentPhase - 1].commitSurveyLink) {
       swal(colors.surveyRedirecAlertContent)
       .then((result) => {
         if (!result.dismiss) {
-          swal(colors.pushSurveyAlertContent(`${this.state.hackData.phases[this.state.currentPhase - 1].commitSurveyLink}?email=${_this.state.user.email}&user_id=${_this.state.user.uid}`))
+          swal(colors.pushSurveyAlertContent([
+              `${this.state.hackData.phases[this.state.currentPhase - 1].commitSurveyLink}`,
+              `?email=${_this.state.user.email}`,
+              `&user_id=${_this.state.user.uid}`
+            ].join(''))
+          )
           .then((result) => {
             if (!result.dismiss) {
               swal(colors.commitContentAlertContent)
@@ -402,8 +449,9 @@ class ProjectEditor extends React.Component {
       });
     }
 
-    const projectName = this.state.user.isAdmin ? `admin-${this.state.user.uid}-${this.state.projectName}`
-    : `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
+    const projectName = this.state.user.isAdmin
+      ? `admin-${this.state.user.uid}-${this.state.projectName}`
+      : `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
 
     // const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
 
@@ -442,7 +490,7 @@ class ProjectEditor extends React.Component {
 
   onFileSelection(name) {
     const splitedFileName = name.split('.');
-    this.saveStat({event: 'view-file', metadata: {filename: name}});
+    // this.saveStat({event: 'view-file', metadata: {filename: name}});
     this.setState((prevState, props) => {
       const projectFiles = prevState.projectFiles;
       if (projectFiles[prevState.selectedFile].unSavedContent !== undefined) {
@@ -458,7 +506,11 @@ class ProjectEditor extends React.Component {
 
   async startCreateNewFileFlow() {
     this.saveProject();
-    const {value: filePath} = await swal(colors.createNewFileFlowAlertContent(this.fileNameValidator));
+
+    const {
+      value: filePath
+    } = await swal(colors.createNewFileFlowAlertContent(this.fileNameValidator));
+
     if (filePath) {
       const file = this.createNewFile(filePath);
       this.putStorageFile(file, this.state.projectName);
@@ -472,49 +524,28 @@ class ProjectEditor extends React.Component {
     const newFile = {
       name: splitedPath[splitedPath.length - 1],
       path: filePath,
-      blob: new Blob([`${splitedPath[splitedPath.length - 1]} create by: ${this.state.user.displayName}`],
-        {type: this.getMIME(splitedPath[splitedPath.length - 1])}),
-    };
+      blob: new Blob([`${splitedPath[splitedPath.length - 1]} create by: ${this.state.user.displayName}`], {
+          type: getMIME(splitedPath[splitedPath.length - 1])
+      }),
+    }
     return newFile;
   }
 
-    fileNameValidator = (fileName) => {
-      if (fileName) {
-        const name = fileName.toLowerCase();
-        const splitedFileName = name.split('/');
-        if (splitedFileName.includes('file') || splitedFileName.includes('folder')) {
-          return true && '"File" or are not valid names.';
-        }
-        if (this.state.projectFiles.hasOwnProperty(fileName)) {
-          return true && 'File already exists.';
-        }
-        return false;
-      } else {
-        return !fileName && 'You need to write something!';
+  fileNameValidator = (fileName) => {
+    if (fileName) {
+      const name = fileName.toLowerCase();
+      const splitedFileName = name.split('/');
+      if (splitedFileName.includes('file') || splitedFileName.includes('folder')) {
+        return true && '"File" or are not valid names.';
       }
-    }
-
-    getMIME(fileName) {
-      const splitedName = fileName.split('.');
-      const extention = splitedName.pop();
-      const extToMimes = {
-        'txt': 'text/plain',
-        'html': 'text/html',
-        'css': 'text/css',
-        'js': 'text/javascript',
-        'md': 'text/markdown',
-        'svg': 'image/svg+xml',
-        'img': 'image/jpeg',
-        'png': 'image/png',
-        'gif': 'image/gif',
-      };
-
-      if (extToMimes.hasOwnProperty(extention)) {
-        return extToMimes[extention];
+      if (this.state.projectFiles.hasOwnProperty(fileName)) {
+        return true && 'File already exists.';
       }
       return false;
+    } else {
+      return !fileName && 'You need to write something!';
     }
-
+  }
     putStorageFile(file, projectName) {
       this.setState({loadingFiles: true});
       // const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}`);
@@ -549,8 +580,8 @@ class ProjectEditor extends React.Component {
 
     reloadFrame() {
       this.setState((prevState, props) => {
-        const proyectPath = prevState.proyectPath + ' ';
-        return {proyectPath};
+        const projectPath = prevState.projectPath + ' ';
+        return {projectPath};
       });
     }
 
@@ -566,85 +597,109 @@ class ProjectEditor extends React.Component {
       stat.userId = this.state.user.uid;
       stat.metadata.hackId = this.state.currentHack;
       stat.metadata.projectName = this.state.projectName;
-      registerStats(stat);
+      // registerStats(stat);
     }
 
     render() {
       return (
         <ThemeProvider theme={styles}>
         <SectionContainer>
+
         <ProjectContent>
+
         <h2>{this.state.projectName.toUpperCase()}</h2>
-        {!this.state.readOnly
-          && <div className="control">
-          <Button primary onClick={this.saveProject}> Save and run </Button>
-          {this.state.currentPhase !== -1
-            && <Button primary onClick={this.startPushNavigation}> Push to evaluation </Button>
-          }
-          <Button primary onClick={this.startCreateNewFileFlow}>Create new file</Button>
+
+        {!this.state.readOnly && (
+          <div className="control">
+            <Button primary onClick={this.saveProject}>
+              Save and run
+            </Button>
+
+          {this.state.currentPhase !== -1 && (
+            <Button primary onClick={this.startPushNavigation}>
+              Push to evaluation
+            </Button>
+          )}
+
+            <Button primary onClick={this.startCreateNewFileFlow}>
+              Create new file
+            </Button>
           </div>
-        }
+        )}
+
         <h3>Files:</h3>
-        {this.state.loadingFiles ? <Loader
-          backgroundColor={colors.projectEditorBgColor}
-          dark
-          small
+
+        {this.state.loadingFiles ? (
+          <Loader
+            backgroundColor={colors.projectEditorBgColor}
+            dark
+            small
           />
-          : <FilesContainer files={this.state.projectFiles}
-          onFileSelection={this.onFileSelection}
-          selectedFile={this.state.selectedFile}
-          projectName={this.state.projectName.toUpperCase()}/>
-        }
+        ) : (
+          <FilesContainer
+            files={this.state.projectFiles}
+            onFileSelection={this.onFileSelection}
+            selectedFile={this.state.selectedFile}
+            projectName={this.state.projectName.toUpperCase()}
+          />
+        )}
+
         <div className="hack-status">
-        <h3>Current phase: {this.state.currentPhase !== -1 ? this.state.currentPhase : 'Tutorial stage'}</h3>
-        <p>
-        Remaining time: <br/>
-        {`${this.state.timer.days}:${this.state.timer.hours}:${this.state.timer.minutes}:${this.state.timer.seconds}`}
-        </p>
+          <h3>
+            Current phase: {this.state.currentPhase !== -1 ? this.state.currentPhase : 'Tutorial stage'}
+          </h3>
+
+          <p>
+            Remaining time: <br/>
+            {`${this.state.timer.days}:${this.state.timer.hours}:${this.state.timer.minutes}:${this.state.timer.seconds}`}
+          </p>
         </div>
         </ProjectContent>
-        <EditorContainer large={this.state.hidePreview}>
-        {!this.state.loadingFiles && <Editor
-          key={this.state.editorKey}
-          value={this.state.projectFiles[this.state.selectedFile].content}
-          options={{
-            lineNumbers: true,
-            mode: this.state.editorMode,
-            lint: true,
-            gutters: [
-              'CodeMirror-lint-markers',
-            ],
-            theme: 'material',
-            tabSize: 2,
-            lineWrapping: true,
-            matchBrackets: true,
-            matchTags: true,
-            autoCloseTags: true,
-            autoCloseBrackets: true,
-            readOnly: this.state.readOnly,
-          }}
-          onChange={this.onChangeEditor}
-          />}
-          </EditorContainer>
-          {this.state.proyectPath
-            && <PreviewContainer hidden={this.state.hidePreview}>
-            <ProjectPreview
-            hidden={this.state.hidePreview}
-            hidePreview={this.hidePreview}
-            projectURL={this.state.proyectPath}
-            projectName={this.state.projectName}
-            reloadFrame={this.reloadFrame}
-            />
-            </PreviewContainer>
-          }          {this.state.hidePreview
-            && <ShowPreview onClick={this.showPreview}>
-            <i className="left" />
-            </ShowPreview>
-          }
-          </SectionContainer>
-          </ThemeProvider>
-        );
-      }
-    }
 
-    export default withCookies(ProjectEditor);
+        <EditorContainer large={this.state.hidePreview}>
+          {!this.state.loadingFiles && (
+            <Editor
+              key={this.state.editorKey}
+              value={this.state.projectFiles[this.state.selectedFile].content}
+              options={{
+                lineNumbers: true,
+                mode: this.state.editorMode,
+                lint: true,
+                gutters: [ 'CodeMirror-lint-markers', ],
+                theme: 'material',
+                tabSize: 2,
+                lineWrapping: true,
+                matchBrackets: true,
+                matchTags: true,
+                autoCloseTags: true,
+                autoCloseBrackets: true,
+                readOnly: this.state.readOnly,
+              }}
+              onChange={this.onChangeEditor}
+            />
+          )}
+         </EditorContainer>
+
+        {this.state.projectPath && (
+          <PreviewContainer hidden={this.state.hidePreview}>
+            <ProjectPreview
+              hidden={this.state.hidePreview}
+              hidePreview={this.hidePreview}
+              projectURL={this.state.projectPath}
+              projectName={this.state.projectName}
+              reloadFrame={this.reloadFrame}
+            />
+          </PreviewContainer>
+        )}
+
+        {this.state.hidePreview && (
+          <EditorPreviewButton action={this.showPreview} />
+        )}
+
+        </SectionContainer>
+      </ThemeProvider>
+    )
+  }
+}
+
+export default withCookies(withRouter(ProjectEditor))

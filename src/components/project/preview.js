@@ -68,6 +68,7 @@ const PreviewContainer = styled('div')`
 `;
 
 const BASE_URL = 'https://ironhacks.com';
+// const BASE_URL = 'http://localhost:3000';
 
 class ProjectPreview extends React.Component {
   constructor(props) {
@@ -92,7 +93,9 @@ class ProjectPreview extends React.Component {
 
   getProjectPreviewPath() {
     const projectURL = `{${BASE_URL}/previewWebServer/${this.state.user.uid}/${this.state.projectName}/index.html`;
-    this.setState({ projectURL: projectURL });
+    this.setState({
+      projectURL: projectURL
+    });
   }
 
   openInANewTab(e) {

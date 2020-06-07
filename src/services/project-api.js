@@ -1,5 +1,4 @@
 import { TemplateFiles } from '../components/project';
-import { fireApi } from './fire-api';
 
 const ProjectApi = {};
 
