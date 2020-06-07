@@ -8,28 +8,46 @@ import Showdown from 'showdown';
 // ~~strikethrough~~ as <del>strikethrough</del>
 // headerLevelStart  foo parse to <h3>foo</h3>
 
-const ConverterConfig = {
-  tables: true,
-  simplifiedAutoLink: true,
-  prefixHeaderId: true,
-  strikethrough: true,
-  headerLevelStart: 3,
-  tasklists: true,
-};
 
 
 class HackTask extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.mdConfig = {
+      tables: true,
+      simplifiedAutoLink: true,
+      prefixHeaderId: true,
+      strikethrough: true,
+      headerLevelStart: 3,
+      tasklists: true,
+    }
+
+    this.converter = new Showdown.Converter(this.mdConfig);
+
+  }
 
   // Decode Markdown to HTML
   decodeBody(markdown) {
-    const converter = new Showdown.Converter(ConverterConfig);
-    return converter.makeHtml(markdown);
-  };
+    return this.converter.makeHtml(markdown)
+  }
 
-  // base64 encoded ascii to ucs-2 string
-  atou(str) {
-    return decodeURIComponent(escape(window.atob(str)));
-  };
+  parseTask(task) {
+
+    let decoded = this.decodeText(task);
+    let text = this.safeText(decoded);
+
+    return this.decodeBody(text);
+  }
+
+  decodeText(encoded) {
+    return window.atob(encoded);
+  }
+
+  safeText(text){
+    return decodeURIComponent(escape(text));
+  }
+
 
   render() {
     if (!this.props.task) {
@@ -39,9 +57,11 @@ class HackTask extends React.Component {
     }
 
     return (
-      <div dangerouslySetInnerHTML={{
-        __html: this.decodeBody(this.atou(this.props.task))
-      }}/>
+      <div className={'content_area'}
+        dangerouslySetInnerHTML={{
+          __html: this.parseTask(this.props.task)
+        }}
+      />
     )
   }
 }
