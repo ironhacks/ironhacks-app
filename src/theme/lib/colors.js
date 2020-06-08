@@ -20,6 +20,7 @@ export const themeColors = {
 }
 
 export const ColorVars = {
+  editor: '--color-editor',
   primary: '--color-primary',
   mainBg: '--color-primary'
 }

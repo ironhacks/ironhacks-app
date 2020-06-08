@@ -15,10 +15,7 @@ class HomePage extends React.Component {
   render() {
     return (
       <LandingPage pageClass="home_page">
-        <Section
-          id="hero"
-          sectionClass="full-height bg-primary"
-          containerClass="">
+        <Section id="hero" sectionClass="full-height bg-primary">
           <HeroSection/>
         </Section>
 
@@ -41,7 +38,6 @@ class HomePage extends React.Component {
         <Section id='home_showcase' sectionClass='showcase_section' >
           <ShowcaseSection/>
         </Section>
-
 
         <Section id='home_stats' sectionClass='stats_section bg-primary' >
           <StatsSection/>
