@@ -1,21 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Theme } from '../../theme';
 import { Treebeard, decorators } from 'react-treebeard';
 import fileIcon from '../../assets/svg/file-icon.svg';
 import folderIcon from '../../assets/svg/folder-icon.svg';
-const _c = Theme.COLORS;
 
 const MainContainer = styled('div')`
-  display: flex;
   flex-grow: 1;
   width: 100%;
   overflow: auto;
-  background-color: ${(props) =>
-    props.backgroundColor ? props.backgroundColor : _c.projectEditorBgColor};
+  background-color: var(--color-editor);
   display: flex;
   flex-direction: column;
   padding: 0 20px 0 20px;
+
+  ul {
+    display: initial;
+  }
   * li {
     width: 100%;
     cursor: pointer;
@@ -26,13 +26,10 @@ const TreeStyles = {
   tree: {
     base: {
       display: 'flex',
-      'align-items': 'center',
-      'justify-content': 'left',
+      alignItems: 'center',
+      justifyContent: 'left',
       listStyle: 'none',
-      backgroundColor: `${(props) =>
-        props.backgroundColor
-          ? props.backgroundColor
-          : _c.projectEditorBgColor}`,
+      backgroundColor: 'var(--color-editor)',
       margin: 0,
       padding: 0,
       color: '#9DA5AB',
@@ -105,14 +102,14 @@ const TreeStyles = {
       },
       loading: {
         color: '#E2C089',
-      },
-    },
-  },
+      }
+    }
+  }
 };
 
 const NodeHeader = styled('div')`
   display: inline-block;
-  .node-item {
+  .node_item {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -120,12 +117,13 @@ const NodeHeader = styled('div')`
     font-family: 'Muli';
     font-size: 14px;
 
-    div {
-      img {
+    .node_item__row {
+      .node_item__icon {
         height: 14px;
         width: 14px;
         margin-right: 5px;
       }
+
       &.item-control {
         position: absolute;
         right: 0;
@@ -141,18 +139,19 @@ const NodeHeader = styled('div')`
   }
 `;
 
-// Example: Customising The Header Decorator To Include Icons
+
 decorators.Header = ({ style, node }) => {
   const iconType = node.children ? 'folder' : 'file';
   return (
-    <NodeHeader>
-      <div className='node-item'>
-        <div className='item-name'>
+    <NodeHeader className="node_header">
+      <div className='node_item'>
+        <div className='item-name node_item__row'>
           <img
+            className="node_item__icon"
             src={iconType === 'file' ? fileIcon : folderIcon}
             alt='item-icon'
           />
-          {node.name}
+          <span>{node.name}</span>
         </div>
       </div>
     </NodeHeader>
@@ -164,13 +163,14 @@ class FilesContainer extends React.Component {
     super(props);
     this.state = {
       cursor: false,
-      selectedFile: 'index.html',
+      selectedFile: this.props.selectedFile,
       data: {
         name: this.props.projectName,
         toggled: true,
         children: [],
-      },
-    };
+      }
+    }
+    this.onToggle = this.onToggle.bind(this);
   }
 
   componentDidMount() {
@@ -213,17 +213,18 @@ class FilesContainer extends React.Component {
 
     if (splitedPath.length === 0) {
       if (filesTree[filesTree.length - 1].name !== fileName) {
-        filesTree[filesTree.length - 1].children
-          ? filesTree[filesTree.lenght - 1].children.push({
+        filesTree[filesTree.length - 1].children ?
+          filesTree[filesTree.length - 1].children.push({
               name: fileName,
               path: filePath,
-            })
-          : (filesTree[filesTree.length - 1].children = [
+          }) : (
+          filesTree[filesTree.length - 1].children = [
               {
                 name: fileName,
                 path: filePath,
               },
-            ]);
+            ]
+        )
       }
       return;
     }
@@ -247,7 +248,10 @@ class FilesContainer extends React.Component {
       });
     });
 
-    filesTree.push({ name: fileName, path: filePath });
+    filesTree.push({
+      name: fileName,
+      path: filePath
+    })
   }
 
   getPath(obj, val, path) {
@@ -265,10 +269,13 @@ class FilesContainer extends React.Component {
 
   onToggle(node, toggled) {
     if (this.state.cursor) {
-      this.setState({ cursor: { active: false } });
+      this.setState({
+        cursor: { active: false }
+      });
     }
 
     node.active = true;
+
     if (node.children) {
       node.toggled = toggled;
     }
@@ -279,7 +286,8 @@ class FilesContainer extends React.Component {
         selectedFile: node.path || prevState.selectedFile,
       };
       return state;
-    });
+    })
+
     if (node.path) {
       this.props.onFileSelection(node.path);
     }
@@ -287,9 +295,9 @@ class FilesContainer extends React.Component {
 
   render() {
     return (
-      <MainContainer>
+      <MainContainer className="main-files-container">
         <Treebeard
-          className='component'
+          className='component file-tree'
           data={this.state.data}
           decorators={decorators}
           onToggle={this.onToggle}
