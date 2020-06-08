@@ -43,7 +43,7 @@ class FooterSection extends React.Component {
       <Row>
         <Col>
           <p className="text-center py-2">
-            You can connect with us via phone, email, or just come to the Research Center for Open Digital Innovation, West-Lafayette, IN.
+            You can connect with us via phone, email, or just come to the Research Center for Open Digital Innovation, West Lafayette, IN.
           </p>
         </Col>
       </Row>
@@ -51,10 +51,10 @@ class FooterSection extends React.Component {
 
       <Row flex={true} rowClass={'py-2 fs-1 flex-align-center'}>
         <Col colClass='flex-1'>
-          <p>+1 765.494.2885</p>
+          <p>+1 765.494.0880</p>
           <p>opendigital@purdue.edu</p>
-          <p>YOUNG Hall<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
-          <p>Discovery Learning Research Center, <br/>298 Nimitz Dr <br/>West Lafayette, IN 47906</p>
+          <p>Ernest C. Young Hall, Room 305<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
+          <p>Discovery Learning Research Center<br/>298 Nimitz Dr.<br/>West Lafayette, IN 47906</p>
         </Col>
 
         <Col colClass='flex-1'>

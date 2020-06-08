@@ -21,8 +21,8 @@ class ShowcaseSection extends React.Component {
         </h2>
         <p>
           In prior years, IronHackers with no coding experience produced
-          interactive visualizations within 10 to 21 days! Explore some of
-          those students showcases how participated in a affordable housing challenge!
+          interactive visualizations within 10 to 21 days! Explore some of 
+          the showcases of students who participated in an affordable housing challenge.
         </p>
         </Col>
       </Row>
