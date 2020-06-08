@@ -118,21 +118,21 @@ class ProjectCard extends React.Component {
     };
   }
 
-  onProjectCardClick = () => {
+  onProjectCardClick() {
     this.props.onClick(this.props.index);
   };
 
-  showNewProjectForm = () => {
+  showNewProjectForm() {
     this.setState((prevState, props) => {
       return { showNewProjectForm: !prevState.showNewProjectForm };
     });
   };
 
-  handleNameInput = (event) => {
+  handleNameInput(event) {
     this.setState({ newProjectName: event.target.value });
   };
 
-  validateName = () => {
+  validateName() {
     const whiteSpaces = /\s/;
     const alphaNumeric = /^[a-z0-9]+$/i;
     if (this.state.newProjectName === '') {
@@ -144,20 +144,22 @@ class ProjectCard extends React.Component {
     const duplicatedName = this.props.projects.some(
       (project) => project.name === this.state.newProjectName
     );
+
     if (duplicatedName) {
       return { error: 'A project with that name already exists' };
     }
+
     if (alphaNumeric.test(this.state.newProjectName)) {
       return { result: true };
     }
     return { error: 'Name can only contain letters and numbers.' };
   };
 
-  duplicatedName = (name) => {
+  duplicatedName(name) {
     return name === this.state.name;
   };
 
-  handleSubmit = (event) => {
+  handleSubmit(event) {
     event.preventDefault();
     const { result, error } = this.validateName();
     if (result) {
@@ -187,15 +189,20 @@ class ProjectCard extends React.Component {
               <h3>Project name:</h3>
               <input
                 type='text'
-                placeholder='Awasome project'
+                placeholder='Awesome project'
                 onChange={this.handleNameInput}
               />
+
               {this.state.nameError && (
                 <p className='name-error'>{this.state.nameError}</p>
               )}
+
               <div className='control'>
                 <input type='submit' value='Create' />
-                <Button width='80px' onClick={this.showNewProjectForm}>
+                <Button
+                  width='80px'
+                  onClick={this.showNewProjectForm}
+                >
                   Cancel
                 </Button>
               </div>
