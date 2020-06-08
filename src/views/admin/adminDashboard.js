@@ -420,4 +420,4 @@ class AdminDashboard extends React.Component {
   }
 }
 
-export default AdminDashboard;
+export { AdminDashboard }

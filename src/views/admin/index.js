@@ -47,7 +47,7 @@ class Admin extends React.Component {
   }
 
   // Query all the hacks objects from the db.
-  getHacks = () => {
+  getHacks() {
     const firestore = window.firebase.firestore();
     const _this = this;
     const hacks = [];
@@ -76,11 +76,11 @@ class Admin extends React.Component {
       });
   };
 
-  goToNewHack = () => {
+  goToNewHack() {
     this.setState({ startNewHackNav: true });
   };
 
-  goToHackDashBoard = (hackIndex) => {
+  goToHackDashBoard(hackIndex) {
     this.setState((prevState, props) => {
       return {
         startDashboardNav: true,
@@ -93,6 +93,7 @@ class Admin extends React.Component {
     if (this.state.startNewHackNav === true) {
       return <Redirect push to='admin/newHack' />;
     }
+
     if (this.state.startDashboardNav === true) {
       const selectedHack = this.state.selectedHack;
       const selectedHackId = this.state.selectedHack.id;
@@ -103,7 +104,10 @@ class Admin extends React.Component {
           push
           to={{
             pathname: pathname,
-            state: { hack: selectedHack, hackId: selectedHackId },
+            state: {
+              hack: selectedHack,
+              hackId: selectedHackId
+            },
           }}
         />
       );
@@ -114,14 +118,15 @@ class Admin extends React.Component {
         <SectionContainer className='container-fluid'>
           <div className='row'>
             <div className='col-md-8 offset-md-2'>
-              <h1>Welcome to IronHacks Platform!</h1>
-              <span>
-                Belllow you will find all the availabe hacks, click on one of
-                them to see more details.
-              </span>
+              <h1>IronHacks Admin Dashboard</h1>
               <Separator primary />
+
               <CardsContainer>
-                <HackCard newHack={true} onClick={this.goToNewHack} />
+                <HackCard
+                  newHack={true}
+                  onClick={this.goToNewHack}
+                />
+
                 {this.state.hacks.map((hack, index) => {
                   return (
                     <HackCard
