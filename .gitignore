@@ -29,3 +29,7 @@ yarn-error.log*
 \.env
 
 \.devtools-lock
+
+resources/
+
+tmp/

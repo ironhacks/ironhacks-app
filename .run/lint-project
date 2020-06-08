@@ -1,32 +1,30 @@
 #!/bin/bash
 
-# -------------------------
-# react-native run-android
-# -------------------------
+
 BASE_PATH="$(npm prefix)"
 
+RUN_LINT_DIRS="src/components,src/config,src/theme,src/util,src/views,src/*.js"
 [[ -f "${BASE_PATH}/./.npmrc" ]] && . ${BASE_PATH}/./.npmrc
 
-#NODE_RUN_ENV=""
-#NODE_RUN_FLAGS=""
-#LINT_DIRS="Components,Config,Model,LifeCycle,Screens,Theme,Utilities"
-RUN_LINT_DIRS="${LINT_DIRS}"
-LINT_ARGS="$@"
+# pretty:check="${LINT_DIRS}"
+LINT_ARGS="$*"
 
 echo "Running linter on project dirs from .npmrc"
 echo "${RUN_LINT_DIRS}"
-#${NODE_RUN_ENV} node ${NODE_RUN_FLAGS}
 
 RUN_SCRIPT_PATH="${BASE_PATH}/./node_modules/.bin"
 
-${RUN_SCRIPT_PATH}/eslint \
+# ${NODE_RUN_ENV} node ${NODE_RUN_FLAGS}
+
+"${RUN_SCRIPT_PATH}/eslint" \
   --config "${BASE_PATH}/.eslintrc.js" \
-  --ext '.js' \
+  --ext ".js" \
   --cache \
   --cache-file "$BASE_PATH/.eslintcache" \
-  --ignore-pattern '!node_modules' \
-    ${LINT_ARGS} \
+  --ignore-pattern "!node_modules" \
+  ${LINT_ARGS} \
       -- \
-        ${LINT_DIRS//,/ }
+        ${RUN_LINT_DIRS//,/ }
+
 
 exit 0

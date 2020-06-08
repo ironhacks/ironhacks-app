@@ -15,6 +15,5 @@ rollup \
   --preferConst \
   --no-interop \
   --exports named \
-  --globals 'React:react,react-native:react-native' \
   --no-esModule \
   "$@"

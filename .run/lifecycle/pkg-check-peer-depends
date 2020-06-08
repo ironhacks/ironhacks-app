@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# UNMET PEER DEPENDENCY react-native-gesture-handler@*
+# "invalid"
+# "extraneous"
+# "err!"
+# "peer dep missing"
+# "UNMET PEER DEPENDENCY"
+# "npm ERR! peer dep missing: [PACKAGE_NAME]@[VERSION], required by [PEER_NAME]@[PEER_VERSION]"
+#
+
+npm ls | grep -vi optional | grep -i 'unmet peer'
+
+# |  grep -i --color unmet
+# npm ls | grep -vi optional | grep  -i "invalid\|err\|peer\|missing" | sort
+
+#"install-peerdeps"
+
+## List peer dependencies
+#npm info react-native@latest peerDependencies
+install-peerdeps --only-peers --silent --dev --extra-args "--no-optional" --dry-run $PACKAGE_NAME@$PACKAGE_VERSION

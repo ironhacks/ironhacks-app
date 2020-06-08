@@ -1,35 +1,31 @@
-const format = require("prettier-eslint");
+module.exports = {
+   env: {
+     es6: true,
+   },
+   parserOptions: {
+     sourceType: 'module',
+     ecmaVersion: 2018,
+   },
 
-// notice, no semicolon in the original text
-const sourceCode = "const {foo} = bar";
-
-const options = {
-  text: sourceCode,
-  prettierOptions: {
-    bracketSpacing: true
-  },
-  fallbackPrettierOptions: {
-    singleQuote: false
-  }
-  eslintConfig: {
-    parserOptions: {
-      ecmaVersion: 7
-    },},
-    rules: {
-      semi: ["error", "never"]
-    }
-    plugins: [
+  extends: [
+    "plugin:prettier/recommended"
+  ],
+  plugins: [
     'eslint-comments',
-    'prettier',
+    'import',
     'react',
     'react-hooks',
-    'react-native',
-    'jest' ],
+    'jest',
+    'prettier',
+  ],
     settings: { react: { version: 'detect' } },
-    overrides: [ { files: [ '*.js' ],
+    overrides: [
+    { files: [ '*.js' ],
       parser: 'babel-eslint',
       plugins: [ 'flowtype' ],
-      rules: { 'flowtype/define-flow-type': 1, 'flowtype/use-flow-type': 1 } },
+      rules: {
+        'flowtype/define-flow-type': 1,
+        'flowtype/use-flow-type': 1 } },
     { files: [ '*.ts', '*.tsx' ],
       parser: '@typescript-eslint/parser',
       plugins: [ '@typescript-eslint/eslint-plugin' ],
@@ -98,6 +94,7 @@ const options = {
       'use-isnan': 1,
       'valid-jsdoc': 0,
       'valid-typeof': 1,
+      // Best Practices
       'block-scoped-var': 0,
       complexity: 0,
       'consistent-return': 0,
@@ -143,6 +140,8 @@ const options = {
       'vars-on-top': 0,
       'wrap-iife': 0,
       yoda: 1,
+
+      // Variables
       'no-catch-shadow': 1,
       'no-delete-var': 1,
       'no-label-var': 1,
@@ -154,6 +153,8 @@ const options = {
       'no-unused-vars':
        [ 1, { vars: 'all', args: 'none', ignoreRestSiblings: true } ],
       'no-use-before-define': 0,
+
+      // Node.js
       'handle-callback-err': 1,
       'no-mixed-requires': 1,
       'no-new-require': 1,
@@ -161,10 +162,14 @@ const options = {
       'no-process-exit': 0,
       'no-restricted-modules': 1,
       'no-sync': 0,
+
+      // ESLint Comments Plugin
       'eslint-comments/no-aggregating-enable': 1,
       'eslint-comments/no-unlimited-disable': 1,
       'eslint-comments/no-unused-disable': 1,
       'eslint-comments/no-unused-enable': 1,
+
+      // Prettier Plugin
       'prettier/prettier': 1,
       'key-spacing': 0,
       'keyword-spacing': 1,
@@ -191,7 +196,7 @@ const options = {
       'no-mixed-spaces-and-tabs': 1,
       quotes: [ 1, 'single', 'avoid-escape' ],
       'quote-props': 0,
-      semi: 1,
+      semi: 0,
       'sort-vars': 0,
       'space-in-brackets': 0,
       'space-in-parens': 0,
@@ -200,12 +205,16 @@ const options = {
       'max-nested-callbacks': 0,
       'one-var': 0,
       'wrap-regex': 0,
+
+      // Legacy
       'max-depth': 0,
       'max-len': 0,
       'max-params': 0,
       'max-statements': 0,
       'no-bitwise': 1,
       'no-plusplus': 0,
+
+      // React Plugin
       'react/display-name': 0,
       'react/jsx-boolean-value': 0,
       'react/jsx-no-comment-textnodes': 1,
@@ -223,13 +232,26 @@ const options = {
       'react/react-in-jsx-scope': 1,
       'react/self-closing-comp': 1,
       'react/wrap-multilines': 0,
+
+      // React-Hooks Plugin
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
-      'react-native/no-inline-styles': 1,
+
+      // Jest Plugin
       'jest/no-disabled-tests': 1,
       'jest/no-focused-tests': 1,
       'jest/no-identical-title': 1,
-      'jest/valid-expect': 1
+      'jest/valid-expect': 1,
+
+      // Import Plugin
+      'import/no-unresolved': 2,
+      'import/default': 2,
+      'import/export': 2,
+      'import/named': 2,
+      'import/namespace': 2,
+      'import/no-duplicates': 1,
+      'import/no-named-as-default-member': 1,
+      'import/no-named-as-default': 1,
     },
   };
 };
