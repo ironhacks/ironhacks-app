@@ -1,0 +1,219 @@
+#!/usr/bin/env node
+const __DEBUG__ = process.env.NODE_DEBUG_LOGGING ? true : false;
+
+var tty = require("tty");
+
+var styles = {
+  "reset":     ["0m", "0m"],
+  "bold":      ["1m", "22m"],
+  "dim":       ["2m", "22m"],
+  "italic":    ["3m", "23m"],
+  "underline": ["4m", "24m"],
+  "inverse":   ["7m", "27m"],
+  "black":     ["30m", "39m"],
+  "red":       ["31m", "39m"],
+  "green":     ["32m", "39m"],
+  "yellow":    ["33m", "39m"],
+  "blue":      ["34m", "39m"],
+  "magenta":   ["35m", "39m"],
+  "cyan":      ["36m", "39m"],
+  "white":     ["37m", "39m"],
+  "default":   ["39m", "39m"],
+  "grey":      ["90m", "39m"],
+  "brightblack":     ["01;30m", "00;39m"],
+  "brightred":       ["01;31m", "00;39m"],
+  "brightgreen":     ["01;32m", "00;39m"],
+  "brightyellow":    ["01;33m", "00;39m"],
+  "brightblue":      ["01;34m", "00;39m"],
+  "brightmagenta":   ["01;35m", "00;39m"],
+  "brightcyan":      ["01;36m", "00;39m"],
+  "brightwhite":     ["01;37m", "00;39m"],
+  "brightdefault":   ["01;39m", "00;39m"],
+  "brightgrey":      ["01;90m", "00;39m"],
+  "bgBlack":   ["40m", "49m"],
+  "bgRed":     ["41m", "49m"],
+  "bgGreen":   ["42m", "49m"],
+  "bgYellow":  ["43m", "49m"],
+  "bgBlue":    ["44m", "49m"],
+  "bgMagenta": ["45m", "49m"],
+  "bgCyan":    ["46m", "49m"],
+  "bgWhite":   ["47m", "49m"],
+  "bgDefault": ["49m", "49m"]
+};
+
+const _c = (styl) => {
+  return ["\x1b[", styl].join("");
+};
+
+
+const fmt = (style, text) => {
+  if (!styles[style]) { return text; }
+  return [ _c(styles[style][0]), text, _c(styles[style][1])].join("");
+};
+
+
+const print_line = (key, value) => {
+  console.log([key, value].join("\t"));
+};
+
+const print_item = (key, value, options) => {
+    const key_style = options.key_style || "green";
+    const val_style = options.val_style || "yellow";
+    const line_max = options.line_maxlen || 80;
+    const key_long = options.key_long || 0;
+    const colspace = options.colspace || " ";
+    const padstart =  options.padstart || " ";
+
+    const key_diff = key_long - key.length;
+    const padkey = colspace.padEnd(key_diff, " ");
+    const colorKey = fmt(key_style, key);
+    const line_left =[padstart, colorKey, padkey, colspace].join("");
+
+    const value_len = line_max - line_left.length;
+    const cut_val = value.slice(0, value_len + 1);
+    const colorVal = fmt(val_style, cut_val);
+    const line_right = colorVal;
+
+    print_line(line_left, line_right);
+};
+
+const sort_keys = (data) => {
+  var shortest_key = 999;
+  var longest_key = 0;
+  var _sorted = data.sort(function(a, b){
+    if(a[0].length > longest_key) { longest_key =  a[0].length; }
+    if(b[0].length > longest_key) { longest_key =  b[0].length; }
+    if(a[0].length < shortest_key) { shortest_key =  a[0].length; }
+    if(b[0].length < shortest_key) { shortest_key =  b[0].length; }
+    return a[0].localeCompare( b[0], { caseFirst: false, numeric: true })
+  });
+
+  return {
+    sorted:_sorted,
+    long: longest_key,
+    short: shortest_key,
+  };
+};
+
+const encoding = "utf-8";
+
+const print_loop = (iterable, options) => {
+  if (! iterable) { return }
+
+  var KEY_STYLE = options.key_style || "brightgreen";
+  var VAL_STYLE = options.val_style || "white";z
+  var COLSPACE = " ";
+  var PADSTART =  "  ";
+  var LINE_MAXLEN = process.stdout.columns || 80;
+
+  const items = sort_keys(Object.entries(iterable));
+
+  if (items.sorted.length === 0 ) { return }
+
+  var item_options = {
+    line_maxlen: LINE_MAXLEN,
+    key_maxlen:  LINE_MAXLEN / 2,
+    padstart: PADSTART,
+    key_long: items.long,
+    colspace: COLSPACE,
+    key_style: KEY_STYLE,
+    val_style: VAL_STYLE,
+  };
+
+  for (var item of items.sorted){
+    print_item(item[0], item[1], item_options);
+  }
+  return;
+};
+
+const get_titleline = (title) => {
+  return `--- ${title.toUpperCase()} --- \n`
+};
+
+const print_titleline = (titleline) => {
+  console.log([fmt("cyan", titleline)].join(""));
+};
+
+const _title = (title) => {
+  print_titleline(get_titleline(title));
+};
+
+const print_info = (name, data, options) => {
+  if (!options) {
+    options = Object.assign({}, options);
+  }
+
+  _title(name);
+  print_loop(data, options);
+};
+
+
+
+function pkgInfo(pkg_path, select) {
+  const selection_list = [
+    "config",
+    "depends",
+    "env",
+    "paths",
+    "scripts",
+  ];
+  var lswrap = "\n\t";
+
+  var noselection = "Nothing selected. Choose a category to view.";
+  const pkg = require(pkg_path);
+  if ((select) && (selection_list.indexOf(select)>=0)) {
+    switch (select) {
+      case "app":     print_info(select, pkg.expo);         break;
+      case "config":  print_info(select, pkg.config);       break;
+      case "env":     print_info(select, process.env);      break;
+      case "scripts": print_info(select, pkg.scripts);      break;
+      case "depends":
+                      print_info(select, pkg.dependencies);
+                      console.log("");
+                      print_info("Dev Dependencies", pkg.devDependencies);
+      break;
+      case "paths":   print_info(select, pkg.dirs);         break;
+      default:
+                      console.log([
+                        noselection,
+                        "",
+                        selection_list.join(lswrap),
+                        ""
+                      ].join(lswrap));
+    }
+  } else {
+    console.log([noselection, "", selection_list.join(lswrap), ""].join(lswrap));
+  }
+
+}
+
+
+
+const fs=require("fs"),path=require("path"),{promisify:promisify}=require("util"),fsStat=promisify(fs.stat),fsLStat=promisify(fs.lstat),pAccess=promisify(fs.access),stop=Symbol("findUp.stop"),typeMappings={directory:"isDirectory",file:"isFile"};
+function checkType({type:t}){if(!(t in typeMappings))throw new Error(`Invalid type specified: ${t}`)}const matchType=(t,e)=>void 0===t||e[typeMappings[t]](),pTry=(t,...e)=>new Promise(r=>{r(t(...e))}),pLimit=t=>{if(!Number.isInteger(t)&&t!==1/0||!(t>0))return Promise.reject(new TypeError("Expected `concurrency` to be a number from 1 and up"));const e=[];let r=0;const s=()=>{r--,e.length>0&&e.shift()()},n=(t,e,...n)=>{r++;const c=pTry(t,...n);e(c),c.then(s,s)},c=(s,...c)=>new Promise(i=>((s,c,...i)=>{r<t?n(s,c,...i):e.push(n.bind(null,s,c,...i))})(s,i,...c));return Object.defineProperties(c,{activeCount:{get:()=>r},pendingCount:{get:()=>e.length}}),c};class EndError extends Error{constructor(t){super(),this.value=t}}const testElement=async(t,e)=>e(await t),finder=async t=>{const e=await Promise.all(t);if(!0===e[1])throw new EndError(e[0]);return!1},pLocate=async(t,e,r)=>{r={concurrency:1/0,preserveOrder:!0,...r};
+const s=pLimit(r.concurrency),n=[...t].map(t=>[t,s(testElement,t,e)]),c=pLimit(r.preserveOrder?1:1/0);try{await Promise.all(n.map(t=>c(finder,t)))}catch(t){if(t instanceof EndError)return t.value;throw t}},locatePath=async(t,e)=>{checkType(e={cwd:process.cwd(),type:"file",allowSymlinks:!0,...e});const r=e.allowSymlinks?fsStat:fsLStat;return pLocate(t,async t=>{try{const s=await r(path.resolve(e.cwd,t));return matchType(e.type,s)}catch(t){return!1}},e)},pathExists=async t=>{try{return await pAccess(t),!0}catch(t){return!1}},findUp=async(t,e={})=>{let r=path.resolve(e.cwd||"");const{root:s}=path.parse(r),n=[].concat(t),c=async e=>{if("function"!=typeof t)return locatePath(n,e);const r=await t(e.cwd);return"string"==typeof r?locatePath([r],e):r};for(;;){const t=await c({...e,cwd:r});if(t===stop)return;if(t)return path.resolve(r,t);if(r===s)return;r=path.dirname(r)}};pathExists.exists=pathExists;
+const pkgUp=async({cwd:t}={})=>findUp("package.json",{cwd:t});
+
+
+
+function main () {
+  if (process.stdin.isTTY) {
+    process.stdin.setEncoding(encoding);
+    var buf = Buffer.from(process.argv[2] || "").toString(encoding);
+    var select = process.argv[2];
+    if (!_pkgpath) {
+           console.log("You are not in an a current npm working directory");
+           process.exit(0);
+    }
+
+    (async()=>{
+      const pkg = await pkgUp();
+      await pkgInfo(pkg, select)
+      console.log("Reading Package File:", pkg);
+    })();
+  }
+}
+main();
+
+
+module.exports = main;

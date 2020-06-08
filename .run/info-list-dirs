@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# UNMET PEER DEPENDENCY react-native-gesture-handler@*
+# "invalid"
+# "extraneous"
+# "err!"
+# "peer dep missing"
+# "UNMET PEER DEPENDENCY"
+
+npm ls | grep -vi optional | grep -i 'unmet peer'
+
+# |  grep -i --color unmet
+# npm ls | grep -vi optional | grep  -i "invalid\|err\|peer\|missing" | sort
+
+#"install-peerdeps"
+
+## List peer dependencies
+#npm info react-native@latest peerDependencies
+
+PROJECT_ROOT_DIRS="$(find . -maxdepth 1 -type d ! -name ".*"  ! -name \"node_modules\" -printf "%P\\n")"
+
+echo -e "\nProject Root Dirs:\n"
+echo "$PROJECT_ROOT_DIRS"
+
+
+# echo "$(find ./Components -maxdepth 3 -type d -printf \"%p\n\"
+#   && find ./Config -maxdepth 3 -type d -printf \"%p\n\"
+#   && find ./LifeCycle -maxdepth 3 -type d -printf \"%p\n\"
+#   && find ./Model -maxdepth 3 -type d -printf \"%p\n\"
+#   && find ./Screens -maxdepth 3 -type d -printf \"%p\n\"
+#   && find ./Theme -maxdepth 3 -type d -printf \"%p\n\"
+#   && find ./Utilities -maxdepth 3 -type d -printf \"%p\n\")"
+#
+# find ./Components -maxdepth 3 -type d -printf \"%p\n\" \
+#   && find ./Config -maxdepth 3 -type d -printf \"%p\n\" \
+#   && find ./LifeCycle -maxdepth 3 -type d -printf \"%p\n\" \
+#   && find ./Model -maxdepth 3 -type d -printf \"%p\n\" \
+#   && find ./Screens -maxdepth 3 -type d -printf \"%p\n\" \
+#   && find ./Theme -maxdepth 3 -type d -printf \"%p\n\" \
+#   && find ./Utilities -maxdepth 3 -type d -printf \"%p\n\""

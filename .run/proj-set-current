@@ -1,0 +1,130 @@
+#!/bin/bash
+
+# ===============================================
+# - PROJECT MANAGER -
+# [ENVIRONMENT VARIABLES]
+# ----------------
+# GLOBAL SETUP
+# ------------
+# - PROJECT_GLOBAL_CONF    ($HOME/.projectrc)
+# - PROJECT_DB             ($HOME/.projects)
+# ----------------
+# PROJECT SPECIFIC
+# ----------------
+# - PROJECT_ROOT            Project root dir (PROJECT_NPM_DIR|PROJECT_GIT_DIR|CWD)
+# - PROJECT_NPM_DIR         NPM projectdir (npm prefix)
+# - PROJECT_GIT_DIR         Git root dir (git rev-parse --show-toplevel)
+# - PROJECT_CONF_PATH       Location of .project file under the project root
+# - PROJECT_PACKAGE_NAME    Project alias to path to project file  *Requires npm package.json
+# - PROJECT_PATHS           List of paths to open in your project editor
+# --------------
+# EDITOR AND IDE
+# --------------
+# - PROJECT_EDITOR          Application to open project files with (Default: Atom)
+# - PROJECT_OPEN_ENV        Placeholder for any env variables needing to be set at editor runtime
+# - PROJECT_OPEN_FLAGS      Placeholder for any cli flags and arguments needing to be set at editor runtime
+# ===============================================
+
+[[ -z ${PROJECT_DB} ]] && PROJECT_DB="$HOME/.projects"
+[[ -z ${PROJECT_GLOBAL_CONF} ]] && PROJECT_GLOBAL_CONF="$HOME/.projectrc"
+[[ -f ${PROJECT_GLOBAL_CONF} ]] && . ${PROJECT_GLOBAL_CONF}
+
+# HELPERS FOR JUMPING IN AND OUT OF PROJECT FOLDERS AND COPYING FILES TO THE CURRNET LOCATION
+
+if [ ! -z ${PROJECT_ROOT} ]; then
+  echo "PROJECTROOT $PROJECT_ROOT"
+else
+  PROJECT_NPM_DIR="$(npm prefix)"
+  PROJECT_GIT_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
+  if [ ! -z $PROJECT_GIT_DIR ]; then
+    PROJECT_ROOT="${PROJECT_GIT_DIR}"
+  elif [ ! -z $PROJECT_NPM_DIR ]; then
+    PROJECT_ROOT="${PROJECT_NPM_DIR}"
+  else
+    PROJECT_ROOT="$PWD"
+  fi
+fi
+
+
+_find_project_npmfile () {
+  FIND_DEPTH="${1:-'2'}"
+
+  find \
+    -mindepth $FIND_DEPTH \
+    -maxdepth $FIND_DEPTH \
+    -path "*node_modules" \
+    -prune -o \
+    -type f \
+    -name "package.json" \
+    -printf "%P\n" \
+      | sort \
+        --ignore-case \
+        --ignore-nonprinting \
+        --dictionary-order \
+        --reverse \
+          | head -n 1
+}
+
+_get_project_name () {
+  cd "${PROJECT_ROOT}"
+  PROJECT_NPMFILE=""
+  if [ -f ${PROJECT_ROOT}/package.json ]; then
+    PROJECT_NPMFILE="${PROJECT_ROOT}/package.json"
+  elif [ -f ${PROJECT_NPM_DIR}/package.json ]; then
+    PROJECT_NPMFILE="${PROJECT_NPM_DIR}/package.json"
+  else
+    [[ -z "${PROJECT_NPMFILE}" ]] && PROJECT_NPMFILE="$(_find_project_npmfile 1)"
+    [[ -z "${PROJECT_NPMFILE}" ]] && PROJECT_NPMFILE="$(_find_project_npmfile 2)"
+    [[ -z "${PROJECT_NPMFILE}" ]] && PROJECT_NPMFILE="$(_find_project_npmfile 3)"
+  fi
+
+  if [ -f "${PROJECT_NPMFILE}" ]; then
+    PROJECT_PACKAGE_DIR="$(dirname ${PROJECT_NPMFILE})"
+    cd "$PROJECT_PACKAGE_DIR"
+    PROJECT_PACKAGE_NAME="$(npm run env:npm | grep package_name= | sed 's/npm_package_name=//')"
+  fi
+
+  [[ -z "$PROJECT_PACKAGE_NAME" ]] && PROJECT_PACKAGE_NAME="$PROJECT_CURRENT"
+  echo "$PROJECT_PACKAGE_NAME"
+}
+
+_update_project_db () {
+  touch "${PROJECT_DB}"
+  mv "${PROJECT_DB}" "${PROJECT_DB}.tmp"
+  echo "${PROJECT_PACKAGE_NAME}=\"${PROJECT_CURRENT}\"" >> "${PROJECT_DB}.tmp"
+  sort -u "${PROJECT_DB}.tmp" > "${PROJECT_DB}"
+  rm "${PROJECT_DB}.tmp"
+}
+
+_update_project_global_conf () {
+  echo "# PROJECT MANAGER GLOBAL CONFIG FILE #
+PROJECT_CURRENT=\"${PROJECT_CURRENT}\"
+PREVIOUS_PROJECT=\"${PREVIOUS_PROJECT}\"
+PROJECT_EDITOR=\"${PROJECT_EDITOR}\"
+PROJECT_OPEN_FLAGS=\"${PROJECT_OPEN_FLAGS}\"
+PROJECT_OPEN_ENV=\"${PROJECT_OPEN_ENV}\"
+PROJECT_GLOBAL_CONF=\"${PROJECT_GLOBAL_CONF}\"
+" > ${PROJECT_GLOBAL_CONF}
+
+}
+
+[[ -z "$PROJECT_CURRENT" ]] \
+    && echo "no project set" \
+    && echo "setting current project to ${PROJECT_ROOT}"
+
+[[ ! -z "$PROJECT_CURRENT" ]] \
+    && [[ "$PROJECT_CURRENT" == "${PROJECT_ROOT}" ]] \
+    && echo "Project already set to current working tree" \
+    && exit 0
+
+PREVIOUS_PROJECT="${PROJECT_CURRENT}"
+PROJECT_CURRENT="${PROJECT_ROOT}"
+
+PROJECT_PACKAGE_NAME="$(_get_project_name)"
+
+_update_project_db
+
+_update_project_global_conf
+
+export PROJECT_CURRENT
+export PROJECT_PREVIOUS

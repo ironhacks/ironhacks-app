@@ -1,0 +1,39 @@
+#!/bin/bash
+
+BASE_DIR="$(npm prefix)"
+APP_DIR="/data/apps"
+ABD_PATH="${ANDROID_HOME}/platform-tools"
+
+[[ -f .npmrc ]] && source .npmrc
+[[ -f .env ]] && source .env
+
+_devtools_lockfile () {
+  echo "REACT_DEBUGGER=\"${REACT_DEBUGGER}\"" > $BASE_DIR/.devtools-lock
+}
+
+if [ ! -z $RUN_REACT_DEBUGGER ]; then
+  REACT_DEBUGGER="node /data/library/React_Library/react-native-debugger/npm-package/bin/rndebugger-open --expo --open"
+  REACT_DEBUGGER_PID="$(pgrep react-debugger)"
+
+  if [ -f ${BASE_DIR}/.devtools-lock ]; then
+    [[ -n $REACT_DEBUGGER_PID ]]
+      && echo "Debugger is still running ${REACT_DEBUGGER_PID}"
+      && exit 0
+    echo "React Devtools already running"
+  fi
+
+  [[ -n $APP_REACT_DEBUGGER_RUNNING ]] \
+      && echo "React Devtools already running"
+  [[ -z $APP_REACT_DEBUGGER_RUNNING ]] \
+      && ${APP_DIR}/react-native-debugger/react-native-debugger &
+
+fi
+
+_devtools_lockfile
+APP_REACT_DEBUGGER_RUNNING="yes"
+
+export APP_REACT_DEBUGGER_RUNNING
+export REACT_DEBUGGER
+
+
+echo "REACT_DEBUGGER=${REACT_DEBUGGER}"

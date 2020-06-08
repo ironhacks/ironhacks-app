@@ -1,0 +1,51 @@
+#!/bin/bash
+
+unset NODE_PATH
+unset NODE_OPTIONS
+unset NODE_DEBUG
+unset NODE_RUN_ENV
+unset NODE_RUN_FLAGS
+unset REACT_DEBUGGER
+unset RUN_ABD_LOGCAT
+unset RUN_CHROMEDEVTOOLS
+unset RUN_REACT_DEBUGGER
+unset RUN_REACT_DEVTOOLS
+unset RUN_REACT_REACTOTRON
+unset APP_REACT_DEBUGGER_RUNNING
+unset APP_REACT_DEVTOOLS_RUNNING
+unset APP_REACT_REACTOTRON_RUNNING
+
+BASE_DIR="$(npm prefix)"
+
+
+[[ -f ${BASE_DIR}/.npmrc ]] && . ${BASE_DIR}/.npmrc
+[[ -f ${BASE_DIR}/.env ]] && . ${BASE_DIR}/.env
+
+# REQUIRED:
+# REACT-NAVTIVE REQUIRES JAVA VERSION 8
+# JAVA_V8 env variable is set to Android studio Java path
+ANDROID_HOME="/data/projects/5_Android_Projects/AndroidSDK"
+ABD_PATH="${ANDROID_HOME}/platform-tools"
+JAVA_HOME="${JAVA_V8}"
+
+export ANDROID_HOME
+export ANDROID_SERIAL
+export APP_DIR
+export APP_REACT_DEBUGGER_RUNNING
+export APP_REACT_DEVTOOLS_RUNNING
+export APP_REACT_REACTOTRON_RUNNING
+export JAVA_HOME
+export NODE_RUN_ENV
+export NODE_RUN_FLAGS
+export PROJECT_CURRENT
+export PROJECT_PREVIOUS
+export PROJECT_ROOT
+export REACT_EDITOR
+export RUN_ABD_LOGCAT
+export RUN_CHROMEDEVTOOLS
+export RUN_ENV
+export RUN_REACT_DEBUGGER
+export RUN_REACT_DEVTOOLS
+export RUN_REACT_REACTOTRON
+
+source ../bin/project-set-current

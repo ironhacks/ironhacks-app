@@ -1,0 +1,99 @@
+#!/bin/bash
+
+# ===============================================
+# - PROJECT MANAGER -
+# [ENVIRONMENT VARIABLES]
+# ----------------
+# GLOBAL SETUP
+# ------------
+# - PROJECT_GLOBAL_CONF    ($HOME/.projectrc)
+# - PROJECT_DB             ($HOME/.projects)
+# ----------------
+# PROJECT SPECIFIC
+# ----------------
+# - PROJECT_ROOT            Project root dir (PROJECT_NPM_DIR|PROJECT_GIT_DIR|CWD)
+# - PROJECT_NPM_DIR         NPM projectdir (npm prefix)
+# - PROJECT_GIT_DIR         Git root dir (git rev-parse --show-toplevel)
+# - PROJECT_CONF_PATH       Location of .project file under the project root
+# - PROJECT_PACKAGE_NAME    Project alias to path to project file  *Requires npm package.json
+# - PROJECT_PATHS           List of paths to open in your project editor
+# --------------
+# EDITOR AND IDE
+# --------------
+# - PROJECT_EDITOR          Application to open project files with (Default: Atom)
+# - PROJECT_OPEN_ENV        Placeholder for any env variables needing to be set at editor runtime
+# - PROJECT_OPEN_FLAGS      Placeholder for any cli flags and arguments needing to be set at editor runtime
+# ===============================================
+
+RUN_SCRIPT_PATH=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+
+[[ -z ${PROJECT_DB} ]] && PROJECT_DB="$HOME/.projects"
+[[ -z ${PROJECT_GLOBAL_CONF} ]] && PROJECT_GLOBAL_CONF="$HOME/.projectrc"
+
+PROJECT_EDITOR="atom"
+PROJECT_OPEN_FLAGS="--clear-window-state,new-window"
+PROJECT_OPEN_ENV=
+
+[[ -f ${PROJECT_GLOBAL_CONF} ]] && . ${PROJECT_GLOBAL_CONF}
+
+PROJECT_NPM_DIR="$(npm prefix)"
+PROJECT_GIT_DIR="$(git rev-parse --show-toplevel 2>/dev/null)"
+
+_get_project_root () {
+  if [ ! -z $PROJECT_GIT_DIR ]; then
+    PROJECT_ROOT="$PROJECT_GIT_DIR"
+  elif [! -z $PROJECT_NPM_DIR ]; then
+    PROJECT_ROOT="$PROJECT_NPM_DIR"
+  else
+    PROJECT_ROOT="$PWD"
+  fi
+
+  echo "$PROJECT_ROOT"
+}
+
+_get_project_paths () {
+  PROJECT_FILE=${1:-'.'}
+
+  [[ ! -f $PROJECT_FILE ]] && echo "." && exit 0
+  PROJECT_PATHS="$(cat $PROJECT_FILE)"
+
+  echo $PROJECT_PATHS
+}
+
+_get_project_conf_path () {
+  # THE GIT ROOT SHOULD BE THE BASE OF ANY PROJECT
+  if [ -f ${PROJECT_GIT_ROOT}/.project ]; then
+    PROJECT_CONF_PATH="${PROJECT_GIT_ROOT}/.project"
+
+    # IF WE ARE IN AN ACTIVE NPM PROJECT TREE NPM PREFIX WILL RETURN THE
+    # BASE DIRECTORY OR ELSE IF WILL RETURN THE CURRENT WORKING DIRECTORY
+  elif [ -f ${PROJECT_NPM_DIR}/.project ]; then
+    PROJECT_CONF_PATH="${PROJECT_NPM_DIR}/.project"
+
+    # SOME PROJECTS MAINTAIN A PARENT DIRECTORY FOR THE GIT REPOSITORY
+    # WHEN THE PACKAGE.JSON FILE IS NEED FOR PROJECT BUILD
+  elif [ -f ${PROJECT_NPM_DIR}/../.project ]; then
+    PROJECT_CONF_PATH="${PROJECT_NPM_DIR}/../.project"
+
+  else
+    echo "Project File NOT FOUND"
+    exit 1
+  fi
+
+  echo "$PROJECT_CONF_PATH"
+}
+
+PROJECT_ROOT="$(_get_project_root)"
+PROJECT_CONF_PATH="$(_get_project_conf_path)"
+PROJECT_PATHS="$(_get_project_paths $PROJECT_CONF_PATH)"
+
+${PROJECT_OPEN_ENV} ${PROJECT_EDITOR} ${PROJECT_OPEN_FLAGS//,/ --} ${PROJECT_PATHS} &
+
+PROJECT_NPM_DIR=${PROJECT_NPM_DIR} \
+PROJECT_GIT_DIR=${PROJECT_GIT_DIR} \
+PROJECT_EDITOR=${PROJECT_EDITOR} \
+PROJECT_OPEN_FLAGS=${PROJECT_OPEN_FLAGS} \
+PROJECT_OPEN_ENV=${PROJECT_OPEN_ENV} \
+PROJECT_ROOT=${PROJECT_ROOT} \
+PROJECT_CONF_PATH=${PROJECT_CONF_PATH} \
+    $RUN_SCRIPT_PATH/./project-set-current

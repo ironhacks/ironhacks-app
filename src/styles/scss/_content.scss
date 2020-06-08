@@ -1,0 +1,49 @@
+.content_area {
+  margin-top: 2em;
+  font-size: 16px;
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    font-size: 1.3em;
+  }
+
+  h3, h4, h5, h6 {
+    font-size: 1em;
+  }
+
+  h1, h2, h3, h4, h5 {
+    margin-bottom: .6em;
+    font-weight: 600;
+    color: var(--color-pink);
+  }
+
+  ol {
+    margin-top: 1em;
+    padding-left: .1em;
+    list-style-type: decimal;
+    list-style: decimal;
+  }
+
+  ul {
+    margin-top: 1em;
+    padding-left: 1em;
+    list-style: disc;
+    list-style-type: disc;
+  }
+
+  ol li,
+  ul li {
+    margin: initial;
+    padding: initial;
+    display: list-item;
+    margin-left: .5em;
+    margin-bottom: calc(1.45rem / 2);
+  }
+
+  a {
+    font-size: 1em;
+  }
+}

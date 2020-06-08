@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# find -type f \
+#    | grep -i --color google \ # -exec cat {} \;  \
+#    | tr -cd "[a-zA-Z0-9!@#$%^&*()_+-=,./<>?:;[]{}\|\s \n]" \
+#    | grep -i --color
+#
+# find . -type f -printf "%G %U %M %m %P \n"
+# find . -type f ! -perm 644 -printf "%G %U %M %m %P \n"
+TIMEAGO=${1:-''}
+BEFORE=${2:-''}
+DEPTH="${FIND_MAXDEPTH}"
+TYPE="${FIND_TYPE:-'f'}"  # -type f
+SIZE_MIN="${FIND_MINSIZE}" # -size +{MIN_SIZE}
+SIZE_MAX="${FIND_MAXSIZE}" # -size -{MAX_SIZE}
+
+LINE_FORMAT="ctime:%CH:%CM:%Cs %M %u %g \033[1m\033[22m\033[00;37m%p\033[0m \033[00;33m%s\033[0m %l \n"
+
+[[ -n $EXCLUDE_NODE ]] && EXCLUDES="$EXCLUDES -path "*./node_modules" -prune -o"
+
+git diff --dirstat=changes,files

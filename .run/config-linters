@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# -----------------------------------------------------------------------------
+# This tool checks whether an ESLint configuration contains rules that are
+# unnecessary or conflict with Prettier. It’s supposed to be run like this:
+#
+#   eslint --print-config path/to/main.js | eslint-config-prettier-check
+#   eslint --print-config test/index.js | eslint-config-prettier-check
+#
+# Exit codes:
+#
+# 0: No automatically detectable problems found.
+# 1: Unexpected error.
+# 2: Conflicting rules found.
+#
+# For more information, see:
+# https://github.com/prettier/eslint-config-prettier#cli-helper-tool
+# -----------------------------------------------------------------------------
+
+BASE_DIR="$(npm prefix)"
+
+[[ -f .npmrc ]] && source .npmrc
+[[ -f .env ]] && source .env
+
+"${BASE_DIR}/node_modules/.bin/eslint" --print-config "${BASE_DIR}/app.js" \
+   | "${BASE_DIR}/node_modules/eslint-config-prettier/bin/cli.js"
+
+exit 0

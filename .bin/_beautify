@@ -1,0 +1,29 @@
+#!/bin/bash
+
+
+# -------------------------
+# ESLINT
+#  js-beautify --indent-size 2 --brace-style end-expand,preserve-inline --max-preserve-newlines 2 --space_after_named_function --break-chained-methods --good-stuff --replace "$@"# @###
+# -------------------------
+
+BASE_PATH="$(npm prefix)"
+NODE_RUN_ENV=
+NODE_RUN_FLAGS=
+
+[[ -f "${BASE_PATH}/./.npmrc" ]] && . ${BASE_PATH}/./.npmrc
+
+LINT_ARGS="$@"
+
+# ${NODE_RUN_ENV} node ${NODE_RUN_FLAGS}
+
+cd ${INIT_CWD}
+
+js-beautify \
+  --indent-size 2 \
+  --brace-style end-expand,preserve-inline \
+  --max-preserve-newlines 2 \
+  --space_after_named_function \
+  --break-chained-methods \
+  --good-stuff \
+  --replace \
+  "$@"
