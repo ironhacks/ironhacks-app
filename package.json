@@ -88,12 +88,14 @@
   },
   "scripts": {
     "build": "npm run reactscripts:build",
+    "build:clean": "mv ./build ./release/current",
     "bump": "npm version patch",
     "config:linters": ".run/config-linters",
     "env:reset": ".run/env-reset",
     "env:user": ".run/env-print",
     "eslint-check": "./node_modules/.bin/eslint --print-config ./App.js | ./node_modules/.bin/eslint-config-prettier-check",
     "info": "pkginfo",
+    "firebase:deploy": "firebase deploy --only hosting",
     "jest": "node_modules/.bin/jest",
     "jsonlint": "jsonlint -s -p",
     "lint": ".bin/_lint",
@@ -114,5 +116,5 @@
     "start:debug": ".run/info-ls-gitchanged",
     "test": "npm run reactscripts:test"
   },
-  "version": "2.0.7"
+  "version": "2.0.8"
 }
