@@ -226,7 +226,7 @@ class HackSelectPage extends React.Component {
         <SectionContainer className='container-fluid'>
           <div className='row'>
             <div className='col-md-8 offset-md-2'>
-              <h1>Welcome to IronHacks Platform!</h1>
+              <h1><strong>Welcome to the IronHacks Platform!</strong></h1>
               <h2>My Hacks</h2>
               <p>
                 Below you will find the hacks you are currently participating
@@ -247,14 +247,14 @@ class HackSelectPage extends React.Component {
               </h2>
 
               <p>
-                Below you will find all the availabe hacks to register in.
+                Below you will find all of the hacks that are available for registration.
                 Click on one of them to start the registration process.
               </p>
 
               <Separator primary />
 
               <HackCardList
-                emptyText={'There are no hacks currently availabe.'}
+                emptyText={'There are no hacks currently available.'}
                 hacks={this.state.availableHacks}
               />
 
