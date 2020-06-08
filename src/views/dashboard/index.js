@@ -13,7 +13,6 @@ class DashboardPage extends React.Component {
         displayName={this.props.user.displayName}
         isAdmin={this.props.userIsAdmin}
         >
-      <main>
         <Switch>
           <Route exact path='/hacks'>
             <HackSelectPage
@@ -32,7 +31,6 @@ class DashboardPage extends React.Component {
             <UserProfile user={this.props.user} />
           </Route>
         </Switch>
-      </main>
       </Page>
     )
   }
