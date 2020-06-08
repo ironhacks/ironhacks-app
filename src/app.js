@@ -9,6 +9,7 @@ import HomePage from './views/home';
 import Admin from './views/admin';
 import { ProjectEditor } from './components/project';
 import { DashboardPage } from './views/dashboard';
+import { AdminDashboard } from './views/admin/adminDashboard';
 import Login from './views/login';
 import './styles/css/root.css'
 import './styles/css/main.css'
@@ -234,10 +235,10 @@ class App extends React.Component {
 
               {this.state.user && (
                 <Route path='/hacks'>
-                <DashboardPage
-                  user={this.state.user}
-                  userIsAdmin={this.state.userIsAdmin}
-                />
+                  <DashboardPage
+                    user={this.state.user}
+                    userIsAdmin={this.state.userIsAdmin}
+                  />
               </Route>
               )}
 
@@ -258,11 +259,18 @@ class App extends React.Component {
               </Route>
 
               {this.state.userIsAdmin && (
+                <>
                 <Route exact path='/admin'>
                   <Admin
                     user={this.props.user}
                   />
                 </Route>
+                <Route path='/admin/dashboard/:hackName'>
+                  <AdminDashboard
+                    user={this.props.user}
+                  />
+                </Route>
+                </>
               )}
 
               <Route
