@@ -44,7 +44,7 @@ class StatsSection extends React.Component {
           Since 2015, more than 1000 participants have hacked in parallel virtually
           around the globe gaining valuable experience in coding as well as work for
           the chance to win internships, Amazon gift cards, cool swag, and certificates.
-          In addition to the students participation and learning, IronHacks provide the
+          In addition to participants' learning, IronHacks provide the
           opportunity to do research on open innovation contest processes.
         </p>
       </Row>
@@ -62,7 +62,7 @@ class StatsSection extends React.Component {
           <h3 className="h3 my-2 font-bold">Globalization Impact</h3>
           <p>
             A new virtual movement of hacking has emerged at Purdue and beyond.
-            Participants come from the US, Colombia, and China. Virtual setting
+            Participants come from the US, Colombia, and China. The virtual setting
             encourages a more diverse audience.
           </p>
         </Col>
@@ -70,7 +70,7 @@ class StatsSection extends React.Component {
           <h3 className="h3 my-2 font-bold">Scientific Impact</h3>
           <p>
             The scientific team at Purdue generated new knowledge and technologies
-            on the implications of machine-enabled feedback and transparency on participant's
+            on the implications of machine-enabled feedback and transparency on participants'
             productivity and innovation performance.
           </p>
         </Col>
