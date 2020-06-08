@@ -55,7 +55,9 @@ class HackNav extends React.Component {
 
   updateHackNav(target) {
     this.hideMenu(target)
-    this.setState({currentView: target});
+    this.setState({
+      currentView: target
+    });
     if (this.props.action) {
       this.props.action(target);
     }
@@ -73,7 +75,7 @@ class HackNav extends React.Component {
         </button>
 
         <div className='links-container'>
-          <NavButton to='task' id={'task'} onClick={()=>this.updateHackNav('task')}>
+          <NavButton to='task' id={'task'} className="pl-0" onClick={()=>this.updateHackNav('task')}>
             Task
           </NavButton>
 
