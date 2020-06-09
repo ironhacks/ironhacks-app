@@ -67,6 +67,17 @@ h1, h2, h3 {
   display: none;
 }
 
+.nohover:hover {
+  color: inherit !important;
+  background-color: inherit !important;
+}
+
+.nohover:hover::before {
+  content: unset !important;
+  color: inherit !important;
+  background-color: inherit !important;
+}
+
 .page.home_page {
   font-size: 1.1em;
 }

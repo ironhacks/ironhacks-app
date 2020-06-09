@@ -1,6 +1,7 @@
 import React from 'react'
 import { Row, Col } from '../../../components/layout'
-import upcomingImg from './images/upcoming-covid19-cta.png'
+import upcomingImg from '../../../assets/img/upcoming-covid19-cta.png'
+import { Link } from 'react-router-dom';
 
 
 class UpcomingSection extends React.Component {
@@ -11,7 +12,9 @@ class UpcomingSection extends React.Component {
             UPCOMING <span className="font-extrabold">IRONHACKS</span>
           </h2>
           <Col colClass="text-center">
-            <img src={upcomingImg} alt="Upcoming Hack" className="banner_img"/>
+            <a href="/covid19" className="nohover">
+              <img src={upcomingImg} alt="Upcoming Hack" className="banner_img"/>
+            </a>
           </Col>
         </Row>
     )

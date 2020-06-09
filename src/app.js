@@ -7,6 +7,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { PageNotFound } from './views/default/404';
 import HomePage from './views/home';
 import Admin from './views/admin';
+import UpcomingHackPage from './views/pages/covid19-hack-page';
 import { ProjectEditor } from './components/project';
 import { DashboardPage } from './views/dashboard';
 import { AdminDashboard } from './views/admin/adminDashboard';
@@ -194,6 +195,9 @@ class App extends React.Component {
             <Switch>
               <Route exact path='/' >
                 <HomePage />
+              </Route>
+              <Route exact path='/covid19' >
+                <UpcomingHackPage />
               </Route>
 
               {this.state.user && (
