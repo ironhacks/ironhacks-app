@@ -25,7 +25,7 @@ class ProcessSection extends React.Component {
       </Row>
       <Row>
         <Col>
-          <img src={processImg}/>
+          <img src={processImg} alt="IronHacks Process Figure"/>
         </Col>
       </Row>
       </>

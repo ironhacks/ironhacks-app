@@ -1,8 +1,6 @@
 import React from 'react'
 import { Row, Col } from '../../../components/layout'
 import upcomingImg from '../../../assets/img/upcoming-covid19-cta.png'
-import { Link } from 'react-router-dom';
-
 
 class UpcomingSection extends React.Component {
   render() {
