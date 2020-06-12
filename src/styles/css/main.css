@@ -81,3 +81,19 @@ h1, h2, h3 {
 .page.home_page {
   font-size: 1.1em;
 }
+
+.list {
+  display: block;
+  list-style: disc;
+  padding-left: 1em;
+}
+
+.list li {
+  display: list-item;
+  list-style: disc;
+  margin: 0.9em 0em 0.9em 0.7em;
+}
+
+.nav-item:hover {
+  text-decoration: none;
+}
