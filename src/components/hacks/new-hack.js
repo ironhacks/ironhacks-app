@@ -68,7 +68,7 @@ const DatePickerContainer = styled('button')`
   }
 `;
 
-class IronHacksApp extends React.Component {
+class HackSetup extends React.Component {
   _timeoutID;
 
   constructor(props) {
@@ -402,4 +402,4 @@ class IronHacksApp extends React.Component {
   }
 }
 
-export default IronHacksApp;
+export default HackSetup;

@@ -12,6 +12,7 @@
 
 .hack_card_list__item {
   margin-top: 1em;
+  display: block;
 }
 
 .hack_card {

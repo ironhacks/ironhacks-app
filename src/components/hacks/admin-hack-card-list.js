@@ -1,7 +1,7 @@
 import React from 'react';
-import { HackCard } from './hack-card';
+import { AdminHackCard } from './admin-hack-card';
 
-class HackCardList extends React.Component {
+class AdminHackCardList extends React.Component {
   constructor(props) {
     super(props);
     this.emptyText = this.props.emptyText || 'There are no hacks available.';
@@ -24,7 +24,7 @@ class HackCardList extends React.Component {
             index={index}
             >
 
-            <HackCard
+            <AdminHackCard
               name={hack.name}
               hackId={hack.id}
               hack={hack}
@@ -40,4 +40,4 @@ class HackCardList extends React.Component {
 }
 
 
-export { HackCardList }
+export { AdminHackCardList }

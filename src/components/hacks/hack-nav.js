@@ -93,12 +93,6 @@ class HackNav extends React.Component {
 
           <span> | </span>
 
-          <NavButton to='examples' onClick={()=>this.updateHackNav('examples')}>
-            Examples
-          </NavButton>
-
-          <span> | </span>
-
           <NavButton to='quiz' onClick={()=>this.updateHackNav('quizzes')}>
             Quiz
           </NavButton>
