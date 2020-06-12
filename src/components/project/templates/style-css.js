@@ -60,3 +60,5 @@ const StyleCssTemplate = {
   path: 'css/',
   blob: new Blob([styleCss], { type: 'text/css' }),
 };
+
+export { StyleCssTemplate }
