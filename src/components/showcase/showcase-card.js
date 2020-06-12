@@ -1,10 +1,6 @@
 import React from 'react';
 
 class ShowcaseCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="card showcase_card depth-1">
@@ -36,4 +32,4 @@ ShowcaseCard.defaultProps = {
   likes: '0',
 }
 
-export { ShowcaseCard }
+export default ShowcaseCard;

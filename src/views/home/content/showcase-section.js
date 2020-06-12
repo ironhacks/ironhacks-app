@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col } from '../../../components/layout'
-import { ShowcaseCard } from './showcase-card';
+import { ShowcaseCard } from '../../../components/showcase';
 import './assets/css/showcase-section.css';
 import app1 from './images/showcase-2018-spring-ialemusm.jpg';
 import app2 from './images/showcase-2018-spring-juaccardenasgom.jpg';
@@ -21,7 +21,7 @@ class ShowcaseSection extends React.Component {
         </h2>
         <p>
           In prior years, IronHackers with no coding experience produced
-          interactive visualizations within 10 to 21 days! Explore some of 
+          interactive visualizations within 10 to 21 days! Explore some of
           the showcases of students who participated in an affordable housing challenge.
         </p>
         </Col>
