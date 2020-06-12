@@ -6,11 +6,16 @@ import { instanceOf } from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { PageNotFound } from './views/default/404';
 import HomePage from './views/home';
-import Admin from './views/admin';
-import UpcomingHackPage from './views/pages/covid19-hack-page';
+import { AdminHackDashboard  } from './views/admin';
+import {
+  AdminHackSelectPage,
+  ProfilePage,
+  UpcomingHackPage,
+  HackPage,
+  HackSelectPage,
+  // ShowcasePage,
+} from './views/pages/';
 import { ProjectEditor } from './components/project';
-import { DashboardPage } from './views/dashboard';
-import { AdminDashboard } from './views/admin/adminDashboard';
 import Login from './views/login';
 import './styles/css/root.css'
 import './styles/css/main.css'
@@ -39,10 +44,11 @@ class App extends React.Component {
     // const { cookies } = props;
 
     this.state = {
+      loading: true,
+      user: null,
       userId: null,
       userIsAdmin: false,
       userHackData: null,
-      mustNavigate: false,
     }
 
     this._isMounted = false;
@@ -58,29 +64,9 @@ class App extends React.Component {
     this._isMounted = false;
    }
 
-   _setShouldNavigate(_update) {
-     this.setState({mustNavigate: _update});
+   _setLoadingState(isLoading) {
+     this.setState({loading: isLoading});
    }
-
-   _setUpdateAdmin(_admin) {
-     this.setState((prevState, props) => {
-       if (prevState.user) {
-         prevState.user.isAdmin = _admin;
-         prevState.userIsAdmin = _admin;
-       }
-       return prevState;
-     });
-   }
-
-   async _isAdmin(uid) {
-    if (uid) {
-      let isAdmin = await window.firebase.firestore()
-        .collection('admins')
-        .doc(uid)
-        .get();
-      this._setUpdateAdmin(isAdmin.exists)
-    }
-  }
 
   _setUserHackdata(hackData){
     localStorage.setItem('userHackData', JSON.stringify(hackData));
@@ -108,16 +94,16 @@ class App extends React.Component {
     this._setUserHackdata(hackData);
   }
 
-  getUserName() {
-    var user = window.firebase.auth().currentUser
+  async getUserName() {
+    var user = await window.firebase.auth().currentUser
     if (user) {
       return user.displayName;
     }
   }
 
-
   _logout() {
     this.removeCookies();
+    window.localStorage.clear();
     window.firebase.auth()
       .signOut()
       .then(
@@ -135,17 +121,42 @@ class App extends React.Component {
     if (cookies.get('currentHack')) {
       cookies.remove('currentHack');
     }
+    if (cookies.get('ironhack_user')) {
+      cookies.remove('ironhack_user');
+    }
     if (cookies.get('currentForum')) {
       cookies.remove('currentForum');
     }
   }
 
-   _setUser(_user) {
+   _setUser(data) {
+     const { cookies } = this.props;
      this.setState({
-       user: _user,
-       userId: _user.uid,
-    });
+       user: data.user,
+       userIsAdmin: data.userIsAdmin,
+       userId: data.userId,
+    })
+    const { lastLoginAt, uid, profileLetters, displayName } = data.user;
+    const cookieData = {
+      loggedIn: lastLoginAt,
+      userId: uid,
+      initials: profileLetters,
+      displayName: displayName,
+    };
+
+    this._setLoadingState(false)
+    cookies.set('ironhack_user', window.btoa(JSON.stringify(cookieData)))
    }
+
+  async _isAdmin(uid) {
+    if (uid) {
+      let isAdmin = await window.firebase.firestore()
+        .collection('admins')
+        .doc(uid)
+        .get();
+      return isAdmin.exists
+    }
+  }
 
   _isUserConnected() {
     const filterUserData = (user) => {
@@ -155,7 +166,7 @@ class App extends React.Component {
         displayName: user.displayName,
         email: user.email,
         emailVerified: user.emailVerified,
-        phoneNumber: user.photoURL,
+        // phoneNumber: user.photoURL,
         photoURL: user.photoURL,
         profileLetters: names[0].slice(0, 1) + names[1].slice(0, 1),
         provider: user.providerData,
@@ -170,125 +181,135 @@ class App extends React.Component {
       .onAuthStateChanged((user) => {
         if (user) {
           let _user = filterUserData(user);
-          this._setUser(_user);
-          this._isAdmin(_user.uid);
+          let _userIsAdmin = this._isAdmin(_user.uid);
+
+          Promise.resolve(_userIsAdmin).then((_userIsAdminResult)=>{
+            this._setUser({
+              user: _user,
+              userId: _user.uid,
+              userIsAdmin: _userIsAdminResult,
+            });
+          })
+
           this._updateHackData(_user.uid);
+
         } else {
-          this._setUser({});
-          this._setShouldNavigate(true);
+          this._setUser({
+            user: false,
+            userId: false,
+            userIsAdmin: false,
+          });
         }
       })
-    this._setShouldNavigate(true);
   }
 
   render() {
-      if(!this.state.user){
+      if(this.state.loading){
         return(
           <LoaderContainer>
             <Loader/>
           </LoaderContainer>
-        );
+        )
       } else {
         return (
           <CookiesProvider>
-          <div className='App'>
-            <Switch>
-              <Route exact path='/' >
-                <HomePage />
-              </Route>
-              <Route exact path='/covid19' >
-                <UpcomingHackPage />
-              </Route>
-
-              {this.state.user && (
-                <Route path='/hacks'>
-                <DashboardPage
-                    user={this.state.user}
-                    userIsAdmin={this.state.userIsAdmin}
-                  />
+            <div className='App'>
+              <Switch>
+                <Route exact path='/' >
+                  <HomePage />
                 </Route>
-              )}
 
-              {this.state.user && (
-                <Route path='/project'>
-                  <ProjectEditor
-                    user={this.state.user}
-                    userIsAdmin={this.state.userIsAdmin}
-                  />
+                <Route exact path='/covid19' >
+                  <UpcomingHackPage />
                 </Route>
-              )}
 
-              {this.state.user && (
-                <Route path='/profile'>
-                  <DashboardPage
-                    user={this.state.user}
-                    userIsAdmin={this.state.userIsAdmin}
-                  />
-                </Route>
-              )}
-
-              {this.state.user && (
                 <Route
-                  path='/logout'
-                  render={()=>(this._logout())}
+                  path='/login'
+                  component={Login}
                 />
-              )}
+                {this.state.user && (
+                  <>
+                    <Route exact path='/hacks'>
+                      <HackSelectPage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
 
-              <Route path='/login' component={Login}/>
-              <Route exact path='/404' component={PageNotFound}/>
+                    <Route path='/hacks/:hackId'>
+                      <HackPage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                        userId={this.state.userId}
+                      />
+                    </Route>
 
-              {this.state.user && (
-                <Route path='/hacks'>
-                  <DashboardPage
-                    user={this.state.user}
-                    userIsAdmin={this.state.userIsAdmin}
-                  />
-              </Route>
-              )}
+                    <Route exact path='/projects'>
+                      <ProjectEditor
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
 
-              {this.state.user && (
-              <Route path='/projects/:projectName'>
-                <ProjectEditor
-                  user={this.state.user}
-                  userIsAdmin={this.state.userIsAdmin}
-                />
-              </Route>
-              )}
+                    <Route path='/projects/:projectName'>
+                      <ProjectEditor
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
 
-              <Route path='/profile'>
-                <DashboardPage
-                  user={this.state.user}
-                  userIsAdmin={this.state.userIsAdmin}
-                />
-              </Route>
+                    <Route exact path='/profile'>
+                      <ProfilePage
+                        profileId={this.state.userId}
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
 
-              {this.state.userIsAdmin && (
-                <>
-                <Route exact path='/admin'>
-                  <Admin
-                    user={this.props.user}
-                  />
-                </Route>
-                <Route path='/admin/dashboard/:hackName'>
-                  <AdminDashboard
-                    user={this.props.user}
-                  />
-                </Route>
-                </>
-              )}
+                    <Route path='/profile:profileId'>
+                      <ProfilePage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
 
-              <Route
-                path='/logout'
-                render={()=>(this._logout())}
-              />
+                    <Route exact path='/logout'
+                      render={()=>(this._logout())}
+                    />
 
-              <Redirect to='/'/>
-            </Switch>
+                  {this.state.userIsAdmin && (
+                    <>
+                    <Route exact path='/admin'>
+                      <AdminHackSelectPage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
+
+                    <Route path='/admin/hacks/:hackId'>
+                      <AdminHackDashboard
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
+                    </>
+                  )}
+                  </>
+                )}
+
+                <Route exact path='/404' component={PageNotFound}/>
+
+                <Redirect to='/'/>
+
+              </Switch>
             </div>
           </CookiesProvider>
       );
     }
   };
 }
+
+
+//     <Route path='/profile/:userId' render={(props) => (<UserProfile user={this.state.user} {...props}/>)}/>
 
 export default withCookies(App);
