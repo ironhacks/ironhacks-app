@@ -55,7 +55,7 @@ const ProfileContainer = styled('div')`
 `;
 
 
-class UserProfile extends React.Component {
+class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     // const { cookies } = props;
@@ -118,4 +118,4 @@ class UserProfile extends React.Component {
 }
 
 
-export default withCookies(UserProfile);
+export default withCookies(ProfilePage);

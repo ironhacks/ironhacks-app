@@ -1,26 +1,19 @@
 import React from 'react';
-import { withCookies } from 'react-cookie';
-import { HackNav } from './hack-nav';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { Section, Row, Col } from '../../components/layout';
+import { Page, Section, Row, Col } from '../../components/layout';
 import TutorialScreen from '../tutorial';
-import ExamplesPage from '../examples';
 import ForumView from '../forum/forum.js';
 // import ThreadViewWithRouter from '../forum/threadView/threadView';
 // import NewThread from '../forum/newThread.js';
 import { ProjectEditor } from '../../components/project';
 import { ProjectsPage } from  '../projects';
-import TaskView from '../task';
 import { ResultsView } from '../results';
+import { HackNav } from '../../components/hacks';
+import TaskView from '../task';
 import QuizListView from '../quiz/quiz-list-view';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  // Link,
-} from 'react-router-dom';
 
 class HackPage extends React.Component {
   constructor(props) {
@@ -31,15 +24,12 @@ class HackPage extends React.Component {
     const hackDataPromise = this.getHack(this.hackId);
 
     this.state = {
-      hackUserId: null,
       hackId: this.hackId,
       activeView: 'task',
-      user: this.props.user,
-      loading: false,
+      loading: true,
       hackPhases: [],
       hackTask: null,
     };
-
 
     Promise.resolve(hackDataPromise).then((hackData) => {
        this.hackData = hackData;
@@ -55,12 +45,6 @@ class HackPage extends React.Component {
     this.setHackTask();
   }
 
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  // }
-
-  // componentWillUnmount() {
-  // }
-
   async getHack(hackId) {
     let hack = await window.firebase.firestore()
       .collection('hacks')
@@ -69,7 +53,6 @@ class HackPage extends React.Component {
 
     if (hack.exists) {
       var hackData = hack.data();
-      console.log('hackdata', hackData);
       return hackData;
     }
 
@@ -105,21 +88,13 @@ class HackPage extends React.Component {
     })
   }
 
-  setCurrentHack(_hack_id) {
-    // const { cookies } = this.props;
-    // cookies.set('currentHack', _hack_id);
-  };
-
   updateHackView(target) {
     console.log('update view', this, this.context, target);
     this.setState({
       activeView: target
     })
-
-    console.log(this.props.history)
     this.props.history.push(`./${target}`)
     this.props.history.go(`./${target}`)
-
   }
 
   render() {
@@ -128,10 +103,13 @@ class HackPage extends React.Component {
         <Section>
           <Loader status={this.state.status} />
         </Section>
-    )
-  } else {
+      )
+    } else {
       return (
-        <>
+       <Page
+          user={this.props.user}
+          userIsAdmin={this.props.userIsAdmin}
+          >
         <Section>
           <Row>
             <Col>
@@ -179,14 +157,6 @@ class HackPage extends React.Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/examples">
-              <Section>
-                <ExamplesPage
-                  hackId={this.hackId}
-                />
-              </Section>
-            </Route>
-
             <Route exact path="/hacks/:hackId/quiz">
               <Section>
                 <QuizListView
@@ -218,7 +188,7 @@ class HackPage extends React.Component {
                   hackData={this.state.hackData}
                   user={this.props.user}
                   userId={this.props.userId}
-                  userIsAdmin={this.state.userIsAdmin}
+                  userIsAdmin={this.props.userIsAdmin}
                 />
               </Section>
             </Route>
@@ -236,10 +206,10 @@ class HackPage extends React.Component {
             </Route>
           </Switch>
         </Router>
-      </>
+      </Page>
       )
     }
   }
 }
 
-export default withCookies(withRouter(HackPage))
+export default withRouter(HackPage)

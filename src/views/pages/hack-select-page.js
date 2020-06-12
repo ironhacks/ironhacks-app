@@ -1,36 +1,11 @@
 import React from 'react';
 import { withCookies } from 'react-cookie';
-import styled, { ThemeProvider } from 'styled-components';
 import swal from 'sweetalert2';
-import { HackCardList } from '../../components/hacks/hack-card-list';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
+import { HackCardList } from '../../components/hacks';
 import * as AlertsContent from '../../components/alert';
-import { Theme } from '../../theme';
-
-const styles = Theme.STYLES.AppSectionTheme;
-
-const SectionContainer = styled('div')`
-  width: 100%;
-  height: ${(props) => props.theme.containerHeight};
-  background-color: ${(props) => props.theme.backgroundColor};
-
-  h1 {
-    margin-bottom: 20px;
-
-    &:first-child {
-      margin-top: 100px;
-    }
-  }
-
-  .empty-list {
-    color: gray;
-    font-style: italic;
-  }
-
-  overflow: auto;
-`;
-
+import { Page, Section, Row, Col } from '../../components/layout';
 
 class HackSelectPage extends React.Component {
   constructor(props) {
@@ -49,7 +24,7 @@ class HackSelectPage extends React.Component {
 
   componentDidMount() {
     try {
-      if (!this.state.user){
+      if (!this.props.user){
         console.log('user not set');
       }
       const hackPromise = this.getHacks(this.state.user);
@@ -63,9 +38,6 @@ class HackSelectPage extends React.Component {
     }
     window.addEventListener('message', this.recieveMessage);
   }
-
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  // }
 
   componentWillUnmount() {
     window.removeEventListener('message', this.recieveMessage);
@@ -115,6 +87,7 @@ class HackSelectPage extends React.Component {
       .doc(_user.uid)
       .get();
 
+
     const userHacks = fireuser.data().hacks;
 
     const whitelistDoc = await window.firebase.firestore()
@@ -122,29 +95,33 @@ class HackSelectPage extends React.Component {
       .doc(_user.email)
       .get();
 
-    const hackIds = whitelistDoc.data().whitelist;
+    if (whitelistDoc.exists) {
+      const { whitelist } = whitelistDoc.data();
+      let hacks = [];
 
-    let hacks = [];
+      if (whitelist && Array.isArray(whitelist)) {
+        for (let hackId of whitelist) {
+          let hackDoc = await window.firebase.firestore()
+          .collection('hacks')
+          .doc(hackId)
+          .get();
 
-    if (hackIds && Array.isArray(hackIds)) {
-      for (let hackId of hackIds) {
-        let hackDoc = await window.firebase.firestore()
-         .collection('hacks')
-         .doc(hackId)
-         .get();
+          let hack = hackDoc.data();
+          hack.hackId = hackId;
+          if (userHacks.includes(hackId)) {
+            hack.registered = true;
+          }
 
-        let hack = hackDoc.data();
-        hack.hackId = hackId;
-        if (userHacks.includes(hackId)) {
-          hack.registered = true;
+          hacks.push(hack);
         }
 
-        hacks.push(hack);
+        localStorage.setItem('userHacks', JSON.stringify(hacks));
       }
 
-      localStorage.setItem('userHacks', JSON.stringify(hacks));
       return hacks;
 
+    } else {
+      return [];
     }
   }
 
@@ -166,12 +143,13 @@ class HackSelectPage extends React.Component {
   };
 
   callRegistrationFuncion(hackIndex) {
-    console.log('register for hacquizzesk');
     this.setState({
       loading: true,
       status: 'Starting registration process...',
     });
+
     const _this = this;
+
     const hackId = _this.state.availableHacks[hackIndex].id;
     const registerUserFunc = window.firebase
       .functions()
@@ -180,12 +158,10 @@ class HackSelectPage extends React.Component {
     registerUserFunc({
       hackId: hackId
     }).then((result) => {
-      console.log('register user function', result);
-      // const projectName = _this.state.availableHacks[hackIndex]
-      //   .data()
-      //   .name.replace(/\s/g, '');
-        console.log('CREATE NEW PROJECT');
-      // _this.createNewProject(projectName, hackId, hackIndex);
+      const projectName = _this.state.availableHacks[hackIndex]
+         .data()
+         .name.replace(/\s/g, '');
+        _this.createNewProject(projectName, hackId, hackIndex);
     });
   };
 
@@ -213,56 +189,56 @@ class HackSelectPage extends React.Component {
   render() {
     if (this.state.loading) {
       return (
-        <ThemeProvider theme={styles}>
-          <SectionContainer className='container-fluid'>
-            <Loader status={this.state.status} />
-          </SectionContainer>
-        </ThemeProvider>
+        <Section>
+          <Loader status={this.state.status} />
+        </Section>
+      )
+    } else {
+      return (
+        <Page
+          user={this.props.user}
+          userIsAdmin={this.props.userIsAdmin}
+        >
+          <Section sectionClass="py-2">
+            <Row>
+              <Col colClass="">
+                <h1 className="h1 page-title">
+                  <strong>Welcome to IronHacks</strong>
+                </h1>
+
+                <h2 className="h2 py-2">Registerd Hacks</h2>
+
+                <Separator primary />
+
+                <HackCardList
+                  emptyText={'You are not registered for any hacks.'}
+                  hacks={this.state.registeredHacks}
+                />
+
+                <Separator />
+
+                <h2 className="h2 py-2">
+                  Hacks Open for Registration
+                </h2>
+
+                <Separator primary />
+
+                <p className="my-5 font-italic cl-lightblue-dk1">
+                  <strong>
+                    The IronHacks Summer 2020: A Global COVID-19 Data Science Challenge will be open for registration soon!
+                  </strong>
+                </p>
+
+                <HackCardList
+                  emptyText={'There are no hacks currently available.'}
+                  hacks={this.state.availableHacks}
+                />
+              </Col>
+            </Row>
+          </Section>
+        </Page>
       )
     }
-
-    return (
-      <ThemeProvider theme={styles}>
-        <SectionContainer className='container-fluid'>
-          <div className='row'>
-            <div className='col-md-8 offset-md-2'>
-              <h1><strong>Welcome to the IronHacks Platform!</strong></h1>
-              <h2>My Hacks</h2>
-              <p>
-                Below you will find the hacks you are currently participating
-                in. Click in any of them to go to the contest.
-              </p>
-
-              <Separator primary />
-
-              <HackCardList
-                emptyText={'You are not registered for any hacks.'}
-                hacks={this.state.registeredHacks}
-              />
-
-              <Separator />
-
-              <h2 style={{paddingTop: '1em'}}>
-                Available hacks for registration
-              </h2>
-
-              <p>
-                Below you will find all of the hacks that are available for registration.
-                Click on one of them to start the registration process.
-              </p>
-
-              <Separator primary />
-
-              <HackCardList
-                emptyText={'There are no hacks currently available.'}
-                hacks={this.state.availableHacks}
-              />
-
-            </div>
-          </div>
-        </SectionContainer>
-      </ThemeProvider>
-    );
   }
 }
 
