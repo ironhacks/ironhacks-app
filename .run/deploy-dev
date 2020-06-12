@@ -1,0 +1,29 @@
+#!/bin/bash
+
+BASE_PATH="$(npm prefix)"
+
+[[ -f "${BASE_PATH}/.npmrc" ]] && . ${BASE_PATH}/.npmrc
+[[ -f "${BASE_PATH}/.env" ]] && . ${BASE_PATH}/.env
+
+# firebase projects:list
+# firebase use "${FIREBASE_PROJECT_DEV}"
+
+PROJECT_VERSION="$(${BASE_PATH}/.run/proj-version)"
+
+echo "DEPLOYING PROJECT VERSION: ${PROJECT_VERSION} [DEV]"
+
+# STASH CURRENT BUILD IF EXISTS
+
+[[ -d "${BASE_PATH}/.dist/build_v${PROJECT_VERSION}" ]] \
+		&& cd "${BASE_PATH}/.dist" \
+		&& rm -rf "./build_v${PROJECT_VERSION}"
+
+[[ -d "${BASE_PATH}/build" ]] \
+		&& mv "${BASE_PATH}/build" "${BASE_PATH}/.dist/build_v${PROJECT_VERSION}"
+
+# CHECK if GIT BRANCH IS CLEAN (OPTIONAL ON DEV)
+
+# UPDATE VERSION NUMBER (OPTIONAL ON DEV)
+
+# DEPLOY TO DEVELOPMENT
+firebase deploy --only hosting
