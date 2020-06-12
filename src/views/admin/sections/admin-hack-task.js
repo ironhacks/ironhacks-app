@@ -1,8 +1,8 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import MarkdownEditor from '../../../../components/markdownEditor/markdownEditor.js';
-import Button from '../../../../util/button.js';
-import { Theme } from '../../../../theme';
+import MarkdownEditor from '../../../components/markdownEditor/markdownEditor.js';
+import Button from '../../../util/button.js';
+import { Theme } from '../../../theme';
 
 
 
