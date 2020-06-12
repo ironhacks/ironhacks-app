@@ -118,5 +118,5 @@
     "start:debug": ".run/info-ls-gitchanged",
     "test": "npm run reactscripts:test"
   },
-  "version": "2.0.8"
+  "version": "2.0.9"
 }
