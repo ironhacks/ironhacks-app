@@ -2,14 +2,15 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import { Theme } from '../../theme';
+import { Cookies, withCookies } from 'react-cookie';
+import { BlankPage, Section, Row, Col } from '../../components/layout';
 
-const colors = Theme.COLORS;
 const styles = Theme.STYLES.LoginTheme;
 
 const SectionContainer = styled('div')`
   width: 100%;
   height: 100vh;
-  background-color: ${colors.mainBgColor};
+  background-color: var(--color-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,6 +30,7 @@ const SectionContainer = styled('div')`
     font-weight: 300;
   }
 `;
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -37,6 +39,7 @@ class Login extends React.Component {
     }
 
     this.isAdmin = this.isAdmin.bind(this);
+
   }
 
   componentDidMount() {
@@ -46,7 +49,11 @@ class Login extends React.Component {
   initAuthUI() {
     const uiConfig = {
       signInFlow: 'redirect',
-      signInOptions: [window.firebase.auth.EmailAuthProvider.PROVIDER_ID],
+      signInOptions: [
+        window.firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        window.firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        window.firebase.auth.GithubAuthProvider.PROVIDER_ID,
+      ],
       callbacks: {
         signInSuccessWithAuthResult: (authResult, redirectUrl) => {
           const user = {
@@ -54,11 +61,16 @@ class Login extends React.Component {
             email: authResult.user.email,
             uid: authResult.user.uid,
           };
-          this.setState({ user: user });
+
+          this.setState({
+            user: user
+          });
+
           if (authResult.additionalUserInfo.isNewUser === true) {
             this.saveUserOnDB(user);
             user.isAdmin = false;
             return false;
+
           } else {
             this.isAdmin(user);
             return false;
@@ -73,39 +85,53 @@ class Login extends React.Component {
       credentialHelper: window.firebaseui.auth.CredentialHelper.NONE, // Disableing credentialHelper
     };
 
-    // Making sure there is only one AuthUI instance
-    if (window.firebaseui.auth.AuthUI.getInstance()) {
-      const ui = window.firebaseui.auth.AuthUI.getInstance();
-      ui.start('#firebaseui-auth-container', uiConfig);
+    const uiInstance = window.firebaseui.auth.AuthUI.getInstance();
+    if (uiInstance) {
+      uiInstance.start('#firebaseui-auth-container', uiConfig);
     } else {
       const ui = new window.firebaseui.auth.AuthUI(window.firebase.auth());
       ui.start('#firebaseui-auth-container', uiConfig);
     }
   }
 
-  saveUserOnDB(user) {
-    const _this = this;
+
+  async _saveUserOnDB(user) {
     window.firebase.firestore()
       .collection('users')
       .doc(user.uid)
-      .set({ name: user.name, email: user.email })
+      .set({
+        name: user.name,
+        email: user.email
+      })
       .then(function(docRef) {
-        _this.setState({ mustNavigate: true });
+        this.setState({
+          mustNavigate: true
+        });
       })
       .catch(function(error) {
         console.error('Error adding document: ', error);
       })
   };
 
+
+  async _isAdmin(uid) {
+    if (uid) {
+      let isAdmin = await window.firebase.firestore()
+        .collection('admins')
+        .doc(uid)
+        .get();
+      return isAdmin.exists
+    }
+  }
+
   isAdmin(user) {
     const _user = user;
-    const _this = this;
     window.firebase.firestore()
       .collection('admins')
       .doc(_user.uid)
       .get()
-      .then(function(doc) {
-        _this.setState((prevState, props) => {
+      .then((doc)=>{
+        this.setState((prevState, props) => {
           _user.isAdmin = true;
           return {
             user: _user,
@@ -113,9 +139,9 @@ class Login extends React.Component {
           }
         })
       })
-      .catch(function(error) {
-        // The user can't read the admins collection, therefore, is not admin.
-        _this.setState((prevState, props) => {
+      .catch((error)=>{
+        console.log('User Role Check Error', error);
+        this.setState((prevState, props) => {
           _user.isAdmin = false;
           return {
             user: _user,
@@ -126,29 +152,33 @@ class Login extends React.Component {
   }
 
   render() {
-    const _user = this.state.user;
-
     if (this.state.mustNavigate) {
       return (
-        <Redirect
-          to={{
+        <Redirect to={{
             pathname: '/hacks',
-            state: { user: _user },
+            state: {
+              user: this.state.user
+            },
           }}
         />
       )
     } else {
       return (
         <ThemeProvider theme={styles}>
+        <BlankPage>
           <SectionContainer>
+
             <h1><span>PURDUE</span> IRONHACKS</h1>
+
             <h2>Hack for innovation and join the open data movement.</h2>
+
             <div id='firebaseui-auth-container' />
           </SectionContainer>
+         </BlankPage>
         </ThemeProvider>
       )
     }
   }
 }
 
-export default Login;
+export default withCookies(Login);
