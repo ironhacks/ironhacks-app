@@ -4,10 +4,6 @@ import CountUp from 'react-countup';
 import './assets/css/stats-section.css';
 
 class StatsCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div class="card stats_card py-6">
@@ -41,11 +37,11 @@ class StatsSection extends React.Component {
         </h2>
 
         <p className="my-5 py-2 text-center">
-          Since 2015, more than 1000 participants have hacked in parallel virtually
-          around the globe gaining valuable experience in coding as well as work for
-          the chance to win internships, Amazon gift cards, cool swag, and certificates.
-          In addition to participants' learning, IronHacks provide the
-          opportunity to do research on open innovation contest processes.
+          Since 2015, more than 1000 participants have hacked in parallel virtually around the
+          globe gaining valuable experience in coding as well as work for the chance to win
+          internships, Amazon gift cards, cool swag, and certificates. In addition to the
+          participation and learning, IronHacks provide the opportunity to do research
+          on open innovation contest processes.
         </p>
       </Row>
 
@@ -53,24 +49,23 @@ class StatsSection extends React.Component {
         <Col colClass="impact_card">
           <h3 className="h3 my-2 font-bold">Innovation Impact</h3>
           <p>
-            Participants developed novel and useful open data solutions in an interactive
-            environment. The platform's features helped them continuously improve their submissions
-            while learning from real-time feedback and others participating in the hack.
+            Participants developed novel and useful open data solutions in an interactive environment.
+            The platform's features helped them continuously improve their submissions while learning
+            from real-time feedback and others participating in the hack.
           </p>
         </Col>
         <Col colClass="impact_card">
           <h3 className="h3 my-2 font-bold">Globalization Impact</h3>
           <p>
-            A new virtual movement of hacking has emerged at Purdue and beyond.
-            Participants come from the US, Colombia, and China. The virtual setting
-            encourages a more diverse audience.
+            The virtual setting of hacking has emerged at Purdue and beyond. Participants come
+            from the US, Colombia, and China. Virtual setting encourages a more diverse audience.
           </p>
         </Col>
         <Col colClass="impact_card">
           <h3 className="h3 my-2 font-bold">Scientific Impact</h3>
           <p>
-            The scientific team at Purdue generated new knowledge and technologies
-            on the implications of machine-enabled feedback and transparency on participants'
+            The scientific team at Purdue generated new knowledge and technologies on the
+            implications of machine-enabled feedback and transparency on participants'
             productivity and innovation performance.
           </p>
         </Col>

@@ -1,15 +1,15 @@
 import React from 'react';
 // import { Page } from '../layouts/page';
 import { LandingPage, Section } from '../../components/layout';
-import { AboutSection } from './content/about-section';
-import { ExamplesSection } from './content/examples-section';
-import { ProcessSection } from './content/process-section';
-import { FooterSection } from './content/footer-section';
-import { HeroSection } from './content/hero-section';
-import { ShowcaseSection } from './content/showcase-section';
-import { StatsSection } from './content/stats-section';
-import { SponsorsSection } from './content/sponsors-section';
-import { UpcomingSection } from './content/upcoming-section';
+import { AboutSection } from '../home/content/about-section';
+import { ExamplesSection } from '../home/content/examples-section';
+import { ProcessSection } from '../home/content/process-section';
+import { FooterSection } from '../home/content/footer-section';
+import { HeroSection } from '../home/content/hero-section';
+import { ShowcaseSection } from '../home/content/showcase-section';
+import { StatsSection } from '../home/content/stats-section';
+import { SponsorsSection } from '../home/content/sponsors-section';
+import { UpcomingSection } from '../home/content/upcoming-section';
 
 class HomePage extends React.Component {
   render() {

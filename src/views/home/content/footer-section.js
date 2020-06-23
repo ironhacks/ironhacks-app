@@ -2,10 +2,6 @@ import React from 'react';
 import { Row, Col } from '../../../components/layout'
 
 class FooterCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div class="card example_card">
@@ -43,7 +39,8 @@ class FooterSection extends React.Component {
       <Row>
         <Col>
           <p className="text-center py-2">
-            You can connect with us via phone, email, or just come to the Research Center for Open Digital Innovation, West Lafayette, IN.
+            You can connect with us via phone, email, or just come to the Research Center
+            for Open Digital Innovation, West Lafayette, IN.
           </p>
         </Col>
       </Row>
@@ -74,6 +71,17 @@ class FooterSection extends React.Component {
           </div>
         </Col>
       </Row>
+      <Row>
+        <Col colClass="text-center">
+          <div>
+          <small>IronHacks is an initiative of the Research Center for Open Digital Innovation (RCODI).</small>
+          </div>
+          <div>
+            <small>It is financially supported by the National Science Foundation (Award #1462044).</small>
+          </div>
+        </Col>
+      </Row>
+
       </>
     )
   }

@@ -31,18 +31,13 @@ class ShowcaseSection extends React.Component {
         <Col>
           <p>
             <strong>Civic Challenge: </strong>
-            Find me a safe and affordable district to live in near the NYU Stern
-            School of Business, New York.
+            Find me a safe and affordable district to live in near the NYU Stern School of
+            Business, New York.
           </p>
+
           <p>
             <strong>Description: </strong>
-            In this IronHacks Challenge, students developed a mashup that integrated,
-            analyzed and interactively displayed open data to support hypothetical
-            new students by evaluating and ranking the 59 habitable districts in
-            New York City. Mashups used a diverse set of decision parameters (metrics)
-            to find the Top 10 districts based on single parameters and the Top 3
-            districts based on the average of three key parameters of safety, affordability
-            and distance to NYU Stern.
+            In this IronHacks Challenge, students developed a mashup that integrated, analyzed and interactively displayed open data to support hypothetical new students by evaluating and ranking the 59 habitable districts in New York City. Mashups used a diverse set of decision parameters (metrics) to find the Top 10 districts based on single parameters and the Top 3 districts based on the average of three key parameters of safety, affordability and distance to NYU Stern.
           </p>
 
         </Col>

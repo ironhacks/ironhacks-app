@@ -6,10 +6,6 @@ import houseImg from './images/housing.jpg';
 import './assets/css/examples-section.css';
 
 class ExampleCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="card example_card">
