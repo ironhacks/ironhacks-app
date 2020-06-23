@@ -14,11 +14,15 @@ const SectionContainer = styled('div')`
 `;
 
 class AdmTutorialSection extends React.Component {
-  state = { previousDocument: this.props.previousDocument };
+  constructor(props) {
+    super(props);
 
-  onEditorChange = (markdown) => {
+    this.onEditorChange = this.onEditorChange.bind(this);
+  }
+
+  onEditorChange(markdown) {
     this.props.onTutorialMarkdownUpdate(markdown);
-  };
+  }
 
   render() {
     return (
@@ -32,7 +36,7 @@ class AdmTutorialSection extends React.Component {
           <MarkdownEditor
             editorLayout='tabbed'
             onEditorChange={this.onEditorChange}
-            withContent={this.state.previousDocument}
+            withContent={this.props.previousDocument}
           />
           <p>Here you will find the instrictions to publish your task.</p>
           <AvailableActionsDiv>

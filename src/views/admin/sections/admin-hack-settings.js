@@ -101,6 +101,18 @@ class AdmSettingsSection extends React.Component {
       <SectionContainer>
         <h2>{this.props.hack.name}'s Settings</h2>
         <Separator primary />
+        <div>
+          <h3>Hack Data:</h3>
+          <pre style={{
+            width: '100%',
+            whiteSpace: 'break-spaces',
+            padding: 0,
+            margin: 0,
+            position: 'relative',
+          }}>
+            {JSON.stringify(this.props.hack, null, '  ')}
+          </pre>
+        </div>
         <h3>
           <label htmlFor='whitelist'>White List</label>
         </h3>

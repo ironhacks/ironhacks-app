@@ -24,9 +24,9 @@ const SectionContainer = styled('div')`
 `;
 
 class AdmTaskSection extends React.Component {
-  onEditorChange = (markdown) => {
+  onEditorChange(markdown) {
     this.props.onTaskMarkdownUpdate(markdown);
-  };
+  }
 
   render() {
     return (

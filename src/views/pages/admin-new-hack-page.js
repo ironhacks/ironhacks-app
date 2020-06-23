@@ -5,7 +5,7 @@ import DayPicker, { DateUtils } from 'react-day-picker';
 import { Theme } from '../../theme';
 import Separator from '../../util/separator';
 import Button from '../../util/button.js';
-import Phase from './phase';
+import Phase from '../../components/hacks/phase';
 import ForumItem from '../../views/forum/forum-item';
 
 import 'react-day-picker/lib/style.css';
@@ -68,7 +68,7 @@ const DatePickerContainer = styled('button')`
   }
 `;
 
-class HackSetup extends React.Component {
+class HackSetupPage extends React.Component {
   _timeoutID;
 
   constructor(props) {
@@ -402,4 +402,4 @@ class HackSetup extends React.Component {
   }
 }
 
-export default HackSetup;
+export default HackSetupPage;

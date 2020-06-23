@@ -5,6 +5,7 @@ import { Theme } from '../../theme';
 import { Loader } from '../../components/loader/index';
 import { Page, Section, Row, Col } from '../../components/layout';
 import {
+  AdminHackForum,
   AdminHackSettings,
   AdminHackSurveys,
   AdminHackTutorial,
@@ -50,8 +51,7 @@ const ControlPanelItem = styled('div')`
 `;
 
 const SectionHeader = styled('div')`
-  min-height: 140px;
-  padding: 25px 50px 50px 50px;
+  padding: 1em 1em 1em 1em;
   border-bottom: 1px solid black;
 `;
 
@@ -116,16 +116,22 @@ class AdminHackDashboard extends React.Component {
       hackData: null,
       hackId: _hackId,
       loading: false,
-    };
+    }
+
+    this.onTaskMarkdownUpdate = this.onTaskMarkdownUpdate.bind(this)
+    this.onTutorialMarkdownUpdate = this.onTutorialMarkdownUpdate.bind(this)
+    this.updateTutorialDocument = this.updateTutorialDocument.bind(this)
+    this.updateTaskDocument = this.updateTaskDocument.bind(this)
+    this.getHack = this.getHack.bind(this);
   }
 
   componentDidMount() {
     if (!this.props.location.state) {
-      this.getHack(this.state.hackId);
+      this.getHack(this.hackId);
     } else {
-      this.setState({
-         hack: this.props.location.state.hack,
-      })
+      // this.setState({
+      //    hack: this.props.location.state.hack,
+      // })
     }
   }
 
@@ -134,7 +140,6 @@ class AdminHackDashboard extends React.Component {
       .collection('hacks')
       .doc(_hackId)
       .get();
-
 
     let adminHackData = await window.firebase.firestore()
       .collection('adminHackData')
@@ -147,7 +152,6 @@ class AdminHackDashboard extends React.Component {
       adminHackData.data()
     )
 
-    console.log('hackData', result);
     this.setState({
       hack: result,
     })
@@ -202,6 +206,7 @@ class AdminHackDashboard extends React.Component {
       .doc(this.state.hackId)
 
     const hackTask = this.state.hack.task;
+
     hackTask.doc = this.utoa(this.state.taskMarkdown);
     hackRef.update({
         task: hackTask,
@@ -268,7 +273,7 @@ class AdminHackDashboard extends React.Component {
 
                 <SectionHeader className='row no-gutters'>
                   <div className='col-md-12'>
-                    <h2>
+                    <h2 className="h2">
                       Hack: {this.state.hack ? this.state.hack.name : 'Loading'}
                     </h2>
                   </div>
@@ -278,6 +283,7 @@ class AdminHackDashboard extends React.Component {
                   <SectionBody className='col-md-12'>
                     {this.state.hack && !this.state.loading ? (
                       <Switch>
+
                         <Route
                           path={this.props.match.url + '/settings'}
                           render={() => (
@@ -288,6 +294,7 @@ class AdminHackDashboard extends React.Component {
                             />
                           )}
                         />
+
                         <Route
                           path={this.props.match.url + '/tutorial'}
                           render={() => (
@@ -297,15 +304,22 @@ class AdminHackDashboard extends React.Component {
                                   ? this.atou(this.state.hack.tutorial.doc)
                                   : ''
                               }
-                              onTutorialMarkdownUpdate={
-                                this.onTutorialMarkdownUpdate
-                              }
-                              updateTutorialDocument={
-                                this.updateTutorialDocument
-                              }
-                            />
-                          )}
-                        />
+                              onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
+                              updateTutorialDocument={this.updateTutorialDocument}
+                              />
+                            )}
+                          />
+
+                        <Route path={this.props.match.url + '/forums'}>
+                          <AdminHackForum
+                            hackId={this.hackId}
+                            forumIndex={0}
+                            onNameChange={()=>{console.log('test')}}
+                            treatment={1}
+                            onTreatmentChange={()=>{console.log('test2')}}
+                          />
+                        </Route>
+
                         <Route
                           path={this.props.match.url + '/task'}
                           render={() => (

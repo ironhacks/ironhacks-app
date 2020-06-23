@@ -1,5 +1,3 @@
-// admSettingsSection.js - Results Component
-
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -35,10 +33,13 @@ class AdmQualtricsIntegrationSection extends React.Component {
     };
   }
 
-  handleInputChange = (event, phaseIndex) => {
+  handleInputChange(event, phaseIndex) {
     const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+
+    // const value = target.type === 'checkbox' ? target.checked : target.value;
+    
     const name = target.name;
+
     if (phaseIndex !== undefined) {
       this.setState((props, prevState) => {
         const { hack } = prevState;
@@ -54,7 +55,7 @@ class AdmQualtricsIntegrationSection extends React.Component {
     }
   };
 
-  saveSurveys = (event) => {
+  saveSurveys(event) {
     event.preventDefault();
     this.props.onUpdate(this.state.hack);
   };

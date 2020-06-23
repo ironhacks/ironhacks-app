@@ -13,13 +13,7 @@ const ItemContainer = styled('div')`
   max-width: 30%;
   justify-content: flex-end;
   border-radius: ${units.universalBorderRadius};
-  background-color: ${(props) => {
-    if (!props.disabled) {
-      return props.isValid ? 'white' : 'red'
-    } else {
-      return props.isValid ? colors.mainBgColor : 'red'
-    }
-  }};
+  background-color: ${(props) => props.isValid ? colors.mainBgColor : 'red'};
   border: 1px solid #999999;
 
   input {
