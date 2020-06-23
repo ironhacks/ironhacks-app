@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Theme } from '../../../theme';
-import Button from '../../../util/button.js';
-
+import { Theme } from '../../theme';
+import Button from '../../util/button.js';
+import { ProjectApi } from '../../services/project-api';
 const colors = Theme.COLORS;
 const units = Theme.UNITS;
 
@@ -115,7 +115,11 @@ class ProjectCard extends React.Component {
     super(props);
     this.state = {
       showNewProjectForm: false,
-    };
+    }
+    this.handleNameInput = this.handleNameInput.bind(this);
+    this.onProjectCardClick = this.onProjectCardClick.bind(this);
+    this.showNewProjectForm = this.showNewProjectForm.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   onProjectCardClick() {
@@ -124,23 +128,30 @@ class ProjectCard extends React.Component {
 
   showNewProjectForm() {
     this.setState((prevState, props) => {
-      return { showNewProjectForm: !prevState.showNewProjectForm };
-    });
-  };
+      return {
+        showNewProjectForm: !prevState.showNewProjectForm
+      }
+    })
+  }
 
   handleNameInput(event) {
-    this.setState({ newProjectName: event.target.value });
+    this.setState({
+      newProjectName: event.target.value
+    })
   };
 
   validateName() {
     const whiteSpaces = /\s/;
     const alphaNumeric = /^[a-z0-9]+$/i;
+
     if (this.state.newProjectName === '') {
       return { error: 'You must write something!' };
     }
+
     if (whiteSpaces.test(this.state.newProjectName)) {
       return { error: "Name can't contain spaces." };
     }
+
     const duplicatedName = this.props.projects.some(
       (project) => project.name === this.state.newProjectName
     );
@@ -152,18 +163,22 @@ class ProjectCard extends React.Component {
     if (alphaNumeric.test(this.state.newProjectName)) {
       return { result: true };
     }
+
     return { error: 'Name can only contain letters and numbers.' };
-  };
+  }
 
   duplicatedName(name) {
     return name === this.state.name;
-  };
+  }
 
   handleSubmit(event) {
     event.preventDefault();
-    const { result, error } = this.validateName();
+    const name = this.state.newProjectName;
+
+    const { result, error } = this.validateName(name);
+    console.log('ProjectApi', ProjectApi);
     if (result) {
-      this.props.onSave(this.state.newProjectName);
+      ProjectApi.createNewProject(name);
       this.setState({ nameError: null });
     } else {
       this.setState({ nameError: error });
@@ -181,7 +196,7 @@ class ProjectCard extends React.Component {
             <span>+</span>
             <span>Create new project</span>
           </CardContainer>
-        );
+        )
       } else {
         return (
           <NewProjectForm>

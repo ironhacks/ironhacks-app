@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../../util/button.js';
+// import Button from '../../util/button.js';
 
 const StyledQuizContainer = styled('div')`
   display: flex;
@@ -23,7 +23,7 @@ const StyledQuizContainer = styled('div')`
 `;
 
 
-function QuizContainer({ quizId, userEmail }) {
+function QuizContainer({quizId, userEmail }) {
   const quizUrls = {
     bootstrap: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_ai47Laj9EM1n433',
     html_css: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_0l9UUOmgB2TCZ1P',
@@ -36,6 +36,15 @@ function QuizContainer({ quizId, userEmail }) {
   if (Object.keys(quizUrls).indexOf(quizId) >= 0){
     quizUrl = quizUrls[`${quizId}`]
   }
+
+  if (!quizUrl){
+    return (
+      <div>
+        <h3>Select a quiz from the menu</h3>
+      </div>
+    )
+  }
+
   return (
     <StyledQuizContainer>
       <iframe

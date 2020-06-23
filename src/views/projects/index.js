@@ -1,9 +1,7 @@
-import ProjectCard from './lib/project-card'
-import * as ProjectFiles from './lib/project-files'
-import ProjectsPage from './lib/project-page'
+import ProjectCard from './project-card'
+import * as ProjectFiles from './project-files'
 
 export {
   ProjectCard,
   ProjectFiles,
-  ProjectsPage,
 }

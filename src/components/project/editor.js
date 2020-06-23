@@ -2,13 +2,16 @@ import React from 'react';
 import {withCookies} from 'react-cookie';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import { withRouter } from 'react-router';
-import styled, {ThemeProvider} from 'styled-components';
+import styled from 'styled-components';
 import {Loader} from '../../components/loader';
 import Button from '../../util/button.js';
 import { cloudFunctionsProdEndPoint } from '../../config/cloud-api';
 import * as DateFormater from '../../util/dateFormater.js';
-import {registerStats} from '../../util/register-stat';
-import { Row, Col } from '../../components/layout';
+// import {registerStats} from '../../util/register-stat';
+import {
+  Row,
+  // Col
+} from '../../components/layout';
 import ProjectPreview from './preview.js';
 import FilesContainer from './filesContainer.js';
 import swal from 'sweetalert2';
@@ -35,12 +38,6 @@ import 'codemirror/addon/edit/closetag';
 const colors = Theme.COLORS;
 
 window.JSHINT = JSHINT;
-
-const themeStyle = {
-  backgroundColor: 'white',
-  textColor: 'black',
-  hoverTextColor: colors.highlightedTextColor,
-}
 
 const SectionContainer = styled('div')`
   display: flex;
@@ -338,7 +335,7 @@ class ProjectEditor extends React.Component {
   };
 
   getCountDown() {
-    const phase = this.state.hackData.phases[this.state.currentPhase - 1];
+    // const phase = this.state.hackData.phases[this.state.currentPhase - 1];
     // const countDownDate = new window.firebase.firestore.Timestamp(phase.codingStartEnd.seconds, phase.codingStartEnd.nanoseconds).toDate();
     const countDownDate = new Date();
     const timer = setInterval(function() {
@@ -436,7 +433,6 @@ class ProjectEditor extends React.Component {
   }
 
   startPushNavigation() {
-    const _this = this;
     this.saveProject();
     const phases = this.state.hackData.phases;
     const currentPhase = this.state.currentPhase;
@@ -447,8 +443,8 @@ class ProjectEditor extends React.Component {
           swal(
             colors.pushSurveyAlertContent([
                 `${phases[currentPhase - 1].commitSurveyLink}`,
-                `?email=${_this.state.user.email}`,
-                `&user_id=${_this.state.user.uid}`
+                `?email=${this.state.user.email}`,
+                `&user_id=${this.state.user.uid}`
               ].join(''))
           ).then((swal_result) => {
             if (!swal_result.dismiss) {
@@ -480,7 +476,7 @@ class ProjectEditor extends React.Component {
   }
 
   pushToGitHub(commitMessage) {
-    const composedCommitMessage = commitMessage + '\n\n\n Final commit phase 1.';
+    // const composedCommitMessage = commitMessage + '\n\n\n Final commit phase 1.';
     const files = [];
 
     for (const key of this.state.projectFiles) {
@@ -490,9 +486,9 @@ class ProjectEditor extends React.Component {
       });
     }
 
-    const projectName = this.state.user.isAdmin
-      ? `admin-${this.state.user.uid}-${this.state.projectName}`
-      : `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
+    // const projectName = this.state.user.isAdmin
+    //   ? `admin-${this.state.user.uid}-${this.state.projectName}`
+    //   : `${this.state.currentHack}-${this.state.user.uid}-${this.state.projectName}`;
 
     // const commitToGitHub = window.firebase.functions().httpsCallable('commitToGitHub');
 
@@ -588,26 +584,28 @@ class ProjectEditor extends React.Component {
   putStorageFile(file, projectName) {
     this.setState({loadingFiles: true});
     const pathRef = storageRef.child(`${this.state.user.uid}/${projectName}/${file.path}`);
-    const _this = this;
+
+    // const _this = this;
     // the return value will be a Promise
     // return
-    const fileData = pathRef.put(file.blob)
-    .then((snapshot) => {
+
+    pathRef.put(file.blob)
+      .then((snapshot) => {
         // Get the download URL
-        pathRef.getDownloadURL().then(function(url) {
+        pathRef.getDownloadURL().then((url)=>{
           const fileURL = url;
           const fileJson = {};
           const fullPath = file.path;
           fileJson[fullPath] = {url: fileURL};
           const firestore = window.firebase.firestore();
           firestore.collection('users')
-          .doc(_this.state.user.uid)
-          .collection('projects')
-          .doc(projectName)
-          .set(fileJson, {merge: true})
-          .then(function(doc) {
-            _this.getProjectFilesUrls();
-          });
+            .doc(this.state.user.uid)
+            .collection('projects')
+            .doc(projectName)
+            .set(fileJson, {merge: true})
+            .then((doc)=>{
+              this.getProjectFilesUrls();
+            })
         })
         .catch(function(error) {
           console.error('Error getting documents: ', error);
