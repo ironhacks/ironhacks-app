@@ -1,3 +1,4 @@
+
 const getAdminHackData = async (data) => {
   const { hackId } = data;
 
@@ -10,7 +11,8 @@ const getAdminHackData = async (data) => {
 
   return {
     registeredUsers: adminHackData.registeredUsers,
-    results: adminHackData.results,
+    results: adminHackData.results || null,
+    task: adminHackData.task || null,
     whitelist: adminHackData.whitelist,
   }
 }

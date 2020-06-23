@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import FullHeart from '../../../assets/svg/full-heart.svg';
 import EmptyHeart from '../../../assets/svg/empty-heart.svg';
 
-const Row = styled('tr')`
+const TableRow = styled('tr')`
   position: relative;
   height: 60px;
 
@@ -58,7 +58,7 @@ const LikeButton = styled('button')`
   }
 `;
 
-class ComperitorRow extends React.Component {
+class CompetitorRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,7 +75,7 @@ class ComperitorRow extends React.Component {
 
   render() {
     return (
-      <Row>
+      <TableRow>
         <td>{this.props.hacker}</td>
         <td>
           <Link
@@ -98,9 +98,9 @@ class ComperitorRow extends React.Component {
             />
           </LikeButton>
         </td>
-      </Row>
+      </TableRow>
     );
   }
 }
 
-export default ComperitorRow;
+export default CompetitorRow;

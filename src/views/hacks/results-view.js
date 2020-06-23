@@ -4,16 +4,16 @@ import styled, { ThemeProvider } from 'styled-components';
 import { Theme } from '../../theme';
 import { Loader } from '../../components/loader';
 import { Timeline } from '../../components/timeline';
-import * as DateFormater from '../../util/dateFormater.js';
-import { PersonalScoreSection } from './lib/results-section-personal.js';
-import { ResultSectionCompetitors } from './lib/results-section-competitors';
-import { TreatmentTexts } from './lib/treatment-texts';
+// import * as DateFormater from '../../util/dateFormater.js';
+import { PersonalScoreSection } from '../results/lib/results-section-personal.js';
+import { ResultSectionCompetitors } from '../results/lib/results-section-competitors';
+import { TreatmentTexts } from '../results/lib/treatment-texts';
 import {
   getPhaseResults,
   getUserPhaseResults,
   getAdminHackData,
   getUserForumData,
-} from './lib/get-results';
+} from '../results/lib/get-results';
 
 // import log from '../../util/log';
 
@@ -159,7 +159,6 @@ class ResultsTabSelector extends React.Component {
 class ResultsView extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       user: this.props.hackUser,
       userId: this.props.hackUserId,
@@ -189,8 +188,8 @@ class ResultsView extends React.Component {
   componentDidMount() {
     this._isMounted = true;
     // this.getCurrentHackInfo();
-
-    // getHackResults
+    console.log('props results', this.props.hackResults)
+     this.getHackResults(this.state.currentPhase)
   }
 
   componentWillUnmount() {
@@ -272,7 +271,8 @@ class ResultsView extends React.Component {
   _getAdminHackData() {
     let hackDataPromise = getAdminHackData({
       hackId: this.props.hackId,
-    });
+    })
+
     let hackData = Promise.resolve(hackDataPromise).then((result)=>{
       console.log(result);
       return result;
@@ -285,7 +285,7 @@ class ResultsView extends React.Component {
 
     let hackData = await this._getAdminHackData();
     // Promise.resolve(hackData).then((data)=>{
-    console.log('hackData', hackData);
+    console.log('get Hack Result hackData', hackData);
     // });
 
     this.setState({
@@ -306,14 +306,14 @@ class ResultsView extends React.Component {
     });
 
     console.log('userPhaseResults', userPhaseResults);
+
     // const endDate = DateFormater.getFirebaseDate(
       // this.props.hackPhases[phase - 1].codingStartEnd
     // )
 
-    let userForumData = getUserForumData()
+    // let userForumData = getUserForumData()
 
-    console.log('userForumData', userForumData);
-
+    // console.log('userForumData', userForumData);
 
     this.setState({ loading: false });
 
@@ -407,4 +407,4 @@ class ResultsView extends React.Component {
   }
 }
 
-export { ResultsView }
+export default ResultsView;
