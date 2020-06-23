@@ -2,12 +2,12 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
-import Separator from '../../../util/separator.js';
-import TimeLine from '../../../util/timeLine.js';
-import { Loader } from '../../../components/loader';
-import { Theme } from '../../../theme';
-import { ProjectApi } from '../../../services/project-api';
-import ProjectCard from './project-card';
+// import Separator from '../../../util/separator.js';
+// import TimeLine from '../../../util/timeLine.js';
+// import { Loader } from '../../../components/loader';
+import { Theme } from '../../theme';
+import { ProjectApi } from '../../services/project-api';
+import ProjectCard from '../projects/project-card';
 
 // const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
@@ -47,7 +47,7 @@ const CardsContainer = styled('div')`
   margin-top: 70px;
 `;
 
-class ProjectsPage extends React.Component {
+class ProjectSelectView extends React.Component {
   constructor(props) {
     super(props);
     const { cookies } = props;
@@ -131,9 +131,9 @@ class ProjectsPage extends React.Component {
           </CardsContainer>
         </SectionContainer>
       </ThemeProvider>
-    );
+    )
   }
 }
 
 
-export default withCookies(ProjectsPage);
+export default withCookies(ProjectSelectView);

@@ -19,7 +19,7 @@ class AdminHackCardList extends React.Component {
         <ul className="hack_card_list">
         {this.props.hacks.map((hack, index) => (
           <li
-            key={hack.hackId}
+            key={index}
             className="hack_card_list__item col-sm-4"
             index={index}
             >

@@ -1,6 +1,14 @@
 import React from 'react';
-import { PhaseItem } from './lib/phase-item';
 import { PhaseInterval } from './lib/phase-interval';
+import styled from 'styled-components';
+
+
+const PhaseItem = styled('div')`
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0 10px 15px;
+`;
+
 
 export default class Phase extends React.Component {
   onCodingHandler = () => {

@@ -1,13 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link , useLocation } from 'react-router-dom';
-import QuizView from './quiz-view';
+import {
+  Link,
+  // useLocation
+} from 'react-router-dom';
+import QuizView from '../quiz/quiz-view';
 import { Section, Row, Col } from '../../components/layout';
 
+// function useQuery() {
+//   return new URLSearchParams(useLocation().search);
+// }
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 // let query = useQuery();
 // let quizId = query.get('quizId');
 

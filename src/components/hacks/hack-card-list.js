@@ -26,7 +26,7 @@ class HackCardList extends React.Component {
 
             <HackCard
               name={hack.name}
-              hackId={hack.id}
+              hackId={hack.hackId}
               hack={hack}
               phases={hack.phases.length}
             />

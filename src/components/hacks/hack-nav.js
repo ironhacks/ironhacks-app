@@ -28,9 +28,9 @@ class HackNav extends React.Component {
       showMenu: 'none',
       currentView: 'task',
     };
-
-    this.navMenuRef = props.navMenuref
-    this.updateHackNav = this.updateHackNav.bind(this)
+    this.baseUrl = `/hacks/${this.props.hackId}`;
+    this.navMenuRef = props.navMenuref;
+    this.updateHackNav = this.updateHackNav.bind(this);
   }
 
   hideMenu(event) {
@@ -75,37 +75,58 @@ class HackNav extends React.Component {
         </button>
 
         <div className='links-container'>
-          <NavButton to='task' id={'task'} className="pl-0" onClick={()=>this.updateHackNav('task')}>
+          <NavButton
+            to={`${this.baseUrl}/task`}
+            id={'task'}
+            className="pl-0"
+            onClick={()=>this.updateHackNav('task')}
+          >
             Task
           </NavButton>
 
           <span> | </span>
 
-          <NavButton to='forum' id={'forum'} onClick={()=>this.updateHackNav('forum')}>
+          <NavButton
+            to={`${this.baseUrl}/forum`}
+            id={'forum'}
+            onClick={()=>this.updateHackNav('forum')}
+          >
             Forum
           </NavButton>
 
           <span> | </span>
 
-          <NavButton to='tutorial' onClick={()=>this.updateHackNav('tutorial')}>
+          <NavButton
+            to={`${this.baseUrl}/tutorial`}
+            onClick={()=>this.updateHackNav('tutorial')}
+          >
             Tutorial
           </NavButton>
 
           <span> | </span>
 
-          <NavButton to='quiz' onClick={()=>this.updateHackNav('quizzes')}>
+          <NavButton
+            to={`${this.baseUrl}/quiz`}
+            onClick={()=>this.updateHackNav('quizzes')}
+          >
             Quiz
           </NavButton>
 
           <span> | </span>
 
-          <NavButton to='projects' onClick={()=>this.updateHackNav('projects')}>
+          <NavButton
+            to={`${this.baseUrl}/projects`}
+            onClick={()=>this.updateHackNav('projects')}
+          >
             Projects
           </NavButton>
 
           <span> | </span>
 
-          <NavButton to='results' onClick={()=>this.updateHackNav('results')}>
+          <NavButton
+            to={`${this.baseUrl}/results`}
+            onClick={()=>this.updateHackNav('results')}
+          >
             Results
           </NavButton>
         </div>
