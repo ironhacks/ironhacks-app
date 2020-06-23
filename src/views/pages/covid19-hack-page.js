@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { LandingPage, Section, Row, Col } from '../../components/layout';
 import upcomingImg from '../../assets/img/upcoming-covid19-cta.png'
-import socialDistancingImg from '../../assets/img/social-distancing.png'
+import partnersImg from '../../assets/img/upcoming-covid19-partners.png'
 import styled from 'styled-components'
 import { Theme } from '../../theme';
 
@@ -114,7 +114,7 @@ class UpcomingHackPage extends React.Component {
               </h2>
 
               <p>
-                IronHacks is a global virtual open data hacking platform that allows users to participate in a high-energy IronHacks competition. The IronHacks platform offers participants a no setup programming environment and many powerful features to create novel and useful models and visualizations, such as a social coding editor, along with an individual and a community dashboard. The platform supports a multiphase and digitally enabled hacking process that augments a participant’s ability to produce the best solutions they can! We do not assume that your first version is the best. Instead, we assume that you learn over time as we move through the hack. Our IronHacks platform uses a multiphase process where hackers build a version of their solution, then submit it to evaluate its predictiveness based on real-time data. Predictions are made for one phase after the other, and real-time data will tell how well your model performs over time. After each phase, the submission is judged through an objective algorithmic process. Further, the process also involves human expert judges and end-users to assess the usefulness of your models and visualizations for their real-world decision making. The platform provides digital tools and feedback mechanisms to monitor one’s own progress. Further, you can also learn from others and explore opportunities you have not seen before. IronHacks is a scientific initiative that is supported by the National Science Foundation (NSF).
+                IronHacks is a global virtual open data hacking platform that allows users to participate in a high-energy IronHacks competition. The IronHacks platform offers participants a no setup programming environment and many powerful features to create novel and useful models and visualizations, such as a social coding editor, along with an individual and a community dashboard.
               </p>
 
               <h2 className="h2 font-bold my-2">
@@ -157,7 +157,7 @@ class UpcomingHackPage extends React.Component {
               <ul className="list">
                 <li>Sign-up phase for COVID-19 and Information/Training Period will tentatively start end of June. During this period we will release of information material, launch virtual events/webinars to introduce you the IronHacks platform, the process, and some central information you need to succeed during the challenge.</li>
                 <li>Launch of Hack/Start of Competition: After a 1 to 2 weeks information period, we will start a high-energy 5-phase IronHacks competition by releasing the Task and the Evaluation Metrics. </li>
-                <li>Iterative hacking phases: The challenge will run through 5 phases between 14 to 30 days (see sample timeline below). After a high-energy “hacking” phase, we will evaluate and score your application using a combination of automated and human evaluation techniques. Our judges will have deep experience in data visualization. </li>
+                <li>Iterative hacking phases: The challenge will run through 5 phases between 14 to 30 days (see sample timeline below). After a high-energy "hacking" phase, we will evaluate and score your application using a combination of automated and human evaluation techniques. Our judges will have deep experience in data visualization. </li>
                 <li>End of IronHacks Summer 2020: We will end with a Virtual Awards Ceremony to showcase the winning solutions! We expect to award our winners near the end of July or beginning of August. </li>
               </ul>
 
@@ -170,7 +170,7 @@ class UpcomingHackPage extends React.Component {
               </h2>
 
               <p>
-                To keep informed, register now on www.ironhacks.com. Once the COVID-19 challenge is open for sign-ups, we will send all registered users an email.
+                To keep informed, register now on www.ironhacks.com. Once the COVID-19 Data Science Challenge is open for sign-ups, we will send all registered users an email.
               </p>
 
               <h2 className="h2 font-bold my-2">
@@ -183,7 +183,7 @@ class UpcomingHackPage extends React.Component {
 
               <ul className="list">
                 <li>Participate in the COVID-19 challenge and gain direct insights about COVID-19 impacts in real-time </li>
-                <li>Leverage our network and reach to promote your organization’s commitment to social good</li>
+                <li>Leverage our network and reach to promote your organization's commitment to social good</li>
                 <li>Connect with top talent in the areas of data and computational social science</li>
                 <li>Contribute to scientific discovery with real-world impact</li>
               </ul>
@@ -191,9 +191,32 @@ class UpcomingHackPage extends React.Component {
               <p>
                 Join forces with us for this chance to create impact with data-driven insights that help policymakers create real change for citizens in the face of the pandemic!
               </p>
+
             </Col>
           </Row>
-          </Section>
+
+          <Row rowClass="mb-2">
+
+            <h2 className="h2 font-bold my-2">
+              Core Partners
+            </h2>
+
+            <Col colClass="text-center">
+              <img src={partnersImg} alt="Key Parnters" className="banner_img mb-4"/>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col colClass="text-center pb-5">
+              <div>
+                <small>IronHacks is an initiative of the Research Center for Open Digital Innovation (RCODI).</small>
+              </div>
+              <div>
+                <small>It is financially supported by the National Science Foundation (Award #1462044).</small>
+              </div>
+            </Col>
+          </Row>
+        </Section>
       </LandingPage>
     )
   }

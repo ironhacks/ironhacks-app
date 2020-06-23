@@ -1,26 +1,31 @@
 import React from 'react';
 import Separator from '../../util/separator';
-import { Loader } from '../../components/loader';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { Page, Section, Row, Col } from '../../components/layout';
-import TutorialScreen from '../tutorial';
-import ForumView from '../forum/forum.js';
-// import ThreadViewWithRouter from '../forum/threadView/threadView';
-// import NewThread from '../forum/newThread.js';
 import { ProjectEditor } from '../../components/project';
-import { ProjectsPage } from  '../projects';
-import { ResultsView } from '../results';
 import { HackNav } from '../../components/hacks';
-import TaskView from '../task';
-import QuizListView from '../quiz/quiz-list-view';
+import {
+  TutorialView,
+  TaskView,
+  ProjectSelectView,
+  QuizListView,
+  ResultsView,
+  ForumView,
+} from '../hacks';
+import ThreadViewWithRouter from '../forum/forum-thread-view';
+import NewThread from '../forum/newThread.js';
+
+// import { Loader } from '../../components/loader';
+
+
 
 class HackPage extends React.Component {
   constructor(props) {
     super(props);
 
     this.hackId = this.props.match.params.hackId;
-
+    this.hackName = this.props.match.params.hackName;
     const hackDataPromise = this.getHack(this.hackId);
 
     this.state = {
@@ -30,18 +35,21 @@ class HackPage extends React.Component {
       hackPhases: [],
       hackTask: null,
     };
+    // Promise.resolve(hackDataPromise).then((hackData) => {
+    //    this.hackData = hackData;
+    //    this.hackName = hackData.name;
+    //    this.state.hackPhases = hackData.phases
+    //    this.state.hackTutorial = hackData.tutorial.doc;
+    //    this.state.hackName = hackData.name;
+    //    this.state.hackData =  hackData;
+    // })
 
-    Promise.resolve(hackDataPromise).then((hackData) => {
-       this.hackData = hackData;
-       this.hackName = hackData.name;
-       this.state.hackPhases = hackData.phases
-       this.state.hackTutorial = hackData.tutorial.doc;
-       this.state.hackData =  hackData;
-    });
     this.updateHackView = this.updateHackView.bind(this);
+    this.getHack = this.getHack.bind(this);
   }
 
   componentDidMount() {
+    console.log('%c HackPage is mounted', 'color:red;font-weight:bold');
     this.setHackTask();
   }
 
@@ -51,12 +59,20 @@ class HackPage extends React.Component {
       .doc(hackId)
       .get();
 
-    if (hack.exists) {
-      var hackData = hack.data();
-      return hackData;
-    }
-
-    return false;
+    Promise.resolve(hack).then((result) => {
+      if (result.exists) {
+        const hackData = result.data();
+        this.setState({
+           hackData: hackData,
+           hackName: hackData.name,
+           hackPhases: hackData.phases,
+           hackResults: hackData.results,
+           hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
+        })
+      } else {
+        return false;
+      }
+    })
   }
 
   setHack(hackData) {
@@ -64,16 +80,18 @@ class HackPage extends React.Component {
       this.setState({
         hackData: hackData,
         loading: false,
-      });
+      })
     }
   }
 
   async getHackTask(hackId) {
+    window.firebase.functions().useFunctionsEmulator('http://localhost:5001')
     const getTask = window.firebase.functions().httpsCallable('getTaskDoc');
     let task = await getTask({
       hackId: hackId,
     })
-    return task.data.task;
+
+    return task.data;
   }
 
   setHackTask() {
@@ -97,14 +115,14 @@ class HackPage extends React.Component {
     this.props.history.go(`./${target}`)
   }
 
+  // if (this.state.loading) {
+  //   return (
+  //     <Section>
+  //     <Loader status={this.state.status} />
+  //     </Section>
+  //   )
+  // } else {
   render() {
-    if (this.state.loading) {
-      return (
-        <Section>
-          <Loader status={this.state.status} />
-        </Section>
-      )
-    } else {
       return (
        <Page
           user={this.props.user}
@@ -115,14 +133,17 @@ class HackPage extends React.Component {
             <Col>
               <h2 className="pt-3">
                 <strong>Hack: </strong>
-                <span>{ this.hackName } </span>
+                <span>{ this.state.hackName } </span>
                 <span className="small">({ this.hackId })</span>
               </h2>
             </Col>
           </Row>
           <Row>
             <Col>
-              <HackNav action={this.updateHackView}/>
+              <HackNav
+                action={this.updateHackView}
+                hackId={this.hackId}
+              />
               <Separator primary />
             </Col>
           </Row>
@@ -134,42 +155,68 @@ class HackPage extends React.Component {
             <Section>
               <TaskView
                 hackId={this.hackId}
+                userId={this.props.userId}
                 task={this.state.hackTask}
               />
+              </Section>
+            </Route>
+
+            <Route exact path="/hacks/:hackId/tutorial">
+              <Section>
+                <TutorialView
+                  hackid={this.hackId}
+                  userId={this.props.userId}
+                  hackTutorial={this.state.hackTutorial}
+                />
               </Section>
             </Route>
 
             <Route exact path="/hacks/:hackId/forum">
               <Section>
                 <ForumView
+                  isAdmin={this.props.userIsAdmin}
                   hackId={this.hackId}
+                  userId={this.props.userId}
                   user={this.props.user}
                 />
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/tutorial">
+            <Route exact path="/hacks/:hackId/forum/new">
               <Section>
-                <TutorialScreen
-                  hackid={this.hackId}
-                  tutorial={this.state.hackTutorial}
+                <NewThread
+                  isAdmin={this.props.userIsAdmin}
+                  hackId={this.hackId}
+                  userId={this.props.userId}
+                  user={this.props.user}
                 />
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/quiz">
+            <Route path="/hacks/:hackId/forum/thread/:threadId">
+              <Section>
+                <ThreadViewWithRouter
+                  isAdmin={this.props.userIsAdmin}
+                  hackId={this.hackId}
+                  userId={this.props.userId}
+                  user={this.props.user}
+                />
+              </Section>
+            </Route>
+
+            <Route exact path="/hacks/:hackId/quizzes">
               <Section>
                 <QuizListView
                   hackId={this.hackId}
+                  userId={this.props.userId}
                   user={this.props.user}
-                  isAdmin={this.state.userIsAdmin}
                 />
               </Section>
             </Route>
 
             <Route exact path="/hacks/:hackId/projects">
               <Section>
-                <ProjectsPage
+                <ProjectSelectView
                   hackId={this.hackId}
                   user={this.props.user}
                   userId={this.props.userId}
@@ -198,6 +245,7 @@ class HackPage extends React.Component {
                 <ResultsView
                   hackData={this.state.hackData}
                   hackPhases={this.state.hackPhases}
+                  hackResults={this.state.hackResults}
                   hackUser={this.props.user}
                   hackUserId={this.props.userId}
                   hackId={this.hackId}
@@ -209,7 +257,6 @@ class HackPage extends React.Component {
       </Page>
       )
     }
-  }
 }
 
 export default withRouter(HackPage)

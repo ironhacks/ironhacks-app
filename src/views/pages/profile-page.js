@@ -1,48 +1,35 @@
 import React from 'react';
 import { withCookies } from 'react-cookie';
-import styled, { ThemeProvider } from 'styled-components';
-import { Theme } from '../../theme';
-
-// const colors = Theme.COLORS;
-const styles = Theme.STYLES.AppSectionTheme;
-
-const SectionContainer = styled('div')`
-  width: 100%;
-  height: ${(props) => props.theme.containerHeight};
-  background-color: ${(props) => props.theme.backgroundColor};
-
-  h1 {
-    margin-bottom: 20px;
-
-    &:first-child {
-      margin-top: 150px;
-    }
-  }
-
-  h2 {
-    margin-top: 50px;
-  }
-
-  .padding {
-    padding: 0 10%;
-  }
-`;
+import styled from 'styled-components';
+import { Page, Section, Row, Col } from '../../components/layout';
+import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 
 const ProfileContainer = styled('div')`
   display: flex;
   justify-content: center;
   padding: 0 10%;
-  margin: 100px 0 20px 0;
+  margin: 100px 0;
   width: 100%;
 
-  span {
-    width: 250px;
-    height: 250px;
+
+  .profile__initials {
+    width: 200px;
+    height: 200px;
     background-color: lightgray;
-    text-align: center;
-    font-size: 140px;
-    border-radius: 125px;
-    padding: 17px 0;
+    font-size: 100px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 100%;
+  }
+
+  .profile__img {
+    width: 200px;
+    height: 200px;
+    max-width: none;
+    max-height: none;
+    border-radius: 50%;
   }
 
   .user-data {
@@ -71,10 +58,11 @@ class ProfilePage extends React.Component {
       hackData: null,
       user: this.props.user,
     };
-    //
+
     // if (this.props.location.state) {
     //   this.state.user = this.props.location.state.user;
     // }
+
     this.firestore = window.firebase.firestore();
   }
 
@@ -95,25 +83,53 @@ class ProfilePage extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={styles}>
-        <SectionContainer>
-          <ProfileContainer>
-            <span>{this.props.user.profileLetters}</span>
-            <div className='user-data'>
-              <h3>Personal Info:</h3>
-              <p>
-                Name: {this.props.user.displayName} <br />
-                Email: {this.props.user.email}
-              </p>
-              <pre>
-              {JSON.stringify(this.props.user,null, '\t')}
-              </pre>
-            </div>
-          </ProfileContainer>
+      <Page
+        user={this.props.user}
+        userIsAdmin={this.props.userIsAdmin}
+      >
+        <Section sectionClass="py-5">
+          <Row>
+            <Col>
+              <ProfileContainer>
+                <div className="profile">
+                  {this.props.user.provider[0].photoURL ? (
+                    <img
+                      className="profile__img"
+                      alt="User Profile"
+                      src={this.props.user.provider[0].photoURL}
+                    />
+                  ) : (
+                    <span className="profile__initials">{this.props.user.profileLetters}</span>
+                  )}
+                </div>
 
-        </SectionContainer>
-      </ThemeProvider>
-    );
+                <div className='user-data'>
+                  <h2 className="h2 profile__name mb-2">{this.props.user.displayName}</h2>
+                  <div>
+                    <div className="mb-2"><MaterialDesignIcon name="email"/> Email: {this.props.user.email} </div>
+                    <div className="mb-2"><MaterialDesignIcon name="key"/> UserId: {this.props.user.userId} </div>
+                    <div className="mb-2"><MaterialDesignIcon name="time"/> Joined: {this.props.user.createdAt} </div>
+                    <div className="mb-2"><MaterialDesignIcon name="time"/> Last Login: {this.props.user.lastLoginAt} </div>
+                    <div className="">Auth Providers: {this.props.user.provider.map((type, index)=>{
+                        if (type.providerId === 'github.com') {
+                          return (<MaterialDesignIcon key={index} iconClass="mx-1" name='github'/>)
+                        } else if (type.providerId === 'google.com') {
+                          return (<MaterialDesignIcon key={index} iconClass="mx-1" name={'google'}/>)
+                        } else if (type.providerId === 'password') {
+                          return (<MaterialDesignIcon key={index} iconClass="mx-1" name={'lock'}/>)
+                        } else {
+                          return false;
+                        }
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </ProfileContainer>
+            </Col>
+          </Row>
+        </Section>
+      </Page>
+    )
   }
 }
 

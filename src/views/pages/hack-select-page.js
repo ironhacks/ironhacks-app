@@ -18,11 +18,10 @@ class HackSelectPage extends React.Component {
       availableHacks: [],
       loading: false,
     };
-
-    this.firestore = window.firebase.firestore();
   }
 
   componentDidMount() {
+    console.log('%c HackSelectPage is mounted', 'color:red;font-weight:bold');
     try {
       if (!this.props.user){
         console.log('user not set');
@@ -48,7 +47,7 @@ class HackSelectPage extends React.Component {
       event.data.source !== 'react-devtools-content-script'
       && event.data.source !== 'react-devtools-bridge'
     ) {
-      console.log('message incoming', event.data);
+      console.log('message incoming', JSON.stringify(event.data));
     }
 
     if (event.data === 'quizDone') {
@@ -57,7 +56,7 @@ class HackSelectPage extends React.Component {
   }
 
   async getHack(hackId) {
-    let hack = await this.firestore
+    let hack = await window.firebase.firestore()
       .collection('hacks')
       .doc(hackId);
     return hack;
@@ -174,7 +173,7 @@ class HackSelectPage extends React.Component {
       ? this.state.registeredHacks[hackIndex].id
       : this.state.availableHacks[hackIndex].id;
 
-    this.firestore
+    window.firebase.firestore()
       .collection('users')
       .doc(this.props.user.uid)
       .get()
@@ -182,7 +181,7 @@ class HackSelectPage extends React.Component {
         const { cookies } = this.props;
         cookies.set('currentHack', hackId);
         cookies.set('currentForum', doc.data().forums[hackId].id);
-        this.setState({ mustNavigate: true });
+        // this.setState({ mustNavigate: true });
       })
   }
 
