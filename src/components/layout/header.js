@@ -59,10 +59,6 @@ const UserMenuDropper = styled('button')`
 
 
 class UserMenuDropdownButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <UserMenuDropper onClick={this.props.onClick} >

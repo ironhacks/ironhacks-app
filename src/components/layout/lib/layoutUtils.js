@@ -9,14 +9,14 @@
 const mergeClasses = (...args) => {
   var results = []
   for (let arg of args) {
-    if (typeof arg === "string") {
-      results.push(...arg.split(" "))
+    if (typeof arg === 'string') {
+      results.push(...arg.split(' '))
     }
     if (Array.isArray(arg)) {
       results.push(...arg)
     }
   }
-  return [...new Set(results)].join(" ").trim()
+  return [...new Set(results)].join(' ').trim()
 }
 
 export { mergeClasses }

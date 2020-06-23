@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import * as DateFormater from '../../util/dateFormater.js';
+// import * as DateFormater from '../../util/dateFormater.js';
 
 const TimeLineContainer = styled('div')`
   position: relative;

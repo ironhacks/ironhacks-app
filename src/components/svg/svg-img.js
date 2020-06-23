@@ -1,5 +1,5 @@
-import React from "react"
-import PropTypes from "prop-types"
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class SvgImgContainer extends React.Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class SvgImgContainer extends React.Component {
   }
 
   render() {
-    const _classes = [this.baseClass, this.containerClass].join(" ").trim();
+    const _classes = [this.baseClass, this.containerClass].join(' ').trim();
     return (
       <div className={_classes}>
       {this.props.children}
@@ -19,7 +19,7 @@ class SvgImgContainer extends React.Component {
 }
 
 SvgImgContainer.defultProps = {
-  containerClass: "",
+  containerClass: '',
 }
 
 SvgImgContainer.propTypes = {
@@ -32,7 +32,7 @@ class SvgImg extends React.Component {
   constructor(props) {
     super(props)
     this.containerClass = this.props.containerClass;
-    this.imgClasses = ["svgimg__svg", this.props.imgClass].join(" ").trim()
+    this.imgClasses = ['svgimg__svg', this.props.imgClass].join(' ').trim()
     this.imgComponent = this.props.imgComponent
   }
 
@@ -48,8 +48,8 @@ class SvgImg extends React.Component {
 
 SvgImg.defultProps = {
   baseClass: 'svg-img',
-  containerClass: "",
-  imgClass: "",
+  containerClass: '',
+  imgClass: '',
 }
 
 SvgImg.propTypes = {
