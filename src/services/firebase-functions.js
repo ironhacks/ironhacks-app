@@ -32,8 +32,8 @@ export const getHackByID = async (hackID) => {
   let hackData;
   try {
     const response = await firestore.collection(COLLECTIONS.HACKS)
-    .doc(hackID)
-    .get()
+      .doc(hackID)
+      .get()
     if (!response.exist) {throw new Error('No Hack with that ID!');}
     hackData = response.data()
     hackData.id = response.id;
@@ -76,7 +76,7 @@ export const getAllHacks = async () => {
     const response = await firestore.collection(COLLECTIONS.HACKS).get()
     response.docs.forEach( (doc) => {
       const hackData = doc.data()
-      hackData.id = doc.id;  
+      hackData.id = doc.id;
       hacks.push(hackData);
     });
     return hacks;
@@ -105,7 +105,7 @@ export const getAdminHackData = async (hackObject, _hackID) => {
 
 //------------------------------------------
 // updateHackWhitelist(whitelist) - update the whitelist on firebase.
-// whitelist (array): array of emails. 
+// whitelist (array): array of emails.
 // hackObject (object): classic hack object pulled from the db
 // return batch promise
 //
@@ -127,7 +127,7 @@ export const updateWhitelist = async (whitelist, hackID) => {
 
 //------------------------------------------
 // updateHackWhitelist(whitelist) - update the whitelist on firebase.
-// whitelist (array): array of emails. 
+// whitelist (array): array of emails.
 // hackObject (object): classic hack object pulled from the db
 // return batch promise
 //
@@ -137,8 +137,50 @@ export const updateTutorialDocument = async (markdown, hackID) => {
 
 }
 
+export const getThreadsByHackId = async (hackID) => {
+  var result = [];
+  let docs = await window.firebase.firestore()
+    .collection(COLLECTIONS.THREADS)
+    .where('hackId', '==', hackID)
+    .get();
+
+  docs.forEach((doc)=>{
+    result.push({
+      id: doc.id,
+      data: doc.data(),
+    })
+  });
+
+  console.log('threads', result);
+  return result
+
+    // .then((docs)=>{
+    //   docs.forEach((doc)=>{
+    //     result.push({
+    //       id: doc.id,
+    //       data: doc.data(),
+    //     })
+    //   })
+    //   return result;
+    // })
+}
 
 
 
+export const getForumsByHackId = async (hackID) => {
+  var result = [];
+  let docs = await window.firebase.firestore()
+    .collection(COLLECTIONS.FORUMS)
+    .where('hackId', '==', hackID)
+    .get();
 
+  docs.forEach((doc)=>{
+    result.push({
+      id: doc.id,
+      data: doc.data(),
+    })
+  });
 
+  console.log('threads', result);
+  return result
+}
