@@ -73,6 +73,7 @@ class ReactionsView extends React.Component {
             {!this.state.totalComments && (
               <span>{`Posted ${this.state.date}`}</span>
             )}
+
             {this.state.totalComments && (
               <span>{`Posted ${this.state.date} | ${this.state.totalComments -
                 1} comments`}</span>

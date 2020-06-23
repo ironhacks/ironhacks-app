@@ -18,6 +18,7 @@ const Select = styled('select')`
 
   margin-left: 10px;
 `;
+
 class ForumSelector extends React.Component {
   onChange = (event) => {
     this.props.onSelection(event.target.value);

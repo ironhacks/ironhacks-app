@@ -1,10 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
-import Button from '../../../util/button.js';
-import CommentView from './commentView.js';
-import MarkdownEditor from '../../../components/markdownEditor/markdownEditor.js';
-import { Theme } from '../../../theme';
+import Button from '../../util/button.js';
+import CommentView from './forum-comment-view';
+import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
+import { Theme } from '../../theme';
 const styles = Theme.STYLES.AppSectionTheme;
 // const units = Theme.UNITS;
 const colors = Theme.COLORS;
@@ -30,11 +30,12 @@ const SectionContainer = styled('div')`
     margin-bottom: 20px;
   }
 `;
-// First comment view (this is the author's comment)
+
 const ThreadSection = styled('div')`
   margin-top: 20px;
   overflow: auto;
 `;
+
 const SectionSeparator = styled('div')`
   background-color: ${colors.mainBgColor}
   height: 1px;
@@ -47,15 +48,25 @@ class ThreadView extends React.Component {
   constructor(props) {
     super(props);
     const { user } = props;
+
+    this.hackId = this.props.match.params.hackId;
+    this.threadId = this.props.match.params.threadId;
+
     this.state = {
       loadingComments: true,
-      thread: this.props.location.state.thread || null,
+      thread: this.threadId,
       head: null,
       comments: [],
       user,
     };
 
+
     this.firestore = window.firebase.firestore();
+
+    this.getComments = this.getComments.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.getThreadData = this.getThreadData.bind(this);
+    this.onEditorChange = this.onEditorChange.bind(this);
   }
 
   componentDidMount() {
@@ -66,33 +77,38 @@ class ThreadView extends React.Component {
     }
   }
 
-  getThreadData = () => {
-    const _this = this;
-    this.firestore
+  getThreadData() {
+    const threadId = this.threadId;
+
+    window.firebase.firestore()
       .collection('threads')
-      .doc(this.props.match.params.threadId)
+      .doc(threadId)
       .get()
       .then((doc) => {
         const thread = doc.data();
         thread.id = doc.id;
-        _this.setState({ thread }, _this.getComments());
+
+        this.setState(
+          { thread },
+          this.getComments()
+        )
       })
       .catch(function(error) {
         console.error('Error getting documents: ', error);
-      });
+      })
   };
-  // This functions get all the comments from a specific thread.
-  getComments = () => {
-    const _this = this;
-    this.firestore
+
+  getComments() {
+    window.firebase.firestore()
       .collection('comments')
-      .where('threadId', '==', this.props.match.params.threadId)
+      .where('threadId', '==', this.threadId)
       .orderBy('createdAt', 'asc')
       .get()
-      .then(function(querySnapshot) {
+      .then((querySnapshot) => {
         const comments = [];
         let head;
-        querySnapshot.forEach(function(doc) {
+
+        querySnapshot.forEach((doc) => {
           const comment = doc.data();
           comment.id = doc.id;
           if (comment.forumId) {
@@ -100,70 +116,78 @@ class ThreadView extends React.Component {
           } else {
             comments.push(comment);
           }
-        });
-        // updating the rest of the comments:
-        _this.setState((prevState, props) => {
-          return {
-            head,
-            comments,
-          };
-        });
+        })
+
+        this.setState((prevState, props) => {
+          return { head, comments }
+        })
       })
       .catch(function(error) {
         console.error('Error getting documents: ', error);
       });
   };
-  // Saving the current content of the editor on the component state.
-  onEditorChange = (markdown) => {
-    this.setState({ markdown: markdown });
-  };
-  // This function handle the sumbit process
-  handleSubmit = () => {
-    // Getting the current user referece:
-    const userId = window.firebase.auth().currentUser.uid;
-    const userName = window.firebase.auth().currentUser.displayName;
-    const _this = this;
+
+  onEditorChange(markdown) {
+    this.setState({
+      markdown: markdown
+    })
+  }
+
+  handleSubmit() {
+    const currentUser = window.firebase.auth().currentUser
+    const userId = currentUser.uid;
+    const userName = currentUser.displayName;
+
     const codedBody = this.utoa(this.state.markdown);
+
     const comment = {
       author: userId,
       authorName: userName,
       body: codedBody,
       createdAt: new Date(),
-      threadId: this.props.match.params.threadId,
-    };
-    this.firestore
+      threadId: this.threadId,
+    }
+
+    window.firebase.firestore()
       .collection('comments')
       .add(comment)
       .then((docRef) => {
-        _this.firestore
+
+        const commentId = docRef.id;
+
+        window.firebase.firestore()
           .collection('threads')
-          .doc(_this.props.match.params.threadId)
+          .doc(this.threadId)
           .update({
-            comments: window.firebase.firestore.FieldValue.arrayUnion(
-              docRef.id
-            ),
+            comments: window.firebase.firestore.FieldValue.arrayUnion(commentId),
           })
           .then((result) => {
-            _this.getComments();
+            console.log('thread update result', result);
+            this.getComments();
           })
           .catch(function(error) {
-            console.error('Error adding document: ', error);
-          });
+            console.error('Error adding threads document: ', error)
+          })
+
       })
       .catch(function(error) {
-        console.error('Error adding document: ', error);
-      });
-  };
-  // TODO: utoa and atou are defined on more than 1 component, we should put this in toher place, like an 'Utilities' in other to avoid this multiple definitions.
-  // ucs-2 string to base64 encoded ascii
-  utoa = (str) => {
+        console.error('Error adding commends document: ', error)
+      })
+  }
+
+
+  utoa(str) {
+    if (!str){
+      return false;
+    }
     return window.btoa(unescape(encodeURIComponent(str)));
-  };
+  }
 
   render() {
     return (
       <ThemeProvider theme={styles}>
         <SectionContainer>
+
           <ThreadSection>
             {this.state.head && (
               <CommentView
@@ -173,7 +197,9 @@ class ThreadView extends React.Component {
                 reloadComments={this.getComments}
               />
             )}
+
             <SectionSeparator />
+
             {this.state.comments.map((comment, index) => (
               <CommentView
                 key={comment.id}
@@ -183,10 +209,12 @@ class ThreadView extends React.Component {
               />
             ))}
           </ThreadSection>
+
           <MarkdownEditor
             editorLayout='tabbed'
             onEditorChange={this.onEditorChange}
           />
+
           <div className='control'>
             <Button primary width='150px' onClick={this.handleSubmit}>
               Submit
