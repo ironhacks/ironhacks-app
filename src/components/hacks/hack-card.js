@@ -75,7 +75,6 @@ class NewHackCard extends React.Component {
   }
 }
 
-
 class HackCard extends React.Component {
   render() {
     return (
@@ -100,10 +99,44 @@ class HackCard extends React.Component {
   }
 }
 
+class HackSignupCard extends React.Component {
+
+  onHackSignup() {
+    this.props.onClick(
+      this.props.index,
+      this.props.hack.registrationSurvey
+    );
+  }
+
+  render() {
+    return (
+      <div className={'hack_card'}>
+        <a href={`/hacks/${this.props.hackId}/register`}>
+          <div className="hack_card__header">
+            <h3 className="hack_title">{this.props.name}</h3>
+          </div>
+
+          <div className="hack_card__body">
+            <span>Click to Register</span>
+          </div>
+
+          <div className="hack_card__footer">
+            <Separator />
+          </div>
+        </a>
+      </div>
+    );
+  }
+}
+
 HackCard.defaultProps = {
   name: 'Hack Name',
   phases: 0,
   hackId: ''
 }
 
-export { HackCard, NewHackCard }
+export {
+  HackCard,
+  NewHackCard,
+  HackSignupCard,
+}

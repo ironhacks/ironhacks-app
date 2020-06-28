@@ -1,5 +1,5 @@
 import React from 'react';
-import { HackCard } from './hack-card';
+import { HackCard, HackSignupCard } from './hack-card';
 
 class HackCardList extends React.Component {
   constructor(props) {
@@ -39,5 +39,42 @@ class HackCardList extends React.Component {
   }
 }
 
+class HackSignupCardList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.emptyText = this.props.emptyText || 'There are no hacks available.';
+  }
 
-export { HackCardList }
+  render() {
+    if (!this.props.hacks || this.props.hacks.length === 0) {
+      return (
+        <span className='empty-list'>
+          {this.emptyText}
+        </span>
+      )
+    } else {
+      return (
+        <ul className="hack_card_list">
+        {this.props.hacks.map((hack, index) => (
+          <li
+            key={hack.hackId}
+            className="hack_card_list__item col-sm-4"
+            index={index}
+            >
+
+            <HackSignupCard
+              name={hack.name}
+              hackId={hack.hackId}
+              hack={hack}
+            />
+
+          </li>
+        ))}
+        </ul>
+      );
+    }
+  }
+}
+
+
+export { HackCardList, HackSignupCardList }
