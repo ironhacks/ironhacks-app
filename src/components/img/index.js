@@ -25,12 +25,22 @@ function getImgSizes(sizes) {
   }).join(', \n')
 }
 
-function Img({baseUrl, responsive, filePath, fileName, sizes, srcSet, alt}) {
-  const imgSrc = baseUrl ? `${baseUrl}/${filePath}${fileName}` : `${fileName}`;
-  const imgAlt = alt ? alt : fileName.split('.')[0].split(/-+|_+/g).join(' ');
-  const imgSet = responsive ? getImgSet(fileName, baseUrl, sizes) : null;
-  const imgPathSet = responsive ? getImgPathSet(imgSet, baseUrl, filePath) : null;
-  const imgSizes = responsive ? getImgSizes(sizes) : null;
+function Img({
+    baseUrl,
+    imgClass,
+    responsive,
+    filePath,
+    fileName,
+    sizes,
+    srcSet,
+    alt
+  }) {
+
+    const imgSrc = baseUrl ? `${baseUrl}/${filePath}${fileName}` : `${fileName}`;
+    const imgAlt = alt ? alt : fileName.split('.')[0].split(/-+|_+/g).join(' ');
+    const imgSet = responsive ? getImgSet(fileName, baseUrl, sizes) : null;
+    const imgPathSet = responsive ? getImgPathSet(imgSet, baseUrl, filePath) : null;
+    const imgSizes = responsive ? getImgSizes(sizes) : null;
 
   return (
     <img
@@ -38,6 +48,7 @@ function Img({baseUrl, responsive, filePath, fileName, sizes, srcSet, alt}) {
       alt={imgAlt}
       sizes={imgSizes}
       srcSet={imgPathSet}
+      className={imgClass}
     />
   )
 }
