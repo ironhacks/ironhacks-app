@@ -1,10 +1,8 @@
 import React from 'react';
 import { withCookies } from 'react-cookie';
-import swal from 'sweetalert2';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
-import { HackCardList } from '../../components/hacks';
-import * as AlertsContent from '../../components/alert';
+import { HackCardList, HackSignupCardList } from '../../components/hacks';
 import { Page, Section, Row, Col } from '../../components/layout';
 
 class HackSelectPage extends React.Component {
@@ -17,172 +15,111 @@ class HackSelectPage extends React.Component {
       registeredHacks: [],
       availableHacks: [],
       loading: false,
-    };
+    }
+
+    // this.hackIdList = this.getHackIds()
+    this.getHacks = this.getHacks.bind(this);
+    // this.getOpenHacks = this.getOpenHacks.bind(this);
+    // this.getUserHacks = this.getUserHacks.bind(this);
   }
 
   componentDidMount() {
-    console.log('%c HackSelectPage is mounted', 'color:red;font-weight:bold');
     try {
       if (!this.props.user){
         console.log('user not set');
       }
-      const hackPromise = this.getHacks(this.state.user);
-      Promise.resolve(hackPromise).then((hackData) => {
-        if (hackData.length > 0) {
-          this.setHacks(hackData)
-        }
-      });
+      this.getHacks();
+      // this.getUserHacks();
+      // this.getOpenHacks();
+
     } catch (e) {
       console.log('get hacks failed', e);
     }
-    window.addEventListener('message', this.recieveMessage);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('message', this.recieveMessage);
-  }
+  async getHacks() {
+    const hacks = await window.firebase.firestore()
+        .collection('hacks')
+        .get()
+        .then((result)=>{
+          let hackList = [];
+          result.docs.forEach((hack)=>{
+            let hackData = hack.data();
+            let hackId = hack.id;
+            let hackName = hackData.name;
 
-  recieveMessage(event) {
-    if (
-      event.data.source !== 'react-devtools-content-script'
-      && event.data.source !== 'react-devtools-bridge'
-    ) {
-      console.log('message incoming', JSON.stringify(event.data));
-    }
+            hackList.push(Object.assign(
+              {available: true},
+              hackData,
+              {hackId},
+              {hackName}
+            ))
+          })
+          return hackList;
+        })
 
-    if (event.data === 'quizDone') {
-      swal.clickConfirm();
-    }
-  }
-
-  async getHack(hackId) {
-    let hack = await window.firebase.firestore()
-      .collection('hacks')
-      .doc(hackId);
-    return hack;
-  }
-
-  setHacks(hacks) {
-    this.setState({
-      availableHacks: hacks.filter((hack) => { return !hack.registered }),
-      registeredHacks: hacks.filter((hack) => { return hack.registered }),
-    });
-  }
-
-  async getHacks(_user) {
-    if (!_user){
-      console.log('%c NO USER', 'color:red;font-weight:bold');
-      return false;
-    }
-
-    const cachedHacks = JSON.parse(localStorage.getItem('userHacks'));
-
-    if (cachedHacks) {
-      return cachedHacks;
-    }
-
-    const fireuser = await window.firebase.firestore()
+    const userHacks = await window.firebase.firestore()
       .collection('users')
-      .doc(_user.uid)
-      .get();
-
-
-    const userHacks = fireuser.data().hacks;
-
-    const whitelistDoc = await window.firebase.firestore()
-      .collection('whitelists')
-      .doc(_user.email)
-      .get();
-
-    if (whitelistDoc.exists) {
-      const { whitelist } = whitelistDoc.data();
-      let hacks = [];
-
-      if (whitelist && Array.isArray(whitelist)) {
-        for (let hackId of whitelist) {
-          let hackDoc = await window.firebase.firestore()
-          .collection('hacks')
-          .doc(hackId)
-          .get();
-
-          let hack = hackDoc.data();
-          hack.hackId = hackId;
-          if (userHacks.includes(hackId)) {
-            hack.registered = true;
-          }
-
-          hacks.push(hack);
-        }
-
-        localStorage.setItem('userHacks', JSON.stringify(hacks));
-      }
-
-      return hacks;
-
-    } else {
-      return [];
-    }
-  }
-
-
-  goToPresurvey(hackIndex, registrationSurvey) {
-    if (registrationSurvey) {
-      swal(
-        AlertsContent.preSurveyAlertContent(
-          registrationSurvey + '?user_email=' + this.props.user.email
-        )
-      ).then((result) => {
-        if (!result.dismiss) {
-          this.callRegistrationFuncion(hackIndex);
+      .doc(this.props.userId)
+      .get()
+      .then((result)=>{
+        if (result.exists) {
+          let userHackList = [];
+          result.data().hacks.forEach((hack)=>{
+            // hacks.push({
+            //   registered: true,
+            //   hackId: hack,
+            //   hackName: hack,
+            //   hackData: hack,
+            //   phases: ['']
+            // })
+            userHackList.push(hack);
+          })
+          return userHackList;
         }
       });
-    } else {
-      this.callRegistrationFuncion(hackIndex);
-    }
-  };
 
-  callRegistrationFuncion(hackIndex) {
-    this.setState({
-      loading: true,
-      status: 'Starting registration process...',
-    });
+    console.log('user hacks', userHacks);
 
-    const _this = this;
+    const openHacks = await window.firebase.firestore()
+      .collection('hacks')
+      .where('registrationOpen', '==', true)
+      .get()
+      .then((result)=>{
+        var openHackList = [];
+        if (!result.empty) {
+          result.docs.forEach((hack)=>{
+            let hackId = hack.id;
+            if (!userHacks.includes(hackId)){
+              openHackList.push(hackId)
+              // let hackData = hack.data();
+              // let hackName = hackData.name;
+              // openHackList.push(Object.assign(
+              //   {available: true},
+              //   hackData,
+              //   {hackId},
+              //   {hackName}
+              // ))
+            }
+          })
+          return openHackList;
+        }
+      })
 
-    const hackId = _this.state.availableHacks[hackIndex].id;
-    const registerUserFunc = window.firebase
-      .functions()
-      .httpsCallable('registerUser');
-
-    registerUserFunc({
-      hackId: hackId
-    }).then((result) => {
-      const projectName = _this.state.availableHacks[hackIndex]
-         .data()
-         .name.replace(/\s/g, '');
-        _this.createNewProject(projectName, hackId, hackIndex);
-    });
-  };
-
-  setCurrentHack(hackIndex) {
-    this.setState({
-      status: 'Creating participant profile...'
+    console.log('open hacks', openHacks);
+    console.log('hacks', hacks);
+    const availableHacks = hacks.filter((hack)=>{
+      return openHacks.includes(hack.hackId)
     })
 
-    const hackId = this.state.registeredHacks[hackIndex]
-      ? this.state.registeredHacks[hackIndex].id
-      : this.state.availableHacks[hackIndex].id;
+    const registeredHacks = hacks.filter((hack)=>{
+      return userHacks.includes(hack.hackId)
+    })
 
-    window.firebase.firestore()
-      .collection('users')
-      .doc(this.props.user.uid)
-      .get()
-      .then((doc) => {
-        const { cookies } = this.props;
-        cookies.set('currentHack', hackId);
-        cookies.set('currentForum', doc.data().forums[hackId].id);
-        // this.setState({ mustNavigate: true });
-      })
+    this.setState({
+      registeredHacks: registeredHacks,
+      availableHacks: availableHacks,
+    })
   }
 
   render() {
@@ -205,7 +142,7 @@ class HackSelectPage extends React.Component {
                   <strong>Welcome to IronHacks</strong>
                 </h1>
 
-                <h2 className="h2 py-2">Registerd Hacks</h2>
+                <h2 className="h2 py-2">Registered Hacks</h2>
 
                 <Separator primary />
 
@@ -228,7 +165,7 @@ class HackSelectPage extends React.Component {
                   </strong>
                 </p>
 
-                <HackCardList
+                <HackSignupCardList
                   emptyText={'There are no hacks currently available.'}
                   hacks={this.state.availableHacks}
                 />

@@ -10,7 +10,7 @@ import {
   AdminHackSurveys,
   AdminHackTutorial,
   AdminHackTask,
-} from './sections';
+} from '../admin';
 
 const colors = Theme.COLORS;
 
@@ -103,7 +103,7 @@ class AdminHackNav extends React.Component {
   }
 }
 
-class AdminHackDashboard extends React.Component {
+class AdminHackPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -146,14 +146,20 @@ class AdminHackDashboard extends React.Component {
       .doc(_hackId)
       .get()
 
+    console.log('hackData', hackData.data());
+
     const result = Object.assign({},
       { hackId: _hackId },
       hackData.data(),
       adminHackData.data()
     )
 
+    console.log('result', result);
+
     this.setState({
       hack: result,
+      hackData: result,
+      hackTask: result.task.doc,
     })
   }
 
@@ -192,9 +198,25 @@ class AdminHackDashboard extends React.Component {
 
   onTaskMarkdownUpdate(markdown) {
     this.setState({
-      taskMarkdown: markdown
+      taskMd: markdown
     })
   }
+
+  // async getHackTask(hackId) {
+  //   const getTask = window.firebase.functions().httpsCallable('getTaskDoc');
+  //   let hackTaskPromise = await getTask({
+  //     hackId: hackId,
+  //   })
+  //
+  //   Promise.resolve(hackTaskPromise).then((hackTask) => {
+  //     if (hackTask.length > 0) {
+  //       this.setState({
+  //         hackTask: hackTask,
+  //         loading: false,
+  //       })
+  //     }
+  //   })
+  // }
 
   updateTaskDocument() {
     this.setState({
@@ -202,18 +224,24 @@ class AdminHackDashboard extends React.Component {
     })
 
     const hackRef = window.firebase.firestore()
-      .collection('adminHackData')
+      .collection('hacks')
       .doc(this.state.hackId)
 
-    const hackTask = this.state.hack.task;
 
-    hackTask.doc = this.utoa(this.state.taskMarkdown);
+    console.log('update task', this.state.taskMd);
+    let encodedTask = this.encodeTask(this.state.taskMd);
+    let timeUpdated = new Date();
+
     hackRef.update({
-        task: hackTask,
+        task: {
+          updated: timeUpdated.toISOString(),
+          doc: encodedTask,
+        }
       })
       .then(() => {
         this.setState({
-          loading: false
+          loading: false,
+          hackTask: encodedTask,
         })
       })
       .catch(function(error) {
@@ -244,12 +272,17 @@ class AdminHackDashboard extends React.Component {
       })
   }
 
-  utoa(str) {
-    return window.btoa(unescape(encodeURIComponent(str)));
+  encodeTask(str) {
+    console.log('encodeTask', str);
+    let safeString = unescape(encodeURIComponent(str));
+    return window.btoa(safeString);
   }
 
-  atou(str) {
-    return decodeURIComponent(escape(window.atob(str)));
+
+  decodeTask(enc) {
+    console.log('decodeTask', enc);
+    let decoded = window.atob(enc);
+    return decodeURIComponent(escape(decoded));
   }
 
   render() {
@@ -284,16 +317,26 @@ class AdminHackDashboard extends React.Component {
                     {this.state.hack && !this.state.loading ? (
                       <Switch>
 
-                        <Route
-                          path={this.props.match.url + '/settings'}
-                          render={() => (
-                            <AdminHackSettings
-                              hackId={this.hackId}
-                              hack={this.state.hack}
-                              onSaveSettings={this.onSaveSettings}
+                        <Route path={this.props.match.url + '/settings'}>
+                          <AdminHackSettings
+                            hackId={this.hackId}
+                            hackData={this.state.hackData}
+                            hack={this.state.hack}
+                            onSaveSettings={this.onSaveSettings}
+                          />
+                        </Route>
+
+                        <Route path={this.props.match.url + '/task'}>
+                            <AdminHackTask
+                              previousDocument={
+                                this.state.hackTask
+                                  ? this.decodeTask(this.state.hackTask)
+                                  : ''
+                              }
+                              onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
+                              updateTaskDocument={this.updateTaskDocument}
                             />
-                          )}
-                        />
+                        </Route>
 
                         <Route
                           path={this.props.match.url + '/tutorial'}
@@ -301,7 +344,7 @@ class AdminHackDashboard extends React.Component {
                             <AdminHackTutorial
                               previousDocument={
                                 this.state.hack.tutorial
-                                  ? this.atou(this.state.hack.tutorial.doc)
+                                  ? this.decodeTask(this.state.hack.tutorial.doc)
                                   : ''
                               }
                               onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
@@ -320,20 +363,6 @@ class AdminHackDashboard extends React.Component {
                           />
                         </Route>
 
-                        <Route
-                          path={this.props.match.url + '/task'}
-                          render={() => (
-                            <AdminHackTask
-                              previousDocument={
-                                this.state.hack.task
-                                  ? this.atou(this.state.hack.task.doc)
-                                  : ''
-                              }
-                              onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
-                              updateTaskDocument={this.updateTaskDocument}
-                            />
-                          )}
-                        />
                         <Route
                           path={this.props.match.url + '/qualtrics-integration'}
                           render={() => (
@@ -359,4 +388,4 @@ class AdminHackDashboard extends React.Component {
   }
 }
 
-export default withRouter(AdminHackDashboard)
+export default withRouter(AdminHackPage)

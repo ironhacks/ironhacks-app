@@ -6,19 +6,49 @@ import { Page, Section, Row, Col } from '../../components/layout';
 import { ProjectEditor } from '../../components/project';
 import { HackNav } from '../../components/hacks';
 import {
-  TutorialView,
-  TaskView,
+  ForumView,
   ProjectSelectView,
   QuizListView,
+  RegistrationView,
   ResultsView,
-  ForumView,
+  TaskView,
+  TutorialView,
 } from '../hacks';
 import ThreadViewWithRouter from '../forum/forum-thread-view';
 import NewThread from '../forum/newThread.js';
 
 // import { Loader } from '../../components/loader';
 
+class HackNavSection extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
+  render() {
+    return (
+      <Section>
+        <Row>
+          <Col>
+            <h2 className="pt-3">
+              <strong>Hack: </strong>
+              <span>{ this.props.hackName } </span>
+              <span className="small">({ this.props.hackId })</span>
+            </h2>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <HackNav
+              action={this.props.updateHackView}
+              hackId={this.props.hackId}
+            />
+            <Separator primary />
+          </Col>
+        </Row>
+      </Section>
+    )
+  }
+}
 
 class HackPage extends React.Component {
   constructor(props) {
@@ -26,7 +56,6 @@ class HackPage extends React.Component {
 
     this.hackId = this.props.match.params.hackId;
     this.hackName = this.props.match.params.hackName;
-    const hackDataPromise = this.getHack(this.hackId);
 
     this.state = {
       hackId: this.hackId,
@@ -35,6 +64,7 @@ class HackPage extends React.Component {
       hackPhases: [],
       hackTask: null,
     };
+
     // Promise.resolve(hackDataPromise).then((hackData) => {
     //    this.hackData = hackData;
     //    this.hackName = hackData.name;
@@ -43,6 +73,7 @@ class HackPage extends React.Component {
     //    this.state.hackName = hackData.name;
     //    this.state.hackData =  hackData;
     // })
+    this.getHack(this.hackId);
 
     this.updateHackView = this.updateHackView.bind(this);
     this.getHack = this.getHack.bind(this);
@@ -50,7 +81,6 @@ class HackPage extends React.Component {
 
   componentDidMount() {
     console.log('%c HackPage is mounted', 'color:red;font-weight:bold');
-    this.setHackTask();
   }
 
   async getHack(hackId) {
@@ -67,6 +97,8 @@ class HackPage extends React.Component {
            hackName: hackData.name,
            hackPhases: hackData.phases,
            hackResults: hackData.results,
+           hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
+           hackTask: hackData.task ? hackData.task.doc : '',
            hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
         })
       } else {
@@ -85,17 +117,14 @@ class HackPage extends React.Component {
   }
 
   async getHackTask(hackId) {
-    window.firebase.functions().useFunctionsEmulator('http://localhost:5001')
+    console.log('get hack task', hackId);
+    // window.firebase.functions().useFunctionsEmulator('http://localhost:5001')
     const getTask = window.firebase.functions().httpsCallable('getTaskDoc');
-    let task = await getTask({
+
+    let hackTaskPromise = await getTask({
       hackId: hackId,
     })
 
-    return task.data;
-  }
-
-  setHackTask() {
-    const hackTaskPromise = this.getHackTask(this.hackId);
     Promise.resolve(hackTaskPromise).then((hackTask) => {
       if (hackTask.length > 0) {
         this.setState({
@@ -107,47 +136,40 @@ class HackPage extends React.Component {
   }
 
   updateHackView(target) {
-    console.log('update view', this, this.context, target);
     this.setState({
       activeView: target
-    })
-    this.props.history.push(`./${target}`)
-    this.props.history.go(`./${target}`)
+    });
+    this.props.history.push(`./${target}`);
+    this.props.history.go(`./${target}`);
   }
 
-  // if (this.state.loading) {
-  //   return (
-  //     <Section>
-  //     <Loader status={this.state.status} />
-  //     </Section>
-  //   )
-  // } else {
   render() {
       return (
        <Page
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
           >
-        <Section>
-          <Row>
-            <Col>
-              <h2 className="pt-3">
-                <strong>Hack: </strong>
-                <span>{ this.state.hackName } </span>
-                <span className="small">({ this.hackId })</span>
-              </h2>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <HackNav
-                action={this.updateHackView}
-                hackId={this.hackId}
+
+        <Router>
+          <Switch>
+            <Route exact path="/hacks/:hackId/register">
+              <Section sectionClass="py-3">
+                <RegistrationView
+                  hackId ={this.hackId}
+                  hackName={this.state.hackName}
+                  hackRegistration={this.state.hackRegistration}
+                />
+              </Section>
+            </Route>
+            <Route path="/hacks/:hackId/*">
+              <HackNavSection
+                hackName={this.state.hackName}
+                updateHackView={this.updateHackView}
+                hackId ={this.hackId}
               />
-              <Separator primary />
-            </Col>
-          </Row>
-        </Section>
+            </Route>
+          </Switch>
+        </Router>
 
         <Router>
           <Switch>

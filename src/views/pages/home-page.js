@@ -1,15 +1,17 @@
 import React from 'react';
-// import { Page } from '../layouts/page';
 import { LandingPage, Section } from '../../components/layout';
-import { AboutSection } from '../home/content/about-section';
-import { ExamplesSection } from '../home/content/examples-section';
-import { ProcessSection } from '../home/content/process-section';
-import { FooterSection } from '../home/content/footer-section';
-import { HeroSection } from '../home/content/hero-section';
-import { ShowcaseSection } from '../home/content/showcase-section';
-import { StatsSection } from '../home/content/stats-section';
-import { SponsorsSection } from '../home/content/sponsors-section';
-import { UpcomingSection } from '../home/content/upcoming-section';
+import {
+  AboutSection,
+  ExamplesSection,
+  ProcessSection,
+  FooterSection,
+  HeroSection,
+  ShowcaseSection,
+  StatsSection,
+  SponsorsSection, 
+  UpcomingSection,
+} from '../home';
+
 
 class HomePage extends React.Component {
   render() {
