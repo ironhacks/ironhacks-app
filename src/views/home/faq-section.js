@@ -1,11 +1,11 @@
 import React from 'react';
-import { Row, Col } from '../../../components/layout'
-import { SvgIcon } from '../../../components/svg'
+import { Row, Col } from '../../components/layout'
+import { SvgIcon } from '../../components/svg'
 import {
   AccountSvg,
   SettingSvg,
   CommentSvg,
-} from '../../../components/svg/jsx'
+} from '../../components/svg/jsx'
 
 class FaqSection extends React.Component {
   render() {

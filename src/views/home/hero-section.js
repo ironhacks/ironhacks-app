@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col } from '../../../components/layout'
-import { SvgImg } from '../../../components/svg'
-import { Theme } from '../../../theme';
-import { BulbSvg } from '../../../components/svg/jsx'
+import { Row, Col } from '../../components/layout'
+import { SvgImg } from '../../components/svg'
+import { Theme } from '../../theme';
+import { BulbSvg } from '../../components/svg/jsx'
 import styled from 'styled-components'
 
 const colors = Theme.COLORS;

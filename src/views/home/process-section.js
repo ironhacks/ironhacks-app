@@ -1,8 +1,6 @@
 import React from 'react'
-import { Row, Col } from '../../../components/layout'
-import { Img } from '../../../components/img'
-// import processImg from './images/ironhacks-process.jpeg'
-
+import { Row, Col } from '../../components/layout'
+import { Img } from '../../components/img'
 
 class ProcessSection extends React.Component {
   render() {

@@ -1,18 +1,19 @@
 import React from 'react';
-import { Row, Col } from '../../../components/layout'
-import foodImg from './images/food.jpg';
-import workImg from './images/workforce.jpg';
-import houseImg from './images/housing.jpg';
+import { Row, Col } from '../../components/layout'
+import { Img } from '../../components/img'
 import './assets/css/examples-section.css';
 
 class ExampleCard extends React.Component {
   render() {
     return (
       <div className="card example_card">
-        <img
-          src={this.props.image}
+        <Img
+          responsive={true}
+          baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
+          filePath={'media%2Fimg%2F'}
+          fileName={this.props.image}
           alt={this.props.title}
-          className="card__image bd-0 mb-0 depth-2"
+          imgClass="card__image bd-0 mb-0 depth-2"
         />
         <div className="card__content bd-0 bg-inherit">
           <h3 className="title example_card__title font-bold my-3">{this.props.title}</h3>
@@ -29,6 +30,7 @@ ExampleCard.defaultProps = {
   description: 'Project Description',
 }
 
+
 class ExamplesSection extends React.Component {
   render() {
     return (
@@ -44,7 +46,7 @@ class ExamplesSection extends React.Component {
           <ExampleCard
             title="HEALTHY LIVING"
             description="Use open data and develop an app that helps citizens in finding cheap and seasonally fresh vegetables from local markets."
-            image={foodImg}
+            image={'topics-food.jpg?alt=media&token=ca701f32-1fdf-4072-9687-308522c2a24e'}
           />
         </Col>
 
@@ -52,7 +54,7 @@ class ExamplesSection extends React.Component {
           <ExampleCard
             title="AFFORDABLE HOUSING"
             description="Build a website with interactive visualizations that helps new students in finding safe and affordable housing near their university."
-            image={workImg}
+            image={'topics-workforce.jpg?alt=media&token=e91e8ebe-c247-4259-9c1a-2c8ffe843ad8'}
           />
         </Col>
 
@@ -60,7 +62,7 @@ class ExamplesSection extends React.Component {
           <ExampleCard
             title="WORKFORCE ANALYTICS"
             description="Use workforce data to explore factors that affect successful career paths."
-            image={houseImg}
+            image={'topics-housing.jpg?alt=media&token=8b0152d8-5fdd-49c9-bb2c-35f94361c8c5'}
           />
         </Col>
       </Row>

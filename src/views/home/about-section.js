@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col } from '../../../components/layout'
+import { Row, Col } from '../../components/layout'
 
 
 class AboutSection extends React.Component {

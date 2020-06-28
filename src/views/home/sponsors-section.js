@@ -1,6 +1,6 @@
 import React from 'react'
-import { Row, Col } from '../../../components/layout'
-import SponsorsBanner from '../../../components/sponsorsBanner'
+import { Row, Col } from '../../components/layout'
+import SponsorsBanner from '../../components/sponsorsBanner'
 
 
 class SponsorsSection extends React.Component {

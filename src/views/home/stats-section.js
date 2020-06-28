@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from '../../../components/layout'
+import { Row, Col } from '../../components/layout'
 import CountUp from 'react-countup';
 import './assets/css/stats-section.css';
 
