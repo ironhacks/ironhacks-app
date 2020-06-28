@@ -5,9 +5,7 @@ import { CookiesProvider, Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import { withRouter } from 'react-router';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { AdminHackDashboard  } from './views/admin';
 import ProjectSelectView from './views/hacks/project-select-view';
-
 import {
   HomePage,
   LoginPage,
@@ -17,10 +15,12 @@ import {
   ProfilePage,
   UpcomingHackPage,
   HackPage,
+  AdminHackPage,
   HackSelectPage,
-  // ShowcasePage,
 } from './views/pages/';
 
+import './assets/static/bootstrap-reboot.css'
+import './assets/static/bootstrap-grid.css'
 import './styles/css/root.css'
 import './styles/css/main.css'
 import './styles/css/colors.css'
@@ -30,7 +30,6 @@ import './styles/css/base.css'
 import './styles/css/icons.css'
 import './styles/css/content.css'
 import './styles/css/charrismatic.css'
-
 
 const LoaderContainer = styled('div')`
   width: 100vw;
@@ -148,48 +147,6 @@ class App extends React.Component {
       })
   }
 
-  // async _updateHackData(userId) {
-  //   if (typeof(userId) !== 'string') {
-  //     return false;
-  //   }
-  //
-  //   let hackData = await this._getUserHackdata(userId);
-  //   console.log('update hack data', userId, hackData);
-  //
-  //   this._setUserHackdata(hackData);
-  // }
-  //
-  // _setUserHackdata(hackData){
-  //   console.log('set hack data', hackData);
-  //   // localStorage.setItem('userHackData', JSON.stringify(hackData));
-  //   if (this._isMounted){
-  //     this.setState({
-  //       userHackData: hackData,
-  //     })
-  //   }
-  // }
-
-  // async _getUserHackdata(userId){
-  //   console.log('get user hack data', userId);
-  //   let userHackData = await window.firebase.firestore()
-  //     .collection('users')
-  //     .doc(userId)
-  //     .get();
-  //
-  //     console.log('get user hack data result', userId, userHackData);
-  //     Promise.resolve(userHackData).then((result)=>{
-  //       let data = result.data();
-  //       console.log('get hack data resut', data);
-  //       return data;
-  //     })
-  //
-  //     // .then((user)=>{
-  //     // }).catch((e)=>{
-  //     //   console.log('error', e);
-  //     // });
-  //     // return userHackData;
-  // }
-
 
   _setUser(data) {
     if (!data.user){
@@ -260,97 +217,97 @@ class App extends React.Component {
                   <HomePage />
                 </Route>
 
-                  <Route exact path='/covid19' >
-                    <UpcomingHackPage />
-                  </Route>
+                <Route exact path='/covid19' >
+                  <UpcomingHackPage />
+                </Route>
 
-                  <Route path='/login'>
-                    <LoginPage
-                      onLoginSuccess={this._updateAppNavigation}
-                      onLoginFail={this._updateAppNavigation}
-                    />
-                  </Route>
+                <Route path='/login'>
+                  <LoginPage
+                    onLoginSuccess={this._updateAppNavigation}
+                    onLoginFail={this._updateAppNavigation}
+                  />
+                </Route>
 
-                  {this.state.user && (
+                {this.state.user && (
+                  <>
+                    <Route exact path='/hacks'>
+                      <HackSelectPage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                        userId={this.state.userId}
+                      />
+                    </Route>
+
+                    <Route path='/hacks/:hackId'>
+                      <HackPage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                        userId={this.state.userId}
+                      />
+                    </Route>
+
+                    <Route exact path='/projects'>
+                      <ProjectSelectView
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
+
+                    <Route path='/projects/:projectName'>
+                      <ProjectSelectView
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
+
+                    <Route exact path='/profile'>
+                      <ProfilePage
+                        profileId={this.state.userId}
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
+
+                    <Route path='/profile:profileId'>
+                      <ProfilePage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
+
+                    <Route exact path='/logout'>
+                      <LogoutPage />
+                    </Route>
+
+                  {this.state.userIsAdmin && (
                     <>
-                      <Route exact path='/hacks'>
-                        <HackSelectPage
-                          user={this.state.user}
-                          userIsAdmin={this.state.userIsAdmin}
-                        />
-                      </Route>
+                    <Route exact path='/admin'>
+                      <AdminHackSelectPage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
 
-                      <Route path='/hacks/:hackId'>
-                        <HackPage
-                          user={this.state.user}
-                          userIsAdmin={this.state.userIsAdmin}
-                          userId={this.state.userId}
-                        />
-                      </Route>
+                    <Route path='/admin/hacks/:hackId'>
+                      <AdminHackPage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
 
-                      <Route exact path='/projects'>
-                        <ProjectSelectView
-                          user={this.state.user}
-                          userIsAdmin={this.state.userIsAdmin}
-                        />
-                      </Route>
-
-                      <Route path='/projects/:projectName'>
-                        <ProjectSelectView
-                          user={this.state.user}
-                          userIsAdmin={this.state.userIsAdmin}
-                        />
-                      </Route>
-
-                      <Route exact path='/profile'>
-                        <ProfilePage
-                          profileId={this.state.userId}
-                          user={this.state.user}
-                          userIsAdmin={this.state.userIsAdmin}
-                        />
-                      </Route>
-
-                      <Route path='/profile:profileId'>
-                        <ProfilePage
-                          user={this.state.user}
-                          userIsAdmin={this.state.userIsAdmin}
-                        />
-                      </Route>
-
-                      <Route exact path='/logout'>
-                        <LogoutPage />
-                      </Route>
-
-                    {this.state.userIsAdmin && (
-                      <>
-                      <Route exact path='/admin'>
-                        <AdminHackSelectPage
-                          user={this.state.user}
-                          userIsAdmin={this.state.userIsAdmin}
-                        />
-                      </Route>
-
-                      <Route path='/admin/hacks/:hackId'>
-                        <AdminHackDashboard
-                          user={this.state.user}
-                          userIsAdmin={this.state.userIsAdmin}
-                        />
-                      </Route>
-
-                      <Route path='/admin/new-hack'>
-                        <NewHackPage
-                          user={this.state.user}
-                          userIsAdmin={this.state.userIsAdmin}
-                        />
-                      </Route>
-                      </>
-                    )}
+                    <Route path='/admin/new-hack'>
+                      <NewHackPage
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
                     </>
                   )}
+                  </>
+                )}
 
-                  <Redirect to='/'/>
-
-                </Switch>
+                <Redirect to='/'/>
+              </Switch>
         )}
           </div>
         </CookiesProvider>
