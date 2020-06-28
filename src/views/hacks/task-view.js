@@ -9,7 +9,7 @@ class TaskView extends React.Component {
         <Col>
           <MdContentView
             content={this.props.task}
-            encoded={false}
+            encoded={true}
             emptyText="Task Document is not available yet."
           />
         </Col>
