@@ -1,4 +1,5 @@
 import React from 'react';
+import { Img } from '../img'
 
 class ShowcaseCard extends React.Component {
   render() {
@@ -6,7 +7,14 @@ class ShowcaseCard extends React.Component {
       <div className="card showcase_card depth-1">
         <div className="card__content">
         <h3 className="title showcase_card__title">{this.props.title}</h3>
-          <img src={this.props.image} alt="HTML tutorial" className="card__image"/>
+          <Img
+            responsive={false}
+            baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
+            filePath={'media%2Fimg%2F'}
+            fileName={this.props.image}
+            imgClass="card__image"
+            alt={this.props.title}
+          />
           <p className="description showcase_card__description">{this.props.description}</p>
         </div>
 
