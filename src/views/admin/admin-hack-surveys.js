@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import Separator from '../../../util/separator.js';
-import Button from '../../../util/button.js';
+import Separator from '../../util/separator.js';
+import Button from '../../util/button.js';
 
 const SectionContainer = styled('form')`
   width: 100%;
@@ -37,7 +37,7 @@ class AdmQualtricsIntegrationSection extends React.Component {
     const target = event.target;
 
     // const value = target.type === 'checkbox' ? target.checked : target.value;
-    
+
     const name = target.name;
 
     if (phaseIndex !== undefined) {

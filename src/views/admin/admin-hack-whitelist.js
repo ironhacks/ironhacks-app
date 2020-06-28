@@ -1,8 +1,8 @@
 import React from 'react';
-import HackWhitelistItem from './hack-whitelist-item';
-import AvailableActionsDiv from '../../../util/availableActionsDiv.js';
-import Button from '../../../util/button.js';
 import styled from 'styled-components';
+import HackWhitelistItem from './hack-whitelist-item';
+import AvailableActionsDiv from '../../util/availableActionsDiv.js';
+import Button from '../../util/button';
 
 const WhitelistContainer = styled('div')`
   display: flex;

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import forumIcon from '../../../assets/svg/forum-icon.svg';
+import forumIcon from '../../assets/svg/forum-icon.svg';
 
 const ForumItemContainer = styled('div')`
   margin: 10px 0 10px 15px;

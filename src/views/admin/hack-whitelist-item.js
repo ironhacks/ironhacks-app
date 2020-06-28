@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Theme } from '../../../theme';
-import trashCanIcon from '../../../assets/svg/trash.svg';
+import { Theme } from '../../theme';
+import trashCanIcon from '../../assets/svg/trash.svg';
 
 const colors = Theme.COLORS;
 const units = Theme.UNITS;
+
 const ItemContainer = styled('div')`
   margin-right: 15px;
   margin-bottom: 10px;

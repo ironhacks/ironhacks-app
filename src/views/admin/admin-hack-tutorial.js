@@ -1,40 +1,35 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import MarkdownEditor from '../../../components/markdownEditor/markdownEditor.js';
-import Button from '../../../util/button.js';
-import { Theme } from '../../../theme';
-
-
-
-
-const AvailableActionsDiv = styled('div')`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse;
-  height: 50px;
-`;
-
+import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
+import AvailableActionsDiv from '../../util/availableActionsDiv.js';
+import Button from '../../util/button';
+import { Theme } from '../../theme';
 
 const styles = Theme.STYLES.adminInnerSectionsTheme;
 const SectionContainer = styled('div')`
   width: 100%;
-  height: 100%;
   padding: 25px 50px 50px 50px;
+  height: ${(props) => props.theme.containerHeight};
 `;
 
-class AdmTaskSection extends React.Component {
+class AdmTutorialSection extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.onEditorChange = this.onEditorChange.bind(this);
+  }
+
   onEditorChange(markdown) {
-    this.props.onTaskMarkdownUpdate(markdown);
+    this.props.onTutorialMarkdownUpdate(markdown);
   }
 
   render() {
     return (
       <ThemeProvider theme={styles}>
         <SectionContainer>
-          <h2>Task document editor</h2>
+          <h2>Tutorial document editor</h2>
           <p>
-            Here you can edit and preview the Task document. You can also
+            Here you can edit and preview the tutorial document. You can also
             publish the document or schedule it (check bellow).
           </p>
           <MarkdownEditor
@@ -48,9 +43,9 @@ class AdmTaskSection extends React.Component {
               primary
               width='150px'
               margin='0 0 0 15px'
-              onClick={this.props.updateTaskDocument}
+              onClick={this.props.updateTutorialDocument}
             >
-              Publish Task
+              Publish tutorial
             </Button>
           </AvailableActionsDiv>
         </SectionContainer>
@@ -59,4 +54,4 @@ class AdmTaskSection extends React.Component {
   }
 }
 
-export default AdmTaskSection;
+export default AdmTutorialSection;
