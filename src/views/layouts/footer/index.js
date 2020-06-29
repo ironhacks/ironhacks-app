@@ -31,7 +31,7 @@ class Footer extends React.Component {
               RESEARCH CENTER FOR OPEN DIGITAL INNOVATION | RCODI
             </div>
             <div>
-              All rigths reserved IronHacks&#169; {new Date().getFullYear()}
+              All rights reserved IronHacks&#169; {new Date().getFullYear()}
             </div>
           </div>
         </div>
