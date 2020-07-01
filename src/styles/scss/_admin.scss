@@ -1,0 +1,59 @@
+.admin-page {
+  .breadcrumb {
+    margin-bottom: 0;
+  }
+}
+
+.admin-hack-content {
+  width: 100%;
+}
+
+.admin-actions-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    height: 50px;
+}
+
+.admin-sidebar {
+  max-height: 100%;
+  border-right: 1px solid black;
+  overflow: auto;
+
+  &__item {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,.5);
+    padding-left: 15px;
+    transition: color 0.5s, background-color 0.5s;
+
+    &:hover {
+      background-color: gray;
+      color: var(--color-primary);
+    }
+
+    img {
+      width: 25px;
+      height: 25px;
+
+      &:first-child {
+        margin-right: 10px;
+      }
+
+      &:last-child {
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+.admin_hack_card_list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: left;
+  margin-top: 70px;
+}

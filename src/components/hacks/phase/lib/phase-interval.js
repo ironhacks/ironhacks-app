@@ -29,19 +29,19 @@ const PhaseIntervalContainer = styled('div')`
 `;
 
 const SetDateButton = styled('button')`
-  border-top: ${(props) => (props.borderTop ? '2px solid gray' : 'none')}
-  border-right: ${(props) => (props.borderRight ? '2px solid gray' : 'none')}
-  border-bottom: ${(props) => (props.borderBottom ? '2px solid gray' : 'none')}
-  border-left: ${(props) => (props.borderLeft ? '2px solid gray' : 'none')}
+  border-top: ${(props) => (props.borderTop ? '2px solid gray' : 'none')};
+  border-right: ${(props) => (props.borderRight ? '2px solid gray' : 'none')};
+  border-bottom: ${(props) => (props.borderBottom ? '2px solid gray' : 'none')};
+  border-left: ${(props) => (props.borderLeft ? '2px solid gray' : 'none')};
   border-radius: ${(props) => {
     const topLeft = props.borderLeft ? units.universalBorderRadius : '0';
     const topRight = props.borderRight ? units.universalBorderRadius : '0';
     const bottomLeft = props.borderLeft ? units.universalBorderRadius : '0';
     const bottomRight = props.borderRight ? units.universalBorderRadius : '0';
     return topLeft + ' ' + topRight + ' ' + bottomRight + ' ' + bottomLeft;
-  }}
-  padding-left: ${(props) => (props.central ? '25px' : 'O')}
-  padding-right: ${(props) => (props.central ? '25px' : 'O')}
+  }};
+  padding-left: ${(props) => (props.central ? '25px' : 'O')};
+  padding-right: ${(props) => (props.central ? '25px' : 'O')};
   background-color: lightgray;
   font-weight: 300;
 `;
@@ -60,6 +60,7 @@ class PhaseInterval extends React.Component {
             {'Phase ' + this.props.phaseIndex + ' - ' + this.props.intervalName}
           </span>
         </div>
+
         <div>
           <SetDateButton
             borderLeft
@@ -69,6 +70,7 @@ class PhaseInterval extends React.Component {
           >
             {moment(this.props.start).format('MMM Do YYYY')}
           </SetDateButton>
+
           <SetDateButton
             borderTop
             borderBottom
@@ -77,6 +79,7 @@ class PhaseInterval extends React.Component {
           >
             {'00:00 - 00:00'}
           </SetDateButton>
+
           <SetDateButton
             borderTop
             borderRight

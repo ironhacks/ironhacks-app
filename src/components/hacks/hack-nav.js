@@ -107,7 +107,7 @@ class HackNav extends React.Component {
 
           <NavButton
             to={`${this.baseUrl}/quiz`}
-            onClick={()=>this.updateHackNav('quizzes')}
+            onClick={()=>this.updateHackNav('quiz')}
           >
             Quiz
           </NavButton>

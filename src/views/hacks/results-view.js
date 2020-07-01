@@ -8,12 +8,14 @@ import { Timeline } from '../../components/timeline';
 import { PersonalScoreSection } from '../results/lib/results-section-personal.js';
 import { ResultSectionCompetitors } from '../results/lib/results-section-competitors';
 import { TreatmentTexts } from '../results/lib/treatment-texts';
+import { Row, Col } from '../../components/layout';
 import {
   getPhaseResults,
   getUserPhaseResults,
   getAdminHackData,
-  getUserForumData,
+  // getUserForumData,
 } from '../results/lib/get-results';
+import './results.css';
 
 // import log from '../../util/log';
 
@@ -288,15 +290,22 @@ class ResultsView extends React.Component {
     console.log('get Hack Result hackData', hackData);
     // });
 
+    const hackResults = hackData.results || [];
     this.setState({
-      results: hackData.results,
+      results: hackResults,
       participants: hackData.registeredUsers,
     });
 
+    console.log('hackdata results', hackData.results);
+
+    if (hackResults){
+
+    }
     let phaseResults = await getPhaseResults({
-      hackResults: hackData.results,
+      hackResults: hackResults,
       phase: phase,
     });
+
 
     console.log('phaseResults', phaseResults);
 
@@ -339,25 +348,27 @@ class ResultsView extends React.Component {
 
   render() {
     return (
-        <ThemeProvider theme={styles}>
-          <SectionContainer>
-            <div className='top-container'>
-              {TreatmentTexts[this.state.treatment].header}
-              {this.props.hackPhases && (
-                <div>
-                  <h3>Please select the phase you want to check.</h3>
-                  <Timeline
-                    phases={this.props.hackPhases}
-                    initialPhase={1}
-                    onClick={this.onPhaseSelection}
-                    currentPhase={this.state.currentPhase}
-                  />
-                </div>
-              )}
+      <Row>
+        <Col>
+          <div className='top-container'>
+            {TreatmentTexts[this.state.treatment].header}
 
-            <ResultsTabSelector
-              callback={this.updateSection}
+            {this.props.hackPhases && (
+            <div>
+              <h3>
+                Please select the phase you want to check.
+              </h3>
+
+              <Timeline
+                phases={this.props.hackPhases}
+                initialPhase={1}
+                onClick={this.onPhaseSelection}
+                currentPhase={this.state.currentPhase}
               />
+            </div>
+            )}
+
+            <ResultsTabSelector callback={this.updateSection}/>
 
             <div className='selected-section'>
               {this.state.loading && (
@@ -365,30 +376,24 @@ class ResultsView extends React.Component {
                   <Loader status='Fetching results...' />
                 </div>
               )}
-              {!this.state.loading
-                && !this.state.results
-                && (
+
+              {!this.state.loading && !this.state.results && (
                 <h2 className='no-results'>
                   Not results for this phase yet.
                 </h2>
               )}
 
-              {this.state.results &&
-                this.state.currentSection === 'competitors'
-                && (
-                    <div>
-                      <ResultSectionCompetitors
-                        hackName={this.props.hackData.name}
-                        treatment={this.state.treatment}
-                        participants={this.state.participants}
-                        scores={this.state.results}
-                        onLikedCompetitors={this.userSaveLikedCompetitors}
-                      />
-                    </div>
+              {this.state.results && this.state.currentSection === 'competitors' && (
+                  <ResultSectionCompetitors
+                    hackName={this.props.hackData.name}
+                    treatment={this.state.treatment}
+                    participants={this.state.participants}
+                    scores={this.state.results}
+                    onLikedCompetitors={this.userSaveLikedCompetitors}
+                  />
                 )}
 
-              {this.state.results &&
-                this.state.currentSection === 'personal' && (
+              {this.state.results && this.state.currentSection === 'personal' && (
                   <PersonalScoreSection
                     userId={this.props.hackUser.uid}
                     hackId={this.props.hackId}
@@ -401,9 +406,9 @@ class ResultsView extends React.Component {
 
               </div>
             </div>
-          </SectionContainer>
-        </ThemeProvider>
-      )
+        </Col>
+      </Row>
+    )
   }
 }
 

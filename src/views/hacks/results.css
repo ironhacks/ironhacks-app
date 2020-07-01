@@ -1,0 +1,86 @@
+.results-section .top-container {
+  padding: 0 10%;
+  background-color: #f9f9f8;
+  border-bottom: 1px solid #e0e4e8;
+}
+
+.results-section .top-container h1 {
+  padding-top: 100px;
+}
+
+.results-section .top-container h3 {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.results-section .tab-container {
+  display: flex;
+  justify-content: left;
+  padding: 0 10%;
+  width: 100%;
+  margin-bottom: -1px;
+}
+
+.results-section .tab-container .tab-button {
+  background-color: #f9f9f8;
+  cursor: pointer;
+  border: none;
+  height: 60px;
+  width: 150px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: 1px solid #e0e4e8;
+  outline: none;
+}
+
+.results-section .tab-container .tab-button.selected {
+  background-color: white;
+  border-top: 3px solid var(--color-primary);
+  border-right: 1px solid #e1e4e8;
+  border-left: 1px solid #e0e4e8;
+  border-bottom: 1px solid white;
+}
+
+.results-section .selected-section {
+  margin-top: 20px;
+  padding: 0 10%;
+}
+
+.results-section .selected-section .results-loader {
+  margin-top: -20px;
+  height: 500px;
+}
+
+.results-section .selected-section h2.no-results {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.results-section .selected-section h3.super-cool-banner {
+  font-size: 20px;
+  text-align: center;
+  -webkit-animation-name: example;
+  -webkit-animation-duration: 4s;
+  animation-name: example;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@-webkit-keyframes example {
+  from {
+    color: red;
+  }
+  to {
+    color: yellow;
+  }
+}
+
+@keyframes example {
+  from {
+    color: #caa32a;
+  }
+  to {
+    color: red;
+  }
+}
