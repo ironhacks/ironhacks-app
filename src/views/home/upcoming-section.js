@@ -15,7 +15,7 @@ class UpcomingSection extends React.Component {
                 responsive={true}
                 baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
                 filePath={'media%2Fimg%2F'}
-                fileName={'upcoming-covid19-cta.png?alt=media&token=8f0cb83e-a0a5-40a4-9eb4-0327ce7cb6f2'}
+                fileName={'upcoming-covid19-cta.png?alt=media&token=7fc34889-ce67-4b46-8e42-250efb8d66c0'}
                 imgClass="banner_img"
                 alt="Upcoming Hack"
               />
