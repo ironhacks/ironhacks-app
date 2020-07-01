@@ -20,10 +20,11 @@ const getAdminHackData = async (data) => {
 
 const getPhaseResults = (data) => {
   const { phase, hackResults } = data;
+  console.log('data', data);
   const phaseResults = hackResults[phase];
   if (!phaseResults){
     return {
-      error: 'Not results for this phase yet.'
+      error: 'No results for this phase yet.'
     }
   } else {
     return phaseResults;

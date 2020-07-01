@@ -110,9 +110,8 @@ class ResultSectionCompetitors extends React.Component {
     return (
       <SectionContainer>
         <h2>Your Competitors</h2>
-        <p>
-          {TreatmentTexts[this.state.treatment].ranking.instructions}
-        </p>
+
+        {TreatmentTexts[this.state.treatment].ranking.instructions}
 
         <h3 className='super-cool-banner'>
           *** Keep in mind: You can earn excellence if you learn and
