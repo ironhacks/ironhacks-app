@@ -4,7 +4,7 @@ import ShowcasePage from './showcase-page';
 import HackSelectPage from './hack-select-page';
 import AdminHackSelectPage from './admin-hack-select-page';
 import AdminHackPage from './admin-hack-page';
-import NewHackPage from './admin-new-hack-page';
+import AdminNewHackPage from './admin-new-hack-page';
 import HackPage from './hack-page';
 import LoginPage from './login-page';
 import LogoutPage from './logout-page';
@@ -13,6 +13,7 @@ import HomePage from './home-page';
 
 export {
   // ProjectEditorPage,
+  AdminNewHackPage,
   AdminHackPage,
   AdminHackSelectPage,
   HackPage,
@@ -20,7 +21,6 @@ export {
   HomePage,
   LoginPage,
   LogoutPage,
-  NewHackPage,
   ProfilePage,
   ShowcasePage,
   UpcomingHackPage,

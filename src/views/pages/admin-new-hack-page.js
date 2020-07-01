@@ -68,7 +68,7 @@ const DatePickerContainer = styled('button')`
   }
 `;
 
-class HackSetupPage extends React.Component {
+class AdminNewHackPage extends React.Component {
   _timeoutID;
 
   constructor(props) {
@@ -402,4 +402,4 @@ class HackSetupPage extends React.Component {
   }
 }
 
-export default HackSetupPage;
+export default AdminNewHackPage;

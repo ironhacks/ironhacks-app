@@ -1,9 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Redirect, Link, Switch, Route, withRouter } from 'react-router-dom';
-import { Theme } from '../../theme';
+import { Redirect, Link, Switch, Route, withRouter, useLocation } from 'react-router-dom';
 import { Loader } from '../../components/loader/index';
 import { Page, Section, Row, Col } from '../../components/layout';
+import { Breadcrumb } from 'react-bootstrap'
 import {
   AdminHackForum,
   AdminHackSettings,
@@ -11,53 +10,10 @@ import {
   AdminHackTutorial,
   AdminHackTask,
 } from '../admin';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const colors = Theme.COLORS;
+import '../../styles/css/admin.css';
 
-const ControlPanel = styled('div')`
-  height 100%;
-  margin-top: 1em;
-  max-height: 100%;
-  border-right: 1px solid black;
-  overflow: auto;
-`;
-
-const ControlPanelItem = styled('div')`
-  width: 100%;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(0,0,0,.5);
-  padding-left: 15px;
-  transition: color 0.5s, background-color 0.5s;
-
-  &:hover {
-    background-color: gray;
-    color: ${colors.mainBgColor};
-  }
-
-  img {
-    width: 25px;
-    height: 25px;
-
-    &:first-child {
-      margin-right: 10px;
-    }
-
-    &:last-child {
-      margin-left: 10px;
-    }
-  }
-`;
-
-const SectionHeader = styled('div')`
-  padding: 1em 1em 1em 1em;
-  border-bottom: 1px solid black;
-`;
-
-const SectionBody = styled('div')`
-  overflow: auto;
-`;
 
 class AdminHackNav extends React.Component {
   constructor(props) {
@@ -67,40 +23,53 @@ class AdminHackNav extends React.Component {
 
   render() {
     return (
-      <ControlPanel className='admin-sidebar col-md-2'>
+      <div className='admin-sidebar col-md-2'>
+        {this.props.items.map((item, index)=>(
+          <Link
+            key={index}
+            to={`${this.baseUrl}/${item.path}`}
+            className="nav-item"
+            >
 
-        <Link to={`${this.baseUrl}/settings`} className="nav-item">
-          <ControlPanelItem>
-              Settings
-          </ControlPanelItem>
-        </Link>
-
-        <Link to={`${this.baseUrl}/forums`} className="nav-item">
-          <ControlPanelItem>
-            Forums
-          </ControlPanelItem>
-        </Link>
-
-        <Link to={`${this.baseUrl}/qualtrics-integration`} className="nav-item">
-          <ControlPanelItem>
-            Surveys
-          </ControlPanelItem>
-        </Link>
-
-        <Link to={`${this.baseUrl}/tutorial`} className="nav-item">
-          <ControlPanelItem>
-            Tutorial
-          </ControlPanelItem>
-        </Link>
-
-        <Link to={`${this.baseUrl}/task`} className="nav-item">
-          <ControlPanelItem>
-            Task
-          </ControlPanelItem>
-        </Link>
-      </ControlPanel>
+            <div className="admin-sidebar__item">
+              {item.name}
+            </div>
+          </Link>
+        ))}
+      </div>
     )
   }
+}
+
+AdminHackNav.defaultProps = {
+  items: [],
+}
+
+function upperCaseWord(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function AdminPageBreadCrumbs({props, hackId, hackName}) {
+  let location = useLocation();
+  const path = location.pathname.split('/');
+  let currentPath = path.length >= 5 ? path.pop() : false;
+
+
+  return (
+    <Breadcrumb>
+      <Breadcrumb.Item href="/admin">Admin</Breadcrumb.Item>
+
+      <Breadcrumb.Item href={`/admin/hacks/${hackId}`}>
+        {hackName}
+      </Breadcrumb.Item>
+
+      {currentPath && (
+        <Breadcrumb.Item active>
+          {upperCaseWord(currentPath)}
+        </Breadcrumb.Item>
+      )}
+    </Breadcrumb>
+  )
 }
 
 class AdminHackPage extends React.Component {
@@ -128,10 +97,6 @@ class AdminHackPage extends React.Component {
   componentDidMount() {
     if (!this.props.location.state) {
       this.getHack(this.hackId);
-    } else {
-      // this.setState({
-      //    hack: this.props.location.state.hack,
-      // })
     }
   }
 
@@ -202,22 +167,6 @@ class AdminHackPage extends React.Component {
     })
   }
 
-  // async getHackTask(hackId) {
-  //   const getTask = window.firebase.functions().httpsCallable('getTaskDoc');
-  //   let hackTaskPromise = await getTask({
-  //     hackId: hackId,
-  //   })
-  //
-  //   Promise.resolve(hackTaskPromise).then((hackTask) => {
-  //     if (hackTask.length > 0) {
-  //       this.setState({
-  //         hackTask: hackTask,
-  //         loading: false,
-  //       })
-  //     }
-  //   })
-  // }
-
   updateTaskDocument() {
     this.setState({
       loading: true
@@ -278,7 +227,6 @@ class AdminHackPage extends React.Component {
     return window.btoa(safeString);
   }
 
-
   decodeTask(enc) {
     console.log('decodeTask', enc);
     let decoded = window.atob(enc);
@@ -291,96 +239,107 @@ class AdminHackPage extends React.Component {
     } else {
       return (
         <Page
+          pageClass="admin-page"
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
         >
 
+      {this.state.hack && !this.state.loading && (
+        <AdminPageBreadCrumbs
+          hackId={this.hackId}
+          hackName={this.state.hack.name}
+        />
+      )}
+
         <Section sectionClass='container-fluid' containerClass="flex">
           <AdminHackNav
             hackId={this.hackId}
+            items={[
+              {name: 'Settings', path: 'settings'},
+              {name: 'Forums', path: 'forums'},
+              {name: 'Surveys', path: 'surveys'},
+              {name: 'Tutorials', path: 'tutorials'},
+              {name: 'Task', path: 'task'},
+              {name: 'Overview', path: 'overview'},
+            ]}
           />
 
-          <Row rowClass='row no-gutters full-height flex-row'>
-            <Col className='col-md-10 full-height'>
-              <div className='d-flex flex-column full-height'>
+          <div className="admin-hack-content">
+            <Row rowClass='no-gutters py-2'>
+              <Col colClass="">
+              {this.state.hack && !this.state.loading ? (
+                <Switch>
+                  <Route path={this.props.match.url + '/settings'}>
+                    <AdminHackSettings
+                      hackId={this.hackId}
+                      hackData={this.state.hackData}
+                      hack={this.state.hack}
+                      onSaveSettings={this.onSaveSettings}
+                    />
+                  </Route>
 
-                <SectionHeader className='row no-gutters'>
-                  <div className='col-md-12'>
-                    <h2 className="h2">
-                      Hack: {this.state.hack ? this.state.hack.name : 'Loading'}
-                    </h2>
-                  </div>
-                </SectionHeader>
+                  <Route path={this.props.match.url + '/overview'}>
+                    <AdminHackTask
+                      previousDocument={
+                        this.state.hackTask
+                          ? this.decodeTask(this.state.hackTask)
+                          : ''
+                      }
+                      onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
+                      updateTaskDocument={this.updateTaskDocument}
+                    />
+                  </Route>
 
-                <div className='row no-gutters flex-grow-1 overflow'>
-                  <SectionBody className='col-md-12'>
-                    {this.state.hack && !this.state.loading ? (
-                      <Switch>
+                  <Route path={this.props.match.url + '/task'}>
+                    <AdminHackTask
+                      previousDocument={
+                        this.state.hackTask
+                          ? this.decodeTask(this.state.hackTask)
+                          : ''
+                      }
+                      onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
+                      updateTaskDocument={this.updateTaskDocument}
+                    />
+                  </Route>
 
-                        <Route path={this.props.match.url + '/settings'}>
-                          <AdminHackSettings
-                            hackId={this.hackId}
-                            hackData={this.state.hackData}
-                            hack={this.state.hack}
-                            onSaveSettings={this.onSaveSettings}
-                          />
-                        </Route>
+                  <Route path={this.props.match.url + '/tutorials'}>
+                    <AdminHackTutorial
+                      previousDocument={
+                        this.state.hack.tutorial
+                          ? this.decodeTask(this.state.hack.tutorial.doc)
+                          : ''
+                      }
+                      onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
+                      updateTutorialDocument={this.updateTutorialDocument}
+                    />
+                  </Route>
 
-                        <Route path={this.props.match.url + '/task'}>
-                            <AdminHackTask
-                              previousDocument={
-                                this.state.hackTask
-                                  ? this.decodeTask(this.state.hackTask)
-                                  : ''
-                              }
-                              onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
-                              updateTaskDocument={this.updateTaskDocument}
-                            />
-                        </Route>
+                    <Route path={this.props.match.url + '/forums'}>
+                      <AdminHackForum
+                        hackId={this.hackId}
+                        forumIndex={0}
+                        onNameChange={()=>{console.log('test')}}
+                        treatment={1}
+                        onTreatmentChange={()=>{console.log('test2')}}
+                      />
+                    </Route>
 
-                        <Route
-                          path={this.props.match.url + '/tutorial'}
-                          render={() => (
-                            <AdminHackTutorial
-                              previousDocument={
-                                this.state.hack.tutorial
-                                  ? this.decodeTask(this.state.hack.tutorial.doc)
-                                  : ''
-                              }
-                              onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
-                              updateTutorialDocument={this.updateTutorialDocument}
-                              />
-                            )}
-                          />
-
-                        <Route path={this.props.match.url + '/forums'}>
-                          <AdminHackForum
-                            hackId={this.hackId}
-                            forumIndex={0}
-                            onNameChange={()=>{console.log('test')}}
-                            treatment={1}
-                            onTreatmentChange={()=>{console.log('test2')}}
-                          />
-                        </Route>
-
-                        <Route
-                          path={this.props.match.url + '/qualtrics-integration'}
-                          render={() => (
-                            <AdminHackSurveys
-                              hack={this.state.hack}
-                              onUpdate={this.updateQualtricsLinks}
-                            />
-                          )}
+                    <Route
+                      path={this.props.match.url + '/surveys'}
+                      render={() => (
+                        <AdminHackSurveys
+                          hack={this.state.hack}
+                          onUpdate={this.updateQualtricsLinks}
                         />
-                      </Switch>
-                    ) : (
-                      <Loader />
-                    )}
-                  </SectionBody>
-                </div>
-              </div>
-            </Col>
-          </Row>
+                      )}
+                    />
+                  </Switch>
+                ) : (
+                  <Loader />
+                )}
+              </Col>
+            </Row>
+          </div>
         </Section>
       </Page>
     )

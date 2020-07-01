@@ -8,7 +8,7 @@ import { HackNav } from '../../components/hacks';
 import {
   ForumView,
   ProjectSelectView,
-  QuizListView,
+  QuizView,
   RegistrationView,
   ResultsView,
   TaskView,
@@ -17,13 +17,7 @@ import {
 import ThreadViewWithRouter from '../forum/forum-thread-view';
 import NewThread from '../forum/newThread.js';
 
-// import { Loader } from '../../components/loader';
-
 class HackNavSection extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Section>
@@ -65,14 +59,6 @@ class HackPage extends React.Component {
       hackTask: null,
     };
 
-    // Promise.resolve(hackDataPromise).then((hackData) => {
-    //    this.hackData = hackData;
-    //    this.hackName = hackData.name;
-    //    this.state.hackPhases = hackData.phases
-    //    this.state.hackTutorial = hackData.tutorial.doc;
-    //    this.state.hackName = hackData.name;
-    //    this.state.hackData =  hackData;
-    // })
     this.getHack(this.hackId);
 
     this.updateHackView = this.updateHackView.bind(this);
@@ -117,8 +103,6 @@ class HackPage extends React.Component {
   }
 
   async getHackTask(hackId) {
-    console.log('get hack task', hackId);
-    // window.firebase.functions().useFunctionsEmulator('http://localhost:5001')
     const getTask = window.firebase.functions().httpsCallable('getTaskDoc');
 
     let hackTaskPromise = await getTask({
@@ -226,9 +210,9 @@ class HackPage extends React.Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/quizzes">
+            <Route exact path="/hacks/:hackId/quiz">
               <Section>
-                <QuizListView
+                <QuizView
                   hackId={this.hackId}
                   userId={this.props.userId}
                   user={this.props.user}
@@ -263,7 +247,7 @@ class HackPage extends React.Component {
             </Route>
 
             <Route exact path="/hacks/:hackId/results">
-              <Section>
+              <Section sectionClass="results-section">
                 <ResultsView
                   hackData={this.state.hackData}
                   hackPhases={this.state.hackPhases}

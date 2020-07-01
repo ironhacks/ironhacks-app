@@ -1,18 +1,10 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import styled from 'styled-components';
-import { AdminHackCardList, NewHackCard } from '../../components/hacks';
+import { AdminHackCardList, AdminNewHackCard } from '../../components/hacks';
 import Separator from '../../util/separator';
 import { Page, Section, Row, Col } from '../../components/layout';
+import { Breadcrumb } from 'react-bootstrap'
 
-
-const CardsContainer = styled('div')`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: left;
-  margin-top: 70px;
-`;
 
 class AdminHackSelectPage extends React.Component {
   constructor(props) {
@@ -51,6 +43,7 @@ class AdminHackSelectPage extends React.Component {
       .get();
 
     Promise.resolve(hacksData);
+
     for (let hack of hacksData.docs){
       let hackData = hack.data();
       hackData.id = hack.id;
@@ -85,6 +78,7 @@ class AdminHackSelectPage extends React.Component {
       const selectedHackId = this.state.selectedHack.id;
       const hackName = selectedHack.name;
       const pathname = '/admin/dashboard/' + hackName;
+
       return (
         <Redirect
           push
@@ -104,29 +98,29 @@ class AdminHackSelectPage extends React.Component {
         user={this.props.user}
         userIsAdmin={this.props.userIsAdmin}
       >
+        <Breadcrumb>
+          <Breadcrumb.Item href="/admin">
+            Admin
+          </Breadcrumb.Item>
+        </Breadcrumb>
+
         <Section sectionClass="py-2">
           <Row>
             <Col colClass="">
-              <h1>IronHacks Admin Dashboard</h1>
+              <h1>Hack Admin Dashboard</h1>
 
               <Separator primary />
 
-              <CardsContainer>
-                <Row>
-                  <Col colClass="flex">
-                  <NewHackCard
-                    newHack={true}
-                    onClick={this.goToNewHack}
-                  />
+              <div className="admin_hack_card_list">
+                <div className="flex">
+                  <AdminNewHackCard onClick={this.goToNewHack} />
 
                   <AdminHackCardList
                     emptyText={'There are no hacks.'}
                     hacks={this.state.hacks}
                   />
-                  </Col>
-                </Row>
-              </CardsContainer>
-
+                </div>
+              </div>
             </Col>
           </Row>
         </Section>
