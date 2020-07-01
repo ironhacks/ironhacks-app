@@ -15,7 +15,7 @@ const Footer = (props) => {
       <div className={'footer_container py-3'} style={footerContainerStyles}>
         <div className='footer_block' style={{ marginLeft: '3rem'}}>
           <div>
-            <span>Version 2.0.1</span>
+            <span>Version 2.1.1</span>
           </div>
         </div>
 
@@ -24,7 +24,7 @@ const Footer = (props) => {
             RESEARCH CENTER FOR OPEN DIGITAL INNOVATION | RCODI
           </div>
           <div>
-            All rigths reserved IronHacks&#169; {new Date().getFullYear()}
+            All rights reserved IronHacks&#169; {new Date().getFullYear()}
           </div>
         </div>
 
