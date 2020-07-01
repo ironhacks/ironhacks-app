@@ -10,7 +10,7 @@ import {
   HomePage,
   LoginPage,
   LogoutPage,
-  NewHackPage,
+  AdminNewHackPage,
   AdminHackSelectPage,
   ProfilePage,
   UpcomingHackPage,
@@ -296,7 +296,7 @@ class App extends React.Component {
                     </Route>
 
                     <Route path='/admin/new-hack'>
-                      <NewHackPage
+                      <AdminNewHackPage
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                       />
