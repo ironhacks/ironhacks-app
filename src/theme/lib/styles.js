@@ -63,13 +63,6 @@ export const LoginTheme = {
   textColor: 'black',
 };
 
-export const adminInnerSectionsTheme = {
-  containerHeight: '100%',
-  backgroundColor: 'white',
-  textColor: 'black',
-  hoverTextColor: Colors.highlightedTextColor,
-};
-
 export const ThreadPreviewTheme = {
   backgroundColor: Colors.threadPreviewBgColor,
   highlightedTextBgColor: Colors.threadPreviewHighlightedBgColor,
