@@ -3,7 +3,7 @@ import React from 'react';
 import ReactMde from 'react-mde';
 import * as Showdown from 'showdown';
 import './css/react-mde-all.css';
-//
+
 // const Editor = styled(ReactMde)`
 //   height: 500px;
 //   max-height: 500px;
@@ -84,6 +84,7 @@ class MarkdownEditor extends React.Component {
         onChange={value => this.handleValueChange(value)}
         selectedTab={this.state.selectedTab}
         value={this.state.value}
+        minEditorHeight={500}
         onTabChange={tabid => this.setSelectedTab(tabid)}
         generateMarkdownPreview={md => Promise.resolve(this.md2Html(md))}
       />
