@@ -2,8 +2,8 @@ import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
 import Button from '../../util/button.js';
+import { Row, Col } from '../../components/layout';
 import { Theme } from '../../theme';
-
 
 const AvailableActionsDiv = styled('div')`
   width: 100%;
@@ -14,7 +14,6 @@ const AvailableActionsDiv = styled('div')`
 `;
 
 
-const styles = Theme.STYLES.adminInnerSectionsTheme;
 const SectionContainer = styled('div')`
   width: 100%;
   height: 100%;
@@ -33,22 +32,16 @@ class AdminHackTask extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={styles}>
-        <SectionContainer>
-          <h2>Task document editor</h2>
-
-          <p>
-            Here you can edit and preview the Task document. You can also
-            publish the document or schedule it (check bellow).
-          </p>
+        <>
+          <h2 className="pb-2">
+            Hack Task Document Editor
+          </h2>
 
           <MarkdownEditor
             editorLayout='tabbed'
             onEditorChange={this.onEditorChange}
             withContent={this.props.previousDocument}
           />
-
-          <p>Here you will find the instrictions to publish your task.</p>
 
           <AvailableActionsDiv>
             <Button
@@ -60,8 +53,7 @@ class AdminHackTask extends React.Component {
               Publish Task
             </Button>
           </AvailableActionsDiv>
-        </SectionContainer>
-      </ThemeProvider>
+      </>
     );
   }
 }

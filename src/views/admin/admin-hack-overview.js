@@ -1,32 +1,44 @@
 import React from 'react';
 import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
-import AvailableActionsDiv from '../../util/availableActionsDiv.js';
-import Button from '../../util/button';
+import Button from '../../util/button.js';
+
+
+const AvailableActionsDiv = styled('div')`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  height: 50px;
+`;
+
+
 
 const SectionContainer = styled('div')`
   width: 100%;
+  height: 100%;
   padding: 25px 50px 50px 50px;
-  height: ${(props) => props.theme.containerHeight};
 `;
 
-class AdmTutorialSection extends React.Component {
+class AdminHackOverview extends React.Component {
   constructor(props) {
     super(props);
-
     this.onEditorChange = this.onEditorChange.bind(this);
   }
 
   onEditorChange(markdown) {
-    this.props.onTutorialMarkdownUpdate(markdown);
+    this.props.onTaskMarkdownUpdate(markdown);
   }
 
   render() {
     return (
-        <>
-          <h2 className="pb-2">
-            Tutorial document editor
-          </h2>
+        <SectionContainer>
+          <h2>Task document editor</h2>
+
+          <p>
+            Here you can edit and preview the Task document. You can also
+            publish the document or schedule it (check bellow).
+          </p>
 
           <MarkdownEditor
             editorLayout='tabbed'
@@ -34,19 +46,21 @@ class AdmTutorialSection extends React.Component {
             withContent={this.props.previousDocument}
           />
 
+          <p>Here you will find the instrictions to publish your task.</p>
+
           <AvailableActionsDiv>
             <Button
               primary
               width='150px'
               margin='0 0 0 15px'
-              onClick={this.props.updateTutorialDocument}
+              onClick={this.props.updateTaskDocument}
             >
-              Publish tutorial
+              Publish Task
             </Button>
           </AvailableActionsDiv>
-      </>
+        </SectionContainer>
     );
   }
 }
 
-export default AdmTutorialSection;
+export default AdminHackOverview;

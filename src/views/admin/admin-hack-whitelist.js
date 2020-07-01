@@ -130,7 +130,6 @@ class AdminHackWhitelist extends React.Component {
           onChange={this.onWhitelistChange}
           type="text"
           autoComplete="off"
-          autoFocus
         />
 
         </WhitelistContainer>

@@ -61,6 +61,7 @@ class AdminHackForumItem extends React.Component {
         width: '100%',
         padding: '1em 0',
       }}>
+
       <ForumItemContainer>
         <div>
           <img src={forumIcon} alt='forum-icon'/>

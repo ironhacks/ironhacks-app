@@ -121,7 +121,7 @@ class AdmQualtricsIntegrationSection extends React.Component {
         <Separator primary />
         <h3>Quizzes</h3>
         <p>
-          These surveys are displayed on the <Link to='/quizzes'>Quizzes</Link>{' '}
+          These surveys are displayed on the <Link to='/quiz'>Quizzes</Link>{' '}
           section, participant can test their abilities using them.
         </p>
         <label>

@@ -1,35 +1,15 @@
 import React from 'react';
-import styled from 'styled-components';
 import Separator from '../../util/separator.js';
 import { InputCheckbox } from '../../components/input/checkbox';
+import { VariableSizeList as List } from 'react-window';
 import AdminHackWhitelist from './admin-hack-whitelist';
-
-
-// Section container
-const SectionContainer = styled('div')`
-  width: 100%;
-  height: 100%;
-  padding: 25px 50px 50px 50px;
-
-  input {
-    width: 100%;
-    max-height: 45px;
-  }
-
-  .new-item-list {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-`;
-
+import { Section } from '../../components/layout';
+import moment from 'moment';
 
 class AdmSettingsSection extends React.Component {
   constructor(props) {
     super(props);
     const { whitelist, registrationOpen } = props.hackData;
-    console.log('hackData', props.hackData);
-    console.log('registrationOpen', registrationOpen);
 
     this.state = {
       whitelist: whitelist || [''],
@@ -37,11 +17,9 @@ class AdmSettingsSection extends React.Component {
       syncing: false,
     }
 
-    // this.hackRef = window.firebase.firestore()
-    //       .collection('hacks')
-    //       .doc(this.hackId);
-
     this.updateHackSettings = this.updateHackSettings.bind(this);
+    this.ListItemUser = this.ListItemUser.bind(this);
+    this.ListItemPhase = this.ListItemPhase.bind(this);
     this.onRegistrationOpenChanged = this.onRegistrationOpenChanged.bind(this);
   }
 
@@ -62,11 +40,7 @@ class AdmSettingsSection extends React.Component {
           syncing: false
         })
       })
-
-      console.log('onRegistrationOpenChanged', value);
   }
-
-
 
   updateHackSettings(whitelist) {
     this.setState({
@@ -86,7 +60,6 @@ class AdmSettingsSection extends React.Component {
           .firestore
           .FieldValue
           .arrayUnion(hackId);
-
 
         const data = {
           whitelist: userWhitelist,
@@ -109,8 +82,6 @@ class AdmSettingsSection extends React.Component {
       .collection('adminHackData')
       .doc(this.props.hackId)
 
-    console.log('hackRef', hackRef);
-
     batch.set(hackRef, hackWhiteListObject, { merge: true });
 
     batch
@@ -129,54 +100,108 @@ class AdmSettingsSection extends React.Component {
       })
   }
 
+  ListItemUser({ index, style }) {
+    return (
+      <div style={style}>
+        {index + 1}. {this.props.hack.registeredUsers[index]}
+      </div>
+    )
+  }
+
+  ListItemPhase({ index, style }) {
+    let phase = this.props.hack.phases[index];
+    let phaseIndex = phase.index ? phase.index + 1 : index + 1;
+    let codeStartDate = phase.codingStartDate ? moment(phase.codingStartDate.seconds).format('MMM Do') : 'n/a';
+    let codeEndDate = phase.codingStartEnd ? moment(phase.codingStartEnd.seconds).format('Do YYYY') : 'n/a';
+    let evalStartDate = phase.evaluationStartDate ? moment(phase.evaluationStartDate.seconds).format('MMM Do') : 'n/a';
+    let evalEndDate = phase.evaluationStartend ? moment(phase.evaluationStartend.seconds).format('Do YYYY') : 'n/a';
+
+    return (
+      <div style={style}>
+        Phase {phaseIndex}<br/>
+        <strong>Coding</strong>: {codeStartDate}-{codeEndDate}<br/>
+        <strong>Evaluation</strong>: {evalStartDate}-{evalEndDate}
+      </div>
+    )
+  }
+
   render() {
     return (
-      <SectionContainer>
-        <h2>{this.props.hack.name}'s Settings</h2>
-        <Separator primary />
-
-        <h2 className="h2">
-          Options
+      <>
+        <h2>
+          {this.props.hack.name}'s Settings
         </h2>
 
-        <InputCheckbox
-          name="Registration Open"
-          onInputChanged={this.onRegistrationOpenChanged}
-          isChecked={this.state.registrationOpen}
-          disabled={this.state.syncing}
-        />
+        <Separator primary />
 
-        <div>
-          <h3>Hack Data:</h3>
 
-          <pre style={{
-            width: '100%',
-            whiteSpace: 'break-spaces',
-            padding: 0,
-            margin: 0,
-            position: 'relative',
-          }}>
-            {JSON.stringify(this.props.hack, null, '  ')}
-          </pre>
-        </div>
+        <Section sectionClass="py-2">
+          <h2 className="h2">
+            Hack Options
+          </h2>
 
-        <h3>
-          <label htmlFor='whitelist'>White List</label>
-        </h3>
+          <InputCheckbox
+            name="Registration Open"
+            onInputChanged={this.onRegistrationOpenChanged}
+            isChecked={this.state.registrationOpen}
+            disabled={this.state.syncing}
+          />
+        </Section>
 
-        <p>
-          The white list is an email list that the defines which users are allow
-          to register and participate in a hack (like a participants list).
-          Please introduce the list of emails. You can separate them by commas
-          (,) whitespaces or by pressing intro. You can also copy-paste them
-          directly from excel.
-        </p>
+        <Section sectionClass="py-2">
 
-      <AdminHackWhitelist
-        onSaveSettings={this.updateHackSettings}
-        whitelist={this.state.whitelist}
-      />
-      </SectionContainer>
+            <h3 className="h3 py-2">
+              Hack Phases
+            </h3>
+
+            <List
+              itemCount={this.props.hack.phases.length}
+              itemSize={(()=>{return 90})}
+              height={this.props.hack.phases.length % 4 * 90}
+              width={400}
+              data={this.props.hack.phases}
+            >
+              {this.ListItemPhase}
+            </List>
+          </Section>
+
+          <Section sectionClass="py-2">
+            <h3 className="h3 py-2">
+              Registered Users
+            </h3>
+
+            <List
+              itemCount={this.props.hack.registeredUsers.length}
+              itemSize={(()=>{return 30})}
+              height={300}
+              width={400}
+              data={this.props.hack.registeredUsers}
+            >
+              {this.ListItemUser}
+            </List>
+          </Section>
+
+          <Section sectionClass="py-2">
+            <h3 className="h3 py-2">
+              Hack Whitelist
+            </h3>
+
+            <p>
+              The white list is an email list that the defines which users are allow
+              to register and participate in a hack (like a participants list).
+              Please introduce the list of emails. You can separate them by commas
+              (,) whitespaces or by pressing intro. You can also copy-paste them
+              directly from excel.
+            </p>
+
+            <AdminHackWhitelist
+              onSaveSettings={this.updateHackSettings}
+              whitelist={this.state.whitelist}
+            />
+          </Section>
+
+
+      </>
     );
   }
 }
