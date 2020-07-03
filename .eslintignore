@@ -18,3 +18,4 @@ yarn-error.log*
 rollup.*.js
 *.config.js
 *.config.*.js
+/src/assets/static
