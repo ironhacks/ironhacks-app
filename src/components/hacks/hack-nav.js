@@ -1,33 +1,46 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import menuIcon from '../../assets/svg/menu-icon.svg';
 import { NavContainerDiv } from './nav-container'
+import menuIcon from '../../assets/svg/menu-icon.svg';
 
-const NavButton = styled(Link)`
-  color: ${(props) => props.theme.textColor};
-  padding: 10px 10px;
-  text-align: center;
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 15px;
-  display: inline-block;
-  transition: color 0.3s, background-color 0.3s;
 
-  &:hover {
-    text-decoration: none;
-    color: ${(props) => props.theme.hoverTextColor};
+class HackNavItem extends React.Component {
+  constructor(props) {
+    super(props);
   }
-`;
+
+  render() {
+    return (
+      <Link
+        className={`hack_nav__item ${this.props.navClass}`}
+        to={`/hacks/${this.props.hackId}/${this.props.navId}`}
+        onClick={this.props.action}
+      >
+        {this.props.name}
+      </Link>
+    )
+  }
+}
+
+HackNavItem.defaultProps = {
+  navClass: '',
+}
 
 class HackNav extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       showMenu: 'none',
       currentView: 'task',
     };
+    this.navItems = [
+      {id: 'task', name: 'Task'},
+      {id: 'forum', name: 'Forum'},
+      {id: 'tutorial', name: 'Tutorial'},
+      {id: 'quiz', name: 'Quiz'},
+      {id: 'projects', name: 'Projects'},
+      {id: 'results', name: 'Results'},
+    ];
     this.baseUrl = `/hacks/${this.props.hackId}`;
     this.navMenuRef = props.navMenuref;
     this.updateHackNav = this.updateHackNav.bind(this);
@@ -55,9 +68,7 @@ class HackNav extends React.Component {
 
   updateHackNav(target) {
     this.hideMenu(target)
-    this.setState({
-      currentView: target
-    });
+    this.setState({currentView: target});
     if (this.props.action) {
       this.props.action(target);
     }
@@ -74,61 +85,16 @@ class HackNav extends React.Component {
           <img src={menuIcon} alt='menu_icon' />
         </button>
 
-        <div className='links-container'>
-          <NavButton
-            to={`${this.baseUrl}/task`}
-            id={'task'}
-            className="pl-0"
-            onClick={()=>this.updateHackNav('task')}
-          >
-            Task
-          </NavButton>
-
-          <span> | </span>
-
-          <NavButton
-            to={`${this.baseUrl}/forum`}
-            id={'forum'}
-            onClick={()=>this.updateHackNav('forum')}
-          >
-            Forum
-          </NavButton>
-
-          <span> | </span>
-
-          <NavButton
-            to={`${this.baseUrl}/tutorial`}
-            onClick={()=>this.updateHackNav('tutorial')}
-          >
-            Tutorial
-          </NavButton>
-
-          <span> | </span>
-
-          <NavButton
-            to={`${this.baseUrl}/quiz`}
-            onClick={()=>this.updateHackNav('quiz')}
-          >
-            Quiz
-          </NavButton>
-
-          <span> | </span>
-
-          <NavButton
-            to={`${this.baseUrl}/projects`}
-            onClick={()=>this.updateHackNav('projects')}
-          >
-            Projects
-          </NavButton>
-
-          <span> | </span>
-
-          <NavButton
-            to={`${this.baseUrl}/results`}
-            onClick={()=>this.updateHackNav('results')}
-          >
-            Results
-          </NavButton>
+        <div className='hack_nav links-container'>
+          {this.navItems.map((item, index)=>(
+            <HackNavItem
+              key={index}
+              navId={item.id}
+              name={item.name}
+              hackId={this.props.hackId}
+              action={()=>this.updateHackNav(item.name)}
+            />
+          ))}
         </div>
       </NavContainerDiv>
     )
