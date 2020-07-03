@@ -13,13 +13,6 @@ const AvailableActionsDiv = styled('div')`
 `;
 
 
-
-const SectionContainer = styled('div')`
-  width: 100%;
-  height: 100%;
-  padding: 25px 50px 50px 50px;
-`;
-
 class AdminHackOverview extends React.Component {
   constructor(props) {
     super(props);
@@ -27,18 +20,15 @@ class AdminHackOverview extends React.Component {
   }
 
   onEditorChange(markdown) {
-    this.props.onTaskMarkdownUpdate(markdown);
+    this.props.onEditorUpdate(markdown);
   }
 
   render() {
     return (
-        <SectionContainer>
-          <h2>Task document editor</h2>
-
-          <p>
-            Here you can edit and preview the Task document. You can also
-            publish the document or schedule it (check bellow).
-          </p>
+        <>
+          <h2 className="pb-2">
+            Hack Overview Editor
+          </h2>
 
           <MarkdownEditor
             editorLayout='tabbed'
@@ -46,20 +36,18 @@ class AdminHackOverview extends React.Component {
             withContent={this.props.previousDocument}
           />
 
-          <p>Here you will find the instrictions to publish your task.</p>
-
           <AvailableActionsDiv>
             <Button
               primary
               width='150px'
               margin='0 0 0 15px'
-              onClick={this.props.updateTaskDocument}
+              onClick={this.props.updateDocument}
             >
-              Publish Task
+              Publish
             </Button>
           </AvailableActionsDiv>
-        </SectionContainer>
-    );
+      </>
+    )
   }
 }
 

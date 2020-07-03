@@ -29,9 +29,6 @@ class HackSelectPage extends React.Component {
         console.log('user not set');
       }
       this.getHacks();
-      // this.getUserHacks();
-      // this.getOpenHacks();
-
     } catch (e) {
       console.log('get hacks failed', e);
     }
@@ -65,21 +62,16 @@ class HackSelectPage extends React.Component {
       .then((result)=>{
         if (result.exists) {
           let userHackList = [];
-          result.data().hacks.forEach((hack)=>{
-            // hacks.push({
-            //   registered: true,
-            //   hackId: hack,
-            //   hackName: hack,
-            //   hackData: hack,
-            //   phases: ['']
-            // })
-            userHackList.push(hack);
-          })
+          let data = result.data()
+          console.log('data', data);
+          if (data.hacks) {
+            data.hacks.forEach((hack)=>{
+              userHackList.push(hack);
+            })
+          }
           return userHackList;
         }
       });
-
-    console.log('user hacks', userHacks);
 
     const openHacks = await window.firebase.firestore()
       .collection('hacks')
@@ -107,11 +99,12 @@ class HackSelectPage extends React.Component {
       })
 
     console.log('open hacks', openHacks);
+
     console.log('hacks', hacks);
+
     const availableHacks = hacks.filter((hack)=>{
       return openHacks.includes(hack.hackId)
     })
-
     const registeredHacks = hacks.filter((hack)=>{
       return userHacks.includes(hack.hackId)
     })

@@ -1,9 +1,8 @@
 import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
 import Button from '../../util/button.js';
 import { Row, Col } from '../../components/layout';
-import { Theme } from '../../theme';
 
 const AvailableActionsDiv = styled('div')`
   width: 100%;
@@ -11,13 +10,6 @@ const AvailableActionsDiv = styled('div')`
   align-items: center;
   flex-direction: row-reverse;
   height: 50px;
-`;
-
-
-const SectionContainer = styled('div')`
-  width: 100%;
-  height: 100%;
-  padding: 25px 50px 50px 50px;
 `;
 
 class AdminHackTask extends React.Component {
@@ -50,7 +42,7 @@ class AdminHackTask extends React.Component {
               margin='0 0 0 15px'
               onClick={this.props.updateTaskDocument}
             >
-              Publish Task
+              Publish
             </Button>
           </AvailableActionsDiv>
       </>

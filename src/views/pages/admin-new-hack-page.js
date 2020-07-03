@@ -290,21 +290,25 @@ class AdminNewHackPage extends React.Component {
         console.error('Error adding document: ', error);
       });
   };
-  // --------------------- Create Hack Process ------------------------ //
 
   render() {
     if (this.state.mustNavigate) {
       return (
         <Redirect
           to={{
-            pathname: '/admin/dashboard/' + this.state.hackName,
+            pathname: '/admin/hacks/' + this.state.hackName,
             state: { hack: this.state.hack, hackId: this.state.hackId },
           }}
         />
       );
     }
+
     const { from, to } = this.state;
-    const modifiers = { start: from, end: to };
+    const modifiers = {
+      start: from,
+      end: to
+    };
+
     return (
       <ThemeProvider theme={styles}>
         <SectionContainer className='container-fluid'>
@@ -315,6 +319,7 @@ class AdminNewHackPage extends React.Component {
               <Separator primary />
             </div>
           </div>
+
           <div className='row'>
             <div className='col-md-8 offset-md-2'>
               <h2>Hack name</h2>
@@ -326,17 +331,24 @@ class AdminNewHackPage extends React.Component {
               <Separator />
             </div>
           </div>
+
           <div className='row'>
             <div className='col-md-8 offset-md-2'>
+
               <h2>{this.state.hackName} Dates</h2>
+
               <p>Dates Explanation.</p>
+
               <Separator />
             </div>
           </div>
+
           <div className='row'>
             <div className='col-md-7 offset-md-2'>
               <h2>Phases</h2>
+
               <p>Phase mechanic description.</p>
+
               {this.state.phases.map((item, index) => (
                 <Phase
                   dates={item}
@@ -345,6 +357,7 @@ class AdminNewHackPage extends React.Component {
                   onFocusHandler={this.onPhaseClick}
                 />
               ))}
+
               <DatePickerContainer
                 className='date-picker-container'
                 phase={this.state.selectedPhase}
@@ -358,15 +371,19 @@ class AdminNewHackPage extends React.Component {
                   onDayClick={this.handleDayClick}
                 />
               </DatePickerContainer>
+
               <NewElementButton onClick={this.addNewPhase}>
                 ADD PHASE
               </NewElementButton>
             </div>
           </div>
+
           <div className='row'>
             <div className='col-md-8 offset-md-2'>
               <Separator />
+
               <h2>Forums</h2>
+
               {this.state.forums.map((item, index) => (
                 <ForumItem
                   name={item}
@@ -376,12 +393,15 @@ class AdminNewHackPage extends React.Component {
                   key={index}
                 />
               ))}
+
               <NewElementButton onClick={this.addNewForum}>
                 ADD FORUM
               </NewElementButton>
+
               <Separator />
             </div>
           </div>
+
           <div className='row'>
             <div className='col-md-8 offset-md-2 finish-cancel-button-container'>
               <Button

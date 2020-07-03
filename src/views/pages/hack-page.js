@@ -1,12 +1,15 @@
 import React from 'react';
 import Separator from '../../util/separator';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useLocation } from 'react-router-dom';
 import { withRouter } from 'react-router';
+import { Breadcrumb } from 'react-bootstrap'
+import { upperCaseWord } from '../../util/string-utils';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { ProjectEditor } from '../../components/project';
 import { HackNav } from '../../components/hacks';
 import {
   ForumView,
+  OverviewView,
   ProjectSelectView,
   QuizView,
   RegistrationView,
@@ -17,19 +20,24 @@ import {
 import ThreadViewWithRouter from '../forum/forum-thread-view';
 import NewThread from '../forum/newThread.js';
 
+class HackTitle extends React.Component {
+  render() {
+    return (
+      <Row>
+        <Col>
+          <h2 className="pt-3">
+            <span>{ this.props.hackName } </span>
+            <span className="small">({ this.props.hackId })</span>
+          </h2>
+        </Col>
+      </Row>
+    )
+  }
+}
+
 class HackNavSection extends React.Component {
   render() {
     return (
-      <Section>
-        <Row>
-          <Col>
-            <h2 className="pt-3">
-              <strong>Hack: </strong>
-              <span>{ this.props.hackName } </span>
-              <span className="small">({ this.props.hackId })</span>
-            </h2>
-          </Col>
-        </Row>
         <Row>
           <Col>
             <HackNav
@@ -39,10 +47,34 @@ class HackNavSection extends React.Component {
             <Separator primary />
           </Col>
         </Row>
-      </Section>
-    )
+      )
   }
 }
+
+
+function HackPageBreadCrumbs({props, hackId, hackName}) {
+  let location = useLocation();
+  const path = location.pathname.split('/');
+  let currentPath = path.length >= 4 ? path.pop() : false;
+
+
+  return (
+    <Breadcrumb>
+      <Breadcrumb.Item href="/hacks">Hacks</Breadcrumb.Item>
+
+      <Breadcrumb.Item href={`/hacks/${hackId}`}>
+        {hackName}
+      </Breadcrumb.Item>
+
+      {currentPath && (
+        <Breadcrumb.Item active>
+          {upperCaseWord(currentPath)}
+        </Breadcrumb.Item>
+      )}
+    </Breadcrumb>
+  )
+}
+
 
 class HackPage extends React.Component {
   constructor(props) {
@@ -50,6 +82,8 @@ class HackPage extends React.Component {
 
     this.hackId = this.props.match.params.hackId;
     this.hackName = this.props.match.params.hackName;
+
+    console.log('hack id', this.hackId);
 
     this.state = {
       hackId: this.hackId,
@@ -85,6 +119,7 @@ class HackPage extends React.Component {
            hackResults: hackData.results,
            hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
            hackTask: hackData.task ? hackData.task.doc : '',
+           hackOverview: hackData.overview ? hackData.overview.doc : '',
            hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
         })
       } else {
@@ -123,8 +158,8 @@ class HackPage extends React.Component {
     this.setState({
       activeView: target
     });
-    this.props.history.push(`./${target}`);
-    this.props.history.go(`./${target}`);
+    this.props.history.push(`/hacks/${this.hackId}/${target}`);
+    this.props.history.go(`/hacks/${this.hackId}/${target}`);
   }
 
   render() {
@@ -133,6 +168,11 @@ class HackPage extends React.Component {
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
           >
+
+        <HackPageBreadCrumbs
+          hackId={this.hackId}
+          hackName={this.state.hackName}
+        />
 
         <Router>
           <Switch>
@@ -145,27 +185,50 @@ class HackPage extends React.Component {
                 />
               </Section>
             </Route>
+
+            <Route exact path="/hacks/:hackId">
+              <Section>
+                <HackNavSection
+                  hackId ={this.hackId}
+                  hackName={this.state.hackName}
+                  updateHackView={this.updateHackView}
+                />
+              </Section>
+            </Route>
+
             <Route path="/hacks/:hackId/*">
-              <HackNavSection
-                hackName={this.state.hackName}
-                updateHackView={this.updateHackView}
-                hackId ={this.hackId}
-              />
+              <Section>
+                <HackNavSection
+                  hackId ={this.hackId}
+                  hackName={this.state.hackName}
+                  updateHackView={this.updateHackView}
+                />
+              </Section>
             </Route>
           </Switch>
         </Router>
 
         <Router>
           <Switch>
-            <Route exact path="/hacks/:hackId/task">
-            <Section>
-              <TaskView
-                hackId={this.hackId}
-                userId={this.props.userId}
-                task={this.state.hackTask}
-              />
+            <Route exact path="/hacks/:hackId">
+              <Section>
+                <OverviewView
+                  hackId={this.hackId}
+                  userId={this.props.userId}
+                  document={this.state.hackOverview}
+                />
               </Section>
             </Route>
+
+            <Route exact path="/hacks/:hackId/task">
+              <Section>
+                <TaskView
+                  hackId={this.hackId}
+                  userId={this.props.userId}
+                  task={this.state.hackTask}
+                />
+                </Section>
+              </Route>
 
             <Route exact path="/hacks/:hackId/tutorial">
               <Section>

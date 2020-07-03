@@ -31,6 +31,9 @@ class AdmQualtricsIntegrationSection extends React.Component {
     this.state = {
       hack,
     };
+
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.saveSurveys = this.saveSurveys.bind(this)
   }
 
   handleInputChange(event, phaseIndex) {

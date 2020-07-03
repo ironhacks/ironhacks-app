@@ -4,11 +4,6 @@ import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
 import AvailableActionsDiv from '../../util/availableActionsDiv.js';
 import Button from '../../util/button';
 
-const SectionContainer = styled('div')`
-  width: 100%;
-  padding: 25px 50px 50px 50px;
-  height: ${(props) => props.theme.containerHeight};
-`;
 
 class AdmTutorialSection extends React.Component {
   constructor(props) {
@@ -41,7 +36,7 @@ class AdmTutorialSection extends React.Component {
               margin='0 0 0 15px'
               onClick={this.props.updateTutorialDocument}
             >
-              Publish tutorial
+              Publish
             </Button>
           </AvailableActionsDiv>
       </>

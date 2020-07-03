@@ -1,12 +1,14 @@
 import React from 'react';
 import { Redirect, Link, Switch, Route, withRouter, useLocation } from 'react-router-dom';
 import { Loader } from '../../components/loader/index';
+import { upperCaseWord } from '../../util/string-utils';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { Breadcrumb } from 'react-bootstrap'
 import {
   AdminHackForum,
   AdminHackSettings,
   AdminHackSurveys,
+  AdminHackOverview,
   AdminHackTutorial,
   AdminHackTask,
 } from '../admin';
@@ -45,10 +47,6 @@ AdminHackNav.defaultProps = {
   items: [],
 }
 
-function upperCaseWord(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 function AdminPageBreadCrumbs({props, hackId, hackName}) {
   let location = useLocation();
   const path = location.pathname.split('/');
@@ -83,15 +81,20 @@ class AdminHackPage extends React.Component {
     this.state = {
       hack: null,
       hackData: null,
+      overview_md: '',
       hackId: _hackId,
       loading: false,
     }
 
+    this.updateOverviewState = this.updateOverviewState.bind(this)
+    this.updateHackOverview = this.updateHackOverview.bind(this)
     this.onTaskMarkdownUpdate = this.onTaskMarkdownUpdate.bind(this)
     this.onTutorialMarkdownUpdate = this.onTutorialMarkdownUpdate.bind(this)
     this.updateTutorialDocument = this.updateTutorialDocument.bind(this)
     this.updateTaskDocument = this.updateTaskDocument.bind(this)
-    this.getHack = this.getHack.bind(this);
+    this.updateQualtricsLinks = this.updateQualtricsLinks.bind(this)
+
+    this.getHack = this.getHack.bind(this)
   }
 
   componentDidMount() {
@@ -111,8 +114,6 @@ class AdminHackPage extends React.Component {
       .doc(_hackId)
       .get()
 
-    console.log('hackData', hackData.data());
-
     const result = Object.assign({},
       { hackId: _hackId },
       hackData.data(),
@@ -124,11 +125,15 @@ class AdminHackPage extends React.Component {
     this.setState({
       hack: result,
       hackData: result,
-      hackTask: result.task.doc,
+      hackTutorial: result.tutorial ? this.decodeTask(result.tutorial.doc) : '',
+      hackTask: result.task ? this.decodeTask(result.task.doc) : '',
+      hackOverview: result.overview ? this.decodeTask(result.overview.doc) : '',
     })
   }
 
 
+  // HACK TUTORIAL
+  // --------------------------------------------
   onTutorialMarkdownUpdate(markdown) {
     this.setState({
       tutorialMarkdown: markdown
@@ -161,6 +166,8 @@ class AdminHackPage extends React.Component {
       });
   }
 
+  // HACK TASK
+  // --------------------------------------------
   onTaskMarkdownUpdate(markdown) {
     this.setState({
       taskMd: markdown
@@ -176,8 +183,6 @@ class AdminHackPage extends React.Component {
       .collection('hacks')
       .doc(this.state.hackId)
 
-
-    console.log('update task', this.state.taskMd);
     let encodedTask = this.encodeTask(this.state.taskMd);
     let timeUpdated = new Date();
 
@@ -196,6 +201,43 @@ class AdminHackPage extends React.Component {
       .catch(function(error) {
         console.error('Error adding document: ', error);
       });
+  }
+
+  // HACK OVERVIEW
+  // --------------------------------------------
+  updateOverviewState(markdown) {
+    this.setState({
+      overview_md: markdown
+    })
+  }
+
+  updateHackOverview() {
+    this.setState({
+      loading: true
+    })
+
+    const hackRef = window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.state.hackId)
+
+    let encodedDoc = this.encodeTask(this.state.overview_md);
+    let timeUpdated = new Date();
+
+    hackRef.update({
+      overview: {
+        doc: encodedDoc,
+        updated: timeUpdated.toISOString(),
+      }
+    })
+    .then(() => {
+      this.setState({
+        loading: false,
+        hackOverview: this.state.overview_md,
+      })
+    })
+    .catch((error)=>{
+      console.error('Error adding document: ', error);
+    })
   }
 
   updateQualtricsLinks(updatedHackData) {
@@ -222,13 +264,11 @@ class AdminHackPage extends React.Component {
   }
 
   encodeTask(str) {
-    console.log('encodeTask', str);
     let safeString = unescape(encodeURIComponent(str));
     return window.btoa(safeString);
   }
 
   decodeTask(enc) {
-    console.log('decodeTask', enc);
     let decoded = window.atob(enc);
     return decodeURIComponent(escape(decoded));
   }
@@ -279,24 +319,16 @@ class AdminHackPage extends React.Component {
                   </Route>
 
                   <Route path={this.props.match.url + '/overview'}>
-                    <AdminHackTask
-                      previousDocument={
-                        this.state.hackTask
-                          ? this.decodeTask(this.state.hackTask)
-                          : ''
-                      }
-                      onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
-                      updateTaskDocument={this.updateTaskDocument}
+                    <AdminHackOverview
+                      previousDocument={this.state.hackOverview}
+                      onEditorUpdate={this.updateOverviewState}
+                      updateDocument={this.updateHackOverview}
                     />
                   </Route>
 
                   <Route path={this.props.match.url + '/task'}>
                     <AdminHackTask
-                      previousDocument={
-                        this.state.hackTask
-                          ? this.decodeTask(this.state.hackTask)
-                          : ''
-                      }
+                      previousDocument={this.state.hackTask}
                       onTaskMarkdownUpdate={this.onTaskMarkdownUpdate}
                       updateTaskDocument={this.updateTaskDocument}
                     />
@@ -304,11 +336,7 @@ class AdminHackPage extends React.Component {
 
                   <Route path={this.props.match.url + '/tutorials'}>
                     <AdminHackTutorial
-                      previousDocument={
-                        this.state.hack.tutorial
-                          ? this.decodeTask(this.state.hack.tutorial.doc)
-                          : ''
-                      }
+                      previousDocument={this.state.hackTutorial}
                       onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
                       updateTutorialDocument={this.updateTutorialDocument}
                     />

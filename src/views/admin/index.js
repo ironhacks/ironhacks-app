@@ -1,13 +1,15 @@
+import AdminHackForum from './admin-hack-forum';
+import AdminHackOverview from './admin-hack-overview';
 import AdminHackSettings from './admin-hack-settings';
 import AdminHackSurveys from './admin-hack-surveys';
-import AdminHackTutorial from './admin-hack-tutorial';
 import AdminHackTask from './admin-hack-task';
-import AdminHackForum from './admin-hack-forum';
+import AdminHackTutorial from './admin-hack-tutorial';
 
 export {
+  AdminHackForum,
+  AdminHackOverview,
   AdminHackSettings,
   AdminHackSurveys,
-  AdminHackForum,
-  AdminHackTutorial,
   AdminHackTask,
+  AdminHackTutorial,
 }
