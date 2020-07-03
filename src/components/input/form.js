@@ -1,6 +1,6 @@
 import React from 'react';
 
-class InputCheckbox extends React.Component {
+class InputForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: ''};
@@ -43,8 +43,8 @@ class InputCheckbox extends React.Component {
 }
 
 
-InputCheckbox.defaultProps = {
+InputForm.defaultProps = {
   name: '',
 }
 
-export { InputCheckbox }
+export { InputForm }
