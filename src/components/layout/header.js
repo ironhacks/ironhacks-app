@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { NavButton } from '../../views/layouts/navigation/nav-button'
-import { HeaderLogo } from '../../views/layouts/navigation/header-logo'
+import { NavButton } from '../navigation/nav-button'
+import { HeaderLogo } from '../navigation/header-logo'
 import { Theme } from '../../theme';
 
 const colors = Theme.COLORS;
