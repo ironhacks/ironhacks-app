@@ -1,46 +1,8 @@
 import React from 'react';
 import { withCookies } from 'react-cookie';
-import styled from 'styled-components';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
-
-const ProfileContainer = styled('div')`
-  display: flex;
-  justify-content: center;
-  padding: 0 10%;
-  margin: 100px 0;
-  width: 100%;
-
-
-  .profile__initials {
-    width: 200px;
-    height: 200px;
-    background-color: lightgray;
-    font-size: 100px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 100%;
-  }
-
-  .profile__img {
-    width: 200px;
-    height: 200px;
-    max-width: none;
-    max-height: none;
-    border-radius: 50%;
-  }
-
-  .user-data {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
-    margin-left: 50px;
-  }
-`;
-
+import '../../styles/css/profile.css';
 
 class ProfilePage extends React.Component {
   constructor(props) {
@@ -87,11 +49,11 @@ class ProfilePage extends React.Component {
         user={this.props.user}
         userIsAdmin={this.props.userIsAdmin}
       >
-        <Section sectionClass="py-5">
+        <Section sectionClass="pt-5">
           <Row>
             <Col>
-              <ProfileContainer>
-                <div className="profile">
+              <div className="profile">
+                <div className="">
                   {this.props.user.provider[0].photoURL ? (
                     <img
                       className="profile__img"
@@ -99,7 +61,9 @@ class ProfilePage extends React.Component {
                       src={this.props.user.provider[0].photoURL}
                     />
                   ) : (
-                    <span className="profile__initials">{this.props.user.profileLetters}</span>
+                    <span className="profile__initials">
+                      {this.props.user.profileLetters}
+                    </span>
                   )}
                 </div>
 
@@ -124,8 +88,21 @@ class ProfilePage extends React.Component {
                     </div>
                   </div>
                 </div>
-              </ProfileContainer>
+              </div>
             </Col>
+          </Row>
+        </Section>
+        <Section>
+          <Row rowClass="flex justify-content-center py-4 mr-5 mb-5">
+            <a href="/profile/edit">
+            <button
+              className="btn btn- bg-primary px-8"
+              onClick={this.updateProfileData}
+              disabled={this.state.updateDisabled}
+            >
+              Edit Profile
+            </button>
+            </a>
           </Row>
         </Section>
       </Page>
