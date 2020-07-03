@@ -17,7 +17,7 @@ class MdContentView extends React.Component {
       simplifiedAutoLink: true,
       prefixHeaderId: true,
       strikethrough: true,
-      headerLevelStart: 3,
+      headerLevelStart: 1,
       tasklists: true,
     }
 
