@@ -1,3 +1,8 @@
+.examples_section .card {
+  background-color: transparent;
+  border: none;
+}
+
 .examples_section .card_row {
   display: flex;
   flex-wrap: wrap;
@@ -16,8 +21,6 @@
     flex-wrap: nowrap;
   }
   .examples_section .card_col {
-    margin-left: 1em;
-    margin-right: 1em;
     flex-basis: 33%;
   }
 }

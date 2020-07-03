@@ -1,4 +1,9 @@
 .examples_section {
+  .card {
+    background-color: transparent;
+    border: none;
+  }
+
   .card_row {
     display: flex;
     flex-wrap: wrap;
