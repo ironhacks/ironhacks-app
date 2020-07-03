@@ -12,6 +12,7 @@ import {
   LogoutPage,
   AdminNewHackPage,
   AdminHackSelectPage,
+  ProfileEditPage,
   ProfilePage,
   UpcomingHackPage,
   HackPage,
@@ -263,6 +264,13 @@ class App extends React.Component {
                     <Route exact path='/profile'>
                       <ProfilePage
                         profileId={this.state.userId}
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
+
+                    <Route exact path='/profile/edit'>
+                      <ProfileEditPage
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                       />
