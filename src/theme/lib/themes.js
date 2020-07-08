@@ -15,7 +15,6 @@ Themes.HeaderTheme = {
 
 Themes.Footer = Styles.FooterTheme;
 Themes.Section = Styles.SectionStyles;
-Themes.Login = Styles.LoginTheme;
 Themes.ThreadPreview = Styles.ThreadPreviewTheme;
 Themes.CommentView = Styles.CommentViewTheme;
 Themes.ReactionsView = Styles.ReactionsViewTheme;
