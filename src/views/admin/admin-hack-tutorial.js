@@ -13,7 +13,7 @@ class AdmTutorialSection extends React.Component {
   }
 
   onEditorChange(markdown) {
-    this.props.onTutorialMarkdownUpdate(markdown);
+    this.props.onDocumentChange(markdown);
   }
 
   render() {

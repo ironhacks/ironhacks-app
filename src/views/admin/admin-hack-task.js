@@ -19,7 +19,7 @@ class AdminHackTask extends React.Component {
   }
 
   onEditorChange(markdown) {
-    this.props.onTaskMarkdownUpdate(markdown);
+    this.props.onDocumentChange(markdown);
   }
 
   render() {

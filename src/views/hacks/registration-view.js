@@ -20,6 +20,9 @@ class RegistrationView extends React.Component {
 
   registerSuccess(){
     console.log('success');
+    window.firebase.analytics().logEvent('register_hack', {
+      'value': this.props.hackId
+    });
     window.location = `/hacks/${this.props.hackId}/task`;
   }
 
