@@ -41,6 +41,7 @@ class HackNavSection extends React.Component {
         <Row>
           <Col>
             <HackNav
+              hackDisplayOptions={this.props.hackDisplayOptions}
               action={this.props.updateHackView}
               hackId={this.props.hackId}
             />
@@ -112,15 +113,18 @@ class HackPage extends React.Component {
     Promise.resolve(hack).then((result) => {
       if (result.exists) {
         const hackData = result.data();
+        console.log('hackData', hackData);
         this.setState({
-           hackData: hackData,
-           hackName: hackData.name,
-           hackPhases: hackData.phases,
-           hackResults: hackData.results,
-           hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
-           hackTask: hackData.task ? hackData.task.doc : '',
-           hackOverview: hackData.overview ? hackData.overview.doc : '',
-           hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
+            hackData: hackData,
+            hackName: hackData.name,
+            hackDisplayOptions: hackData.displayOptions,
+            hackPhases: hackData.phases,
+            hackResults: hackData.results,
+            hackBanner: hackData.hackBannerImg ? hackData.hackBannerImg : false,
+            hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
+            hackOverview: hackData.overview ? hackData.overview.doc : '',
+            hackTask: hackData.task ? hackData.task.doc : '',
+            hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
         })
       } else {
         return false;
@@ -187,19 +191,31 @@ class HackPage extends React.Component {
             </Route>
 
             <Route exact path="/hacks/:hackId">
+              {this.state.hackBanner && (
+                <Section sectionClass="py-3">
+                  <Row>
+                    <img src={this.state.hackBanner}/>
+                  </Row>
+                </Section>
+              )}
+
+              {this.state.hackDisplayOptions && (
               <Section>
                 <HackNavSection
                   hackId ={this.hackId}
+                  hackDisplayOptions={this.state.hackDisplayOptions}
                   hackName={this.state.hackName}
                   updateHackView={this.updateHackView}
                 />
               </Section>
+              )}
             </Route>
 
             <Route path="/hacks/:hackId/*">
               <Section>
                 <HackNavSection
                   hackId ={this.hackId}
+                  hackDisplayOptions={this.state.hackDisplayOptions}
                   hackName={this.state.hackName}
                   updateHackView={this.updateHackView}
                 />
@@ -220,27 +236,7 @@ class HackPage extends React.Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/task">
-              <Section>
-                <TaskView
-                  hackId={this.hackId}
-                  userId={this.props.userId}
-                  task={this.state.hackTask}
-                />
-                </Section>
-              </Route>
-
-            <Route exact path="/hacks/:hackId/tutorial">
-              <Section>
-                <TutorialView
-                  hackid={this.hackId}
-                  userId={this.props.userId}
-                  hackTutorial={this.state.hackTutorial}
-                />
-              </Section>
-            </Route>
-
-            <Route exact path="/hacks/:hackId/forum">
+            <Route exact path="/hacks/:hackId/forums">
               <Section>
                 <ForumView
                   isAdmin={this.props.userIsAdmin}
@@ -321,6 +317,27 @@ class HackPage extends React.Component {
                 />
               </Section>
             </Route>
+
+            <Route exact path="/hacks/:hackId/task">
+              <Section>
+                <TaskView
+                  hackId={this.hackId}
+                  userId={this.props.userId}
+                  task={this.state.hackTask}
+                />
+                </Section>
+              </Route>
+
+            <Route exact path="/hacks/:hackId/tutorial">
+              <Section>
+                <TutorialView
+                  hackid={this.hackId}
+                  userId={this.props.userId}
+                  hackTutorial={this.state.hackTutorial}
+                />
+              </Section>
+            </Route>
+
           </Switch>
         </Router>
       </Page>

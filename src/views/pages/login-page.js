@@ -1,21 +1,11 @@
 import React from 'react';
-// import { Redirect } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
-import {
-  // Cookies, 
-  withCookies
-} from 'react-cookie';
-import { Theme } from '../../theme';
-import { BlankPage,Row, Col } from '../../components/layout';
-
-const styles = Theme.STYLES.LoginTheme;
+import styled from 'styled-components';
+import { withCookies } from 'react-cookie';
+import { BlankPage, Section, Row, Col } from '../../components/layout';
 
 const SectionContainer = styled('div')`
-  width: 100%;
   height: 100vh;
-  background-color: var(--color-primary);
   display: flex;
-  overflow: auto;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -24,8 +14,6 @@ const SectionContainer = styled('div')`
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
-
-    // this._isAdmin = this._isAdmin.bind(this);
     this._saveUserOnDB = this._saveUserOnDB.bind(this);
     this.initAuthUI = this.initAuthUI.bind(this);
   }
@@ -36,18 +24,23 @@ class LoginPage extends React.Component {
   }
 
   onComplete(){
-    console.log('complete', this.state);
-    // if (this.props.onLoginSuccess){
-    //   this.props.onLoginSuccess({
-    //     mustNavigate: true,
-    //     navigateTo: '/hacks',
-    //   })
-    // } else {
-      // this.context.router.history.push(`/target`)
+    if (document.referrer) {
+      let prevUrl = new URL(document.referrer);
+      if (prevUrl.hostname.includes('localhost')
+      || prevUrl.hostname.includes('ironhacks.com')) {
+        let forwardUrl = prevUrl.pathname;
+        if (forwardUrl !== '/' && forwardUrl !== '/login' ) {
+          window.location.replace(forwardUrl);
+        } else {
+          window.location = '/hacks';
+        }
+      } else {
+        window.location = '/hacks';
+      }
+    }
     window.location = '/hacks';
-    // }
-
   }
+
   onFailed(){
     if (this.props.onLoginSuccess){
       this.props.onLoginSuccess({
@@ -92,10 +85,6 @@ class LoginPage extends React.Component {
 
         signInFailure: function(error) {
           console.log('sign in failure', error);
-          // this.setState({
-          //   mustNavigate: false,
-          //   navigateTo: '/login',
-          // })
           this.onFailed();
         },
       },
@@ -125,11 +114,10 @@ class LoginPage extends React.Component {
       })
       .then(()=>{
         console.log('user saved success');
-        // this.setState({
-        //   user: user,
-        //   // mustNavigate: true,
-        //   // navigateTo: '/hacks',
-        // });
+        let timestamp = new Date().toISOString();
+        window.firebase.analytics().logEvent('user_signup', {
+          'value': timestamp
+        });
         this.onComplete();
       })
       .catch((error)=>{
@@ -137,68 +125,11 @@ class LoginPage extends React.Component {
         this.onFailed();
       })
   }
-  //
-  // async _isAdmin(userId) {
-  //   if (userId) {
-  //     try {
-  //       let isAdmin = await window.firebase.firestore()
-  //         .collection('admins')
-  //         .doc(userId)
-  //         .get();
-  //       return isAdmin.exists
-  //     } catch (e) {
-  //       return false;
-  //     } finally {
-  //       return false;
-  //     }
-  //   }
-  // }
-
-  // isAdmin(user) {
-  //   const _user = user;
-  //   window.firebase.firestore()
-  //     .collection('admins')
-  //     .doc(_user.uid)
-  //     .get()
-  //     .then((doc)=>{
-  //       this.setState((prevState, props) => {
-  //         _user.isAdmin = true;
-  //         return {
-  //           user: _user,
-  //           mustNavigate: false,
-  //           navigateTo: '/admin',
-  //         }
-  //       })
-  //     })
-  //     .catch((error)=>{
-  //       console.log('User Role Check Error', error);
-  //       this.setState((prevState, props) => {
-  //         _user.isAdmin = false;
-  //         return {
-  //           user: _user,
-  //           mustNavigate: true,
-  //           navigateTo: '/hacks',
-  //         }
-  //       });
-  //     });
-  // }
 
   render() {
-    // if (this.state.mustNavigate) {
-    //   console.log('navigating', this.state);
-    //   return (
-    //      <Redirect to={{
-    //         pathname: `${this.state.navigateTo}`,
-    //         state: {
-    //           user: this.state.user
-    //         },
-    //       }}
-    //     />
-    //   )
-    // } else {
       return (
-        <ThemeProvider theme={styles}>
-          <BlankPage>
+          <BlankPage pageClass="bg-primary">
+          <Section>
             <SectionContainer>
               <Row>
                 <Col>
@@ -219,11 +150,10 @@ class LoginPage extends React.Component {
                 </Col>
               </Row>
             </SectionContainer>
+            </Section>
           </BlankPage>
-        </ThemeProvider>
       )
     }
-  // }
 }
 
 export default withCookies(LoginPage);

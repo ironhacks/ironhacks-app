@@ -111,15 +111,12 @@ class AdminHackSelectPage extends React.Component {
 
               <Separator primary />
 
-              <div className="admin_hack_card_list">
-                <div className="flex">
-                  <AdminNewHackCard onClick={this.goToNewHack} />
-
-                  <AdminHackCardList
-                    emptyText={'There are no hacks.'}
-                    hacks={this.state.hacks}
-                  />
-                </div>
+              <AdminNewHackCard onClick={this.goToNewHack} />
+              <div className="">
+                <AdminHackCardList
+                  emptyText={'There are no hacks.'}
+                  hacks={this.state.hacks}
+                />
               </div>
             </Col>
           </Row>

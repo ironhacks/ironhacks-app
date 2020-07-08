@@ -13,6 +13,7 @@ class HackSelectPage extends React.Component {
       startNewHackNav: true,
       startDashboardNav: true,
       registeredHacks: [],
+      previousHacks: [],
       availableHacks: [],
       loading: false,
     }
@@ -37,6 +38,7 @@ class HackSelectPage extends React.Component {
   async getHacks() {
     const hacks = await window.firebase.firestore()
         .collection('hacks')
+        .where('hackPublished', '==', true)
         .get()
         .then((result)=>{
           let hackList = [];
@@ -63,7 +65,6 @@ class HackSelectPage extends React.Component {
         if (result.exists) {
           let userHackList = [];
           let data = result.data()
-          console.log('data', data);
           if (data.hacks) {
             data.hacks.forEach((hack)=>{
               userHackList.push(hack);
@@ -84,19 +85,28 @@ class HackSelectPage extends React.Component {
             let hackId = hack.id;
             if (!userHacks.includes(hackId)){
               openHackList.push(hackId)
-              // let hackData = hack.data();
-              // let hackName = hackData.name;
-              // openHackList.push(Object.assign(
-              //   {available: true},
-              //   hackData,
-              //   {hackId},
-              //   {hackName}
-              // ))
             }
           })
           return openHackList;
         }
       })
+
+      const closedHacks = await window.firebase.firestore()
+        .collection('hacks')
+        .where('registrationOpen', '==', false)
+        .get()
+        .then((result)=>{
+          var closedHackList = [];
+          if (!result.empty) {
+            result.docs.forEach((hack)=>{
+              let hackId = hack.id;
+              if (!userHacks.includes(hackId)){
+                closedHackList.push(hackId)
+              }
+            })
+            return closedHackList;
+          }
+        })
 
     console.log('open hacks', openHacks);
 
@@ -108,10 +118,14 @@ class HackSelectPage extends React.Component {
     const registeredHacks = hacks.filter((hack)=>{
       return userHacks.includes(hack.hackId)
     })
+    const previousHacks = hacks.filter((hack)=>{
+      return closedHacks.includes(hack.hackId)
+    })
 
     this.setState({
       registeredHacks: registeredHacks,
       availableHacks: availableHacks,
+      previousHacks: previousHacks,
     })
   }
 
@@ -135,7 +149,7 @@ class HackSelectPage extends React.Component {
                   <strong>Welcome to IronHacks</strong>
                 </h1>
 
-                <h2 className="h2 py-2">Registered Hacks</h2>
+                <h2 className="h2 py-2">Your Registered Hacks</h2>
 
                 <Separator primary />
 
@@ -162,6 +176,21 @@ class HackSelectPage extends React.Component {
                   emptyText={'There are no hacks currently available.'}
                   hacks={this.state.availableHacks}
                 />
+
+                <Separator />
+
+                <h2 className="h2 py-2">
+                  Hacks
+                </h2>
+
+                <HackCardList
+                  emptyText={'No previous hacks to show.'}
+                  hacks={this.state.previousHacks}
+                />
+
+                <Separator primary />
+
+
               </Col>
             </Row>
           </Section>

@@ -82,6 +82,7 @@ class AdminHackPage extends React.Component {
       hack: null,
       hackData: null,
       overview_md: '',
+      hackTutorial: '',
       hackId: _hackId,
       loading: false,
     }
@@ -89,7 +90,7 @@ class AdminHackPage extends React.Component {
     this.updateOverviewState = this.updateOverviewState.bind(this)
     this.updateHackOverview = this.updateHackOverview.bind(this)
     this.onTaskMarkdownUpdate = this.onTaskMarkdownUpdate.bind(this)
-    this.onTutorialMarkdownUpdate = this.onTutorialMarkdownUpdate.bind(this)
+    this.onTutorialChange = this.onTutorialChange.bind(this)
     this.updateTutorialDocument = this.updateTutorialDocument.bind(this)
     this.updateTaskDocument = this.updateTaskDocument.bind(this)
     this.updateQualtricsLinks = this.updateQualtricsLinks.bind(this)
@@ -125,53 +126,47 @@ class AdminHackPage extends React.Component {
     this.setState({
       hack: result,
       hackData: result,
-      hackTutorial: result.tutorial ? this.decodeTask(result.tutorial.doc) : '',
-      hackTask: result.task ? this.decodeTask(result.task.doc) : '',
-      hackOverview: result.overview ? this.decodeTask(result.overview.doc) : '',
+      hackTutorial: result.tutorial ? this.decodeDocument(result.tutorial.doc) : '',
+      hackTask: result.task ? this.decodeDocument(result.task.doc) : '',
+      hackOverview: result.overview ? this.decodeDocument(result.overview.doc) : '',
     })
   }
 
 
   // HACK TUTORIAL
   // --------------------------------------------
-  onTutorialMarkdownUpdate(markdown) {
-    this.setState({
-      tutorialMarkdown: markdown
-    })
+  onTutorialChange(md) {
+    this.setState({hackTutorial: md})
   }
 
   updateTutorialDocument() {
-    this.setState({
-      loading: true
-    })
+    this.setState({loading: true})
 
     const hackRef = window.firebase.firestore()
       .collection('hacks')
       .doc(this.state.hackId)
 
-    const hackTutorial = this.state.hack.tutorial;
-
-    hackTutorial.doc = this.utoa(this.state.tutorialMarkdown);
+    const hackTutorial = this.encodeDocument(this.state.hackTutorial);
+    let timeUpdated = new Date();
 
     hackRef.update({
-        tutorial: hackTutorial,
-      })
-      .then(() => {
-        this.setState({
-          loading: false
-        });
-      })
-      .catch(function(error) {
+      tutorial: {
+        doc: hackTutorial,
+        updated: timeUpdated.toISOString(),
+      }
+    })
+    .then(() => {
+      this.setState({ loading: false});
+    })
+    .catch(function(error) {
         console.error('Error adding document: ', error);
-      });
+    });
   }
 
   // HACK TASK
   // --------------------------------------------
   onTaskMarkdownUpdate(markdown) {
-    this.setState({
-      taskMd: markdown
-    })
+    this.setState({hackTask: markdown })
   }
 
   updateTaskDocument() {
@@ -183,7 +178,7 @@ class AdminHackPage extends React.Component {
       .collection('hacks')
       .doc(this.state.hackId)
 
-    let encodedTask = this.encodeTask(this.state.taskMd);
+    let encodedTask = this.encodeDocument(this.state.hackTask);
     let timeUpdated = new Date();
 
     hackRef.update({
@@ -193,10 +188,7 @@ class AdminHackPage extends React.Component {
         }
       })
       .then(() => {
-        this.setState({
-          loading: false,
-          hackTask: encodedTask,
-        })
+        this.setState({loading: false})
       })
       .catch(function(error) {
         console.error('Error adding document: ', error);
@@ -206,9 +198,7 @@ class AdminHackPage extends React.Component {
   // HACK OVERVIEW
   // --------------------------------------------
   updateOverviewState(markdown) {
-    this.setState({
-      overview_md: markdown
-    })
+    this.setState({overview_md: markdown})
   }
 
   updateHackOverview() {
@@ -220,7 +210,7 @@ class AdminHackPage extends React.Component {
       .collection('hacks')
       .doc(this.state.hackId)
 
-    let encodedDoc = this.encodeTask(this.state.overview_md);
+    let encodedDoc = this.encodeDocument(this.state.overview_md);
     let timeUpdated = new Date();
 
     hackRef.update({
@@ -263,12 +253,12 @@ class AdminHackPage extends React.Component {
       })
   }
 
-  encodeTask(str) {
+  encodeDocument(str) {
     let safeString = unescape(encodeURIComponent(str));
     return window.btoa(safeString);
   }
 
-  decodeTask(enc) {
+  decodeDocument(enc) {
     let decoded = window.atob(enc);
     return decodeURIComponent(escape(decoded));
   }
@@ -337,7 +327,7 @@ class AdminHackPage extends React.Component {
                   <Route path={this.props.match.url + '/tutorials'}>
                     <AdminHackTutorial
                       previousDocument={this.state.hackTutorial}
-                      onTutorialMarkdownUpdate={this.onTutorialMarkdownUpdate}
+                      onDocumentChange={this.onTutorialChange}
                       updateTutorialDocument={this.updateTutorialDocument}
                     />
                   </Route>

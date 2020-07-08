@@ -6,18 +6,18 @@ import Select from 'react-select';
 import '../../styles/css/profile.css';
 
 const EDUCATION_STATUS = [
-  { label: 'Current Undergraduate', value: 'current_undergraduate' },
-  { label: 'Current Master\s', value: 'current_masters' },
-  { label: 'Current PhD', value: 'current_phd' },
-  { label: 'None', value: 'none' },
+  { label: 'Yes', value: 'student_yes' },
+  { label: 'No', value: 'student_no' },
 ]
-
 const HIGHEST_DEGREE = [
- { label: 'None' , value: 'none' },
- { label: 'HS Diploma/Equivalent' , value: 'hs_diploma_equiv' },
- { label: 'Bachelor\'s' , value: 'bachelors' },
- { label: 'Master\'s' , value: 'masters' },
- { label: 'PhD', value: 'phd' },
+  { label: 'Less than high school degree', value: 'hs_or_less'},
+  { label: 'High school graduate (high school diploma or equivalent including GED)', value: 'hs_equiv'},
+  { label: 'Some college but no degree', value: 'come_college'},
+  { label: 'Associate degree in college (2-year)', value: 'assoc_degree'},
+  { label: 'Bachelor\'s degree in college (4-year)', value: 'bach_degree'},
+  { label: 'Master\'s degree', value: 'masters_degree'},
+  { label: 'Doctoral degree', value: 'pdf_degree'},
+  { label: 'Professional degree (JD, MD)', value: 'prof_degree'},
 ]
 
 const PROGRAMING_LANGUAGES = [
@@ -93,15 +93,7 @@ class ProfileEditPage extends React.Component {
     this.updateProfileData = this.updateProfileData.bind(this);
   }
 
-  componentDidMount() {
-    // const userid = this.state.user.userId;
-    // var projectsPromise = ProjectApi.getProjects(userid);
-    // const _this = this;
-    // projectsPromise.then(function(projects){
-    //   console.log('projects', projects);
-    //   _this.setProjects(projects);
-    // })
-  }
+  componentDidMount() { }
 
   getUserProfile() {
     window.firebase.firestore()
