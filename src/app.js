@@ -64,6 +64,7 @@ class App extends React.Component {
     super(props);
 
     // const { cookies } = props;
+    // console.log('document referrer', document.referrer);
 
     this.state = {
       mustNavigate: false,
@@ -84,7 +85,12 @@ class App extends React.Component {
   }
 
    componentDidMount() {
-     console.log('%c App is mounted', 'color:red;font-weight:bold');
+     window.firebase.analytics()
+       .logEvent('test_event', {
+         value: 'app_loaded'
+       }
+     );
+
      this._isMounted = true;
      this._isUserConnected();
    }
@@ -98,7 +104,6 @@ class App extends React.Component {
   }
 
   _updateAppNavigation(data){
-    console.log('updateAppNavigation app navigation', data);
     this.setState({
       navigateTo: data.navigateTo,
       mustNavigate: data.mustNavigate,
@@ -106,24 +111,19 @@ class App extends React.Component {
   }
 
   _isUserConnected() {
-
     const currentUser = window.firebase.auth().currentUser;
 
     if (currentUser){
-      console.log('current user', currentUser);
       let user = filterUserData(currentUser);
       this._setUser({
         user: user,
         userId: user.userId,
         userIsAdmin: false,
       });
-      console.log('current user', user);
     }
 
     window.firebase.auth()
       .onAuthStateChanged((user) => {
-        console.log('auth state changed', user);
-        console.log('auth state changed state', this.state);
         if (user) {
           let _user = filterUserData(user);
           let _userId = _user.userId;
@@ -153,8 +153,6 @@ class App extends React.Component {
     if (!data.user){
       console.log('no user');
     } else {
-      console.log('setting user data', data);
-
       const { cookies } = this.props;
 
       const { lastLoginAt, uid, profileLetters, displayName } = data.user;
