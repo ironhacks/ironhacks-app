@@ -7,16 +7,13 @@ const colors = Theme.COLORS;
 
 
 const CardContainer = styled('button')`
-  height: 150px;
-  width: 30%;
-  margin: 10px;
   text-align: left;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
   border: none;
   background-color: white;
-  padding: 0;
+  padding: 1em;
 
-  &.newHackCard {
+  &.new-hack-card {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -58,11 +55,11 @@ class AdminNewHackCard extends React.Component {
   render() {
     return (
       <CardContainer
-        className='newHackCard'
+        className='new-hack-card'
         onClick={this.props.onClick}
         >
         <span>+</span>
-        <span>Add Hack</span>
+        <span>New Hack</span>
       </CardContainer>
     )
   }

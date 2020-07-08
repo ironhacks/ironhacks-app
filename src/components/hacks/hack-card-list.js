@@ -1,6 +1,18 @@
 import React from 'react';
 import { HackCard, HackSignupCard } from './hack-card';
 
+
+
+  // title
+  // start-date,
+  // difficulty
+  //   'Beginner'
+  //   'Intermediate'
+  //   'Advanced'
+  // description
+  // image
+
+
 class HackCardList extends React.Component {
   constructor(props) {
     super(props);
@@ -20,15 +32,14 @@ class HackCardList extends React.Component {
         {this.props.hacks.map((hack, index) => (
           <li
             key={hack.hackId}
-            className="hack_card_list__item col-sm-4"
+            className="hack_card_list__item w-50p"
             index={index}
             >
 
             <HackCard
               name={hack.name}
               hackId={hack.hackId}
-              hack={hack}
-              phases={hack.phases.length}
+              hackData={hack}
             />
 
           </li>
@@ -58,7 +69,7 @@ class HackSignupCardList extends React.Component {
         {this.props.hacks.map((hack, index) => (
           <li
             key={hack.hackId}
-            className="hack_card_list__item col-sm-4"
+            className="hack_card_list__item w-50p"
             index={index}
             >
 
@@ -66,6 +77,7 @@ class HackSignupCardList extends React.Component {
               name={hack.name}
               hackId={hack.hackId}
               hack={hack}
+              hackData={hack}
             />
 
           </li>

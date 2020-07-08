@@ -18,12 +18,35 @@
 
 .hack_card {
   min-height: 3em;
-  min-width: 30%;
-  padding: 1em;
+  min-width: 50%;
+  flex: 1 1 100%;
+  margin: 1em;
   text-align: left;
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 3px 2px 10px 1px rgba(0, 0, 0, 0.2);
   border: none;
   background-color: white;
+  min-height: 100px;
+
+  &__header {
+
+  }
+
+  &__body {
+
+  }
+
+  .card_img {
+    width: 100px;
+    height: 100px;
+    border: 1px solid rgba(0,0,0,.1);
+  }
+
+  .card_title {
+    line-height: 1;
+    font-size: 1em;
+    margin: 0 0 0 15px;
+
+  }
 
   a {
     color: inherit;
@@ -50,12 +73,6 @@
         font-size: 40px;
       }
     }
-  }
-
-  .hack_title {
-    line-height: 1;
-    font-size: 1em;
-    margin: 0 0 0 15px;
   }
 
   span {

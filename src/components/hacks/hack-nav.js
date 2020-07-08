@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { NavContainerDiv } from './nav-container'
+import { upperCaseWord } from '../../util/string-utils';
 import menuIcon from '../../assets/svg/menu-icon.svg';
 
 
@@ -13,10 +14,10 @@ class HackNavItem extends React.Component {
     return (
       <Link
         className={`hack_nav__item ${this.props.navClass}`}
-        to={`/hacks/${this.props.hackId}/${this.props.navId}`}
+        to={`/hacks/${this.props.hackId}/${this.props.navId.toLowerCase()}`}
         onClick={this.props.action}
       >
-        {this.props.name}
+        {upperCaseWord(this.props.name)}
       </Link>
     )
   }
@@ -33,17 +34,46 @@ class HackNav extends React.Component {
       showMenu: 'none',
       currentView: 'task',
     };
-    this.navItems = [
-      {id: 'task', name: 'Task'},
-      {id: 'forum', name: 'Forum'},
-      {id: 'tutorial', name: 'Tutorial'},
-      {id: 'quiz', name: 'Quiz'},
-      {id: 'projects', name: 'Projects'},
-      {id: 'results', name: 'Results'},
-    ];
+    // this.navItems = [
+    //   {id: 'task', name: 'Task'},
+    //   {id: 'forum', name: 'Forum'},
+    //   {id: 'tutorial', name: 'Tutorial'},
+    //   {id: 'quiz', name: 'Quiz'},
+    //   {id: 'projects', name: 'Projects'},
+    //   {id: 'results', name: 'Results'},
+    // ];
+
     this.baseUrl = `/hacks/${this.props.hackId}`;
     this.navMenuRef = props.navMenuref;
     this.updateHackNav = this.updateHackNav.bind(this);
+    this.getNav = this.getNav.bind(this);
+  }
+
+  componentDidMount() {
+    console.log('mounted');
+  }
+
+  getNav(items){
+    if (!items) {
+      return [];
+    }
+
+    let display = Object.keys(items).filter((item)=>{
+      return items[item];
+    });
+
+    let sorted = display.sort((a,b)=>{ return a.localeCompare(b) })
+
+    console.log('display', sorted);
+
+    const navItems = display.map((item)=>{
+      return {
+        id: item.replace('Enabled', ''),
+        name: item.replace('Enabled', ''),
+      }
+    });
+
+    return navItems;
   }
 
   hideMenu(event) {
@@ -86,7 +116,7 @@ class HackNav extends React.Component {
         </button>
 
         <div className='hack_nav links-container'>
-          {this.navItems.map((item, index)=>(
+          {this.getNav(this.props.hackDisplayOptions).map((item, index)=>(
             <HackNavItem
               key={index}
               navId={item.id}
@@ -99,6 +129,10 @@ class HackNav extends React.Component {
       </NavContainerDiv>
     )
   }
+}
+
+HackNav.defaultProps = {
+  hackDisplayOptions: [],
 }
 
 export { HackNav }
