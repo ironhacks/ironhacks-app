@@ -86,10 +86,7 @@ class App extends React.Component {
 
    componentDidMount() {
      window.firebase.analytics()
-       .logEvent('test_event', {
-         value: 'app_loaded'
-       }
-     );
+       .logEvent('screen_view');
 
      this._isMounted = true;
      this._isUserConnected();
