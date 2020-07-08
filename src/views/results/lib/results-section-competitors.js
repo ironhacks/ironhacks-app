@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import swal from 'sweetalert2';
-import ComperitorRow from './comperitorRow.js';
+import CompetitorRow from './competitor-row.js';
 import { Theme } from '../../../theme';
 import { TreatmentTexts } from './treatment-texts';
 
@@ -110,9 +110,8 @@ class ResultSectionCompetitors extends React.Component {
     return (
       <SectionContainer>
         <h2>Your Competitors</h2>
-        <p>
-          {TreatmentTexts[this.state.treatment].ranking.instructions}
-        </p>
+
+        {TreatmentTexts[this.state.treatment].ranking.instructions}
 
         <h3 className='super-cool-banner'>
           *** Keep in mind: You can earn excellence if you learn and
@@ -132,7 +131,7 @@ class ResultSectionCompetitors extends React.Component {
             {/*
               Object.keys(this.props.scores.similarity).map((key, i) => {
               return (
-                <ComperitorRow
+                <CompetitorRow
                   key={i}
                   hacker={this.props.participants[key]}
                   hackerId={key}

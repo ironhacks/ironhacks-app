@@ -15,14 +15,15 @@ class Content extends React.Component {
 }
 
 // <Meta title={title} />
-const Page = ({ user, displayName, pageClass, isAdmin, children }) => {
+const Page = ({ user, pageClass, userIsAdmin, children }) => {
   const classes = ['page', pageClass].join(' ').trim();
+  const displayName = user.displayName || 'IH';
   return (
     <>
       <Header
         user={user}
         displayName={displayName}
-        isAdmin={isAdmin}
+        isAdmin={userIsAdmin}
       />
       <Content>
         <div className={classes}>

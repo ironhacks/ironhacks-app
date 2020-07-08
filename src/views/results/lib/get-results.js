@@ -1,3 +1,4 @@
+
 const getAdminHackData = async (data) => {
   const { hackId } = data;
 
@@ -10,7 +11,8 @@ const getAdminHackData = async (data) => {
 
   return {
     registeredUsers: adminHackData.registeredUsers,
-    results: adminHackData.results,
+    results: adminHackData.results || null,
+    task: adminHackData.task || null,
     whitelist: adminHackData.whitelist,
   }
 }
@@ -18,10 +20,11 @@ const getAdminHackData = async (data) => {
 
 const getPhaseResults = (data) => {
   const { phase, hackResults } = data;
+  console.log('data', data);
   const phaseResults = hackResults[phase];
   if (!phaseResults){
     return {
-      error: 'Not results for this phase yet.'
+      error: 'No results for this phase yet.'
     }
   } else {
     return phaseResults;

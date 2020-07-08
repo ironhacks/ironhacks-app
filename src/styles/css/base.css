@@ -1,8 +1,4 @@
-html {
-  font-family: sans-serif;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-}
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
@@ -174,19 +170,19 @@ textarea {
   -webkit-appearance: button;
   font: inherit;
 }
+
 html {
   font: 112.5%/1.45em georgia, serif;
   box-sizing: border-box;
-  overflow-y: scroll;
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
-* {
-  box-sizing: inherit;
-}
-*:before {
-  box-sizing: inherit;
-}
-*:after {
-  box-sizing: inherit;
+
+@media only screen and (max-width: 480px) {
+  html {
+    font-size: 100%;
+  }
 }
 
 body {
@@ -595,10 +591,4 @@ pre code:after,
 pre tt:before,
 pre tt:after {
   content: "";
-}
-
-@media only screen and (max-width: 480px) {
-  html {
-    font-size: 100%;
-  }
 }

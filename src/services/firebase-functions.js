@@ -32,8 +32,8 @@ export const getHackByID = async (hackID) => {
   let hackData;
   try {
     const response = await firestore.collection(COLLECTIONS.HACKS)
-    .doc(hackID)
-    .get()
+      .doc(hackID)
+      .get()
     if (!response.exist) {throw new Error('No Hack with that ID!');}
     hackData = response.data()
     hackData.id = response.id;
@@ -76,7 +76,7 @@ export const getAllHacks = async () => {
     const response = await firestore.collection(COLLECTIONS.HACKS).get()
     response.docs.forEach( (doc) => {
       const hackData = doc.data()
-      hackData.id = doc.id;  
+      hackData.id = doc.id;
       hacks.push(hackData);
     });
     return hacks;
@@ -105,7 +105,7 @@ export const getAdminHackData = async (hackObject, _hackID) => {
 
 //------------------------------------------
 // updateHackWhitelist(whitelist) - update the whitelist on firebase.
-// whitelist (array): array of emails. 
+// whitelist (array): array of emails.
 // hackObject (object): classic hack object pulled from the db
 // return batch promise
 //
@@ -127,7 +127,7 @@ export const updateWhitelist = async (whitelist, hackID) => {
 
 //------------------------------------------
 // updateHackWhitelist(whitelist) - update the whitelist on firebase.
-// whitelist (array): array of emails. 
+// whitelist (array): array of emails.
 // hackObject (object): classic hack object pulled from the db
 // return batch promise
 //
@@ -137,8 +137,129 @@ export const updateTutorialDocument = async (markdown, hackID) => {
 
 }
 
+export const getThreadsByHackId = async (hackID) => {
+  var result = [];
+  let docs = await window.firebase.firestore()
+    .collection(COLLECTIONS.THREADS)
+    .where('hackId', '==', hackID)
+    .get();
+
+  docs.forEach((doc)=>{
+    result.push({
+      id: doc.id,
+      data: doc.data(),
+    })
+  });
+
+  console.log('threads', result);
+  return result
+
+    // .then((docs)=>{
+    //   docs.forEach((doc)=>{
+    //     result.push({
+    //       id: doc.id,
+    //       data: doc.data(),
+    //     })
+    //   })
+    //   return result;
+    // })
+}
 
 
 
+export const getForumsByHackId = async (hackID) => {
+  var result = [];
+  let docs = await window.firebase.firestore()
+    .collection(COLLECTIONS.FORUMS)
+    .where('hackId', '==', hackID)
+    .get();
+
+  docs.forEach((doc)=>{
+    result.push({
+      id: doc.id,
+      data: doc.data(),
+    })
+  });
+
+  console.log('threads', result);
+  return result
+}
 
 
+export async function getHack(hackId) {
+    let hack = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(hackId);
+    return hack;
+}
+
+
+export async function getHackIdsAsync() {
+    let hackIds = [];
+    const result = await window.firebase.firestore()
+      .collection('hacks')
+      .get();
+
+    result.docs.forEach((doc)=>{
+      hackIds.push(doc.id)
+    })
+
+    return hackIds;
+}
+
+export function getHackIds() {
+    return window.firebase.firestore()
+      .collection('hacks')
+      .get()
+      .then((result)=>{
+        let hackIds = [];
+        result.docs.forEach((doc)=>{
+          hackIds.push(doc.id)
+        })
+        return hackIds;
+      })
+}
+
+export function getUserHacks(userId) {
+    window.firebase.firestore()
+      .collection('users')
+      .doc(userId)
+      .get()
+      .then((result)=>{
+        if (result.exists) {
+          let hacks = [];
+          result.data().hacks.forEach((hack)=>{
+            hacks.push({
+              registered: true,
+              hackId: hack,
+              hackName: hack,
+              hackData: hack,
+              phases: ['']
+            })
+          })
+        }
+      })
+}
+
+export function getOpenHacks() {
+    window.firebase.firestore()
+      .collection('hacks')
+      .where('registrationOpen', '==', true)
+      .get()
+      .then((result)=>{
+        var hacks = [];
+        if (!result.empty) {
+          result.docs.forEach((hack)=>{
+            let hackData = hack.data();
+            let hackId = hack.id;
+            let hackName = hackData.name;
+            hacks.push(Object.assign(
+              {available: true},
+              hackData,
+              {hackId},
+              {hackName}
+            ))
+          })
+        }
+      })
+}

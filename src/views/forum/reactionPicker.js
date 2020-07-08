@@ -4,9 +4,9 @@ import LikeReaction from '../../assets/svg/like-reaction.svg';
 import LikeReactionHighLighted from '../../assets/svg/like-reaction-highlight.svg';
 import DislikeReaction from '../../assets/svg/dislike-reaction.svg';
 import DislikeReactionHighLighted from '../../assets/svg/dislike-reaction-highlight.svg';
-import { Theme } from '../../theme';
-const colors = Theme.COLORS;
-const units = Theme.UNITS;
+// import { Theme } from '../../theme';
+// const colors = Theme.COLORS;
+// const units = Theme.UNITS;
 
 const Reactions = styled('div')`
   display: flex;
@@ -16,7 +16,7 @@ const Reactions = styled('div')`
 `;
 
 const ReactionCounter = styled('div')`
-  position: relative
+  position: relative;
   display: flex;
   align-items: center;
   border: 1px solid;
@@ -34,17 +34,16 @@ const ReactionCounter = styled('div')`
 
   span {
     padding: 0 5px;
-    width: 24px
+    width: 24px;
 
     img {
       height: 24px;
-      width auto;
+      width: auto;
       padding: 5px 0;
       object-fit: contain;
     }
 
-    &:nth-child(1) {
-    }
+    &:nth-child(1) {}
 
     &:nth-child(2) {
       text-align: center;
@@ -132,7 +131,7 @@ class ReactionPicker extends React.Component {
 
   getComment() {
     const _this = this;
-    this.firestore
+    window.firebase.firestore()
       .collection('comments')
       .doc(this.props.commentId)
       .get()

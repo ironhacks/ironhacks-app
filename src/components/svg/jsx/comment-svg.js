@@ -1,11 +1,11 @@
-import React from "react"
+import React from 'react'
 
 const SvgComponent = props => (
   <svg
     aria-hidden="true"
     style={{
-      msTransform: "rotate(360deg)",
-      WebkitTransform: "rotate(360deg)",
+      msTransform: 'rotate(360deg)',
+      WebkitTransform: 'rotate(360deg)',
     }}
     viewBox="0 0 432 432"
     transform="rotate(360)"

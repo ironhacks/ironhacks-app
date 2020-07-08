@@ -1,0 +1,11 @@
+.sponsor_banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sponsor_banner .sponsor_logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}

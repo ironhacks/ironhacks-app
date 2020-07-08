@@ -1,0 +1,26 @@
+.examples_section .card {
+  background-color: transparent;
+  border: none;
+}
+
+.examples_section .card_row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.examples_section .card_col {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (min-width: 800px) {
+  .examples_section .card_row {
+    flex-wrap: nowrap;
+  }
+  .examples_section .card_col {
+    flex-basis: 33%;
+  }
+}

@@ -9,7 +9,8 @@ import {Loader} from '../../components/loader';
 import { Theme } from '../../theme';
 const colors = Theme.COLORS;
 const units = Theme.UNITS;
-const styles = colors.AppSectionTheme;
+
+const styles = Theme.STYLES.AppSectionTheme;
 
 const SectionContainer = styled('div')`
   position: relative;
@@ -21,6 +22,7 @@ const SectionContainer = styled('div')`
   background-color: ${(props) => props.theme.backgroundColor};
   overflow: auto;
 `;
+
 const Header = styled('div')`
   width 100%;
   margin-top: 25px;
@@ -106,17 +108,18 @@ const TitleInput = styled('input')`
 class NewThread extends React.Component {
   constructor(props) {
     super(props);
-    const { cookies, user } = props;
+    const { cookies } = props;
     this.state = {
-      currentHack: cookies.get('currentHack') || null,
+      currentHack: this.props.hackId,
       forum: cookies.get('currentForum') || null,
-      user,
+      user: this.props.user,
       title: '',
       markdown: '',
       mustNavigate: false,
       selectedHack: 0,
       selectedForum: 0,
-    };
+    }
+
     this.firestore = window.firebase.firestore();
   }
 
@@ -126,11 +129,13 @@ class NewThread extends React.Component {
     }
   }
 
-  onEditorChange = (markdown) => {
-    this.setState({ markdown: markdown });
-  };
+  onEditorChange(markdown) {
+    this.setState({
+      markdown: markdown
+    })
+  }
 
-  handleInputChange = (event) => {
+  handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
@@ -138,72 +143,83 @@ class NewThread extends React.Component {
     this.setState({
       [name]: value,
     });
-  };
+  }
 
-  // This function handle the sumbit process
-  handleSubmit = (event) => {
+  handleSubmit(event) {
     event.preventDefault();
     let hackId;
     let forumId;
+
     if (this.props.user.isAdmin) {
       hackId = this.state.hacks[this.state.selectedHack].id;
-      forumId = this.state.hacks[this.state.selectedHack].forums[
-        this.state.selectedForum
-      ].id;
+      forumId = this.state.hacks[this.state.selectedHack].forums[this.state.selectedForum].id;
     } else {
       hackId = this.state.currentHack;
       forumId = this.state.forum;
     }
-    const currentDate = new Date(); // We use the same date in both the thread and the comment, so on the db the stats show that they were created at the same time.
-    const _this = this;
+
+    const currentDate = new Date();
     const codedBody = this.utoa(this.state.markdown);
-    // TODO: add forum id
+
+    let threadData = {
+      title: this.state.title,
+      author: this.props.user.uid,
+      authorName: this.props.user.displayName,
+      createdAt: currentDate,
+      hackId: hackId,
+      forumId: forumId,
+    };
+
     this.firestore
       .collection('threads')
-      .add({
-        title: this.state.title,
-        author: this.props.user.uid,
-        authorName: this.props.user.displayName,
-        createdAt: currentDate,
-        hackId: hackId,
-        forumId: forumId,
-      })
-      .then(function(docRef) {
+      .add(threadData)
+      .then((docRef) => {
         const threadRef = docRef.id;
-        _this.firestore
+
+        this.firestore
           .collection('comments')
           .add({
-            author: _this.props.user.uid,
-            authorName: _this.props.user.displayName,
+            author: this.props.user.uid,
+            authorName: this.props.user.displayName,
             body: codedBody,
             createdAt: currentDate,
             threadId: docRef.id,
             forumId: forumId,
           }) // Adding double reference on the thread.
-          .then(function(docRef) {
-            _this.firestore
+          .then((docRef) => {
+
+            this.firestore
               .collection('threads')
               .doc(threadRef)
               .update({
-                comments: [docRef.id],
-              });
-            _this.setState({ mustNavigate: true, threadRef: threadRef });
+                comments: [threadRef],
+              })
+
+            this.setState({
+              mustNavigate: true,
+              threadRef: threadRef
+            })
+
           });
       })
       .catch(function(error) {
         console.error('Error adding document: ', error);
       });
   };
-  // ucs-2 string to base64 encoded ascii
-  utoa = (str) => {
+
+
+  utoa(str) {
     return window.btoa(unescape(encodeURIComponent(str)));
   };
 
   // ---------------------------------------- Admin features ------------------------------------------
 
   // Query all the hacks objects from the db.
-  getHacks = () => {
-    this.setState({ loading: true });
+  getHacks() {
+    this.setState({
+      loading: true
+    })
+
     const _this = this;
     const hacks = [];
     this.firestore
@@ -220,10 +236,10 @@ class NewThread extends React.Component {
       })
       .catch(function(error) {
         console.error('Error getting documents: ', error);
-      });
-  };
+      })
+  }
 
-  getForums = (hackIndex) => {
+  getForums(hackIndex) {
     const _this = this;
     const forums = [];
     const index = hackIndex || 0;
@@ -245,23 +261,23 @@ class NewThread extends React.Component {
       })
       .catch(function(error) {
         console.error('Error getting documents: ', error);
-      });
-  };
+      })
+  }
 
-  onhackSelector = (hackIndex) => {
+  onhackSelector(hackIndex) {
     if (this.state.hacks[hackIndex].forums) {
       this.setState({ selectedHack: hackIndex });
     } else {
       this.setState({ selectedHack: hackIndex });
       this.getForums(hackIndex);
     }
-  };
+  }
 
-  onForumSelection = (forumIndex) => {
-    this.setState({ selectedForum: forumIndex });
-  };
-
-  // ---------------------------------------- Admin features ------------------------------------------
+  onForumSelection(forumIndex) {
+    this.setState({
+      selectedForum: forumIndex
+    })
+  }
 
   render() {
     if (this.state.loading) {
@@ -291,7 +307,7 @@ class NewThread extends React.Component {
             <h1>New Topic</h1>
             <p>
               {' '}
-              Bellow you will find a{' '}
+              Below you will find a{' '}
               <strong>
                 <i>Markdown Editor</i>
               </strong>

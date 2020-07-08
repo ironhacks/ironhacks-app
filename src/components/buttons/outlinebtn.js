@@ -1,5 +1,5 @@
 // DemoComponent.js
-import React from "react"
+import React from 'react'
 
 // This is a container component to render our demos and their code
 function DemoComponent({ code, children }) {

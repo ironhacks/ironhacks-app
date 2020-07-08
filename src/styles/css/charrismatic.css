@@ -1150,35 +1150,3 @@ blockquote{
   bottom:0;
   z-index:2;
 }
-
-::-webkit-resizer{ background:rgba(27, 64, 80, 0.5); }
-
-::-webkit-scrollbar{
-  background:rgba(27, 64, 80, 0.5);
-  max-width:10px;
-  max-height:10px;
-}
-
-::-webkit-scrollbar-button{
-  background:none;
-  border-radius:6px;
-  width:4px;
-  height:4px;
-}
-
-::-webkit-scrollbar-corner{ background:rgba(27, 64, 80, 0.5); }
-
-::-webkit-scrollbar-thumb{
-  background:#389fcc;
-  border-radius:8px;
-}
-
-::-moz-selection{
-  color:#afd4e4;
-  background:#1d2e35;
-}
-
-::selection{
-  color:#afd4e4;
-  background:#1d2e35;
-}

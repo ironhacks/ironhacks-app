@@ -57,19 +57,6 @@ export const AppSectionTheme = {
   hoverTextColor: Colors.highlightedTextColor,
 };
 
-export const LoginTheme = {
-  containerHeight: '100vh;',
-  backgroundColor: 'white',
-  textColor: 'black',
-};
-
-export const adminInnerSectionsTheme = {
-  containerHeight: '100%',
-  backgroundColor: 'white',
-  textColor: 'black',
-  hoverTextColor: Colors.highlightedTextColor,
-};
-
 export const ThreadPreviewTheme = {
   backgroundColor: Colors.threadPreviewBgColor,
   highlightedTextBgColor: Colors.threadPreviewHighlightedBgColor,

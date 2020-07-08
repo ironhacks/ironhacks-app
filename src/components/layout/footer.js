@@ -14,7 +14,9 @@ const Footer = (props) => {
     <footer className={mergeClasses(baseClass, footerClass)}>
       <div className={'footer_container py-3'} style={footerContainerStyles}>
         <div className='footer_block' style={{ marginLeft: '3rem'}}>
-          <span>Version 2.0.1</span>
+          <div>
+            <span>Version 2.1.1</span>
+          </div>
         </div>
 
         <div className='footer_block' style={{ marginRight: '3rem'}}>
@@ -22,7 +24,7 @@ const Footer = (props) => {
             RESEARCH CENTER FOR OPEN DIGITAL INNOVATION | RCODI
           </div>
           <div>
-            All rigths reserved IronHacks&#169; {new Date().getFullYear()}
+            All rights reserved IronHacks&#169; {new Date().getFullYear()}
           </div>
         </div>
 
