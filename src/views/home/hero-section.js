@@ -30,19 +30,21 @@ const LoginButton = styled(Link)`
 class HeroSection extends React.Component {
   render() {
     return (
-      <Row flex={true} rowClass={'py-2 fs-2 flex-align-center'}>
+      <Row flex={true}
+      rowClass={'py-2 fs-2 flex-align-center flex-wrap'}>
 
-        <Col colClass='flex-1'>
+        <Col colClass='flex-1 min-w-300'>
           <h1 className={'h1 site-title'}>
             <span className="font-light">PURDUE </span>
             <span className="font-extrabold">IRONHACKS</span>
           </h1>
+
           <h2 className="mb-3 mt-1">Hack for innovation and join the open data movement.</h2>
           <LoginButton to='/login?mode=select'>Sign up here now</LoginButton>
           <LoginButton to='/login'>Sign in</LoginButton>
         </Col>
 
-        <Col colClass='flex-1'>
+        <Col colClass='flex-1 hide--med'>
           <SvgImg
             containerClass=""
             imgClass={''}
