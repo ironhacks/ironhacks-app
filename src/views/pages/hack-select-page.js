@@ -17,11 +17,7 @@ class HackSelectPage extends React.Component {
       availableHacks: [],
       loading: false,
     }
-
-    // this.hackIdList = this.getHackIds()
     this.getHacks = this.getHacks.bind(this);
-    // this.getOpenHacks = this.getOpenHacks.bind(this);
-    // this.getUserHacks = this.getUserHacks.bind(this);
   }
 
   componentDidMount() {
@@ -91,7 +87,7 @@ class HackSelectPage extends React.Component {
         }
       })
 
-      const closedHacks = await window.firebase.firestore()
+    const closedHacks = await window.firebase.firestore()
         .collection('hacks')
         .where('registrationOpen', '==', false)
         .get()
@@ -108,23 +104,46 @@ class HackSelectPage extends React.Component {
           }
         })
 
-    console.log('open hacks', openHacks);
-
-    console.log('hacks', hacks);
-
-    const availableHacks = hacks.filter((hack)=>{
-      return openHacks.includes(hack.hackId)
-    })
+    // ALL REGISTERED HACKS
     const registeredHacks = hacks.filter((hack)=>{
       return userHacks.includes(hack.hackId)
     })
-    const previousHacks = hacks.filter((hack)=>{
-      return closedHacks.includes(hack.hackId)
+
+    // HACKS NOT REGISTERED
+    const unregisteredHacks = hacks.filter((hack)=>{
+      return !openHacks.includes(hack.hackId)
+    })
+
+    // NOT REGISTERED - OPEN FOR REGISTRATION
+    const availableHacks = unregisteredHacks.filter((hack)=>{
+      return openHacks.includes(hack.hackId)
+    })
+
+    // NOT REGISTERED - NOT OPEN FOR REGISTRATION
+    const unavailableHacks = unregisteredHacks.filter((hack)=>{
+      return !openHacks.includes(hack.hackId)
+    })
+
+    // NOT REGISTERED - NOT OPEN FOR REGISTRATION - FUTURE DATE
+    const upcomingHacks = unavailableHacks.filter((hack)=>{
+      return (
+        closedHacks.includes(hack.hackId) &&
+        Date.parse(hack.startDate) > Date.now()
+      )
+    })
+
+    // NOT REGISTERED - NOT OPEN FOR REGISTRATION - PAST DATE
+    const previousHacks = unavailableHacks.filter((hack)=>{
+      return (
+        closedHacks.includes(hack.hackId) &&
+        Date.parse(hack.startDate) <= Date.now()
+      )
     })
 
     this.setState({
       registeredHacks: registeredHacks,
       availableHacks: availableHacks,
+      upcomingHacks: upcomingHacks,
       previousHacks: previousHacks,
     })
   }
@@ -139,10 +158,11 @@ class HackSelectPage extends React.Component {
     } else {
       return (
         <Page
+          pageFooter={false}
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
         >
-          <Section sectionClass="py-2">
+          <Section sectionClass="py-2 mb-10">
             <Row>
               <Col colClass="">
                 <h1 className="h1 page-title">
@@ -166,31 +186,34 @@ class HackSelectPage extends React.Component {
 
                 <Separator primary />
 
-                <p className="my-5 font-italic cl-lightblue-dk1">
-                  <strong>
-                    The IronHacks Summer 2020: A Global COVID-19 Data Science Challenge will be open for registration soon!
-                  </strong>
-                </p>
-
                 <HackSignupCardList
                   emptyText={'There are no hacks currently available.'}
                   hacks={this.state.availableHacks}
                 />
 
-                <Separator />
 
                 <h2 className="h2 py-2">
-                  Hacks
+                  Upcoming Hacks
                 </h2>
-
-                <HackCardList
-                  emptyText={'No previous hacks to show.'}
-                  hacks={this.state.previousHacks}
-                />
 
                 <Separator primary />
 
+                <HackCardList
+                  emptyText={'No upcoming hacks.'}
+                  hacks={this.state.upcomingHacks}
+                />
 
+
+                <h2 className="h2 py-2">
+                  Past Hacks
+                </h2>
+
+                <Separator primary />
+
+                <HackCardList
+                  emptyText={'No previous hacks.'}
+                  hacks={this.state.previousHacks}
+                />
               </Col>
             </Row>
           </Section>

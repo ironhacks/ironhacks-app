@@ -91,6 +91,25 @@ class UpcomingHackPage extends React.Component {
             </Col>
           </Row>
 
+          <Row>
+            <Col>
+              <iframe
+                title="MPH IronHacks Welcome Video"
+                style={{
+                  margin: '1em auto 3em',
+                  display: 'block',
+                }}
+                width="560"
+                height="315"
+                src="https://www.youtube-nocookie.com/embed/6LBzLqVIc-0"
+                frameBorder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                />
+            </Col>
+          </Row>
+
+
           <Row rowClass="">
             <Col>
               <h2 className="h2 font-bold my-2">
@@ -98,8 +117,11 @@ class UpcomingHackPage extends React.Component {
               </h2>
 
               <p>
-                We will provide our IronHacks participants with access to a selection of large and granular datasets related to COVID-19 incidents as well as social and economic effects. We specifically curated a selection of social and economic data that can be identified at a granular spatial level (Zip code/specific location). Equipped with this data, participants will work in a Jupyter notebook lab environment to create novel and useful statistical models and visualizations using Python, R or Julia. The challenge will focus on three aspects: data visualization, as well as prediction. Indeed, the weekly prediction of COVID-19 impacts such as crowding at core places as well as economic spending will be at the core of statistical models and data visualizations. The participants’ notebooks and their outputs (html and markdown files) will be a central component of a submission.
+                We will provide our IronHacks participants with access to a selection of large and granular datasets related to COVID-19 incidents as well as social and economic effects. We specifically curated a selection of social and economic data that can be identified at a granular geographic level (Zip code/specific location). Equipped with this data, participants will work in a Jupyter notebook lab environment to create novel and useful statistical models and visualizations using Python, R or Julia. The challenge will focus on two aspects: data visualization, as well as prediction. Indeed, the weekly prediction of COVID-19 impacts such as crowding at core places as well as economic spending will be at the core of statistical models and data visualizations. The participants’ notebooks and their outputs (html and markdown files) will be a central component of a submission.
               </p>
+
+
+
 
               <h2 className="h2 font-bold my-2">
                 How will participants be evaluated?
@@ -108,7 +130,7 @@ class UpcomingHackPage extends React.Component {
               <p>Each participant's notebook will be evaluated in several dimensions: </p>
 
               <ul className="list">
-                <li>Quality and usefulness of the interactive data visualization</li>
+                <li>Quality and usefulness of the data visualization</li>
                 <li>Accuracy of the prediction</li>
                 <li>Quality and reproducibility of the software code </li>
               </ul>
@@ -130,7 +152,7 @@ class UpcomingHackPage extends React.Component {
               </h2>
 
               <p>
-                This IronHacks is not limited to programming or data science experts! We are recruiting anyone around the world, from our network of students and alumni to data science communities online. We are calling on all of those people who are interested in open data for social good and who have the interest and initiative to learn and iterate quickly over the multiphase hack timeline. Basic knowledge of statistics, Python or R or Julia is required. But even if you are a beginner or you feel a little rusty in Python or R, you should not shy away. You can use the information period of 2 to 3 weeks to get up to speed and explore some of tutorials that we will be sharing. You will be contributing great value towards this challenge and you will gain new skills along the way.
+                This IronHacks is not limited to programming or data science experts! We are recruiting anyone around the world, from our network of students and alumni to data science communities online. We are calling on all of those people who are interested in open data for social good and who have the interest and initiative to learn and iterate quickly over the multiphase hack timeline. Basic knowledge of statistics, Python, R or Julia is required. But even if you are a beginner or you feel a little rusty in Python or R, you should not shy away. You can use the informational training period to get up to speed and explore some of tutorials that we will be sharing. You will be contributing great value towards this challenge and you will gain new skills along the way.
               </p>
 
               <h2 className="h2 font-bold my-2">
@@ -138,16 +160,28 @@ class UpcomingHackPage extends React.Component {
               </h2>
 
               <p>
-                We offer a range of cool prizes and recognition to our IronHackers! Winning hackers will have the opportunity to be eligible for cash prizes. From Community Mindset, Winning Spirit, to Best Solution, there is a chance for everyone to gain fame, connect with top-level organizations, and be recognized for their excellent solutions to the COVID-19 Civic Challenge!
+                We offer a range of cool prizes and recognition to our IronHackers! Winning hackers will have the opportunity to be eligible for cash prizes. From Improvement Spirit, to Best Solution, there is a chance for everyone to gain fame, connect with top-level organizations, and be recognized for their excellent solutions to the COVID-19 Data Science Challenge!
               </p>
 
               <ul className="list">
-                  <li>$3000 in Total Prize Money for three winner categories: Best Solution, Winning Spirit, and Community Spirit</li>
-                  <li>A certificate signed by the RCODI team and logos of our partners</li>
-                  <li>A virtual award ceremony with presence of local and global partners</li>
-                  <li>Podcast interviews and feature presentation of the best solutions in media and press</li>
-                  <li>Promotion of Winners through partner channels</li>
-                  <li>Internship at RCODI to prepare future IronHacks</li>
+                  <li>
+                    $3000 in Total Prize Money across different categories (e.g. Best Solution, Improvement Spirit)
+                  </li>
+                  <li>
+                    A certificate signed by the RCODI team and logos of our partners
+                  </li>
+                  <li>
+                    A virtual award ceremony with presence of local and global partners
+                   </li>
+                  <li>
+                    Podcast interviews and feature presentation of the best solutions in media and press
+                  </li>
+                  <li>
+                    Promotion through partner channels
+                  </li>
+                  <li>
+                    Internship at RCODI to prepare future IronHacks
+                  </li>
               </ul>
             </Col>
           </Row>
@@ -164,16 +198,16 @@ class UpcomingHackPage extends React.Component {
 
               <ul className="list">
                 <li>
-                  Sign-up phase for COVID-19 and Information/Training Period will tentatively start at the beginning of July. During this period we will release informational materials, launch virtual events/webinars to introduce you the IronHacks platform, the process, and some central details you need to succeed during the challenge.
+                  Sign-up phase for COVID-19 and Information/Training Period will tentatively start in mid-July. During this period we will release informational materials, launch virtual events/webinars to introduce you the IronHacks platform, the process, and some central details you need to succeed during the challenge.
                 </li>
                 <li>
-                  Launch of Hack/Start of Competition: After a 1 to 2 weeks information period, we will start a high-energy 5-phase IronHacks competition by releasing the Task and the Evaluation Metrics.
+                  Launch of Hack/Start of Competition: After a few days of training/information sessions, we will start a high-energy 4-phase IronHacks competition by releasing the Task and the Evaluation Metrics.
                 </li>
                 <li>
-                  Iterative hacking phases: The challenge will run through 5 phases between 14 to 30 days (see sample timeline below). After a high-energy "hacking" phase, we will evaluate and score your application using a combination of automated and human evaluation techniques. Our judges will have deep experience in data visualization.
+                  Iterative hacking phases: The challenge will run through 4 phases between 14 to 30 days (see sample timeline below). After a high-energy "hacking" phase, we will evaluate and score your application using a combination of automated and human evaluation techniques. Our judges will have deep experience in data visualization.
                 </li>
                 <li>
-                  End of IronHacks Summer 2020: We will end with a Virtual Awards Ceremony to showcase the winning solutions! We expect to award our winners near the beginning of August.
+                  End of IronHacks Summer 2020: We will end with a Virtual Awards Ceremony to showcase the winning solutions! We expect to award our winners beginning/mid of August.
                 </li>
               </ul>
 
