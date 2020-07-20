@@ -6,15 +6,12 @@ import {
   InputTextarea,
   InputSelect,
 } from '../../components/input';
-
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
 import { VariableSizeList as List } from 'react-window';
 import { Section, Row } from '../../components/layout';
-import moment from 'moment';
 
-class AdminSettingsSection extends React.Component {
+class AdminHackSettings extends React.Component {
   constructor(props) {
     super(props);
     const {
@@ -32,10 +29,12 @@ class AdminSettingsSection extends React.Component {
     } = props.hackData;
 
     let defaultDisplayOptions = {
-      forumsEnabled: false,
+      forumEnabled: false,
+      calendarEnabled: false,
       taskEnabled: false,
       tutorialEnabled: false,
       resultsEnabled: false,
+      rulesEnabled: false,
       projectsEnabled: false,
       quizEnabled: false,
     }
@@ -57,7 +56,6 @@ class AdminSettingsSection extends React.Component {
     }
 
 
-    this.ListItemPhase = this.ListItemPhase.bind(this);
     this.ListItemUser = this.ListItemUser.bind(this);
     this.onHackBannerImgChanged = this.onHackBannerImgChanged.bind(this);
     this.onHackNameChanged = this.onHackNameChanged.bind(this);
@@ -73,7 +71,6 @@ class AdminSettingsSection extends React.Component {
   }
 
   onHackStartDateChanged(value){
-    console.log('date', value, value.toISOString());
     this.setState({startDate: value})
   }
 
@@ -163,7 +160,6 @@ class AdminSettingsSection extends React.Component {
       return text.replace(/[^a-zA-Z0-9-.,()"'/ ]/g, '')
     };
 
-
     const filterUrl = (path) => {
       return path.toLowerCase()
         .replace(/[^a-zA-Z0-9- ]/g, '')
@@ -221,22 +217,6 @@ class AdminSettingsSection extends React.Component {
     )
   }
 
-  ListItemPhase({ index, style }) {
-    let phase = this.props.hack.phases[index];
-    let phaseIndex = phase.index ? phase.index + 1 : index + 1;
-    let codeStartDate = phase.codingStartDate ? moment(phase.codingStartDate.seconds).format('MMM Do') : 'n/a';
-    let codeEndDate = phase.codingStartEnd ? moment(phase.codingStartEnd.seconds).format('Do YYYY') : 'n/a';
-    let evalStartDate = phase.evaluationStartDate ? moment(phase.evaluationStartDate.seconds).format('MMM Do') : 'n/a';
-    let evalEndDate = phase.evaluationStartend ? moment(phase.evaluationStartend.seconds).format('Do YYYY') : 'n/a';
-
-    return (
-      <div style={style}>
-        Phase {phaseIndex}<br/>
-        <strong>Coding</strong>: {codeStartDate}-{codeEndDate}<br/>
-        <strong>Evaluation</strong>: {evalStartDate}-{evalEndDate}
-      </div>
-    )
-  }
 
   render() {
     return (
@@ -280,7 +260,7 @@ class AdminSettingsSection extends React.Component {
               {label: 'Intermediate', name: 'intermediate'},
               {label: 'Advanced', name: 'advanced'},
             ]}
-            onInputChanged={this.onHackDifficultyChanged}
+            onInputChange={this.onHackDifficultyChanged}
           />
 
           <InputTextarea
@@ -328,7 +308,7 @@ class AdminSettingsSection extends React.Component {
           <InputCheckbox
             label="Hack Published"
             name="hackPublished"
-            onInputChanged={this.onHackPublishedChanged}
+            onInputChange={this.onHackPublishedChanged}
             isChecked={this.state.hackPublished}
             disabled={this.state.syncing}
           />
@@ -336,7 +316,7 @@ class AdminSettingsSection extends React.Component {
           <InputCheckbox
             label="Registration Open"
             name="registrationOpen"
-            onInputChanged={this.onRegistrationOpenChanged}
+            onInputChange={this.onRegistrationOpenChanged}
             isChecked={this.state.registrationOpen}
             disabled={this.state.syncing}
           />
@@ -346,17 +326,57 @@ class AdminSettingsSection extends React.Component {
           </h3>
 
           <InputCheckbox
-            label="Forums Enabled"
-            name="forumsEnabled"
-            onInputChanged={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.forumsEnabled}
+            label="Calendar Enabled"
+            name="calendarEnabled"
+            onInputChange={this.onDisplayOptionsChanged}
+            isChecked={this.state.displayOptions.calendarEnabled}
+            disabled={this.state.syncing}
+          />
+
+          <InputCheckbox
+            label="Forum Enabled"
+            name="forumEnabled"
+            onInputChange={this.onDisplayOptionsChanged}
+            isChecked={this.state.displayOptions.forumEnabled}
+            disabled={this.state.syncing}
+          />
+
+          <InputCheckbox
+            label="Projects Enabled"
+            name="projectsEnabled"
+            onInputChange={this.onDisplayOptionsChanged}
+            isChecked={this.state.displayOptions.projectsEnabled}
+            disabled={this.state.syncing}
+          />
+
+          <InputCheckbox
+            label="Results Enabled"
+            name="resultsEnabled"
+            onInputChange={this.onDisplayOptionsChanged}
+            isChecked={this.state.displayOptions.resultsEnabled}
+            disabled={this.state.syncing}
+          />
+
+          <InputCheckbox
+            label="Quiz Enabled"
+            name="quizEnabled"
+            onInputChange={this.onDisplayOptionsChanged}
+            isChecked={this.state.displayOptions.quizEnabled}
+            disabled={this.state.syncing}
+          />
+
+          <InputCheckbox
+            label="Rules Enabled"
+            name="rulesEnabled"
+            onInputChange={this.onDisplayOptionsChanged}
+            isChecked={this.state.displayOptions.rulesEnabled}
             disabled={this.state.syncing}
           />
 
           <InputCheckbox
             label="Task Enabled"
             name="taskEnabled"
-            onInputChanged={this.onDisplayOptionsChanged}
+            onInputChange={this.onDisplayOptionsChanged}
             isChecked={this.state.displayOptions.taskEnabled}
             disabled={this.state.syncing}
           />
@@ -364,34 +384,11 @@ class AdminSettingsSection extends React.Component {
           <InputCheckbox
             label="Tutorial Enabled"
             name="tutorialEnabled"
-            onInputChanged={this.onDisplayOptionsChanged}
+            onInputChange={this.onDisplayOptionsChanged}
             isChecked={this.state.displayOptions.tutorialEnabled}
             disabled={this.state.syncing}
           />
 
-          <InputCheckbox
-            label="Results Enabled"
-            name="resultsEnabled"
-            onInputChanged={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.resultsEnabled}
-            disabled={this.state.syncing}
-          />
-
-          <InputCheckbox
-            label="Projects Enabled"
-            name="projectsEnabled"
-            onInputChanged={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.projectsEnabled}
-            disabled={this.state.syncing}
-          />
-
-          <InputCheckbox
-            label="Quiz Enabled"
-            name="quizEnabled"
-            onInputChanged={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.quizEnabled}
-            disabled={this.state.syncing}
-          />
 
         </Section>
 
@@ -409,19 +406,7 @@ class AdminSettingsSection extends React.Component {
             />
           </div>
 
-          <h3 className="h3 py-2">
-            Hack Phases
-          </h3>
 
-          <List
-            itemCount={this.props.hack.phases.length}
-            itemSize={(()=>{return 90})}
-            height={this.props.hack.phases.length % 4 * 90}
-            width={400}
-            data={this.props.hack.phases}
-          >
-            {this.ListItemPhase}
-          </List>
         </Section>
 
           <Section sectionClass="py-2">
@@ -461,4 +446,4 @@ class AdminSettingsSection extends React.Component {
   }
 }
 
-export default AdminSettingsSection;
+export default AdminHackSettings;
