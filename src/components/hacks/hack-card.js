@@ -1,13 +1,11 @@
 import React from 'react';
-import { Theme } from '../../theme';
-import './assets/style.css';
-
 
 const formatDate = (timestring) => {
+  console.log('start date', timestring);
   let date = new Date(Date.parse(timestring));
   return [
-    date.getMonth().toString().padStart(2, '0'),
-    date.getDay().toString().padStart(2, '0'),
+    (date.getMonth() + 1).toString().padStart(2, '0'),
+    date.getDate().toString().padStart(2, '0'),
     date.getFullYear(),
   ].join('/')
 }
@@ -29,6 +27,7 @@ class HackCard extends React.Component {
                 <img
                   className="card_img"
                   src={this.props.hackData.hackThumbImg}
+                  alt={`${this.props.name} Thumbnail`}
                   />
               )}
             </div>
@@ -46,7 +45,7 @@ class HackCard extends React.Component {
 
               {this.props.hackData.startDate && (
                 <span className="mr-3">
-                  Start Date: {formatDate(this.props.hackData.startDate)}
+                  Opening Date: {formatDate(this.props.hackData.startDate)}
                 </span>
               )}
 
@@ -82,6 +81,7 @@ class HackSignupCard extends React.Component {
                 <img
                   className="card_img"
                   src={this.props.hackData.hackThumbImg}
+                  alt={`${this.props.name} Thumbnail`}
                   />
               )}
             </div>
@@ -105,7 +105,7 @@ class HackSignupCard extends React.Component {
 
               {this.props.hackData.difficulty && (
                 <span>
-                  Difficulty:  {this.props.hackData.difficulty.label}
+                  Difficulty: {this.props.hackData.difficulty.label}
                 </span>
               )}
             </div>

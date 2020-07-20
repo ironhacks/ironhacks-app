@@ -6,10 +6,6 @@ import menuIcon from '../../assets/svg/menu-icon.svg';
 
 
 class HackNavItem extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Link
@@ -34,15 +30,6 @@ class HackNav extends React.Component {
       showMenu: 'none',
       currentView: 'task',
     };
-    // this.navItems = [
-    //   {id: 'task', name: 'Task'},
-    //   {id: 'forum', name: 'Forum'},
-    //   {id: 'tutorial', name: 'Tutorial'},
-    //   {id: 'quiz', name: 'Quiz'},
-    //   {id: 'projects', name: 'Projects'},
-    //   {id: 'results', name: 'Results'},
-    // ];
-
     this.baseUrl = `/hacks/${this.props.hackId}`;
     this.navMenuRef = props.navMenuref;
     this.updateHackNav = this.updateHackNav.bind(this);
@@ -62,9 +49,7 @@ class HackNav extends React.Component {
       return items[item];
     });
 
-    let sorted = display.sort((a,b)=>{ return a.localeCompare(b) })
-
-    console.log('display', sorted);
+    display.sort((a,b)=>{ return a.localeCompare(b) })
 
     const navItems = display.map((item)=>{
       return {

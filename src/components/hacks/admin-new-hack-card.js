@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Theme } from '../../theme';
-import './assets/style.css';
 
 const colors = Theme.COLORS;
 
