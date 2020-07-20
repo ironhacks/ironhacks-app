@@ -5,6 +5,8 @@ import { InputText, InputNumber } from '../../components/input';
 import Select from 'react-select';
 import '../../styles/css/profile.css';
 
+import { COUNTRY_CODES } from '../../data';
+
 const EDUCATION_STATUS = [
   { label: 'Yes', value: 'student_yes' },
   { label: 'No', value: 'student_no' },
@@ -72,6 +74,9 @@ class ProfileEditPage extends React.Component {
         demographicData: {
           highestDegree: null,
           educationStatus: null,
+          city: null,
+          state: null,
+          country: null,
         },
         socialMedia: {
           facebook: null,
@@ -89,7 +94,7 @@ class ProfileEditPage extends React.Component {
     this.experienceInputChanged = this.experienceInputChanged.bind(this);
     this.socialInputChanged = this.socialInputChanged.bind(this);
     this.demographicDegreeInputChanged = this.demographicDegreeInputChanged.bind(this);
-    this.demographicEductationInputChanged = this.demographicEductationInputChanged.bind(this);
+    this.demographicEductationInputChange = this.demographicEductationInputChange.bind(this);
     this.updateProfileData = this.updateProfileData.bind(this);
   }
 
@@ -174,7 +179,6 @@ class ProfileEditPage extends React.Component {
   }
 
   demographicDegreeInputChanged(name, data) {
-    console.log('dgree', name, data);
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
     this.setState({
@@ -185,7 +189,7 @@ class ProfileEditPage extends React.Component {
     })
   }
 
-  demographicEductationInputChanged(name, data) {
+  demographicEductationInputChange(name, data) {
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
 
@@ -194,7 +198,6 @@ class ProfileEditPage extends React.Component {
         ...this.state.formData,
         demographicData : demographic,
       },
-      // educationSelect : data,
     })
 
     console.log(name, data);
@@ -280,12 +283,12 @@ class ProfileEditPage extends React.Component {
                 onInputChange={this.socialInputChanged}
               />
 
-              <h3 className="h3 mt-2 py-2 font-bold">Education status</h3>
+              <h3 className="h3 mt-2 py-2 font-bold">Current Student?</h3>
 
               <Select
                 options={EDUCATION_STATUS}
                 value={this.state.formData.demographicData.educationStatus}
-                onChange={(value)=>this.demographicEductationInputChanged('educationStatus', value)}
+                onChange={(value)=>this.demographicEductationInputChange('educationStatus', value)}
               />
 
               <h3 className="h3 mt-2 py-2 font-bold">Highest degree earned</h3>
@@ -295,6 +298,39 @@ class ProfileEditPage extends React.Component {
                 value={this.state.formData.demographicData.highestDegree}
                 onChange={(value)=>this.demographicDegreeInputChanged('highestDegree', value)}
               />
+
+              <h3 className="h3 mt-2 py-2 font-bold">Country</h3>
+
+              <Select
+                options={COUNTRY_CODES}
+                value={this.state.formData.demographicData.country}
+                onChange={(value)=>this.demographicDegreeInputChanged('country', value)}
+              />
+
+              <InputText
+                containerClass="flex py-1 mt-4 flex-between"
+                inputClass="mx-2 flex-2"
+                labelClass="flex-1"
+                name="city"
+                label="City"
+                icon="map"
+                iconClass="pr-2"
+                value={this.state.formData.demographicData.city || ''}
+                onChange={(value)=>this.demographicDegreeInputChanged('city', value)}
+              />
+
+              <InputText
+                containerClass="flex py-1 flex-between"
+                inputClass="mx-2 flex-2"
+                labelClass="flex-1"
+                name="state"
+                label="State"
+                icon="map"
+                iconClass="pr-2"
+                value={this.state.formData.demographicData.state || ''}
+                onChange={(value)=>this.demographicDegreeInputChanged('state', value)}
+              />
+
             </Col>
           </Row>
 

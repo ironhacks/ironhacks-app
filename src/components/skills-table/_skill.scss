@@ -1,0 +1,139 @@
+///
+/// Convert font-size from px to rem with px fallback
+/// @param $size - the value in pixel you want to convert
+/// {@include fontSize(12px);}
+///
+@function px2rem($pxSize) {
+  //Default font size is 16px;
+  $baseSize: ( 16px / 1px );
+  $remSize: ( $pxSize / $baseSize );
+
+  @return $remSize  ;
+}
+
+
+///
+/// Convert font-size from rem to px
+/// @param $size - the value in pixel you want to convert
+///  {@include fontSize(12px);}
+///
+@function rem2px($remSize) {
+  //Default font size is 16px;
+  $baseSize: 16px;
+  $remValue: ( $remSize / 1rem );
+  $pxSize: ( $remValue * $baseSize );
+
+  @return $pxSize;
+}
+
+
+// ==============================================
+// SKILL BAR CONFIG
+// ----------------------------------------------
+
+// GLOBAL
+$title_color: #000000;
+$base_textsize              : 1rem;
+$page_content_fs            : ($base_textsize * .8);
+// ----------------------------------------------
+$skill_item_bg              : rgba(0, 0, 0, 0.1);
+$proficiency_bar_bg         : #24a8af;
+$skillinterest_bar_bg       : #49c3b6;
+
+$skill_table_col_ct         : 2;
+$skill_row_h                : 2rem;
+$skill_row_margin_bottom    : 2px;
+$skill_row_margin_left      : 4px;
+$skillset_container_bg      : black;
+$skill_column_width         : percentage(1 / $skill_table_col_ct);
+$skill_level_bar_pad        : px2rem(2px);
+$skill_level_bar_pad_px     :  2px;
+$skill_title_color          : $title_color;
+$skill_title_font_size      : $page_content_fs;
+$skill_title_font_size_px   : rem2px($skill_title_font_size);
+$skill_level_bar_h          : $skill_title_font_size_px + $skill_level_bar_pad_px + $skill_level_bar_pad_px;
+
+.skill_section {
+  display: flex;
+
+  > .container {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .section__title {
+    margin-bottom: 0;
+  }
+
+  .skill-table {
+    padding: .2rem .2rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: ( -$skill_row_margin_left );
+  }
+}
+
+.skill {
+  background: $skill_item_bg;
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-wrap: wrap;
+  flex-basis: calc(#{$skill_column_width} - #{$skill_row_margin_left});
+  margin-left: $skill_row_margin_left;
+  margin-top: $skill_row_margin_bottom;
+  margin-bottom: $skill_row_margin_bottom;
+
+  &:nth-child(#{$skill_table_col_ct}n-#{$skill_table_col_ct - 1}) {
+    margin-left: 0;
+  }
+
+  &__title {
+    flex: 1;
+    top: 0;
+    left: .2em;
+    color: $skill_title_color;
+    font-size: $skill_title_font_size;
+    font-weight: 400;
+    white-space: pre;
+    position: relative;
+  }
+
+  .skill__level {
+    width: 100%;
+    padding-right: 0;
+    position: relative;
+
+    .levelbar {
+      height: ( $skill_level_bar_h / 2);
+
+      &.proficiency_bar { background: $proficiency_bar_bg; }
+      &.interest_bar { background: $skillinterest_bar_bg; }
+
+      &.indicator_bar {
+        top: 0;
+        left: 25%;
+        width: 50%;
+        position: absolute;
+        border-left: 1px solid #c4c4c4;
+        border-right: 1px solid #c4c4c4;
+        z-index: 2;
+
+        &::before {
+          content: "";
+          height: 100%;
+          width: 1px;
+          left: 50%;
+          position: absolute;
+          z-index: 5;
+          background: #c4c4c4;
+          display: block;
+          bottom: 0;
+        }
+      }
+    }
+  }
+}
