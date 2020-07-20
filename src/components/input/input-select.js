@@ -10,8 +10,8 @@ class InputSelect extends React.Component {
   handleChange(value) {
     // let value = event.target.value;
     console.log('changed', value);
-    if (this.props.onInputChanged) {
-      this.props.onInputChanged(this.props.name, value);
+    if (this.props.onInputChange) {
+      this.props.onInputChange(this.props.name, value);
     }
   }
 

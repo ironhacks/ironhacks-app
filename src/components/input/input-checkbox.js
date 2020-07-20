@@ -7,9 +7,9 @@ class InputCheckbox extends React.Component {
   }
 
   handleChange(event) {
-    if (this.props.onInputChanged){
+    if (this.props.onInputChange){
       let value = event.target.checked
-      this.props.onInputChanged(this.props.name, value);
+      this.props.onInputChange(this.props.name, value);
     }
   }
 

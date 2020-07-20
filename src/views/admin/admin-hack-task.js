@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
 import Button from '../../util/button.js';
-import { Row, Col } from '../../components/layout';
+// import { Row, Col } from '../../components/layout';
 
 const AvailableActionsDiv = styled('div')`
   width: 100%;
@@ -40,7 +40,7 @@ class AdminHackTask extends React.Component {
               primary
               width='150px'
               margin='0 0 0 15px'
-              onClick={this.props.updateTaskDocument}
+              onClick={this.props.updateDocument}
             >
               Publish
             </Button>

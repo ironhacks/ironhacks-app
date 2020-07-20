@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
 import AvailableActionsDiv from '../../util/availableActionsDiv.js';
 import Button from '../../util/button';
