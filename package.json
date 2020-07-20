@@ -21,6 +21,7 @@
     "bootstrap": "^4.5.0",
     "codemirror": "^5.55.0",
     "deep-equal": "^1.1.1",
+    "friendly-words": "^1.1.10",
     "jquery": "^3.5.1",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
