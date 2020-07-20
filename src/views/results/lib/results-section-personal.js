@@ -14,10 +14,6 @@ const SectionContainer = styled('div')`
 `;
 
 class PersonalScoreSection extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <SectionContainer>

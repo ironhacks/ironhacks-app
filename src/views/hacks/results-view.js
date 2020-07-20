@@ -1,7 +1,4 @@
 import React from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-// import { withCookies } from 'react-cookie';
-import { Theme } from '../../theme';
 import { Loader } from '../../components/loader';
 import { Timeline } from '../../components/timeline';
 // import * as DateFormater from '../../util/dateFormater.js';
@@ -17,108 +14,104 @@ import {
 } from '../results/lib/get-results';
 import './results.css';
 
-// import log from '../../util/log';
 
-const colors = Theme.COLORS;
-const styles = Theme.STYLES.AppSectionTheme;
-
-const SectionContainer = styled('div')`
-  width: 100%;
-  height: ${(props) => props.theme.containerHeight};
-  background-color: ${(props) => props.theme.backgroundColor};
-  overflow: auto;
-
-  .top-container {
-    padding: 0 10%;
-    background-color: #f9f9f8;
-    border-bottom: 1px solid rgb(224, 228, 232);
-
-    h1 {
-      padding-top: 100px;
-    }
-
-    h3 {
-      margin-bottom: 0;
-      text-align: center;
-    }
-  }
-
-  .tab-container {
-    display: flex;
-    justify-content: left;
-    padding: 0 10%;
-    width: 100%;
-    margin-bottom: -1px;
-
-    .tab-button {
-      background-color: #f9f9f8;
-      cursor: pointer;
-      border: none;
-      height: 60px;
-      width: 150px;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      border-bottom: 1px solid rgb(224, 228, 232);
-      outline: none;
-
-      &.selected {
-        background-color: white;
-        border-top: 3px solid ${colors.mainBgColor};
-        border-right: 1px solid rgb(225, 228, 232);
-        border-left: 1px solid rgb(224, 228, 232);
-        border-bottom: 1px solid white;
-      }
-    }
-  }
-
-  .selected-section {
-    margin-top: 20px;
-    padding: 0 10%;
-
-    .results-loader {
-      margin-top: -20px;
-      height: 500px;
-    }
-
-    h2 {
-      &.no-results {
-        margin-top: 50px;
-        text-align: center;
-      }
-    }
-
-    h3 {
-      &.super-cool-banner {
-        font-size: 20px;
-        text-align: center;
-        -webkit-animation-name: example;
-        -webkit-animation-duration: 4s;
-        animation-name: example;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-
-        @-webkit-keyframes example {
-          from {
-            color: red;
-          }
-          to {
-            color: yellow;
-          }
-        }
-
-        @keyframes example {
-          from {
-            color: #caa32a;
-          }
-          to {
-            color: red;
-          }
-        }
-      }
-    }
-  }
-`;
+// const SectionContainer = styled('div')`
+//   width: 100%;
+//   height: ${(props) => props.theme.containerHeight};
+//   background-color: ${(props) => props.theme.backgroundColor};
+//   overflow: auto;
+//
+//   .top-container {
+//     padding: 0 10%;
+//     background-color: #f9f9f8;
+//     border-bottom: 1px solid rgb(224, 228, 232);
+//
+//     h1 {
+//       padding-top: 100px;
+//     }
+//
+//     h3 {
+//       margin-bottom: 0;
+//       text-align: center;
+//     }
+//   }
+//
+//   .tab-container {
+//     display: flex;
+//     justify-content: left;
+//     padding: 0 10%;
+//     width: 100%;
+//     margin-bottom: -1px;
+//
+//     .tab-button {
+//       background-color: #f9f9f8;
+//       cursor: pointer;
+//       border: none;
+//       height: 60px;
+//       width: 150px;
+//       border-top-left-radius: 10px;
+//       border-top-right-radius: 10px;
+//       border-bottom: 1px solid rgb(224, 228, 232);
+//       outline: none;
+//
+//       &.selected {
+//         background-color: white;
+//         border-top: 3px solid ${colors.mainBgColor};
+//         border-right: 1px solid rgb(225, 228, 232);
+//         border-left: 1px solid rgb(224, 228, 232);
+//         border-bottom: 1px solid white;
+//       }
+//     }
+//   }
+//
+//   .selected-section {
+//     margin-top: 20px;
+//     padding: 0 10%;
+//
+//     .results-loader {
+//       margin-top: -20px;
+//       height: 500px;
+//     }
+//
+//     h2 {
+//       &.no-results {
+//         margin-top: 50px;
+//         text-align: center;
+//       }
+//     }
+//
+//     h3 {
+//       &.super-cool-banner {
+//         font-size: 20px;
+//         text-align: center;
+//         -webkit-animation-name: example;
+//         -webkit-animation-duration: 4s;
+//         animation-name: example;
+//         animation-duration: 1s;
+//         animation-iteration-count: infinite;
+//         animation-direction: alternate;
+//
+//         @-webkit-keyframes example {
+//           from {
+//             color: red;
+//           }
+//           to {
+//             color: yellow;
+//           }
+//         }
+//
+//         @keyframes example {
+//           from {
+//             color: #caa32a;
+//           }
+//           to {
+//             color: red;
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;
 
 
 class ResultsTabSelector extends React.Component {
