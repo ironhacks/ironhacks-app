@@ -1,0 +1,32 @@
+
+.notebookviewer {
+  text-align: center;
+}
+
+.notebookviewer-logo {
+  height: 40vmin;
+}
+
+.notebookviewer-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.notebookviewer-link {
+  color: #09d3ac;
+}
+
+.notebookviewer .darkTheme > * {
+  background-color: #2F3129;
+  color: white;
+}
+
+.notebookviewer .MDImg img {
+  max-width: 100%;
+}
