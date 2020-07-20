@@ -61,3 +61,83 @@
   text-decoration: none;
   color: rgba(0, 0, 0, 0.6);
 }
+
+.hack_card_list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2em;
+}
+
+.hack_card_list__item {
+  margin-top: 1em;
+  display: block;
+}
+
+.hack_card {
+  min-height: 3em;
+  min-width: 50%;
+  flex: 1 1 100%;
+  margin: 1em;
+  text-align: left;
+  box-shadow: 3px 2px 10px 1px rgba(0, 0, 0, 0.2);
+  border: none;
+  background-color: white;
+  min-height: 100px;
+}
+
+.hack_card .card_img {
+  width: 100px;
+  max-width: 100px;
+  height: 100px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.hack_card .card_title {
+  line-height: 1;
+  font-size: 1em;
+}
+
+.hack_card .card_description {
+  margin-top: .8em;
+  margin-bottom: .3em;
+  line-height: 1;
+  font-size: .8em;
+}
+
+
+.hack_card a {
+  color: inherit;
+}
+
+.hack_card a:hover {
+  text-decoration: none;
+}
+
+.hack_card.newHackCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hack_card.newHackCard span {
+  color: var(--color-primary);
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.hack_card.newHackCard span:first-child {
+  line-height: 40px;
+  font-size: 40px;
+}
+
+.hack_card span {
+  font-size: 12px;
+}
