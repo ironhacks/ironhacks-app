@@ -1,17 +1,19 @@
-import styled from 'styled-components';
+import React from 'react';
 
-import {Theme} from '../theme';
-const colors = Theme.COLORS;
-
-
-const Separator = styled('div')`
-  width: 100%;
-  height: 1px;
-  margin-top: 15px;
-  margin-bottom: 10px;
-  background-color: ${(props) =>
-    props.primary ? colors.mainBgColor : 'lightgray'
-};
-`;
+function Separator({primary}){
+  const style = {
+    width: '100%',
+    height: '1px',
+    marginTop: '15px',
+    marginBottom: '10px',
+    backgroundColor: primary ? 'var(--color-primary)' : 'lightgray',
+  }
+  return (
+    <div
+      style={style}
+      className="seperator"
+    />
+  )
+}
 
 export default Separator;
