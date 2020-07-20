@@ -4,44 +4,13 @@ import { MaterialDesignIcon } from '../../components/icons/material-design-icon'
 import { InputText, InputNumber } from '../../components/input';
 import Select from 'react-select';
 import '../../styles/css/profile.css';
+import {
+  COUNTRY_CODES,
+  EDUCATION_STATUS,
+  HIGHEST_DEGREE,
+  PROGRAMING_LANGUAGES,
+} from '../../data';
 
-import { COUNTRY_CODES } from '../../data';
-
-const EDUCATION_STATUS = [
-  { label: 'Yes', value: 'student_yes' },
-  { label: 'No', value: 'student_no' },
-]
-const HIGHEST_DEGREE = [
-  { label: 'Less than high school degree', value: 'hs_or_less'},
-  { label: 'High school graduate (high school diploma or equivalent including GED)', value: 'hs_equiv'},
-  { label: 'Some college but no degree', value: 'come_college'},
-  { label: 'Associate degree in college (2-year)', value: 'assoc_degree'},
-  { label: 'Bachelor\'s degree in college (4-year)', value: 'bach_degree'},
-  { label: 'Master\'s degree', value: 'masters_degree'},
-  { label: 'Doctoral degree', value: 'pdf_degree'},
-  { label: 'Professional degree (JD, MD)', value: 'prof_degree'},
-]
-
-const PROGRAMING_LANGUAGES = [
-  { label: 'Bash', value: 'bash' },
-  { label: 'C/C++', value: 'c_cplus' },
-  { label: 'C#/.NET', value: 'csharp_dotnet' },
-  { label: 'D3.js', value: 'd3js' },
-  { label: 'Go', value: 'go' },
-  { label: 'Java', value: 'java' },
-  { label: 'Javascript/Typescript', value: 'js_js' },
-  { label: 'Julia', value: 'julia' },
-  { label: 'MATLAB', value: 'matlab' },
-  { label: 'Other', value: 'other' },
-  { label: 'PHP', value: 'php' },
-  { label: 'Python', value: 'python' },
-  { label: 'R', value: 'r' },
-  { label: 'Ruby', value: 'ruby' },
-  { label: 'SAS/STATA', value: 'sas_stata' },
-  { label: 'Scala', value: 'scala' },
-  { label: 'SQL', value: 'sql' },
-  { label: 'Visual Basic/VBA', value: 'vba' },
-]
 
 class ProfileEditPage extends React.Component {
   constructor(props) {
