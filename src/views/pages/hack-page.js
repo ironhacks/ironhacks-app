@@ -7,33 +7,10 @@ import { upperCaseWord } from '../../util/string-utils';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { ProjectEditor } from '../../components/project';
 import { HackNav } from '../../components/hacks';
-import {
-  ForumView,
-  OverviewView,
-  ProjectSelectView,
-  QuizView,
-  RegistrationView,
-  ResultsView,
-  TaskView,
-  TutorialView,
-} from '../hacks';
+import { Hack } from '../hacks';
 import ThreadViewWithRouter from '../forum/forum-thread-view';
 import NewThread from '../forum/newThread.js';
-
-class HackTitle extends React.Component {
-  render() {
-    return (
-      <Row>
-        <Col>
-          <h2 className="pt-3">
-            <span>{ this.props.hackName } </span>
-            <span className="small">({ this.props.hackId })</span>
-          </h2>
-        </Col>
-      </Row>
-    )
-  }
-}
+import { CountdownTimer } from '../../components/timer';
 
 class HackNavSection extends React.Component {
   render() {
@@ -84,8 +61,6 @@ class HackPage extends React.Component {
     this.hackId = this.props.match.params.hackId;
     this.hackName = this.props.match.params.hackName;
 
-    console.log('hack id', this.hackId);
-
     this.state = {
       hackId: this.hackId,
       activeView: 'task',
@@ -113,23 +88,40 @@ class HackPage extends React.Component {
     Promise.resolve(hack).then((result) => {
       if (result.exists) {
         const hackData = result.data();
-        console.log('hackData', hackData);
+
+        let upcomingEvent = this.getUpcomingHackEvent(hackData)
+        console.log('event', upcomingEvent);
         this.setState({
-            hackData: hackData,
-            hackName: hackData.name,
-            hackDisplayOptions: hackData.displayOptions,
-            hackPhases: hackData.phases,
-            hackResults: hackData.results,
-            hackBanner: hackData.hackBannerImg ? hackData.hackBannerImg : false,
-            hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
-            hackOverview: hackData.overview ? hackData.overview.doc : '',
-            hackTask: hackData.task ? hackData.task.doc : '',
-            hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
+          hackData: hackData,
+          hackName: hackData.name,
+          hackDisplayOptions: hackData.displayOptions,
+          hackExtensions: hackData.extensions ? hackData.extensions : false,
+          hackPhases: hackData.phases,
+          hackRules:  hackData.rules ? hackData.rules.doc : '',
+          hackResults: hackData.results,
+          hackBanner: hackData.hackBannerImg ? hackData.hackBannerImg : false,
+          hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
+          hackOverview: hackData.overview ? hackData.overview.doc : '',
+          hackTask: hackData.task ? hackData.task.doc : '',
+          hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
+          upcomingEvent: upcomingEvent,
         })
       } else {
         return false;
       }
     })
+  }
+
+  getUpcomingHackEvent(hackData) {
+    let startDate = hackData.startDate;
+    if (startDate && Date.parse(startDate) > Date.now()) {
+      return {
+        date: startDate,
+        name: 'Opening Date',
+      }
+    } else {
+      return false;
+    }
   }
 
   setHack(hackData) {
@@ -178,11 +170,20 @@ class HackPage extends React.Component {
           hackName={this.state.hackName}
         />
 
+        {this.state.upcomingEvent && (
+          <div className="event-countdown">
+            <span>Upcoming: {this.state.upcomingEvent.name}</span>
+            <CountdownTimer
+              endTime={this.state.upcomingEvent.date}
+            />
+          </div>
+        )}
+
         <Router>
           <Switch>
             <Route exact path="/hacks/:hackId/register">
               <Section sectionClass="py-3">
-                <RegistrationView
+                <Hack.Registration
                   hackId ={this.hackId}
                   hackName={this.state.hackName}
                   hackRegistration={this.state.hackRegistration}
@@ -194,7 +195,7 @@ class HackPage extends React.Component {
               {this.state.hackBanner && (
                 <Section sectionClass="py-3">
                   <Row>
-                    <img src={this.state.hackBanner}/>
+                    <img src={this.state.hackBanner} alt='Hack Banner Img'/>
                   </Row>
                 </Section>
               )}
@@ -228,7 +229,7 @@ class HackPage extends React.Component {
           <Switch>
             <Route exact path="/hacks/:hackId">
               <Section>
-                <OverviewView
+                <Hack.Overview
                   hackId={this.hackId}
                   userId={this.props.userId}
                   document={this.state.hackOverview}
@@ -236,9 +237,18 @@ class HackPage extends React.Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/forums">
+            <Route exact path="/hacks/:hackId/calendar">
               <Section>
-                <ForumView
+                <Hack.Calendar
+                  data={this.state.hackExtensions}
+                  hackId={this.hackId}
+                />
+              </Section>
+            </Route>
+
+            <Route exact path="/hacks/:hackId/forum">
+              <Section>
+                <Hack.Forum
                   isAdmin={this.props.userIsAdmin}
                   hackId={this.hackId}
                   userId={this.props.userId}
@@ -271,7 +281,7 @@ class HackPage extends React.Component {
 
             <Route exact path="/hacks/:hackId/quiz">
               <Section>
-                <QuizView
+                <Hack.Quiz
                   hackId={this.hackId}
                   userId={this.props.userId}
                   user={this.props.user}
@@ -281,7 +291,7 @@ class HackPage extends React.Component {
 
             <Route exact path="/hacks/:hackId/projects">
               <Section>
-                <ProjectSelectView
+                <Hack.ProjectSelect
                   hackId={this.hackId}
                   user={this.props.user}
                   userId={this.props.userId}
@@ -307,7 +317,7 @@ class HackPage extends React.Component {
 
             <Route exact path="/hacks/:hackId/results">
               <Section sectionClass="results-section">
-                <ResultsView
+                <Hack.Results
                   hackData={this.state.hackData}
                   hackPhases={this.state.hackPhases}
                   hackResults={this.state.hackResults}
@@ -318,9 +328,19 @@ class HackPage extends React.Component {
               </Section>
             </Route>
 
+            <Route exact path="/hacks/:hackId/rules">
+              <Section sectionClass="rules-section">
+                <Hack.Rules
+                  hackId={this.hackId}
+                  userId={this.props.userId}
+                  content={this.state.hackRules}
+                />
+              </Section>
+            </Route>
+
             <Route exact path="/hacks/:hackId/task">
               <Section>
-                <TaskView
+                <Hack.Task
                   hackId={this.hackId}
                   userId={this.props.userId}
                   task={this.state.hackTask}
@@ -330,10 +350,20 @@ class HackPage extends React.Component {
 
             <Route exact path="/hacks/:hackId/tutorial">
               <Section>
-                <TutorialView
+                <Hack.Tutorial
                   hackid={this.hackId}
                   userId={this.props.userId}
                   hackTutorial={this.state.hackTutorial}
+                />
+              </Section>
+            </Route>
+
+            <Route exact path="/hacks/:hackId/submit">
+              <Section>
+                <Hack.Submit
+                  hackId={this.hackId}
+                  userId={this.props.userId}
+                  hackData={this.state.hackData}
                 />
               </Section>
             </Route>
