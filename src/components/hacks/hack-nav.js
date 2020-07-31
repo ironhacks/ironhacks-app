@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { NavContainerDiv } from './nav-container'
+import { HackNavContainerDiv } from './nav-container'
 import { upperCaseWord } from '../../util/string-utils';
 import menuIcon from '../../assets/svg/menu-icon.svg';
 
@@ -10,8 +10,7 @@ class HackNavItem extends React.Component {
     return (
       <Link
         className={`hack_nav__item ${this.props.navClass}`}
-        to={`/hacks/${this.props.hackId}/${this.props.navId.toLowerCase()}`}
-        onClick={this.props.action}
+        to={`/hacks/${this.props.slug}/${this.props.navId.toLowerCase()}`}
       >
         {upperCaseWord(this.props.name)}
       </Link>
@@ -30,14 +29,10 @@ class HackNav extends React.Component {
       showMenu: 'none',
       currentView: 'task',
     };
-    this.baseUrl = `/hacks/${this.props.hackId}`;
+    this.showMenu = this.showMenu.bind(this);
+    this.baseUrl = `/hacks/${this.props.hackSlug}`;
     this.navMenuRef = props.navMenuref;
-    this.updateHackNav = this.updateHackNav.bind(this);
     this.getNav = this.getNav.bind(this);
-  }
-
-  componentDidMount() {
-    console.log('mounted');
   }
 
   getNav(items){
@@ -75,23 +70,9 @@ class HackNav extends React.Component {
     }
   }
 
-  onClick(event) {
-    if (this.props.onClick) {
-      this.props.onClick(event)
-    }
-  }
-
-  updateHackNav(target) {
-    this.hideMenu(target)
-    this.setState({currentView: target});
-    if (this.props.action) {
-      this.props.action(target);
-    }
-  }
-
   render() {
     return (
-      <NavContainerDiv
+      <HackNavContainerDiv
         display={this.state.showMenu}
         innerRef={this.navMenuRef}
       >
@@ -105,13 +86,24 @@ class HackNav extends React.Component {
             <HackNavItem
               key={index}
               navId={item.id}
+              slug={this.props.hackSlug}
               name={item.name}
               hackId={this.props.hackId}
-              action={()=>this.updateHackNav(item.name)}
             />
           ))}
+
         </div>
-      </NavContainerDiv>
+        <a
+          href="https://hub.ironhacks.com"
+          onClick={(()=>{
+            window.firebase.analytics().logEvent('launch_hub');
+          })}
+          target="_blank"
+          className="btn hub-button bg-primary ml-auto font-bold"
+        >
+          Workspace
+        </a>
+      </HackNavContainerDiv>
     )
   }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 
 const formatDate = (timestring) => {
-  console.log('start date', timestring);
   let date = new Date(Date.parse(timestring));
   return [
     (date.getMonth() + 1).toString().padStart(2, '0'),
@@ -13,14 +12,10 @@ const formatDate = (timestring) => {
 
 
 class HackCard extends React.Component {
-  componentDidMount() {
-    console.log(this.props);
-  }
-
   render() {
     return (
       <div className="hack_card">
-        <a href={`/hacks/${this.props.hackId}`}>
+        <a href={`/hacks/${this.props.hackData.hackSlug}`}>
           <div className="flex">
             <div className="hack_card__header">
               {this.props.hackData.hackThumbImg && (
@@ -63,7 +58,6 @@ class HackCard extends React.Component {
 }
 
 class HackSignupCard extends React.Component {
-
   onHackSignup() {
     this.props.onClick(
       this.props.index,
@@ -74,7 +68,7 @@ class HackSignupCard extends React.Component {
   render() {
     return (
       <div className={'hack_card'}>
-        <a href={`/hacks/${this.props.hackId}/register`}>
+        <a href={`/hacks/${this.props.hackData.hackSlug}/register`}>
           <div className="flex">
             <div className="hack_card__header">
               {this.props.hackData.hackThumbImg && (
@@ -99,7 +93,7 @@ class HackSignupCard extends React.Component {
 
               {this.props.hackData.startDate && (
                 <span className="mr-3">
-                  Start Date: {formatDate(this.props.hackData.startDate)}
+                  Opening Date: {formatDate(this.props.hackData.startDate)}
                 </span>
               )}
 

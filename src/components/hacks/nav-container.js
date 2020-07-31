@@ -1,9 +1,6 @@
 import styled from 'styled-components';
-import { Theme } from '../../theme';
 
-const units = Theme.UNITS;
-
-const NavContainerDiv = styled('nav')`
+const HackNavContainerDiv = styled('nav')`
   display: flex;
   align-items: center;
   font-size: 14px;
@@ -12,7 +9,7 @@ const NavContainerDiv = styled('nav')`
     display: none;
   }
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 640px) {
     position: absolute;
     flex-direction: column;
     align-items: start;
@@ -24,7 +21,7 @@ const NavContainerDiv = styled('nav')`
       display: ${(props) => props.display};
       flex-direction: column;
       align-items: start;
-      border-radius: ${units.universalBorderRadius};
+      border-radius: 5px;
       background-color: #f9f9f9;
       min-width: 160px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -57,7 +54,7 @@ const NavContainerDiv = styled('nav')`
       padding: 0;
       border: none;
       background-color: transparent;
-      border-radius: ${units.universalBorderRadius};
+      border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s;
 
@@ -69,8 +66,8 @@ const NavContainerDiv = styled('nav')`
         width: 100%;
         height: 100%;
       }
-    }primary
+    }
   }
 `;
 
-export { NavContainerDiv }
+export { HackNavContainerDiv }
