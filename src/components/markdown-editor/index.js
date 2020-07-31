@@ -4,14 +4,6 @@ import ReactMde from 'react-mde';
 import * as Showdown from 'showdown';
 import './css/react-mde-all.css';
 
-// const Editor = styled(ReactMde)`
-//   height: 500px;
-//   max-height: 500px;
-//   padding-top: 1px;
-//   position: relative;
-//   width: 100%;
-// `;
-
 // function loadSuggestions(text) {
 //   return new Promise((accept, reject) => {
 //     setTimeout(() => {
@@ -56,12 +48,6 @@ class MarkdownEditor extends React.Component {
     }
 
     this.converter = new Showdown.Converter(this.mdConfig);
-    this.md2Html = this.md2Html.bind(this);
-  }
-
-
-  md2Html(md) {
-    return this.converter.makeHtml(md)
   }
 
   _setValue(_value) {
@@ -73,23 +59,26 @@ class MarkdownEditor extends React.Component {
   }
 
   handleValueChange(value) {
-    this._setValue(value)
     this.props.onEditorChange(value);
   };
 
   render() {
     return (
       <ReactMde
+        value={this.props.value}
         layout={this.props.editorLayout}
-        onChange={value => this.handleValueChange(value)}
         selectedTab={this.state.selectedTab}
-        value={this.state.value}
-        minEditorHeight={500}
+        minEditorHeight={this.props.height}
+        generateMarkdownPreview={md=>Promise.resolve(this.converter.makeHtml(md))}
         onTabChange={tabid => this.setSelectedTab(tabid)}
-        generateMarkdownPreview={md => Promise.resolve(this.md2Html(md))}
+        onChange={value => this.handleValueChange(value)}
       />
     );
   }
+}
+
+MarkdownEditor.defaultProps = {
+  height: 500,
 }
 
 export default MarkdownEditor;

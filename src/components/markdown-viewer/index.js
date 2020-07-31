@@ -52,8 +52,9 @@ class MdContentView extends React.Component {
   }
 
   render() {
+    const classes = `content_area ${this.props.containerClass}`;
     return (
-      <div className={'content_area'}
+      <div className={classes.trim()}
         dangerouslySetInnerHTML={{
           __html: this.parseContent(this.props.content)
         }}
@@ -64,6 +65,7 @@ class MdContentView extends React.Component {
 
 MdContentView.defaultProps = {
   emptyText: 'Content is not available yet',
+  containerClass: '',
 }
 
 export { MdContentView }
