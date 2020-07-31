@@ -18,7 +18,7 @@
 .content_area h1, .content_area h2, .content_area h3, .content_area h4, .content_area h5 {
   margin-bottom: .6em;
   font-weight: 600;
-  color: var(--color-pink);
+  color: var(--color-dark);
 }
 
 .content_area ol {
