@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col } from '../../components/layout';
-import { MdContentView }  from '../../components/markdownEditor/md-content-view';
+import { MdContentView }  from '../../components/markdown-viewer';
 
 class TaskView extends React.Component {
   render() {
@@ -14,7 +14,6 @@ class TaskView extends React.Component {
           />
         </Col>
       </Row>
-
     )
   }
 }

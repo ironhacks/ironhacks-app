@@ -6,8 +6,7 @@ const CalendarView = ({data}) => {
   const iframe = `<iframe
   title="Event Calendar"
   src="${gcalendar_src}"
-  style="border-width: 0;"
-  width="400"
+  style="border-width: 0; width:100%;"
   height="600"
   frameBorder="0"
   scrolling="no"></iframe>
@@ -16,7 +15,7 @@ const CalendarView = ({data}) => {
   return (
       <Row>
         <Col>
-          <div dangerouslySetInnerHTML={ {__html: iframe}} />
+          <div style={{width: '100%'}} dangerouslySetInnerHTML={ {__html: iframe}} />
         </Col>
       </Row>
   )
