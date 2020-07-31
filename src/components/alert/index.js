@@ -51,7 +51,17 @@ export const preSurveyAlertContent = (url) => {
     title: 'Registration survey',
     html: `<iframe src='${url}' title='Qualtrics survey'/>`,
     showCloseButton: true,
-    showConfirmButton: false,
+    showConfirmButton: true,
+    allowOutsideClick: false,
+    customClass: 'surveyAlert',
+  };
+};
+
+export const registrationGeneric = (url) => {
+  return {
+    title: 'Confirm Registration',
+    showCloseButton: true,
+    showConfirmButton: true,
     allowOutsideClick: false,
     customClass: 'surveyAlert',
   };
