@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Loader } from './components/loader';
 import { CookiesProvider, Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
@@ -19,11 +18,9 @@ import './styles/css/base.css'
 import './styles/css/icons.css'
 import './styles/css/content.css'
 import './styles/css/charrismatic.css'
-
-const LoaderContainer = styled('div')`
-  width: 100vw;
-  height: 100vh;
-`;
+import './styles/css/typography.css'
+import './styles/css/buttons.css'
+import './styles/css/forum.css'
 
 const filterUserData = (user) => {
   const names = user.displayName.split(' ');
@@ -191,9 +188,9 @@ class App extends React.Component {
         <CookiesProvider>
           <div className='App'>
             {this.state.loading ? (
-                <LoaderContainer>
-                  <Loader/>
-                </LoaderContainer>
+                <div style={{width: '100vw', height: '100vh',  background: 'var(--color-primary)'}}>
+                  <Loader />
+                </div>
             ) : (
               <Switch>
                 <Route exact path='/' >
@@ -235,7 +232,7 @@ class App extends React.Component {
                       />
                     </Route>
 
-                    <Route path='/hacks/:hackId'>
+                    <Route path='/hacks/:hackSlug'>
                       <Pages.Hack
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
@@ -319,6 +316,5 @@ class App extends React.Component {
     }
   }
 }
-// <Route exact path='/404' component={PageNotFound}/>
 
 export default withCookies(withRouter(App));
