@@ -1,8 +1,11 @@
 import React from 'react';
 
-function MaterialDesignIcon({ name, iconClass}) {
+function MaterialDesignIcon({ name, iconClass, ...props}) {
   return (
-    <i className={`zmdi zmdi-${name} ${iconClass}`}/>
+    <i
+      className={`zmdi zmdi-${name} ${iconClass}`}
+      {...props}
+    />
   )
 }
 MaterialDesignIcon.defaultProps = {
