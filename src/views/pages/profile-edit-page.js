@@ -41,16 +41,17 @@ class ProfileEditPage extends React.Component {
           vba: null,
         },
         demographicData: {
-          highestDegree: null,
-          educationStatus: null,
+          highestDegree: { label: '', value: null },
+          educationStatus: { label: '', value: null },
+          country: { label: '', value: null },
           city: null,
           state: null,
-          country: null,
         },
         socialMedia: {
           facebook: null,
           linkedin: null,
           instagram: null,
+          github: null,
         }
       },
       degreeSelect: { label: null, value: null },
@@ -62,12 +63,14 @@ class ProfileEditPage extends React.Component {
 
     this.experienceInputChanged = this.experienceInputChanged.bind(this);
     this.socialInputChanged = this.socialInputChanged.bind(this);
-    this.demographicDegreeInputChanged = this.demographicDegreeInputChanged.bind(this);
-    this.demographicEductationInputChange = this.demographicEductationInputChange.bind(this);
+    this.demographicSelectInputChanged = this.demographicSelectInputChanged.bind(this);
+    this.demographicTextInputChange = this.demographicTextInputChange.bind(this);
     this.updateProfileData = this.updateProfileData.bind(this);
   }
 
-  componentDidMount() { }
+  componentDidMount() {
+    window.firebase.analytics().logEvent('view_profile_edit')
+  }
 
   getUserProfile() {
     window.firebase.firestore()
@@ -77,20 +80,17 @@ class ProfileEditPage extends React.Component {
       .then((result)=>{
         let data = result.data();
         if (data.profileData) {
-          let exp = Object.assign(
-            {},
+          let exp = Object.assign({},
             this.state.formData.programmingExperience,
             data.profileData.programmingExperience,
           );
 
-          let soc = Object.assign(
-            {},
+          let soc = Object.assign({},
             this.state.formData.socialMedia,
             data.profileData.socialMedia,
           );
 
-          let dem = Object.assign(
-            {},
+          let dem = Object.assign({},
             this.state.formData.demographicData,
             data.profileData.demographicData,
           );
@@ -118,6 +118,7 @@ class ProfileEditPage extends React.Component {
       })
       .then(()=>{
         console.log('success');
+        window.firebase.analytics().logEvent('update_profile')
         window.location = '/profile';
       })
   }
@@ -132,7 +133,6 @@ class ProfileEditPage extends React.Component {
           socialMedia : social,
         }
       })
-      console.log(this.state.formData);
   }
 
   experienceInputChanged(name, value) {
@@ -147,7 +147,8 @@ class ProfileEditPage extends React.Component {
     })
   }
 
-  demographicDegreeInputChanged(name, data) {
+  demographicSelectInputChanged(name, data) {
+    console.log('demographic', name, data);
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
     this.setState({
@@ -158,18 +159,16 @@ class ProfileEditPage extends React.Component {
     })
   }
 
-  demographicEductationInputChange(name, data) {
+  demographicTextInputChange(name, data) {
+    console.log('demographic text', name, data);
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
-
     this.setState({
       formData: {
         ...this.state.formData,
         demographicData : demographic,
       },
     })
-
-    console.log(name, data);
   }
 
   render() {
@@ -252,12 +251,24 @@ class ProfileEditPage extends React.Component {
                 onInputChange={this.socialInputChanged}
               />
 
+              <InputText
+                containerClass="flex py-1 flex-between"
+                inputClass="mx-2 flex-2"
+                labelClass="flex-1"
+                name="github"
+                label="Github"
+                icon="github"
+                iconClass="pr-2"
+                value={this.state.formData.socialMedia.github || ''}
+                onInputChange={this.socialInputChanged}
+              />
+
               <h3 className="h3 mt-2 py-2 font-bold">Current Student?</h3>
 
               <Select
                 options={EDUCATION_STATUS}
                 value={this.state.formData.demographicData.educationStatus}
-                onChange={(value)=>this.demographicEductationInputChange('educationStatus', value)}
+                onChange={(value)=>this.demographicSelectInputChanged('educationStatus', value)}
               />
 
               <h3 className="h3 mt-2 py-2 font-bold">Highest degree earned</h3>
@@ -265,7 +276,7 @@ class ProfileEditPage extends React.Component {
               <Select
                 options={HIGHEST_DEGREE}
                 value={this.state.formData.demographicData.highestDegree}
-                onChange={(value)=>this.demographicDegreeInputChanged('highestDegree', value)}
+                onChange={(value)=>this.demographicSelectInputChanged('highestDegree', value)}
               />
 
               <h3 className="h3 mt-2 py-2 font-bold">Country</h3>
@@ -273,7 +284,7 @@ class ProfileEditPage extends React.Component {
               <Select
                 options={COUNTRY_CODES}
                 value={this.state.formData.demographicData.country}
-                onChange={(value)=>this.demographicDegreeInputChanged('country', value)}
+                onChange={(value)=>this.demographicSelectInputChanged('country', value)}
               />
 
               <InputText
@@ -285,7 +296,7 @@ class ProfileEditPage extends React.Component {
                 icon="map"
                 iconClass="pr-2"
                 value={this.state.formData.demographicData.city || ''}
-                onChange={(value)=>this.demographicDegreeInputChanged('city', value)}
+                onInputChange={this.demographicTextInputChange}
               />
 
               <InputText
@@ -297,7 +308,7 @@ class ProfileEditPage extends React.Component {
                 icon="map"
                 iconClass="pr-2"
                 value={this.state.formData.demographicData.state || ''}
-                onChange={(value)=>this.demographicDegreeInputChanged('state', value)}
+                onInputChange={this.demographicTextInputChange}
               />
 
             </Col>

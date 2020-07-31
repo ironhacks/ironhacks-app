@@ -6,8 +6,6 @@ import { Theme } from '../../theme';
 import Separator from '../../util/separator';
 import Button from '../../util/button.js';
 import Phase from '../../components/hacks/phase';
-import ForumItem from '../../views/forum/forum-item';
-
 import 'react-day-picker/lib/style.css';
 
 const styles = Theme.STYLES.AppSectionTheme;
@@ -375,30 +373,6 @@ class AdminNewHackPage extends React.Component {
               <NewElementButton onClick={this.addNewPhase}>
                 ADD PHASE
               </NewElementButton>
-            </div>
-          </div>
-
-          <div className='row'>
-            <div className='col-md-8 offset-md-2'>
-              <Separator />
-
-              <h2>Forums</h2>
-
-              {this.state.forums.map((item, index) => (
-                <ForumItem
-                  name={item}
-                  treatment={item.treatment}
-                  onForumItemUpdate={this.onForumItemUpdate}
-                  forumIndex={index}
-                  key={index}
-                />
-              ))}
-
-              <NewElementButton onClick={this.addNewForum}>
-                ADD FORUM
-              </NewElementButton>
-
-              <Separator />
             </div>
           </div>
 

@@ -22,9 +22,6 @@ class HackSelectPage extends React.Component {
 
   componentDidMount() {
     try {
-      if (!this.props.user){
-        console.log('user not set');
-      }
       this.getHacks();
     } catch (e) {
       console.log('get hacks failed', e);
@@ -42,7 +39,6 @@ class HackSelectPage extends React.Component {
             let hackData = hack.data();
             let hackId = hack.id;
             let hackName = hackData.name;
-
             hackList.push(Object.assign(
               {available: true},
               hackData,
@@ -70,79 +66,41 @@ class HackSelectPage extends React.Component {
         }
       });
 
-    const openHacks = await window.firebase.firestore()
-      .collection('hacks')
-      .where('registrationOpen', '==', true)
-      .get()
-      .then((result)=>{
-        var openHackList = [];
-        if (!result.empty) {
-          result.docs.forEach((hack)=>{
-            let hackId = hack.id;
-            if (!userHacks.includes(hackId)){
-              openHackList.push(hackId)
-            }
-          })
-          return openHackList;
-        }
-      })
-
-    const closedHacks = await window.firebase.firestore()
-        .collection('hacks')
-        .where('registrationOpen', '==', false)
-        .get()
-        .then((result)=>{
-          var closedHackList = [];
-          if (!result.empty) {
-            result.docs.forEach((hack)=>{
-              let hackId = hack.id;
-              if (!userHacks.includes(hackId)){
-                closedHackList.push(hackId)
-              }
-            })
-            return closedHackList;
-          }
-        })
-
     // ALL REGISTERED HACKS
     const registeredHacks = hacks.filter((hack)=>{
       return userHacks.includes(hack.hackId)
     })
 
+    this.setState({ registeredHacks: registeredHacks })
+
     // HACKS NOT REGISTERED
     const unregisteredHacks = hacks.filter((hack)=>{
-      return !openHacks.includes(hack.hackId)
+      return !userHacks.includes(hack.hackId)
     })
 
     // NOT REGISTERED - OPEN FOR REGISTRATION
     const availableHacks = unregisteredHacks.filter((hack)=>{
-      return openHacks.includes(hack.hackId)
+      return hack.registrationOpen;
     })
+
+    this.setState({ availableHacks: availableHacks })
 
     // NOT REGISTERED - NOT OPEN FOR REGISTRATION
     const unavailableHacks = unregisteredHacks.filter((hack)=>{
-      return !openHacks.includes(hack.hackId)
+      return !hack.registrationOpen;
     })
 
     // NOT REGISTERED - NOT OPEN FOR REGISTRATION - FUTURE DATE
     const upcomingHacks = unavailableHacks.filter((hack)=>{
-      return (
-        closedHacks.includes(hack.hackId) &&
-        Date.parse(hack.startDate) > Date.now()
-      )
+      return Date.parse(hack.startDate) > Date.now()
     })
 
     // NOT REGISTERED - NOT OPEN FOR REGISTRATION - PAST DATE
     const previousHacks = unavailableHacks.filter((hack)=>{
-      return (
-        closedHacks.includes(hack.hackId) &&
-        Date.parse(hack.startDate) <= Date.now()
-      )
+      return Date.parse(hack.startDate) <= Date.now()
     })
 
     this.setState({
-      registeredHacks: registeredHacks,
-      availableHacks: availableHacks,
       upcomingHacks: upcomingHacks,
       previousHacks: previousHacks,
     })

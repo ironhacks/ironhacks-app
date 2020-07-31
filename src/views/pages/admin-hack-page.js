@@ -80,20 +80,13 @@ class AdminHackPage extends React.Component {
       loading: false,
     }
 
-    this.updateOverviewState = this.updateOverviewState.bind(this)
-    this.updateHackOverview = this.updateHackOverview.bind(this)
-    this.onTaskMarkdownUpdate = this.onTaskMarkdownUpdate.bind(this)
-    this.onTutorialChange = this.onTutorialChange.bind(this)
-    this.updateTutorialDocument = this.updateTutorialDocument.bind(this)
-    this.updateTaskDocument = this.updateTaskDocument.bind(this)
     this.updateQualtricsLinks = this.updateQualtricsLinks.bind(this)
-    this.updateHackRules = this.updateHackRules.bind(this)
-    this.onRulesChange = this.onRulesChange.bind(this)
     this.getHack = this.getHack.bind(this)
   }
 
   componentDidMount() {
     if (!this.props.location.state) {
+      console.log('getting hack');
       this.getHack(this.hackId);
     }
   }
@@ -115,8 +108,6 @@ class AdminHackPage extends React.Component {
       adminHackData.data()
     )
 
-    console.log('result', result);
-
     this.setState({
       hack: result,
       hackData: result,
@@ -127,139 +118,6 @@ class AdminHackPage extends React.Component {
       hackExtensions: result.extensions ? result.extensions : {},
     })
   }
-
-
-  // HACK TUTORIAL
-  // --------------------------------------------
-  onTutorialChange(md) {
-    this.setState({hackTutorial: md})
-  }
-
-  updateTutorialDocument() {
-    this.setState({loading: true})
-
-    const hackRef = window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.state.hackId)
-
-    const hackTutorial = this.encodeDocument(this.state.hackTutorial);
-    let timeUpdated = new Date();
-
-    hackRef.update({
-      tutorial: {
-        doc: hackTutorial,
-        updated: timeUpdated.toISOString(),
-      }
-    })
-    .then(() => {
-      this.setState({ loading: false});
-    })
-    .catch(function(error) {
-        console.error('Error adding document: ', error);
-    });
-  }
-
-  // HACK TASK
-  // --------------------------------------------
-  onTaskMarkdownUpdate(markdown) {
-    this.setState({hackTask: markdown })
-  }
-
-  updateTaskDocument() {
-    this.setState({
-      loading: true
-    })
-
-    const hackRef = window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.state.hackId)
-
-    let encodedTask = this.encodeDocument(this.state.hackTask);
-    let timeUpdated = new Date();
-
-    hackRef.update({
-        task: {
-          updated: timeUpdated.toISOString(),
-          doc: encodedTask,
-        }
-      })
-      .then(() => {
-        this.setState({loading: false})
-      })
-      .catch(function(error) {
-        console.error('Error adding document: ', error);
-      });
-  }
-
-  // HACK OVERVIEW
-  // --------------------------------------------
-  updateOverviewState(markdown) {
-    this.setState({overview_md: markdown})
-  }
-
-  updateHackOverview() {
-    this.setState({
-      loading: true
-    })
-
-    const hackRef = window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.state.hackId)
-
-    let encodedDoc = this.encodeDocument(this.state.overview_md);
-    let timeUpdated = new Date();
-
-    hackRef.update({
-      overview: {
-        doc: encodedDoc,
-        updated: timeUpdated.toISOString(),
-      }
-    })
-    .then(() => {
-      this.setState({
-        loading: false,
-        hackOverview: this.state.overview_md,
-      })
-    })
-    .catch((error)=>{
-      console.error('Error adding document: ', error);
-    })
-  }
-
-
-  // HACK RULES
-  // --------------------------------------------
-  onRulesChange(markdown) {
-    this.setState({rules_md: markdown})
-  }
-
-  updateHackRules() {
-    this.setState({loading: true})
-
-    const hackRef = window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.state.hackId)
-
-    let encodedDoc = this.encodeDocument(this.state.rules_md);
-    let timeUpdated = new Date();
-
-    hackRef.update({
-      rules: {
-        doc: encodedDoc,
-        updated: timeUpdated.toISOString(),
-      }
-    })
-    .then(() => {
-      this.setState({
-        loading: false,
-        hackRules: this.state.rules_md,
-      })
-    })
-    .catch((error)=>{
-      console.error('Error adding document: ', error);
-    })
-  }
-
 
   // HACK SURVEYS
   // --------------------------------------------
@@ -319,6 +177,7 @@ class AdminHackPage extends React.Component {
             hackId={this.hackId}
             items={[
               {name: 'Settings', path: 'settings'},
+              {name: 'Registration', path: 'registration'},
               {name: 'Forums', path: 'forums'},
               {name: 'Overview', path: 'overview'},
               {name: 'Rules', path: 'rules'},
@@ -344,35 +203,10 @@ class AdminHackPage extends React.Component {
                     />
                   </Route>
 
-                  <Route path={this.props.match.url + '/overview'}>
-                    <AdminHack.Overview
-                      previousDocument={this.state.hackOverview}
-                      onEditorUpdate={this.updateOverviewState}
-                      updateDocument={this.updateHackOverview}
-                    />
-                  </Route>
-
-                  <Route path={this.props.match.url + '/task'}>
-                    <AdminHack.Task
-                      previousDocument={this.state.hackTask}
-                      onDocumentChange={this.onTaskMarkdownUpdate}
-                      updateDocument={this.updateTaskDocument}
-                    />
-                  </Route>
-
-                  <Route path={this.props.match.url + '/rules'}>
-                    <AdminHack.Rules
-                      previousDocument={this.state.hackRules}
-                      onDocumentChange={this.onRulesChange}
-                      updateDocument={this.updateHackRules}
-                    />
-                  </Route>
-
-                  <Route path={this.props.match.url + '/tutorials'}>
-                    <AdminHack.Tutorial
-                      previousDocument={this.state.hackTutorial}
-                      onDocumentChange={this.onTutorialChange}
-                      updateTutorialDocument={this.updateTutorialDocument}
+                  <Route path={this.props.match.url + '/registration'}>
+                    <AdminHack.Registration
+                      hackId={this.hackId}
+                      hackData={this.state.hackData}
                     />
                   </Route>
 
@@ -383,6 +217,38 @@ class AdminHackPage extends React.Component {
                       onNameChange={()=>{console.log('test')}}
                       treatment={1}
                       onTreatmentChange={()=>{console.log('test2')}}
+                    />
+                  </Route>
+
+                  <Route path={this.props.match.url + '/overview'}>
+                    <AdminHack.Overview
+                      previousDocument={this.state.hackOverview}
+                      hackId={this.state.hackId}
+                    />
+                  </Route>
+
+                  <Route path={this.props.match.url + '/task'}>
+                    <AdminHack.Task
+                      previousDocument={this.state.hackTask}
+                      hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
+                    />
+                  </Route>
+
+
+                  <Route path={this.props.match.url + '/tutorials'}>
+                    <AdminHack.Tutorial
+                      previousDocument={this.state.hackTutorial}
+                      hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
+                    />
+                  </Route>
+
+                  <Route path={this.props.match.url + '/rules'}>
+                    <AdminHack.Rules
+                      previousDocument={this.state.hackRules}
+                      hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
                     />
                   </Route>
 
@@ -407,7 +273,6 @@ class AdminHackPage extends React.Component {
                       hackId={this.hackId}
                     />
                   </Route>
-
 
                 </Switch>
                 ) : (

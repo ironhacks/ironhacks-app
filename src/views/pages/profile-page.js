@@ -4,7 +4,7 @@ import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { SkillsTable } from '../../components/skills-table';
 import '../../styles/css/profile.css';
-
+import { ErrorBoundary } from '../../util';
 
 function getHackName(hackId) {
   return window.firebase.firestore()
@@ -20,11 +20,169 @@ function getHackName(hackId) {
     })
 }
 
+class TrainingKeyLink extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fileUrl: false,
+    }
+    this.onResolve = this.onResolve.bind(this)
+  }
+
+  onResolve(foundURL) {
+    this.setState({fileUrl: foundURL});
+  }
+
+  onReject(error) {
+    console.log('Training key file not found')
+  }
+
+  getFileUrl() {
+    window.firebase.storage()
+      .ref('/keys-training-DeKE13nHvqzolDUa0Fg9')
+      .child(`${this.props.userId}.json`)
+      .getDownloadURL()
+      .then(this.onResolve, this.onReject);
+  }
+
+  componentDidMount() {
+    this.getFileUrl()
+  }
+
+
+  downloadFileUrl() {
+    fetch(this.state.fileUrl, {
+      method: 'GET',
+    })
+    .then(response => response.text())
+    .then(fileContents => {
+      var element = window.document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents));
+      element.setAttribute('download', this.props.fileName);
+      element.style.display = 'none';
+      window.document.body.appendChild(element);
+      element.click();
+      window.document.body.removeChild(element);
+    }).catch(error => console.error(error));
+
+  }
+
+  render() {
+    return(
+      <>
+      {this.state.fileUrl && (
+        <div className="flex flex-center">
+          <div
+            type="submit"
+            className="badge badge-primary py-2 px-10 h4 font-semibold m-0"
+            onClick={(()=>{this.downloadFileUrl()})}
+          >
+            Download your hack dataset training key
+          </div>
+        </div>
+        )}
+        </>
+      )
+    }
+}
+
+
+class RegisteredHackList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      registeredHacks: [],
+    }
+
+    this.renderList = this.renderList.bind(this)
+    this.getHackList = this.getHackList.bind(this)
+  }
+
+  componentDidMount() {
+    if (this.props.hacks) {
+      this.getHackList(this.props.hacks);
+    }
+  }
+
+  getHackList(hacks){
+    let result = [];
+    hacks.forEach((item, i) => {
+      result.push(getHackName(item))
+    })
+    Promise.all(result).then((names)=>{
+      this.setState({
+        registeredHacks: names
+      })
+    })
+  }
+
+  renderList() {
+    return  (
+      this.state.registeredHacks.map((item, index)=>(
+        <li key={index}>
+          <span>{item}</span>
+        </li>
+      ))
+    )
+  }
+
+  render() {
+    return (
+      <div className="registered-hack-list">
+        <h3 className="mt-6 h3 font-bold">
+          Registered Hacks
+        </h3>
+
+        <ul className="pl-2 fs-m2">
+          {this.renderList()}
+        </ul>
+      </div>
+    )
+  }
+}
+
+
+class ProfileDemographicData extends React.Component {
+  render() {
+    return (
+      <div className="mb-2">
+        <MaterialDesignIcon name={this.props.icon}/>
+        <span> {this.props.title}: {this.props.label}</span>
+      </div>
+    )
+  }
+}
+
+
+
+
+class ProfileSocialAccounts extends React.Component {
+  render(){
+    return (
+    <div className="registered-hack-list">
+      <h3 className="mt-6 h3 font-bold">
+        Social
+      </h3>
+      <ul className="pl-2 fs-m2">
+        {this.props.data.map((item, index)=>(
+          <li key={index}>
+            <MaterialDesignIcon iconClass="mx-1" name={item.name}/>
+            <span style={{display: 'none', textTransform: 'capitalize'}}>{item.name}:</span>
+            <span>{item.value}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    )
+  }
+}
+
+
 class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      registeredHacks: null,
+      hacks: null,
       userData: {
           programmingExperience: {
             bash: null,
@@ -53,27 +211,19 @@ class ProfilePage extends React.Component {
             city: null,
             state: null,
           },
-          socialMedia: {
-            facebook: null,
-            linkedin: null,
-            instagram: null,
-          }
-      }
+      },
+      socialData: [],
     }
   }
 
-  getHackList(hacks){
-    let result = [];
-    hacks.forEach((item, i) => {
-      result.push(getHackName(item))
-    })
-
-    Promise.all(result).then((names)=>{
-      this.setState({
-        registeredHacks: names
-      })
-    })
+  componentDidMount() {
+    window.firebase.analytics().logEvent('view_profile')
+    let userId = this.props.user.userId;
+    if (userId) {
+      this.getUserData(userId);
+    }
   }
+
 
   getUserData(userId) {
     window.firebase.firestore()
@@ -82,23 +232,49 @@ class ProfilePage extends React.Component {
       .get()
       .then((doc)=>{
         if (doc.exists) {
+          var programming = {};
+          var demographic = {};
+          var social = [];
           let data = doc.data();
-          console.log(data);
-          this.getHackList(data.hacks);
-          let defaultUserData = this.state.userData;
-          
+          let prgExp = this.state.userData.programmingExperience;
+          let demDat = this.state.userData.demographicData;
+
+          if (data.profileData.socialMedia) {
+            social = Object.keys(data.profileData.socialMedia).map((key, index)=>{
+              return {name: key, value: data.profileData.socialMedia[key] }
+            }).filter((item)=>{
+              return item.value;
+            })
+          }
+
+          if (data.profileData){
+            if (data.profileData.programmingExperience) {
+              programming = Object.assign({}, prgExp, data.profileData.programmingExperience);
+            }
+            // if (data.profileData.socialMedia) {
+            //   social = Object.assign({}, prgExp, data.profileData.socialMedia);
+            // }
+            if (data.profileData.demographicData) {
+              demographic = Object.assign({}, prgExp, data.profileData.demographicData);
+            }
+          }
+
           this.setState({
-            userData: Object.assign({}, defaultUserData, data.profileData),
+            hacks: data.hacks,
+            socialData: social,
+            userData: {
+              programmingExperience: {
+                ...prgExp,
+                ...programming,
+              },
+              demographicData: {
+                ...demDat,
+                ...demographic
+              }
+            }
           })
         }
       })
-  }
-  componentDidMount() {
-    console.log(this.props.user)
-    let userId = this.props.user.userId;
-    if (userId) {
-      this.getUserData(userId);
-    }
   }
 
   render() {
@@ -108,6 +284,12 @@ class ProfilePage extends React.Component {
         userIsAdmin={this.props.userIsAdmin}
       >
         <Section sectionClass="pt-5">
+        <Row>
+          <TrainingKeyLink
+            fileName={'service-account.json'}
+            userId={this.props.user.uid}
+          />
+        </Row>
           <Row>
             <Col>
               {/* LEFT COLUMN */}
@@ -125,26 +307,21 @@ class ProfilePage extends React.Component {
                     </span>
                   )}
 
-                  {this.state.registeredHacks && (
-                    <div className="registered-hack-list">
-                      <h3 className="mt-6 h3 font-bold">
-                        Registered Hacks
-                      </h3>
+                  {this.state.socialData.length > 0 && (
+                    <ProfileSocialAccounts
+                      data={this.state.socialData}
+                    />
+                  )}
 
-                      <ul className="pl-2 fs-m2">
-                      {this.state.registeredHacks.map((item, index)=>(
-                        <li key={index}>
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                      </ul>
-
-                    </div>
+                  {this.state.hacks && (
+                    <RegisteredHackList
+                      hacks={this.state.hacks}
+                    />
                   )}
                   </div>
 
                 {/* RIGHT COLUMN */}
-
+                <ErrorBoundary>
                 <div className='user-data'>
                   <h2 className="h2 profile__name mb-1">{this.props.user.displayName}</h2>
 
@@ -166,15 +343,31 @@ class ProfilePage extends React.Component {
                     <div className="mb-2"><MaterialDesignIcon name="key"/> UserId: {this.props.user.userId} </div>
                     {this.state.userData && this.state.userData.demographicData && (
                         <>
-                        <div className="mb-2">
-                        <MaterialDesignIcon name="book"/> Current Student: {this.state.userData.demographicData.educationStatus.label}
-                        </div>
-                        <div className="mb-2">
-                        <MaterialDesignIcon name="graduation-cap"/> Highest Degree Earned: {this.state.userData.demographicData.highestDegree.label}
-                        </div>
-                        <div className="mb-2"><MaterialDesignIcon name="map"/> Country: {this.state.userData.demographicData.country.label}</div>
-                        <div className="mb-2"><MaterialDesignIcon name="map"/> City: {this.state.userData.demographicData.city}</div>
-                        <div className="mb-2"><MaterialDesignIcon name="map"/> State: {this.state.userData.demographicData.state}</div>
+                        <ProfileDemographicData
+                          icon="book"
+                          title="Current Student"
+                          label={this.state.userData.demographicData.educationStatus.label || ''}
+                        />
+                        <ProfileDemographicData
+                          icon="graduation-cap"
+                          title="Highest Degree Earned"
+                          label={this.state.userData.demographicData.highestDegree.label || ''}
+                        />
+                        <ProfileDemographicData
+                          icon="map"
+                          title="Country"
+                          label={this.state.userData.demographicData.country.label || ''}
+                        />
+                        <ProfileDemographicData
+                          icon="map"
+                          title="City"
+                          label={this.state.userData.demographicData.state}
+                        />
+                        <ProfileDemographicData
+                          icon="map"
+                          title="State"
+                          label={this.state.userData.demographicData.state}
+                        />
                         </>
                       )}
                       <div className="py-2 bd-t1 mt-3 cl-grey">
@@ -186,13 +379,15 @@ class ProfilePage extends React.Component {
                       {this.state.userData && this.state.userData.programmingExperience && (
                         <div className="py-2 mt-3">
                         <SkillsTable
-                        sorted="alpha"
-                        title="Programming Experience"
-                        items={Object.entries(this.state.userData.programmingExperience)}
-                        />
+                          sorted="alpha"
+                          title="Programming Experience"
+                          items={Object.entries(this.state.userData.programmingExperience)}
+                          />
                         </div>
                       )}
                 </div>
+
+                </ErrorBoundary>
               </div>
             </Col>
           </Row>
