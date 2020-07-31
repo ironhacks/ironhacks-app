@@ -17,13 +17,17 @@
     "@emotion/styled": "^10.0.10",
     "ajv": "^6.12.2",
     "ajv-keywords": "^3.5.0",
+    "antd": "^4.4.2",
     "bootstrap": "^4.5.0",
     "codemirror": "^5.55.0",
     "deep-equal": "^1.1.1",
+    "friendly-words": "^1.1.10",
+    "jquery": "^3.5.1",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
+    "react-ace": "^9.1.1",
     "react-bootstrap": "^1.0.1",
     "react-codemirror2": "^5.1.0",
     "react-cookie": "^3.1.2",
@@ -32,6 +36,7 @@
     "react-day-picker": "^7.4.8",
     "react-dom": "^16.12.0",
     "react-dropzone": "^11.0.1",
+    "react-markdown": "^4.3.1",
     "react-mde": "^10.1.0",
     "react-moment": "^0.7.9",
     "react-redux": "^7.2.0",
@@ -41,10 +46,11 @@
     "react-select": "^3.1.0",
     "react-treebeard": "^3.2.4",
     "react-window": "^1.8.5",
+    "redux": "^4.0.5",
     "shallowequal": "^1.1.0",
     "showdown": "^1.9.1",
     "styled-components": "^5.1.1",
-    "sweetalert2": "^7.33.1",
+    "sweetalert2": "^9.17.1",
     "velocity-react": "^1.4.3",
     "warning": "^4.0.3"
   },
@@ -122,5 +128,5 @@
     "start:debug": ".run/info-ls-gitchanged",
     "test": "npm run reactscripts:test"
   },
-  "version": "2.1.4"
+  "version": "2.1.7"
 }

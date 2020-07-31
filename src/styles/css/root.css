@@ -1,8 +1,11 @@
+
 :root {
   --color-surface: white;
   --color-solid: black;
-  --color-primary: #ffce35;
+  --color-primary: #e7f447;
+  --color-ironhacksv1: #ffce35;
   --color-pink: #dc27af;
+  --color-black: #000000;
   --color-darkgrey: #282828;
   --color-teal: #6fe5e6;
   --color-editor: #24282A;

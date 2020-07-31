@@ -46,8 +46,8 @@ class FooterSection extends React.Component {
       </Row>
 
 
-      <Row flex={true} rowClass={'py-2 fs-1 flex-align-center'}>
-        <Col colClass='flex-1'>
+      <Row flex={true} rowClass={'py-2 fs-1 flex-align-center flex-wrap'}>
+        <Col colClass='flex-1 min-w-350'>
           <p>+1 765.494.0880</p>
           <p>opendigital@purdue.edu</p>
           <p>Ernest C. Young Hall, Room 305<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
@@ -55,7 +55,7 @@ class FooterSection extends React.Component {
         </Col>
 
         <Col colClass='flex-1'>
-          <div className="ratio--16x9 w-full relative">
+          <div className="ratio--16x9 w-full relative hide--med">
             <iframe
               title="IronHacks YouTube Video"
               style={{

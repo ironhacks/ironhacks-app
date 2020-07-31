@@ -4,13 +4,16 @@ import { NavButton } from '../navigation/nav-button'
 import { HeaderLogo } from '../navigation/header-logo'
 import { Theme } from '../../theme';
 
-const colors = Theme.COLORS;
 const styles = Theme.STYLES;
-const themes = Theme.THEMES;
+
+const headerTheme = {
+  backgroundColor: 'var(--color-primary)',
+  textColor: 'var(--color-black)',
+  hoverTextColor: 'var(--color-darkgrey)',
+};
 
 const HeaderContainer = styled('div')`
   height: ${(props) => props.theme.containerHeight};
-  background-color: ${colors.mainBgColor}
 
   .menu {
     display: flex;
@@ -121,7 +124,7 @@ class Header extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={themes.HeaderTheme}>
+      <ThemeProvider theme={headerTheme}>
         <div className='container-fluid' style={styles.HeaderStyle}>
           <HeaderContainer
             className='row'

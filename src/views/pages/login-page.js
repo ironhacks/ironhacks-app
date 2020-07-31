@@ -1,29 +1,33 @@
 import React from 'react';
-import styled from 'styled-components';
 import { withCookies } from 'react-cookie';
 import { BlankPage, Section, Row, Col } from '../../components/layout';
-
-const SectionContainer = styled('div')`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
+import { Loader } from '../../components/loader';
 
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      loading: false,
+      status: 'loading',
+    }
     this._saveUserOnDB = this._saveUserOnDB.bind(this);
+    this._onSignInSuccess = this._onSignInSuccess.bind(this);
+    this._onFailed = this._onFailed.bind(this);
+    this._onComplete = this._onComplete.bind(this);
+
     this.initAuthUI = this.initAuthUI.bind(this);
   }
 
   componentDidMount() {
-    console.log('%c LoginPage is mounted', 'color:red;font-weight:bold');
-    this.initAuthUI();
+    if (window.firebase.auth().currentUser) {
+      this._onComplete();
+    } else {
+      this.initAuthUI();
+    }
   }
 
-  onComplete(){
+  _onComplete(){
+    this.setState({ status: 'Navigating...' });
     if (document.referrer) {
       let prevUrl = new URL(document.referrer);
       if (prevUrl.hostname.includes('localhost')
@@ -41,13 +45,20 @@ class LoginPage extends React.Component {
     window.location = '/hacks';
   }
 
-  onFailed(){
+  _onFailed(error){
     if (this.props.onLoginSuccess){
       this.props.onLoginSuccess({
         mustNavigate: true,
         navigateTo: '/',
       })
     }
+  }
+
+  _onSignInSuccess() {
+    this.setState({
+      loading: true,
+      status: 'Sign-in success',
+    });
   }
 
   initAuthUI() {
@@ -58,34 +69,22 @@ class LoginPage extends React.Component {
         window.firebase.auth.EmailAuthProvider.PROVIDER_ID,
         window.firebase.auth.GithubAuthProvider.PROVIDER_ID,
       ],
-
       callbacks: {
-
-        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-          const user = {
-            name: authResult.user.displayName,
-            email: authResult.user.email,
-            uid: authResult.user.uid,
-            isAdmin: false,
-          };
-
-          console.log('signIn Success With AuthResult', authResult);
-
-          if (authResult.additionalUserInfo.isNewUser === true) {
-            console.log('user is new user', user);
-            this._saveUserOnDB(user);
+        signInSuccessWithAuthResult: (result, redirectUrl) => {
+          this._onSignInSuccess();
+          if (result.additionalUserInfo.isNewUser === true) {
+            this._saveUserOnDB({
+              name: result.user.displayName,
+              email: result.user.email,
+              uid: result.user.uid,
+              isAdmin: false,
+            })
           } else {
-            // let userIsAdmin = this._isAdmin(user.uid);
-            // Promise.resolve(userIsAdmin).then((result)=>{
-            //   user.isAdmin = result;
-            this.onComplete()
-            // })
+            this._onComplete()
           }
         },
-
-        signInFailure: function(error) {
-          console.log('sign in failure', error);
-          this.onFailed();
+        signInFailure: (error) => {
+          this._onFailed(error)
         },
       },
       tosUrl: '/tos',
@@ -104,6 +103,7 @@ class LoginPage extends React.Component {
 
 
   _saveUserOnDB(user) {
+    this.setState({ status: 'Creating user account' });
     window.firebase.firestore()
       .collection('users')
       .doc(user.uid)
@@ -113,24 +113,27 @@ class LoginPage extends React.Component {
         created: window.firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(()=>{
-        console.log('user saved success');
         let timestamp = new Date().toISOString();
-        window.firebase.analytics().logEvent('user_signup', {
-          'value': timestamp
-        });
-        this.onComplete();
+        window.firebase.analytics().logEvent('user_signup', { 'value': timestamp });
+        this._onComplete();
       })
       .catch((error)=>{
         console.error('Error adding document: ', error);
-        this.onFailed();
+        this._onFailed();
       })
   }
 
   render() {
       return (
-          <BlankPage pageClass="bg-primary">
+        <BlankPage pageClass="bg-primary">
           <Section>
-            <SectionContainer>
+            <div style={{
+              height: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
               <Row>
                 <Col>
                   <h1 className={'h1 site-title'}>
@@ -139,19 +142,19 @@ class LoginPage extends React.Component {
                   </h1>
 
                   <h2 className="mb-3 mt-1">
-                    Hack for innovation and join the open data movement.
+                    Hack for innovation to solve global challenges.
                   </h2>
 
-                </Col>
-              </Row>
-              <Row>
-                <Col>
+                  {this.state.loading && (
+                    <Loader status={this.state.status} />
+                  )}
+
                   <div id='firebaseui-auth-container' />
                 </Col>
               </Row>
-            </SectionContainer>
-            </Section>
-          </BlankPage>
+            </div>
+          </Section>
+        </BlankPage>
       )
     }
 }

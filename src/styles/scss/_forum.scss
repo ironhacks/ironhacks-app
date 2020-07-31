@@ -1,0 +1,34 @@
+.comment {
+  &_controls {
+    position: absolute;
+    display: flex;
+    top: 10px;
+    right: 15px;
+    height: 30px;
+  }
+
+  &_author {
+    display: flex;
+    align-items: center;
+
+    &__name {
+      font-size: 1em;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+    &__img {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 26px;
+      height: 26px;
+      font-size: 10px;
+      text-transform: uppercase;
+      margin-right: 0.7em;
+      font-weight: 800;
+      font-style: normal;
+      background-color: var(--color-primary);
+      border-radius: 50%;
+    }
+  }
+}

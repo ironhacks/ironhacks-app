@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import swal from 'sweetalert2';
-import CompetitorRow from './competitor-row.js';
 import { Theme } from '../../../theme';
 import { TreatmentTexts } from './treatment-texts';
 

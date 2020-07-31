@@ -1,0 +1,89 @@
+.skill_section {
+  display: flex;
+}
+
+.skill_section > .container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.skill_section .section__title {
+  margin-bottom: 0;
+}
+
+.skill_section .skill-table {
+  padding: .2rem .2rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -4px;
+}
+
+.skill {
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-wrap: wrap;
+  flex-basis: calc(50% - 4px);
+  margin-left: 4px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.skill:nth-child(2n-1) {
+  margin-left: 0;
+}
+
+.skill__title {
+  flex: 1;
+  top: 0;
+  left: .2em;
+  color: #000000;
+  font-size: 0.8rem;
+  font-weight: 400;
+  white-space: pre;
+  position: relative;
+}
+
+.skill .skill__level {
+  width: 100%;
+  padding-right: 0;
+  position: relative;
+}
+
+.skill .skill__level .levelbar {
+  height: 8.4px;
+}
+
+.skill .skill__level .levelbar.proficiency_bar {
+  background: #24a8af;
+}
+
+.skill .skill__level .levelbar.interest_bar {
+  background: #49c3b6;
+}
+
+.skill .skill__level .levelbar.indicator_bar {
+  top: 0;
+  left: 25%;
+  width: 50%;
+  position: absolute;
+  border-left: 1px solid #c4c4c4;
+  border-right: 1px solid #c4c4c4;
+  z-index: 2;
+}
+
+.skill .skill__level .levelbar.indicator_bar::before {
+  content: "";
+  height: 100%;
+  width: 1px;
+  left: 50%;
+  position: absolute;
+  z-index: 5;
+  background: #c4c4c4;
+  display: block;
+  bottom: 0;
+}

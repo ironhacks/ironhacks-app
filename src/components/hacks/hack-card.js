@@ -1,13 +1,10 @@
 import React from 'react';
-import { Theme } from '../../theme';
-import './assets/style.css';
-
 
 const formatDate = (timestring) => {
   let date = new Date(Date.parse(timestring));
   return [
-    date.getMonth().toString().padStart(2, '0'),
-    date.getDay().toString().padStart(2, '0'),
+    (date.getMonth() + 1).toString().padStart(2, '0'),
+    date.getDate().toString().padStart(2, '0'),
     date.getFullYear(),
   ].join('/')
 }
@@ -15,20 +12,17 @@ const formatDate = (timestring) => {
 
 
 class HackCard extends React.Component {
-  componentDidMount() {
-    console.log(this.props);
-  }
-
   render() {
     return (
       <div className="hack_card">
-        <a href={`/hacks/${this.props.hackId}`}>
+        <a href={`/hacks/${this.props.hackData.hackSlug}`}>
           <div className="flex">
             <div className="hack_card__header">
               {this.props.hackData.hackThumbImg && (
                 <img
                   className="card_img"
                   src={this.props.hackData.hackThumbImg}
+                  alt={`${this.props.name} Thumbnail`}
                   />
               )}
             </div>
@@ -46,7 +40,7 @@ class HackCard extends React.Component {
 
               {this.props.hackData.startDate && (
                 <span className="mr-3">
-                  Start Date: {formatDate(this.props.hackData.startDate)}
+                  Opening Date: {formatDate(this.props.hackData.startDate)}
                 </span>
               )}
 
@@ -64,7 +58,6 @@ class HackCard extends React.Component {
 }
 
 class HackSignupCard extends React.Component {
-
   onHackSignup() {
     this.props.onClick(
       this.props.index,
@@ -75,13 +68,14 @@ class HackSignupCard extends React.Component {
   render() {
     return (
       <div className={'hack_card'}>
-        <a href={`/hacks/${this.props.hackId}/register`}>
+        <a href={`/hacks/${this.props.hackData.hackSlug}/register`}>
           <div className="flex">
             <div className="hack_card__header">
               {this.props.hackData.hackThumbImg && (
                 <img
                   className="card_img"
                   src={this.props.hackData.hackThumbImg}
+                  alt={`${this.props.name} Thumbnail`}
                   />
               )}
             </div>
@@ -99,13 +93,13 @@ class HackSignupCard extends React.Component {
 
               {this.props.hackData.startDate && (
                 <span className="mr-3">
-                  Start Date: {formatDate(this.props.hackData.startDate)}
+                  Opening Date: {formatDate(this.props.hackData.startDate)}
                 </span>
               )}
 
               {this.props.hackData.difficulty && (
                 <span>
-                  Difficulty:  {this.props.hackData.difficulty.label}
+                  Difficulty: {this.props.hackData.difficulty.label}
                 </span>
               )}
             </div>

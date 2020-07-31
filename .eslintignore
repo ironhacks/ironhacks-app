@@ -19,3 +19,4 @@ rollup.*.js
 *.config.js
 *.config.*.js
 /src/assets/static
+/constants/country-codes.js

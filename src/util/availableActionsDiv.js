@@ -1,8 +1,4 @@
-// availableActionsDiv.js
-
-
 import styled from 'styled-components';
-
 
 const AvailableActionsDiv = styled('div')`
   width: 100%;

@@ -1,40 +1,32 @@
-// forum.js - forum main Component
 import React from 'react';
-import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
 import { Redirect } from 'react-router-dom';
-// import { registerStats } from '../../util/register-stat';
 import { Theme } from '../../theme';
-import ForumSelector from '../forum/forumSelector';
-import ThreadPreview from '../forum/threadPreview';
-import * as DateFormater from '../../util/dateFormater';
+import PostPreview from '../../components/forum/post-preview';
 
 import searchIcon from '../../assets/svg/searchIcon.svg';
-// import SponsorsBanner from '../../components/sponsorsBanner';
 const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
-const units = Theme.UNITS;
 
 const SectionContainer = styled('div')`
   width: 100%;
   padding: 0 10%;
   height: ${(props) => props.theme.containerHeight};
-  background-color: ${(props) => props.theme.backgroundColor};
-  overflow-y: scroll;
+  background-color: var(--light);
+  overflow-y: auto;
 `;
 
 const MainHeader = styled('h1')`
   width: 100%;
   text-align: center;
   padding-top: 20px;
-  padding-bottom: 40px;
+  padding-bottom: 1em;
   font-weight: 800;
 `;
 
 const Control = styled('div')`
   display: flex;
   align-items: center;
-  height: 30px;
   margin-bottom: 15px;
 `;
 
@@ -43,8 +35,8 @@ const NewThreadButton = styled('button')`
   font-weight: 700;
   padding: 0 15px;
   border: none;
-  border-radius: ${units.universalBorderRadius}
-  background-color: ${colors.mainBgColor};
+  border-radius: 5px;
+  background-color: var(--color-primary);
   transition: background-color 0.3s;
 
   &:hover {
@@ -78,8 +70,7 @@ const SearchBar = styled('form')`
     background-color: #f2f2f2;
     border: 1px solid #999999;
     border-right: none;
-    border-radius: ${units.universalBorderRadius} 0px 0px
-      ${units.universalBorderRadius};
+    border-radius: 5px 0px 0px 5px;
     padding-left: 10px;
   }
 
@@ -88,8 +79,7 @@ const SearchBar = styled('form')`
     background-color: #f2f2f2;
     border: 1px solid #999999;
     border-left: none;
-    border-radius: 0px ${units.universalBorderRadius}
-      ${units.universalBorderRadius} 0px;
+    border-radius: 0px 5px 5px 0px;
     padding-left: 10px;
 
     img {
@@ -99,171 +89,65 @@ const SearchBar = styled('form')`
   }
 `;
 
+
+
 class ForumView extends React.Component {
   constructor(props) {
     super(props);
-
-    const { cookies } = props;
-    console.log(this.props.hackData);
     this.state = {
-      currentHack: this.props.hackId || null,
-      forum: cookies.get('currentForum') || null,
+      forum: null,
       selectedForum: 0,
       hackForums: {},
-      threads: [],
+      posts: [],
       selectedHack: 0,
     };
-    this.firestore = window.firebase.firestore();
-    this.saveStat = this.saveStat.bind(this);
+
+    this.newThread = this.newThread.bind(this);
+    this.getPosts = this.getPosts.bind(this)
+    this.sortThreads = this.sortThreads.bind(this)
   }
 
   componentDidMount() {
-    this.getForums();
-    // this.getThreads();
-    // if (this.props.user.isAdmin) {
-      // this.getHacks();
-    // } else {
-    // }
+    this.getPosts();
   }
 
-  getForums() {
-    const forums = [];
+  getPosts() {
+    let posts = [];
     window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
       .collection('forums')
-      .where('hack', '==', this.props.hackId)
+      .doc('general')
+      .collection('posts')
+      .orderBy('createdAt', 'desc')
       .get()
       .then((docs) => {
         docs.forEach((doc) => {
-          forums.push({
+          posts.push({
             id: doc.id,
             data: doc.data(),
           });
         })
-
-        this.setState({
-          hackForums: forums
-        })
-
-        this.getThreads();
-        // _this.getThreadsAdmin(0);
+        this.setState({ posts: posts })
       })
       .catch(function(error) {
         console.error('Error getting documents: ', error);
       });
   }
 
-  getThreads() {
-    const _this = this;
-    let threads = [];
-    let forums = this.state.hackForums;
-    let selectedForum = 0;
-
-    console.log(forums, selectedForum, forums[selectedForum]);
-
-    let forumId = this.state.hackForums[this.state.selectedForum].id;
-
-    console.log('get threads from', forumId);
-
-    this.firestore
-      .collection('threads')
-      .where('forumId', '==', forumId)
-      .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          const thread = doc.data();
-          thread.id = doc.id;
-          threads.push(thread);
-        });
-
-        threads = _this.sortThreads(threads);
-        _this.setState({ threads: threads });
+  sortThreads(posts, order='asc') {
+    if (order === 'asc') {
+      return posts.sort((a, b) => {
+        return a.data.createdAt.toMillis() - b.data.createdAt.toMillis()
       })
-      .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      });
+    } else {
+      return posts.sort((a, b) => {
+        return b.data.createdAt.toMillis() - a.data.createdAt.toMillis()
+      })
+    }
   }
 
-  sortThreads(threads) {
-    const sortedThreads = threads;
-    sortedThreads.sort((a, b) => {
-      const aDate = DateFormater.getFirebaseDate(a.createdAt);
-      const bDate = DateFormater.getFirebaseDate(b.createdAt);
-      return aDate > bDate ? -1 : aDate < bDate ? 1 : 0;
-    });
-    return sortedThreads;
-  };
-
-  // ---------------------------------------- Admin features ------------------------------------------
-
-  // Query all the hacks objects from the db.
-  getHacks() {
-    const _this = this;
-    const hacks = [];
-    this.firestore
-      .collection('hacks')
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const hackData = doc.data();
-          hackData.id = doc.id;
-          hacks.push(hackData);
-        });
-        _this.setState({ hacks: hacks, selectedHack: 0 });
-        console.log(hacks);
-        _this.getForums();
-      })
-      .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      });
-  };
-
-
-  getThreadsAdmin(forumIndex) {
-    const hackId = this.props.hackId;
-    const forumId = this.props.hackForums[this.state.selectedHack][forumIndex].id || 0;
-    const _this = this;
-    let threads = [];
-    this.firestore
-      .collection('threads')
-      .where('hackId', '==', hackId)
-      .where('forumId', '==', forumId)
-      .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          const thread = doc.data();
-          thread.id = doc.id;
-          threads.push(thread);
-        });
-        threads = _this.sortThreads(threads);
-        _this.setState({ threads: threads });
-      })
-      .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      });
-  };
-
-  onhackSelector(hackIndex) {
-    this.setState({ selectedHack: hackIndex, forum: 0 });
-    this.getForums(hackIndex);
-  };
-
-  onForumSelection(forumIndex) {
-    this.setState({ forum: forumIndex });
-    this.getThreadsAdmin(forumIndex);
-  };
-
-  // ---------------------------------------- Admin features ------------------------------------------
-
-  saveStat(event) {
-    // const statData = {
-    //   userId: this.props.user.uid,
-    //   event: 'click',
-    //   metadata: {
-    //     on: 'create-new-thread',
-    //     location: 'forum',
-    //   },
-    // };
-    // registerStats(statData);
+  newThread(event) {
     this.setState({ startNewThreadFlow: true });
   };
 
@@ -275,33 +159,16 @@ class ForumView extends React.Component {
     return (
       <ThemeProvider theme={styles}>
         <SectionContainer>
-          <MainHeader>IronHacks User Forum</MainHeader>
-          <h2>General discussion</h2>
-          <p>
-            Welcome to the Ironhacks forum! Feel free to talk about anything
-            related with the task. You can also share code here.
-          </p>
+          <MainHeader>
+            IronHacks User Forum
+          </MainHeader>
+
           <Control>
-
-            <NewThreadButton onClick={this.saveStat}>
-              START A NEW TOPIC
-            </NewThreadButton>
-
-            {this.props.isAdmin && this.state.hacks && (
-              <ForumSelector
-                onSelection={this.onhackSelector}
-                selector={this.state.hacks}
-              />
+            {this.props.userIsAdmin && (
+              <NewThreadButton onClick={this.newThread}>
+                New Post
+              </NewThreadButton>
             )}
-
-            {this.props.isAdmin &&
-              this.state.hacks &&
-              this.state.hacks[this.state.selectedHack].forums && (
-                <ForumSelector
-                  onSelection={this.onForumSelection}
-                  selector={this.state.hacks[this.state.selectedHack].forums}
-                />
-              )}
 
             <SearchBar>
               <input type='text' placeholder='Search...' />
@@ -311,14 +178,18 @@ class ForumView extends React.Component {
             </SearchBar>
           </Control>
 
-          {this.state.threads.map((thread, index) => {
+          {this.state.posts.map((thread, index) => {
             return (
-              <ThreadPreview
+              <PostPreview
                 key={thread.id}
-                thread={thread}
+                postId={thread.id}
+                postTitle={thread.data.title}
+                postAuthor={thread.data.authorName}
+                postDate={thread.data.createdAt.toDate().toLocaleDateString()}
+                thread={thread.data}
                 user={this.props.user}
               />
-            );
+            )
           })}
 
         </SectionContainer>
@@ -327,4 +198,4 @@ class ForumView extends React.Component {
   }
 }
 
-export default withCookies(ForumView);
+export default ForumView;

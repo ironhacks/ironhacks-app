@@ -1,24 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Loader } from './components/loader';
 import { CookiesProvider, Cookies, withCookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import { withRouter } from 'react-router';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import ProjectSelectView from './views/hacks/project-select-view';
-import {
-  HomePage,
-  LoginPage,
-  LogoutPage,
-  AdminNewHackPage,
-  AdminHackSelectPage,
-  ProfileEditPage,
-  ProfilePage,
-  UpcomingHackPage,
-  HackPage,
-  AdminHackPage,
-  HackSelectPage,
-} from './views/pages/';
+import { Pages } from './views/pages/';
 
 import './assets/static/bootstrap-reboot.css'
 import './assets/static/bootstrap-grid.css'
@@ -31,11 +18,9 @@ import './styles/css/base.css'
 import './styles/css/icons.css'
 import './styles/css/content.css'
 import './styles/css/charrismatic.css'
-
-const LoaderContainer = styled('div')`
-  width: 100vw;
-  height: 100vh;
-`;
+import './styles/css/typography.css'
+import './styles/css/buttons.css'
+import './styles/css/forum.css'
 
 const filterUserData = (user) => {
   const names = user.displayName.split(' ');
@@ -44,7 +29,6 @@ const filterUserData = (user) => {
     displayName: user.displayName,
     email: user.email,
     emailVerified: user.emailVerified,
-    // phoneNumber: user.photoURL,
     photoURL: user.photoURL,
     profileLetters: names[0].slice(0, 1) + names[1].slice(0, 1),
     provider: user.providerData,
@@ -86,10 +70,7 @@ class App extends React.Component {
 
    componentDidMount() {
      window.firebase.analytics()
-       .logEvent('test_event', {
-         value: 'app_loaded'
-       }
-     );
+       .logEvent('screen_view');
 
      this._isMounted = true;
      this._isUserConnected();
@@ -207,21 +188,21 @@ class App extends React.Component {
         <CookiesProvider>
           <div className='App'>
             {this.state.loading ? (
-                <LoaderContainer>
-                  <Loader/>
-                </LoaderContainer>
+                <div style={{width: '100vw', height: '100vh',  background: 'var(--color-primary)'}}>
+                  <Loader />
+                </div>
             ) : (
               <Switch>
                 <Route exact path='/' >
-                  <HomePage />
+                  <Pages.Home />
                 </Route>
 
                 <Route exact path='/covid19' >
-                  <UpcomingHackPage />
+                  <Pages.UpcomingHack />
                 </Route>
 
                 <Route path='/login'>
-                  <LoginPage
+                  <Pages.Login
                     onLoginSuccess={this._updateAppNavigation}
                     onLoginFail={this._updateAppNavigation}
                   />
@@ -229,16 +210,30 @@ class App extends React.Component {
 
                 {this.state.user && (
                   <>
-                    <Route exact path='/hacks'>
-                      <HackSelectPage
+                    <Route path='/notebook-viewer'>
+                      <Pages.Notebook
+                      user={this.state.user}
+                      />
+                    </Route>
+
+                    <Route exact path='/hub'>
+                      <Pages.Hub
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                         userId={this.state.userId}
                       />
                     </Route>
 
-                    <Route path='/hacks/:hackId'>
-                      <HackPage
+                    <Route exact path='/hacks'>
+                      <Pages.HackSelect
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                        userId={this.state.userId}
+                      />
+                    </Route>
+
+                    <Route path='/hacks/:hackSlug'>
+                      <Pages.Hack
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                         userId={this.state.userId}
@@ -260,7 +255,7 @@ class App extends React.Component {
                     </Route>
 
                     <Route exact path='/profile'>
-                      <ProfilePage
+                      <Pages.Profile
                         profileId={this.state.userId}
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
@@ -268,41 +263,41 @@ class App extends React.Component {
                     </Route>
 
                     <Route exact path='/profile/edit'>
-                      <ProfileEditPage
+                      <Pages.ProfileEdit
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                       />
                     </Route>
 
                     <Route path='/profile:profileId'>
-                      <ProfilePage
+                      <Pages.Profile
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                       />
                     </Route>
 
                     <Route exact path='/logout'>
-                      <LogoutPage />
+                      <Pages.Logout />
                     </Route>
 
                   {this.state.userIsAdmin && (
                     <>
                     <Route exact path='/admin'>
-                      <AdminHackSelectPage
+                      <Pages.AdminHackSelect
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                       />
                     </Route>
 
                     <Route path='/admin/hacks/:hackId'>
-                      <AdminHackPage
+                      <Pages.AdminHack
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                       />
                     </Route>
 
                     <Route path='/admin/new-hack'>
-                      <AdminNewHackPage
+                      <Pages.AdminNewHack
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                       />
@@ -321,9 +316,5 @@ class App extends React.Component {
     }
   }
 }
-// <Route exact path='/404' component={PageNotFound}/>
-
-
-//     <Route path='/profile/:userId' render={(props) => (<UserProfile user={this.state.user} {...props}/>)}/>
 
 export default withCookies(withRouter(App));

@@ -7,21 +7,21 @@ class InputCheckbox extends React.Component {
   }
 
   handleChange(event) {
-    if (this.props.onInputChanged){
+    if (this.props.onInputChange){
       let value = event.target.checked
-      this.props.onInputChanged(this.props.name, value);
+      this.props.onInputChange(this.props.name, value);
     }
   }
 
   render() {
     return (
-      <div className="input_field">
-        <label>
-          <span className="input__name mr-3">
+      <div className={'input_field'}>
+        <label className={`${this.props.containerClass}`}>
+          <span className={`input__name ${this.props.labelClass ? this.props.labelClass : 'mr-3' }`}>
             {this.props.label}
           </span>
           <input
-            className="input__checkbox"
+            className={`input__checkbox ${this.props.inputClass}`}
             name={this.props.name}
             type="checkbox"
             checked={this.props.isChecked}
@@ -38,6 +38,9 @@ InputCheckbox.defaultProps = {
   name: '',
   isChecked: false,
   label: '',
+  containerClass: '',
+  labelClass: '',
+  inputClass: '',
 }
 
 export { InputCheckbox }

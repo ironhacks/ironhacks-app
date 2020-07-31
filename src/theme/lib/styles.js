@@ -18,7 +18,7 @@ export const personalFeddbackTheme = {
 
 
 export const LoaderTheme = {
-  loaderFrontColor: Colors.mainBgColor,
+  loaderFrontColor: 'var(--color-primary)',
   loaderFrontColorDark: '#212529',
   loaderBackgroundColor: '#C7C3B7',
   sectionBackgroundColor: '#EEEDE9',
@@ -27,19 +27,19 @@ export const LoaderTheme = {
 
 export const LandingTheme = {
   containerHeight: '100vh',
-  backgroundColor: Colors.mainBgColor,
+  backgroundColor: 'var(--color-primary)',
   textColor: 'black',
 };
 
 export const HeaderStyle = {
   height: '50px',
-  backgroundColor: Colors.mainBgColor,
+  backgroundColor: 'var(--color-primary)',
   color: Colors.mainTextColor,
 };
 
 export const FooterTheme = {
   containerHeight: '50px',
-  backgroundColor: Colors.mainBgColor,
+  backgroundColor: 'var(--color-primary)',
   textColor: Colors.mainTextColor,
   hoverTextColor: Colors.highlightedTextColor,
 };

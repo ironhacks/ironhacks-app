@@ -25,8 +25,7 @@ export const createNewFileFlowAlertContent = (validator) => {
 
 export const surveyRedirecAlertContent = {
   title: 'Push to evaluation',
-  text:
-    'Before push your final commit for this phase, you must fill the phase survey.',
+  text: 'Before push your final commit for this phase, you must fill the phase survey.',
   confirmButtonText: 'Go to survey',
   confirmButtonColor: colors.mainBgColor,
   showCancelButton: true,
@@ -49,10 +48,20 @@ export const pushSurveyAlertContent = (url) => {
 
 export const preSurveyAlertContent = (url) => {
   return {
-    title: 'Resgistration survey',
+    title: 'Registration survey',
     html: `<iframe src='${url}' title='Qualtrics survey'/>`,
     showCloseButton: true,
-    showConfirmButton: false,
+    showConfirmButton: true,
+    allowOutsideClick: false,
+    customClass: 'surveyAlert',
+  };
+};
+
+export const registrationGeneric = (url) => {
+  return {
+    title: 'Confirm Registration',
+    showCloseButton: true,
+    showConfirmButton: true,
     allowOutsideClick: false,
     customClass: 'surveyAlert',
   };
@@ -60,8 +69,7 @@ export const preSurveyAlertContent = (url) => {
 
 export const commitContentAlertContent = {
   title: 'Push to evaluation',
-  text:
-    'Please enter bellow a short message describing mayor changes since your last phase or just describing what you add to the project.',
+  text: 'Please enter bellow a short message describing mayor changes since your last phase or just describing what you add to the project.',
   confirmButtonText: 'Send',
   confirmButtonColor: colors.mainBgColor,
   showCloseButton: true,
@@ -77,10 +85,8 @@ export const successFinalCommitAlert = (phase) => {
   return {
     title: 'Success',
     type: 'success',
-    text:
-      'Thanks for making your final commit for phase ' +
-      phase +
-      '! Your app will be considered for evaluation! Stay tuned and wait for feedback in your dashboard!',
+    text: `Thanks for making your final commit for phase ${phase}!
+      Your app will be considered for evaluation! Stay tuned and wait for feedback in your dashboard!`,
     confirmButtonText: 'Ok',
     confirmButtonColor: colors.mainBgColor,
     showCloseButton: true,
@@ -91,8 +97,8 @@ export const successFinalCommitAlert = (phase) => {
 export const successNoFinalCommitAlertContent = {
   title: 'Success',
   type: 'success',
-  text:
-    'You have just commited your code to github! Congratulations!\nRemember: To submit your app for grading you have to make a final commit (select yes)',
+  text: `You have just commited your code to github! Congratulations!
+    Remember: To submit your app for grading you have to make a final commit (select yes)`,
   confirmButtonText: 'OK',
   confirmButtonColor: colors.mainBgColor,
   showCloseButton: true,

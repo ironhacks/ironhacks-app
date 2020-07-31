@@ -15,7 +15,7 @@ class Content extends React.Component {
 }
 
 // <Meta title={title} />
-const Page = ({ user, pageClass, userIsAdmin, children }) => {
+const Page = ({ user, pageClass, pageFooter, userIsAdmin, children }) => {
   const classes = ['page', pageClass].join(' ').trim();
   const displayName = user.displayName || 'IH';
   return (
@@ -30,13 +30,16 @@ const Page = ({ user, pageClass, userIsAdmin, children }) => {
           {children}
         </div>
       </Content>
-      <Footer />
+      {pageFooter && (
+        <Footer />
+      )}
     </>
   )
 }
 
 Page.defaultProps = {
   pageClass: '',
+  pageFooter: false,
   isAdmin: false,
   displayName: '',
   user: {},

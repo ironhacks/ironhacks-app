@@ -330,6 +330,7 @@ a:hover::before{
   display:block;
   max-width:100%;
 }
+
 .flex-row{
   margin-left:3rem;
   margin-right:3rem;
@@ -337,6 +338,24 @@ a:hover::before{
   flex-direction:row;
   max-width:100%;
 }
+
+
+@media (max-width: 600px) {
+  .flex-row {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .flex-row {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+}
+
+
 .flex-row > .col{
   flex-grow:1;
   flex-shrink:1;
@@ -344,8 +363,10 @@ a:hover::before{
   margin-left:1em;
   margin-right:1em;
 }
+
 .flex-row > .col:first-child{ margin-left:0; }
 .flex-row > .col:last-child{ margin-right:0; }
+
 .flex-row-3 > .col {
   flex-basis: 33%;
   max-width: 33%;
