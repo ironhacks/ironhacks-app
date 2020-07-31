@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "the-ironhacks-platform-dev"
+    "default": "ironhacks-c406a",
+    "dev": "ironhacks-c406a",
+    "prod": "the-ironhacks-platform-dev"
   }
 }
