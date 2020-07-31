@@ -1,11 +1,7 @@
 import React from 'react';
-
 import styled from 'styled-components';
-
 import { Theme } from '../../theme';
 const units = Theme.UNITS;
-
-// import MarkdownEditor from '../markdownEditor/markdownEditor.js';
 
 const Select = styled('select')`
   height: 30px;

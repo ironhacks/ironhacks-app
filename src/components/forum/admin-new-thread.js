@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
 import BreadCrumbs from '../../util/breadCrumbs.js';
-import ForumSelector from './forumSelector.js';
+import ForumSelector from './forum-selector';
 import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
 import {Loader} from '../../components/loader';
 import { Theme } from '../../theme';

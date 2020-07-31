@@ -4,9 +4,7 @@ import LikeReaction from '../../assets/svg/like-reaction.svg';
 import LikeReactionHighLighted from '../../assets/svg/like-reaction-highlight.svg';
 import DislikeReaction from '../../assets/svg/dislike-reaction.svg';
 import DislikeReactionHighLighted from '../../assets/svg/dislike-reaction-highlight.svg';
-// import { Theme } from '../../theme';
-// const colors = Theme.COLORS;
-// const units = Theme.UNITS;
+
 
 const Reactions = styled('div')`
   display: flex;
