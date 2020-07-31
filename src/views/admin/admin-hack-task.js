@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import MarkdownEditor from '../../components/markdownEditor/markdownEditor.js';
+import MarkdownEditor from '../../components/markdown-editor';
 import Button from '../../util/button.js';
-// import { Row, Col } from '../../components/layout';
 
 const AvailableActionsDiv = styled('div')`
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   flex-direction: row-reverse;
   height: 50px;
 `;
@@ -15,11 +15,49 @@ const AvailableActionsDiv = styled('div')`
 class AdminHackTask extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      content: this.props.previousDocument || '',
+    }
+
     this.onEditorChange = this.onEditorChange.bind(this);
+    this.updateTaskDocument = this.updateTaskDocument.bind(this)
+  }
+
+  encodeDocument(str) {
+    let safeString = unescape(encodeURIComponent(str));
+    return window.btoa(safeString);
+  }
+
+  decodeDocument(enc) {
+    let decoded = window.atob(enc);
+    return decodeURIComponent(escape(decoded));
   }
 
   onEditorChange(markdown) {
-    this.props.onDocumentChange(markdown);
+    this.setState({content: markdown})
+  }
+
+  updateTaskDocument() {
+    this.setState({ loading: true })
+    let encodedTask = this.encodeDocument(this.state.content);
+    let timeUpdated = new Date();
+
+    window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .update({
+        task: {
+          updated: timeUpdated.toISOString(),
+          doc: encodedTask,
+        }
+      })
+      .then(() => {
+        this.setState({loading: false})
+        window.location.reload();
+      })
+      .catch(function(error) {
+        console.error('Error adding document: ', error);
+      });
   }
 
   render() {
@@ -32,7 +70,7 @@ class AdminHackTask extends React.Component {
           <MarkdownEditor
             editorLayout='tabbed'
             onEditorChange={this.onEditorChange}
-            withContent={this.props.previousDocument}
+            value={this.state.content}
           />
 
           <AvailableActionsDiv>
@@ -40,10 +78,17 @@ class AdminHackTask extends React.Component {
               primary
               width='150px'
               margin='0 0 0 15px'
-              onClick={this.props.updateDocument}
+              onClick={this.updateTaskDocument}
             >
               Publish
             </Button>
+            <a
+              href={`/hacks/${this.props.hackSlug}/task`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View live document
+            </a>
           </AvailableActionsDiv>
       </>
     );

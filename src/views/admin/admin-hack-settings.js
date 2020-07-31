@@ -8,7 +8,6 @@ import {
 } from '../../components/input';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { VariableSizeList as List } from 'react-window';
 import { Section, Row } from '../../components/layout';
 
 class AdminHackSettings extends React.Component {
@@ -55,8 +54,6 @@ class AdminHackSettings extends React.Component {
       startDate: startDate ? new Date(Date.parse(startDate)) : new Date(),
     }
 
-
-    this.ListItemUser = this.ListItemUser.bind(this);
     this.onHackBannerImgChanged = this.onHackBannerImgChanged.bind(this);
     this.onHackNameChanged = this.onHackNameChanged.bind(this);
     this.onHackPublishedChanged = this.onHackPublishedChanged.bind(this);
@@ -108,7 +105,6 @@ class AdminHackSettings extends React.Component {
     if (this.state.syncing) {
       return false;
     }
-
     this.setState({syncing: true})
 
     window.firebase.firestore()
@@ -127,7 +123,6 @@ class AdminHackSettings extends React.Component {
     if (this.state.syncing) {
       return false
     }
-
     this.setState({syncing: true})
 
     window.firebase.firestore()
@@ -208,15 +203,6 @@ class AdminHackSettings extends React.Component {
         window.location.reload();
       })
   }
-
-  ListItemUser({ index, style }) {
-    return (
-      <div style={style}>
-        {index + 1}. {this.props.hack.registeredUsers[index]}
-      </div>
-    )
-  }
-
 
   render() {
     return (
@@ -388,14 +374,10 @@ class AdminHackSettings extends React.Component {
             isChecked={this.state.displayOptions.tutorialEnabled}
             disabled={this.state.syncing}
           />
-
-
         </Section>
 
         <Section sectionClass="py-2">
-
           <div className="flex align-content-center py-2">
-
             <h3 className="h3 my-0 mr-2" style={{verticalAlign: 'center'}}>
               Start Date
             </h3>
@@ -403,46 +385,30 @@ class AdminHackSettings extends React.Component {
             <DatePicker
               selected={this.state.startDate}
               onChange={this.onHackStartDateChanged}
+              showTimeSelect
+              timeFormat="HH:mm"
+              dateFormat="MMMM d, yyyy h:mm aa"
+              timeCaption="time"
+              timeIntervals={60}
             />
           </div>
 
 
         </Section>
 
-          <Section sectionClass="py-2">
-            <h3 className="h3 py-2">
-              Registered Users
-            </h3>
-            {this.props.hack.registeredUsers ? (
-              <List
-              itemCount={this.props.hack.registeredUsers.length}
-              itemSize={(()=>{return 30})}
-              height={300}
-              width={400}
-              data={this.props.hack.registeredUsers}
-              >
-              {this.ListItemUser}
-              </List>
-
-            ):(
-              <p>No registered users</p>
-            )}
-          </Section>
-
-          <Section>
-            <Row rowClass="flex justify-content-center bg-grey-lt2 py-4 mr-5 mb-5">
-              <button
-                className="btn btn- bg-primary px-8"
-                onClick={this.submitSettings}
-                disabled={this.state.submitDisabled}
-              >
-                Submit
-              </button>
-            </Row>
-          </Section>
-
+        <Section>
+          <Row rowClass="flex justify-content-center bg-grey-lt2 py-4 mr-5 mb-5">
+            <button
+              className="btn btn- bg-primary px-8"
+              onClick={this.submitSettings}
+              disabled={this.state.submitDisabled}
+            >
+              Submit
+            </button>
+          </Row>
+        </Section>
       </>
-    );
+    )
   }
 }
 
