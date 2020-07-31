@@ -15,13 +15,13 @@ class InputCheckbox extends React.Component {
 
   render() {
     return (
-      <div className="input_field">
-        <label>
-          <span className="input__name mr-3">
+      <div className={'input_field'}>
+        <label className={`${this.props.containerClass}`}>
+          <span className={`input__name ${this.props.labelClass ? this.props.labelClass : 'mr-3' }`}>
             {this.props.label}
           </span>
           <input
-            className="input__checkbox"
+            className={`input__checkbox ${this.props.inputClass}`}
             name={this.props.name}
             type="checkbox"
             checked={this.props.isChecked}
@@ -38,6 +38,9 @@ InputCheckbox.defaultProps = {
   name: '',
   isChecked: false,
   label: '',
+  containerClass: '',
+  labelClass: '',
+  inputClass: '',
 }
 
 export { InputCheckbox }

@@ -36,6 +36,7 @@ class InputText extends React.Component {
           className={`input text_input ${this.props.inputClass}`}
           type="text"
           name={this.props.name}
+          disabled={this.props.disabled}
           value={this.props.value}
           onChange={this.handleChange}
         />
@@ -51,6 +52,7 @@ InputText.defaultProps = {
   labelClass: '',
   iconClass: '',
   icon: false,
+  disabled: false,
   inputClass: '',
   containerClass: '',
 }
