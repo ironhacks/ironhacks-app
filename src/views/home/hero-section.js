@@ -1,31 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Row, Col } from '../../components/layout'
 import { SvgImg } from '../../components/svg'
-import { Theme } from '../../theme';
 import { BulbSvg } from '../../components/svg/jsx'
-import styled from 'styled-components'
-
-const colors = Theme.COLORS;
-
-const LoginButton = styled(Link)`
-  padding: 10px 10px;
-  margin-right: 4px;
-  margin-top: 1em;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  color: black;
-  background-color: none;
-  border: 2px solid black;
-  trasition: color: 0.5s;
-
-  &:hover {
-    background-color: ${(props) => props.theme.hoverTextColor};
-    color: ${colors.invertedHighlightedTextColor};
-    text-decoration: none;
-  }
-`;
+import { LoginButton } from '../../components/buttons';
 
 class HeroSection extends React.Component {
   render() {
@@ -39,9 +16,17 @@ class HeroSection extends React.Component {
             <span className="font-extrabold">IRONHACKS</span>
           </h1>
 
-          <h2 className="mb-3 mt-1">Hack for innovation and join the open data movement.</h2>
-          <LoginButton to='/login?mode=select'>Sign up here now</LoginButton>
-          <LoginButton to='/login'>Sign in</LoginButton>
+          <h2 className="mb-3 mt-1">
+              Hack for innovation to solve global challenges.
+          </h2>
+
+          <LoginButton to='/login?mode=select'>
+            Sign up here now
+          </LoginButton>
+
+          <LoginButton to='/login'>
+            Sign in
+          </LoginButton>
         </Col>
 
         <Col colClass='flex-1 hide--med'>
