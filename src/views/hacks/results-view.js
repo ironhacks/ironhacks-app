@@ -159,9 +159,7 @@ class ResultsView extends React.Component {
       userId: this.props.hackUserId,
       hackId: this.props.hackId,
       currentHack: this.props.hackId,
-      // currentHack: cookies.get('currentHack') || null,
       forumId: '8JKHD71CFYS2SzI52UQ9',
-      // forumId: cookies.get('currentForum') || null,
       hackData: this.props.hackData,
       hackPhases: this.props.hackPhases,
       treatment: this.props.treatement || 0,
@@ -173,7 +171,6 @@ class ResultsView extends React.Component {
     }
 
     this._isMounted = false;
-    // this.firestore = window.firebase.firestore();
     this.updateSection = this.updateSection.bind(this);
     this.onPhaseSelection = this.onPhaseSelection.bind(this);
     this.getHackResults = this.getHackResults.bind(this);

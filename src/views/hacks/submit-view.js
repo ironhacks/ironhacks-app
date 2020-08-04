@@ -55,6 +55,8 @@ class SubmitView extends React.Component {
           case window.firebase.storage.TaskState.RUNNING:
             console.log('Upload is running');
             break;
+          default:
+            console.log('Uploading');
         }
       }, function(error) {
         console.log('Upload error', error);

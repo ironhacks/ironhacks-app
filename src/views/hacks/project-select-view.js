@@ -1,10 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { withCookies } from 'react-cookie';
 import styled, { ThemeProvider } from 'styled-components';
-// import Separator from '../../../util/separator.js';
-// import TimeLine from '../../../util/timeLine.js';
-// import { Loader } from '../../../components/loader';
 import { Theme } from '../../theme';
 import { ProjectApi } from '../../services/project-api';
 import ProjectCard from '../projects/project-card';
@@ -50,12 +46,11 @@ const CardsContainer = styled('div')`
 class ProjectSelectView extends React.Component {
   constructor(props) {
     super(props);
-    const { cookies } = props;
 
     this.state = {
       currentHack: this.props.hackId,
       user: this.props.user,
-      forum: cookies.get('currentForum') || null,
+      forum: null,
       startNewProjecNav: false,
       startProjectEditorNav: false,
       projects: [],
@@ -136,4 +131,4 @@ class ProjectSelectView extends React.Component {
 }
 
 
-export default withCookies(ProjectSelectView);
+export default ProjectSelectView;

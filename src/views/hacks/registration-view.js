@@ -43,9 +43,7 @@ class RegistrationView extends React.Component {
       let userId = this.props.userId;
       let formUrl = this.props.hackRegistration;
       let formType = 'hackRegistration';
-
       let alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`;
-      console.log(Swal);
       Swal.fire({
           title: 'Registration survey',
           html: `<iframe src="${alertUrl}" title="Registration Form"/>`,

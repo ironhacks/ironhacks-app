@@ -1,5 +1,4 @@
 import React from 'react';
-import {withCookies} from 'react-cookie';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
@@ -740,4 +739,4 @@ class ProjectEditor extends React.Component {
   }
 }
 
-export default withCookies(withRouter(ProjectEditor))
+export default withRouter(ProjectEditor)
