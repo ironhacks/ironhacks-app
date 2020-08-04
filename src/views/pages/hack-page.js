@@ -120,6 +120,9 @@ class HackPage extends React.Component {
     }
       return (
        <Page
+          pageTitle={`IronHacks | ${this.state.hackName} Hack Page`}
+          pageDescription="IronHacks Hack Event Page"
+          pageUrl={`https://ironhacks.com/hacks/${this.hackSlug}`}
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
           >
@@ -227,7 +230,7 @@ class HackPage extends React.Component {
             <Route exact path="/hacks/:hackId/forum/:forumId/:threadId/edit">
               <Section>
                 <ThreadEditView
-                  isAdmin={this.props.userIsAdmin}
+                  userIsAdmin={this.props.userIsAdmin}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   user={this.props.user}
@@ -249,7 +252,7 @@ class HackPage extends React.Component {
             <Route exact path="/hacks/:hackId/forum/new">
               <Section>
                 <NewThread
-                  isAdmin={this.props.userIsAdmin}
+                  userIsAdmin={this.props.userIsAdmin}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   user={this.props.user}

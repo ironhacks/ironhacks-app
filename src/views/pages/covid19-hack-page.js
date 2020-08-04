@@ -7,7 +7,11 @@ import { Img } from '../../components/img';
 class UpcomingHackPage extends React.Component {
   render() {
     return (
-      <LandingPage>
+      <LandingPage
+        pageTitle="IronHacks | COVID-19 Challenge"
+        pageDescription="A Global COVID-19 Data Science Challenge powered by IronHacks"
+        pageUrl="https://ironhacks.com/covid19"
+      >
 
         <Section sectionClass="bg-blue-lt1 py-5">
           <Row rowClass="mb-2">

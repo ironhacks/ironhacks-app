@@ -1,5 +1,4 @@
 import React from 'react';
-import { withCookies } from 'react-cookie';
 import { BlankPage, Section, Row, Col } from '../../components/layout';
 import { Loader } from '../../components/loader';
 
@@ -125,7 +124,12 @@ class LoginPage extends React.Component {
 
   render() {
       return (
-        <BlankPage pageClass="bg-primary">
+        <BlankPage
+          pageClass="bg-primary"
+          pageTitle="IronHacks | Login"
+          pageDescription="Login to IronHacks"
+          pageUrl="https://ironhacks.com/login"
+        >
           <Section>
             <div style={{
               height: '100vh',
@@ -149,7 +153,9 @@ class LoginPage extends React.Component {
                     <Loader status={this.state.status} />
                   )}
 
-                  <div id='firebaseui-auth-container' />
+                  <div style={{display:'flex'}}>
+                    <div style={{backgroundColor: 'transparent'}} id='firebaseui-auth-container' />
+                  </div>
                 </Col>
               </Row>
             </div>
@@ -159,4 +165,4 @@ class LoginPage extends React.Component {
     }
 }
 
-export default withCookies(LoginPage);
+export default LoginPage;

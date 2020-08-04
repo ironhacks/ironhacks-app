@@ -1,5 +1,4 @@
 import React from 'react';
-import { withCookies } from 'react-cookie';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
 import { HackCardList, HackSignupCardList } from '../../components/hacks';
@@ -116,6 +115,8 @@ class HackSelectPage extends React.Component {
     } else {
       return (
         <Page
+          pageTitle="IronHacks | Hacks"
+          pageUrl="https://ironhacks.com/hacks"
           pageFooter={false}
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
@@ -181,4 +182,4 @@ class HackSelectPage extends React.Component {
   }
 }
 
-export default withCookies(HackSelectPage);
+export default HackSelectPage;

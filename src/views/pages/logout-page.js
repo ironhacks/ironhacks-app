@@ -1,6 +1,5 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { withCookies } from 'react-cookie';
 import { Loader } from '../../components/loader';
 
 class LogoutPage extends React.Component {
@@ -15,13 +14,9 @@ class LogoutPage extends React.Component {
   }
 
   _logout() {
-    const { cookies } = this.props;
     window.firebase.auth()
       .signOut()
       .then(()=>{
-        if (cookies.get('ironhack_user')) {
-          cookies.remove('ironhack_user');
-        }
         window.localStorage.clear();
         this.setState({ loading: false })
       },
@@ -49,4 +44,4 @@ class LogoutPage extends React.Component {
   }
 }
 
-export default withCookies(LogoutPage);
+export default LogoutPage;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { withCookies } from 'react-cookie';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { SkillsTable } from '../../components/skills-table';
@@ -34,7 +33,7 @@ class TrainingKeyLink extends React.Component {
   }
 
   onReject(error) {
-    console.log('Training key file not found')
+    // console.log('Training key file not found')
   }
 
   getFileUrl() {
@@ -282,6 +281,9 @@ class ProfilePage extends React.Component {
       <Page
         user={this.props.user}
         userIsAdmin={this.props.userIsAdmin}
+        pageTitle="IronHacks | User Profile"
+        pageDescription="IronHacks User Profile Page"
+        pageUrl="https://ironhacks.com/profile"
       >
         <Section sectionClass="pt-5">
         <Row>
@@ -410,4 +412,4 @@ class ProfilePage extends React.Component {
 }
 
 
-export default withCookies(ProfilePage);
+export default ProfilePage;

@@ -176,6 +176,9 @@ class ProfileEditPage extends React.Component {
       <Page
         user={this.props.user}
         userIsAdmin={this.props.userIsAdmin}
+        pageTitle="IronHacks | Edit User Profile"
+        pageDescription="Edit your IronHacks User Profile"
+        pageUrl="https://ironhacks.com/profile/edit"
       >
       <Section sectionClass="pt-10">
         <Row rowClass="ml-0">
@@ -197,11 +200,8 @@ class ProfileEditPage extends React.Component {
 
               <div className='user-data'>
                 <h2 className="h2 py-2 font-bold">Update Profile Info</h2>
-
                 <h2 className="h2 profile__name mb-2">{this.props.user.displayName}</h2>
-
                 <div className="mb-2"><MaterialDesignIcon name="key"/> UserId: {this.props.user.userId} </div>
-
                 <div className="mb-2"><MaterialDesignIcon name="email"/> Email: {this.props.user.email} </div>
               </div>
             </div>
