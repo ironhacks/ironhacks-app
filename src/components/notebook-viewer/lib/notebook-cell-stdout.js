@@ -1,10 +1,6 @@
 import React from 'react';
-import AceEditor from 'react-ace';
-// import 'ace-builds/src-noconflict/mode-python';
-// import 'ace-builds/src-noconflict/theme-chaos';
-
+import {Controlled as CodeMirror} from 'react-codemirror2'
 import { Tag } from 'antd';
-
 
 function NotebookStdOut({
   stdout_found,
@@ -27,25 +23,26 @@ function NotebookStdOut({
 
       <br/>
 
-      <AceEditor
-        readOnly
-        placeholder='--'
-        mode='markdown'
-        theme={codeTheme}
-        name='stdout'
-        style={{
-          maxWidth: '700px',
-          padding: '10px',
-          margin: '10px 0px',
-        }}
-        width='100%'
-        maxLines={maxLength}
-        fontSize={14}
-        showPrintMargin={false}
-        showGutter={false}
-        highlightActiveLine={false}
+      <CodeMirror
         value={cellContent}
-        setOptions={displayOptions}
+        className=""
+        style={{
+          padding: '0',
+          margin: '0',
+        }}
+        options={{
+          lineNumbers: true,
+          mode: 'python',
+          lint: false,
+          theme: 'seti',
+          tabSize: 2,
+          lineWrapping: true,
+          matchBrackets: false,
+          matchTags: false,
+          autoCloseTags: false,
+          autoCloseBrackets: false,
+          readOnly: true,
+        }}
       />
     </div>
   )

@@ -7,6 +7,7 @@ import {
   Typography,
 } from 'antd';
 import ReactMarkdown from 'react-markdown';
+import editorOptions from './notebook-config';
 import { NotebookCodeCell } from './lib/notebook-cell-code';
 import { NotebookErrorCell } from './lib/notebook-error';
 import { NotebookImg } from './lib/notebook-img';
@@ -15,7 +16,7 @@ import { NotebookMdCell } from './lib/notebook-cell-md';
 import { NotebookStdOut } from './lib/notebook-cell-stdout';
 import { NotebookText } from './lib/notebook-text';
 import { NotebookTitle } from './lib/notebook-title';
-import editorOptions from './notebook-config';
+import './style.css';
 
 
 // ---
@@ -59,7 +60,6 @@ class NotebookViewer extends React.Component {
     return !!pattern.test(str);
   }
 
-
   async getNotebookFile() {
     if (this.props.file) {
       var fbase = this.props.file.split('/');
@@ -75,15 +75,11 @@ class NotebookViewer extends React.Component {
         .then(async (text) => {
           try {
             var notebook_json = JSON.parse(text)
-
             this.setState({
               notebook_json: notebook_json,
               loading: false,
               placeholder_component: 'Notebook loaded'
             })
-
-            console.log(this.state.notebook_json)
-
           } catch (error) {
             console.log('error', error);
 
@@ -121,7 +117,9 @@ class NotebookViewer extends React.Component {
           'src="' + this.state.fbase_path + old_source[1] + '"'
         )
       } else {
-        var rgx2 = new RegExp(/\!\[(.*?)\]\((.*?)[\s|\)]/);
+        // var rgx2 = new RegExp(/\!\[(.*?)\]\((.*?)[\s|\)]/);
+        var rgx2 = new RegExp(/!\[(.*?)\]\((.*?)[\s|)]/);
+
         var s2 = source[code].match(rgx2);
 
         if (s2 && !this.validURL(s2[2])) {

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Tag } from 'antd';
-import AceEditor from 'react-ace';
-// import 'ace-builds/src-noconflict/theme-chaos';
-// import 'ace-builds/src-noconflict/mode-python';
+import {Controlled as CodeMirror} from 'react-codemirror2'
 
 function NotebookErrorCell({
   codeTheme,
@@ -25,26 +23,27 @@ function NotebookErrorCell({
 
         <br/>
 
-        <AceEditor
-          readOnly
-          placeholder='--'
-          mode='markdown'
-          theme={codeTheme}
-          name='error'
-          style={{
-            maxWidth: '700px',
-            padding: '10px',
-            margin: '10px 0px'
-          }}
-          width='100%'
-          maxLines={maxLength}
-          fontSize={14}
-          showPrintMargin={false}
-          showGutter={false}
-          highlightActiveLine={false}
-          value={cellContent}
-          setOptions={displayOptions}
-        />
+      <CodeMirror
+        value={cellContent}
+        className=""
+        style={{
+          padding: '0',
+          margin: '0',
+        }}
+        options={{
+          lineNumbers: true,
+          mode: 'python',
+          lint: false,
+          theme: 'seti',
+          tabSize: 2,
+          lineWrapping: true,
+          matchBrackets: false,
+          matchTags: false,
+          autoCloseTags: false,
+          autoCloseBrackets: false,
+          readOnly: true,
+        }}
+      />
       </div>
   )
 }

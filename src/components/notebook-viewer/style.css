@@ -30,3 +30,9 @@
 .notebookviewer .MDImg img {
   max-width: 100%;
 }
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+  line-height: 120%;
+  font-size: .8em;
+}
