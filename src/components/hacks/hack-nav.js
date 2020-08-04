@@ -98,6 +98,7 @@ class HackNav extends React.Component {
           onClick={(()=>{
             window.firebase.analytics().logEvent('launch_hub');
           })}
+          rel="noopener noreferrer"
           target="_blank"
           className="btn hub-button bg-primary ml-auto font-bold"
         >

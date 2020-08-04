@@ -1,5 +1,6 @@
 import React from 'react'
 import { mergeClasses } from './lib/layoutUtils'
+import {version  as PkgVersion} from '../../../package.json';
 
 
 const footerContainerStyles = {
@@ -15,7 +16,7 @@ const Footer = (props) => {
       <div className={'footer_container py-3'} style={footerContainerStyles}>
         <div className='footer_block' style={{ marginLeft: '3rem'}}>
           <div>
-            <span>Version 2.1.1</span>
+            <span>{`Version ${PkgVersion}`}</span>
           </div>
         </div>
 

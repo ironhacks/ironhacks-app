@@ -28,7 +28,6 @@ class AdminHackCardList extends React.Component {
               name={hack.name}
               hackId={hack.id}
               hack={hack}
-              phases={hack.phases.length}
             />
 
           </li>
