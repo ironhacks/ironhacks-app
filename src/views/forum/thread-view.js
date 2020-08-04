@@ -51,7 +51,7 @@ class ThreadView extends React.Component {
 
     // RECEIVE POST DATA FROM PREVIOUS ROUTE
     if (this.props.location.state){
-      console.log(this.props.location.state);
+      // console.log(this.props.location.state);
     }
 
     this.getComments = this.getComments.bind(this);

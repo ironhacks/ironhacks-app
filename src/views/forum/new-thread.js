@@ -107,9 +107,10 @@ class NewThread extends React.Component {
     const currentDate = new Date();
     const codedBody = this.utoa(this.state.markdown);
 
-    let threadData = {
+    let postData = {
       title: this.state.title,
       author: this.props.user.uid,
+      adminPost: false,
       authorName: this.props.user.displayName,
       createdAt: currentDate,
       hackId: hackId,
@@ -117,42 +118,29 @@ class NewThread extends React.Component {
       body: codedBody,
     };
 
-    console.log(threadData);
+    if (this.props.userIsAdmin){
+      postData.adminPost = true;
+    }
+
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('forums')
       .doc(forumId)
       .collection('posts')
-      .add(threadData)
+      .add(postData)
       .then((postDoc) => {
         const threadId = postDoc.id;
         this.setState({
           threadRef: threadId
         })
-          // window.firebase.firestore()
-          //   .collection('comments')
-          //   .add({
-          //     postId: threadId,
-          //     author: this.props.user.uid,
-          //     authorName: this.props.user.displayName,
-          //     createdAt: currentDate,
-          //     forumId: forumId,
-          //   })
-          //   .then((docRef) => {
-          //     window.firebase.firestore()
-          //       .collection('threads')
-          //       .doc(threadId)
-          //       .update({
-          //         comments: [threadId],
-          //       })
-          // });
-          window.history.back();
+        window.history.back();
       })
       .catch(function(error) {
         console.error('Error adding document: ', error);
-      });
-  };
+      })
+  }
+
 
 
   utoa(str) {
@@ -192,6 +180,7 @@ class NewThread extends React.Component {
 
           <MarkdownEditor
             editorLayout='tabbed'
+            value={this.state.markdown}
             onEditorChange={this.onEditorChange}
           />
 
