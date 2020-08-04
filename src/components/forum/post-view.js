@@ -1,63 +1,30 @@
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
-import styled from 'styled-components';
 import ReactionsView from './reaction-view';
-import ReactionPicker from './reaction-picker';
+// import ReactionPicker from './reaction-picker';
 import Separator from '../../util/separator';
 import { MdContentView } from '../markdown-viewer';
 import { MaterialDesignIcon } from '../icons/material-design-icon';
 import Swal from 'sweetalert2';
 
-const UserName = styled('div')`
-  display: flex;
-  align-items: center;
-
-  span {
-    font-size: 20px;
-    font-weight: 400;
-    font-style: italic;
-    line-height: 15px;
-    margin: 0;
-  }
-`;
-
-const UserImage = styled('div')`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  font-size: 16px;
-  margin-right: 15px;
-  font-weight: 800;
-  font-style: normal;
-  background-color: var(--color-primary);
-  border-radius: 20px;
-`;
-
-const Control = styled('div')`
-  position: absolute;
-  display: flex;
-  top: 10px;
-  right: 15px;
-  height: 30px;
-`;
-
-
-function PostHeader({postTitle, postAuthorName}){
-  const name = postAuthorName;
+function PostHeader({postTitle, postAuthorName, adminPost}){
+  const name = postAuthorName.split(' ');
   const initials = name[0].slice(0, 1) + name[1].slice(0, 1);
-  return (
-    <>
-        <h2 className="h2 mb-2 font-bold">
-          {postTitle}
-        </h2>
 
-        <UserName>
-          <UserImage>{initials}</UserImage>
-          <span>{postAuthorName}</span>
-        </UserName>
-    </>
+  return (
+    <div className="post_header">
+      <h2 className="post_title mb-2">{postTitle}</h2>
+      <div className="post_author">
+        <div className="post_author__img">{initials}</div>
+          {adminPost ? (
+          <div className="post_author__name">
+            <span>{name[0]}</span>
+            <div className="badge badge-dark ml-2">IronHacks Team</div>
+          </div>
+          ) : (
+          <div className="post_author__name">{postAuthorName}</div>
+          )}
+      </div>
+    </div>
   )
 }
 
@@ -75,8 +42,9 @@ class PostView extends React.Component {
     super(props);
     const { user } = props;
     const { authorName } = props.data;
-    const splitedName = authorName.split(' ');
-    const profileLetters = splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1);
+    const name = authorName.split(' ');
+    const profileLetters = name[0].slice(0, 1) + name[1].slice(0, 1);
+
     this.state = {
       authorName: authorName,
       user: user,
@@ -107,7 +75,6 @@ class PostView extends React.Component {
     })
     .then((result) => {
       if (result.value) {
-        console.log(this.props.postRef);
         let commentDocs = this.props.postRef
           .collection('comments')
           .get();
@@ -135,18 +102,16 @@ class PostView extends React.Component {
   }
 
   render() {
-    if (this.state.navigateToForum) {
-      return <Redirect push to='/forum' />;
-    }
-
     return (
-      <div className="depth-1 mb-2 p-5 relative">
+      <div className="post depth-1 mb-2 p-5 relative">
         <PostHeader
           postAuthorName={this.props.data.authorName}
+          adminPost={this.props.data.adminPost || false}
           postTitle={this.props.title}
         />
+
         {this.props.data.author === this.state.user.uid && (
-          <Control>
+          <div className="post_controls">
             <MaterialDesignIcon
               name="edit"
               iconClass="btn mr-2"
@@ -159,23 +124,15 @@ class PostView extends React.Component {
               iconClass="btn"
               onClick={this.deletePost}
             />
-          </Control>
-          )}
+          </div>
+        )}
 
         <Separator />
-
         <PostBody content={this.props.data.body} />
-
         <Separator />
 
         <div className='flex'>
           <ReactionsView commentData={this.props.data} />
-
-          <ReactionPicker
-            commentData={this.props.data}
-            commentId={this.props.data.id}
-            user={this.state.user}
-            />
         </div>
       </div>
     )

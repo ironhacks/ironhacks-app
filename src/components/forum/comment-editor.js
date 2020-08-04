@@ -40,8 +40,6 @@ class CommentEditor extends React.Component {
       postId: this.props.postId,
     }
 
-    console.log('comment', comment);
-
     if (this.props.userIsAdmin){
       comment.adminPost = true;
       this.props.postRef

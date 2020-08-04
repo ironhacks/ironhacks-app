@@ -1,47 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ReactionsView from './reaction-view';
 import ReactionPicker from './reaction-picker';
-
-const PreviewContainer = styled('div')`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  border-radius: 5px;
-  background-color: rgba(0,0,0,0.02);
-  margin-bottom: 5px;
-  padding: 10px 15px;
-  border: 1px solid #dadada;
-  transition: background-color 0.2s;
-
-  h2 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 0 4px 0;
-    line-height: 1;
-
-    a {
-      color: black;
-    }
-  }
-
-
-  .post-author {
-    font-size: 15px;
-    margin: 0 .4em 0 0;
-  }
-
-  .post-date {
-    font-size: 15px;
-    margin-bottom: 10px;
-  }
-
-  .stats {
-    display: flex;
-  }
-`;
 
 
 function ThreadLink({threadId, threadTitle, threadData}){
@@ -57,29 +17,10 @@ function ThreadLink({threadId, threadTitle, threadData}){
 }
 
 
-function PostPreviewAuthorImg({author}){
-  const name = author.split(' ');
-  const initials = name[0].slice(0, 1) + name[1].slice(0, 1);
-  const authorImgStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '40px',
-    height: '40px',
-    fontSize: '15px',
-    marginRight: '15px',
-    fontWeight: '800',
-    fontStyle: 'normal',
-    backgroundColor: 'var(--color-primary)',
-    borderRadius: '20px',
-  }
-
+function PostPreviewAuthorImg({initials}){
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-    }}>
-      <div style={authorImgStyle}>
+    <div className="flex flex-align-center">
+      <div className="author-img">
         {initials}
       </div>
     </div>
@@ -90,24 +31,19 @@ class PostPreview extends React.Component {
   constructor(props) {
     super(props);
     const { authorName } = props.thread;
-    const splitedName = authorName.split(' ');
-    const profileLetters = splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1);
+    const name = authorName.split(' ');
+    const initials = name[0].slice(0, 1) + name[1].slice(0, 1);
+
     this.state = {
-      profileLetters,
       navigate: false,
       referrer: null,
+      authorInitials: initials,
+      authorName: authorName,
+      authorFirstName: name[0],
     };
 
     this.getComment = this.getComment.bind(this);
   }
-
-  componentDidMount() {
-    // this.getComment();
-  }
-
-  static contextTypes = {
-    router: PropTypes.object,
-  };
 
   getComment() {
     window.firebase.firestore()
@@ -122,33 +58,28 @@ class PostPreview extends React.Component {
       })
       .catch(function(error) {
         console.error('Error getting documents: ', error);
-      });
-  };
+      })
+  }
 
   render() {
     return (
-        <PreviewContainer>
-          <div style={{
-            display: 'flex',
+        <div className="post-preview">
+          <div className="flex">
+            <PostPreviewAuthorImg
+              initials={this.state.authorInitials}
+            />
 
-          }}>
-          <PostPreviewAuthorImg
-            author={this.props.postAuthor}
-          />
             <div>
-              <div>
-                <h2>
-                  <ThreadLink
-                    threadId={this.props.postId}
-                    threadTitle={this.props.postTitle}
-                    threadData={this.props.thread}
-                  />
-                </h2>
-              </div>
-
+              <h2>
+                <ThreadLink
+                  threadId={this.props.postId}
+                  threadTitle={this.props.postTitle}
+                  threadData={this.props.thread}
+                />
+              </h2>
               <div>
                 <span className='post-author'>
-                  by <em>{this.props.postAuthor}</em>
+                  by <em>{this.state.authorFirstName}</em>
                 </span>
 
                 <span className='post-date'>
@@ -175,7 +106,7 @@ class PostPreview extends React.Component {
               />
             )}
           </div>
-        </PreviewContainer>
+        </div>
     )
   }
 }
