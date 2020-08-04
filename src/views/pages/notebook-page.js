@@ -10,7 +10,6 @@ class NotebookPage extends React.Component {
     this.state = {
       loading: false,
     }
-
     let queryPath = this.notebookPath = this.props.location.search;
     if (queryPath) {
       let urlSearch = new URLSearchParams(window.location.search);
@@ -21,7 +20,6 @@ class NotebookPage extends React.Component {
     } else {
       this.path = '';
     }
-    console.log('path', this.path);
   }
 
   getNotebookPath() {
@@ -42,6 +40,9 @@ class NotebookPage extends React.Component {
           pageClass="admin-page"
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
+          pageTitle="IronHacks | Notebook Viewer"
+          pageDescription="Juptyer Notebook Viewer"
+          pageUrl="https://ironhacks.com/notebook-viewer"
         >
         <NotebookViewer
           title="Notebook Viewer"
