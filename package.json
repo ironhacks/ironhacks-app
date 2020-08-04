@@ -114,5 +114,5 @@
     "start": "npm run react:start",
     "test": "npm run react:test"
   },
-  "version": "2.1.7"
+  "version": "2.1.8"
 }
