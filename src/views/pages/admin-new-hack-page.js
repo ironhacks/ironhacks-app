@@ -1,12 +1,12 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
-import DayPicker, { DateUtils } from 'react-day-picker';
 import { Theme } from '../../theme';
 import Separator from '../../util/separator';
 import Button from '../../util/button.js';
-import Phase from '../../components/hacks/phase';
-import 'react-day-picker/lib/style.css';
+
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const styles = Theme.STYLES.AppSectionTheme;
 
@@ -37,34 +37,6 @@ const SectionContainer = styled('div')`
     height: 50px;
   }
 `;
-const NewElementButton = styled('button')`
-  background-color: transparent;
-  border: none;
-  font-weight: 800;
-  color: #4d4d4d;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-const DatePickerContainer = styled('button')`
-  display: ${(props) => {
-    if (props.phase === 0) {
-      return 'none';
-    } else {
-      return 'block';
-    }
-  }}
-  top: 30px;
-  left: 20px;
-  margin-bottom: 10px;
-  background-color: transparent;
-  border: none;
-
-  &:focus {
-    outline: 0;
-  }
-`;
 
 class AdminNewHackPage extends React.Component {
   _timeoutID;
@@ -73,216 +45,54 @@ class AdminNewHackPage extends React.Component {
     super(props);
     this.state = {
       hackName: '',
-      selectedPhase: 0,
-      from: undefined,
-      to: undefined,
-      isCalendarManagingFocus: false,
-      phases: [
-        {
-          coding: { start: new Date(), end: new Date() },
-          evaluation: { start: new Date(), end: new Date() },
-        },
-      ],
-      forums: [{ name: '', treatment: 0, participants: [] }],
+      startDate: new Date(),
       isCreateEnable: true,
       mustNavigate: false,
     };
-    // References
-    this.calendarContainerRef = React.createRef();
+
+    this.onHackStartDateChanged = this.onHackStartDateChanged.bind(this);
+    this.hackNameEventHandler = this.hackNameEventHandler.bind(this);
+    this.createHack = this.createHack.bind(this);
   }
 
-  componentDidUpdate = () => {
-    if (this.calendarContainerRef.current) {
-      this.calendarContainerRef.current.focus();
-    }
-  };
 
-  // Callback, reports if the title input state change
-  hackNameEventHandler = (event) => {
+  onHackStartDateChanged(value){
+    this.setState({startDate: value})
+  }
+
+  hackNameEventHandler(event) {
     this.setState({
       hackName: event.target.value,
       isCreateEnable: event.target.value ? false : true,
-    });
-  };
+    })
+  }
 
-  // ---------------------- Phase Functions -----------------------------//
-  // Add a new Phase Json Representation Object to de phases array on the state object
-  addNewPhase = () => {
-    this.setState((prevState, props) => {
-      return prevState.phases.push({
-        coding: { start: new Date(), end: new Date() },
-        evaluation: { start: new Date(), end: new Date() },
-      });
-    });
-  };
-
-  onPhaseClick = (phaseIndex, phaseStage) => {
-    let range;
-    if (phaseStage === 'coding') {
-      range = {
-        from: this.state.phases[phaseIndex - 1].coding.start,
-        to: this.state.phases[phaseIndex - 1].coding.end,
-      };
-    } else {
-      range = {
-        from: this.state.phases[phaseIndex - 1].evaluation.start,
-        to: this.state.phases[phaseIndex - 1].evaluation.end,
-      };
-    }
-    this.setState((prevState, props) => {
-      return {
-        selectedPhase: phaseIndex,
-        phaseStage: phaseStage,
-        from: range.from,
-        to: range.to,
-      };
-    });
-  };
-  // ---------------------- Phase Functions -----------------------------//
-  // --------------------- Calendar functions ------------------------- //
-  // Callback, handle when the user clicks on a day.
-  handleDayClick = (day) => {
-    // Update the range shown on the calendar.
-    /*
-     * range object format
-     * range = {
-     *   from: Date(),
-     *   to: Date(),
-     * }
-     */
-    const range = DateUtils.addDayToRange(day, this.state);
-    // Setting the phase value for the correct phase index and updating the calendar display
-    this.setState((prevState, props) => {
-      if (prevState.phaseStage === 'coding') {
-        prevState.phases[prevState.selectedPhase - 1].coding = {
-          start: range.from,
-          end: range.to,
-        };
-      } else if (prevState.phaseStage === 'evaluation') {
-        prevState.phases[prevState.selectedPhase - 1].evaluation = {
-          start: range.from,
-          end: range.to,
-        };
-      }
-      return { phases: prevState.phases, from: range.from, to: range.to };
-    });
-  };
-
-  _onCalendarContainerBlur = () => {
-    this._timeoutID = setTimeout(() => {
-      if (this.state.isCalendarManagingFocus) {
-        this.setState({
-          isCalendarManagingFocus: false,
-          selectedPhase: 0,
-        });
-      }
-    }, 0);
-  };
-
-  _onCalendarContainerFocus = () => {
-    clearTimeout(this._timeoutID);
-    if (!this.state.isCalendarManagingFocus) {
-      this.setState({
-        isCalendarManagingFocus: true,
-      });
-    }
-  };
-  // --------------------- Calendar functions ------------------------- //
-  // --------------------- Forum functions ---------------------------- //
-  // Add a new Phase Json Representation Object to de forum array on the state object
-  addNewForum = () => {
-    this.setState((prevState, props) => {
-      return prevState.forums.push({
-        name: '',
-        treatment: 0,
-        participants: [],
-      });
-    });
-  };
-
-  onForumItemUpdate = (name, treatment, index) => {
-    this.setState((prevState, props) => {
-      prevState.forums[index] = {
-        name: name ? name : prevState.forums[index].name,
-        treatment: treatment ? treatment : prevState.forums[index].treatment,
-        participants: {},
-      };
-      return prevState.forums;
-    });
-  };
-  // --------------------- Forum functions ---------------------------- //
-  // --------------------- Create Hack Process ------------------------ //
-  // this fucton handle the 'create' button onClick
-  createHackHandler = () => {
-    // TODO: change the ui in order to block all input fields.
-    this.createHack();
-  };
-
-  createHack = () => {
-    // Begin to create the hack json representation:
-    /*
-     * Hack = {
-     *   name: string,
-     *   phases: [{}],
-     *   tutorial: {},
-     *   ceremony: {},
-     */
-
-    // Mapping phases object to create the json representation of it.
-    const phases = this.state.phases.map((item, index) => {
-      return {
-        index: index,
-        codingStartDate: item.coding.start,
-        codingStartEnd: item.coding.end,
-        evaluationStartDate: item.evaluation.start,
-        evaluationStartend: item.evaluation.end,
-      };
-    });
-
+  createHack() {
     const hackInstance = {
       name: this.state.hackName,
-      phases: phases,
+      startDate: this.state.startDate,
       tutorial: {
         doc: '',
-        start: new Date(),
-        end: new Date(),
+        created: new Date(),
       },
-    };
-
-    const adminData = {
       task: {
         doc: '',
-        releaseDate: new Date(),
+        created: new Date(),
       },
-      whiteList: [],
     };
 
     this.setState({ hack: hackInstance });
-    // db Reference
-    const firestore = window.firebase.firestore();
-    const _this = this;
-    // TODO: add forum id
-    firestore
+
+    window.firebase.firestore()
       .collection('hacks')
       .add(hackInstance)
-      .then(function(docRef) {
-        const hackRef = docRef.id;
-        _this.setState({ hackId: hackRef });
-        // Adding each forum to the hack:
-        // Get a new write batch
-        const batch = firestore.batch();
-        _this.state.forums.forEach((forum) => {
-          forum.hack = hackRef;
-          const newForumRef = firestore.collection('forums').doc();
-          batch.set(newForumRef, forum);
+      .then((docRef)=>{
+        const hackId = docRef.id;
+        this.setState({
+          mustNavigate: true,
+          hackId: hackId
         });
-        const adminDataRef = firestore.collection('adminHackData').doc(hackRef);
-        batch.set(adminDataRef, adminData);
-        // Commit the batch
-        batch.commit().then(function() {
-          // TODO: Update the UI to give feedback to the user
-          _this.setState({ mustNavigate: true });
-        });
+        window.location = `/admin/hacks/${hackId}`;
       })
       .catch(function(error) {
         console.error('Error adding document: ', error);
@@ -295,25 +105,20 @@ class AdminNewHackPage extends React.Component {
         <Redirect
           to={{
             pathname: '/admin/hacks/' + this.state.hackName,
-            state: { hack: this.state.hack, hackId: this.state.hackId },
+            state: {
+              hack: this.state.hack,
+              hackId: this.state.hackId
+            },
           }}
         />
       );
     }
-
-    const { from, to } = this.state;
-    const modifiers = {
-      start: from,
-      end: to
-    };
-
     return (
       <ThemeProvider theme={styles}>
         <SectionContainer className='container-fluid'>
           <div className='row'>
             <div className='col-md-8 offset-md-2'>
               <h1>Create a new Hack</h1>
-              <p>Hack description</p>
               <Separator primary />
             </div>
           </div>
@@ -331,48 +136,21 @@ class AdminNewHackPage extends React.Component {
           </div>
 
           <div className='row'>
-            <div className='col-md-8 offset-md-2'>
-
-              <h2>{this.state.hackName} Dates</h2>
-
-              <p>Dates Explanation.</p>
-
-              <Separator />
-            </div>
-          </div>
-
-          <div className='row'>
             <div className='col-md-7 offset-md-2'>
-              <h2>Phases</h2>
-
-              <p>Phase mechanic description.</p>
-
-              {this.state.phases.map((item, index) => (
-                <Phase
-                  dates={item}
-                  phaseIndex={index + 1}
-                  key={index}
-                  onFocusHandler={this.onPhaseClick}
+              <div className="flex align-content-center py-2">
+                <h3 className="h3 my-0 mr-2" style={{verticalAlign: 'center'}}>
+                  Start Date
+                </h3>
+                <DatePicker
+                  selected={this.state.startDate}
+                  onChange={this.onHackStartDateChanged}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  dateFormat="MMMM d, yyyy h:mm aa"
+                  timeCaption="time"
+                  timeIntervals={60}
                 />
-              ))}
-
-              <DatePickerContainer
-                className='date-picker-container'
-                phase={this.state.selectedPhase}
-                innerRef={this.calendarContainerRef}
-                onBlur={this._onCalendarContainerBlur}
-                onFocus={this._onCalendarContainerFocus}
-              >
-                <DayPicker
-                  selectedDays={[from, { from, to }]}
-                  modifiers={modifiers}
-                  onDayClick={this.handleDayClick}
-                />
-              </DatePickerContainer>
-
-              <NewElementButton onClick={this.addNewPhase}>
-                ADD PHASE
-              </NewElementButton>
+                </div>
             </div>
           </div>
 
@@ -382,12 +160,14 @@ class AdminNewHackPage extends React.Component {
                 primary
                 width='150px'
                 margin='0 0 0 15px'
-                onClick={this.createHackHandler}
+                onClick={this.createHack}
                 disabled={this.state.isCreateEnable}
               >
                 Create Hack
               </Button>
-              <Button width='150px'>Cancel</Button>
+              <Button width='150px'>
+                Cancel
+              </Button>
             </div>
           </div>
         </SectionContainer>
