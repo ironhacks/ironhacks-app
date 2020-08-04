@@ -88,6 +88,8 @@ class AdminHackRegistration extends React.Component {
     .get()
     .then(doc=>{
       let data = doc.data();
+      if (!data) { return false }
+
       let users = Object.keys(data).map((key, i) => {
         let user = data[key];
         // this.getUserData(user.ref);
@@ -188,13 +190,14 @@ class AdminHackRegistration extends React.Component {
     }
 
     while (list.length > 0) {
-      Object.keys(groups).forEach((group)=>{
+      for (var i = 0; i < Object.keys(groups).length; i++) {
         if (list.length > 0){
+          let group = Object.keys(groups)[i];
           let index = Math.floor(Math.random() * list.length);
-          groups[group].push(list[index]);
+          groups[group].push(list[index].userId);
           list = removeListItem(list, index);
         }
-      })
+      }
     }
     this.setState({cohortList: groups});
 

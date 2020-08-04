@@ -10,6 +10,18 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Section, Row } from '../../components/layout';
 
+
+var fire2Date = (fireDate) => {
+  if (!fireDate){
+    return '';
+  }
+
+  let secs = fireDate.seconds || 0;
+  let nsecs = fireDate.nanoseconds || 0;
+
+  return new Date((secs * 1000) + (nsecs / 1000000)).toISOString();
+}
+
 class AdminHackSettings extends React.Component {
   constructor(props) {
     super(props);
@@ -38,6 +50,13 @@ class AdminHackSettings extends React.Component {
       quizEnabled: false,
     }
 
+    let parsedDate = startDate;
+    if (startDate.seconds) {
+      parsedDate = new Date(Date.parse(fire2Date(startDate)))
+    } else {
+      parsedDate = new Date(Date.parse(startDate));
+    }
+
     this.state = {
       whitelist: whitelist || [''],
       displayOptions: displayOptions || defaultDisplayOptions,
@@ -51,7 +70,7 @@ class AdminHackSettings extends React.Component {
       hackThumbImg: hackThumbImg || '',
       syncing: false,
       submitDisabled: false,
-      startDate: startDate ? new Date(Date.parse(startDate)) : new Date(),
+      startDate: startDate ? parsedDate : new Date(),
     }
 
     this.onHackBannerImgChanged = this.onHackBannerImgChanged.bind(this);
