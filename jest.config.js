@@ -67,7 +67,7 @@ module.exports = {
   // An enum that specifies notification mode. Requires { notify: true }
   // notifyMode: 'failure-change',
   // A preset that is used as a base for Jest's configuration
-  preset: 'jest-expo',
+  // preset: 'jest-expo',
   // Run tests from one or more projects
   // projects: null,
   // Use this configuration option to add custom reporters to Jest
