@@ -24,10 +24,10 @@ class ProcessSection extends React.Component {
       <Row>
         <Col>
           <Img
-            responsive={true}
-            baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
+            responsive={false}
+            baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
             filePath={'media%2Fimg%2F'}
-            fileName={'ironhacks-process.jpg?alt=media&token=4ddd0be3-4cd4-4e8c-93ca-e16d093c7cb3'}
+            fileName={'ironhacks-process.jpg?alt=media&token=f0b8d6f5-d431-4444-b7e5-66f6ff0bccbb'}
             alt="IronHacks Process Figure"
           />
         </Col>

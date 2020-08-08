@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col } from '../../components/layout'
+import { MaterialDesignIcon } from '../../components/icons';
 
 class FooterCard extends React.Component {
   render() {
@@ -52,6 +53,13 @@ class FooterSection extends React.Component {
           <p>opendigital@purdue.edu</p>
           <p>Ernest C. Young Hall, Room 305<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
           <p>Discovery Learning Research Center<br/>298 Nimitz Dr.<br/>West Lafayette, IN 47906</p>
+          <p>
+            <a href="https://www.facebook.com/OpenDigitalPurdue/">
+              <MaterialDesignIcon
+                name="facebook"
+              />
+            </a>
+          </p>
         </Col>
 
         <Col colClass='flex-1'>
