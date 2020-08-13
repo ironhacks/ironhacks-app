@@ -114,7 +114,7 @@
     "start": "npm run react:start",
     "test": "npm run react:test"
   },
-  "version": "2.1.8",
+  "version": "2.1.9",
   "bit": {
     "env": {
       "compiler": "bit.envs/compilers/react@1.0.20"
