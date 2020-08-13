@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { Loader } from '../../components/loader';
+import { userMetrics } from '../../util/user-metrics'
 
 class LogoutPage extends React.Component {
   constructor(props) {
@@ -14,6 +15,14 @@ class LogoutPage extends React.Component {
   }
 
   _logout() {
+    window.firebase.analytics().logEvent('user_logout');
+    userMetrics({
+      event: 'user_logout',
+      metadata: {
+        location: window.location.pathname,
+      }
+    })
+
     window.firebase.auth()
       .signOut()
       .then(()=>{

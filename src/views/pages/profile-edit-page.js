@@ -3,6 +3,7 @@ import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { InputText, InputNumber } from '../../components/input';
 import Select from 'react-select';
+import { userMetrics } from '../../util/user-metrics'
 import '../../styles/css/profile.css';
 import {
   COUNTRY_CODES,
@@ -70,6 +71,12 @@ class ProfileEditPage extends React.Component {
 
   componentDidMount() {
     window.firebase.analytics().logEvent('view_profile_edit')
+    userMetrics({
+      event: 'view_page',
+      metadata: {
+        location: '/profile/edit'
+      }
+    })
   }
 
   getUserProfile() {
@@ -119,6 +126,12 @@ class ProfileEditPage extends React.Component {
       .then(()=>{
         console.log('success');
         window.firebase.analytics().logEvent('update_profile')
+        userMetrics({
+          event: 'profile_update',
+          metadata: {
+            location: '/profile/edit',
+          }
+        })
         window.location = '/profile';
       })
   }
@@ -138,7 +151,6 @@ class ProfileEditPage extends React.Component {
   experienceInputChanged(name, value) {
     let experience = this.state.formData.programmingExperience;
     experience[name] = value;
-
     this.setState({
       formData: {
         ...this.state.formData,
@@ -148,7 +160,6 @@ class ProfileEditPage extends React.Component {
   }
 
   demographicSelectInputChanged(name, data) {
-    console.log('demographic', name, data);
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
     this.setState({
@@ -160,7 +171,6 @@ class ProfileEditPage extends React.Component {
   }
 
   demographicTextInputChange(name, data) {
-    console.log('demographic text', name, data);
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
     this.setState({

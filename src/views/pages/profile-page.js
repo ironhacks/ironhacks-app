@@ -4,6 +4,7 @@ import { MaterialDesignIcon } from '../../components/icons/material-design-icon'
 import { SkillsTable } from '../../components/skills-table';
 import '../../styles/css/profile.css';
 import { ErrorBoundary } from '../../util';
+import { userMetrics } from '../../util/user-metrics'
 
 function getHackName(hackId) {
   return window.firebase.firestore()
@@ -38,7 +39,7 @@ class TrainingKeyLink extends React.Component {
 
   getFileUrl() {
     window.firebase.storage()
-      .ref('/keys-training-DeKE13nHvqzolDUa0Fg9')
+      .ref('/data/ DeKE13nHvqzolDUa0Fg9/keys/training')
       .child(`${this.props.userId}.json`)
       .getDownloadURL()
       .then(this.onResolve, this.onReject);
@@ -50,6 +51,16 @@ class TrainingKeyLink extends React.Component {
 
 
   downloadFileUrl() {
+    window.firebase.analytics().logEvent('download_file', {type: 'key_file'})
+    userMetrics({
+      event: 'download_file',
+      metadata: {
+        fileType: 'key_file',
+        location: '/profile',
+        filePath: this.state.fileUrl,
+      }
+    })
+
     fetch(this.state.fileUrl, {
       method: 'GET',
     })
@@ -76,7 +87,7 @@ class TrainingKeyLink extends React.Component {
             className="badge badge-primary py-2 px-10 h4 font-semibold m-0"
             onClick={(()=>{this.downloadFileUrl()})}
           >
-            Download your hack dataset training key
+            Download your hack dataset api key
           </div>
         </div>
         )}
@@ -217,6 +228,12 @@ class ProfilePage extends React.Component {
 
   componentDidMount() {
     window.firebase.analytics().logEvent('view_profile')
+    userMetrics({
+      event: 'view_page',
+      metadata: {
+        location: '/profile'
+      }
+    })
     let userId = this.props.user.userId;
     if (userId) {
       this.getUserData(userId);
@@ -238,21 +255,17 @@ class ProfilePage extends React.Component {
           let prgExp = this.state.userData.programmingExperience;
           let demDat = this.state.userData.demographicData;
 
-          if (data.profileData.socialMedia) {
-            social = Object.keys(data.profileData.socialMedia).map((key, index)=>{
-              return {name: key, value: data.profileData.socialMedia[key] }
-            }).filter((item)=>{
-              return item.value;
-            })
-          }
-
           if (data.profileData){
+            if (data.profileData.socialMedia) {
+              social = Object.keys(data.profileData.socialMedia).map((key, index)=>{
+                return {name: key, value: data.profileData.socialMedia[key] }
+              }).filter((item)=>{
+                return item.value;
+              })
+            }
             if (data.profileData.programmingExperience) {
               programming = Object.assign({}, prgExp, data.profileData.programmingExperience);
             }
-            // if (data.profileData.socialMedia) {
-            //   social = Object.assign({}, prgExp, data.profileData.socialMedia);
-            // }
             if (data.profileData.demographicData) {
               demographic = Object.assign({}, prgExp, data.profileData.demographicData);
             }
