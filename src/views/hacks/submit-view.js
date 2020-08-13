@@ -1,32 +1,46 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import { Row, Col } from '../../components/layout';
 import { InputText, InputCheckbox, InputTextarea } from '../../components/input';
 import { FileUpload, } from '../../components/dropzone';
-
+import { fire2Date, fire2Ms } from '../../util/date-utils'
 
 class SubmitView extends React.Component {
   constructor(props) {
     super(props);
+
+    this.submissionId = this.props.match.params.submissionId;
+
     this.state = {
       loading: true,
-      data: true,
-      submissionData: {
+      submissionForm: {
+        deadline: '',
+        name: '',
         description: '',
-        references: '',
-        keywords: [],
-        public: false,
+        survey: '',
+        fields: [],
         files: [],
       },
-      submissionFiles: [],
+      acceptedFiles: null,
+      submissionData: {
+        public: false,
+        files: [], // COMPLETED FILE UPLOADS ADDED TO HERE BEFORE SUBMISSION
+        fields: [],
+      },
+      submissionFiles: [], // HOLDS FILES BEFORE UPLOAD BEGINS
       submissionDisabled: false,
     }
-
-    this.submissionPhase = 'phase1';
 
     this.onFileUploadFiles = this.onFileUploadFiles.bind(this);
     this.startSubmitSubmission = this.startSubmitSubmission.bind(this);
     this.uploadSubmissionFile = this.uploadSubmissionFile.bind(this);
     this.onSubmissionInputChange = this.onSubmissionInputChange.bind(this);
+    this.onSubmissionFieldChanged = this.onSubmissionFieldChanged.bind(this);
+    this.getSubmissionData = this.getSubmissionData.bind(this);
+  }
+
+  componentDidMount(){
+    this.getSubmissionData()
   }
 
   onFileUploadFiles(_files) {
@@ -39,10 +53,47 @@ class SubmitView extends React.Component {
     this.setState({public: value})
   }
 
-  uploadSubmissionFile({file, hackId, phaseId, userId}) {
-    const storageRef = window.firebase.storage().ref();
-    const pathRef = storageRef.child(`data/hacks/${hackId}/${phaseId}/${userId}/${file.path}`);
+  getSubmissionData() {
+    const hackId = this.props.hackId;
+    const submissionId = this.submissionId;
+    window.firebase.firestore()
+      .collection('hacks')
+      .doc(hackId)
+      .collection('submissions')
+      .doc('settings')
+      .get()
+      .then((doc)=>{
+        let submissions = doc.data();
+        if (submissions[submissionId]){
+          let submissionForm = submissions[submissionId];
+          let acceptedFiles = submissionForm.files.map((item, index)=>{
+            return item.name;
+          })
 
+          this.setState({
+            submissionForm: submissionForm,
+            acceptedFiles: acceptedFiles,
+          });
+        }
+      })
+  }
+
+  onSubmissionFieldChanged(name, value, index) {
+    let fields = this.state.submissionData.fields;
+    let submissionData = this.state.submissionData;
+    fields[index] = value;
+
+    this.setState({
+      submissionData: {
+        ...submissionData,
+        fields: fields,
+      }
+    });
+  }
+
+  uploadSubmissionFile({file, hackId, submissionId, userId}) {
+    const storageRef = window.firebase.storage().ref();
+    const pathRef = storageRef.child(`data/hacks/${hackId}/${submissionId}/${userId}/${file.path}`);
     const uploadTask = pathRef.put(file);
 
     uploadTask.on('state_changed', function(snapshot){
@@ -84,9 +135,10 @@ class SubmitView extends React.Component {
                 ...this.state.submissionData,
                 files: fileData,
               }
-            });
+            })
 
             const submissionData = this.state.submissionData;
+
             if (fileData.length === submissionData.files.length){
               console.log('uploading complete');
               this.setState({uploading: false});
@@ -95,25 +147,25 @@ class SubmitView extends React.Component {
           })
           .catch(function(error) {
             console.error('Error getting documents: ', error);
-          });
+          })
       })
       .catch((error) => {
         console.log('Upload Failed:', file, error.message);
-      });
+      })
   }
 
   startSubmitSubmission() {
     this.setState({submissionDisabled: true});
-    let files = this.state.submissionFiles;
+    const files = this.state.submissionFiles;
     const userId = this.props.userId;
     const hackId = this.props.hackId;
-    const phaseId = 'phase1';
+    const submissionId = this.submissionId;
 
     files.forEach((item, i) => {
       this.uploadSubmissionFile({
         file: item,
         hackId: hackId,
-        phaseId: phaseId,
+        submissionId: submissionId,
         userId: userId,
       })
     });
@@ -122,20 +174,20 @@ class SubmitView extends React.Component {
   completeSubmitSubmission(data) {
     const userId = this.props.userId;
     const hackId = this.props.hackId;
-    const phaseId = 'phase1';
+    const submissionId = this.submissionId;
 
     window.firebase.firestore()
       .collection('hacks')
       .doc(hackId)
       .collection('submissions')
-      .doc(phaseId)
+      .doc(submissionId)
       .collection('users')
       .doc(userId)
       .set(data, {merge: true})
       .then(()=>{
         this.setState({submissionDisabled: false});
         console.log('done');
-        window.location.reload();
+        window.location = `/hacks/${this.props.hackSlug}`;
       })
   }
 
@@ -144,69 +196,79 @@ class SubmitView extends React.Component {
       <>
       <Row>
         <Col>
-
-          <h3 className="h3 py-2">
-            Current Submission
+          <h3 className="h2 font-bold py-2">
+            {this.state.submissionForm.name}
           </h3>
 
-          <InputTextarea
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-3"
-            labelClass="flex-1"
-            name="submission_description"
-            label="Description of the model"
-            value={this.state.submissionData.description || ''}
-            onInputChange={(name, value)=>this.onSubmissionInputChange('description', value)}
-          />
+          <p className="py-1">
+            Deadline: {this.state.submissionForm.deadline ? fire2Date(this.state.submissionForm.deadline).toISOString() : ''}
+          </p>
 
-          <InputTextarea
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-3"
-            labelClass="flex-1"
-            name="submission_references"
-            label="Submission References"
-            value={this.state.submissionData.references || ''}
-            onInputChange={(name, value)=>this.onSubmissionInputChange('references', value)}
-          />
+          <h3 className="h3 font-bold">Description:</h3>
 
-          <InputText
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-2"
-            labelClass="flex-1"
-            name="submission_keywords"
-            label="Keywords"
-            icon="image"
-            iconClass="pl-1 pr-2"
-            value={this.state.submissionData.keywords || ''}
-            onInputChange={(name, value)=>this.onSubmissionInputChange('keywords', value)}
-          />
+          <p className="bg-grey-lt4 p-2 mb-2">
+            {this.state.submissionForm.description}
+          </p>
 
-          <InputCheckbox
-            label="Share my submission"
-            name="public"
-            onInputChange={this.onSubmissionInputChange}
-            isChecked={this.state.submissionData.public}
-          />
+          {this.state.submissionForm.fields.map((item, index)=>(
+            <InputTextarea
+              key={index}
+              containerClass="flex flex-col py-1 flex-between"
+              inputClass="flex-3"
+              labelClass="flex-1 font-bold"
+              name={`field_${index}`}
+              label={item.title}
+              value={this.state.submissionData.fields[index] || ''}
+              onInputChange={(name, value)=>this.onSubmissionFieldChanged(name, value, index)}
+            />
+          ))}
 
-          <h2 className="h2 py-3">
-            File Upload
-          </h2>
+          <h3 className="h3 py-1 font-bold">
+            Submission Files
+          </h3>
+          <ul className="list">
+          {this.state.submissionForm.files.map((item, index)=>(
+            <li key={index} className="list-item">
+              <span>{item.name}</span>
+              {item.required && (<span className="font-italic ml-1">*required</span>)}
+            </li>
+          ))}
+          </ul>
 
-          <FileUpload
-            onFilesChanged={this.onFileUploadFiles}
-          />
+          <div className="p-2">
+            <h3 className="h3 font-bold py-3">
+              File Upload
+            </h3>
 
+            <FileUpload
+              acceptedFiles={this.state.acceptedFiles}
+              onFilesChanged={this.onFileUploadFiles}
+            />
+          </div>
         </Col>
       </Row>
 
       <Row>
         <Col>
-          <button
-            onClick={this.startSubmitSubmission}
-            disabled={this.state.submissionDisabled}
-            >
-            Submit
-          </button>
+          <div className="flex flex-end">
+            <InputCheckbox
+              label="Share my submission"
+              name="public"
+              labelClass="badge"
+              onInputChange={this.onSubmissionInputChange}
+              isChecked={this.state.submissionData.public}
+            />
+          </div>
+
+          <div className="flex flex-end">
+            <button
+              className="btn btn-success px-3"
+              onClick={this.startSubmitSubmission}
+              disabled={this.state.submissionDisabled}
+              >
+              Submit
+            </button>
+          </div>
         </Col>
       </Row>
       </>
@@ -214,4 +276,4 @@ class SubmitView extends React.Component {
   }
 }
 
-export default SubmitView
+export default withRouter(SubmitView)

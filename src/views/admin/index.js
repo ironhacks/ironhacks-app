@@ -5,6 +5,7 @@ import AdminHackRules from './admin-hack-rules';
 import AdminHackRegistration from './admin-hack-registration';
 import AdminHackSettings from './admin-hack-settings';
 import AdminHackSubmissions from './admin-hack-submissions';
+import AdminHackSubmissionEdit from './admin-hack-submission-edit';
 import AdminHackSurveys from './admin-hack-surveys';
 import AdminHackTask from './admin-hack-task';
 import AdminHackTutorial from './admin-hack-tutorial';
@@ -18,6 +19,7 @@ const AdminHack = {
   Rules: AdminHackRules,
   Settings: AdminHackSettings,
   Submissions: AdminHackSubmissions,
+  SubmissionEdit: AdminHackSubmissionEdit,
   Surveys: AdminHackSurveys,
   Task: AdminHackTask,
   Tutorial: AdminHackTutorial,

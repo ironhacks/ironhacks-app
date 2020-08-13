@@ -9,7 +9,7 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Section, Row } from '../../components/layout';
-
+import { upperCaseWord } from '../../util/string-utils';
 
 var fire2Date = (fireDate) => {
   if (!fireDate){
@@ -46,6 +46,7 @@ class AdminHackSettings extends React.Component {
       tutorialEnabled: false,
       resultsEnabled: false,
       rulesEnabled: false,
+      submissionsEnabled: false,
       projectsEnabled: false,
       quizEnabled: false,
     }
@@ -59,7 +60,7 @@ class AdminHackSettings extends React.Component {
 
     this.state = {
       whitelist: whitelist || [''],
-      displayOptions: displayOptions || defaultDisplayOptions,
+      displayOptions: Object.assign({}, defaultDisplayOptions, displayOptions),
       registrationOpen: registrationOpen || false,
       hackPublished: hackPublished || false,
       hackBannerImg: hackBannerImg || '',
@@ -330,69 +331,16 @@ class AdminHackSettings extends React.Component {
             Display Options
           </h3>
 
-          <InputCheckbox
-            label="Calendar Enabled"
-            name="calendarEnabled"
-            onInputChange={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.calendarEnabled}
-            disabled={this.state.syncing}
-          />
-
-          <InputCheckbox
-            label="Forum Enabled"
-            name="forumEnabled"
-            onInputChange={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.forumEnabled}
-            disabled={this.state.syncing}
-          />
-
-          <InputCheckbox
-            label="Projects Enabled"
-            name="projectsEnabled"
-            onInputChange={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.projectsEnabled}
-            disabled={this.state.syncing}
-          />
-
-          <InputCheckbox
-            label="Results Enabled"
-            name="resultsEnabled"
-            onInputChange={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.resultsEnabled}
-            disabled={this.state.syncing}
-          />
-
-          <InputCheckbox
-            label="Quiz Enabled"
-            name="quizEnabled"
-            onInputChange={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.quizEnabled}
-            disabled={this.state.syncing}
-          />
-
-          <InputCheckbox
-            label="Rules Enabled"
-            name="rulesEnabled"
-            onInputChange={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.rulesEnabled}
-            disabled={this.state.syncing}
-          />
-
-          <InputCheckbox
-            label="Task Enabled"
-            name="taskEnabled"
-            onInputChange={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.taskEnabled}
-            disabled={this.state.syncing}
-          />
-
-          <InputCheckbox
-            label="Tutorial Enabled"
-            name="tutorialEnabled"
-            onInputChange={this.onDisplayOptionsChanged}
-            isChecked={this.state.displayOptions.tutorialEnabled}
-            disabled={this.state.syncing}
-          />
+          {Object.keys(this.state.displayOptions).map((key, index)=>(
+            <InputCheckbox
+              key={index}
+              label={upperCaseWord(key.replace('Enabled', ' Enabled'))}
+              name={key}
+              onInputChange={this.onDisplayOptionsChanged}
+              isChecked={this.state.displayOptions[key]}
+              disabled={this.state.syncing}
+            />
+          ))}
         </Section>
 
         <Section sectionClass="py-2">
