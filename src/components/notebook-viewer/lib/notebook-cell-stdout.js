@@ -1,6 +1,5 @@
 import React from 'react';
 import {Controlled as CodeMirror} from 'react-codemirror2'
-import { Tag } from 'antd';
 
 function NotebookStdOut({
   stdout_found,
@@ -10,39 +9,19 @@ function NotebookStdOut({
   cellContent,
   displayOptions,
 }) {
-
   return (
       <div style={{
-        padding: '5px 3px',
+        padding: '0 3px .5em 3px',
         display: display,
       }}>
-
-      <Tag color='#2db7f5'>
-        stdout
-      </Tag>
-
-      <br/>
-
       <CodeMirror
-        value={cellContent}
         className=""
+        value={cellContent}
         style={{
           padding: '0',
           margin: '0',
         }}
-        options={{
-          lineNumbers: true,
-          mode: 'python',
-          lint: false,
-          theme: 'seti',
-          tabSize: 2,
-          lineWrapping: true,
-          matchBrackets: false,
-          matchTags: false,
-          autoCloseTags: false,
-          autoCloseBrackets: false,
-          readOnly: true,
-        }}
+        options={displayOptions}
       />
     </div>
   )

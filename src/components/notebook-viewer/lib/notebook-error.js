@@ -1,5 +1,4 @@
 import React from 'react';
-import { Tag } from 'antd';
 import {Controlled as CodeMirror} from 'react-codemirror2'
 
 function NotebookErrorCell({
@@ -17,33 +16,15 @@ function NotebookErrorCell({
 
   return (
       <div style={cellStyle}>
-        <Tag color='#f50'>
-          error
-        </Tag>
-
-        <br/>
-
-      <CodeMirror
-        value={cellContent}
-        className=""
-        style={{
-          padding: '0',
-          margin: '0',
-        }}
-        options={{
-          lineNumbers: true,
-          mode: 'python',
-          lint: false,
-          theme: 'seti',
-          tabSize: 2,
-          lineWrapping: true,
-          matchBrackets: false,
-          matchTags: false,
-          autoCloseTags: false,
-          autoCloseBrackets: false,
-          readOnly: true,
-        }}
-      />
+        <CodeMirror
+          value={cellContent}
+          className=""
+          style={{
+            padding: '0',
+            margin: '0',
+          }}
+          options={displayOptions}
+        />
       </div>
   )
 }

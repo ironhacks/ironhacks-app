@@ -3,13 +3,11 @@ import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { Page } from '../../components/layout';
 import { NotebookViewer } from '../../components/notebook-viewer';
+import { userMetrics } from '../../util/user-metrics'
 
 class NotebookPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: false,
-    }
     let queryPath = this.notebookPath = this.props.location.search;
     if (queryPath) {
       let urlSearch = new URLSearchParams(window.location.search);
@@ -20,14 +18,26 @@ class NotebookPage extends React.Component {
     } else {
       this.path = '';
     }
+    this.state = {
+      loading: false,
+    }
   }
-
-  getNotebookPath() {
-
-  }
-
 
   componentDidMount() {
+    window.firebase.analytics()
+      .logEvent('view_notebook', {
+        filePath: this.path,
+        fileName: this.name,
+      })
+
+    userMetrics({
+      event: 'view_notebook',
+      metadata: {
+        fileName: this.name,
+        filePath: this.path,
+        location: '/notebook-viewer',
+      }
+    })
   }
 
 
