@@ -1,26 +1,39 @@
 import React from 'react';
-import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdown-editor';
+import { InputText } from '../../components/input';
 import Button from '../../util/button.js';
 
-const AvailableActionsDiv = styled('div')`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row-reverse;
-  height: 50px;
-`;
 
 class AdminHackTask extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: this.props.previousDocument || '',
+      content: this.props.hackTask.doc ? this.decodeDocument(this.props.hackTask.doc) : '',
+      survey: this.props.hackTask.survey ? this.props.hackTask.survey : '',
     }
 
     this.onEditorChange = this.onEditorChange.bind(this);
     this.updateTaskDocument = this.updateTaskDocument.bind(this)
+    this.onSurveyChanged = this.onSurveyChanged.bind(this)
+  }
+
+  componentDidMount(){
+
+  }
+
+  getTasks(){
+    window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('tasks')
+      .get()
+      .then((docs)=>{
+        let tasks = [];
+        docs.forEach((item, index) => {
+          tasks.push(item.data())
+        });
+        this.setState({ tasks: tasks })
+      })
   }
 
   encodeDocument(str) {
@@ -37,6 +50,10 @@ class AdminHackTask extends React.Component {
     this.setState({content: markdown})
   }
 
+  onSurveyChanged(name, value) {
+    this.setState({survey: value})
+  }
+
   updateTaskDocument() {
     this.setState({ loading: true })
     let encodedTask = this.encodeDocument(this.state.content);
@@ -47,6 +64,7 @@ class AdminHackTask extends React.Component {
       .doc(this.props.hackId)
       .update({
         task: {
+          survey: this.state.survey,
           updated: timeUpdated.toISOString(),
           doc: encodedTask,
         }
@@ -67,13 +85,30 @@ class AdminHackTask extends React.Component {
             Hack Task Document Editor
           </h2>
 
+          <InputText
+            containerClass="flex py-2 flex-between flex-align-center"
+            inputClass="ml-2 flex-1"
+            labelClass="h4 mr-3 mb-0"
+            name="task_survey"
+            label="Task Survey"
+            value={this.state.survey || ''}
+            onInputChange={this.onSurveyChanged}
+          />
+
           <MarkdownEditor
             editorLayout='tabbed'
             onEditorChange={this.onEditorChange}
             value={this.state.content}
           />
 
-          <AvailableActionsDiv>
+          <div style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexDirection: 'row-reverse',
+            height: '50px',
+          }}>
             <Button
               primary
               width='150px'
@@ -89,7 +124,7 @@ class AdminHackTask extends React.Component {
             >
               View live document
             </a>
-          </AvailableActionsDiv>
+          </div>
       </>
     );
   }

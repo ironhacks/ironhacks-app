@@ -73,7 +73,7 @@ class HackPage extends React.Component {
         hackBanner: hackData.hackBannerImg ? hackData.hackBannerImg : false,
         hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
         hackOverview: hackData.overview ? hackData.overview.doc : '',
-        hackTask: hackData.task ? hackData.task.doc : '',
+        hackTask: hackData.task,
         hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
         upcomingEvent: upcomingEvent,
       })
@@ -90,22 +90,6 @@ class HackPage extends React.Component {
     } else {
       return false;
     }
-  }
-
-  async getHackTask(hackId) {
-    const getTask = window.firebase.functions().httpsCallable('getTaskDoc');
-    let hackTaskPromise = await getTask({
-      hackId: hackId,
-    })
-
-    Promise.resolve(hackTaskPromise).then((hackTask) => {
-      if (hackTask.length > 0) {
-        this.setState({
-          hackTask: hackTask,
-          loading: false,
-        })
-      }
-    })
   }
 
   render() {
@@ -323,6 +307,7 @@ class HackPage extends React.Component {
             <Route exact path="/hacks/:hackId/task">
               <Section>
                 <Hack.Task
+                  userEmail={this.props.user.email}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   task={this.state.hackTask}
@@ -340,9 +325,21 @@ class HackPage extends React.Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/submit">
+            <Route exact path="/hacks/:hackId/submissions">
+              <Section>
+                <Hack.Submissions
+                  hackSlug={this.hackSlug}
+                  hackId={this.state.hackId}
+                  userId={this.props.userId}
+                  hackData={this.state.hackData}
+                />
+              </Section>
+            </Route>
+
+            <Route path="/hacks/:hackId/submit/:submissionId">
               <Section>
                 <Hack.Submit
+                  hackSlug={this.hackSlug}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   hackData={this.state.hackData}
