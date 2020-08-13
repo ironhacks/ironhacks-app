@@ -28,16 +28,30 @@
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <div id="root"></div>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyA6EnVRUF1W1QD4qvx-6yjcQ2A4YNrihqY",
-  authDomain: "the-ironhacks-platform-dev.firebaseapp.com",
-  databaseURL: "https://the-ironhacks-platform-dev.firebaseio.com",
-  projectId: "the-ironhacks-platform-dev",
-  storageBucket: "the-ironhacks-platform-dev.appspot.com",
-  messagingSenderId: "314398832566",
-  appId: "1:314398832566:web:da5dfef4755d4745aab317",
-  measurementId: "G-0DHWPN23J6"
-};
+let host = window.location.host;
+if (host !== 'ironhacks.com') {
+  var firebaseConfig = {
+    apiKey: "AIzaSyAiJKRVynLPxSB1_NjzMf-Im6uwmJnpMpY",
+    authDomain: "ironhacks-c406a.firebaseapp.com",
+    databaseURL: "https://ironhacks-c406a.firebaseio.com",
+    projectId: "ironhacks-c406a",
+    storageBucket: "ironhacks-c406a.appspot.com",
+    messagingSenderId: "562187828196",
+    appId: "1:562187828196:web:5bcad3383928a22b8d25f1",
+    measurementId: "G-4YTL413E6H"
+  }
+} else {
+  var firebaseConfig = {
+    apiKey: "AIzaSyA6EnVRUF1W1QD4qvx-6yjcQ2A4YNrihqY",
+    authDomain: "the-ironhacks-platform-dev.firebaseapp.com",
+    databaseURL: "https://the-ironhacks-platform-dev.firebaseio.com",
+    projectId: "the-ironhacks-platform-dev",
+    storageBucket: "the-ironhacks-platform-dev.appspot.com",
+    messagingSenderId: "314398832566",
+    appId: "1:314398832566:web:da5dfef4755d4745aab317",
+    measurementId: "G-0DHWPN23J6"
+  }
+}
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 </script>
