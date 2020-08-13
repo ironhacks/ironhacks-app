@@ -91,37 +91,46 @@ class UpcomingHackPage extends React.Component {
           </Row>
 
 
-          <Row rowClass="">
+          <Row rowClass="py-2">
             <Col>
-              <h2 className="h2 font-bold my-2">
+              <h2 className="h2 font-bold mb-2">
                 What will participants create during this IronHacks?
               </h2>
 
               <p>
                 The COVID-19 Data Science Challenges will focus on prediction tasks and data visualizations. We will provide our IronHacks participants with access to a selection of large and granular datasets related to COVID-19 incidents as well as social and economic effects. Equipped with this data, participants will work in the IronHacks workspace with JupyterLab and access to BigQuery to create novel and useful statistical models and visualizations using Python and R. Participants will submit Jupyter notebooks and their outputs (html and markdown files).
               </p>
+            </Col>
+          </Row>
 
-
-              <h2 className="h2 font-bold my-2">
+          <Row rowClass="py-2">
+            <Col>
+              <h2 className="h2 font-bold mb-2">
                 How will participants be evaluated?
               </h2>
 
-              <p>Each participant's notebook will be evaluated in several dimensions: </p>
+              <p>Each participant's notebook will be evaluated in several dimensions, such as:</p>
 
               <List
                 items={[
-                  'Quality and usefulness of the data visualization',
                   'Accuracy of the prediction',
-                  'Quality and reproducibility of the software code',
+                  'Quality and usefulness of the result presentation (data visualization)',
+                  'Quality of the software code',
                 ]}
               />
 
               <p>
-                The evaluation criteria and scorecard will be released along with the Task Statement at the start of the Hack.
+                The evaluation criteria and scorecard will be released at the start of the competition.
               </p>
 
-              <h2 className="h2 font-bold my-2">
-                How does IronHacks work?
+            </Col>
+          </Row>
+
+          <Row rowClass="py-2">
+            <Col>
+
+              <h2 className="h2 font-bold mb-2">
+                What will the IronHacks offer?
               </h2>
 
               <p>
@@ -151,7 +160,22 @@ class UpcomingHackPage extends React.Component {
                 </li>
               </ul>
 
-              <h2 className="h2 font-bold my-2">
+              <Img
+                responsive={true}
+                baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com'}
+                filePath={'o/media%2Fimg%2F'}
+                fileName={'ironhacks-process.jpg?alt=media&token=0b68c710-36fb-4992-9c02-604dff758a5e'}
+                alt="Key Parnters"
+                imgClass="banner_img my-3"
+              />
+
+            </Col>
+          </Row>
+
+          <Row rowClass="py-2">
+            <Col>
+
+              <h2 className="h2 font-bold mb-2">
                 What skills are needed?
               </h2>
 
@@ -159,7 +183,12 @@ class UpcomingHackPage extends React.Component {
                 This IronHacks is not limited to data science experts! We are calling on all of those people who are interested in battling the pandemic and who have the interest and initiative to learn and iterate quickly over the multiphase hack timeline. Basic knowledge of statistics, Python and R is required. But even if you are a beginner or you feel a little rusty in Python or R, you should not shy away. You can use our tutorials to warm up.
               </p>
 
-              <h2 className="h2 font-bold my-2">
+            </Col>
+          </Row>
+
+          <Row rowClass="py-2">
+            <Col>
+              <h2 className="h2 font-bold mb-2">
                 What can I gain?
               </h2>
 
@@ -178,9 +207,9 @@ class UpcomingHackPage extends React.Component {
             </Col>
           </Row>
 
-          <Row rowClass="py-3">
+          <Row rowClass="py-2">
             <Col>
-              <h2 className="h2 font-bold my-2">
+              <h2 className="h2 font-bold mb-2">
                 What is the timeline?
               </h2>
 
@@ -194,14 +223,18 @@ class UpcomingHackPage extends React.Component {
                   <p><strong>COVID-19 Data Science Challenge Fall 2020:</strong> This challenge has not yet opened yet. We plan to open this challenge on September 29th, 2020.</p>
                 ]}
               />
+            </Col>
+          </Row>
 
-              <h3 className="h3 font-bold my-2">
+          <Row rowClass="py-2">
+            <Col>
+              <h2 className="h2 font-bold mb-2">
                 How can I stay informed about the start of the COVID-19 Data Science Challenge?
-              </h3>
+              </h2>
 
               <ul className="list">
                 <li>
-                  Sign up on at <a className="link--underline" href="https://ironhacks.com">ironhacks.com</a> to learn more about each challenge and their timeline.
+                  Sign up on <a className="link--underline" href="https://ironhacks.com">ironhacks.com</a> to learn more about each challenge and their timeline.
                 </li>
 
                 <li>
@@ -212,10 +245,14 @@ class UpcomingHackPage extends React.Component {
                   Sign-up for an upcoming Info Session on August 11, 2020 <a className="link--underline" href="https://purdue-student.webex.com/purdue-student/onstage/g.php?MTID=eaabc17b783525278246fc7b228261b3a">here.</a>
                 </li>
               </ul>
+            </Col>
+          </Row>
 
-              <h3 className="h3 font-bold my-2">
+          <Row rowClass="py-2">
+            <Col>
+              <h2 className="h2 font-bold mb-2">
                 Why should organizations partner with us?
-              </h3>
+              </h2>
 
               <p>
                 By partnering with us for the IronHacks COVID-19 Data Science Challenge, organizations have the opportunity to take collective action and help society to cope with the COVID-19 pandemic.
@@ -247,9 +284,9 @@ class UpcomingHackPage extends React.Component {
             <Col colClass="text-center">
               <Img
                 responsive={true}
-                baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
-                filePath={'media%2Fimg%2F'}
-                fileName={'upcoming-covid19-partners.jpg?alt=media&token=367cbef2-c62b-4938-841d-5165d9d0da84'}
+                baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com'}
+                filePath={'o/media%2Fimg%2F'}
+                fileName={'ironhacks-partners.jpg?alt=media&token=60054022-4726-4dd9-97dc-7acedeaaa05d'}
                 alt="Key Parnters"
                 imgClass="banner_img mb-4"
               />
