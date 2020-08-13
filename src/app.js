@@ -79,7 +79,6 @@ class App extends React.Component {
 
   _isUserConnected() {
     const currentUser = window.firebase.auth().currentUser;
-
     if (currentUser){
       let user = this._filterUser(currentUser);
       window.firebase.analytics().setUserId(user.userId);
@@ -90,32 +89,30 @@ class App extends React.Component {
       });
     }
 
-    window.firebase.auth()
-      .onAuthStateChanged((user) => {
-        if (user) {
-          let _user = this._filterUser(user);
-          let _userId = _user.userId;
-          let _userIsAdmin = this._isAdmin(_userId);
-
-          Promise.resolve(_userIsAdmin).then((_userIsAdminResult)=>{
-            this._setUser({
-              user: _user,
-              userId: _user.userId,
-              userIsAdmin: _userIsAdminResult,
-            });
-          }).catch((error)=>{
-            console.log('error', error);
-          })
-        } else {
+    window.firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        let _user = this._filterUser(user);
+        let _userId = _user.userId;
+        window.firebase.analytics().setUserId(_userId);
+        let _userIsAdmin = this._isAdmin(_userId);
+        Promise.resolve(_userIsAdmin).then((_userIsAdminResult)=>{
           this._setUser({
-            user: false,
-            userId: false,
-            userIsAdmin: false,
+            user: _user,
+            userId: _user.userId,
+            userIsAdmin: _userIsAdminResult,
           });
-        }
-      })
+        }).catch((error)=>{
+          console.log('error', error);
+        })
+      } else {
+        this._setUser({
+          user: false,
+          userId: false,
+          userIsAdmin: false,
+        });
+      }
+    })
   }
-
 
   _setUser(data) {
     this.setState({
@@ -132,9 +129,7 @@ class App extends React.Component {
         .collection('admins')
         .doc(uid)
         .get();
-
       return isAdmin.exists;
-
     } else {
       return false;
     }

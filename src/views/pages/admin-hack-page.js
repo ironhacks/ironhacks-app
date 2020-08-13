@@ -113,7 +113,7 @@ class AdminHackPage extends React.Component {
       hackData: result,
       hackRules: result.rules ? this.decodeDocument(result.rules.doc) : '',
       hackTutorial: result.tutorial ? this.decodeDocument(result.tutorial.doc) : '',
-      hackTask: result.task ? this.decodeDocument(result.task.doc) : '',
+      hackTask: result.task ? result.task : null,
       hackOverview: result.overview ? this.decodeDocument(result.overview.doc) : '',
       hackExtensions: result.extensions ? result.extensions : {},
     })
@@ -229,7 +229,7 @@ class AdminHackPage extends React.Component {
 
                   <Route path={this.props.match.url + '/task'}>
                     <AdminHack.Task
-                      previousDocument={this.state.hackTask}
+                      hackTask={this.state.hackTask}
                       hackId={this.state.hackId}
                       hackSlug={this.state.hackData.hackSlug}
                     />
@@ -259,8 +259,15 @@ class AdminHackPage extends React.Component {
                     />
                   </Route>
 
-                  <Route path={this.props.match.url + '/submissions'}>
+                  <Route exact path={this.props.match.url + '/submissions'}>
                     <AdminHack.Submissions
+                      hackData={this.state.hack}
+                      hackId={this.state.hackId}
+                    />
+                  </Route>
+
+                  <Route path={this.props.match.url + '/submissions/edit/:submissionId'}>
+                    <AdminHack.SubmissionEdit
                       hackData={this.state.hack}
                       hackId={this.state.hackId}
                     />
