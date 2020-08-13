@@ -6,11 +6,7 @@ import {Loader} from '../../components/loader';
 import Button from '../../util/button.js';
 import { cloudFunctionsProdEndPoint } from '../../config/cloud-api';
 import * as DateFormater from '../../util/dateFormater.js';
-// import {registerStats} from '../../util/register-stat';
-import {
-  Row,
-  // Col
-} from '../../components/layout';
+import { Row } from '../../components/layout';
 import ProjectPreview from './preview.js';
 import FilesContainer from './filesContainer.js';
 import swal from 'sweetalert2';

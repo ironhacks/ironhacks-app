@@ -27,7 +27,7 @@ class ProcessSection extends React.Component {
             responsive={false}
             baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
             filePath={'media%2Fimg%2F'}
-            fileName={'ironhacks-process.jpg?alt=media&token=f0b8d6f5-d431-4444-b7e5-66f6ff0bccbb'}
+            fileName={'ironhacks-process.jpg?alt=media&token=0b68c710-36fb-4992-9c02-604dff758a5e'}
             alt="IronHacks Process Figure"
           />
         </Col>

@@ -1,15 +1,7 @@
-// personalScoreItem.js
-
 import React from 'react';
-
 import styled, { css } from 'styled-components';
-
 import { Theme } from '../../../theme';
 import { PersonalFeedbackContent } from './personal-feedback-content';
-import { registerStats } from '../../../util/register-stat';
-
-// const colors = Theme.COLORS;
-// const units = Theme.UNITS;
 const styles = Theme.STYLES.personalFeddbackTheme;
 
 const ItemContainer = styled('div')`
@@ -153,7 +145,6 @@ class PersonalScoreItem extends React.Component {
         type: this.props.type,
       },
     };
-    registerStats(statData);
     this.setState((prevState, props) => {
       const active = !prevState.active;
       return { active };
