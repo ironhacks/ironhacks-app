@@ -1,9 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { Row, Col } from '../../components/layout';
-import { InputText, InputCheckbox, InputTextarea } from '../../components/input';
+import { InputCheckbox, InputTextarea } from '../../components/input';
 import { FileUpload, } from '../../components/dropzone';
-import { fire2Date, fire2Ms } from '../../util/date-utils'
+import { fire2Date } from '../../util/date-utils'
 
 class SubmitView extends React.Component {
   constructor(props) {
