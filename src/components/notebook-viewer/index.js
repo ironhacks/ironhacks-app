@@ -155,6 +155,8 @@ class NotebookViewer extends React.Component {
         if ('text/plain' in output.data) {
           for (let text of output.data['text/plain']) {
             // STRIP ANSI TERMINAL COLOR CODES FROM OUTPUT
+            /*eslint-disable no-control-regex*/
+            // str.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
             output_txt.push(text.replace(/\u001b\[[0-9][0-9]?m/g, ''))
           }
         }

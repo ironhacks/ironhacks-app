@@ -4,7 +4,6 @@ import { Loader } from '../../components/loader';
 import randomUsername from '../../services/random-username';
 import { userMetrics } from '../../util/user-metrics'
 
-
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
@@ -73,7 +72,6 @@ class LoginPage extends React.Component {
       ],
       callbacks: {
         signInSuccessWithAuthResult: (result, redirectUrl) => {
-          console.log('signin with auth result');
           this._onSignInSuccess();
           if (result.additionalUserInfo.isNewUser === true) {
             this._saveUserOnDB({
@@ -84,12 +82,7 @@ class LoginPage extends React.Component {
             })
           } else {
             window.firebase.analytics().logEvent('user_login');
-            userMetrics({
-              event: 'user_login',
-              metadata: {
-                location: '/login',
-              }
-            })
+            userMetrics({event: 'user_login'})
             this._onComplete()
           }
         },
@@ -114,7 +107,6 @@ class LoginPage extends React.Component {
 
   _saveUserOnDB(user) {
     this.setState({ status: 'Creating user account' });
-    console.log('save user');
     window.firebase.firestore()
       .collection('users')
       .doc(user.uid)
@@ -127,12 +119,8 @@ class LoginPage extends React.Component {
       .then(()=>{
         let timestamp = new Date().toISOString();
         window.firebase.analytics().logEvent('user_signup', { 'value': timestamp });
-        userMetrics({
-          event: 'user_signup',
-          metadata: {
-            location: '/login',
-          }
-        })
+        userMetrics({ event: 'user_signup' })
+
         this._onComplete();
       })
       .catch((error)=>{

@@ -75,11 +75,14 @@ class NewThread extends React.Component {
   }
 
   setForumId(){
+    console.log(this.props.hackId);
     window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
       .collection('forums')
-      .where('hack','==', this.props.hackId)
       .get()
       .then((forums)=>{
+        console.log('forums', forums);
         let forumId = forums.docs[0].id;
         // TODO: temp workaround
         this.setState({forumId: forumId})
@@ -195,8 +198,8 @@ class NewThread extends React.Component {
           </div>
 
           <p>
-            You can style your Thread using Markdown syntax <strong> (If you don't know Markdown, please check <a target='_blank' rel='noopener noreferrer' href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet'> here.</a>)</strong>
-            <br/>Click the 'Preview' button to preview you post before submitting.
+            Format your post Markdown, <strong> you can learn more about Markdown syntax<a target='_blank' rel='noopener noreferrer' href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet'> here.</a>)</strong>
+            <br/>Click the 'Preview' button to see you post before submitting.
           </p>
         </SectionContainer>
     )}

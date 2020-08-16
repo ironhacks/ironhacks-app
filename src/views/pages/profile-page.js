@@ -54,9 +54,8 @@ class TrainingKeyLink extends React.Component {
     window.firebase.analytics().logEvent('download_file', {type: 'key_file'})
     userMetrics({
       event: 'download_file',
-      metadata: {
+      data: {
         fileType: 'key_file',
-        location: '/profile',
         filePath: this.state.fileUrl,
       }
     })
@@ -228,12 +227,7 @@ class ProfilePage extends React.Component {
 
   componentDidMount() {
     window.firebase.analytics().logEvent('view_profile')
-    userMetrics({
-      event: 'view_page',
-      metadata: {
-        location: '/profile'
-      }
-    })
+    userMetrics({event: 'view_profile'})
     let userId = this.props.user.userId;
     if (userId) {
       this.getUserData(userId);

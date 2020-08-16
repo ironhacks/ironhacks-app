@@ -3,13 +3,14 @@
 // *  @function registerStats
 // *  @param {Object} data user metrics
 //
-const userMetrics = (data) => {
+const userMetrics = (eventData) => {
   let user = window.firebase.auth().currentUser;
 
   let metricData = {
-    ...data,
+    ...eventData,
     userId:  user.uid || 'unauthenticated',
-    date: window.firebase.firestore.Timestamp.now(),
+    timestamp: window.firebase.firestore.Timestamp.now(),
+    pathname: window.location.pathname,
   }
 
   if (process.env.NODE_ENV !== 'production') {

@@ -247,7 +247,7 @@ class AdminSubmissionEditForm extends React.Component {
                     containerClass="flex py-1 flex-between flex-align-center"
                     inputClass="mx-2 flex-1"
                     labelClass="flex-1 h4 mb-0"
-                    name="name"cancelEditSubmission
+                    name="name"
                     label="Filename"
                     value={item.name || ''}
                     onInputChange={((name, value)=>{this.onFileChanged(name, value, index)})}

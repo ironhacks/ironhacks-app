@@ -182,7 +182,6 @@ class AdminHackPage extends React.Component {
               {name: 'Overview', path: 'overview'},
               {name: 'Rules', path: 'rules'},
               {name: 'Submissions', path: 'submissions'},
-              {name: 'Surveys', path: 'surveys'},
               {name: 'Task', path: 'task'},
               {name: 'Tutorials', path: 'tutorials'},
               {name: 'Extensions', path: 'extensions'},
@@ -249,13 +248,6 @@ class AdminHackPage extends React.Component {
                       previousDocument={this.state.hackRules}
                       hackId={this.state.hackId}
                       hackSlug={this.state.hackData.hackSlug}
-                    />
-                  </Route>
-
-                  <Route path={this.props.match.url + '/surveys'}>
-                    <AdminHack.Surveys
-                      hack={this.state.hack}
-                      onUpdate={this.updateQualtricsLinks}
                     />
                   </Route>
 
