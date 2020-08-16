@@ -95,22 +95,7 @@ class AdmQualtricsIntegrationSection extends React.Component {
           />
         </label>
         <Separator />
-        {this.state.hack.phases.map((phase) => {
-          return (
-            <label key={phase.index}>
-              Phase {phase.index + 1} survey link:
-              <input
-                name={`phase-survey-${phase.index}`}
-                type='text'
-                onChange={(e) => this.handleInputChange(e, phase.index)}
-                defaultValue={
-                  this.state.hack.phases[phase.index].commitSurveyLink || ''
-                }
-                placeholder={`Phase ${phase.index + 1} survey link`}
-              />
-            </label>
-          );
-        })}
+        
         <Separator />
         <label>
           Post hack survey link:

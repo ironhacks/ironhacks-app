@@ -5,14 +5,6 @@ import { AdminSubmissionForm } from '../../components/submission';
 import { fire2Date } from '../../util/date-utils'
 import { Link } from 'react-router-dom';
 
-
-// deadline: '',
-// name: '',
-// description: '',
-// survey: '',
-// fields: [],
-// files: [],
-
 function SubmissionItem({data, onEditSubmission}) {
   let { deadline } = data;
 
@@ -107,7 +99,7 @@ class AdminHackSubmissions extends React.Component {
   saveSubmissions(){
     let submissions = this.state.submissions;
     let submissionData = {};
-    Object.keys(submissions).map((key, index)=>{
+    Object.keys(submissions).forEach((key, index)=>{
       let submission = submissions[key]
       let submissionId = submission.submissionId;
       submissionData[submissionId] = submission;

@@ -35,6 +35,7 @@ class AdminHackSettings extends React.Component {
       startDate,
       hackThumbImg,
       registrationOpen,
+      registrationSurvey,
       displayOptions,
       whitelist,
     } = props.hackData;
@@ -62,6 +63,7 @@ class AdminHackSettings extends React.Component {
       whitelist: whitelist || [''],
       displayOptions: Object.assign({}, defaultDisplayOptions, displayOptions),
       registrationOpen: registrationOpen || false,
+      registrationSurvey: registrationSurvey || '',
       hackPublished: hackPublished || false,
       hackBannerImg: hackBannerImg || '',
       hackName: name || '',
@@ -80,6 +82,7 @@ class AdminHackSettings extends React.Component {
     this.onHackSlugChanged = this.onHackSlugChanged.bind(this);
     this.onHackThumbImgChanged = this.onHackThumbImgChanged.bind(this);
     this.onRegistrationOpenChanged = this.onRegistrationOpenChanged.bind(this);
+    this.onRegistrationSurveyChanged = this.onRegistrationSurveyChanged.bind(this);
     this.submitSettings = this.submitSettings.bind(this);
     this.onHackDescriptionChanged = this.onHackDescriptionChanged.bind(this);
     this.onHackDifficultyChanged = this.onHackDifficultyChanged.bind(this);
@@ -101,6 +104,11 @@ class AdminHackSettings extends React.Component {
 
   onHackDifficultyChanged(name, value){
     this.setState({hackDifficulty: value})
+  }
+
+  onRegistrationSurveyChanged(name, value){
+    console.log(name, value);
+    this.setState({registrationSurvey: value})
   }
 
   onHackNameChanged(name, value){
@@ -188,6 +196,7 @@ class AdminHackSettings extends React.Component {
     let hackDescription = filterDescription(this.state.hackDescription.trim());
     let displayOptions = this.state.displayOptions;
     let hackSlug = filterUrl(this.state.hackSlug.trim());
+    let registrationSurvey = this.state.registrationSurvey.trim();
     let startDate = this.state.startDate;
 
     if (!this.state.hackSlug) {
@@ -198,27 +207,29 @@ class AdminHackSettings extends React.Component {
       .collection('hacks')
       .doc(this.props.hackId)
       .update({
-        hackBannerImg: hackBannerImg,
         description: hackDescription,
-        displayOptions: displayOptions,
         difficulty: hackDifficulty,
-        name: hackName,
+        displayOptions: displayOptions,
+        hackBannerImg: hackBannerImg,
         hackSlug: hackSlug,
         hackThumbImg: hackThumbImg,
+        name: hackName,
+        registrationSurvey: registrationSurvey,
         startDate: startDate.toISOString(),
       })
       .then(() => {
         this.setState({
+          displayOptions: displayOptions,
           hackBannerImg: hackBannerImg,
           hackDescription: hackDescription,
-          displayOptions: displayOptions,
           hackDifficulty: hackDifficulty,
           hackName: hackName,
           hackSlug: hackSlug,
           hackThumbImg: hackThumbImg,
+          registrationSurvey: registrationSurvey,
           startDate: startDate,
-          syncing: false,
           submitDisabled: false,
+          syncing: false,
         })
         window.location.reload();
       })
@@ -278,6 +289,20 @@ class AdminHackSettings extends React.Component {
             value={this.state.hackDescription || ''}
             onInputChange={this.onHackDescriptionChanged}
           />
+
+
+          <InputText
+            containerClass="flex py-1 flex-between"
+            inputClass="mx-2 flex-2"
+            labelClass="flex-1"
+            name="hackRegistration"
+            label="Registration Survey"
+            icon="image"
+            iconClass="pl-1 pr-2"
+            value={this.state.registrationSurvey}
+            onInputChange={this.onRegistrationSurveyChanged}
+          />
+
 
           <h3 className="h3 py-2">
             Hack Media

@@ -61,12 +61,12 @@ class AdminHackSubmissionEdit extends React.Component {
   saveSubmission(data){
     let submissions = this.state.submissions;
     let submissionData = {};
-    Object.keys(submissions).map((key, index)=>{
+    Object.keys(submissions).forEach((key, index)=>{
       let submission = submissions[key]
       let submissionId = submission.submissionId;
       submissionData[submissionId] = submission;
     })
-
+    
     let updateId = data.submissionId;
     submissionData[updateId] = data;
 

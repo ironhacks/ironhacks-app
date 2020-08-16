@@ -50,6 +50,7 @@ class AdminHackRegistration extends React.Component {
       cohorts: [],
       cohortList: [],
       registeredUsers: [],
+      registeredUsersData: null,
     }
 
     this.addCohort = this.addCohort.bind(this)
@@ -57,6 +58,28 @@ class AdminHackRegistration extends React.Component {
     this.deleteCohort = this.deleteCohort.bind(this)
     this.getSettings = this.getSettings.bind(this)
     this.assignCohorts = this.assignCohorts.bind(this)
+    this.removeUser = this.removeUser.bind(this)
+  }
+
+  async removeUser(index) {
+    let list = this.state.registeredUsers
+    let user = list[index];
+
+    window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('registration')
+      .doc('participants')
+      .update({
+        [user.userId]: window.firebase.firestore.FieldValue.delete()
+      })
+
+      this.setState({
+        registeredUsers: [
+          ...list.slice(0, index),
+          ...list.slice(index + 1, list.length),
+        ],
+      })
   }
 
   componentDidMount() {
@@ -68,18 +91,18 @@ class AdminHackRegistration extends React.Component {
     let user = this.state.registeredUsers[index];
     return (
       <div style={style}>
-        {index + 1}. {user.name}
+        {index + 1}. {user.name} <em>({user.hackAlias})</em> &lt;{user.email}&gt;
+        <div
+          className="badge btn btn-outline-danger ml-3"
+          onClick={()=>this.removeUser(index)}
+          >
+          remove
+        </div>
       </div>
     )
   }
 
-  async getUserData(userRef) {
-    const user = await userRef.get()
-    console.log(user.id, JSON.stringify(user.data()));
-    return user;
-  }
-
-  getRegisteredUsers(){
+  async getRegisteredUsers(){
     window.firebase.firestore()
     .collection('hacks')
     .doc(this.props.hackId)
@@ -89,18 +112,30 @@ class AdminHackRegistration extends React.Component {
     .then(doc=>{
       let data = doc.data();
       if (!data) { return false }
+      let users = [];
 
-      let users = Object.keys(data).map((key, i) => {
-        let user = data[key];
-        // this.getUserData(user.ref);
-        return {
-          userId: key,
-          ref: user.ref,
-          name: user.alias,
-        }
-      }).filter(el=>{ return el.name })
+      this.setState({registeredUsersData: data});
 
-      this.setState({registeredUsers: users});
+      Object.keys(data).forEach((id) => {
+        let user = data[id];
+        console.log(user);
+        users.push(
+          user.ref.get().then((userDoc)=>{
+            return {
+              userId: id,
+              userRef: user.ref,
+              hackAlias: user.alias,
+              ...userDoc.data()
+            }
+          })
+        )
+      })
+
+      users.filter(el=>{ return el.name })
+
+      Promise.all(users).then((usersList)=>{
+        this.setState({registeredUsers: usersList});
+      })
     })
   }
 
@@ -331,15 +366,23 @@ class AdminHackRegistration extends React.Component {
             </h3>
 
             {this.state.registeredUsers ? (
+              <div>
+              <div className="flex font-bold">
+                <div className="mr-1">#.</div>
+                <div className="mr-4">Name</div>
+                <div className="mr-4"><em>(Alias)</em></div>
+                <div className="mr-0">&lt;Email&gt;</div>
+              </div>
               <List
                 itemCount={this.state.registeredUsers.length}
                 itemSize={(()=>{return 30})}
                 height={300}
-                width={400}
+                width={'100%'}
                 data={this.state.registeredUsers}
               >
                 {this.ListItemUser}
               </List>
+              </div>
             ):(
               <p>No registered users</p>
             )}
