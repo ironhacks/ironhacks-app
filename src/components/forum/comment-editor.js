@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../../util/button.js';
 import MarkdownEditor from '../../components/markdown-editor';
+import { userMetrics } from '../../util/user-metrics'
 
 class CommentEditor extends React.Component {
   constructor(props) {
@@ -54,6 +55,8 @@ class CommentEditor extends React.Component {
       })
 
     } else {
+      userMetrics({event: 'submit_comment'})
+
       // LOOKUP USER ALIAS
       window.firebase.firestore()
         .collection('hacks')

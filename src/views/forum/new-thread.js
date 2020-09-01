@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdown-editor';
 import {Loader} from '../../components/loader';
+import { withRouter } from 'react-router-dom';
+import { userMetrics } from '../../util/user-metrics'
 
 const SectionContainer = styled('div')`
   position: relative;
@@ -62,7 +64,6 @@ class NewThread extends React.Component {
     this.onEditorChange = this.onEditorChange.bind(this)
     this.submitIsDisabled = this.submitIsDisabled.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.setForumId = this.setForumId.bind(this)
   }
 
   onEditorChange(markdown) {
@@ -71,26 +72,7 @@ class NewThread extends React.Component {
   }
 
   componentDidMount() {
-    this.setForumId()
-  }
 
-  setForumId(){
-    console.log(this.props.hackId);
-    window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('forums')
-      .get()
-      .then((forums)=>{
-        console.log('forums', forums);
-        let forumId = forums.docs[0].id;
-        // TODO: temp workaround
-        this.setState({forumId: forumId})
-        // doc.forEach((forum)=>{
-        //   let data=forum.data();
-        //   console.log(forum.id, data)
-        // })
-      })
   }
 
   handleInputChange(event) {
@@ -125,6 +107,7 @@ class NewThread extends React.Component {
       postData.adminPost = true;
     }
 
+    userMetrics({event: 'submit_post'})
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -208,4 +191,4 @@ class NewThread extends React.Component {
   }
 }
 
-export default NewThread;
+export default withRouter(NewThread);

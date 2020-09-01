@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../util/button.js';
 import MarkdownEditor from '../../components/markdown-editor';
+import { userMetrics } from '../../util/user-metrics'
 
 const AvailableActionsDiv = styled('div')`
   width: 100%;
@@ -110,6 +111,7 @@ class ThreadEditView extends React.Component {
   }
 
   updatePost() {
+    userMetrics({event: 'edit_forum_post'})
     const encodedBody = this.encodeDocument(this.state.content);
 
     if (this.state.postRef) {

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import PostView from '../../components/forum/post-view';
 import { CommentView } from '../../components/forum/comment-view';
 import { CommentEditor } from '../../components/forum/comment-editor';
-
+import { userMetrics } from '../../util/user-metrics'
 
 // Section container
 const SectionContainer = styled('div')`
@@ -59,6 +59,7 @@ class ThreadView extends React.Component {
   }
 
   componentDidMount() {
+    userMetrics({event: 'view_post'})
     this.getPostData();
   }
 
