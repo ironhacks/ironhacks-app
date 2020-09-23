@@ -39,7 +39,7 @@ class TrainingKeyLink extends React.Component {
 
   getFileUrl() {
     window.firebase.storage()
-      .ref('/data/ DeKE13nHvqzolDUa0Fg9/keys/training')
+      .ref('/data/ DeKE13nHvqzolDUa0Fg9/keys/competition')
       .child(`${this.props.userId}.json`)
       .getDownloadURL()
       .then(this.onResolve, this.onReject);

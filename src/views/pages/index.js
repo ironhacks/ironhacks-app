@@ -1,6 +1,7 @@
 import AdminHackPage from './admin-hack-page';
 import AdminHackSelectPage from './admin-hack-select-page';
 import AdminNewHackPage from './admin-new-hack-page';
+import AdminUtilsPage from './admin-utils-page';
 import HackPage from './hack-page';
 import HackSelectPage from './hack-select-page';
 import HomePage from './home-page';
@@ -17,6 +18,7 @@ const Pages = {
   AdminNewHack: AdminNewHackPage,
   AdminHack: AdminHackPage,
   AdminHackSelect: AdminHackSelectPage,
+  AdminUtils: AdminUtilsPage,
   Hack: HackPage,
   HackSelect: HackSelectPage,
   Home: HomePage,

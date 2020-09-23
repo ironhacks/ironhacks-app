@@ -71,12 +71,6 @@ class ProfileEditPage extends React.Component {
 
   componentDidMount() {
     window.firebase.analytics().logEvent('view_profile_edit')
-    userMetrics({
-      event: 'view_page',
-      metadata: {
-        location: '/profile/edit'
-      }
-    })
   }
 
   getUserProfile() {
@@ -126,12 +120,7 @@ class ProfileEditPage extends React.Component {
       .then(()=>{
         console.log('success');
         window.firebase.analytics().logEvent('update_profile')
-        userMetrics({
-          event: 'profile_update',
-          metadata: {
-            location: '/profile/edit',
-          }
-        })
+        userMetrics({event: 'update_profile'})
         window.location = '/profile';
       })
   }

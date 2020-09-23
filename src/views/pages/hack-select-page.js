@@ -1,7 +1,7 @@
 import React from 'react';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
-import { HackCardList, HackSignupCardList } from '../../components/hacks';
+import { HackCardList, PreviousHackCardList, HackSignupCardList } from '../../components/hacks';
 import { Page, Section, Row, Col } from '../../components/layout';
 
 class HackSelectPage extends React.Component {
@@ -169,7 +169,7 @@ class HackSelectPage extends React.Component {
 
                 <Separator primary />
 
-                <HackCardList
+                <PreviousHackCardList
                   emptyText={'No previous hacks.'}
                   hacks={this.state.previousHacks}
                 />

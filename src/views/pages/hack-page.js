@@ -285,10 +285,8 @@ class HackPage extends React.Component {
               <Section sectionClass="results-section">
                 <Hack.Results
                   hackData={this.state.hackData}
-                  hackPhases={this.state.hackPhases}
-                  hackResults={this.state.hackResults}
-                  hackUser={this.props.user}
-                  hackUserId={this.props.userId}
+                  user={this.props.user}
+                  userId={this.props.userId}
                   hackId={this.state.hackId}
                 />
               </Section>

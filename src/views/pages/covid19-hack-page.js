@@ -240,10 +240,6 @@ class UpcomingHackPage extends React.Component {
                 <li>
                   Watch our recent our publicly accessible <a className="link--underline" href="https://youtu.be/vnT587J-wis">Info Sessions.</a>
                 </li>
-
-                <li>
-                  Sign-up for an upcoming Info Session on August 11, 2020 <a className="link--underline" href="https://purdue-student.webex.com/purdue-student/onstage/g.php?MTID=eaabc17b783525278246fc7b228261b3a">here.</a>
-                </li>
               </ul>
             </Col>
           </Row>

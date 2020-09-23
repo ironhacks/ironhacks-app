@@ -16,12 +16,7 @@ class LogoutPage extends React.Component {
 
   _logout() {
     window.firebase.analytics().logEvent('user_logout');
-    userMetrics({
-      event: 'user_logout',
-      metadata: {
-        location: window.location.pathname,
-      }
-    })
+    userMetrics({event: 'user_logout'})
 
     window.firebase.auth()
       .signOut()
