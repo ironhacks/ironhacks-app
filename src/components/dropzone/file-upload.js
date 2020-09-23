@@ -34,10 +34,8 @@ class FileUpload extends React.Component {
   }
 
   onFiles(_files) {
-    console.log('on files', _files);
     let fileList = this.state.fileList;
     let files = this.state.files;
-
 
     _files.forEach((item, i) => {
       if (this.props.acceptedFiles) {
@@ -81,6 +79,7 @@ class FileUpload extends React.Component {
         onDrop={this.onFiles}
         validate={this.validateFile}
         onChangeStatus={this.onFileStatus}
+        disabled={this.props.disabled}
       >
         {({ getRootProps, getInputProps}) => (
           <section className="dropzone">
@@ -115,6 +114,10 @@ class FileUpload extends React.Component {
       </Dropzone>
     )
   }
+}
+
+FileUpload.defaultProps = {
+  disabled: false,
 }
 
 export { FileUpload }
