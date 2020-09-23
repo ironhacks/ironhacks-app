@@ -43,6 +43,7 @@ class InputTextarea extends React.Component {
           name={this.props.name}
           value={this.props.value}
           onChange={this.handleChange}
+          disabled={this.props.disabled}
         />
       </div>
     )
@@ -56,6 +57,7 @@ InputTextarea.defaultProps = {
   labelClass: '',
   inputClass: '',
   containerClass: '',
+  disabled: false,
 }
 
 export { InputTextarea }
