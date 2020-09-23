@@ -1,8 +1,9 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { InputText, InputCheckbox, InputTextarea } from '../input';
+import { InputText, InputCheckbox } from '../input';
 // import { fire2Date } from '../../util/date-utils'
+import MarkdownEditor from '../../components/markdown-editor';
 
 
 const filterUrl = (path) => {
@@ -24,14 +25,15 @@ class AdminSubmissionForm extends React.Component {
       files: [],
     }
 
-    this.addSubmission = this.addSubmission.bind(this);
-    this.addFile = this.addFile.bind(this);
     this.addField = this.addField.bind(this);
-    this.removeFile = this.removeFile.bind(this);
-    this.removeField = this.removeField.bind(this);
-    this.onSubmissionIdChanged = this.onSubmissionIdChanged.bind(this);
-    this.onFormDataChanged = this.onFormDataChanged.bind(this);
+    this.addFile = this.addFile.bind(this);
+    this.addSubmission = this.addSubmission.bind(this);
     this.onFieldChanged = this.onFieldChanged.bind(this);
+    this.onFormDataChanged = this.onFormDataChanged.bind(this);
+    this.onFormDescriptionChanged = this.onFormDescriptionChanged.bind(this);
+    this.onSubmissionIdChanged = this.onSubmissionIdChanged.bind(this);
+    this.removeField = this.removeField.bind(this);
+    this.removeFile = this.removeFile.bind(this);
   }
 
   addSubmission() {
@@ -81,6 +83,7 @@ class AdminSubmissionForm extends React.Component {
     _fields.push({
       title: '',
       type: 'textarea',
+      required: true,
     })
     this.setState({fields: _fields})
   }
@@ -96,6 +99,12 @@ class AdminSubmissionForm extends React.Component {
     let form = this.state;
     form[name] = value;
     this.setState(form)
+  }
+
+  onFormDescriptionChanged(content){
+    this.setState({
+      description: content,
+    })
   }
 
   onSubmissionIdChanged(name, value){
@@ -170,22 +179,19 @@ class AdminSubmissionForm extends React.Component {
             onInputChange={this.onFormDataChanged}
           />
 
+          <h3 className="h4 pr-4">
+            Description
+          </h3>
 
-          <div className="flex py-1 flex-between my-2">
-            <h3 className="h4 pr-4">
-              Description
-            </h3>
-            <InputTextarea
-              value={this.state.description}
-              onInputChange={this.onFormDataChanged}
-              name="description"
-              inputClass="w-full"
-              containerClass="flex-1 pr-2"
-            />
-          </div>
+          <MarkdownEditor
+            editorLayout='tabbed'
+            height={300}
+            onEditorChange={this.onFormDescriptionChanged}
+            value={this.state.description}
+            disabled={this.state.loading}
+          />
 
-
-          <h3 className="h4">
+          <h3 className="mt-3 h4">
             Submission Fields
           </h3>
 
@@ -200,6 +206,15 @@ class AdminSubmissionForm extends React.Component {
                     name="title"
                     label="Title"
                     value={item.title || ''}
+                    onInputChange={((name, value)=>{this.onFieldChanged(name, value, index)})}
+                  />
+                  <InputCheckbox
+                    name='required'
+                    label='Required'
+                    containerClass='my-0 mr-2 badge badge-dark flex flex-align-center'
+                    labelClass='mr-2'
+                    inputClass=''
+                    isChecked={item.required}
                     onInputChange={((name, value)=>{this.onFieldChanged(name, value, index)})}
                   />
 
