@@ -41,6 +41,7 @@
     "react-window": "^1.8.5",
     "redux": "^4.0.5",
     "showdown": "^1.9.1",
+    "showdown-katex": "^0.8.0",
     "styled-components": "^5.1.1",
     "sweetalert2": "^9.17.1",
     "warning": "^4.0.3"
@@ -111,7 +112,7 @@
     "react:build": "react-scripts build",
     "react:start": "react-scripts start",
     "react:test": "react-scripts test -env=jsdom",
-    "start": "npm run react:start",
+    "start": "react-scripts start",
     "test": "npm run react:test"
   },
   "version": "2.1.10",

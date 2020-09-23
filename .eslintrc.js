@@ -143,6 +143,7 @@ module.exports = {
     "no-eq-null": 0,
     "no-eval": 2,
     "no-extra-bind": 1,
+    "no-mixed-operators": 0,
     "no-fallthrough": 1,
     "no-floating-decimal": 0,
     "no-implied-eval": 1,
