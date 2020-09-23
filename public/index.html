@@ -54,16 +54,13 @@ if (host !== 'ironhacks.com') {
 }
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
-if (host === 'localhost:3000') {
-  console.log('localhost');
-  var db = firebase.firestore();
-  db.settings({
-    host: "localhost:8080",
-    ssl: false
-  });
-}
-
-
+// if (host === 'localhost:3000') {
+//   var db = firebase.firestore();
+//   db.settings({
+//     host: "localhost:8080",
+//     ssl: false
+//   });
+// }
 </script>
 </body>
 </html>
