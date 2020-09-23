@@ -1,10 +1,9 @@
 import React from 'react';
 import MarkdownEditor from '../../components/markdown-editor';
-import { InputText } from '../../components/input';
 import Button from '../../util/button.js';
 
 
-class AdminHackTask extends React.Component {
+class AdminHackResults extends React.Component {
   constructor(props) {
     super(props);
 
@@ -15,45 +14,35 @@ class AdminHackTask extends React.Component {
       updated: '',
     }
 
-    this.getTask = this.getTask.bind(this);
+    this.getResultsSettings = this.getResultsSettings.bind(this);
     this.onEditorChange = this.onEditorChange.bind(this);
-    this.updateTaskDocument = this.updateTaskDocument.bind(this)
-    this.onSurveyChanged = this.onSurveyChanged.bind(this)
+    this.updateContent = this.updateContent.bind(this)
   }
 
   componentDidMount(){
-    this.getTask();
+    this.getResultsSettings();
   }
 
-  getTask() {
+  getResultsSettings() {
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
+      .collection('results')
+      .doc('settings')
       .get()
       .then((doc)=>{
+        if (!doc.exists) {
+          this.setState({loading: false});
+          return false;
+        }
+
         let data = doc.data()
-        let task = data.task;
         this.setState({
-          content: this.decodeDocument(task.doc),
-          survey: task.survey,
-          updated: task.updated,
+          content: data.content ? this.decodeDocument(data.content) : '',
+          updated: data.updated,
           loading: false,
         })
       })
-
-    // TODO: MULTIPLE TASK DOCS
-    // window.firebase.firestore()
-    //   .collection('hacks')
-    //   .doc(this.props.hackId)
-    //   .collection('tasks')
-    //   .get()
-    //   .then((docs)=>{
-    //     let tasks = [];
-    //     docs.forEach((item, index) => {
-    //       tasks.push(item.data())
-    //     });
-    //     this.setState({ tasks: tasks })
-    //   })
   }
 
   encodeDocument(str) {
@@ -70,24 +59,21 @@ class AdminHackTask extends React.Component {
     this.setState({content: markdown})
   }
 
-  onSurveyChanged(name, value) {
-    this.setState({survey: value})
-  }
-
-  updateTaskDocument() {
+  updateContent() {
     this.setState({ loading: true })
-    let encodedTask = this.encodeDocument(this.state.content);
+    let encodedContent = this.encodeDocument(this.state.content);
     let timeUpdated = new Date();
+    let authorId = this.props.userId;
 
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
+      .collection('results')
+      .doc('settings')
       .update({
-        task: {
-          survey: this.state.survey,
-          updated: timeUpdated.toISOString(),
-          doc: encodedTask,
-        }
+        updated: timeUpdated.toISOString(),
+        content: encodedContent,
+        authorId: authorId,
       })
       .then(() => {
         this.setState({loading: false})
@@ -102,18 +88,8 @@ class AdminHackTask extends React.Component {
     return (
         <>
           <h2 className="pb-2">
-            Hack Task Document Editor
+            Dashboard Document Editor
           </h2>
-
-          <InputText
-            containerClass="flex py-2 flex-between flex-align-center"
-            inputClass="ml-2 flex-1"
-            labelClass="h4 mr-3 mb-0"
-            name="task_survey"
-            label="Task Survey"
-            value={this.state.survey || ''}
-            onInputChange={this.onSurveyChanged}
-          />
 
           <MarkdownEditor
             editorLayout='tabbed'
@@ -134,12 +110,13 @@ class AdminHackTask extends React.Component {
               primary
               width='150px'
               margin='0 0 0 15px'
-              onClick={this.updateTaskDocument}
+              onClick={this.updateContent}
             >
               Publish
             </Button>
+
             <a
-              href={`/hacks/${this.props.hackSlug}/task`}
+              href={`/hacks/${this.props.hackSlug}/results`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -151,4 +128,4 @@ class AdminHackTask extends React.Component {
   }
 }
 
-export default AdminHackTask;
+export default AdminHackResults;
