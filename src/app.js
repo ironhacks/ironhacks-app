@@ -5,6 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import ProjectSelectView from './views/hacks/project-select-view';
 import { Pages } from './views/pages/';
 import {Helmet} from 'react-helmet';
+import { userMetrics } from './util/user-metrics'
 
 import './assets/static/bootstrap-reboot.css'
 import './assets/static/bootstrap-grid.css'
@@ -19,6 +20,7 @@ import './styles/css/content.css'
 import './styles/css/charrismatic.css'
 import './styles/css/typography.css'
 import './styles/css/buttons.css'
+import './styles/css/results.css'
 import './styles/css/forum.css'
 
 
@@ -80,6 +82,7 @@ class App extends React.Component {
     const currentUser = window.firebase.auth().currentUser;
     if (currentUser){
       let user = this._filterUser(currentUser);
+      userMetrics({event: 'app_load'})
       window.firebase.analytics().setUserId(user.userId);
       this._setUser({
         user: user,
@@ -92,6 +95,8 @@ class App extends React.Component {
       if (user) {
         let _user = this._filterUser(user);
         window.firebase.analytics().setUserId(_user.userId);
+        userMetrics({event: 'app_load'})
+
         const isAdmin = await window.firebase.firestore()
           .collection('admins')
           .doc(_user.userId)
@@ -174,14 +179,6 @@ class App extends React.Component {
                     />
                   </Route>
 
-                  <Route exact path='/hub'>
-                    <Pages.Hub
-                      user={this.state.user}
-                      userIsAdmin={this.state.userIsAdmin}
-                      userId={this.state.userId}
-                    />
-                  </Route>
-
                   <Route exact path='/hacks'>
                     <Pages.HackSelect
                       user={this.state.user}
@@ -254,6 +251,13 @@ class App extends React.Component {
                       />
                     </Route>
 
+                    <Route path='/admin/utils'>
+                      <Pages.AdminUtils
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
+                    </Route>
+
                     <Route path='/admin/new-hack'>
                       <Pages.AdminNewHack
                         user={this.state.user}
@@ -264,7 +268,6 @@ class App extends React.Component {
                   )}
                 </>
               )}
-
                 <Redirect to='/'/>
               </Switch>
           )}
