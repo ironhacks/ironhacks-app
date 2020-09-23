@@ -7,9 +7,8 @@ function NotebookHeader({title, fileUrl, fileName}) {
     window.firebase.analytics().logEvent('download_file', {type: 'notebook_file'})
     userMetrics({
       event: 'download_file',
-      metadata: {
+      data: {
         fileType: 'notebook_file',
-        location: '/notebook-viewer',
         filePath: fileUrl,
       }
     })

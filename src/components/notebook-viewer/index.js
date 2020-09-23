@@ -288,7 +288,9 @@ class NotebookViewer extends React.Component {
           {this.state.loading ? (
             <div>{'Loading...'}</div>
           ) : (
-            this.state.notebook_json.cells.map((item, index) => (
+            <>
+            {this.state.notebook_json.cells ? (
+              this.state.notebook_json.cells.map((item, index) => (
               <Card
                 key={index}
                 bodyStyle={{
@@ -366,9 +368,13 @@ class NotebookViewer extends React.Component {
                 </>
               )}
               </Card>
-            )
-          ))
-          }
+            ))
+          ) : (
+            <p>Error: Notebook Failed to load</p>
+          )
+        }
+        </>
+      )}
           </center>
         </Spin>
       </div>
