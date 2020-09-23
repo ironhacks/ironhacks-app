@@ -67,11 +67,15 @@ class MarkdownEditor extends React.Component {
       <ReactMde
         value={this.props.value}
         layout={this.props.editorLayout}
+        classes={{
+          preview: 'content_area',
+        }}
         selectedTab={this.state.selectedTab}
         minEditorHeight={this.props.height}
         generateMarkdownPreview={md=>Promise.resolve(this.converter.makeHtml(md))}
         onTabChange={tabid => this.setSelectedTab(tabid)}
         onChange={value => this.handleValueChange(value)}
+        readOnly={this.props.disabled}
       />
     );
   }
@@ -79,6 +83,7 @@ class MarkdownEditor extends React.Component {
 
 MarkdownEditor.defaultProps = {
   height: 500,
+  disabled: false,
 }
 
 export default MarkdownEditor;
