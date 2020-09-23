@@ -2,7 +2,91 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { Row, Col } from '../../components/layout';
 import { CountdownTimer } from '../../components/timer';
+import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { fire2Date, fire2Ms } from '../../util/date-utils'
+
+function SubmissionListItem({
+  status,
+  hackSlug,
+  submissionId,
+  userSubmitted,
+  name,
+  deadline,
+}){
+
+
+  if (userSubmitted) {
+    return (
+      <>
+    <a
+      href={`/hacks/${hackSlug}/submit/${submissionId}`}
+      className="link--underline flex-2 cl-green-ac4"
+      >
+      <MaterialDesignIcon
+        iconClass="icon_fs-1 mr-1"
+        name="check"
+        />
+        {name}
+      </a>
+      <span className="font-italic cl-green-ac4 flex-1 text-center">
+        Submitted
+      </span>
+    </>
+    )
+  }
+
+  if (status === 'closed') {
+    return (
+      <>
+      <span className="flex-2">
+        <MaterialDesignIcon
+        iconClass="icon_fs-1 mr-1"
+        name="block"
+        />
+        {name}
+      </span>
+      <span className="font-italic flex-1 text-center">
+        Closed
+      </span>
+      </>
+    )
+  } else if (status === 'current') {
+    return (
+      <>
+        <a
+          href={`/hacks/${hackSlug}/submit/${submissionId}`}
+          className="link--underline flex-2"
+          >
+          <MaterialDesignIcon
+            iconClass="icon_fs-1 mr-1"
+            name="arrow-forward"
+          />
+          {name}
+        </a>
+
+        <CountdownTimer
+          timerClass="flex-1 text-center"
+          endTime={fire2Date(deadline)}
+        />
+      </>
+    )
+  } else {
+    return (
+      <>
+      <span className="flex-2">
+        <MaterialDesignIcon
+          iconClass="icon_fs-1 mr-1"
+          name="alarm"
+        />
+        {name}
+      </span>
+      <span className="font-italic flex-1 text-center">
+        Upcoming
+      </span>
+      </>
+    )
+  }
+}
 
 class SubmissionsView extends React.Component {
   constructor(props) {
@@ -10,19 +94,32 @@ class SubmissionsView extends React.Component {
     this.state = {
       loading: true,
       submissions: [],
+      userSubmitted: [],
       now: Date.now(),
       current: null,
     }
 
     this.getSubmissions = this.getSubmissions.bind(this);
+    this.getUserSubmission = this.getUserSubmission.bind(this);
   }
 
   componentDidMount() {
     this.getSubmissions()
   }
 
+  getUserSubmission(submissionId) {
+    const hackId = this.props.hackId;
+    const userId = this.props.userId;
+    return window.firebase.firestore()
+      .doc(`hacks/${hackId}/submissions/${submissionId}/users/${userId}`)
+      .get()
+      .then(doc=>{
+        return doc.exists
+      })
+
+  }
+
   getSubmissions() {
-    // const userId = this.props.userId;
     const hackId = this.props.hackId;
     window.firebase.firestore()
       .collection('hacks')
@@ -32,6 +129,7 @@ class SubmissionsView extends React.Component {
       .get()
       .then((doc)=>{
         let submissionData = doc.data();
+        let userSubmitted = [];
         let submissions = [];
         let currentSubmission = null;
         for (let submission of Object.values(submissionData)) {
@@ -49,8 +147,14 @@ class SubmissionsView extends React.Component {
           } else {
             submission.status = 'upcoming';
           }
+
+          userSubmitted.push(this.getUserSubmission(submission.submissionId))
         }
 
+        Promise.all(userSubmitted).then(result=>{
+          console.log('result', result);
+          this.setState({ userSubmitted: result })
+        })
         this.setState({submissions: submissions});
       })
   }
@@ -59,42 +163,21 @@ class SubmissionsView extends React.Component {
     return (
       <Row>
         <Col>
-        <ul className="list">
-          {this.state.submissions.map((item, index)=>{
-            if (item.status === 'closed') {
-              return (
-                <li key={index} className="list-item w-500 mx-auto">
-                  <div className="flex flex-between">
-                    <span>{item.name}</span>
-                    <span className="font-italic">Closed</span>
-                  </div>
-                </li>
-              )
-            } else if (item.status === 'current') {
-              return (
-                <li key={index} className="list-item w-500 mx-auto">
-                  <div className="flex flex-between">
-                  <a href={`/hacks/${this.props.hackSlug}/submit/${item.submissionId}`} className="link--underline">
-                    {item.name}
-                    </a>
-
-                    <CountdownTimer
-                      endTime={fire2Date(item.deadline)}
-                    />
-                  </div>
-                </li>
-              )
-            } else {
-              return (
-                <li key={index} className="list-item w-500 mx-auto">
-                  <div className="flex flex-between">
-                    <span>{item.name}</span>
-                    <span className="font-italic">Upcoming</span>
-                  </div>
-                </li>
-              )
-            }
-          })}
+        <ul className="">
+          {this.state.submissions.map((item, index)=>(
+            <li key={index} className="my-4 w-500 mx-auto">
+              <div className="flex flex-between flex-align-center">
+                <SubmissionListItem
+                  deadline={item.deadline}
+                  userSubmitted={this.state.userSubmitted[index]}
+                  name={item.name}
+                  status={item.status}
+                  hackSlug={this.props.hackSlug}
+                  submissionId={item.submissionId}
+                />
+              </div>
+            </li>
+          ))}
         </ul>
         </Col>
       </Row>

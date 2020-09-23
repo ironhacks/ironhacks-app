@@ -84,7 +84,6 @@ class RegistrationView extends React.Component {
 
   registerHack() {
     this.goToPresurvey()
-    console.log('registering now');
   }
 
   render() {

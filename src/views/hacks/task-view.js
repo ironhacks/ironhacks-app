@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col } from '../../components/layout';
 import { MdContentView }  from '../../components/markdown-viewer';
 import Swal from 'sweetalert2';
+import { userMetrics } from '../../util/user-metrics'
 
 class TaskView extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class TaskView extends React.Component {
   }
 
   componentDidMount(){
+    userMetrics({event: 'view_task'})
     this.getUserForms();
   }
 
@@ -27,7 +29,6 @@ class TaskView extends React.Component {
       .then((doc)=>{
         if (doc.exists){
           let data = doc.data();
-          console.log(data);
           if ('hackTaskSurvey' in data){
             this.setState({formFilled: true});
           }
@@ -43,6 +44,8 @@ class TaskView extends React.Component {
     let formUrl = this.props.task.survey;
     let formType = 'hackTaskSurvey';
     let alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`;
+    userMetrics({event: 'open_survey'})
+
     Swal.fire({
       title: 'Hack Consent Form',
       html: `<iframe src="${alertUrl}" title="Hack Consent Form"/>`,
