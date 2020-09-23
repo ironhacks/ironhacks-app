@@ -1,3 +1,44 @@
 .link--underline {
   text-decoration: underline;
 }
+
+.text-center{ text-align:center; }
+.text-justify{ text-align:justify; }
+.text-left{ text-align:left; }
+.text-right{ text-align:right; }
+.text-underline { text-decoration: underline; }
+
+.bigger{ font-size:1.7em; }
+.smaller{ font-size:0.8em; }
+
+.font-bold{ font-weight:700; }
+.font-extrabold{ font-weight:800; }
+.font-italic{ font-style:italic; }
+.font-light{ font-weight:300; }
+.font-regular{ font-weight:500; }
+.font-semibold{ font-weight:600; }
+.font-thin{ font-weight:200; }
+
+.fs-0{ font-size:1.000em; }
+.fs-1{ font-size:1.125em; }
+.fs-10{ font-size:3.247em; }
+.fs-11{ font-size:3.653em; }
+.fs-12{ font-size:4.110em; }
+.fs-13{ font-size:4.624em; }
+.fs-14{ font-size:5.202em; }
+.fs-15{ font-size:5.852em; }
+.fs-16{ font-size:6.583em; }
+.fs-2{ font-size:1.266em; }
+.fs-3{ font-size:1.424em; }
+.fs-4{ font-size:1.602em; }
+.fs-5{ font-size:1.802em; }
+.fs-6{ font-size:2.027em; }
+.fs-7{ font-size:2.281em; }
+.fs-8{ font-size:2.566em; }
+.fs-9{ font-size:2.887em; }
+.fs-m1{ font-size:0.889em; }
+.fs-m2{ font-size:0.791em; }
+.fs-m3{ font-size:0.702em; }
+.fs-m4{ font-size:0.624em; }
+.fs-m5{ font-size:0.555em; }
+.fs-m6{ font-size:0.493em; }

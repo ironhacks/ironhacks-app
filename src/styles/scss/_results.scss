@@ -1,6 +1,5 @@
 .results-section {
   .top-container {
-    padding: 0 10%;
     background-color: #f9f9f8;
     border-bottom: 1px solid rgb(224, 228, 232);
 
@@ -17,9 +16,7 @@
   .tab-container {
     display: flex;
     justify-content: left;
-    padding: 0 10%;
     width: 100%;
-    margin-bottom: -1px;
 
     .tab-button {
       background-color: #f9f9f8;
@@ -43,8 +40,7 @@
   }
 
   .selected-section {
-    margin-top: 20px;
-    padding: 0 10%;
+    margin-top: .3em;
 
     .results-loader {
       margin-top: -20px;
