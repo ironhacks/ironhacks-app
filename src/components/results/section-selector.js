@@ -1,13 +1,42 @@
 import React from 'react';
 import { userMetrics } from '../../util/user-metrics'
 
+function SectionSelectorItem({
+  selected,
+  buttonClass,
+  title,
+  disabled,
+  index,
+  onItemClick,
+}) {
+  let classes = [
+    buttonClass,
+    selected ? 'bg-grey-dk3 cl-white' : 'cl-grey-dk3',
+    disabled ? 'cl-white bg-grey-lt2' : ''
+  ].join(' ');
+
+  return (
+    <div
+      className={classes}
+      onClick={()=>{
+        if (disabled) { return false }
+        onItemClick()
+      }}
+    >
+      <span>{title}</span>
+    </div>
+  )
+}
+
 class ResultsSectionSelector extends React.Component {
   constructor(props){
     super(props);
-    this.buttonClass = 'badge btn py-3 px-4 mx-2 bd-1';
+    this.buttonClass = 'badge btn py-3 px-4 mx-1 bd-1';
   }
 
   changeSection(sectionId) {
+    if (this.props.disabled) { return false }
+
     userMetrics({
       event: 'results_section_view',
       data: {
@@ -21,18 +50,16 @@ class ResultsSectionSelector extends React.Component {
 
   render() {
     return (
-      <div className='flex flex-start py-2'>
+      <div className='flex flex-start py-2 fs-m1'>
         {this.props.sections.map((item, index)=>(
-          <div
+          <SectionSelectorItem
             key={index}
-            className={[
-              this.buttonClass,
-              this.props.selected === item.name ? 'bg-grey-dk3 cl-white' : 'cl-grey-dk3'
-            ].join(' ')}
-            onClick={()=>{this.changeSection(item.name)}}
-            >
-            {item.label}
-          </div>
+            buttonClass={this.buttonClass}
+            selected={item.name === this.props.selected ? true : false}
+            disabled={item.disabled}
+            onItemClick={()=>{this.changeSection(item.name)}}
+            title={item.label}
+          />
         ))}
       </div>
     )

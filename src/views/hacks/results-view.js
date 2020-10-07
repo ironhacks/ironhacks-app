@@ -3,6 +3,7 @@ import { Loader } from '../../components/loader';
 import { MdContentView }  from '../../components/markdown-viewer';
 import { Row, Col } from '../../components/layout';
 import {
+  ResultsFinalSection,
   ResultsSectionSelector,
   ResultsSubmissionSelector,
   ResultsScoresSection,
@@ -46,6 +47,7 @@ class ResultsView extends React.Component {
       submissionData: null,
       currentSubmission: null,
       loading: true,
+      finalResults: null,
       submissions: null,
     }
 
@@ -54,18 +56,26 @@ class ResultsView extends React.Component {
     this.getHackResults = this.getHackResults.bind(this);
     this.getResultsContent = this.getResultsContent.bind(this);
     this.getParticipantsList = this.getParticipantsList.bind(this);
+    this.getResultsFinal = this.getResultsFinal.bind(this);
   }
 
   componentDidMount() {
     this.getSubmissionInfo()
     this.getParticipantsList()
     this.getResultsContent()
-    this.getHackResults(this.state.selectedPhase)
+    this.getHackResults()
+
+    // TODO: if all submissions are closed then check
+    this.getResultsFinal()
   }
 
   onPhaseSelection(phase, submissionId) {
     this.setState({selectedPhase: phase});
-    this.getHackResults();
+    if (phase === 'final') {
+      // this.getResultsFinal();
+    } else {
+      this.getHackResults();
+    }
   }
 
   updateSection(id) {
@@ -133,6 +143,23 @@ class ResultsView extends React.Component {
     })
 
     this.setState({submissions: submissions})
+  }
+
+  async getResultsFinal() {
+    let finalDoc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('results')
+      .doc('final')
+      .get()
+
+    if (finalDoc.exists) {
+      console.log('final', finalDoc);
+      let finalData = finalDoc.data();
+      this.setState({finalResults: finalData})
+    } else {
+      console.log('no final');
+    }
 
   }
 
@@ -263,9 +290,9 @@ class ResultsView extends React.Component {
                   selected={this.state.section}
                   callback={this.updateSection}
                   sections={[
-                    {name: 'scores', label: 'Your Scores'},
-                    {name: 'peers', label: 'You Peers'},
-                    {name: 'summary', label: 'Summary'},
+                    {name: 'scores', label: 'Your Scores', disabled: this.state.selectedPhase === 'final' ? true : false},
+                    {name: 'peers', label: 'You Peers', disabled: this.state.selectedPhase === 'final' ? true : false},
+                    {name: 'summary', label: 'Summary', disabled: this.state.selectedPhase === 'final' ? true : false},
                   ]}
                 />
               </div>
@@ -279,6 +306,7 @@ class ResultsView extends React.Component {
 
                 <ResultsSubmissionSelector
                   phases={this.state.submissions}
+                  finalResults={this.state.finalResults}
                   selectedPhase={this.state.selectedPhase}
                   onClick={this.onPhaseSelection}
                 />
@@ -288,34 +316,35 @@ class ResultsView extends React.Component {
             </div>
 
             <div className='selected-section'>
-              {this.state.loading && (
+              {this.state.loading ? (
                 <div className='results-loader'>
                   <Loader status='Fetching results...' />
                 </div>
-              )}
-
-              {!this.state.loading && this.state.section === 'scores' && (
+              ):(
+              <>
+              {this.state.selectedPhase === 'final' ? (
+                  <>
+                    {this.state.finalResults ? (
+                      <ResultsFinalSection
+                        userId={this.props.userId}
+                        scores={this.state.finalResults}
+                        submission={this.state.userSubmission}
+                      />
+                    ) : (
+                      <h2 className='border text-center font-bold py-2'>
+                        No final results yet.
+                      </h2>
+                    )}
+                  </>
+              ):(
                 <>
-                  {this.state.userResults ? (
-                    <ResultsScoresSection
-                      userId={this.props.userId}
-                      scores={this.state.userResults}
-                      submission={this.state.userSubmission}
-                    />
-                  ) : (
-                    <h2 className='border text-center font-bold py-2'>
-                      No results for this submission.
-                    </h2>
-                  )}
-                </>
-              )}
-
-              {!this.state.loading && this.state.section === 'summary' && (
+                {this.state.section === 'scores' && (
                   <>
-                    {this.state.resultStats ? (
-                      <ResultsSummarySection
-                        participantCount={this.state.participantCount}
-                        summary={this.state.resultStats}
+                    {this.state.userResults ? (
+                      <ResultsScoresSection
+                        userId={this.props.userId}
+                        scores={this.state.userResults}
+                        submission={this.state.userSubmission}
                       />
                     ) : (
                       <h2 className='border text-center font-bold py-2'>
@@ -323,22 +352,40 @@ class ResultsView extends React.Component {
                       </h2>
                     )}
                   </>
-              )}
+                )}
 
-              {!this.state.loading && this.state.section === 'peers' && (
-                  <>
-                    {this.state.submissionData ? (
-                      <ResultsPeersSection
-                        participantData={this.state.submissionData}
-                      />
-                    ) : (
-                      <h2 className='border text-center font-bold py-2'>
-                        No results for this submission.
-                      </h2>
-                    )}
-                  </>
-              )}
+                {this.state.section === 'summary' && (
+                    <>
+                      {this.state.resultStats ? (
+                        <ResultsSummarySection
+                          participantCount={this.state.participantCount}
+                          summary={this.state.resultStats}
+                        />
+                      ) : (
+                        <h2 className='border text-center font-bold py-2'>
+                          No results for this submission.
+                        </h2>
+                      )}
+                    </>
+                )}
 
+                {this.state.section === 'peers' && (
+                    <>
+                      {this.state.submissionData ? (
+                        <ResultsPeersSection
+                          participantData={this.state.submissionData}
+                        />
+                      ) : (
+                        <h2 className='border text-center font-bold py-2'>
+                          No results for this submission.
+                        </h2>
+                      )}
+                    </>
+                )}
+              </>
+              )}
+              </>
+            )}
             </div>
 
             <MdContentView
