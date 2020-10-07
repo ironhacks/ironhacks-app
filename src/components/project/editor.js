@@ -1,5 +1,4 @@
 import React from 'react';
-import {withCookies} from 'react-cookie';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
@@ -7,11 +6,7 @@ import {Loader} from '../../components/loader';
 import Button from '../../util/button.js';
 import { cloudFunctionsProdEndPoint } from '../../config/cloud-api';
 import * as DateFormater from '../../util/dateFormater.js';
-// import {registerStats} from '../../util/register-stat';
-import {
-  Row,
-  // Col
-} from '../../components/layout';
+import { Row } from '../../components/layout';
 import ProjectPreview from './preview.js';
 import FilesContainer from './filesContainer.js';
 import swal from 'sweetalert2';
@@ -740,4 +735,4 @@ class ProjectEditor extends React.Component {
   }
 }
 
-export default withCookies(withRouter(ProjectEditor))
+export default withRouter(ProjectEditor)

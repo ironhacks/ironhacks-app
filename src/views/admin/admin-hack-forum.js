@@ -32,7 +32,6 @@ class AdminHackForumItem extends React.Component {
   constructor(props) {
     super(props);
 
-    // const { cookies } = props;
     this.state = {
       currentHack: this.props.hackId || null,
       selectedForum: 0,

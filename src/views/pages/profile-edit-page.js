@@ -3,6 +3,7 @@ import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { InputText, InputNumber } from '../../components/input';
 import Select from 'react-select';
+import { userMetrics } from '../../util/user-metrics'
 import '../../styles/css/profile.css';
 import {
   COUNTRY_CODES,
@@ -119,6 +120,7 @@ class ProfileEditPage extends React.Component {
       .then(()=>{
         console.log('success');
         window.firebase.analytics().logEvent('update_profile')
+        userMetrics({event: 'update_profile'})
         window.location = '/profile';
       })
   }
@@ -138,7 +140,6 @@ class ProfileEditPage extends React.Component {
   experienceInputChanged(name, value) {
     let experience = this.state.formData.programmingExperience;
     experience[name] = value;
-
     this.setState({
       formData: {
         ...this.state.formData,
@@ -148,7 +149,6 @@ class ProfileEditPage extends React.Component {
   }
 
   demographicSelectInputChanged(name, data) {
-    console.log('demographic', name, data);
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
     this.setState({
@@ -160,7 +160,6 @@ class ProfileEditPage extends React.Component {
   }
 
   demographicTextInputChange(name, data) {
-    console.log('demographic text', name, data);
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
     this.setState({
@@ -176,6 +175,9 @@ class ProfileEditPage extends React.Component {
       <Page
         user={this.props.user}
         userIsAdmin={this.props.userIsAdmin}
+        pageTitle="IronHacks | Edit User Profile"
+        pageDescription="Edit your IronHacks User Profile"
+        pageUrl="https://ironhacks.com/profile/edit"
       >
       <Section sectionClass="pt-10">
         <Row rowClass="ml-0">
@@ -197,11 +199,8 @@ class ProfileEditPage extends React.Component {
 
               <div className='user-data'>
                 <h2 className="h2 py-2 font-bold">Update Profile Info</h2>
-
                 <h2 className="h2 profile__name mb-2">{this.props.user.displayName}</h2>
-
                 <div className="mb-2"><MaterialDesignIcon name="key"/> UserId: {this.props.user.userId} </div>
-
                 <div className="mb-2"><MaterialDesignIcon name="email"/> Email: {this.props.user.email} </div>
               </div>
             </div>

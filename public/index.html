@@ -6,8 +6,12 @@
 <meta name="theme-color" content="#000000">
 <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
 <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-<title>Ironhacks Platform</title>
-<link rel="stylesheet" type="text/css" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+<link rel="canonical" href="https://ironhacks.com" />
+<title>IronHacks</title>
+<meta name="description" content="Hack for innovation to solve global challenges" />
+<meta property="og:title" content="IronHacks" />
+<meta property="og:description" content="Hack for innovation to solve global challenges" />
+<meta property="og:image" content="https://ironhacks.com/ironhacks-social.jpg" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
 <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
@@ -16,25 +20,47 @@
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-storage.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-functions.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
-<script src="https://cdn.firebase.com/libs/firebaseui/4.2.0/firebaseui.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+<script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
 <style> body { margin: 0; padding: 0; }</style>
 </head>
 <body>
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <div id="root"></div>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyA6EnVRUF1W1QD4qvx-6yjcQ2A4YNrihqY",
-  authDomain: "the-ironhacks-platform-dev.firebaseapp.com",
-  databaseURL: "https://the-ironhacks-platform-dev.firebaseio.com",
-  projectId: "the-ironhacks-platform-dev",
-  storageBucket: "the-ironhacks-platform-dev.appspot.com",
-  messagingSenderId: "314398832566",
-  appId: "1:314398832566:web:da5dfef4755d4745aab317",
-  measurementId: "G-0DHWPN23J6"
-};
+let host = window.location.host;
+if (host !== 'ironhacks.com') {
+  var firebaseConfig = {
+    apiKey: "AIzaSyAiJKRVynLPxSB1_NjzMf-Im6uwmJnpMpY",
+    authDomain: "ironhacks-c406a.firebaseapp.com",
+    databaseURL: "https://ironhacks-c406a.firebaseio.com",
+    projectId: "ironhacks-c406a",
+    storageBucket: "ironhacks-c406a.appspot.com",
+    messagingSenderId: "562187828196",
+    appId: "1:562187828196:web:5bcad3383928a22b8d25f1",
+    measurementId: "G-4YTL413E6H"
+  }
+} else {
+  var firebaseConfig = {
+    apiKey: "AIzaSyA6EnVRUF1W1QD4qvx-6yjcQ2A4YNrihqY",
+    authDomain: "the-ironhacks-platform-dev.firebaseapp.com",
+    databaseURL: "https://the-ironhacks-platform-dev.firebaseio.com",
+    projectId: "the-ironhacks-platform-dev",
+    storageBucket: "the-ironhacks-platform-dev.appspot.com",
+    messagingSenderId: "314398832566",
+    appId: "1:314398832566:web:da5dfef4755d4745aab317",
+    measurementId: "G-0DHWPN23J6"
+  }
+}
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
+// if (host === 'localhost:3000') {
+//   var db = firebase.firestore();
+//   db.settings({
+//     host: "localhost:8080",
+//     ssl: false
+//   });
+// }
 </script>
 </body>
 </html>

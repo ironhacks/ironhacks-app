@@ -73,7 +73,7 @@ class HackPage extends React.Component {
         hackBanner: hackData.hackBannerImg ? hackData.hackBannerImg : false,
         hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
         hackOverview: hackData.overview ? hackData.overview.doc : '',
-        hackTask: hackData.task ? hackData.task.doc : '',
+        hackTask: hackData.task,
         hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
         upcomingEvent: upcomingEvent,
       })
@@ -92,22 +92,6 @@ class HackPage extends React.Component {
     }
   }
 
-  async getHackTask(hackId) {
-    const getTask = window.firebase.functions().httpsCallable('getTaskDoc');
-    let hackTaskPromise = await getTask({
-      hackId: hackId,
-    })
-
-    Promise.resolve(hackTaskPromise).then((hackTask) => {
-      if (hackTask.length > 0) {
-        this.setState({
-          hackTask: hackTask,
-          loading: false,
-        })
-      }
-    })
-  }
-
   render() {
     if (!this.state.hackId) {
       return  (
@@ -120,6 +104,9 @@ class HackPage extends React.Component {
     }
       return (
        <Page
+          pageTitle={`IronHacks | ${this.state.hackName} Hack Page`}
+          pageDescription="IronHacks Hack Event Page"
+          pageUrl={`https://ironhacks.com/hacks/${this.hackSlug}`}
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
           >
@@ -227,7 +214,7 @@ class HackPage extends React.Component {
             <Route exact path="/hacks/:hackId/forum/:forumId/:threadId/edit">
               <Section>
                 <ThreadEditView
-                  isAdmin={this.props.userIsAdmin}
+                  userIsAdmin={this.props.userIsAdmin}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   user={this.props.user}
@@ -249,7 +236,7 @@ class HackPage extends React.Component {
             <Route exact path="/hacks/:hackId/forum/new">
               <Section>
                 <NewThread
-                  isAdmin={this.props.userIsAdmin}
+                  userIsAdmin={this.props.userIsAdmin}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   user={this.props.user}
@@ -298,10 +285,8 @@ class HackPage extends React.Component {
               <Section sectionClass="results-section">
                 <Hack.Results
                   hackData={this.state.hackData}
-                  hackPhases={this.state.hackPhases}
-                  hackResults={this.state.hackResults}
-                  hackUser={this.props.user}
-                  hackUserId={this.props.userId}
+                  user={this.props.user}
+                  userId={this.props.userId}
                   hackId={this.state.hackId}
                 />
               </Section>
@@ -320,6 +305,7 @@ class HackPage extends React.Component {
             <Route exact path="/hacks/:hackId/task">
               <Section>
                 <Hack.Task
+                  userEmail={this.props.user.email}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   task={this.state.hackTask}
@@ -337,9 +323,21 @@ class HackPage extends React.Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/submit">
+            <Route exact path="/hacks/:hackId/submissions">
+              <Section>
+                <Hack.Submissions
+                  hackSlug={this.hackSlug}
+                  hackId={this.state.hackId}
+                  userId={this.props.userId}
+                  hackData={this.state.hackData}
+                />
+              </Section>
+            </Route>
+
+            <Route path="/hacks/:hackId/submit/:submissionId">
               <Section>
                 <Hack.Submit
+                  hackSlug={this.hackSlug}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   hackData={this.state.hackData}

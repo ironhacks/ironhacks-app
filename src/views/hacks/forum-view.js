@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { Theme } from '../../theme';
 import PostPreview from '../../components/forum/post-preview';
 
-import searchIcon from '../../assets/svg/searchIcon.svg';
+// import searchIcon from '../../assets/svg/searchIcon.svg';
 const colors = Theme.COLORS;
 const styles = Theme.STYLES.AppSectionTheme;
 
@@ -56,40 +56,51 @@ const NewThreadButton = styled('button')`
     font-size: 12px;
   }
 `;
+//
+// const SearchBar = styled('form')`
+//   height: 45px;
+//   display: flex;
+//   min-witdh: 300px;
+//   margin-left: auto;
+//   justify-content: flex-end;
+//
+//   input {
+//     width: 60%;
+//     height: 100%;
+//     background-color: #f2f2f2;
+//     border: 1px solid #999999;
+//     border-right: none;
+//     border-radius: 5px 0px 0px 5px;
+//     padding-left: 10px;
+//   }
+//
+//   button {
+//     height: 100%;
+//     background-color: #f2f2f2;
+//     border: 1px solid #999999;
+//     border-left: none;
+//     border-radius: 0px 5px 5px 0px;
+//     padding-left: 10px;
+//
+//     img {
+//       width: 100%;
+//       height: 100%;
+//     }
+//   }
+// `;
 
-const SearchBar = styled('form')`
-  height: 45px;
-  display: flex;
-  min-witdh: 300px;
-  margin-left: auto;
-  justify-content: flex-end;
-
-  input {
-    width: 60%;
-    height: 100%;
-    background-color: #f2f2f2;
-    border: 1px solid #999999;
-    border-right: none;
-    border-radius: 5px 0px 0px 5px;
-    padding-left: 10px;
-  }
-
-  button {
-    height: 100%;
-    background-color: #f2f2f2;
-    border: 1px solid #999999;
-    border-left: none;
-    border-radius: 0px 5px 5px 0px;
-    padding-left: 10px;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-`;
-
-
+//
+// function ForumSearchBar() {
+//   return (
+//     <SearchBar>
+//       <input type='text' placeholder='Search...' />
+//       <button>
+//         <img src={searchIcon} alt='searchIcon' />
+//       </button>
+//     </SearchBar>
+//   )
+// }
+//
 
 class ForumView extends React.Component {
   constructor(props) {
@@ -169,13 +180,6 @@ class ForumView extends React.Component {
                 New Post
               </NewThreadButton>
             )}
-
-            <SearchBar>
-              <input type='text' placeholder='Search...' />
-              <button>
-                <img src={searchIcon} alt='searchIcon' />
-              </button>
-            </SearchBar>
           </Control>
 
           {this.state.posts.map((thread, index) => {

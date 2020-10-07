@@ -1,8 +1,13 @@
 import React from 'react';
 import { Row, Col } from '../../components/layout';
 import { MdContentView }  from '../../components/markdown-viewer';
+import { userMetrics } from '../../util/user-metrics'
 
 class RulesView extends React.Component {
+  componentDidMount() {
+    userMetrics({event: 'view_rules'})
+  }
+
   render() {
     return (
       <Row>

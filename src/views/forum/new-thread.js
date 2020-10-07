@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdown-editor';
 import {Loader} from '../../components/loader';
+import { withRouter } from 'react-router-dom';
+import { userMetrics } from '../../util/user-metrics'
 
 const SectionContainer = styled('div')`
   position: relative;
@@ -62,7 +64,6 @@ class NewThread extends React.Component {
     this.onEditorChange = this.onEditorChange.bind(this)
     this.submitIsDisabled = this.submitIsDisabled.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.setForumId = this.setForumId.bind(this)
   }
 
   onEditorChange(markdown) {
@@ -71,23 +72,7 @@ class NewThread extends React.Component {
   }
 
   componentDidMount() {
-    this.setForumId()
-  }
 
-  setForumId(){
-    window.firebase.firestore()
-      .collection('forums')
-      .where('hack','==', this.props.hackId)
-      .get()
-      .then((forums)=>{
-        let forumId = forums.docs[0].id;
-        // TODO: temp workaround
-        this.setState({forumId: forumId})
-        // doc.forEach((forum)=>{
-        //   let data=forum.data();
-        //   console.log(forum.id, data)
-        // })
-      })
   }
 
   handleInputChange(event) {
@@ -107,9 +92,10 @@ class NewThread extends React.Component {
     const currentDate = new Date();
     const codedBody = this.utoa(this.state.markdown);
 
-    let threadData = {
+    let postData = {
       title: this.state.title,
       author: this.props.user.uid,
+      adminPost: false,
       authorName: this.props.user.displayName,
       createdAt: currentDate,
       hackId: hackId,
@@ -117,42 +103,30 @@ class NewThread extends React.Component {
       body: codedBody,
     };
 
-    console.log(threadData);
+    if (this.props.userIsAdmin){
+      postData.adminPost = true;
+    }
+
+    userMetrics({event: 'submit_post'})
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('forums')
       .doc(forumId)
       .collection('posts')
-      .add(threadData)
+      .add(postData)
       .then((postDoc) => {
         const threadId = postDoc.id;
         this.setState({
           threadRef: threadId
         })
-          // window.firebase.firestore()
-          //   .collection('comments')
-          //   .add({
-          //     postId: threadId,
-          //     author: this.props.user.uid,
-          //     authorName: this.props.user.displayName,
-          //     createdAt: currentDate,
-          //     forumId: forumId,
-          //   })
-          //   .then((docRef) => {
-          //     window.firebase.firestore()
-          //       .collection('threads')
-          //       .doc(threadId)
-          //       .update({
-          //         comments: [threadId],
-          //       })
-          // });
-          window.history.back();
+        window.history.back();
       })
       .catch(function(error) {
         console.error('Error adding document: ', error);
-      });
-  };
+      })
+  }
+
 
 
   utoa(str) {
@@ -192,6 +166,7 @@ class NewThread extends React.Component {
 
           <MarkdownEditor
             editorLayout='tabbed'
+            value={this.state.markdown}
             onEditorChange={this.onEditorChange}
           />
 
@@ -206,8 +181,8 @@ class NewThread extends React.Component {
           </div>
 
           <p>
-            You can style your Thread using Markdown syntax <strong> (If you don't know Markdown, please check <a target='_blank' rel='noopener noreferrer' href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet'> here.</a>)</strong>
-            <br/>Click the 'Preview' button to preview you post before submitting.
+            Format your post Markdown, <strong> you can learn more about Markdown syntax<a target='_blank' rel='noopener noreferrer' href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet'> here.</a>)</strong>
+            <br/>Click the 'Preview' button to see you post before submitting.
           </p>
         </SectionContainer>
     )}
@@ -216,4 +191,4 @@ class NewThread extends React.Component {
   }
 }
 
-export default NewThread;
+export default withRouter(NewThread);

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { HackNavContainerDiv } from './nav-container'
 import { upperCaseWord } from '../../util/string-utils';
 import menuIcon from '../../assets/svg/menu-icon.svg';
+import { userMetrics } from '../../util/user-metrics'
 
 
 class HackNavItem extends React.Component {
@@ -76,7 +77,6 @@ class HackNav extends React.Component {
         display={this.state.showMenu}
         innerRef={this.navMenuRef}
       >
-
         <button onClick={this.showMenu}>
           <img src={menuIcon} alt='menu_icon' />
         </button>
@@ -96,8 +96,10 @@ class HackNav extends React.Component {
         <a
           href="https://hub.ironhacks.com"
           onClick={(()=>{
+            userMetrics({event: 'launch_hub'})
             window.firebase.analytics().logEvent('launch_hub');
           })}
+          rel="noopener noreferrer"
           target="_blank"
           className="btn hub-button bg-primary ml-auto font-bold"
         >

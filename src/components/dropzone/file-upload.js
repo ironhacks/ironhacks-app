@@ -29,14 +29,20 @@ class FileUpload extends React.Component {
     this.removeFile = this.removeFile.bind(this)
   }
 
+  onFileStatus({ meta }, status) {
+    console.log(status, meta)
+  }
+
   onFiles(_files) {
     let fileList = this.state.fileList;
     let files = this.state.files;
 
-    console.log('files added', _files)
-    console.log('fileList', fileList)
-
     _files.forEach((item, i) => {
+      if (this.props.acceptedFiles) {
+        if (!this.props.acceptedFiles.includes(item.name)) {
+          return false
+        }
+      }
       if(!fileList.includes(item.path)){
         files.push(item);
         fileList.push(item.path)
@@ -53,6 +59,11 @@ class FileUpload extends React.Component {
     }
   }
 
+  validateFile(files) {
+    console.log('validate', files);
+    return true
+  }
+
   removeFile(position) {
     let files = this.state.files;
     let newFiles = files.filter((item, index)=>{
@@ -64,7 +75,12 @@ class FileUpload extends React.Component {
 
   render() {
     return (
-      <Dropzone onDrop={this.onFiles}>
+      <Dropzone
+        onDrop={this.onFiles}
+        validate={this.validateFile}
+        onChangeStatus={this.onFileStatus}
+        disabled={this.props.disabled}
+      >
         {({ getRootProps, getInputProps}) => (
           <section className="dropzone">
             <div {...getRootProps({style: baseStyle})}>
@@ -98,6 +114,10 @@ class FileUpload extends React.Component {
       </Dropzone>
     )
   }
+}
+
+FileUpload.defaultProps = {
+  disabled: false,
 }
 
 export { FileUpload }

@@ -30,6 +30,7 @@ class InputSelect extends React.Component {
           options={this.props.options}
           value={this.props.value}
           onChange={this.handleChange}
+          isDisabled={this.props.disabled}
         />
       </div>
     )
@@ -43,6 +44,7 @@ InputSelect.defaultProps = {
   labelClass: '',
   inputClass: '',
   containerClass: '',
+  disabled: false,
 }
 
 export { InputSelect }

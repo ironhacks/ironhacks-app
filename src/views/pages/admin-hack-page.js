@@ -1,66 +1,11 @@
 import React from 'react';
-import { Redirect, Link, Switch, Route, withRouter, useLocation } from 'react-router-dom';
+import { Redirect, Switch, Route, withRouter } from 'react-router-dom';
 import { Loader } from '../../components/loader/index';
-import { upperCaseWord } from '../../util/string-utils';
+import { AdminPageNavBreadcrumbs, AdminHackNav } from '../../components/admin';
 import { Page, Section, Row, Col } from '../../components/layout';
-import { Breadcrumb } from 'react-bootstrap'
 import { AdminHack } from '../admin';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/css/admin.css';
-
-
-class AdminHackNav extends React.Component {
-  constructor(props) {
-    super(props);
-    this.baseUrl = `/admin/hacks/${this.props.hackId}`;
-  }
-
-  render() {
-    return (
-      <div className='admin-sidebar col-md-2'>
-        {this.props.items.map((item, index)=>(
-          <Link
-            key={index}
-            to={`${this.baseUrl}/${item.path}`}
-            className="nav-item"
-            >
-
-            <div className="admin-sidebar__item">
-              {item.name}
-            </div>
-          </Link>
-        ))}
-      </div>
-    )
-  }
-}
-
-AdminHackNav.defaultProps = {
-  items: [],
-}
-
-function AdminPageBreadCrumbs({props, hackId, hackName}) {
-  let location = useLocation();
-  const path = location.pathname.split('/');
-  let currentPath = path.length >= 5 ? path.pop() : false;
-
-
-  return (
-    <Breadcrumb>
-      <Breadcrumb.Item href="/admin">Admin</Breadcrumb.Item>
-
-      <Breadcrumb.Item href={`/admin/hacks/${hackId}`}>
-        {hackName}
-      </Breadcrumb.Item>
-
-      {currentPath && (
-        <Breadcrumb.Item active>
-          {upperCaseWord(currentPath)}
-        </Breadcrumb.Item>
-      )}
-    </Breadcrumb>
-  )
-}
 
 class AdminHackPage extends React.Component {
   constructor(props) {
@@ -86,7 +31,6 @@ class AdminHackPage extends React.Component {
 
   componentDidMount() {
     if (!this.props.location.state) {
-      console.log('getting hack');
       this.getHack(this.hackId);
     }
   }
@@ -113,7 +57,6 @@ class AdminHackPage extends React.Component {
       hackData: result,
       hackRules: result.rules ? this.decodeDocument(result.rules.doc) : '',
       hackTutorial: result.tutorial ? this.decodeDocument(result.tutorial.doc) : '',
-      hackTask: result.task ? this.decodeDocument(result.task.doc) : '',
       hackOverview: result.overview ? this.decodeDocument(result.overview.doc) : '',
       hackExtensions: result.extensions ? result.extensions : {},
     })
@@ -166,7 +109,7 @@ class AdminHackPage extends React.Component {
         >
 
       {this.state.hack && !this.state.loading && (
-        <AdminPageBreadCrumbs
+        <AdminPageNavBreadcrumbs
           hackId={this.hackId}
           hackName={this.state.hack.name}
         />
@@ -180,9 +123,9 @@ class AdminHackPage extends React.Component {
               {name: 'Registration', path: 'registration'},
               {name: 'Forums', path: 'forums'},
               {name: 'Overview', path: 'overview'},
+              {name: 'Results', path: 'results'},
               {name: 'Rules', path: 'rules'},
               {name: 'Submissions', path: 'submissions'},
-              {name: 'Surveys', path: 'surveys'},
               {name: 'Task', path: 'task'},
               {name: 'Tutorials', path: 'tutorials'},
               {name: 'Extensions', path: 'extensions'},
@@ -229,7 +172,6 @@ class AdminHackPage extends React.Component {
 
                   <Route path={this.props.match.url + '/task'}>
                     <AdminHack.Task
-                      previousDocument={this.state.hackTask}
                       hackId={this.state.hackId}
                       hackSlug={this.state.hackData.hackSlug}
                     />
@@ -244,6 +186,15 @@ class AdminHackPage extends React.Component {
                     />
                   </Route>
 
+                  <Route path={this.props.match.url + '/results'}>
+                    <AdminHack.Results
+                      previousDocument={this.state.hackRules}
+                      hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
+                      userId={this.props.user.userId}
+                    />
+                  </Route>
+
                   <Route path={this.props.match.url + '/rules'}>
                     <AdminHack.Rules
                       previousDocument={this.state.hackRules}
@@ -252,15 +203,15 @@ class AdminHackPage extends React.Component {
                     />
                   </Route>
 
-                  <Route path={this.props.match.url + '/surveys'}>
-                    <AdminHack.Surveys
-                      hack={this.state.hack}
-                      onUpdate={this.updateQualtricsLinks}
+                  <Route exact path={this.props.match.url + '/submissions'}>
+                    <AdminHack.Submissions
+                      hackData={this.state.hack}
+                      hackId={this.state.hackId}
                     />
                   </Route>
 
-                  <Route path={this.props.match.url + '/submissions'}>
-                    <AdminHack.Submissions
+                  <Route path={this.props.match.url + '/submissions/edit/:submissionId'}>
+                    <AdminHack.SubmissionEdit
                       hackData={this.state.hack}
                       hackId={this.state.hackId}
                     />

@@ -22,3 +22,6 @@ tmp/
 archive/
 
 \.notes
+dist/
+
+docs/content/

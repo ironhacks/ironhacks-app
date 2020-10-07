@@ -1,7 +1,5 @@
 import React from 'react';
-import AceEditor from 'react-ace';
-// import 'ace-builds/src-noconflict/theme-chaos';
-// import 'ace-builds/src-noconflict/mode-python';
+import {Controlled as CodeMirror} from 'react-codemirror2'
 
 function NotebookCodeCell({
   bgColor,
@@ -21,30 +19,28 @@ function NotebookCodeCell({
     backgroundColor: bgColor,
   }
 
-  const editorStyle = {
-    // maxWidth: '700px',
-    padding: '0',
-    margin: '0'
-  }
-
   return (
     <div style={containerStyle}>
-      <AceEditor
-        readOnly
-        placeholder='---'
-        mode='python'
-        className="ace-chaos"
-        theme={codeTheme}
-        name='code'
-        style={editorStyle}
-        width='100%'
-        maxLines={maxLength}
-        onLoad={onLoad}
-        onChange={onChange}
-        fontSize={14}
-        showGutter={true}
+      <CodeMirror
         value={cellContent}
-        setOptions={displayOptions}
+        className=""
+        style={{
+          padding: '0',
+          margin: '0',
+        }}
+        options={{
+          lineNumbers: true,
+          mode: 'python',
+          lint: false,
+          theme: 'seti',
+          tabSize: 2,
+          lineWrapping: true,
+          matchBrackets: false,
+          matchTags: false,
+          autoCloseTags: false,
+          autoCloseBrackets: false,
+          readOnly: true,
+        }}
       />
     </div>
   )

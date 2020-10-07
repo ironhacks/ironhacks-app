@@ -1,404 +1,399 @@
 import React from 'react';
 import { Loader } from '../../components/loader';
-import { Timeline } from '../../components/timeline';
-// import * as DateFormater from '../../util/dateFormater.js';
-import { PersonalScoreSection } from '../results/lib/results-section-personal.js';
-import { ResultSectionCompetitors } from '../results/lib/results-section-competitors';
-import { TreatmentTexts } from '../results/lib/treatment-texts';
+import { MdContentView }  from '../../components/markdown-viewer';
 import { Row, Col } from '../../components/layout';
 import {
-  getPhaseResults,
-  getUserPhaseResults,
-  getAdminHackData,
-  // getUserForumData,
-} from '../results/lib/get-results';
-import './results.css';
+  ResultsFinalSection,
+  ResultsSectionSelector,
+  ResultsSubmissionSelector,
+  ResultsScoresSection,
+  ResultsPeersSection,
+  ResultsSummarySection,
+} from '../../components/results';
+import { fire2Ms } from '../../util/date-utils';
+import { getArrayStats } from '../../util/stats';
 
-
-// const SectionContainer = styled('div')`
-//   width: 100%;
-//   height: ${(props) => props.theme.containerHeight};
-//   background-color: ${(props) => props.theme.backgroundColor};
-//   overflow: auto;
-//
-//   .top-container {
-//     padding: 0 10%;
-//     background-color: #f9f9f8;
-//     border-bottom: 1px solid rgb(224, 228, 232);
-//
-//     h1 {
-//       padding-top: 100px;
-//     }
-//
-//     h3 {
-//       margin-bottom: 0;
-//       text-align: center;
-//     }
-//   }
-//
-//   .tab-container {
-//     display: flex;
-//     justify-content: left;
-//     padding: 0 10%;
-//     width: 100%;
-//     margin-bottom: -1px;
-//
-//     .tab-button {
-//       background-color: #f9f9f8;
-//       cursor: pointer;
-//       border: none;
-//       height: 60px;
-//       width: 150px;
-//       border-top-left-radius: 10px;
-//       border-top-right-radius: 10px;
-//       border-bottom: 1px solid rgb(224, 228, 232);
-//       outline: none;
-//
-//       &.selected {
-//         background-color: white;
-//         border-top: 3px solid ${colors.mainBgColor};
-//         border-right: 1px solid rgb(225, 228, 232);
-//         border-left: 1px solid rgb(224, 228, 232);
-//         border-bottom: 1px solid white;
-//       }
-//     }
-//   }
-//
-//   .selected-section {
-//     margin-top: 20px;
-//     padding: 0 10%;
-//
-//     .results-loader {
-//       margin-top: -20px;
-//       height: 500px;
-//     }
-//
-//     h2 {
-//       &.no-results {
-//         margin-top: 50px;
-//         text-align: center;
-//       }
-//     }
-//
-//     h3 {
-//       &.super-cool-banner {
-//         font-size: 20px;
-//         text-align: center;
-//         -webkit-animation-name: example;
-//         -webkit-animation-duration: 4s;
-//         animation-name: example;
-//         animation-duration: 1s;
-//         animation-iteration-count: infinite;
-//         animation-direction: alternate;
-//
-//         @-webkit-keyframes example {
-//           from {
-//             color: red;
-//           }
-//           to {
-//             color: yellow;
-//           }
-//         }
-//
-//         @keyframes example {
-//           from {
-//             color: #caa32a;
-//           }
-//           to {
-//             color: red;
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
-
-
-class ResultsTabSelector extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      activeSection: 'competitors',
-    }
-  }
-
-  changeSection = (event) => {
-    this.setState({
-      activeSection: event.target.id
+function getMetrics(data) {
+  let metrics = [];
+  [...new Set(
+    Object.values(data).map((item,index)=>{
+      return item.map((key,i)=>{
+        return key.label
+      })
+      .join(',')
     })
-    this.props.callback(event.target.id);
-  }
+  )]
+  .map((list)=>{
+    return list.split(',')
+  })
+  .forEach((metric)=>{
+    metrics= [...new Set([...metrics, ...metric])]
+  })
 
-  render() {
-    return (
-      <div className='tab-container'>
-        <button
-          className={`tab-button ${this.state.activeSection === 'competitors' ? 'selected' : ''}`}
-          onClick={this.changeSection}
-          id='competitors'
-        >
-          Your Peers
-        </button>
-        <button
-          className={`tab-button ${ this.state.activeSection === 'personal' ? 'selected' : ''}`}
-          onClick={this.changeSection}
-          id='personal'
-        >
-          Personal Feedback
-        </button>
-    </div>
-    )
-  }
+  return metrics;
 }
 
 class ResultsView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: this.props.hackUser,
-      userId: this.props.hackUserId,
-      hackId: this.props.hackId,
-      currentHack: this.props.hackId,
-      // currentHack: cookies.get('currentHack') || null,
-      forumId: '8JKHD71CFYS2SzI52UQ9',
-      // forumId: cookies.get('currentForum') || null,
-      hackData: this.props.hackData,
-      hackPhases: this.props.hackPhases,
-      treatment: this.props.treatement || 0,
-      scores: null,
+      resultsContent: '',
+      resultStats: null,
+      userResults: null,
+      results: null,
+      participantCount: null,
+      section: 'scores',
+      selectedPhase: 0,
+      submissionData: null,
+      currentSubmission: null,
       loading: true,
-      currentSection: 'competitors',
-      currentPhase: 1,
-      selectedPhase: 1,
+      finalResults: null,
+      submissions: null,
     }
 
-    this._isMounted = false;
-    // this.firestore = window.firebase.firestore();
     this.updateSection = this.updateSection.bind(this);
     this.onPhaseSelection = this.onPhaseSelection.bind(this);
     this.getHackResults = this.getHackResults.bind(this);
-    this.getCurrentHackInfo = this.getCurrentHackInfo.bind(this);
+    this.getResultsContent = this.getResultsContent.bind(this);
+    this.getParticipantsList = this.getParticipantsList.bind(this);
+    this.getResultsFinal = this.getResultsFinal.bind(this);
   }
 
   componentDidMount() {
-    this._isMounted = true;
-    // this.getCurrentHackInfo();
-    console.log('props results', this.props.hackResults)
-     this.getHackResults(this.state.currentPhase)
+    this.getSubmissionInfo()
+    this.getParticipantsList()
+    this.getResultsContent()
+    this.getHackResults()
+
+    // TODO: if all submissions are closed then check
+    this.getResultsFinal()
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  userSaveLikedCompetitors(likedCompetitors) {
-    const saveLikedCompetitors = window.firebase
-      .functions()
-      .httpsCallable('saveLikedCompetitors')
-
-    const {
-      // currentHack: hackId,
-      selectedPhase: phase
-    } = this.state;
-
-    saveLikedCompetitors({
-      userId: this.props.userId,
-      phase,
-      hackId: this.props.hackId,
-      likedCompetitors,
-    }).then((response) => {
-      this.getHackResults(phase);
-    })
-  }
-
-
-  setCurrentHackInfo(data) {
-    console.log(data);
-    if (this._isMounted) {
-      this.setState({
-        hackData: data,
-        currentPhase: 1,
-        selectedPhase: 1,
-      })
+  onPhaseSelection(phase, submissionId) {
+    this.setState({selectedPhase: phase});
+    if (phase === 'final') {
+      // this.getResultsFinal();
+    } else {
+      this.getHackResults();
     }
-
-    localStorage.setItem('currentHackInfo', JSON.stringify(data))
-  }
-
-  getCurrentHackInfo() {
-    let hackId = this.props.hackId;
-    console.log('get current hack info', hackId);
-    const hacks = window.firebase.firestore()
-      .collection('hacks')
-      .doc(hackId)
-      .get();
-
-    const hackData = Promise.resolve(hacks).then((doc) => {
-        const data = doc.data();
-        // let currentPhase = DateFormater.getCurrentPhase(hackData.phases).index + 1 || -1;
-        // this.getForumData();
-        // this.getHackResults();
-        return data;
-      })
-      .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      })
-      this.setCurrentHackInfo(hackData)
-  }
-
-
-
-  onPhaseSelection(phase) {
-    this.setState({ selectedPhase: phase + 1 });
-    this.getHackResults(phase + 1);
   }
 
   updateSection(id) {
-    this.setState({currentSection: id});
+    this.setState({section: id});
   }
 
-  saveStat(stat) {
-    // stat.userId = this.state.user.uid;
-    // stat.metadata.hackId = this.state.currentHack;
-    // registerStats(stat);
-  }
+  async getResultsContent() {
+    let resultsSettingsDoc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('results')
+      .doc('settings')
+      .get()
 
-  _getAdminHackData() {
-    let hackDataPromise = getAdminHackData({
-      hackId: this.props.hackId,
-    })
+    let resultsData = resultsSettingsDoc.data()
 
-    let hackData = Promise.resolve(hackDataPromise).then((result)=>{
-      console.log(result);
-      return result;
-    })
-    return hackData;
-  }
-
-  async getHackResults(phase) {
-    // this.state.hackData.phases[phase - 1].codingStartEnd
-
-    let hackData = await this._getAdminHackData();
-    // Promise.resolve(hackData).then((data)=>{
-    console.log('get Hack Result hackData', hackData);
-    // });
-
-    const hackResults = hackData.results || [];
-    this.setState({
-      results: hackResults,
-      participants: hackData.registeredUsers,
-    });
-
-    console.log('hackdata results', hackData.results);
-
-    if (hackResults){
-
+    if (resultsData.content) {
+      this.setState({resultsContent: resultsData.content})
     }
-    let phaseResults = await getPhaseResults({
-      hackResults: hackResults,
-      phase: phase,
-    });
+  }
 
+  async getParticipantsList() {
+    let participantsDoc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('registration')
+      .doc('participants')
+      .get()
 
-    console.log('phaseResults', phaseResults);
+    let participantsData = participantsDoc.data();
 
-    let userPhaseResults = getUserPhaseResults({
-      phaseResults: phaseResults,
-      userId: this.props.hackUser.uid,
-    });
+    let participants = {};
 
-    console.log('userPhaseResults', userPhaseResults);
+    for (let participant of Object.keys(participantsData)){
+      participants[participant] = {
+        userId: participant,
+        alias: participantsData[participant].alias,
+        ref: participantsData[participant].ref,
+      }
+    }
 
-    // const endDate = DateFormater.getFirebaseDate(
-      // this.props.hackPhases[phase - 1].codingStartEnd
-    // )
+    this.setState({
+      participants: participants,
+    })
+  }
 
-    // let userForumData = getUserForumData()
+  async getSubmissionInfo() {
+    let submissionsDoc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('submissions')
+      .doc('settings')
+      .get()
 
-    // console.log('userForumData', userForumData);
+    let submissionsData = submissionsDoc.data();
+
+    let submissions = [];
+
+    for (let submission of Object.keys(submissionsData)){
+      submissions.push(submissionsData[submission]);
+    }
+
+    submissions.sort((a,b)=>{
+      return fire2Ms(a.deadline) - fire2Ms(b.deadline)
+    })
+
+    this.setState({submissions: submissions})
+  }
+
+  async getResultsFinal() {
+    let finalDoc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('results')
+      .doc('final')
+      .get()
+
+    if (finalDoc.exists) {
+      console.log('final', finalDoc);
+      let finalData = finalDoc.data();
+      this.setState({finalResults: finalData})
+    } else {
+      console.log('no final');
+    }
+
+  }
+
+  async getHackResults() {
+    let adminsRef = await window.firebase.firestore()
+      .collection('admins')
+      .get()
+
+    let adminList = [];
+
+    adminsRef.docs.forEach((item, index) => {
+      adminList.push(item.id);
+    })
+
+    let submissionId = this.state.submissions[this.state.selectedPhase].submissionId;
+
+    this.setState({currentSubmission:  submissionId})
+
+    let submissionsCollection = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('submissions')
+      .doc(this.state.currentSubmission)
+      .collection('users')
+      .get()
+
+    let submissions = [];
+    submissionsCollection.docs.forEach(doc=>{
+      // REMOVE USER SUBMISSION FROM PEER SET
+      if (doc.id === this.props.userId) {
+        this.setState({
+          userSubmission: doc.data()
+        })
+      // REMOVE ADMIN USERS FROM PEER SET
+      } else if (!adminList.includes(doc.id)) {
+        let userName;
+        if (this.state.participants[doc.id]){
+          userName  = this.state.participants[doc.id].alias
+        }
+        submissions.push({
+          userId: doc.id,
+          name: userName,
+          ...doc.data()
+        })
+      }
+    })
+
+    if (submissions.length > 0){
+      this.setState({submissionData: submissions})
+    } else {
+      this.setState({submissionData: null})
+    }
+
+    let submissionResultsDoc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('results')
+      .doc(submissionId)
+      .get()
+
+    if (submissionResultsDoc.exists) {
+      let submissionResultsData = submissionResultsDoc.data();
+
+      let resultsIds = Object.keys(submissionResultsData).filter((item)=>{
+        return ! adminList.includes(item)
+      })
+
+      let results = {};
+      resultsIds.forEach((result, i) => {
+        results[result] = submissionResultsData[result];
+      });
+
+      this.setState({
+        participantCount: Object.keys(results).length,
+        userResults: results[this.props.userId],
+      })
+
+      let metrics = getMetrics(submissionResultsData);
+
+      let values = {};
+      metrics.forEach ((metric)=>{
+        values[metric] = [];
+      })
+
+      // CONVERT LIST OF RESULTS TO SET OF KEYS AND ARRAY OF VALUES
+      Object.values(submissionResultsData).forEach((user)=>{
+        user.forEach((item)=>{
+          values[item.label].push(item.value)
+        })
+      })
+
+      // FILTER NULL (AND/OR FALSE) VALUES FROM THE VALUE LIST
+      Object.keys(values).forEach((key)=>{
+        values[key] = values[key].filter((item)=> {return item})
+      })
+
+      let stats = {};
+
+      Object.keys(values).forEach((key)=>{
+        stats[key] = getArrayStats(values[key])
+      })
+
+      this.setState({ resultStats: stats })
+    } else {
+      this.setState({
+        resultStats: null,
+        userResults: null,
+      })
+    }
 
     this.setState({ loading: false });
-
-    // const getResults = window.firebase.functions()
-    //   .httpsCallable('getPhaseResults');
-    //
-    // getPhaseResults({
-    //   phase,
-    //   endDate: endDate.getTime(),
-    //   userId: this.props.hackUser.uid,
-    //   hackId: this.props.hackId,
-    //   forumId: this.state.forumId,
-    // }).then((response) => {
-    //   console.log('response', response);
-    //   const { userResults: results } = response.data;
-    //   this.setState({
-    //     results,
-    //     loading: false,
-    //     gettingResults: true,
-    //   })
-    // })
   }
 
   render() {
     return (
       <Row>
         <Col>
-          <div className='top-container'>
-            {TreatmentTexts[this.state.treatment].header}
+          <div className='top-container pb-4'>
+            <h1 className="h2 font-bold pt-2 mb-0">Dashboard</h1>
 
-            {this.props.hackPhases && (
-            <div>
-              <h3>
-                Please select the phase you want to check.
-              </h3>
+            <div className="results-controls flex flex-between my-2">
+              <div>
+                <h3 className="font-bold text-center">
+                  Select the results section.
+                </h3>
 
-              <Timeline
-                phases={this.props.hackPhases}
-                initialPhase={1}
-                onClick={this.onPhaseSelection}
-                currentPhase={this.state.currentPhase}
-              />
+                <ResultsSectionSelector
+                  selected={this.state.section}
+                  callback={this.updateSection}
+                  sections={[
+                    {name: 'scores', label: 'Your Scores', disabled: this.state.selectedPhase === 'final' ? true : false},
+                    {name: 'peers', label: 'You Peers', disabled: this.state.selectedPhase === 'final' ? true : false},
+                    {name: 'summary', label: 'Summary', disabled: this.state.selectedPhase === 'final' ? true : false},
+                  ]}
+                />
+              </div>
+
+              <div className="">
+              {this.state.submissions && (
+                <>
+                <h3 className="font-bold text-center">
+                  Select the phase you want to view.
+                </h3>
+
+                <ResultsSubmissionSelector
+                  phases={this.state.submissions}
+                  finalResults={this.state.finalResults}
+                  selectedPhase={this.state.selectedPhase}
+                  onClick={this.onPhaseSelection}
+                />
+                </>
+              )}
+              </div>
             </div>
-            )}
-
-            <ResultsTabSelector callback={this.updateSection}/>
 
             <div className='selected-section'>
-              {this.state.loading && (
+              {this.state.loading ? (
                 <div className='results-loader'>
                   <Loader status='Fetching results...' />
                 </div>
-              )}
-
-              {!this.state.loading && !this.state.results && (
-                <h2 className='no-results'>
-                  Not results for this phase yet.
-                </h2>
-              )}
-
-              {this.state.results && this.state.currentSection === 'competitors' && (
-                  <ResultSectionCompetitors
-                    hackName={this.props.hackData.name}
-                    treatment={this.state.treatment}
-                    participants={this.state.participants}
-                    scores={this.state.results}
-                    onLikedCompetitors={this.userSaveLikedCompetitors}
-                  />
+              ):(
+              <>
+              {this.state.selectedPhase === 'final' ? (
+                  <>
+                    {this.state.finalResults ? (
+                      <ResultsFinalSection
+                        userId={this.props.userId}
+                        scores={this.state.finalResults}
+                        submission={this.state.userSubmission}
+                      />
+                    ) : (
+                      <h2 className='border text-center font-bold py-2'>
+                        No final results yet.
+                      </h2>
+                    )}
+                  </>
+              ):(
+                <>
+                {this.state.section === 'scores' && (
+                  <>
+                    {this.state.userResults ? (
+                      <ResultsScoresSection
+                        userId={this.props.userId}
+                        scores={this.state.userResults}
+                        submission={this.state.userSubmission}
+                      />
+                    ) : (
+                      <h2 className='border text-center font-bold py-2'>
+                        No results for this submission.
+                      </h2>
+                    )}
+                  </>
                 )}
 
-              {this.state.results && this.state.currentSection === 'personal' && (
-                  <PersonalScoreSection
-                    userId={this.props.hackUser.uid}
-                    hackId={this.props.hackId}
-                    scores={this.state.results}
-                    currentPhase={this.state.selectedPhase}
-                  />
-              )
-            }
+                {this.state.section === 'summary' && (
+                    <>
+                      {this.state.resultStats ? (
+                        <ResultsSummarySection
+                          participantCount={this.state.participantCount}
+                          summary={this.state.resultStats}
+                        />
+                      ) : (
+                        <h2 className='border text-center font-bold py-2'>
+                          No results for this submission.
+                        </h2>
+                      )}
+                    </>
+                )}
 
-
-              </div>
+                {this.state.section === 'peers' && (
+                    <>
+                      {this.state.submissionData ? (
+                        <ResultsPeersSection
+                          participantData={this.state.submissionData}
+                        />
+                      ) : (
+                        <h2 className='border text-center font-bold py-2'>
+                          No results for this submission.
+                        </h2>
+                      )}
+                    </>
+                )}
+              </>
+              )}
+              </>
+            )}
             </div>
+
+            <MdContentView
+              content={this.state.resultsContent}
+              encoded={true}
+              emptyText="Results Doc not available yet."
+            />
+          </div>
         </Col>
       </Row>
     )

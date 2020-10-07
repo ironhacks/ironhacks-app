@@ -1,10 +1,5 @@
 import React from 'react';
-// import { Loader } from '../../components/loader/index';
-import {
-  Redirect,
-  // Switch,
-  // Route
-} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import { Page } from '../../components/layout';
 

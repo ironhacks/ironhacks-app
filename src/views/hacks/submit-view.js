@@ -1,32 +1,114 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import { Row, Col } from '../../components/layout';
-import { InputText, InputCheckbox, InputTextarea } from '../../components/input';
-import { FileUpload, } from '../../components/dropzone';
+import { InputTextarea } from '../../components/input';
+import { FileUpload } from '../../components/dropzone';
+import { MdContentView } from '../../components/markdown-viewer';
+import { fire2Date, fire2Ms } from '../../util/date-utils'
+import { userMetrics } from '../../util/user-metrics'
+import { crc32 } from '../../util/hash-crc32'
+import Swal from 'sweetalert2';
 
+function SubmissionField({
+  index,
+  title,
+  value,
+  isValid,
+  isRequired,
+  isDisabled,
+  onChange,
+}) {
+  return (
+    <div className="my-3">
+      <h3 className={`${isValid ? '' : 'font-bold cl-red'}`}>
+        <strong>{`Q${index + 1}.`}</strong>
+        <span>{title}</span>
+        {isRequired ? (<span className="ml-1 pb-1 badge font-italic">(required)</span>) : (null)}
+      </h3>
+
+      <InputTextarea
+        containerClass="flex flex-col py-1 flex-between"
+        inputClass={`flex-3 ${isValid ? '' : 'border-danger'}`}
+        labelClass="flex-1 font-bold hide"
+        name={`field_${index}`}
+        label={`Q${index + 1}`}
+        value={value}
+        disabled={isDisabled}
+        onInputChange={onChange}
+      />
+    </div>
+  )
+}
 
 class SubmitView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: true,
-      data: true,
-      submissionData: {
-        description: '',
-        references: '',
-        keywords: [],
-        public: false,
-        files: [],
-      },
-      submissionFiles: [],
-      submissionDisabled: false,
+
+    this.submissionId = this.props.match.params.submissionId;
+
+    this.dateSettings = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short',
     }
 
-    this.submissionPhase = 'phase1';
+    this.state = {
+      loading: true,
+      user: null,
+      submissionForm: {
+        deadline: '',
+        name: '',
+        description: '',
+        survey: '',
+        fields: [],
+        files: [],
+      },
+      uploading: false,
+      acceptedFiles: null,
+      submissionData: {
+        public: false,
+        files: [], // COMPLETED FILE UPLOADS ADDED TO HERE BEFORE SUBMISSION
+        fields: [],
+      },
+      submissionFiles: [], // HOLDS FILES BEFORE UPLOAD BEGINS
+      fileProgress: [],
+      submissionDisabled: false,
+      surveyComplete: false,
+      uploadComplete: false,
+      submissionComplete: false,
+    }
 
     this.onFileUploadFiles = this.onFileUploadFiles.bind(this);
     this.startSubmitSubmission = this.startSubmitSubmission.bind(this);
     this.uploadSubmissionFile = this.uploadSubmissionFile.bind(this);
     this.onSubmissionInputChange = this.onSubmissionInputChange.bind(this);
+    this.onSubmissionFieldChanged = this.onSubmissionFieldChanged.bind(this);
+    this.getSubmissionData = this.getSubmissionData.bind(this);
+    this.validateFields = this.validateFields.bind(this);
+    this.showSurveryModal = this.showSurveryModal.bind(this);
+    this.showConfirmModal = this.showConfirmModal.bind(this);
+    this.showSuccessModal = this.showSuccessModal.bind(this);
+    this.getUser = this.getUser.bind(this);
+  }
+
+  componentDidMount(){
+    this.getUser()
+    this.getSubmissionData()
+  }
+
+  getUser() {
+    window.firebase.firestore()
+      .collection('users')
+      .doc(this.props.userId)
+      .get()
+      .then(doc=>{
+        this.setState({user: doc.data()})
+      })
+
   }
 
   onFileUploadFiles(_files) {
@@ -39,10 +121,71 @@ class SubmitView extends React.Component {
     this.setState({public: value})
   }
 
-  uploadSubmissionFile({file, hackId, phaseId, userId}) {
-    const storageRef = window.firebase.storage().ref();
-    const pathRef = storageRef.child(`data/hacks/${hackId}/${phaseId}/${userId}/${file.path}`);
+  getSubmissionData() {
+    const hackId = this.props.hackId;
+    const submissionId = this.submissionId;
+    window.firebase.firestore()
+      .collection('hacks')
+      .doc(hackId)
+      .collection('submissions')
+      .doc('settings')
+      .get()
+      .then((doc)=>{
+        let submissions = doc.data();
+        if (submissions[submissionId]){
+          let fields = [];
+          let submissionForm = submissions[submissionId];
+          let acceptedFiles = submissionForm.files.map((item, index)=>{
+            return item.name;
+          })
 
+          submissionForm.fields = submissionForm.fields.map((item, index)=>{
+            fields.push('');
+            return {
+              ...item,
+              isValid: true,
+            }
+          })
+          submissionForm.files = submissionForm.files.map((item, index)=>{
+            return {
+              ...item,
+              isValid: true,
+            }
+          })
+
+          if (fire2Ms(submissionForm.deadline) < Date.now()){
+            this.setState({
+              submissionDisabled: true,
+            })
+          }
+
+          let submissionData = this.state.submissionData;
+          submissionData.fields = fields;
+          this.setState({
+            submissionData: submissionData,
+            submissionForm: submissionForm,
+            acceptedFiles: acceptedFiles,
+          });
+        }
+      })
+  }
+
+  onSubmissionFieldChanged(name, value, index) {
+    let fields = this.state.submissionData.fields;
+    let submissionData = this.state.submissionData;
+    fields[index] = value;
+
+    this.setState({
+      submissionData: {
+        ...submissionData,
+        fields: fields,
+      }
+    });
+  }
+
+  uploadSubmissionFile({file, index, hackId, submissionId, userId}) {
+    const storageRef = window.firebase.storage().ref();
+    const pathRef = storageRef.child(`data/hacks/${hackId}/${submissionId}/${userId}/${file.path}`);
     const uploadTask = pathRef.put(file);
 
     uploadTask.on('state_changed', function(snapshot){
@@ -55,6 +198,8 @@ class SubmitView extends React.Component {
           case window.firebase.storage.TaskState.RUNNING:
             console.log('Upload is running');
             break;
+          default:
+            console.log('Uploading');
         }
       }, function(error) {
         console.log('Upload error', error);
@@ -82,134 +227,324 @@ class SubmitView extends React.Component {
                 ...this.state.submissionData,
                 files: fileData,
               }
-            });
+            })
 
-            const submissionData = this.state.submissionData;
-            if (fileData.length === submissionData.files.length){
+
+            if (fileData.length === this.state.submissionFiles.length){
               console.log('uploading complete');
-              this.setState({uploading: false});
-              this.completeSubmitSubmission(submissionData);
+              this.setState({
+                uploadComplete: true,
+                uploading: false
+              });
+
+              this.completeSubmitSubmission();
             }
           })
           .catch(function(error) {
             console.error('Error getting documents: ', error);
-          });
+          })
       })
       .catch((error) => {
         console.log('Upload Failed:', file, error.message);
-      });
+      })
+  }
+
+  validateFields() {
+    let submissionFields = this.state.submissionData.fields;
+    let fieldIsValid = [];
+    let form = this.state.submissionForm;
+    let formFields = form.fields;
+
+    formFields.forEach((field, index) => {
+
+      if (field.required &&
+        (!submissionFields[index] || submissionFields[index].trim().length === 0))
+      {
+        fieldIsValid.push(false)
+        formFields[index].isValid = false;
+      } else {
+        fieldIsValid.push(true)
+        formFields[index].isValid = true;
+      }
+    })
+
+    // SET STATE FOR UI STATE / FEEDBACK
+    this.setState({
+      submissionForm: {
+        ...form,
+        fields: formFields,
+      }
+    })
+
+    // RETURN TRUTH STATEMENT TO CONTINUE OR STOP SUBMISSION
+    return fieldIsValid.every(item=>{ return item === true })
+  }
+
+
+  validateFiles() {
+    let submissionFiles = this.state.submissionFiles;
+    let fileIsValid = [];
+
+    let form = this.state.submissionForm;
+    let formFiles = form.files;
+
+    formFiles.forEach((file, index) => {
+      if (file.required && (!submissionFiles[index]))
+      {
+        fileIsValid.push(false)
+        formFiles[index].isValid = false;
+      } else {
+        fileIsValid.push(true)
+        formFiles[index].isValid = true;
+      }
+    })
+
+    // SET STATE FOR UI STATE / FEEDBACK
+    this.setState({
+      submissionForm: {
+        ...form,
+        files: formFiles,
+      }
+    })
+
+    // RETURN TRUTH STATEMENT TO CONTINUE OR STOP SUBMISSION
+    return fileIsValid.every(item=>{ return item === true })
+  }
+
+  showConfirmModal() {
+    Swal.fire({
+      title: 'Are you ready to submit?',
+      html: `
+        <p>Confirm you want to submit the files.</p>
+        <ul>${this.state.submissionFiles.map((item, index)=>(`<li><em>${item.name}<em></li>`))}</ul>
+      `,
+      icon: 'question',
+      reverseButtons: true,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, submit'
+    })
+    .then((result) => {
+      if (result.value) {
+        const files = this.state.submissionFiles;
+        const userId = this.props.userId;
+        const hackId = this.props.hackId;
+        const submissionId = this.submissionId;
+
+        this.setState({ uploading: true })
+
+        files.forEach((item, index) => {
+          this.uploadSubmissionFile({
+            index: index,
+            file: item,
+            hackId: hackId,
+            submissionId: submissionId,
+            userId: userId,
+          })
+        })
+
+        if (this.state.submissionForm.survey) {
+          this.showSurveryModal()
+        } else {
+          this.setState({surveyComplete: true});
+        }
+      } else {
+        this.setState({submissionDisabled: false});
+      }
+    })
+  }
+
+
+  showSurveryModal() {
+    const formUrl = this.state.submissionForm.survey;
+    const userEmail = this.state.user.email;
+    const userId = this.props.userId;
+    const hackId = this.props.hackId;
+    const formId= crc32(`${this.props.hackSlug}|${this.submissionId}`).toString(16).toUpperCase()
+    const formType = `hackSubmitSurvey_${formId}`;
+    const alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`;
+
+    Swal.fire({
+        title: 'Hack Submission Form',
+        html: `<iframe src="${alertUrl}" title="Hack Submission Form"/>`,
+        showCloseButton: true,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        customClass: 'surveyAlert',
+      }).then(()=>{
+        this.setState({surveyComplete: true});
+        if (this.state.submissionComplete){
+          this.showSuccessModal()
+        }
+      })
+  }
+
+  showSuccessModal() {
+    Swal.fire({
+      title: 'Submission Successful',
+      text: 'Your submission is complete.',
+      icon: 'success',
+    })
+    .then(() => {
+      console.log('done');
+      // this.setState({submissionDisabled: false});
+      window.location = `/hacks/${this.props.hackSlug}`;
+    })
   }
 
   startSubmitSubmission() {
     this.setState({submissionDisabled: true});
-    let files = this.state.submissionFiles;
-    const userId = this.props.userId;
-    const hackId = this.props.hackId;
-    const phaseId = 'phase1';
 
-    files.forEach((item, i) => {
-      this.uploadSubmissionFile({
-        file: item,
-        hackId: hackId,
-        phaseId: phaseId,
-        userId: userId,
-      })
-    });
+    let validFields = this.validateFields();
+    let validFiles = this.validateFiles()
+
+    if (!validFields || !validFiles) {
+      this.setState({submissionDisabled: false});
+      return false
+    }
+
+    this.showConfirmModal()
   }
 
-  completeSubmitSubmission(data) {
+  completeSubmitSubmission() {
+    const submissionData = this.state.submissionData;
     const userId = this.props.userId;
     const hackId = this.props.hackId;
-    const phaseId = 'phase1';
+    const submissionId = this.submissionId;
+    userMetrics({event: 'user_submission'})
+
+    for (let field of submissionData.fields){
+      if (typeof(submissionData.fields[field]) === 'undefined'){
+
+      }
+    }
 
     window.firebase.firestore()
       .collection('hacks')
       .doc(hackId)
       .collection('submissions')
-      .doc(phaseId)
+      .doc(submissionId)
       .collection('users')
       .doc(userId)
-      .set(data, {merge: true})
+      .set(submissionData, {merge: true})
       .then(()=>{
-        this.setState({submissionDisabled: false});
-        console.log('done');
-        window.location.reload();
+        this.setState({ submissionComplete: true })
+        if (this.state.surveyComplete){
+          this.showSuccessModal()
+        }
       })
   }
 
   render() {
     return (
-      <>
+      <div className="mb-7">
       <Row>
+       {this.state.uploading && (
+         <div style={{
+           display: 'flex',
+           position: 'fixed',
+           width: '100vw',
+           height: '100vh',
+           zIndex: '1',
+           top: 0,
+           left: 0,
+           bottom: 0,
+           right: 0,
+           background: 'radial-gradient(rgba(0,0,0,.4), transparent)',
+           justifyContent: 'center',
+           alignItems: 'center',
+           color: 'white',
+           fontSize: '1em',
+         }}
+         >
+          Upload in progress...
+         </div>
+       )}
         <Col>
-
-          <h3 className="h3 py-2">
-            Current Submission
+          <h3 className="h2 font-bold py-2">
+            {this.state.submissionForm.name}
           </h3>
 
-          <InputTextarea
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-3"
-            labelClass="flex-1"
-            name="submission_description"
-            label="Description of the model"
-            value={this.state.submissionData.description || ''}
-            onInputChange={(name, value)=>this.onSubmissionInputChange('description', value)}
+          <p className="py-1">
+            <strong>Deadline:</strong>
+            <span className="ml-2">
+              {this.state.submissionForm.deadline ?
+                fire2Date(this.state.submissionForm.deadline).toLocaleString('en-US', this.dateSettings)
+                : ''
+              }
+            </span>
+          </p>
+
+          <MdContentView
+            content={this.state.submissionForm.description}
+            encoded={false}
+            emptyText="Submission Description not available yet."
           />
 
-          <InputTextarea
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-3"
-            labelClass="flex-1"
-            name="submission_references"
-            label="Submission References"
-            value={this.state.submissionData.references || ''}
-            onInputChange={(name, value)=>this.onSubmissionInputChange('references', value)}
-          />
+          {this.state.submissionForm.fields.map((field, index)=>(
+            <SubmissionField
+              key={index}
+              index={index}
+              isValid={field.isValid}
+              isRequired={field.required}
+              title={field.title}
+              value={this.state.submissionData.fields[index] || ''}
+              isDisabled={this.state.submissionDisabled}
+              onChange={(name, value)=>this.onSubmissionFieldChanged(name, value, index)}
+            />
+          ))}
 
-          <InputText
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-2"
-            labelClass="flex-1"
-            name="submission_keywords"
-            label="Keywords"
-            icon="image"
-            iconClass="pl-1 pr-2"
-            value={this.state.submissionData.keywords || ''}
-            onInputChange={(name, value)=>this.onSubmissionInputChange('keywords', value)}
-          />
+          <h3 className="h3 py-1 font-bold">
+            Submission Files
+          </h3>
 
-          <InputCheckbox
-            label="Share my submission"
-            name="public"
-            onInputChange={this.onSubmissionInputChange}
-            isChecked={this.state.submissionData.public}
-          />
+          <ul className="list">
+          {this.state.submissionForm.files.map((item, index)=>(
+            <li key={index} className="list-item">
+              <code className={item.isValid ? '' : 'border-danger border'}>
+                {item.name}
+              </code>
+              {item.required && (
+                <span
+                  className={`font-italic ml-1 badge font-italic ${item.isValid ? '' : 'cl-red'}`}>
+                    (required)
+                </span>
+              )}
+            </li>
+          ))}
+          </ul>
 
-          <h2 className="h2 py-3">
-            File Upload
-          </h2>
+          <div className="p-2">
+            <h3 className="h3 font-bold py-3">
+              File Upload
+            </h3>
 
-          <FileUpload
-            onFilesChanged={this.onFileUploadFiles}
-          />
-
+            <FileUpload
+              disabled={this.state.submissionDisabled}
+              acceptedFiles={this.state.acceptedFiles}
+              onFilesChanged={this.onFileUploadFiles}
+            />
+          </div>
         </Col>
       </Row>
 
       <Row>
         <Col>
-          <button
-            onClick={this.startSubmitSubmission}
-            disabled={this.state.submissionDisabled}
-            >
-            Submit
-          </button>
+          <div className="flex flex-end">
+            <button
+              className="btn btn-success px-3"
+              onClick={this.startSubmitSubmission}
+              disabled={this.state.submissionDisabled}
+              >
+                Submit
+            </button>
+          </div>
         </Col>
       </Row>
-      </>
+      </div>
     )
   }
 }
 
-export default SubmitView
+export default withRouter(SubmitView)

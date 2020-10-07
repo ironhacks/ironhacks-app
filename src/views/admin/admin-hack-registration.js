@@ -1,47 +1,21 @@
 import React from 'react';
 import { Section } from '../../components/layout';
-import { VariableSizeList as List } from 'react-window';
 import { InputText, InputCheckbox } from '../../components/input';
 import randomTeamname from '../../services/random-teamname';
-
-
-class CohortListUser extends React.Component {
-  constructor(props) {
-    super(props);
-    this.ListItem = this.ListItem.bind(this);
-  }
-
-  ListItem({ index, style }) {
-    return (
-      <div style={style}>
-        {index + 1}. {this.props.dataList[index]}
-      </div>
-    )
-  }
-  render() {
-    return (
-      <List
-        itemCount={this.props.dataList.length}
-        itemSize={(()=>{return 30})}
-        height={200}
-        width={'100%'}
-        data={this.props.dataList}
-      >
-      {this.ListItem}
-      </List>
-    )
-  }
-}
+import {
+  AdminRegisteredUserList,
+  AdminCohortListItem,
+} from '../../components/admin';
 
 function removeListItem(list, index) {
   return [...list.slice(0, index), ...list.slice(index + 1, list.length)];
 }
 
+
 class AdminHackRegistration extends React.Component {
   constructor(props) {
     super(props);
 
-    this.ListItemUser = this.ListItemUser.bind(this);
 
     this.state = {
       data: '',
@@ -50,6 +24,7 @@ class AdminHackRegistration extends React.Component {
       cohorts: [],
       cohortList: [],
       registeredUsers: [],
+      registeredUsersData: null,
     }
 
     this.addCohort = this.addCohort.bind(this)
@@ -59,47 +34,10 @@ class AdminHackRegistration extends React.Component {
     this.assignCohorts = this.assignCohorts.bind(this)
   }
 
+
   componentDidMount() {
     this.getSettings();
     this.getRegisteredUsers();
-  }
-
-  ListItemUser({ index, style }) {
-    let user = this.state.registeredUsers[index];
-    return (
-      <div style={style}>
-        {index + 1}. {user.name}
-      </div>
-    )
-  }
-
-  async getUserData(userRef) {
-    const user = await userRef.get()
-    console.log(user.id, JSON.stringify(user.data()));
-    return user;
-  }
-
-  getRegisteredUsers(){
-    window.firebase.firestore()
-    .collection('hacks')
-    .doc(this.props.hackId)
-    .collection('registration')
-    .doc('participants')
-    .get()
-    .then(doc=>{
-      let data = doc.data();
-      let users = Object.keys(data).map((key, i) => {
-        let user = data[key];
-        // this.getUserData(user.ref);
-        return {
-          userId: key,
-          ref: user.ref,
-          name: user.alias,
-        }
-      }).filter(el=>{ return el.name })
-
-      this.setState({registeredUsers: users});
-    })
   }
 
   getSettings() {
@@ -133,6 +71,52 @@ class AdminHackRegistration extends React.Component {
           });
         }
       });
+  }
+
+
+  async getRegisteredUsers(){
+    let adminsRef = await window.firebase.firestore()
+      .collection('admins')
+      .get()
+
+    let adminList = [];
+
+    adminsRef.docs.forEach((item, index) => {
+      adminList.push(item.id);
+    })
+
+    let participantDoc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('registration')
+      .doc('participants')
+      .get()
+
+      let data = participantDoc.data();
+      if (!data) { return false }
+      let users = [];
+
+      this.setState({registeredUsersData: data});
+
+      for (let id of Object.keys(data)) {
+        let user = data[id];
+        let userDoc = await user.ref.get();
+        users.push({
+          isAdmin: adminList.includes(id),
+          userId: id,
+          userRef: user.ref,
+          hackAlias: user.alias,
+          ...userDoc.data()
+        })
+      }
+
+      // users.filter(el=>{ return el.name })
+
+      users
+        .sort((a,b)=>{ return a.email.localeCompare(b.email) })
+        .sort((a,b)=>{ if (a.isAdmin) { return -1 } else { return 1 } })
+
+      this.setState({registeredUsers: users});
   }
 
   addCohort(){
@@ -177,24 +161,34 @@ class AdminHackRegistration extends React.Component {
   }
 
   assignCohorts() {
-    let list = this.state.registeredUsers;
+    let userlist = this.state.registeredUsers;
+
+    // DO NOT ASSIGN ADMIN USERS TO THE PARTICIPANT COHORT
+    userlist = userlist.filter(user=>{ return !user.isAdmin })
+
+    // USERS ARE ORDERED BY EMAIL FOR DISPLAY
+    // RESORTING ON USERID WHICH IS RANDOMLY GENERATED
+    // SHUFFLES THE LIST BEFORE SORTING INTO GROUPS
+    userlist.sort((a,b)=>{ return a.userId.localeCompare(b.userId) })
+
     const groups = {};
     this.state.cohorts.forEach((group, i) => {
       groups[group.id] = [];
-    });
+    })
 
     if (Object.keys(groups).length === 0) {
       return false;
     }
 
-    while (list.length > 0) {
-      Object.keys(groups).forEach((group)=>{
-        if (list.length > 0){
-          let index = Math.floor(Math.random() * list.length);
-          groups[group].push(list[index]);
-          list = removeListItem(list, index);
+    while (userlist.length > 0) {
+      for (var i = 0; i < Object.keys(groups).length; i++) {
+        if (userlist.length > 0){
+          let group = Object.keys(groups)[i];
+          let index = Math.floor(Math.random() * userlist.length);
+          groups[group].push(userlist[index].userId);
+          userlist = removeListItem(userlist, index);
         }
-      })
+      }
     }
     this.setState({cohortList: groups});
 
@@ -240,7 +234,7 @@ class AdminHackRegistration extends React.Component {
 
           <Section sectionClass="py-2">
             <h2>
-              User Cohorts
+              Cohorts Settings
             </h2>
 
             {this.state.cohorts.map((item, index)=>(
@@ -328,15 +322,13 @@ class AdminHackRegistration extends React.Component {
             </h3>
 
             {this.state.registeredUsers ? (
-              <List
-                itemCount={this.state.registeredUsers.length}
-                itemSize={(()=>{return 30})}
-                height={300}
-                width={400}
-                data={this.state.registeredUsers}
-              >
-                {this.ListItemUser}
-              </List>
+              <AdminRegisteredUserList
+                registeredUsers={this.state.registeredUsers}
+                hackId={this.props.hackId}
+                onRemove={((userlist)=>{
+                  this.setState({registeredUsers: userlist})
+                })}
+              />
             ):(
               <p>No registered users</p>
             )}
@@ -344,6 +336,7 @@ class AdminHackRegistration extends React.Component {
             <h3 className="h3 py-2">
               Cohorts
             </h3>
+            <p><em>*Admin users are not added to user cohorts</em></p>
 
             <div className="admin-cohort-list flex flex-wrap">
               {this.state.cohortList && (
@@ -354,7 +347,7 @@ class AdminHackRegistration extends React.Component {
                   >
                     <div className="card p-2 bg-blue-grey-lt4 border-0">
                       <h3 className="h3 font-bold">{item}</h3>
-                      <CohortListUser
+                      <AdminCohortListItem
                         dataList={this.state.cohortList[item]}
                       />
                     </div>

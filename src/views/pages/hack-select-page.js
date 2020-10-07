@@ -1,8 +1,7 @@
 import React from 'react';
-import { withCookies } from 'react-cookie';
 import Separator from '../../util/separator';
 import { Loader } from '../../components/loader';
-import { HackCardList, HackSignupCardList } from '../../components/hacks';
+import { HackCardList, PreviousHackCardList, HackSignupCardList } from '../../components/hacks';
 import { Page, Section, Row, Col } from '../../components/layout';
 
 class HackSelectPage extends React.Component {
@@ -116,6 +115,8 @@ class HackSelectPage extends React.Component {
     } else {
       return (
         <Page
+          pageTitle="IronHacks | Hacks"
+          pageUrl="https://ironhacks.com/hacks"
           pageFooter={false}
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
@@ -168,7 +169,7 @@ class HackSelectPage extends React.Component {
 
                 <Separator primary />
 
-                <HackCardList
+                <PreviousHackCardList
                   emptyText={'No previous hacks.'}
                   hacks={this.state.previousHacks}
                 />
@@ -181,4 +182,4 @@ class HackSelectPage extends React.Component {
   }
 }
 
-export default withCookies(HackSelectPage);
+export default HackSelectPage;

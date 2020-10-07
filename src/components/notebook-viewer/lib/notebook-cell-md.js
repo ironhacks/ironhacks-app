@@ -1,48 +1,37 @@
 import React from 'react';
-import {
-  Col,
-  Row,
-  Typography,
-} from 'antd';
+import { Row } from  '../../../components/layout';
 
 function NotebookMdCell({
-  display,
   bgColor,
   executionCount,
   gutterVisible,
   cellContent,
 }) {
-  const cellStyle = {
-    display: display ? '' : 'none',
-    // color: bgColor || '#E5496A',
-    float: 'left',
+
+  const tagStyle = {
     padding: '5px',
+    color: 'var(--red)',
+    fontFamily: 'monospace',
+    fontSize: '0.9em',
   }
 
-  const gutterStyle = {
-    textAlign: 'left',
-  }
+  if (cellContent) {
+    return (
+      <Row rowClass="mt-1 mx-0 text-left flex flex-nowrap">
+        <div className="px-0">
+          <span style={tagStyle}>
+            {`Out[${executionCount}]:`}
+          </span>
+        </div>
 
-  const rowStyle = {
-    display: display,
-  }
-
-  return (
-    <Row style={rowStyle}>
-      <Col span={gutterVisible}>
-        <Typography.Text style={cellStyle}>
-          O [{executionCount}]:
-        </Typography.Text>
-      </Col>
-
-      <Col
-        span={gutterVisible ? 20 : 22}
-        style={gutterStyle}>
+        <div className="flex-1">
           {cellContent}
-      </Col>
-      <Col span={1}/>
-    </Row>
-  )
+        </div>
+      </Row>
+    )
+  } else {
+    return (<></>)
+  }
 }
 
 

@@ -1,7 +1,8 @@
 import React from 'react';
+import Swal from 'sweetalert2';
 import { Row, Col } from '../../components/layout';
 import { registerUser } from '../../services/register-hack';
-import Swal from 'sweetalert2';
+import { userMetrics } from '../../util/user-metrics'
 
 class RegistrationView extends React.Component {
   constructor(props) {
@@ -18,6 +19,13 @@ class RegistrationView extends React.Component {
       .logEvent('register_hack', {
         'value': this.props.hackSlug
       });
+
+    userMetrics({
+      event: 'register_hack',
+      data: {
+        hackId: this.props.hackId,
+      }
+    })
 
     window.location = `/hacks/${this.props.hackSlug}`;
   }
@@ -43,9 +51,7 @@ class RegistrationView extends React.Component {
       let userId = this.props.userId;
       let formUrl = this.props.hackRegistration;
       let formType = 'hackRegistration';
-
       let alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`;
-      console.log(Swal);
       Swal.fire({
           title: 'Registration survey',
           html: `<iframe src="${alertUrl}" title="Registration Form"/>`,
@@ -78,7 +84,6 @@ class RegistrationView extends React.Component {
 
   registerHack() {
     this.goToPresurvey()
-    console.log('registering now');
   }
 
   render() {

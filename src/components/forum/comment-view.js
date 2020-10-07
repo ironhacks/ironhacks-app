@@ -8,15 +8,19 @@ import { MaterialDesignIcon } from '../icons/material-design-icon';
 import Swal from 'sweetalert2';
 
 function CommentHeader({postTitle, postAuthorName, adminPost}){
-  const name = postAuthorName;
+  const name = postAuthorName.split(' ');
   const initials = name[0].slice(0, 1) + name[1].slice(0, 1);
 
   return (
     <div className="comment_author">
       <div className="comment_author__img">{initials}</div>
-      <div className="comment_author__name">{postAuthorName}</div>
-      {adminPost && (
+      {adminPost ? (
+        <>
+        <span>{name[0]}</span>
         <div className="badge badge-dark ml-2">IronHacks Team</div>
+        </>
+      ) : (
+        <div className="comment_author__name">{postAuthorName}</div>
       )}
     </div>
   )
@@ -40,8 +44,8 @@ function CommentFooter({user, data}){
         commentData={data}
       />
       <ReactionPicker
-        commentData={data}
-        commentId={data.id}
+        reactions={data.reactions}
+        docRef={data.commentRef}
         user={user}
       />
     </div>
@@ -53,9 +57,8 @@ class CommentView extends React.Component {
     super(props);
     const { user } = props;
     const { authorName } = props.data;
-    const splitedName = authorName.split(' ');
-    const profileLetters =
-      splitedName[0].slice(0, 1) + splitedName[1].slice(0, 1);
+    const name = authorName.split(' ');
+    const profileLetters = name[0].slice(0, 1) + name[1].slice(0, 1);
 
     this.state = {
       user,

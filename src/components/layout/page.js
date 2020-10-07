@@ -1,8 +1,7 @@
 import React from 'react'
 import { Header } from './header'
-// import Meta from './meta'
 import { Footer } from './footer'
-// import { useSiteMetadata } from '../../hooks/use-site-metadata'
+import {Helmet} from 'react-helmet';
 
 class Content extends React.Component {
   render() {
@@ -14,12 +13,30 @@ class Content extends React.Component {
   }
 }
 
-// <Meta title={title} />
-const Page = ({ user, pageClass, pageFooter, userIsAdmin, children }) => {
+
+const Page = ({
+  children,
+  pageDescription,
+  pageTitle,
+  pageUrl,
+  pageClass,
+  pageFooter,
+  user,
+  userIsAdmin,
+}) => {
   const classes = ['page', pageClass].join(' ').trim();
   const displayName = user.displayName || 'IH';
   return (
     <>
+      {pageTitle && (
+        <Helmet>
+          <title>{pageTitle}</title>
+          <meta property="og:title" content={pageTitle} />
+          {pageDescription && ( <meta name="description" content={pageDescription} /> )}
+          {pageDescription && ( <meta property="og:description" content={pageDescription} /> )}
+          {pageUrl && ( <link rel="canonical" href={pageUrl} /> )}
+        </Helmet>
+      )}
       <Header
         user={user}
         displayName={displayName}
@@ -43,31 +60,53 @@ Page.defaultProps = {
   isAdmin: false,
   displayName: '',
   user: {},
+  pageTitle: '',
+  pageDescription: '',
+  pageUrl: '',
 }
 
 
-// <Meta title={title} />
-const BlankPage = ({ pageClass, children }) => {
+const BlankPage = ({ pageClass, children, pageTitle, pageDescription, pageUrl }) => {
   const classes = ['page', pageClass].join(' ').trim();
   return (
+    <>
+      {pageTitle && (
+        <Helmet>
+          <title>{pageTitle}</title>
+          <meta property="og:title" content={pageTitle} />
+          {pageDescription && ( <meta property="og:description" content={pageDescription} /> )}
+          {pageUrl && ( <link rel="canonical" href={pageUrl} /> )}
+        </Helmet>
+      )}
       <Content>
         <div className={classes}>
           {children}
         </div>
       </Content>
+    </>
   )
 }
 
 BlankPage.defaultProps = {
   pageClass: '',
+  pageTitle: '',
+  pageDescription: '',
+  pageUrl: '',
 }
 
 
-// <Meta title={title} />
-const LandingPage = ({ pageClass, children }) => {
+const LandingPage = ({ pageClass, children, pageTitle, pageDescription, pageUrl }) => {
   const classes = ['page', pageClass].join(' ').trim();
   return (
     <>
+      {pageTitle && (
+        <Helmet>
+          <title>{pageTitle}</title>
+          <meta property="og:title" content={pageTitle} />
+          {pageDescription && ( <meta property="og:description" content={pageDescription} /> )}
+          {pageUrl && ( <link rel="canonical" href={pageUrl} /> )}
+        </Helmet>
+      )}
       <Content>
         <div className={classes}>
           {children}
@@ -81,6 +120,9 @@ const LandingPage = ({ pageClass, children }) => {
 
 LandingPage.defaultProps = {
   pageClass: '',
+  pageTitle: '',
+  pageDescription: '',
+  pageUrl: '',
 }
 
 export { Page, BlankPage, LandingPage }

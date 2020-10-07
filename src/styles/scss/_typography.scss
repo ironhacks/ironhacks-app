@@ -3,3 +3,54 @@
     text-decoration: underline;
   }
 }
+
+.link--underline {
+  text-decoration: underline;
+}
+
+.text {
+  &-center{ text-align:center; }
+  &-justify{ text-align:justify; }
+  &-left{ text-align:left; }
+  &-right{ text-align:right; }
+  &-underline { text-decoration: underline; }
+}
+
+.bigger{ font-size: 1.7em; }
+.smaller{ font-size: 0.8em; }
+
+.font {
+  &-bold{ font-weight: 700; }
+  &-extrabold{ font-weight: 800; }
+  &-light{ font-weight: 300; }
+  &-regular{ font-weight: 500; }
+  &-semibold{ font-weight: 600; }
+  &-thin{ font-weight: 200; }
+  &-italic{ font-style: italic; }
+}
+
+.fs {
+  &-0{ font-size: 1.000em; }
+  &-1{ font-size: 1.125em; }
+  &-10{ font-size: 3.247em; }
+  &-11{ font-size: 3.653em; }
+  &-12{ font-size: 4.110em; }
+  &-13{ font-size: 4.624em; }
+  &-14{ font-size: 5.202em; }
+  &-15{ font-size: 5.852em; }
+  &-16{ font-size: 6.583em; }
+  &-2{ font-size: 1.266em; }
+  &-3{ font-size: 1.424em; }
+  &-4{ font-size: 1.602em; }
+  &-5{ font-size: 1.802em; }
+  &-6{ font-size: 2.027em; }
+  &-7{ font-size: 2.281em; }
+  &-8{ font-size: 2.566em; }
+  &-9{ font-size: 2.887em; }
+  &-m1{ font-size: 0.889em; }
+  &-m2{ font-size: 0.791em; }
+  &-m3{ font-size: 0.702em; }
+  &-m4{ font-size: 0.624em; }
+  &-m5{ font-size: 0.555em; }
+  &-m6{ font-size: 0.493em; }
+}

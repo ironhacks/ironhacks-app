@@ -7,6 +7,7 @@ import RegistrationView from './registration-view';
 import ResultsView from './results-view';
 import RulesView from './rules-view';
 import SubmitView from './submit-view';
+import SubmissionsView from './submissions-view';
 import TaskView from './task-view';
 import TutorialView from './tutorial-view';
 
@@ -20,6 +21,7 @@ const Hack = {
   Results: ResultsView,
   Rules: RulesView,
   Submit: SubmitView,
+  Submissions: SubmissionsView,
   Task: TaskView,
   Tutorial: TutorialView,
 }

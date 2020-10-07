@@ -1,7 +1,8 @@
 import React from 'react';
-import { withCookies } from 'react-cookie';
 import { BlankPage, Section, Row, Col } from '../../components/layout';
 import { Loader } from '../../components/loader';
+import randomUsername from '../../services/random-username';
+import { userMetrics } from '../../util/user-metrics'
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -80,6 +81,8 @@ class LoginPage extends React.Component {
               isAdmin: false,
             })
           } else {
+            window.firebase.analytics().logEvent('user_login');
+            userMetrics({event: 'user_login'})
             this._onComplete()
           }
         },
@@ -110,11 +113,14 @@ class LoginPage extends React.Component {
       .set({
         name: user.name,
         email: user.email,
+        alias: randomUsername(),
         created: window.firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(()=>{
         let timestamp = new Date().toISOString();
         window.firebase.analytics().logEvent('user_signup', { 'value': timestamp });
+        userMetrics({ event: 'user_signup' })
+
         this._onComplete();
       })
       .catch((error)=>{
@@ -125,7 +131,12 @@ class LoginPage extends React.Component {
 
   render() {
       return (
-        <BlankPage pageClass="bg-primary">
+        <BlankPage
+          pageClass="bg-primary"
+          pageTitle="IronHacks | Login"
+          pageDescription="Login to IronHacks"
+          pageUrl="https://ironhacks.com/login"
+        >
           <Section>
             <div style={{
               height: '100vh',
@@ -149,7 +160,9 @@ class LoginPage extends React.Component {
                     <Loader status={this.state.status} />
                   )}
 
-                  <div id='firebaseui-auth-container' />
+                  <div style={{display:'flex'}}>
+                    <div style={{backgroundColor: 'transparent'}} id='firebaseui-auth-container' />
+                  </div>
                 </Col>
               </Row>
             </div>
@@ -159,4 +172,4 @@ class LoginPage extends React.Component {
     }
 }
 
-export default withCookies(LoginPage);
+export default LoginPage;
