@@ -1,18 +1,16 @@
+# IronHacks Server Application
 
-# Purdue IronHacks Platform
-
-Hack for innovation and join the open data movement.
+Hack for innovation to solve global challenges.
 
 ## About
 
-An IronHacks is a unique 21-day, 4-stage innovative hacking program for individuals who want to create impact from open data. Participation is free. During our iterative hacking process, you will learn new skills, have the chance to learn from others and receive feedback from our experts! Turn your ideas into web apps that make data actionable and useful!
+IronHacks is an open data hacking program that combines experiential learning with real-world data-driven problem solving. During a 5-stage virtual competition, students utilize open data to create novel and useful interactive visualizations and analytic "apps" that solve civic challenges.
 
 [![](http://i.imgur.com/wtv2dy6.png)](http://ironhacks.com)
 
+During an iterative multiphase process, the competing participants have access to tutorials, standardized libraries and packages, and virtual help sessions. After each phase, submissions are being evaluated within a few hours or days with the help of machine intelligence and human experts. Real time and targeted feedback accelerate learning and facilitate participants in hacking complex problems.
 
-## Developer Documentation
-
-If you are interested how the app works in the depth, check out the [Documentation Site](https://ironhacks.github.io/ironhacks-platform-2018/).
+visit [ironhacks.com](https://ironhacks.com)
 
 ## License
 
