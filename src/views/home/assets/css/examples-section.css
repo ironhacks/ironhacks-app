@@ -1,13 +1,16 @@
+.videos_section .card,
 .examples_section .card {
   background-color: transparent;
   border: none;
 }
 
+.videos_section .card_row,
 .examples_section .card_row {
   display: flex;
   flex-wrap: wrap;
 }
 
+.videos_section .card_col,
 .examples_section .card_col {
   flex-grow: 1;
   flex-shrink: 1;
@@ -17,9 +20,11 @@
 }
 
 @media screen and (min-width: 800px) {
+  .videos_section .card_row,
   .examples_section .card_row {
     flex-wrap: nowrap;
   }
+  .videos_section .card_col,
   .examples_section .card_col {
     flex-basis: 33%;
   }
