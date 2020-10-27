@@ -15,7 +15,6 @@ class LoginPage extends React.Component {
     this._onSignInSuccess = this._onSignInSuccess.bind(this);
     this._onFailed = this._onFailed.bind(this);
     this._onComplete = this._onComplete.bind(this);
-
     this.initAuthUI = this.initAuthUI.bind(this);
   }
 
@@ -68,7 +67,6 @@ class LoginPage extends React.Component {
       signInOptions: [
         window.firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         window.firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        window.firebase.auth.GithubAuthProvider.PROVIDER_ID,
       ],
       callbacks: {
         signInSuccessWithAuthResult: (result, redirectUrl) => {
