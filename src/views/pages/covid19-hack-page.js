@@ -1,8 +1,79 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LandingPage, Section, Row, Col } from '../../components/layout';
 import { LoginButton } from '../../components/buttons';
 import { List } from '../../components/list';
 import { Img } from '../../components/img';
+import FsLightbox from 'fslightbox-react';
+
+function VideoSection() {
+  const [lightboxController, setLightboxController] = useState({
+    toggler: false,
+    slide: 1
+  });
+
+  function openLightboxOnSlide(number) {
+    setLightboxController({
+      toggler: !lightboxController.toggler,
+      slide: number
+    })
+  }
+
+  return (
+    <>
+    <Row>
+      <Col>
+        <h2 className="h2 font-bold mb-2">
+          Testimonials
+        </h2>
+      </Col>
+    </Row>
+    <Row rowClass="card_row" flex={true}>
+      <Col colClass="card_col">
+        <div className="card example_card" style={{cursor: 'pointer'}} onClick={() => openLightboxOnSlide(1)}>
+          <Img
+            responsive={false}
+            baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
+            filePath={'media%2Fimg%2Foptim%2F'}
+            fileName={'video-thumb-indiana-mph_360x200.png?alt=media&token=483bb5df-a703-4740-9b34-3c1a925b3899'}
+            alt={'Indiana Management Performance Hub'}
+            imgClass="card__image bd-0 mb-0 depth-2"
+            imgStyle={{objectFit: 'cover'}}
+          />
+          <div className="card__content bd-0 bg-inherit">
+            <h3 className="title example_card__title font-bold my-3 px-2">Indiana Management Performance Hub</h3>
+          </div>
+        </div>
+      </Col>
+
+      <Col colClass="card_col">
+        <div className="card example_card" style={{cursor: 'pointer'}} onClick={() => openLightboxOnSlide(2)}>
+          <Img
+            responsive={false}
+            baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
+            filePath={'media%2Fimg%2Foptim%2F'}
+            fileName={'video-thumb-indiana-dwd_360x200.png?alt=media&token=ef219088-5ead-4c95-ad86-d6f144e9752c'}
+            alt={'Indiana Management Performance Hub'}
+            imgClass="card__image bd-0 mb-0 depth-2"
+            imgStyle={{objectFit: 'cover'}}
+          />
+          <div className="card__content bd-0 bg-inherit">
+            <h3 className="title example_card__title font-bold my-3 px-2">Indiana Dept. of Workforce Development</h3>
+          </div>
+        </div>
+      </Col>
+    </Row>
+
+    <FsLightbox
+      toggler={lightboxController.toggler}
+      sources={[
+          'https://www.youtube.com/watch?v=6LBzLqVIc-0',
+          'https://www.youtube.com/watch?v=QXptoKzR1Vk',
+      ]}
+      slide={lightboxController.slide}
+      />
+    </>
+  )
+}
 
 class UpcomingHackPage extends React.Component {
   render() {
@@ -71,26 +142,13 @@ class UpcomingHackPage extends React.Component {
 
             </Col>
           </Row>
+        </Section>
 
-          <Row>
-            <Col>
-              <iframe
-                title="MPH IronHacks Welcome Video"
-                style={{
-                  margin: '1em auto 3em',
-                  display: 'block',
-                }}
-                width="560"
-                height="315"
-                src="https://www.youtube-nocookie.com/embed/6LBzLqVIc-0"
-                frameBorder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                />
-            </Col>
-          </Row>
+        <Section sectionClass="videos_section">
+          <VideoSection/>
+        </Section>
 
-
+        <Section>
           <Row rowClass="py-2">
             <Col>
               <h2 className="h2 font-bold mb-2">

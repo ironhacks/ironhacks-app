@@ -28,6 +28,7 @@ function getImgSizes(sizes) {
 function Img({
     baseUrl,
     imgClass,
+    imgStyle,
     responsive,
     filePath,
     fileName,
@@ -36,11 +37,11 @@ function Img({
     alt
   }) {
 
-    const imgSrc = baseUrl ? `${baseUrl}/${filePath}${fileName}` : `${fileName}`;
-    const imgAlt = alt ? alt : fileName.split('.')[0].split(/-+|_+/g).join(' ');
-    const imgSet = responsive ? getImgSet(fileName, baseUrl, sizes) : null;
-    const imgPathSet = responsive ? getImgPathSet(imgSet, baseUrl, filePath) : null;
-    const imgSizes = responsive ? getImgSizes(sizes) : null;
+  const imgSrc = baseUrl ? `${baseUrl}/${filePath}${fileName}` : `${fileName}`;
+  const imgAlt = alt ? alt : fileName.split('.')[0].split(/-+|_+/g).join(' ');
+  const imgSet = responsive ? getImgSet(fileName, baseUrl, sizes) : null;
+  const imgPathSet = responsive ? getImgPathSet(imgSet, baseUrl, filePath) : null;
+  const imgSizes = responsive ? getImgSizes(sizes) : null;
 
   return (
     <img
@@ -49,6 +50,7 @@ function Img({
       sizes={imgSizes}
       srcSet={imgPathSet}
       className={imgClass}
+      style={imgStyle}
     />
   )
 }
@@ -57,6 +59,7 @@ function Img({
 Img.defaultProps = {
   sizes: FIREBASE_IMAGE_DEFAULT,
   filePath: '',
+  style: '',
 }
 
 
