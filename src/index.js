@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import {unregister} from './serviceWorker';
+import reportWebVitals from './util/report-web-vitals'
 
 import App from './app';
 
@@ -16,4 +17,5 @@ ReactDOM.render((
   </BrowserRouter>
 ), document.getElementById('root'));
 
+reportWebVitals(console.log);
 unregister();
