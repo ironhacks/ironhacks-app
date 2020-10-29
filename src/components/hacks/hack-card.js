@@ -15,40 +15,42 @@ class HackCard extends React.Component {
   render() {
     return (
       <div className="hack_card">
-        <a href={`/hacks/${this.props.hackData.hackSlug}`}>
+        <a href={`/hacks/${this.props.slug}`}>
           <div className="flex">
             <div className="hack_card__header">
-              {this.props.hackData.hackThumbImg && (
+              {this.props.thumbImg && (
                 <img
                   className="card_img"
-                  src={this.props.hackData.hackThumbImg}
+                  src={this.props.thumbImg}
                   alt={`${this.props.name} Thumbnail`}
                   />
               )}
             </div>
 
-            <div className="hack_card__body p-2">
-              <h3 className="card_title">
+            <div className="hack_card__body">
+              <h3 className="card_title font-bold">
                 {this.props.name}
               </h3>
 
-              {this.props.hackData.description && (
+              {this.props.description && (
               <p className="card_description">
-                {this.props.hackData.description}
+                {this.props.description}
               </p>
               )}
 
-              {this.props.hackData.startDate && (
-                <span className="mr-3">
-                  Opening Date: {formatDate(this.props.hackData.startDate)}
-                </span>
-              )}
+              <div className="card_meta">
+                {this.props.startDate && (
+                  <span className="mr-3">
+                    Opening Date: {formatDate(this.props.startDate)}
+                  </span>
+                )}
 
-              {this.props.hackData.difficulty && (
-                <span>
-                  Difficulty:  {this.props.hackData.difficulty.label}
-                </span>
-              )}
+                {this.props.difficulty && (
+                  <span>
+                    Difficulty: {this.props.difficulty.label}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </a>
@@ -57,6 +59,12 @@ class HackCard extends React.Component {
   }
 }
 
+HackCard.defaultProps = {
+  thumbImg: null,
+  description: null,
+  startDate: false,
+  difficulty: null,
+}
 
 class PreviousHackCard extends React.Component {
   render() {
@@ -64,42 +72,51 @@ class PreviousHackCard extends React.Component {
       <div className="hack_card">
         <div className="flex">
             <div className="hack_card__header">
-              {this.props.hackData.hackThumbImg && (
+              {this.props.thumbImg && (
                 <img
                   className="card_img"
-                  src={this.props.hackData.hackThumbImg}
+                  src={this.props.thumbImg}
                   alt={`${this.props.name} Thumbnail`}
                   />
               )}
             </div>
 
             <div className="hack_card__body p-2">
-              <h3 className="card_title">
+              <h3 className="card_title font-bold">
                 {this.props.name}
               </h3>
 
-              {this.props.hackData.description && (
+              {this.props.description && (
               <p className="card_description">
-                {this.props.hackData.description}
+                {this.props.description}
               </p>
               )}
 
-              {this.props.hackData.startDate && (
-                <span className="mr-3">
-                  Opening Date: {formatDate(this.props.hackData.startDate)}
-                </span>
-              )}
+              <div className="card_meta">
+                {this.props.startDate && (
+                  <span className="mr-3">
+                    Opening Date: {formatDate(this.props.startDate)}
+                  </span>
+                )}
 
-              {this.props.hackData.difficulty && (
-                <span>
-                  Difficulty:  {this.props.hackData.difficulty.label}
-                </span>
-              )}
+                {this.props.difficulty && (
+                  <span>
+                    Difficulty: {this.props.difficulty.label}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
       </div>
     )
   }
+}
+
+PreviousHackCard.defaultProps = {
+  thumbImg: null,
+  description: null,
+  startDate: false,
+  difficulty: null,
 }
 
 
@@ -114,40 +131,42 @@ class HackSignupCard extends React.Component {
   render() {
     return (
       <div className={'hack_card'}>
-        <a href={`/hacks/${this.props.hackData.hackSlug}/register`}>
+        <a href={`/hacks/${this.props.slug}/register`}>
           <div className="flex">
             <div className="hack_card__header">
-              {this.props.hackData.hackThumbImg && (
+              {this.props.thumbImg && (
                 <img
                   className="card_img"
-                  src={this.props.hackData.hackThumbImg}
+                  src={this.props.thumbImg}
                   alt={`${this.props.name} Thumbnail`}
                   />
               )}
             </div>
 
             <div className="hack_card__body p-2">
-              <h3 className="card_title">
+              <h3 className="card_title font-bold">
                 {this.props.name}
               </h3>
 
-              {this.props.hackData.description && (
+              {this.props.description && (
               <p className="card_description">
-                {this.props.hackData.description}
+                {this.props.description}
               </p>
               )}
 
-              {this.props.hackData.startDate && (
-                <span className="mr-3">
-                  Opening Date: {formatDate(this.props.hackData.startDate)}
-                </span>
-              )}
+              <div className="card_meta">
+                {this.props.startDate && (
+                  <span className="mr-3">
+                    Opening Date: {formatDate(this.props.startDate)}
+                  </span>
+                )}
 
-              {this.props.hackData.difficulty && (
-                <span>
-                  Difficulty: {this.props.hackData.difficulty.label}
-                </span>
-              )}
+                {this.props.difficulty && (
+                  <span>
+                    Difficulty: {this.props.difficulty.label}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </a>

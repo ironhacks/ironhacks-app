@@ -15,8 +15,8 @@ class HackCardList extends React.Component {
   render() {
     if (!this.props.hacks || this.props.hacks.length === 0) {
       return (
-        <div className="py-5">
-          <span className='empty-list'>
+        <div className="py-5 mb-2">
+          <span className='font-italic ml-2'>
             {this.emptyText}
           </span>
         </div>
@@ -27,14 +27,18 @@ class HackCardList extends React.Component {
         {this.props.hacks.map((hack, index) => (
           <li
             key={hack.hackId}
-            className="hack_card_list__item w-50p"
+            className="hack_card_list__item w-full"
             index={index}
             >
 
             <HackCard
               name={hack.name}
               hackId={hack.hackId}
-              hackData={hack}
+              thumbImg={hack.hackThumbImg}
+              slug={hack.hackSlug}
+              description={hack.description}
+              startDate={hack.startDate}
+              difficulty={hack.difficulty}
             />
           </li>
         ))}
@@ -65,14 +69,18 @@ class PreviousHackCardList extends React.Component {
         {this.props.hacks.map((hack, index) => (
           <li
             key={hack.hackId}
-            className="hack_card_list__item w-50p"
+            className="hack_card_list__item w-full"
             index={index}
             >
 
             <PreviousHackCard
               name={hack.name}
               hackId={hack.hackId}
-              hackData={hack}
+              thumbImg={hack.hackThumbImg}
+              slug={hack.hackSlug}
+              description={hack.description}
+              startDate={hack.startDate}
+              difficulty={hack.difficulty}
             />
           </li>
         ))}
@@ -104,14 +112,17 @@ class HackSignupCardList extends React.Component {
         {this.props.hacks.map((hack, index) => (
           <li
             key={hack.hackId}
-            className="hack_card_list__item w-50p"
+            className="hack_card_list__item w-full"
             index={index}
             >
             <HackSignupCard
               name={hack.name}
               hackId={hack.hackId}
-              hack={hack}
-              hackData={hack}
+              thumbImg={hack.hackThumbImg}
+              slug={hack.hackSlug}
+              description={hack.description}
+              startDate={hack.startDate}
+              difficulty={hack.difficulty}
             />
           </li>
         ))}
