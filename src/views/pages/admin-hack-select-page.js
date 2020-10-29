@@ -1,8 +1,8 @@
-import React from 'react';
+import { Component } from 'react';
 import { AdminHackCardList } from '../../components/hacks';
 import { Page, Section, Row, Col } from '../../components/layout';
 
-class AdminHackSelectPage extends React.Component {
+class AdminHackSelectPage extends Component {
   constructor(props) {
     super(props);
     this.state = {

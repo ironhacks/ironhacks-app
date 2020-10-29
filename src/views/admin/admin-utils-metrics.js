@@ -1,6 +1,6 @@
-import React from 'react';
+import { Component } from 'react';
 
-class AdminUtilsMetrics extends React.Component {
+class AdminUtilsMetrics extends Component {
   constructor(props) {
     super(props);
     this.state = { }

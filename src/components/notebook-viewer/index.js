@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import {
   Card,
   Spin,
@@ -30,7 +30,7 @@ import './style.css';
 //
 
 
-class NotebookViewer extends React.Component {
+class NotebookViewer extends Component {
   constructor(props) {
     super(props);
     this.state = {

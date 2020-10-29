@@ -1,10 +1,10 @@
-import React from 'react';
+import { Component } from 'react';
 import { Link, Redirect, Switch, Route, withRouter } from 'react-router-dom';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { AdminUtils } from '../admin';
 
 
-class AdminUtilsNav extends React.Component {
+class AdminUtilsNav extends Component {
   constructor(props) {
     super(props);
     this.baseUrl = '/admin/utils';
@@ -34,7 +34,7 @@ AdminUtilsNav.defaultProps = {
   items: [],
 }
 
-class AdminUtilsPage extends React.Component {
+class AdminUtilsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {}

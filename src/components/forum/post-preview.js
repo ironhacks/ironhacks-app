@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ReactionsView from './reaction-view';
 import ReactionPicker from './reaction-picker';
@@ -27,7 +27,7 @@ function PostPreviewAuthorImg({initials}){
   )
 }
 
-class PostPreview extends React.Component {
+class PostPreview extends Component {
   constructor(props) {
     super(props);
     const { authorName } = props.thread;

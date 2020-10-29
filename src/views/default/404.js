@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import styled, {ThemeProvider} from 'styled-components';
 import {Theme} from '../../theme';
@@ -37,7 +37,7 @@ const SectionContainer = styled('div')`
 `;
 
 
-class PageNotFound extends React.Component {
+class PageNotFound extends Component {
   constructor(props) {
     super(props);
     this.state = {

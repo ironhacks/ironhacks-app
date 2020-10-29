@@ -1,5 +1,3 @@
-import React from 'react'
-
 const SvgComponent = props => (
   <svg
     aria-hidden="true"

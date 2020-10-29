@@ -1,11 +1,11 @@
-import React from 'react';
+import { Component } from 'react';
 import { Redirect, Switch, Route, withRouter } from 'react-router-dom';
 import { Loader } from '../../components/loader/index';
 import { AdminPageNavBreadcrumbs, AdminHackNav } from '../../components/admin';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { AdminHack } from '../admin';
 
-class AdminHackPage extends React.Component {
+class AdminHackPage extends Component {
   constructor(props) {
     super(props);
 

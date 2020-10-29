@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import { QuizContainer } from '../../components/quiz/quiz-container';
 import  { QuizNav } from '../../components/quiz/quiz-nav';
 import { Section, Row, Col } from '../../components/layout';
 
-class QuizView extends React.Component {
+class QuizView extends Component {
   constructor(props) {
     super(props);
     let  { email: userEmail } = this.props.user;

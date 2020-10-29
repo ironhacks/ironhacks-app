@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import Select from 'react-select';
 
-class InputSelect extends React.Component {
+class InputSelect extends Component {
   handleChange = value => {
     // let value = event.target.value;
     console.log('changed', value);

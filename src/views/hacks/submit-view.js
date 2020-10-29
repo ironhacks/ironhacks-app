@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { withRouter } from 'react-router';
 import { Row, Col } from '../../components/layout';
 import { InputTextarea } from '../../components/input';
@@ -40,7 +40,7 @@ function SubmissionField({
   )
 }
 
-class SubmitView extends React.Component {
+class SubmitView extends Component {
   constructor(props) {
     super(props);
 

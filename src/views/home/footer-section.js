@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Img } from '../../components/img'
 import { Row, Col } from '../../components/layout'
 import { MaterialDesignIcon } from '../../components/icons';

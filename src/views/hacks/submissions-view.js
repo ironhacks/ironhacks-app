@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { withRouter } from 'react-router';
 import { Row, Col } from '../../components/layout';
 import { CountdownTimer } from '../../components/timer';
@@ -88,7 +88,7 @@ function SubmissionListItem({
   }
 }
 
-class SubmissionsView extends React.Component {
+class SubmissionsView extends Component {
   constructor(props) {
     super(props);
     this.state = {

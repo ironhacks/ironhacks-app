@@ -1,4 +1,3 @@
-import React from 'react';
 import { VariableSizeList as List } from 'react-window';
 
 function AdminRegisteredUserList({

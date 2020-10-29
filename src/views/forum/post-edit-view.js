@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../util/button.js';
@@ -32,7 +32,7 @@ const SectionContainer = styled('div')`
 `;
 
 
-class ThreadEditView extends React.Component {
+class ThreadEditView extends Component {
   constructor(props) {
     super(props);
     const { user } = props;

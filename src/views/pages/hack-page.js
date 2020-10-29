@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { OverlayLoaderContainer, Loader } from '../../components/loader';
 import Separator from '../../util/separator';
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -33,7 +33,7 @@ const HackNavSection = (
 };
 
 
-class HackPage extends React.Component {
+class HackPage extends Component {
   constructor(props) {
     super(props);
 

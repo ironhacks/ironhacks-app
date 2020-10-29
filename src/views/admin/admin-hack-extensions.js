@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import Separator from '../../util/separator.js';
 import { InputText, InputCheckbox } from '../../components/input';
 import { Section, Row } from '../../components/layout';
@@ -26,7 +26,7 @@ import { Section, Row } from '../../components/layout';
 // mode=AGENDA
 
 
-class AdminHackExtensions extends React.Component {
+class AdminHackExtensions extends Component {
   constructor(props) {
     super(props);
     this.state = {

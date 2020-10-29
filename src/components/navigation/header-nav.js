@@ -1,8 +1,8 @@
-import React from 'react';
+import { Component } from 'react';
 import { NavContainerDiv } from './nav-container'
 import menuIcon from '../../assets/svg/menu-icon.svg'
 
-class HeaderNav extends React.Component {
+class HeaderNav extends Component {
   constructor(props) {
     super(props);
 

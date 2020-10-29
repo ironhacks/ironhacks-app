@@ -1,10 +1,10 @@
-import React from 'react';
+import { Component } from 'react';
 import MarkdownEditor from '../../components/markdown-editor';
 import { InputText } from '../../components/input';
 import Button from '../../util/button.js';
 
 
-class AdminHackTask extends React.Component {
+class AdminHackTask extends Component {
   constructor(props) {
     super(props);
 

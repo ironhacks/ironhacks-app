@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import { MaterialDesignIcon } from '../icons/material-design-icon';
 
@@ -33,7 +33,7 @@ const ReactionCounter = styled('div')`
 `;
 
 
-class ReactionPicker extends React.Component {
+class ReactionPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {

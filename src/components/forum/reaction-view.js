@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import * as DateFormater from '../../util/dateFormater.js';
 import { Theme } from '../../theme';
@@ -21,7 +21,7 @@ const ItemData = styled('div')`
   }
 `;
 
-class ReactionsView extends React.Component {
+class ReactionsView extends Component {
   constructor(props) {
     super(props);
     const { commentId, totalComments, commentData } = props;

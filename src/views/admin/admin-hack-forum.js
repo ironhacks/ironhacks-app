@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import forumIcon from '../../assets/svg/forum-icon.svg';
 
@@ -28,7 +28,7 @@ const ForumItemContainer = styled('div')`
   }
 `;
 
-class AdminHackForumItem extends React.Component {
+class AdminHackForumItem extends Component {
   constructor(props) {
     super(props);
 
@@ -110,7 +110,7 @@ class AdminHackForumItem extends React.Component {
 }
 
 
-class AdminHackForumView extends React.Component {
+class AdminHackForumView extends Component {
   constructor(props) {
     super(props);
     this.state = {

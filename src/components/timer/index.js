@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import * as Time from '../../constants/time';
 
-class CountdownTimer extends React.Component {
+class CountdownTimer extends Component {
   constructor(props) {
     super(props);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 // import styled from 'styled-components';
 import ReactMde from 'react-mde';
 import * as Showdown from 'showdown';
@@ -22,7 +22,7 @@ import './css/react-mde-all.css';
 //   })
 // }
 
-class MarkdownEditor extends React.Component {
+class MarkdownEditor extends Component {
   constructor(props) {
     super(props);
 

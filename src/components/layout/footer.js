@@ -1,4 +1,3 @@
-import React from 'react'
 import { mergeClasses } from './lib/layoutUtils'
 import {version  as PkgVersion} from '../../../package.json';
 

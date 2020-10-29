@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Loader } from './components/loader';
 import { withRouter } from 'react-router';
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -11,7 +11,7 @@ import './assets/static/bootstrap-grid.css'
 import './styles/charrismatic.min.css'
 import './styles/styles.css'
 
-class App extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = {

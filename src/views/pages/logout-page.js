@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Loader } from '../../components/loader';
 import { userMetrics } from '../../util/user-metrics'
 
-class LogoutPage extends React.Component {
+class LogoutPage extends Component {
   constructor(props) {
     super(props);
     this.state = { loading: true }

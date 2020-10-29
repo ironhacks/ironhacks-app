@@ -1,11 +1,11 @@
-import React from 'react';
+import { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { Page } from '../../components/layout';
 import { NotebookViewer } from '../../components/notebook-viewer';
 import { userMetrics } from '../../util/user-metrics'
 
-class NotebookPage extends React.Component {
+class NotebookPage extends Component {
   constructor(props) {
     super(props);
 

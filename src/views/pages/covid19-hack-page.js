@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { LandingPage, Section, Row, Col } from '../../components/layout';
 import { LoginButton } from '../../components/buttons';
 import { List } from '../../components/list';

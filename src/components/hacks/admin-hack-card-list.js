@@ -1,4 +1,3 @@
-import React from 'react';
 import { AdminHackCard } from './admin-hack-card';
 
 const AdminHackCardList = (

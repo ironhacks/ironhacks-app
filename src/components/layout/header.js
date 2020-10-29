@@ -1,4 +1,4 @@
-import React from 'react';
+import { createRef, Component } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { NavButton } from '../navigation/nav-button'
 import { HeaderLogo } from '../navigation/header-logo'
@@ -74,7 +74,7 @@ const UserMenuDropdownButton = (
   );
 };
 
-class Header extends React.Component {
+class Header extends Component {
   constructor(props) {
     super(props);
 
@@ -83,8 +83,8 @@ class Header extends React.Component {
       showMenu: 'none',
     };
 
-    this.userMenuRef = React.createRef();
-    this.navMenuref = React.createRef();
+    this.userMenuRef = createRef();
+    this.navMenuref = createRef();
   }
 
   componentDidMount() {

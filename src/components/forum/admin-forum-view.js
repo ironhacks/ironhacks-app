@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import ForumSelector from './forum-selector';
 
-class AdminForumView extends React.Component {
+class AdminForumView extends Component {
   constructor(props) {
     super(props);
     this.state = {

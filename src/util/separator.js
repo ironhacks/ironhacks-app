@@ -1,5 +1,3 @@
-import React from 'react';
-
 function Separator({primary}){
   const style = {
     width: '100%',

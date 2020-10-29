@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdown-editor';
 import {Loader} from '../../components/loader';
@@ -44,7 +44,7 @@ const TitleInput = styled('input')`
   margin-bottom: 10px;
 `;
 
-class NewThread extends React.Component {
+class NewThread extends Component {
   constructor(props) {
     super(props);
     this.state = {

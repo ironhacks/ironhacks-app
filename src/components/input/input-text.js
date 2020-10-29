@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import { MaterialDesignIcon } from '../icons/material-design-icon';
 
-class InputText extends React.Component {
+class InputText extends Component {
   handleChange = event => {
     let value = event.target.value;
     if (this.props.onInputChange) {

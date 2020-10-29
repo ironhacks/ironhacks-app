@@ -1,5 +1,3 @@
-import React from 'react';
-
 function MaterialDesignIcon({ name, iconClass, ...props}) {
   return (
     <i

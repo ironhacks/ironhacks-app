@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { InputText, InputCheckbox } from '../input';
@@ -12,7 +12,7 @@ const filterUrl = (path) => {
     .replace(/ /g, '-')
 }
 
-class AdminSubmissionForm extends React.Component {
+class AdminSubmissionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {

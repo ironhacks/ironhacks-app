@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 
 const formatDate = (timestring) => {
   let date = new Date(Date.parse(timestring));
@@ -133,7 +133,7 @@ PreviousHackCard.defaultProps = {
 }
 
 
-class HackSignupCard extends React.Component {
+class HackSignupCard extends Component {
   onHackSignup() {
     this.props.onClick(
       this.props.index,

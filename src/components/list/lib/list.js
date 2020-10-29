@@ -1,5 +1,3 @@
-import React from 'react';
-
 function List({ items, listClass, itemClass }) {
   return (
     <ul className={`list ${listClass}`}>

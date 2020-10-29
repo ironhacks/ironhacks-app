@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import { VariableSizeList as List } from 'react-window';
 
-class AdminUtilsUsers extends React.Component {
+class AdminUtilsUsers extends Component {
   constructor(props) {
     super(props);
     this.state = {

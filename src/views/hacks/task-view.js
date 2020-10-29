@@ -1,10 +1,10 @@
-import React from 'react';
+import { Component } from 'react';
 import { Row, Col } from '../../components/layout';
 import { MdContentView }  from '../../components/markdown-viewer';
 import Swal from 'sweetalert2';
 import { userMetrics } from '../../util/user-metrics'
 
-class TaskView extends React.Component {
+class TaskView extends Component {
   constructor(props) {
     super(props);
     this.state = {

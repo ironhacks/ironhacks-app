@@ -1,5 +1,3 @@
-import React from 'react';
-
 const FIREBASE_IMAGE_DEFAULT = [
   '1200x675',
   '800x450',

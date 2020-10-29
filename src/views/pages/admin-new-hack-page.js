@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import { Theme } from '../../theme';
@@ -38,7 +38,7 @@ const SectionContainer = styled('div')`
   }
 `;
 
-class AdminNewHackPage extends React.Component {
+class AdminNewHackPage extends Component {
   _timeoutID;
 
   constructor(props) {

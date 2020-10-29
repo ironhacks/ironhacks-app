@@ -1,4 +1,3 @@
-import React from 'react';
 import { LandingPage, Section } from '../../components/layout';
 import {
   AboutSection,

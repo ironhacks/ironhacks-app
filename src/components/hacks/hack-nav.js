@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { HackNavContainerDiv } from './nav-container'
 import { upperCaseWord } from '../../util/string-utils';
@@ -28,7 +28,7 @@ HackNavItem.defaultProps = {
   navClass: '',
 }
 
-class HackNav extends React.Component {
+class HackNav extends Component {
   constructor(props) {
     super(props);
     this.state = {

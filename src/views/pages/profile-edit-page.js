@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { InputText, InputNumber } from '../../components/input';
@@ -13,7 +13,7 @@ import {
 } from '../../data';
 
 
-class ProfileEditPage extends React.Component {
+class ProfileEditPage extends Component {
   constructor(props) {
     super(props);
 

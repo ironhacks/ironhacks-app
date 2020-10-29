@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import Button from '../../util/button.js';
 import MarkdownEditor from '../../components/markdown-editor';
 import { userMetrics } from '../../util/user-metrics'
 
-class CommentEditor extends React.Component {
+class CommentEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {

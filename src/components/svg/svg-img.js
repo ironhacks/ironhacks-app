@@ -1,7 +1,7 @@
-import React from 'react'
+import { Component } from 'react';
 import PropTypes from 'prop-types'
 
-class SvgImgContainer extends React.Component {
+class SvgImgContainer extends Component {
   constructor(props) {
     super(props)
     this.baseClass = 'svgimg';
@@ -28,7 +28,7 @@ SvgImgContainer.propTypes = {
 }
 
 
-class SvgImg extends React.Component {
+class SvgImg extends Component {
   constructor(props) {
     super(props)
     this.containerClass = this.props.containerClass;

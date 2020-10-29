@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled, {css} from 'styled-components';
 import * as DateFormater from './dateFormater.js';
 
@@ -53,7 +53,7 @@ const PhaseItem = styled('button')`
   }
 `;
 
-class TimeLine extends React.Component {
+class TimeLine extends Component {
   constructor(props) {
     super(props);
     const {phases} = props;

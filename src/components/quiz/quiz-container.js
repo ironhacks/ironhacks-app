@@ -1,5 +1,3 @@
-import React from 'react';
-
 function QuizContainer({quizId, userEmail }) {
   const quizUrls = {
     bootstrap: 'https://purdue.ca1.qualtrics.com/jfe/form/SV_ai47Laj9EM1n433',

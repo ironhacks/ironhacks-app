@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { PhaseInterval } from './lib/phase-interval';
 import styled from 'styled-components';
 
@@ -10,7 +10,7 @@ const PhaseItem = styled('div')`
 `;
 
 
-export default class Phase extends React.Component {
+export default class Phase extends Component {
   onCodingHandler = () => {
     this.props.onFocusHandler(this.props.phaseIndex, 'coding');
   };

@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 import Dropzone from 'react-dropzone'
 
 const baseStyle = {
@@ -17,7 +17,7 @@ const baseStyle = {
   transition: 'border .24s ease-in-out'
 };
 
-class FileUpload extends React.Component {
+class FileUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import { useEffect } from 'react';
 import { Row, Col } from '../../components/layout';
 import { userMetrics } from '../../util/user-metrics'
 

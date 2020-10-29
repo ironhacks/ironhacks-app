@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import MarkdownEditor from '../../components/markdown-editor';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -11,7 +11,7 @@ const filterUrl = (path) => {
     .replace(/ /g, '-')
 }
 
-class AdminSubmissionEditForm extends React.Component {
+class AdminSubmissionEditForm extends Component {
   constructor(props) {
     super(props);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdown-editor';
 import Button from '../../util/button.js';
@@ -13,7 +13,7 @@ const AvailableActionsDiv = styled('div')`
 `;
 
 
-class AdminHackOverview extends React.Component {
+class AdminHackOverview extends Component {
   constructor(props) {
     super(props);
     this.state = {

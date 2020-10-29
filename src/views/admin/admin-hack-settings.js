@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import Separator from '../../util/separator.js';
 import {
   InputText,
@@ -22,7 +22,7 @@ var fire2Date = (fireDate) => {
   return new Date((secs * 1000) + (nsecs / 1000000)).toISOString();
 }
 
-class AdminHackSettings extends React.Component {
+class AdminHackSettings extends Component {
   constructor(props) {
     super(props);
     const {

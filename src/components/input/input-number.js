@@ -1,6 +1,6 @@
-import React from 'react';
+import { Component } from 'react';
 
-class InputNumber extends React.Component {
+class InputNumber extends Component {
   handleChange = event => {
     let value = event.target.value;
     if (this.props.onInputChange) {

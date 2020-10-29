@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 
 const SectionContainer = styled('div')`
@@ -83,7 +83,7 @@ function ParticipantScoreRow({participant}) {
   )
 }
 
-class ResultsPeersSection extends React.Component {
+class ResultsPeersSection extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,10 +1,10 @@
-import React from 'react';
+import { Component } from 'react';
 import { Section, Row } from '../../components/layout';
 import Separator from '../../util/separator.js';
 import { AdminSubmissionEditForm } from '../../components/submission';
 import { withRouter } from 'react-router';
 
-class AdminHackSubmissionEdit extends React.Component {
+class AdminHackSubmissionEdit extends Component {
   constructor(props) {
     super(props);
 

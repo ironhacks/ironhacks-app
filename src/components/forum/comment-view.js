@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { MdContentView } from '../markdown-viewer';
 import ReactionsView from './reaction-view';
@@ -52,7 +52,7 @@ function CommentFooter({user, data}){
   )
 }
 
-class CommentView extends React.Component {
+class CommentView extends Component {
   constructor(props) {
     super(props);
     const { user } = props;

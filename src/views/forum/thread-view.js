@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import PostView from '../../components/forum/post-view';
@@ -31,7 +31,7 @@ const SectionSeparator = styled('div')`
   margin-bottom: 15px;
 `;
 
-class ThreadView extends React.Component {
+class ThreadView extends Component {
   constructor(props) {
     super(props);
     const { user } = props;

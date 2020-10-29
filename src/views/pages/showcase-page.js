@@ -1,4 +1,3 @@
-import React from 'react';
 import { LandingPage, Section, Row, Col } from '../../components/layout';
 import { ShowcaseCard } from '../../components/showcase';
 

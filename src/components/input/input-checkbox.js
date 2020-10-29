@@ -1,6 +1,6 @@
-import React from 'react';
+import { Component } from 'react';
 
-class InputCheckbox extends React.Component {
+class InputCheckbox extends Component {
   handleChange = event => {
     if (this.props.onInputChange){
       let value = event.target.checked

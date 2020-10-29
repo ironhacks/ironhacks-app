@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import MarkdownEditor from '../../components/markdown-editor';
 import Button from '../../util/button.js';
 
 
-class AdminHackResults extends React.Component {
+class AdminHackResults extends Component {
   constructor(props) {
     super(props);
 

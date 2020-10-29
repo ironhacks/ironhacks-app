@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import { Section, Row } from '../../components/layout';
 import Separator from '../../util/separator.js';
 import { AdminSubmissionForm, AdminSubmissionItem } from '../../components/submission';
 
-class AdminHackSubmissions extends React.Component {
+class AdminHackSubmissions extends Component {
   constructor(props) {
     super(props);
 

@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import { VariableSizeList as List } from 'react-window';
 
-class AdminCohortListItem extends React.Component {
+class AdminCohortListItem extends Component {
   ListItem = ({ index, style }) => {
     return (
       <div style={style}>

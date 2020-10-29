@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component, Fragment } from 'react';
 import {Link} from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -57,7 +57,7 @@ const sectionsEndPoints = {
   newThread: 'newThread',
 };
 
-class BreadCrumbs extends React.Component {
+class BreadCrumbs extends Component {
   returnToDetails = (event) => {
     event.preventDefault();
     this.props.returnToDetails();
@@ -70,10 +70,10 @@ class BreadCrumbs extends React.Component {
         <Link to={'/forum'}>Home</Link>
         {this.props.sections.map((section) => {
           return (
-            <React.Fragment>
+            <Fragment>
               <i className="right"/>
               <Link to={sectionsEndPoints[section]}>{sections[sections]}</Link>
-            </React.Fragment>
+            </Fragment>
           );
         })}
         <i className="right"/>

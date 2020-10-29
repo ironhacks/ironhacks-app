@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import {
   HackCard,
   PreviousHackCard,
@@ -6,7 +6,7 @@ import {
 } from './hack-card';
 
 
-class HackCardList extends React.Component {
+class HackCardList extends Component {
   constructor(props) {
     super(props);
     this.emptyText = this.props.emptyText || 'There are no hacks available.';
@@ -48,7 +48,7 @@ class HackCardList extends React.Component {
   }
 }
 
-class PreviousHackCardList extends React.Component {
+class PreviousHackCardList extends Component {
   constructor(props) {
     super(props);
     this.emptyText = this.props.emptyText || 'There are no hacks available.';
@@ -91,7 +91,7 @@ class PreviousHackCardList extends React.Component {
 }
 
 
-class HackSignupCardList extends React.Component {
+class HackSignupCardList extends Component {
   constructor(props) {
     super(props);
     this.emptyText = this.props.emptyText || 'There are no hacks available.';

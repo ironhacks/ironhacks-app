@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import { downloadFileUrl } from '../../util/download-file-url';
 
@@ -50,7 +50,7 @@ function UserScoreRow({name, label, value}) {
 }
 
 
-class SubmissionLink extends React.Component {
+class SubmissionLink extends Component {
   constructor(props) {
     super(props);
 

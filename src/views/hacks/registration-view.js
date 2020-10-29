@@ -1,10 +1,10 @@
-import React from 'react';
+import { Component } from 'react';
 import Swal from 'sweetalert2';
 import { Row, Col } from '../../components/layout';
 import { registerUser } from '../../services/register-hack';
 import { userMetrics } from '../../util/user-metrics'
 
-class RegistrationView extends React.Component {
+class RegistrationView extends Component {
   constructor(props) {
     super(props);
     this.state = {registerDisabled: false }

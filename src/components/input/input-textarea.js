@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 
 
 // <InputText
@@ -11,7 +11,7 @@ import React from 'react';
 //   onInputChange={this.onFormDataChanged}
 // />
 
-class InputTextarea extends React.Component {
+class InputTextarea extends Component {
   handleChange = event => {
     let value = event.target.value;
     if (this.props.onInputChange) {

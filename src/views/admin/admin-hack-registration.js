@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Section } from '../../components/layout';
 import { InputText, InputCheckbox } from '../../components/input';
 import randomTeamname from '../../services/random-teamname';
@@ -12,7 +12,7 @@ function removeListItem(list, index) {
 }
 
 
-class AdminHackRegistration extends React.Component {
+class AdminHackRegistration extends Component {
   constructor(props) {
     super(props);
 

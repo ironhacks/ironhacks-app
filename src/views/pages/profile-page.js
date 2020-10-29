@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { SkillsTable } from '../../components/skills-table';
@@ -19,7 +19,7 @@ function getHackName(hackId) {
     })
 }
 
-class TrainingKeyLink extends React.Component {
+class TrainingKeyLink extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -94,7 +94,7 @@ class TrainingKeyLink extends React.Component {
 }
 
 
-class RegisteredHackList extends React.Component {
+class RegisteredHackList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -185,7 +185,7 @@ const ProfileSocialAccounts = (
 };
 
 
-class ProfilePage extends React.Component {
+class ProfilePage extends Component {
   constructor(props) {
     super(props);
     this.state = {

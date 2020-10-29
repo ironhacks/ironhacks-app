@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { fire2Date } from '../../util/date-utils';
 import { MdContentView } from '../../components/markdown-viewer';

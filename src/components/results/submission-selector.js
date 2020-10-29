@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { userMetrics } from '../../util/user-metrics'
 import { fire2Ms } from '../../util/date-utils';
 
@@ -30,7 +30,7 @@ function SubmissionSelectorItem({
 
 }
 
-class ResultsSubmissionSelector extends React.Component {
+class ResultsSubmissionSelector extends Component {
   onItemClick(phase, submissionId) {
     userMetrics({
       event: 'results_phase_view',

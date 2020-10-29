@@ -1,4 +1,3 @@
-import React from 'react';
 import githubLogo from '../../assets/banner-logos/github.jpg';
 import nsfLogo from '../../assets/banner-logos/nsf.jpg';
 import westLafayetteCityLogo from '../../assets/banner-logos/city-west-lafayette-logo.jpg';

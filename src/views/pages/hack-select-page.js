@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import { Loader } from '../../components/loader';
 import { HackCardList, PreviousHackCardList, HackSignupCardList } from '../../components/hacks';
 import { Page, Section, Row, Col } from '../../components/layout';
 
-class HackSelectPage extends React.Component {
+class HackSelectPage extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import ReactionsView from './reaction-view';
 // import ReactionPicker from './reaction-picker';
 import Separator from '../../util/separator';
@@ -38,7 +38,7 @@ function PostBody({content}){
   )
 }
 
-class PostView extends React.Component {
+class PostView extends Component {
   constructor(props) {
     super(props);
     const { user } = props;

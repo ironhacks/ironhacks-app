@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import { Theme } from '../../theme';
@@ -102,7 +102,7 @@ const NewThreadButton = styled('button')`
 // }
 //
 
-class ForumView extends React.Component {
+class ForumView extends Component {
   constructor(props) {
     super(props);
     this.state = {

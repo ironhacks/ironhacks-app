@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Loader } from '../../components/loader';
 import { MdContentView }  from '../../components/markdown-viewer';
 import { Row, Col } from '../../components/layout';
@@ -33,7 +33,7 @@ function getMetrics(data) {
   return metrics;
 }
 
-class ResultsView extends React.Component {
+class ResultsView extends Component {
   constructor(props) {
     super(props);
     this.state = {

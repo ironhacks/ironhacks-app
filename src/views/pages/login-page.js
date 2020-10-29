@@ -1,10 +1,10 @@
-import React from 'react';
+import { Component } from 'react';
 import { BlankPage, Section, Row, Col } from '../../components/layout';
 import { Loader } from '../../components/loader';
 import randomUsername from '../../services/random-username';
 import { userMetrics } from '../../util/user-metrics'
 
-class LoginPage extends React.Component {
+class LoginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Row, Col } from '../../components/layout'
 import { SvgImg } from '../../components/svg'
 import { BulbSvg } from '../../components/svg/jsx'
