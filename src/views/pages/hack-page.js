@@ -1,10 +1,9 @@
 import React from 'react';
 import { OverlayLoaderContainer, Loader } from '../../components/loader';
 import Separator from '../../util/separator';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { Page, Section, Row, Col } from '../../components/layout';
-import { ProjectEditor } from '../../components/project';
 import { HackNav, HackPageBreadCrumbs } from '../../components/hacks';
 import { Hack } from '../hacks';
 import ThreadView from '../forum/thread-view';
@@ -255,32 +254,6 @@ class HackPage extends React.Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/projects">
-              <Section>
-                <Hack.ProjectSelect
-                  hackId={this.state.hackId}
-                  user={this.props.user}
-                  userId={this.props.userId}
-                  hackData={this.state.hackData}
-                />
-              </Section>
-            </Route>
-
-            <Route exact path="/hacks/:hackId/projects/:projectName">
-              <Section
-                sectionClass="section_full"
-                containerClass="w-full max-w-none"
-              >
-                <ProjectEditor
-                  hackId={this.state.hackId}
-                  hackData={this.state.hackData}
-                  user={this.props.user}
-                  userId={this.props.userId}
-                  userIsAdmin={this.props.userIsAdmin}
-                />
-              </Section>
-            </Route>
-
             <Route exact path="/hacks/:hackId/results">
               <Section sectionClass="results-section">
                 <Hack.Results
@@ -344,6 +317,8 @@ class HackPage extends React.Component {
                 />
               </Section>
             </Route>
+
+            <Redirect push to={`/hacks/${this.hackSlug}`}/>
 
           </Switch>
       </Page>
