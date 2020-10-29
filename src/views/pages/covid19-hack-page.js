@@ -340,7 +340,7 @@ class UpcomingHackPage extends React.Component {
                 responsive={true}
                 baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com'}
                 filePath={'o/media%2Fimg%2F'}
-                fileName={'ironhacks-partners.jpg?alt=media&token=60054022-4726-4dd9-97dc-7acedeaaa05d'}
+                fileName={'ironhacks-partners-2020.jpg?alt=media&token=fa199ce5-bd90-48ac-acdd-8ea979fecb17'}
                 alt="Key Parnters"
                 imgClass="banner_img mb-4"
               />
