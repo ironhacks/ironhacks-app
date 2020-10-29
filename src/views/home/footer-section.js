@@ -44,64 +44,62 @@ function FooterVideo() {
 }
 
 
-class FooterSection extends React.Component {
-  render() {
-    return (
-      <>
-      <Row>
-        <Col>
-          <h2 className="h2 text-center my-2">
-            GET IN <span className="font-extrabold">TOUCH</span>
-          </h2>
-        </Col>
-      </Row>
+const FooterSection = () => {
+  return (
+    <>
+    <Row>
+      <Col>
+        <h2 className="h2 text-center my-2">
+          GET IN <span className="font-extrabold">TOUCH</span>
+        </h2>
+      </Col>
+    </Row>
 
-      <Row>
-        <Col>
-          <p className="text-center py-2">
-            You can connect with us via phone, email, or just come to the Research Center
-            for Open Digital Innovation, West Lafayette, IN.
-          </p>
-        </Col>
-      </Row>
+    <Row>
+      <Col>
+        <p className="text-center py-2">
+          You can connect with us via phone, email, or just come to the Research Center
+          for Open Digital Innovation, West Lafayette, IN.
+        </p>
+      </Col>
+    </Row>
 
 
-      <Row flex={true} rowClass={'py-2 fs-1 flex-align-center flex-wrap'}>
-        <Col colClass='flex-1 min-w-350'>
-          <p>+1 765.494.0880</p>
-          <p>opendigital@purdue.edu</p>
-          <p>Ernest C. Young Hall, Room 305<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
-          <p>Discovery Learning Research Center<br/>298 Nimitz Dr.<br/>West Lafayette, IN 47906</p>
-          <p>
-            <a href="https://www.facebook.com/OpenDigitalPurdue/">
-              <MaterialDesignIcon
-                name="facebook"
-              />
-            </a>
-          </p>
-        </Col>
+    <Row flex={true} rowClass={'py-2 fs-1 flex-align-center flex-wrap'}>
+      <Col colClass='flex-1 min-w-350'>
+        <p>+1 765.494.0880</p>
+        <p>opendigital@purdue.edu</p>
+        <p>Ernest C. Young Hall, Room 305<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
+        <p>Discovery Learning Research Center<br/>298 Nimitz Dr.<br/>West Lafayette, IN 47906</p>
+        <p>
+          <a href="https://www.facebook.com/OpenDigitalPurdue/">
+            <MaterialDesignIcon
+              name="facebook"
+            />
+          </a>
+        </p>
+      </Col>
 
-        <Col colClass='flex-1 hide--med'>
-          <div className="flex flex-center flex-align-center w-full relative">
-            <FooterVideo/>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col colClass="text-center">
-          <div>
-          <small>IronHacks is an initiative of the Research Center for Open Digital Innovation (RCODI).</small>
-          </div>
-          <div>
-            <small>It is financially supported by the National Science Foundation (Award #1462044).</small>
-          </div>
-        </Col>
-      </Row>
+      <Col colClass='flex-1 hide--med'>
+        <div className="flex flex-center flex-align-center w-full relative">
+          <FooterVideo/>
+        </div>
+      </Col>
+    </Row>
+    <Row>
+      <Col colClass="text-center">
+        <div>
+        <small>IronHacks is an initiative of the Research Center for Open Digital Innovation (RCODI).</small>
+        </div>
+        <div>
+          <small>It is financially supported by the National Science Foundation (Award #1462044).</small>
+        </div>
+      </Col>
+    </Row>
 
-      </>
-    )
-  }
-}
+    </>
+  )
+};
 
 
 export { FooterSection }

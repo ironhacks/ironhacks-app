@@ -150,29 +150,33 @@ class RegisteredHackList extends React.Component {
 }
 
 
-class ProfileDemographicData extends React.Component {
-  render() {
-    return (
-      <div className="mb-2">
-        <MaterialDesignIcon name={this.props.icon}/>
-        <span> {this.props.title}: {this.props.label}</span>
-      </div>
-    )
-  }
-}
+const ProfileDemographicData = (
+  {
+    icon,
+    title,
+    label,
+  },
+) => {
+  return (
+    <div className="mb-2">
+      <MaterialDesignIcon name={icon}/>
+      <span> {title}: {label}</span>
+    </div>
+  );
+};
 
-
-
-
-class ProfileSocialAccounts extends React.Component {
-  render(){
-    return (
+const ProfileSocialAccounts = (
+  {
+    data,
+  },
+) => {
+  return (
     <div className="registered-hack-list">
       <h3 className="mt-6 h3 font-bold">
         Social
       </h3>
       <ul className="pl-2 fs-m2">
-        {this.props.data.map((item, index)=>(
+        {data.map((item, index)=>(
           <li key={index}>
             <MaterialDesignIcon iconClass="mx-1" name={item.name}/>
             <span style={{display: 'none', textTransform: 'capitalize'}}>{item.name}:</span>
@@ -181,9 +185,8 @@ class ProfileSocialAccounts extends React.Component {
         ))}
       </ul>
     </div>
-    )
-  }
-}
+  );
+};
 
 
 class ProfilePage extends React.Component {

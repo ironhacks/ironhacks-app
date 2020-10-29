@@ -46,27 +46,25 @@ function OverlayLoaderContainer({children}) {
 }
 
 
-class Loader extends React.Component {
-  render() {
-    const loaderSize = this.props.small ? 'loader_spinner__container-sm' : 'loader_spinner__container';
+const Loader = props => {
+  const loaderSize = props.small ? 'loader_spinner__container-sm' : 'loader_spinner__container';
 
-    return (
-      <div className={loaderSize}>
+  return (
+    <div className={loaderSize}>
 
-        <div className="loader_spinner"
-          style={{ color: this.props.color ? this.props.color : '' }}
-          />
+      <div className="loader_spinner"
+        style={{ color: props.color ? props.color : '' }}
+        />
 
-          {this.props.status && (
-            <div className="loader_status">
-              {this.props.status}
-            </div>
-          )}
+        {props.status && (
+          <div className="loader_status">
+            {props.status}
+          </div>
+        )}
 
-      </div>
-    )
-  }
-}
+    </div>
+  );
+};
 
 Loader.defaultProps = {
   color: '',

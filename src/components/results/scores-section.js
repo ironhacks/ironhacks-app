@@ -106,51 +106,54 @@ SubmissionLink.defaultProps = {
 }
 
 
-class ResultsScoresSection extends React.Component {
-  render() {
-    return (
-      <div>
-        {this.props.scores && (
-          <Table>
-          <thead>
-          <tr>
-          <th>Metric</th>
-          <th>Value</th>
-          </tr>
-          </thead>
-          <tbody>
-          {this.props.scores.map((item, index)=>(
-            <UserScoreRow
-              key={index}
-              label={item.label}
-              value={item.value}
-              name={item.name}
-            />
-          ))}
-          </tbody>
-          </Table>
-        )}
+const ResultsScoresSection = (
+  {
+    scores,
+    submission,
+  },
+) => {
+  return (
+    <div>
+      {scores && (
+        <Table>
+        <thead>
+        <tr>
+        <th>Metric</th>
+        <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {scores.map((item, index)=>(
+          <UserScoreRow
+            key={index}
+            label={item.label}
+            value={item.value}
+            name={item.name}
+          />
+        ))}
+        </tbody>
+        </Table>
+      )}
 
-        {this.props.submission && (
-          <div>
-            <h3 className="font-bold mb-1 text-left text-underline">Your Submission:</h3>
-            {this.props.submission.files.map((item, index)=>(
-              <div
-                key={index}
-                className="mb-2"
-                >
-                <SubmissionLink
-                  fileName={item.name}
-                  fileType={item.type}
-                  fileUrl={item.url}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    )
-  }
-}
+      {submission && (
+        <div>
+          <h3 className="font-bold mb-1 text-left text-underline">Your Submission:</h3>
+          {submission.files.map((item, index)=>(
+            <div
+              key={index}
+              className="mb-2"
+              >
+              <SubmissionLink
+                fileName={item.name}
+                fileType={item.type}
+                fileUrl={item.url}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export { ResultsScoresSection }

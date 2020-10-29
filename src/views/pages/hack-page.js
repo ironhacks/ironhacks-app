@@ -11,22 +11,26 @@ import ThreadEditView from '../forum/post-edit-view';
 import NewThread from '../forum/new-thread';
 import { CountdownTimer } from '../../components/timer';
 
-class HackNavSection extends React.Component {
-  render() {
-    return (
-        <Row>
-          <Col>
-            <HackNav
-              hackDisplayOptions={this.props.hackDisplayOptions}
-              hackId={this.props.hackId}
-              hackSlug={this.props.hackSlug}
-            />
-          </Col>
-          <Separator primary />
-        </Row>
-      )
-  }
-}
+const HackNavSection = (
+  {
+    hackDisplayOptions,
+    hackId,
+    hackSlug,
+  },
+) => {
+  return (
+    <Row>
+      <Col>
+        <HackNav
+          hackDisplayOptions={hackDisplayOptions}
+          hackId={hackId}
+          hackSlug={hackSlug}
+        />
+      </Col>
+      <Separator primary />
+    </Row>
+  );
+};
 
 
 class HackPage extends React.Component {

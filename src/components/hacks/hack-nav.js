@@ -6,18 +6,23 @@ import menuIcon from '../../assets/svg/menu-icon.svg';
 import { userMetrics } from '../../util/user-metrics'
 
 
-class HackNavItem extends React.Component {
-  render() {
-    return (
-      <Link
-        className={`hack_nav__item ${this.props.navClass}`}
-        to={`/hacks/${this.props.slug}/${this.props.navId.toLowerCase()}`}
-      >
-        {upperCaseWord(this.props.name)}
-      </Link>
-    )
-  }
-}
+const HackNavItem = (
+  {
+    navClass,
+    slug,
+    navId,
+    name,
+  },
+) => {
+  return (
+    <Link
+      className={`hack_nav__item ${navClass}`}
+      to={`/hacks/${slug}/${navId.toLowerCase()}`}
+    >
+      {upperCaseWord(name)}
+    </Link>
+  );
+};
 
 HackNavItem.defaultProps = {
   navClass: '',
