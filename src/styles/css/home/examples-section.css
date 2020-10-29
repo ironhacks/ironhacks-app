@@ -24,8 +24,4 @@
   .examples_section .card_row {
     flex-wrap: nowrap;
   }
-  .videos_section .card_col,
-  .examples_section .card_col {
-    flex-basis: 33%;
-  }
 }

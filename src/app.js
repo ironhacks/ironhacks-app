@@ -5,23 +5,11 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { Pages } from './views/pages/';
 import {Helmet} from 'react-helmet';
 import { userMetrics } from './util/user-metrics'
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/static/bootstrap-reboot.css'
 import './assets/static/bootstrap-grid.css'
-import './styles/css/root.css'
-import './styles/css/main.css'
-import './styles/css/colors.css'
-import './styles/css/layout.css'
-import './styles/css/flex.css'
-import './styles/css/base.css'
-import './styles/css/icons.css'
-import './styles/css/content.css'
-import './styles/css/charrismatic.css'
-import './styles/css/typography.css'
-import './styles/css/buttons.css'
-import './styles/css/results.css'
-import './styles/css/forum.css'
-
+import './styles/charrismatic.min.css'
+import './styles/styles.css'
 
 class App extends React.Component {
   constructor(props) {
