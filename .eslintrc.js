@@ -1,4 +1,3 @@
-
 const _env ={
   "browser": true,
   "es6": true,
@@ -13,6 +12,7 @@ const _plugins = [
 ];
 
 const _extends = [
+  "react-app",
   "prettier",
   "plugin:prettier/recommended",
   "prettier/react",
@@ -246,8 +246,6 @@ module.exports = {
     "wrap-regex": 0,
 
     // Legacy
-    "max-depth": 0,
-    "max-len": 0,
     "max-params": 0,
     "max-statements": 0,
     "no-bitwise": 1,
@@ -268,7 +266,7 @@ module.exports = {
     "react/no-string-refs": 1,
     "react/no-unknown-property": 0,
     "react/prop-types": 0,
-    "react/react-in-jsx-scope": 1,
+    "react/react-in-jsx-scope": 0,
     "react/self-closing-comp": 1,
     "react/wrap-multilines": 0,
     "react/no-typos": 0,
@@ -289,8 +287,8 @@ module.exports = {
     "operator-linebreak": 0,
 
     "max-len": [
-      "error", {
-        "code": 160,
+      "warn", {
+        "code": 180,
         "tabWidth": 2,
         "ignoreUrls": true,
         "ignoreComments": true,
