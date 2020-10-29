@@ -2,7 +2,6 @@ import React from 'react';
 import { QuizContainer } from '../../components/quiz/quiz-container';
 import  { QuizNav } from '../../components/quiz/quiz-nav';
 import { Section, Row, Col } from '../../components/layout';
-import '../../styles/css/hacks.css';
 
 class QuizView extends React.Component {
   constructor(props) {

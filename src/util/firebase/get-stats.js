@@ -1,12 +1,12 @@
-function fire2Ms(fireDate) {
+export function fire2Ms(fireDate) {
   return ((fireDate.seconds * 1000) + (fireDate.nanoseconds / 1000000))
 }
 
-function fire2Date(fireDate) {
+export function fire2Date(fireDate) {
   return new Date((fireDate.seconds * 1000) + (fireDate.nanoseconds / 1000000))
 }
 
-async function getStats({startDate=false, hackId=false, userId=false, notUserId=false}) {
+export async function getStats({startDate=false, hackId=false, userId=false, notUserId=false}) {
   var START_DATE = '2020-08-10';
 
   var date = startDate ? startDate : START_DATE;
@@ -25,7 +25,7 @@ async function getStats({startDate=false, hackId=false, userId=false, notUserId=
     query = query.where('userId', '==', userId)
   }
 
-  snapshot = await query.get();
+  let snapshot = await query.get();
 
   snapshot.forEach((doc) => {
     stats.push(doc.data());
@@ -58,6 +58,3 @@ async function getStats({startDate=false, hackId=false, userId=false, notUserId=
     return result;
   })
 }
-
-
-getStats({})
