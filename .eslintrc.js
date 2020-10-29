@@ -12,7 +12,6 @@ const _plugins = [
 ];
 
 const _extends = [
-  "react-app",
   "prettier",
   "plugin:prettier/recommended",
   "prettier/react",
