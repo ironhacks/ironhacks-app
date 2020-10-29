@@ -13,6 +13,7 @@ function PostHeader({postTitle, postAuthorName, adminPost}){
   return (
     <div className="post_header">
       <h2 className="post_title mb-2">{postTitle}</h2>
+
       <div className="post_author">
         <div className="post_author__img">{initials}</div>
           {adminPost ? (

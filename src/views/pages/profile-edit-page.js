@@ -4,7 +4,7 @@ import { MaterialDesignIcon } from '../../components/icons/material-design-icon'
 import { InputText, InputNumber } from '../../components/input';
 import Select from 'react-select';
 import { userMetrics } from '../../util/user-metrics'
-import '../../styles/css/profile.css';
+
 import {
   COUNTRY_CODES,
   EDUCATION_STATUS,

@@ -145,15 +145,16 @@ class LoginPage extends React.Component {
             }}>
               <Row>
                 <Col>
-                  <h1 className={'h1 site-title'}>
+                  <div className="text-center">
+                  <h1 className={'h2 site-title'}>
                     <span className="font-light">PURDUE </span>
                     <span className="font-extrabold">IRONHACKS</span>
                   </h1>
 
-                  <h2 className="mb-3 mt-1">
+                  <h2 className="h4 mb-3 mt-1">
                     Hack for innovation to solve global challenges.
                   </h2>
-
+                  </div>
                   {this.state.loading && (
                     <Loader status={this.state.status} />
                   )}

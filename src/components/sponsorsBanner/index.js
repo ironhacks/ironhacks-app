@@ -1,16 +1,16 @@
 import React from 'react';
 import githubLogo from '../../assets/banner-logos/github.jpg';
 import nsfLogo from '../../assets/banner-logos/nsf.jpg';
-import westLafayetteCityLogo from '../../assets/banner-logos/city-west-lafayette-logo.png';
+import westLafayetteCityLogo from '../../assets/banner-logos/city-west-lafayette-logo.jpg';
 import redhatLogo from '../../assets/banner-logos/red-hat.jpg';
-import cuplLogo from '../../assets/banner-logos/cupl-logo.png';
-import nihLogo from '../../assets/banner-logos/nih.png';
-import matchboxLogo from '../../assets/banner-logos/match-box.png';
-import mphLogo from '../../assets/banner-logos/mph-logo.png';
-import socrataLogo from '../../assets/banner-logos/socrata.png';
-import techNexusLogo from '../../assets/banner-logos/tech-nexus-logo.png';
-import unalLogo from '../../assets/banner-logos/universidad-nacional-de-colombia.png';
-import purdueLogo from '../../assets/banner-logos/purdue-sig-black-gold.png';
+import cuplLogo from '../../assets/banner-logos/cupl-logo.jpg';
+import nihLogo from '../../assets/banner-logos/nih.jpg';
+import matchboxLogo from '../../assets/banner-logos/match-box.jpg';
+import mphLogo from '../../assets/banner-logos/mph-logo.jpg';
+import socrataLogo from '../../assets/banner-logos/socrata.jpg';
+import techNexusLogo from '../../assets/banner-logos/tech-nexus-logo.jpg';
+import unalLogo from '../../assets/banner-logos/universidad-nacional-de-colombia.jpg';
+import purdueLogo from '../../assets/banner-logos/purdue-sig-black-gold.jpg';
 import './style.css';
 
 class SponsorsBanner extends React.Component {

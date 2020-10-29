@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col } from '../../components/layout'
 import { Img } from '../../components/img'
-import './assets/css/examples-section.css';
 
 class ExampleCard extends React.Component {
   render() {

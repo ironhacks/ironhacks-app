@@ -16,7 +16,7 @@ class HeroSection extends React.Component {
             <span className="font-extrabold">IRONHACKS</span>
           </h1>
 
-          <h2 className="mb-3 mt-1">
+          <h2 className="h3 mb-3 mt-1">
               Hack for innovation to solve global challenges.
           </h2>
 

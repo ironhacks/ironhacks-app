@@ -2,7 +2,6 @@ import React from 'react';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { SkillsTable } from '../../components/skills-table';
-import '../../styles/css/profile.css';
 import { ErrorBoundary } from '../../util';
 import { userMetrics } from '../../util/user-metrics'
 

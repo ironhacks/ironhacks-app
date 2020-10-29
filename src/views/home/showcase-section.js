@@ -1,9 +1,6 @@
 import React from 'react';
 import { Row, Col } from '../../components/layout'
 import { ShowcaseCard } from '../../components/showcase';
-import './assets/css/showcase-section.css';
-
-// https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o/media%2Fimg%02F
 
 const app1 = 'showcase-2018-spring-ialemusm.jpg?alt=media&token=565a83f1-4856-45cc-a7df-75e2aa309019';
 const app2 = 'showcase-2018-spring-juaccardenasgom.jpg?alt=media&token=c9629701-90fd-4e19-860d-768203a8520b';

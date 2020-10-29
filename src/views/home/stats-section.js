@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col } from '../../components/layout'
 import CountUp from 'react-countup';
-import './assets/css/stats-section.css';
 
 class StatsCard extends React.Component {
   render() {
