@@ -48,7 +48,6 @@ class AdminHackSettings extends React.Component {
       resultsEnabled: false,
       rulesEnabled: false,
       submissionsEnabled: false,
-      projectsEnabled: false,
       quizEnabled: false,
     }
 

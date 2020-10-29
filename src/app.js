@@ -2,7 +2,6 @@ import React from 'react';
 import { Loader } from './components/loader';
 import { withRouter } from 'react-router';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import ProjectSelectView from './views/hacks/project-select-view';
 import { Pages } from './views/pages/';
 import {Helmet} from 'react-helmet';
 import { userMetrics } from './util/user-metrics'
@@ -192,20 +191,6 @@ class App extends React.Component {
                       user={this.state.user}
                       userIsAdmin={this.state.userIsAdmin}
                       userId={this.state.userId}
-                    />
-                  </Route>
-
-                  <Route exact path='/projects'>
-                    <ProjectSelectView
-                      user={this.state.user}
-                      userIsAdmin={this.state.userIsAdmin}
-                    />
-                  </Route>
-
-                  <Route path='/projects/:projectName'>
-                    <ProjectSelectView
-                      user={this.state.user}
-                      userIsAdmin={this.state.userIsAdmin}
                     />
                   </Route>
 
