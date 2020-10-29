@@ -28,10 +28,11 @@
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <div id="root"></div>
 <script>
+console.log("%REACT_APP_MESSAGE%");
 let host = window.location.host;
 if (host !== 'ironhacks.com') {
   var firebaseConfig = {
-    apiKey: "AIzaSyAiJKRVynLPxSB1_NjzMf-Im6uwmJnpMpY",
+    apiKey: "%REACT_APP_FIREBASE_APIKEY%",
     authDomain: "ironhacks-c406a.firebaseapp.com",
     databaseURL: "https://ironhacks-c406a.firebaseio.com",
     projectId: "ironhacks-c406a",
@@ -42,7 +43,8 @@ if (host !== 'ironhacks.com') {
   }
 } else {
   var firebaseConfig = {
-    apiKey: "AIzaSyA6EnVRUF1W1QD4qvx-6yjcQ2A4YNrihqY",
+
+    apiKey: "%REACT_APP_FIREBASE_APIKEY_DEV%",
     authDomain: "the-ironhacks-platform-dev.firebaseapp.com",
     databaseURL: "https://the-ironhacks-platform-dev.firebaseio.com",
     projectId: "the-ironhacks-platform-dev",

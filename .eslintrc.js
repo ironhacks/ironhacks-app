@@ -235,6 +235,7 @@ const _rules = {
   'wrap-regex': 0,
 
   // Legacy
+  'max-len': 0,
   'max-params': 0,
   'max-statements': 0,
   'no-bitwise': 1,
@@ -274,16 +275,6 @@ const _rules = {
   'import/no-named-as-default-member': 1,
   'import/no-named-as-default': 1,
   'operator-linebreak': 0,
-
-  'max-len': [
-    'warn', {
-      'code': 180,
-      'tabWidth': 2,
-      'ignoreUrls': true,
-      'ignoreComments': true,
-      'ignoreTrailingComments': false,
-    },
-  ]
 }
 
 module.exports = {

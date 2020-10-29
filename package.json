@@ -79,6 +79,7 @@
     "eslint-plugin-testing-library": "^3.9.2",
     "fslightbox-react": "^1.5.0",
     "prettier": "^1.19.1",
+    "react-snapshot": "^1.3.0",
     "source-map-explorer": "^2.5.0",
     "typescript": "^3.9.6"
   },
@@ -104,8 +105,8 @@
     "bump": "npm version patch",
     "bump:minor": "npm version minor",
     "config:linters": ".run/config-linters",
-    "deploy:dev": "./run/deploy-dev",
-    "deploy:prod": "npm run build:clean && firebase use prod && deploy --only hosting",
+    "deploy:dev": "firebase use dev && firebase deploy --only hosting",
+    "deploy:prod": "npm run build:clean && npm run build && firebase use prod && deploy --only hosting",
     "env:reset": ".run/env-reset",
     "env:user": ".run/env-print",
     "eslint-check": "./node_modules/.bin/eslint --print-config ./App.js | ./node_modules/.bin/eslint-config-prettier-check",

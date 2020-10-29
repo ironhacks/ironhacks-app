@@ -1,9 +1,7 @@
-import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import {unregister} from './serviceWorker';
-import reportWebVitals from './util/report-web-vitals'
-
 import App from './app';
+import { render } from 'react-snapshot';
 
 if (process.env.NODE_ENV !== 'production') {
   window.__DEV__ = true;
@@ -11,11 +9,10 @@ if (process.env.NODE_ENV !== 'production') {
   window.__DEV__ = false;
 }
 
-ReactDOM.render((
+render((
   <BrowserRouter>
     <App/>
   </BrowserRouter>
 ), document.getElementById('root'));
 
-reportWebVitals(console.log);
 unregister();
