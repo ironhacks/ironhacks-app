@@ -11,7 +11,7 @@ function AdminPageNavBreadcrumbs({props, hackId, hackName}) {
 
 
   return (
-    <Breadcrumb>
+    <Breadcrumb listProps={{className: 'bg-grey-dk3 br-0 cl-white font-bold fs-m2'}}>
       <Breadcrumb.Item href="/admin">Admin</Breadcrumb.Item>
 
       <Breadcrumb.Item href={`/admin/hacks/${hackId}`}>

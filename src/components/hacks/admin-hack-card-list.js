@@ -2,16 +2,11 @@ import React from 'react';
 import { AdminHackCard } from './admin-hack-card';
 
 class AdminHackCardList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.emptyText = this.props.emptyText || 'There are no hacks available.';
-  }
-
   render() {
     if (!this.props.hacks || this.props.hacks.length === 0) {
       return (
         <span className='empty-list'>
-          {this.emptyText}
+          {this.props.emptyText || 'There are no hacks available.'}
         </span>
       )
     } else {
@@ -29,11 +24,10 @@ class AdminHackCardList extends React.Component {
               hackId={hack.id}
               hack={hack}
             />
-
           </li>
         ))}
         </ul>
-      );
+      )
     }
   }
 }

@@ -4,8 +4,6 @@ import { Loader } from '../../components/loader/index';
 import { AdminPageNavBreadcrumbs, AdminHackNav } from '../../components/admin';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { AdminHack } from '../admin';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../styles/css/admin.css';
 
 class AdminHackPage extends React.Component {
   constructor(props) {
@@ -108,14 +106,10 @@ class AdminHackPage extends React.Component {
           userIsAdmin={this.props.userIsAdmin}
         >
 
-      {this.state.hack && !this.state.loading && (
-        <AdminPageNavBreadcrumbs
-          hackId={this.hackId}
-          hackName={this.state.hack.name}
-        />
-      )}
-
-        <Section sectionClass='container-fluid' containerClass="flex">
+        <Section
+          sectionClass='container-fluid px-0'
+          containerClass="flex px-0 mx-0 section_full"
+        >
           <AdminHackNav
             hackId={this.hackId}
             items={[
@@ -133,6 +127,13 @@ class AdminHackPage extends React.Component {
           />
 
           <div className="admin-hack-content">
+            {this.state.hack && (
+              <AdminPageNavBreadcrumbs
+                hackId={this.hackId}
+                hackName={this.state.hack.name}
+              />
+            )}
+
             <Row rowClass='no-gutters py-2'>
               <Col colClass="">
               {this.state.hack && !this.state.loading ? (
@@ -224,6 +225,8 @@ class AdminHackPage extends React.Component {
                       hackId={this.hackId}
                     />
                   </Route>
+
+                  <Redirect push to={`/admin/hacks/${this.hackId}/settings`} />
 
                 </Switch>
                 ) : (
