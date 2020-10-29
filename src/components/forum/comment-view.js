@@ -66,10 +66,9 @@ class CommentView extends React.Component {
     };
 
     this.firestore = window.firebase.firestore();
-    this.deleteComment = this.deleteComment.bind(this)
   }
 
-  deleteComment() {
+  deleteComment = () => {
     let commentBody = window.atob(this.props.data.body).trim();
     if (commentBody.length > 100){
       commentBody = commentBody.substring(0,100) + '...';

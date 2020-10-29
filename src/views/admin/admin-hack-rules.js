@@ -18,8 +18,6 @@ class AdminHackTask extends React.Component {
     this.state = {
       content: this.props.previousDocument || '',
     }
-    this.onEditorChange = this.onEditorChange.bind(this);
-    this.updateHackRules = this.updateHackRules.bind(this)
   }
 
   encodeDocument(str) {
@@ -32,11 +30,11 @@ class AdminHackTask extends React.Component {
     return decodeURIComponent(escape(decoded));
   }
 
-  onEditorChange(markdown) {
+  onEditorChange = markdown => {
     this.setState({content: markdown})
-  }
+  };
 
-  updateHackRules() {
+  updateHackRules = () => {
     this.setState({loading: true})
     let encodedDoc = this.encodeDocument(this.state.content);
     let timeUpdated = new Date();
@@ -56,7 +54,7 @@ class AdminHackTask extends React.Component {
       .catch((error)=>{
         console.error('Error adding document: ', error);
       })
-  }
+  };
 
   render() {
     return (

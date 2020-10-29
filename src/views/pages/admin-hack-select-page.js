@@ -9,15 +9,13 @@ class AdminHackSelectPage extends React.Component {
       startDashboardNav: false,
       hacks: [],
     }
-
-    this.getHacks = this.getHacks.bind(this);
   }
 
   componentDidMount() {
     this.getHacks();
   }
 
-  async getHacks() {
+  getHacks = async () => {
     const hacks = [];
     let hackDocs = await window.firebase.firestore()
       .collection('hacks')
@@ -32,7 +30,7 @@ class AdminHackSelectPage extends React.Component {
 
     hacks.sort((a,b)=>{ return a.name.localeCompare(b.name) })
     this.setState({hacks: hacks})
-  }
+  };
 
   render() {
     return (

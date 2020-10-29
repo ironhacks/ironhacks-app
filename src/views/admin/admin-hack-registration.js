@@ -26,12 +26,6 @@ class AdminHackRegistration extends React.Component {
       registeredUsers: [],
       registeredUsersData: null,
     }
-
-    this.addCohort = this.addCohort.bind(this)
-    this.saveCohorts = this.saveCohorts.bind(this)
-    this.deleteCohort = this.deleteCohort.bind(this)
-    this.getSettings = this.getSettings.bind(this)
-    this.assignCohorts = this.assignCohorts.bind(this)
   }
 
 
@@ -40,7 +34,7 @@ class AdminHackRegistration extends React.Component {
     this.getRegisteredUsers();
   }
 
-  getSettings() {
+  getSettings = () => {
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -71,7 +65,7 @@ class AdminHackRegistration extends React.Component {
           });
         }
       });
-  }
+  };
 
 
   async getRegisteredUsers(){
@@ -119,7 +113,7 @@ class AdminHackRegistration extends React.Component {
       this.setState({registeredUsers: users});
   }
 
-  addCohort(){
+  addCohort = () => {
     let cohorts = this.state.cohorts;
     let cohortName = randomTeamname();
     let cohortId = [
@@ -137,7 +131,7 @@ class AdminHackRegistration extends React.Component {
       },
     });
     this.setState({cohorts: cohorts});
-  }
+  };
 
   handleCohortInputChange(index, name, value) {
     return false;
@@ -149,7 +143,7 @@ class AdminHackRegistration extends React.Component {
     this.setState({cohorts: cohorts})
   }
 
-  deleteCohort(index){
+  deleteCohort = index => {
     let cohorts = this.state.cohorts
     let updatedCohorts = [
       ...cohorts.slice(0, index),
@@ -158,9 +152,9 @@ class AdminHackRegistration extends React.Component {
     this.setState({
       cohorts: updatedCohorts,
     })
-  }
+  };
 
-  assignCohorts() {
+  assignCohorts = () => {
     let userlist = this.state.registeredUsers;
 
     // DO NOT ASSIGN ADMIN USERS TO THE PARTICIPANT COHORT
@@ -202,10 +196,9 @@ class AdminHackRegistration extends React.Component {
         this.setState({syncing: false});
         console.log('cohorts saved');
       })
-  }
+  };
 
-
-  saveCohorts() {
+  saveCohorts = () => {
     this.setState({syncing: true});
     let cohorts = this.state.cohorts;
     let cohortData = {};
@@ -223,7 +216,7 @@ class AdminHackRegistration extends React.Component {
         this.setState({syncing: false});
         window.location.reload();
       })
-  }
+  };
 
   render() {
     return (

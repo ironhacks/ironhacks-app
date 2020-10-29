@@ -41,11 +41,9 @@ class PostPreview extends React.Component {
       authorName: authorName,
       authorFirstName: name[0],
     };
-
-    this.getComment = this.getComment.bind(this);
   }
 
-  getComment() {
+  getComment = () => {
     window.firebase.firestore()
       .collection('comments')
       .doc(this.props.thread.comments[0])
@@ -59,7 +57,7 @@ class PostPreview extends React.Component {
       .catch(function(error) {
         console.error('Error getting documents: ', error);
       })
-  }
+  };
 
   render() {
     return (

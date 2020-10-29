@@ -11,7 +11,6 @@ class TaskView extends React.Component {
       taskButtonDisabled: false,
       formFilled: false,
     }
-    this.showTaskSurvey = this.showTaskSurvey.bind(this)
   }
 
   componentDidMount(){
@@ -37,7 +36,7 @@ class TaskView extends React.Component {
   }
 
 
-  showTaskSurvey() {
+  showTaskSurvey = () => {
     let hackId = this.props.hackId;
     let userEmail = this.props.userEmail;
     let userId = this.props.userId;
@@ -59,7 +58,7 @@ class TaskView extends React.Component {
         formFilled: true
       });
     })
-  }
+  };
 
   render() {
     return (

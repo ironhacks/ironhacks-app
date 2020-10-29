@@ -25,13 +25,9 @@ class App extends React.Component {
     }
 
     this._isMounted = false;
-    this._setUser = this._setUser.bind(this);
-    this._isUserConnected = this._isUserConnected.bind(this);
-    this._updateAppNavigation = this._updateAppNavigation.bind(this);
-    this._filterUser = this._filterUser.bind(this)
   }
 
-  _filterUser(user) {
+  _filterUser = user => {
     const names = user.displayName.split(' ');
     return {
       createdAt: user.metadata.creationTime,
@@ -46,26 +42,26 @@ class App extends React.Component {
       uid: user.uid,
       lastLoginAt: user.metadata.lastSignInTime,
     }
+  };
+
+  componentDidMount() {
+    window.firebase.analytics().logEvent('screen_view');
+    this._isMounted = true;
+    this._isUserConnected();
   }
 
-   componentDidMount() {
-     window.firebase.analytics().logEvent('screen_view');
-     this._isMounted = true;
-     this._isUserConnected();
-   }
+  componentWillUnmount() {
+   this._isMounted = false;
+  }
 
-   componentWillUnmount() {
-    this._isMounted = false;
-   }
-
-  _updateAppNavigation(data){
+  _updateAppNavigation = data => {
     this.setState({
       navigateTo: data.navigateTo,
       mustNavigate: data.mustNavigate,
     })
-  }
+  };
 
-  _isUserConnected() {
+  _isUserConnected = () => {
     const currentUser = window.firebase.auth().currentUser;
     if (currentUser){
       let user = this._filterUser(currentUser);
@@ -103,16 +99,16 @@ class App extends React.Component {
         });
       }
     })
-  }
+  };
 
-  _setUser(data) {
+  _setUser = data => {
     this.setState({
       user: data.user,
       userId: data.userId,
       userIsAdmin: data.userIsAdmin,
       loading: false,
     })
-  }
+  };
 
   render() {
     if (this.state.mustNavigate) {

@@ -74,61 +74,48 @@ class AdminHackSettings extends React.Component {
       submitDisabled: false,
       startDate: startDate ? parsedDate : new Date(),
     }
-
-    this.onHackBannerImgChanged = this.onHackBannerImgChanged.bind(this);
-    this.onHackNameChanged = this.onHackNameChanged.bind(this);
-    this.onHackPublishedChanged = this.onHackPublishedChanged.bind(this);
-    this.onHackSlugChanged = this.onHackSlugChanged.bind(this);
-    this.onHackThumbImgChanged = this.onHackThumbImgChanged.bind(this);
-    this.onRegistrationOpenChanged = this.onRegistrationOpenChanged.bind(this);
-    this.onRegistrationSurveyChanged = this.onRegistrationSurveyChanged.bind(this);
-    this.submitSettings = this.submitSettings.bind(this);
-    this.onHackDescriptionChanged = this.onHackDescriptionChanged.bind(this);
-    this.onHackDifficultyChanged = this.onHackDifficultyChanged.bind(this);
-    this.onHackStartDateChanged = this.onHackStartDateChanged.bind(this);
-    this.onDisplayOptionsChanged = this.onDisplayOptionsChanged.bind(this);
   }
 
-  onHackStartDateChanged(value){
+  onHackStartDateChanged = value => {
     this.setState({startDate: value})
-  }
+  };
 
-  onHackBannerImgChanged(name, value){
+  onHackBannerImgChanged = (name, value) => {
     this.setState({hackBannerImg: value})
-  }
+  };
 
-  onHackThumbImgChanged(name, value){
+  onHackThumbImgChanged = (name, value) => {
     this.setState({hackThumbImg: value})
-  }
+  };
 
-  onHackDifficultyChanged(name, value){
+  onHackDifficultyChanged = (name, value) => {
     this.setState({hackDifficulty: value})
-  }
+  };
 
-  onRegistrationSurveyChanged(name, value){
+  onRegistrationSurveyChanged = (name, value) => {
     console.log(name, value);
     this.setState({registrationSurvey: value})
-  }
+  };
 
-  onHackNameChanged(name, value){
+  onHackNameChanged = (name, value) => {
     this.setState({hackName: value})
-  }
+  };
 
-  onHackDescriptionChanged(name, value){
+  onHackDescriptionChanged = (name, value) => {
     this.setState({hackDescription: value})
-  }
+  };
 
-  onHackSlugChanged(name, value){
+  onHackSlugChanged = (name, value) => {
     this.setState({hackSlug: value})
-  }
+  };
 
-  onDisplayOptionsChanged(name, value){
+  onDisplayOptionsChanged = (name, value) => {
     let display = this.state.displayOptions;
     display[name] = value;
     this.setState({displayOptions: display})
-  }
+  };
 
-  onRegistrationOpenChanged(name, value) {
+  onRegistrationOpenChanged = (name, value) => {
     if (this.state.syncing) {
       return false;
     }
@@ -144,9 +131,9 @@ class AdminHackSettings extends React.Component {
           syncing: false,
         })
       })
-  }
+  };
 
-  onHackPublishedChanged(name, value) {
+  onHackPublishedChanged = (name, value) => {
     if (this.state.syncing) {
       return false
     }
@@ -162,9 +149,9 @@ class AdminHackSettings extends React.Component {
           syncing: false
         })
       })
-  }
+  };
 
-  submitSettings() {
+  submitSettings = () => {
     if (this.state.syncing) {
       return false
     }
@@ -232,7 +219,7 @@ class AdminHackSettings extends React.Component {
         })
         window.location.reload();
       })
-  }
+  };
 
   render() {
     return (

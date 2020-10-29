@@ -12,17 +12,12 @@ import React from 'react';
 // />
 
 class InputTextarea extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this)
-  }
-
-  handleChange(event) {
+  handleChange = event => {
     let value = event.target.value;
     if (this.props.onInputChange) {
       this.props.onInputChange(this.props.name, value);
     }
-  }
+  };
 
   render() {
     return (

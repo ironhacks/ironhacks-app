@@ -61,12 +61,6 @@ class ProfileEditPage extends React.Component {
     };
 
     this.getUserProfile()
-
-    this.experienceInputChanged = this.experienceInputChanged.bind(this);
-    this.socialInputChanged = this.socialInputChanged.bind(this);
-    this.demographicSelectInputChanged = this.demographicSelectInputChanged.bind(this);
-    this.demographicTextInputChange = this.demographicTextInputChange.bind(this);
-    this.updateProfileData = this.updateProfileData.bind(this);
   }
 
   componentDidMount() {
@@ -110,7 +104,7 @@ class ProfileEditPage extends React.Component {
       })
   }
 
-  updateProfileData() {
+  updateProfileData = () => {
     window.firebase.firestore()
       .collection('users')
       .doc(this.props.user.uid)
@@ -123,9 +117,9 @@ class ProfileEditPage extends React.Component {
         userMetrics({event: 'update_profile'})
         window.location = '/profile';
       })
-  }
+  };
 
-  socialInputChanged(name, value) {
+  socialInputChanged = (name, value) => {
       let social = this.state.formData.socialMedia;
       social[name] = value;
 
@@ -135,9 +129,9 @@ class ProfileEditPage extends React.Component {
           socialMedia : social,
         }
       })
-  }
+  };
 
-  experienceInputChanged(name, value) {
+  experienceInputChanged = (name, value) => {
     let experience = this.state.formData.programmingExperience;
     experience[name] = value;
     this.setState({
@@ -146,9 +140,9 @@ class ProfileEditPage extends React.Component {
         programmingExperience : experience,
       }
     })
-  }
+  };
 
-  demographicSelectInputChanged(name, data) {
+  demographicSelectInputChanged = (name, data) => {
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
     this.setState({
@@ -157,9 +151,9 @@ class ProfileEditPage extends React.Component {
         demographicData : demographic,
       },
     })
-  }
+  };
 
-  demographicTextInputChange(name, data) {
+  demographicTextInputChange = (name, data) => {
     let demographic = this.state.formData.demographicData;
     demographic[name] = data;
     this.setState({
@@ -168,7 +162,7 @@ class ProfileEditPage extends React.Component {
         demographicData : demographic,
       },
     })
-  }
+  };
 
   render() {
     return (

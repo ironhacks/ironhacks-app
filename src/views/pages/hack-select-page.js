@@ -15,7 +15,6 @@ class HackSelectPage extends React.Component {
       availableHacks: [],
       loading: false,
     }
-    this.getHacks = this.getHacks.bind(this);
   }
 
   componentDidMount() {
@@ -26,7 +25,7 @@ class HackSelectPage extends React.Component {
     }
   }
 
-  async getHacks() {
+  getHacks = async () => {
     const hacks = await window.firebase.firestore()
         .collection('hacks')
         .where('hackPublished', '==', true)
@@ -102,7 +101,7 @@ class HackSelectPage extends React.Component {
       upcomingHacks: upcomingHacks,
       previousHacks: previousHacks,
     })
-  }
+  };
 
   render() {
     if (this.state.loading) {

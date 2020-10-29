@@ -29,20 +29,9 @@ class AdminSubmissionEditForm extends React.Component {
     stateData.deadline = fire2Date(stateData.deadline);
 
     this.state = stateData;
-
-    this.addField = this.addField.bind(this);
-    this.addFile = this.addFile.bind(this);
-    this.cancelChanges = this.cancelChanges.bind(this);
-    this.onFieldChanged = this.onFieldChanged.bind(this);
-    this.onFormDataChanged = this.onFormDataChanged.bind(this);
-    this.onFormDescriptionChanged = this.onFormDescriptionChanged.bind(this);
-    this.onSubmissionIdChanged = this.onSubmissionIdChanged.bind(this);
-    this.removeField = this.removeField.bind(this);
-    this.removeFile = this.removeFile.bind(this);
-    this.saveChanges = this.saveChanges.bind(this);
   }
 
-  saveChanges() {
+  saveChanges = () => {
     let data = this.state;
     if (!data.name){
       console.log('please fill out the form');
@@ -66,31 +55,31 @@ class AdminSubmissionEditForm extends React.Component {
         files: [],
       })
     }
-  }
+  };
 
-  cancelChanges() {
+  cancelChanges = () => {
     if (this.props.onCancelEdit) {
       this.props.onCancelEdit()
     }
-  }
+  };
 
-  addFile() {
+  addFile = () => {
     let _files = this.state.files;
     _files.push({
       name: '',
       required: false,
     })
     this.setState({files: _files})
-  }
+  };
 
-  removeFile(index) {
+  removeFile = index => {
     let _files = this.state.files;
     delete _files[index];
     _files = [..._files.slice(0, index), ..._files.slice(index + 1, _files.length)]
     this.setState({files: _files})
-  }
+  };
 
-  addField() {
+  addField = () => {
     let _fields = this.state.fields;
     _fields.push({
       title: '',
@@ -98,31 +87,31 @@ class AdminSubmissionEditForm extends React.Component {
       required: true,
     })
     this.setState({fields: _fields})
-  }
+  };
 
-  removeField(index) {
+  removeField = index => {
     let _fields = this.state.fields;
     delete _fields[index];
     _fields = [..._fields.slice(0, index), ..._fields.slice(index + 1, _fields.length)]
     this.setState({fields: _fields})
-  }
+  };
 
-  onFormDataChanged(name, value){
+  onFormDataChanged = (name, value) => {
     let form = this.state;
     form[name] = value;
     this.setState(form)
-  }
+  };
 
-  onFormDescriptionChanged(content){
+  onFormDescriptionChanged = content => {
     this.setState({
       description: content,
     })
-  }
+  };
 
-  onSubmissionIdChanged(name, value){
+  onSubmissionIdChanged = (name, value) => {
     let id = filterUrl(value.trim());
     this.setState({submissionId: id})
-  }
+  };
 
   onFileChanged(name, value, index){
     let files = this.state.files;
@@ -130,11 +119,11 @@ class AdminSubmissionEditForm extends React.Component {
     this.setState({files: files});
   }
 
-  onFieldChanged(name, value, index){
+  onFieldChanged = (name, value, index) => {
     let fields = this.state.fields;
     fields[index][name] = value;
     this.setState({fields: fields});
-  }
+  };
 
   render() {
     return (

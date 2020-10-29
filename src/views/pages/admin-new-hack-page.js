@@ -49,25 +49,21 @@ class AdminNewHackPage extends React.Component {
       isCreateEnable: true,
       mustNavigate: false,
     };
-
-    this.onHackStartDateChanged = this.onHackStartDateChanged.bind(this);
-    this.hackNameEventHandler = this.hackNameEventHandler.bind(this);
-    this.createHack = this.createHack.bind(this);
   }
 
 
-  onHackStartDateChanged(value){
+  onHackStartDateChanged = value => {
     this.setState({startDate: value})
-  }
+  };
 
-  hackNameEventHandler(event) {
+  hackNameEventHandler = event => {
     this.setState({
       hackName: event.target.value,
       isCreateEnable: event.target.value ? false : true,
     })
-  }
+  };
 
-  createHack() {
+  createHack = () => {
     const hackInstance = {
       name: this.state.hackName,
       startDate: this.state.startDate,

@@ -9,20 +9,18 @@ class CommentEditor extends React.Component {
     this.state = {
       content: '',
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.onEditorChange = this.onEditorChange.bind(this);
   }
 
-  onEditorChange(markdown) {
+  onEditorChange = markdown => {
     this.setState({content: markdown})
-  }
+  };
 
   encodeDocument(str) {
     let safeString = unescape(encodeURIComponent(str));
     return window.btoa(safeString);
   }
 
-  handleSubmit() {
+  handleSubmit = () => {
 
     const currentUser = window.firebase.auth().currentUser
     const userId = currentUser.uid;
@@ -85,7 +83,7 @@ class CommentEditor extends React.Component {
           console.log(error)
         })
     }
-  }
+  };
 
 
   render() {

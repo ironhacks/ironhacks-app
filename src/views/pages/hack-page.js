@@ -49,10 +49,9 @@ class HackPage extends React.Component {
     };
 
     this.getHack(this.hackSlug);
-    this.getHack = this.getHack.bind(this);
   }
 
-  async getHack(hackSlug) {
+  getHack = async hackSlug => {
     let hacks = await window.firebase.firestore()
       .collection('hacks')
       .where('hackSlug', '==', hackSlug)
@@ -81,7 +80,7 @@ class HackPage extends React.Component {
         upcomingEvent: upcomingEvent,
       })
     }
-  }
+  };
 
   getUpcomingHackEvent(hackData) {
     let startDate = hackData.startDate;

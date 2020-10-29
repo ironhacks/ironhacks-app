@@ -14,16 +14,14 @@ class QuizView extends React.Component {
       quizActive: false,
       userEmail: userEmail,
     }
-
-    this.setQuizActive = this.setQuizActive.bind(this);
   }
 
-  setQuizActive(event) {
+  setQuizActive = event => {
     let _quizid = event.target.dataset.quizid;
     this.setState({
       quizId: _quizid
     })
-  }
+  };
 
   getUrlQuizId() {
     let params = (new URL(document.location)).searchParams;

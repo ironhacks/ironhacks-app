@@ -8,16 +8,13 @@ class AdminForumView extends React.Component {
       hacks: [],
       selectedHack: 0,
     }
-    this.onhackSelector = this.onhackSelector.bind(this)
-    this.onForumSelection = this.onForumSelection.bind(this)
-    this.getHacks = this.getHacks.bind(this)
   }
 
   componentDidMount() {
     this.getHacks()
   }
 
-  getHacks() {
+  getHacks = () => {
     const hacks = [];
     window.firebase.firestore()
       .collection('hacks')
@@ -40,16 +37,15 @@ class AdminForumView extends React.Component {
       });
   };
 
-  onhackSelector(hackIndex) {
+  onhackSelector = hackIndex => {
     this.setState({
       selectedHack: hackIndex,
       forum: 0
     })
     this.getForums(hackIndex);
-  }
+  };
 
-
-  onForumSelection(forumIndex) {
+  onForumSelection = forumIndex => {
     this.setState({ forum: forumIndex });
     this.getThreadsAdmin(forumIndex);
   };

@@ -50,13 +50,6 @@ class ResultsView extends React.Component {
       finalResults: null,
       submissions: null,
     }
-
-    this.updateSection = this.updateSection.bind(this);
-    this.onPhaseSelection = this.onPhaseSelection.bind(this);
-    this.getHackResults = this.getHackResults.bind(this);
-    this.getResultsContent = this.getResultsContent.bind(this);
-    this.getParticipantsList = this.getParticipantsList.bind(this);
-    this.getResultsFinal = this.getResultsFinal.bind(this);
   }
 
   componentDidMount() {
@@ -69,20 +62,20 @@ class ResultsView extends React.Component {
     this.getResultsFinal()
   }
 
-  onPhaseSelection(phase, submissionId) {
+  onPhaseSelection = (phase, submissionId) => {
     this.setState({selectedPhase: phase});
     if (phase === 'final') {
       // this.getResultsFinal();
     } else {
       this.getHackResults();
     }
-  }
+  };
 
-  updateSection(id) {
+  updateSection = id => {
     this.setState({section: id});
-  }
+  };
 
-  async getResultsContent() {
+  getResultsContent = async () => {
     let resultsSettingsDoc = await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -95,9 +88,9 @@ class ResultsView extends React.Component {
     if (resultsData.content) {
       this.setState({resultsContent: resultsData.content})
     }
-  }
+  };
 
-  async getParticipantsList() {
+  getParticipantsList = async () => {
     let participantsDoc = await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -120,7 +113,7 @@ class ResultsView extends React.Component {
     this.setState({
       participants: participants,
     })
-  }
+  };
 
   async getSubmissionInfo() {
     let submissionsDoc = await window.firebase.firestore()
@@ -145,7 +138,7 @@ class ResultsView extends React.Component {
     this.setState({submissions: submissions})
   }
 
-  async getResultsFinal() {
+  getResultsFinal = async () => {
     let finalDoc = await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -161,9 +154,9 @@ class ResultsView extends React.Component {
       console.log('no final');
     }
 
-  }
+  };
 
-  async getHackResults() {
+  getHackResults = async () => {
     let adminsRef = await window.firebase.firestore()
       .collection('admins')
       .get()
@@ -271,7 +264,7 @@ class ResultsView extends React.Component {
     }
 
     this.setState({ loading: false });
-  }
+  };
 
   render() {
     return (

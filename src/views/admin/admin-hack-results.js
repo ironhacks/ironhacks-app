@@ -13,17 +13,13 @@ class AdminHackResults extends React.Component {
       survey: '',
       updated: '',
     }
-
-    this.getResultsSettings = this.getResultsSettings.bind(this);
-    this.onEditorChange = this.onEditorChange.bind(this);
-    this.updateContent = this.updateContent.bind(this)
   }
 
   componentDidMount(){
     this.getResultsSettings();
   }
 
-  getResultsSettings() {
+  getResultsSettings = () => {
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -43,7 +39,7 @@ class AdminHackResults extends React.Component {
           loading: false,
         })
       })
-  }
+  };
 
   encodeDocument(str) {
     let safeString = unescape(encodeURIComponent(str));
@@ -55,11 +51,11 @@ class AdminHackResults extends React.Component {
     return decodeURIComponent(escape(decoded));
   }
 
-  onEditorChange(markdown) {
+  onEditorChange = markdown => {
     this.setState({content: markdown})
-  }
+  };
 
-  updateContent() {
+  updateContent = () => {
     this.setState({ loading: true })
     let encodedContent = this.encodeDocument(this.state.content);
     let timeUpdated = new Date();
@@ -82,7 +78,7 @@ class AdminHackResults extends React.Component {
       .catch(function(error) {
         console.error('Error adding document: ', error);
       });
-  }
+  };
 
   render() {
     return (

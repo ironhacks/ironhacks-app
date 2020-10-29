@@ -85,9 +85,6 @@ class Header extends React.Component {
 
     this.userMenuRef = React.createRef();
     this.navMenuref = React.createRef();
-    this.showUserMenu = this.showUserMenu.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-    this.hideMenus = this.hideMenus.bind(this);
   }
 
   componentDidMount() {
@@ -98,16 +95,16 @@ class Header extends React.Component {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  handleClickOutside(event) {
+  handleClickOutside = event => {
     const userMenuRef = this.userMenuRef.current;
     if (userMenuRef && !userMenuRef.contains(event.target)) {
       this.setState({
         showUserMenu: 'none',
       })
     }
-  }
+  };
 
-  showUserMenu() {
+  showUserMenu = () => {
     if (this.state.showUserMenu === 'none') {
       this.setState({
         showUserMenu: 'flex'
@@ -117,13 +114,13 @@ class Header extends React.Component {
         showUserMenu: 'none'
       })
     }
-  }
+  };
 
-  hideMenus(event) {
+  hideMenus = event => {
     this.setState({
       showUserMenu: 'none',
     })
-  }
+  };
 
   render() {
     return (

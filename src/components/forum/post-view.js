@@ -52,8 +52,6 @@ class PostView extends React.Component {
       profileLetters: profileLetters,
       editMode: false,
     }
-
-    this.deletePost = this.deletePost.bind(this);
   }
 
   editPost() {
@@ -63,7 +61,7 @@ class PostView extends React.Component {
 
   }
 
-  deletePost() {
+  deletePost = () => {
     Swal.fire({
       title: 'Are you sure?',
       text: 'Confirm you want to delete this post.',
@@ -100,7 +98,7 @@ class PostView extends React.Component {
         })
       }
     })
-  }
+  };
 
   render() {
     return (

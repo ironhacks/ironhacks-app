@@ -2,18 +2,14 @@ import React from 'react';
 import { VariableSizeList as List } from 'react-window';
 
 class AdminCohortListItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.ListItem = this.ListItem.bind(this);
-  }
-
-  ListItem({ index, style }) {
+  ListItem = ({ index, style }) => {
     return (
       <div style={style}>
         {index + 1}. {this.props.dataList[index]}
       </div>
     )
-  }
+  };
+
   render() {
     return (
       <List

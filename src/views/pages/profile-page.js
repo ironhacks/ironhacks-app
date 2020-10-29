@@ -25,12 +25,11 @@ class TrainingKeyLink extends React.Component {
     this.state = {
       fileUrl: false,
     }
-    this.onResolve = this.onResolve.bind(this)
   }
 
-  onResolve(foundURL) {
+  onResolve = foundURL => {
     this.setState({fileUrl: foundURL});
-  }
+  };
 
   onReject(error) {
     // console.log('Training key file not found')
@@ -101,9 +100,6 @@ class RegisteredHackList extends React.Component {
     this.state = {
       registeredHacks: [],
     }
-
-    this.renderList = this.renderList.bind(this)
-    this.getHackList = this.getHackList.bind(this)
   }
 
   componentDidMount() {
@@ -112,7 +108,7 @@ class RegisteredHackList extends React.Component {
     }
   }
 
-  getHackList(hacks){
+  getHackList = hacks => {
     let result = [];
     hacks.forEach((item, i) => {
       result.push(getHackName(item))
@@ -122,9 +118,9 @@ class RegisteredHackList extends React.Component {
         registeredHacks: names
       })
     })
-  }
+  };
 
-  renderList() {
+  renderList = () => {
     return  (
       this.state.registeredHacks.map((item, index)=>(
         <li key={index}>
@@ -132,7 +128,7 @@ class RegisteredHackList extends React.Component {
         </li>
       ))
     )
-  }
+  };
 
   render() {
     return (

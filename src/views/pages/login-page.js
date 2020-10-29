@@ -11,11 +11,6 @@ class LoginPage extends React.Component {
       loading: false,
       status: 'loading',
     }
-    this._saveUserOnDB = this._saveUserOnDB.bind(this);
-    this._onSignInSuccess = this._onSignInSuccess.bind(this);
-    this._onFailed = this._onFailed.bind(this);
-    this._onComplete = this._onComplete.bind(this);
-    this.initAuthUI = this.initAuthUI.bind(this);
   }
 
   componentDidMount() {
@@ -26,7 +21,7 @@ class LoginPage extends React.Component {
     }
   }
 
-  _onComplete(){
+  _onComplete = () => {
     this.setState({ status: 'Navigating...' });
     if (document.referrer) {
       let prevUrl = new URL(document.referrer);
@@ -43,25 +38,25 @@ class LoginPage extends React.Component {
       }
     }
     window.location = '/hacks';
-  }
+  };
 
-  _onFailed(error){
+  _onFailed = error => {
     if (this.props.onLoginSuccess){
       this.props.onLoginSuccess({
         mustNavigate: true,
         navigateTo: '/',
       })
     }
-  }
+  };
 
-  _onSignInSuccess() {
+  _onSignInSuccess = () => {
     this.setState({
       loading: true,
       status: 'Sign-in success',
     });
-  }
+  };
 
-  initAuthUI() {
+  initAuthUI = () => {
     const uiConfig = {
       signInFlow: 'redirect',
       signInOptions: [
@@ -100,10 +95,9 @@ class LoginPage extends React.Component {
       const ui = new window.firebaseui.auth.AuthUI(window.firebase.auth());
       ui.start('#firebaseui-auth-container', uiConfig);
     }
-  }
+  };
 
-
-  _saveUserOnDB(user) {
+  _saveUserOnDB = user => {
     this.setState({ status: 'Creating user account' });
     window.firebase.firestore()
       .collection('users')
@@ -125,7 +119,7 @@ class LoginPage extends React.Component {
         console.error('Error adding document: ', error);
         this._onFailed();
       })
-  }
+  };
 
   render() {
       return (

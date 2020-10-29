@@ -14,18 +14,13 @@ class AdminHackTask extends React.Component {
       survey: '',
       updated: '',
     }
-
-    this.getTask = this.getTask.bind(this);
-    this.onEditorChange = this.onEditorChange.bind(this);
-    this.updateTaskDocument = this.updateTaskDocument.bind(this)
-    this.onSurveyChanged = this.onSurveyChanged.bind(this)
   }
 
   componentDidMount(){
     this.getTask();
   }
 
-  getTask() {
+  getTask = () => {
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -54,7 +49,7 @@ class AdminHackTask extends React.Component {
     //     });
     //     this.setState({ tasks: tasks })
     //   })
-  }
+  };
 
   encodeDocument(str) {
     let safeString = unescape(encodeURIComponent(str));
@@ -66,15 +61,15 @@ class AdminHackTask extends React.Component {
     return decodeURIComponent(escape(decoded));
   }
 
-  onEditorChange(markdown) {
+  onEditorChange = markdown => {
     this.setState({content: markdown})
-  }
+  };
 
-  onSurveyChanged(name, value) {
+  onSurveyChanged = (name, value) => {
     this.setState({survey: value})
-  }
+  };
 
-  updateTaskDocument() {
+  updateTaskDocument = () => {
     this.setState({ loading: true })
     let encodedTask = this.encodeDocument(this.state.content);
     let timeUpdated = new Date();
@@ -96,7 +91,7 @@ class AdminHackTask extends React.Component {
       .catch(function(error) {
         console.error('Error adding document: ', error);
       });
-  }
+  };
 
   render() {
     return (

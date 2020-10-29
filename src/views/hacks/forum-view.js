@@ -112,17 +112,13 @@ class ForumView extends React.Component {
       posts: [],
       selectedHack: 0,
     };
-
-    this.newThread = this.newThread.bind(this);
-    this.getPosts = this.getPosts.bind(this)
-    this.sortThreads = this.sortThreads.bind(this)
   }
 
   componentDidMount() {
     this.getPosts();
   }
 
-  getPosts() {
+  getPosts = () => {
     let posts = [];
     window.firebase.firestore()
       .collection('hacks')
@@ -144,9 +140,9 @@ class ForumView extends React.Component {
       .catch(function(error) {
         console.error('Error getting documents: ', error);
       });
-  }
+  };
 
-  sortThreads(posts, order='asc') {
+  sortThreads = (posts, order='asc') => {
     if (order === 'asc') {
       return posts.sort((a, b) => {
         return a.data.createdAt.toMillis() - b.data.createdAt.toMillis()
@@ -156,9 +152,9 @@ class ForumView extends React.Component {
         return b.data.createdAt.toMillis() - a.data.createdAt.toMillis()
       })
     }
-  }
+  };
 
-  newThread(event) {
+  newThread = event => {
     this.setState({ startNewThreadFlow: true });
   };
 

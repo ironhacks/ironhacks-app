@@ -9,12 +9,11 @@ class AdminHackNav extends React.Component {
     }
 
     this.baseUrl = `/admin/hacks/${this.props.hackId}`;
-    this.setActive = this.setActive.bind(this)
   }
 
-  setActive(path) {
+  setActive = path => {
     this.setState({active: path})
-  }
+  };
 
   getActivePath() {
     return window.location.pathname.split('/').slice(4)[0]

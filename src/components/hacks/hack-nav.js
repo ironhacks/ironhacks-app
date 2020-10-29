@@ -35,13 +35,11 @@ class HackNav extends React.Component {
       showMenu: 'none',
       currentView: 'task',
     };
-    this.showMenu = this.showMenu.bind(this);
     this.baseUrl = `/hacks/${this.props.hackSlug}`;
     this.navMenuRef = props.navMenuref;
-    this.getNav = this.getNav.bind(this);
   }
 
-  getNav(items){
+  getNav = items => {
     if (!items) {
       return [];
     }
@@ -60,21 +58,21 @@ class HackNav extends React.Component {
     });
 
     return navItems;
-  }
+  };
 
   hideMenu(event) {
     this.setState({
       showMenu: 'none',
     });
-  };
+  }
 
-  showMenu() {
+  showMenu = () => {
     if (this.state.showMenu === 'none') {
       this.setState({ showMenu: 'flex' });
     } else {
       this.setState({ showMenu: 'none' });
     }
-  }
+  };
 
   render() {
     return (

@@ -19,15 +19,13 @@ class AdminHackOverview extends React.Component {
     this.state = {
       content: this.props.previousDocument || '',
     }
-    this.onEditorChange = this.onEditorChange.bind(this);
-    this.updateHackOverview = this.updateHackOverview.bind(this)
   }
 
-  onEditorChange(markdown) {
+  onEditorChange = markdown => {
     this.setState({content: markdown});
-  }
+  };
 
-  updateHackOverview() {
+  updateHackOverview = () => {
     this.setState({ loading: true })
     let encodedDoc = this.encodeDocument(this.state.content);
     let timeUpdated = new Date();
@@ -50,7 +48,7 @@ class AdminHackOverview extends React.Component {
       .catch((error)=>{
         console.error('Error adding document: ', error);
       })
-  }
+  };
 
   encodeDocument(str) {
     let safeString = unescape(encodeURIComponent(str));
