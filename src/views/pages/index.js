@@ -12,7 +12,8 @@ import NotebookViewer from './notebook-page';
 import ProfileEditPage from './profile-edit-page';
 import ProfilePage from './profile-page';
 import ShowcasePage from './showcase-page';
-import UpcomingHackPage from './covid19-hack-page';
+import UpcomingHackFall2020Page from './covid19-fall-hack-page';
+// import UpcomingHackSummer2020Page from './covid19-summer-hack-page';
 
 const Pages = {
   AdminNewHack: AdminNewHackPage,
@@ -29,7 +30,7 @@ const Pages = {
   ProfileEdit: ProfileEditPage,
   Profile: ProfilePage,
   Showcase: ShowcasePage,
-  UpcomingHack: UpcomingHackPage,
+  UpcomingHack: UpcomingHackFall2020Page,
 };
 
 export { Pages }

@@ -139,12 +139,12 @@ class App extends Component {
             </div>
           ) : (
             <Switch>
-              <Route exact path='/' >
-                <Pages.Home />
+              <Route exact path='/'>
+                <Pages.Home/>
               </Route>
 
-              <Route exact path='/covid19' >
-                <Pages.UpcomingHack />
+              <Route exact path='/covid19'>
+                <Pages.UpcomingHack/>
               </Route>
 
               <Route path='/login'>
