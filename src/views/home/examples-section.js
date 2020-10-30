@@ -46,7 +46,7 @@ const ExamplesSection = () => {
       <Col colClass="card_col">
         <ExampleCard
           title="HEALTHY LIVING"
-          description="Use open data and develop an app that helps citizens in finding cheap and seasonally fresh vegetables from local markets."
+          description="Use open data to develop an app that helps citizens find  cheap and seasonally fresh vegetables from local markets."
           image={'topics-food.jpg?alt=media&token=ca701f32-1fdf-4072-9687-308522c2a24e'}
         />
       </Col>
@@ -54,7 +54,7 @@ const ExamplesSection = () => {
       <Col>
         <ExampleCard
           title="AFFORDABLE HOUSING"
-          description="Build a website with interactive visualizations that helps new students in finding safe and affordable housing near their university."
+          description="Build a website with interactive visualizations that helps new students to find safe and affordable housing near their university."
           image={'topics-workforce.jpg?alt=media&token=e91e8ebe-c247-4259-9c1a-2c8ffe843ad8'}
         />
       </Col>

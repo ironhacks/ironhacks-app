@@ -1,5 +1,6 @@
 import { AboutSection } from './about-section';
 import { ExamplesSection } from './examples-section';
+import { FeaturesSection } from './features-section';
 import { ProcessSection } from './process-section';
 import { FooterSection } from './footer-section';
 import { HeroSection } from './hero-section';
@@ -11,6 +12,7 @@ import { UpcomingSection } from './upcoming-section';
 export {
   AboutSection ,
   ExamplesSection,
+  FeaturesSection,
   ProcessSection,
   FooterSection,
   HeroSection,

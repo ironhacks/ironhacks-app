@@ -3,11 +3,12 @@ import {
   AboutSection,
   ExamplesSection,
   ProcessSection,
+  FeaturesSection,
   FooterSection,
   HeroSection,
   ShowcaseSection,
   StatsSection,
-  SponsorsSection, 
+  SponsorsSection,
   UpcomingSection,
 } from '../home';
 
@@ -19,15 +20,19 @@ const HomePage = () => {
         <HeroSection/>
       </Section>
 
-      <Section id="home_about" sectionClass="py-4 depth-5">
+      <Section id="home_about" sectionClass="py-4">
         <AboutSection/>
       </Section>
 
-      <Section id="home_upcoming" sectionClass="bg-primary">
+      <Section id='home_features' sectionClass='features_section'>
+        <FeaturesSection/>
+      </Section>
+
+      <Section id="home_upcoming" sectionClass="bg-primary depth-5">
         <UpcomingSection />
       </Section>
 
-      <Section id='home_process' sectionClass='process_section' >
+      <Section id='home_process' sectionClass='process_section'>
         <ProcessSection/>
       </Section>
 

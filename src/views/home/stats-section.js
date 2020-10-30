@@ -35,7 +35,7 @@ const StatsSection = () => {
         Since 2015, more than 1000 participants have hacked in parallel virtually around the
         globe gaining valuable experience in coding as well as work for the chance to win
         internships, Amazon gift cards, cool swag, and certificates. In addition to the
-        participation and learning, IronHacks provide the opportunity to do research
+        participation and learning, IronHacks provides the opportunity to do research
         on open innovation contest processes.
       </p>
     </Row>
