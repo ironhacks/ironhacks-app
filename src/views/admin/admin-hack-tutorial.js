@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import MarkdownEditor from '../../components/markdown-editor';
 import Button from '../../util/button';
 import styled from 'styled-components';
@@ -12,14 +12,12 @@ const AvailableActionsDiv = styled('div')`
   height: 50px;
 `;
 
-class AdminTutorialSection extends React.Component {
+class AdminTutorialSection extends Component {
   constructor(props) {
     super(props);
     this.state = {
       content: this.props.previousDocument || '',
     }
-    this.onEditorChange = this.onEditorChange.bind(this);
-    this.updateTutorialDocument = this.updateTutorialDocument.bind(this)
   }
 
   encodeDocument(str) {
@@ -32,11 +30,11 @@ class AdminTutorialSection extends React.Component {
     return decodeURIComponent(escape(decoded));
   }
 
-  onEditorChange(md) {
+  onEditorChange = md => {
     this.setState({content: md})
-  }
+  };
 
-  updateTutorialDocument() {
+  updateTutorialDocument = () => {
     this.setState({loading: true})
     const hackTutorial = this.encodeDocument(this.state.content);
     let timeUpdated = new Date();
@@ -56,7 +54,7 @@ class AdminTutorialSection extends React.Component {
       .catch((error)=>{
         console.error('Error adding document: ', error);
       })
-  }
+  };
 
   render() {
     return (

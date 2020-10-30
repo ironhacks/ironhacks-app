@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 const SectionContainer = styled('div')`
@@ -58,35 +57,38 @@ function ParticipantScoreRow({name, stats}) {
   )
 }
 
-class ResultsSummarySection extends React.Component {
-  render() {
-    return (
-      <SectionContainer>
-        <Table>
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Sample Size</th>
-              <th>Mean</th>
-              <th>StdDev</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(this.props.summary).map((key, index)=>(
-              <ParticipantScoreRow
-                key={index}
-                name={key}
-                stats={this.props.summary[key]}
-              />
-            ))}
-          </tbody>
-        </Table>
-        <p>
-          Total Participants: {this.props.participantCount}
-        </p>
-      </SectionContainer>
-    )
-  }
-}
+const ResultsSummarySection = (
+  {
+    summary,
+    participantCount,
+  },
+) => {
+  return (
+    <SectionContainer>
+      <Table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Sample Size</th>
+            <th>Mean</th>
+            <th>StdDev</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.keys(summary).map((key, index)=>(
+            <ParticipantScoreRow
+              key={index}
+              name={key}
+              stats={summary[key]}
+            />
+          ))}
+        </tbody>
+      </Table>
+      <p>
+        Total Participants: {participantCount}
+      </p>
+    </SectionContainer>
+  );
+};
 
 export { ResultsSummarySection }

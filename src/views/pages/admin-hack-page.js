@@ -1,13 +1,11 @@
-import React from 'react';
+import { Component } from 'react';
 import { Redirect, Switch, Route, withRouter } from 'react-router-dom';
 import { Loader } from '../../components/loader/index';
 import { AdminPageNavBreadcrumbs, AdminHackNav } from '../../components/admin';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { AdminHack } from '../admin';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../styles/css/admin.css';
 
-class AdminHackPage extends React.Component {
+class AdminHackPage extends Component {
   constructor(props) {
     super(props);
 
@@ -24,9 +22,6 @@ class AdminHackPage extends React.Component {
       hackId: _hackId,
       loading: false,
     }
-
-    this.updateQualtricsLinks = this.updateQualtricsLinks.bind(this)
-    this.getHack = this.getHack.bind(this)
   }
 
   componentDidMount() {
@@ -35,7 +30,7 @@ class AdminHackPage extends React.Component {
     }
   }
 
-  async getHack(_hackId) {
+  getHack = async _hackId => {
     let hackData = await window.firebase.firestore()
       .collection('hacks')
       .doc(_hackId)
@@ -60,11 +55,11 @@ class AdminHackPage extends React.Component {
       hackOverview: result.overview ? this.decodeDocument(result.overview.doc) : '',
       hackExtensions: result.extensions ? result.extensions : {},
     })
-  }
+  };
 
   // HACK SURVEYS
   // --------------------------------------------
-  updateQualtricsLinks(updatedHackData) {
+  updateQualtricsLinks = updatedHackData => {
     this.setState({ loading: true })
 
     const hackRef = window.firebase.firestore()
@@ -85,7 +80,7 @@ class AdminHackPage extends React.Component {
       .catch(function(error) {
         console.error('Error adding document: ', error);
       })
-  }
+  };
 
   encodeDocument(str) {
     let safeString = unescape(encodeURIComponent(str));
@@ -108,14 +103,10 @@ class AdminHackPage extends React.Component {
           userIsAdmin={this.props.userIsAdmin}
         >
 
-      {this.state.hack && !this.state.loading && (
-        <AdminPageNavBreadcrumbs
-          hackId={this.hackId}
-          hackName={this.state.hack.name}
-        />
-      )}
-
-        <Section sectionClass='container-fluid' containerClass="flex">
+        <Section
+          sectionClass='container-fluid px-0'
+          containerClass="flex px-0 mx-0 section_full"
+        >
           <AdminHackNav
             hackId={this.hackId}
             items={[
@@ -133,6 +124,13 @@ class AdminHackPage extends React.Component {
           />
 
           <div className="admin-hack-content">
+            {this.state.hack && (
+              <AdminPageNavBreadcrumbs
+                hackId={this.hackId}
+                hackName={this.state.hack.name}
+              />
+            )}
+
             <Row rowClass='no-gutters py-2'>
               <Col colClass="">
               {this.state.hack && !this.state.loading ? (
@@ -224,6 +222,8 @@ class AdminHackPage extends React.Component {
                       hackId={this.hackId}
                     />
                   </Route>
+
+                  <Redirect push to={`/admin/hacks/${this.hackId}/settings`} />
 
                 </Switch>
                 ) : (

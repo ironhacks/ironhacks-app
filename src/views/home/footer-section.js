@@ -1,99 +1,105 @@
-import React from 'react';
+import { useState } from 'react';
+import { Img } from '../../components/img'
 import { Row, Col } from '../../components/layout'
 import { MaterialDesignIcon } from '../../components/icons';
+import FsLightbox from 'fslightbox-react';
 
-class FooterCard extends React.Component {
-  render() {
-    return (
-      <div class="card example_card">
-        <img
-          src={this.props.image}
-          alt={this.props.title}
-          class="card__image bd-0 mb-0"/>
-        <div class="card__content bd-0 bg-inherit">
-          <h3 class="title example_card__title">{this.props.title}</h3>
-          <p class="description example_card__description">{this.props.description}</p>
-        </div>
+
+function FooterVideo() {
+  const [lightboxController, setLightboxController] = useState({
+    toggler: false,
+    slide: 1
+  });
+
+  function openLightboxOnSlide(number) {
+    setLightboxController({
+      toggler: !lightboxController.toggler,
+      slide: number
+    })
+  }
+
+  return (
+    <>
+      <div className="card" style={{cursor: 'pointer'}} onClick={() => openLightboxOnSlide(1)}>
+        <Img
+          responsive={false}
+          baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
+          filePath={'media%2Fimg%2Foptim%2F'}
+          fileName={'video-ironhacks-promo_360x200.png?alt=media&token=d1dd80ad-010e-47dc-b0b9-66c1660f58ab'}
+          alt={'IronHacks Video Promo'}
+          imgClass="card__image bd-0 mb-0 depth-2"
+          imgStyle={{objectFit: 'cover'}}
+        />
       </div>
-    )
-  }
+
+    <FsLightbox
+      toggler={lightboxController.toggler}
+      sources={[
+          'https://www.youtube.com/watch?v=q2R4Tvpou0c',
+      ]}
+      slide={lightboxController.slide}
+      />
+    </>
+  )
 }
 
-FooterCard.defaultProps = {
-  image: '',
-  title: 'Project Title',
-  description: 'Project Description',
-}
 
-class FooterSection extends React.Component {
-  render() {
-    return (
-      <>
-      <Row>
-        <Col>
-          <h2 className="h2 text-center my-2">
-            GET IN <span className="font-extrabold">TOUCH</span>
-          </h2>
-        </Col>
-      </Row>
+const FooterSection = () => {
+  return (
+    <>
+    <Row>
+      <Col>
+        <h2 className="h2 text-center my-2">
+          GET IN <span className="font-extrabold">TOUCH</span>
+        </h2>
+      </Col>
+    </Row>
 
-      <Row>
-        <Col>
-          <p className="text-center py-2">
-            You can connect with us via phone, email, or just come to the Research Center
-            for Open Digital Innovation, West Lafayette, IN.
-          </p>
-        </Col>
-      </Row>
+    <Row>
+      <Col>
+        <p className="text-center py-2">
+          You can connect with us via phone, email, or just come to the Research Center
+          for Open Digital Innovation, West Lafayette, IN.
+        </p>
+      </Col>
+    </Row>
 
 
-      <Row flex={true} rowClass={'py-2 fs-1 flex-align-center flex-wrap'}>
-        <Col colClass='flex-1 min-w-350'>
-          <p>+1 765.494.0880</p>
-          <p>opendigital@purdue.edu</p>
-          <p>Ernest C. Young Hall, Room 305<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
-          <p>Discovery Learning Research Center<br/>298 Nimitz Dr.<br/>West Lafayette, IN 47906</p>
-          <p>
-            <a href="https://www.facebook.com/OpenDigitalPurdue/">
-              <MaterialDesignIcon
-                name="facebook"
-              />
-            </a>
-          </p>
-        </Col>
+    <Row flex={true} rowClass={'py-2 fs-1 flex-align-center flex-wrap'}>
+      <Col colClass='flex-1 min-w-350'>
+        <p>+1 765.494.0880</p>
+        <p>opendigital@purdue.edu</p>
+        <p>Ernest C. Young Hall, Room 305<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
+        <p>Discovery Learning Research Center<br/>298 Nimitz Dr.<br/>West Lafayette, IN 47906</p>
+        <p>
+          <a href="https://www.facebook.com/OpenDigitalPurdue/">
+            <MaterialDesignIcon
+              name="facebook"
+            />
+          </a>
+        </p>
+      </Col>
 
-        <Col colClass='flex-1'>
-          <div className="ratio--16x9 w-full relative hide--med">
-            <iframe
-              title="IronHacks YouTube Video"
-              style={{
-                width: '100%',
-                height: '100%',
-                position: 'absolute',
-                display: 'block',
-              }}
-              src="https://www.youtube-nocookie.com/embed/q2R4Tvpou0c?controls=0"
-              frameBorder="0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen />
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col colClass="text-center">
-          <div>
-          <small>IronHacks is an initiative of the Research Center for Open Digital Innovation (RCODI).</small>
-          </div>
-          <div>
-            <small>It is financially supported by the National Science Foundation (Award #1462044).</small>
-          </div>
-        </Col>
-      </Row>
+      <Col colClass='flex-1 hide--med'>
+        <div className="flex flex-center flex-align-center w-full relative">
+          <FooterVideo/>
+        </div>
+      </Col>
+    </Row>
+    <Row>
+      <Col colClass="text-center">
+        <div>
+        <small>IronHacks is an initiative of the Research Center for Open Digital Innovation (RCODI).</small>
+        </div>
+        <div>
+          <small>It is financially supported by the National Science Foundation (Award #1462044).</small>
+        </div>
+      </Col>
+    </Row>
 
-      </>
-    )
-  }
-}
+    </>
+  )
+};
 
 
 export { FooterSection }

@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import { QuizNavItem } from './quiz-nav-item';
 
-class QuizNav extends React.Component {
+class QuizNav extends Component {
   constructor(props){
     super(props)
     this.quizList = [

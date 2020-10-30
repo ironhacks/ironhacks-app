@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { withRouter } from 'react-router';
 import { Row, Col } from '../../components/layout';
 import { CountdownTimer } from '../../components/timer';
@@ -88,7 +88,7 @@ function SubmissionListItem({
   }
 }
 
-class SubmissionsView extends React.Component {
+class SubmissionsView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -98,16 +98,13 @@ class SubmissionsView extends React.Component {
       now: Date.now(),
       current: null,
     }
-
-    this.getSubmissions = this.getSubmissions.bind(this);
-    this.getUserSubmission = this.getUserSubmission.bind(this);
   }
 
   componentDidMount() {
     this.getSubmissions()
   }
 
-  getUserSubmission(submissionId) {
+  getUserSubmission = submissionId => {
     const hackId = this.props.hackId;
     const userId = this.props.userId;
     return window.firebase.firestore()
@@ -117,9 +114,9 @@ class SubmissionsView extends React.Component {
         return doc.exists
       })
 
-  }
+  };
 
-  getSubmissions() {
+  getSubmissions = () => {
     const hackId = this.props.hackId;
     window.firebase.firestore()
       .collection('hacks')
@@ -157,7 +154,7 @@ class SubmissionsView extends React.Component {
         })
         this.setState({submissions: submissions});
       })
-  }
+  };
 
   render() {
     return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../util/button.js';
@@ -32,7 +32,7 @@ const SectionContainer = styled('div')`
 `;
 
 
-class ThreadEditView extends React.Component {
+class ThreadEditView extends Component {
   constructor(props) {
     super(props);
     const { user } = props;
@@ -53,17 +53,13 @@ class ThreadEditView extends React.Component {
     if (this.props.location.state){
       // console.log(this.props.location.state);
     }
-
-    this.updatePost = this.updatePost.bind(this);
-    this.getPostData = this.getPostData.bind(this);
-    this.onEditorChange = this.onEditorChange.bind(this);
   }
 
   componentDidMount() {
     this.getPostData();
   }
 
-  getPostData() {
+  getPostData = () => {
     const threadId = this.threadId;
     const postRef = window.firebase.firestore()
       .collection('hacks')
@@ -90,13 +86,13 @@ class ThreadEditView extends React.Component {
       .catch(function(error) {
         console.error('Error getting documents: ', error);
       })
-  }
+  };
 
-  onEditorChange(markdown) {
+  onEditorChange = markdown => {
     this.setState({
       content: markdown
     })
-  }
+  };
 
   cancelSubmit() {
     let path = window.location.pathname.split('/').slice(0,-1).join('/');
@@ -110,7 +106,7 @@ class ThreadEditView extends React.Component {
     return window.btoa(unescape(encodeURIComponent(str)));
   }
 
-  updatePost() {
+  updatePost = () => {
     userMetrics({event: 'edit_forum_post'})
     const encodedBody = this.encodeDocument(this.state.content);
 
@@ -127,7 +123,7 @@ class ThreadEditView extends React.Component {
           console.error('Error adding commends document: ', error)
         })
     }
-  }
+  };
 
   encodeDocument(str) {
     let safeString = unescape(encodeURIComponent(str));

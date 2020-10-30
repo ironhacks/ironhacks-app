@@ -1,4 +1,4 @@
-import React from 'react';
+import { createRef, Component } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { NavButton } from '../navigation/nav-button'
 import { HeaderLogo } from '../navigation/header-logo'
@@ -61,17 +61,20 @@ const UserMenuDropper = styled('button')`
 `;
 
 
-class UserMenuDropdownButton extends React.Component {
-  render() {
-    return (
-      <UserMenuDropper onClick={this.props.onClick} >
-        {this.props.text}
-      </UserMenuDropper>
-    )
-  }
-}
+const UserMenuDropdownButton = (
+  {
+    onClick,
+    text,
+  },
+) => {
+  return (
+    <UserMenuDropper onClick={onClick} >
+      {text}
+    </UserMenuDropper>
+  );
+};
 
-class Header extends React.Component {
+class Header extends Component {
   constructor(props) {
     super(props);
 
@@ -80,11 +83,8 @@ class Header extends React.Component {
       showMenu: 'none',
     };
 
-    this.userMenuRef = React.createRef();
-    this.navMenuref = React.createRef();
-    this.showUserMenu = this.showUserMenu.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-    this.hideMenus = this.hideMenus.bind(this);
+    this.userMenuRef = createRef();
+    this.navMenuref = createRef();
   }
 
   componentDidMount() {
@@ -95,16 +95,16 @@ class Header extends React.Component {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  handleClickOutside(event) {
+  handleClickOutside = event => {
     const userMenuRef = this.userMenuRef.current;
     if (userMenuRef && !userMenuRef.contains(event.target)) {
       this.setState({
         showUserMenu: 'none',
       })
     }
-  }
+  };
 
-  showUserMenu() {
+  showUserMenu = () => {
     if (this.state.showUserMenu === 'none') {
       this.setState({
         showUserMenu: 'flex'
@@ -114,13 +114,13 @@ class Header extends React.Component {
         showUserMenu: 'none'
       })
     }
-  }
+  };
 
-  hideMenus(event) {
+  hideMenus = event => {
     this.setState({
       showUserMenu: 'none',
     })
-  }
+  };
 
   render() {
     return (

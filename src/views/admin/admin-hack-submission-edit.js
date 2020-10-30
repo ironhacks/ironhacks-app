@@ -1,10 +1,10 @@
-import React from 'react';
+import { Component } from 'react';
 import { Section, Row } from '../../components/layout';
 import Separator from '../../util/separator.js';
 import { AdminSubmissionEditForm } from '../../components/submission';
 import { withRouter } from 'react-router';
 
-class AdminHackSubmissionEdit extends React.Component {
+class AdminHackSubmissionEdit extends Component {
   constructor(props) {
     super(props);
 
@@ -13,9 +13,6 @@ class AdminHackSubmissionEdit extends React.Component {
     this.state = {
       submissions: [],
     }
-
-    this.saveSubmission = this.saveSubmission.bind(this);
-    this.getSubmissions = this.getSubmissions.bind(this);
   }
 
   componentDidMount(){
@@ -23,7 +20,7 @@ class AdminHackSubmissionEdit extends React.Component {
   }
 
 
-  getSubmissions() {
+  getSubmissions = () => {
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -46,7 +43,7 @@ class AdminHackSubmissionEdit extends React.Component {
       .catch((error)=>{
         console.log(error);
       })
-  }
+  };
 
   onSubmissionDataChanged(name, value){
     let form = this.state;
@@ -58,7 +55,7 @@ class AdminHackSubmissionEdit extends React.Component {
     window.history.back();
   }
 
-  saveSubmission(data){
+  saveSubmission = data => {
     let submissions = this.state.submissions;
     let submissionData = {};
     Object.keys(submissions).forEach((key, index)=>{
@@ -82,7 +79,7 @@ class AdminHackSubmissionEdit extends React.Component {
       .catch((error)=>{
         console.log(error);
       })
-  }
+  };
 
   render() {
     return (

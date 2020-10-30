@@ -1,17 +1,18 @@
-import React from 'react'
 import { Header } from './header'
 import { Footer } from './footer'
 import {Helmet} from 'react-helmet';
 
-class Content extends React.Component {
-  render() {
-    return (
-      <main className={'main'}>
-        {this.props.children}
-      </main>
-    )
-  }
-}
+const Content = (
+  {
+    children,
+  },
+) => {
+  return (
+    <main className={'main'}>
+      {children}
+    </main>
+  );
+};
 
 
 const Page = ({

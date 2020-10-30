@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import PostView from '../../components/forum/post-view';
@@ -31,7 +31,7 @@ const SectionSeparator = styled('div')`
   margin-bottom: 15px;
 `;
 
-class ThreadView extends React.Component {
+class ThreadView extends Component {
   constructor(props) {
     super(props);
     const { user } = props;
@@ -53,9 +53,6 @@ class ThreadView extends React.Component {
     if (this.props.location.state){
       // console.log(this.props.location.state);
     }
-
-    this.getComments = this.getComments.bind(this);
-    this.getPostData = this.getPostData.bind(this);
   }
 
   componentDidMount() {
@@ -63,7 +60,7 @@ class ThreadView extends React.Component {
     this.getPostData();
   }
 
-  getPostData() {
+  getPostData = () => {
     const threadId = this.threadId;
     const postRef = window.firebase.firestore()
       .collection('hacks')
@@ -87,9 +84,9 @@ class ThreadView extends React.Component {
       .catch(function(error) {
         console.error('Error getting documents: ', error);
       })
-  }
+  };
 
-  getComments() {
+  getComments = () => {
     if (this.state.postRef) {
       this.state.postRef
       .collection('comments')
@@ -109,7 +106,7 @@ class ThreadView extends React.Component {
         console.error('Error getting documents: ', error);
       })
     }
-  }
+  };
 
 
   render() {

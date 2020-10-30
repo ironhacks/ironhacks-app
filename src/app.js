@@ -1,30 +1,17 @@
-import React from 'react';
+import { Component } from 'react';
 import { Loader } from './components/loader';
 import { withRouter } from 'react-router';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import ProjectSelectView from './views/hacks/project-select-view';
 import { Pages } from './views/pages/';
 import {Helmet} from 'react-helmet';
 import { userMetrics } from './util/user-metrics'
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/static/bootstrap-reboot.css'
 import './assets/static/bootstrap-grid.css'
-import './styles/css/root.css'
-import './styles/css/main.css'
-import './styles/css/colors.css'
-import './styles/css/layout.css'
-import './styles/css/flex.css'
-import './styles/css/base.css'
-import './styles/css/icons.css'
-import './styles/css/content.css'
-import './styles/css/charrismatic.css'
-import './styles/css/typography.css'
-import './styles/css/buttons.css'
-import './styles/css/results.css'
-import './styles/css/forum.css'
+import './styles/charrismatic.min.css'
+import './styles/styles.css'
 
-
-class App extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,13 +25,9 @@ class App extends React.Component {
     }
 
     this._isMounted = false;
-    this._setUser = this._setUser.bind(this);
-    this._isUserConnected = this._isUserConnected.bind(this);
-    this._updateAppNavigation = this._updateAppNavigation.bind(this);
-    this._filterUser = this._filterUser.bind(this)
   }
 
-  _filterUser(user) {
+  _filterUser = user => {
     const names = user.displayName.split(' ');
     return {
       createdAt: user.metadata.creationTime,
@@ -59,26 +42,26 @@ class App extends React.Component {
       uid: user.uid,
       lastLoginAt: user.metadata.lastSignInTime,
     }
+  };
+
+  componentDidMount() {
+    window.firebase.analytics().logEvent('screen_view');
+    this._isMounted = true;
+    this._isUserConnected();
   }
 
-   componentDidMount() {
-     window.firebase.analytics().logEvent('screen_view');
-     this._isMounted = true;
-     this._isUserConnected();
-   }
+  componentWillUnmount() {
+   this._isMounted = false;
+  }
 
-   componentWillUnmount() {
-    this._isMounted = false;
-   }
-
-  _updateAppNavigation(data){
+  _updateAppNavigation = data => {
     this.setState({
       navigateTo: data.navigateTo,
       mustNavigate: data.mustNavigate,
     })
-  }
+  };
 
-  _isUserConnected() {
+  _isUserConnected = () => {
     const currentUser = window.firebase.auth().currentUser;
     if (currentUser){
       let user = this._filterUser(currentUser);
@@ -116,16 +99,16 @@ class App extends React.Component {
         });
       }
     })
-  }
+  };
 
-  _setUser(data) {
+  _setUser = data => {
     this.setState({
       user: data.user,
       userId: data.userId,
       userIsAdmin: data.userIsAdmin,
       loading: false,
     })
-  }
+  };
 
   render() {
     if (this.state.mustNavigate) {
@@ -156,12 +139,12 @@ class App extends React.Component {
             </div>
           ) : (
             <Switch>
-              <Route exact path='/' >
-                <Pages.Home />
+              <Route exact path='/'>
+                <Pages.Home/>
               </Route>
 
-              <Route exact path='/covid19' >
-                <Pages.UpcomingHack />
+              <Route exact path='/covid19'>
+                <Pages.UpcomingHack/>
               </Route>
 
               <Route path='/login'>
@@ -192,20 +175,6 @@ class App extends React.Component {
                       user={this.state.user}
                       userIsAdmin={this.state.userIsAdmin}
                       userId={this.state.userId}
-                    />
-                  </Route>
-
-                  <Route exact path='/projects'>
-                    <ProjectSelectView
-                      user={this.state.user}
-                      userIsAdmin={this.state.userIsAdmin}
-                    />
-                  </Route>
-
-                  <Route path='/projects/:projectName'>
-                    <ProjectSelectView
-                      user={this.state.user}
-                      userIsAdmin={this.state.userIsAdmin}
                     />
                   </Route>
 

@@ -1,7 +1,6 @@
 import CalendarView from './calendar-view';
 import ForumView from './forum-view';
 import OverviewView from './overview-view';
-import ProjectSelectView from './project-select-view';
 import QuizView from './quiz-view';
 import RegistrationView from './registration-view';
 import ResultsView from './results-view';
@@ -15,7 +14,6 @@ const Hack = {
   Calendar: CalendarView,
   Forum: ForumView,
   Overview: OverviewView,
-  ProjectSelect: ProjectSelectView,
   Quiz: QuizView,
   Registration: RegistrationView,
   Results: ResultsView,

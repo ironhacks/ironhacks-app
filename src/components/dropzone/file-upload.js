@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react';
 import Dropzone from 'react-dropzone'
 
 const baseStyle = {
@@ -17,7 +17,7 @@ const baseStyle = {
   transition: 'border .24s ease-in-out'
 };
 
-class FileUpload extends React.Component {
+class FileUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,15 +25,13 @@ class FileUpload extends React.Component {
       files: [],
       fileList: [],
     };
-    this.onFiles = this.onFiles.bind(this)
-    this.removeFile = this.removeFile.bind(this)
   }
 
   onFileStatus({ meta }, status) {
     console.log(status, meta)
   }
 
-  onFiles(_files) {
+  onFiles = _files => {
     let fileList = this.state.fileList;
     let files = this.state.files;
 
@@ -57,21 +55,21 @@ class FileUpload extends React.Component {
     if (this.props.onFilesChanged) {
       this.props.onFilesChanged(files)
     }
-  }
+  };
 
   validateFile(files) {
     console.log('validate', files);
     return true
   }
 
-  removeFile(position) {
+  removeFile = position => {
     let files = this.state.files;
     let newFiles = files.filter((item, index)=>{
       return index !== position;
     })
 
     this.setState({files: newFiles});
-  }
+  };
 
   render() {
     return (

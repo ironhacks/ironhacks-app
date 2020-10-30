@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { withRouter } from 'react-router';
 import { Row, Col } from '../../components/layout';
 import { InputTextarea } from '../../components/input';
@@ -40,7 +40,7 @@ function SubmissionField({
   )
 }
 
-class SubmitView extends React.Component {
+class SubmitView extends Component {
   constructor(props) {
     super(props);
 
@@ -81,18 +81,6 @@ class SubmitView extends React.Component {
       uploadComplete: false,
       submissionComplete: false,
     }
-
-    this.onFileUploadFiles = this.onFileUploadFiles.bind(this);
-    this.startSubmitSubmission = this.startSubmitSubmission.bind(this);
-    this.uploadSubmissionFile = this.uploadSubmissionFile.bind(this);
-    this.onSubmissionInputChange = this.onSubmissionInputChange.bind(this);
-    this.onSubmissionFieldChanged = this.onSubmissionFieldChanged.bind(this);
-    this.getSubmissionData = this.getSubmissionData.bind(this);
-    this.validateFields = this.validateFields.bind(this);
-    this.showSurveryModal = this.showSurveryModal.bind(this);
-    this.showConfirmModal = this.showConfirmModal.bind(this);
-    this.showSuccessModal = this.showSuccessModal.bind(this);
-    this.getUser = this.getUser.bind(this);
   }
 
   componentDidMount(){
@@ -100,7 +88,7 @@ class SubmitView extends React.Component {
     this.getSubmissionData()
   }
 
-  getUser() {
+  getUser = () => {
     window.firebase.firestore()
       .collection('users')
       .doc(this.props.userId)
@@ -109,19 +97,19 @@ class SubmitView extends React.Component {
         this.setState({user: doc.data()})
       })
 
-  }
+  };
 
-  onFileUploadFiles(_files) {
+  onFileUploadFiles = _files => {
     this.setState({submissionFiles: _files});
-  }
+  };
 
-  onSubmissionInputChange(name, value) {
+  onSubmissionInputChange = (name, value) => {
     let submission = this.state.submissionData;
     submission[name] = value;
     this.setState({public: value})
-  }
+  };
 
-  getSubmissionData() {
+  getSubmissionData = () => {
     const hackId = this.props.hackId;
     const submissionId = this.submissionId;
     window.firebase.firestore()
@@ -168,9 +156,9 @@ class SubmitView extends React.Component {
           });
         }
       })
-  }
+  };
 
-  onSubmissionFieldChanged(name, value, index) {
+  onSubmissionFieldChanged = (name, value, index) => {
     let fields = this.state.submissionData.fields;
     let submissionData = this.state.submissionData;
     fields[index] = value;
@@ -181,9 +169,9 @@ class SubmitView extends React.Component {
         fields: fields,
       }
     });
-  }
+  };
 
-  uploadSubmissionFile({file, index, hackId, submissionId, userId}) {
+  uploadSubmissionFile = ({file, index, hackId, submissionId, userId}) => {
     const storageRef = window.firebase.storage().ref();
     const pathRef = storageRef.child(`data/hacks/${hackId}/${submissionId}/${userId}/${file.path}`);
     const uploadTask = pathRef.put(file);
@@ -247,9 +235,9 @@ class SubmitView extends React.Component {
       .catch((error) => {
         console.log('Upload Failed:', file, error.message);
       })
-  }
+  };
 
-  validateFields() {
+  validateFields = () => {
     let submissionFields = this.state.submissionData.fields;
     let fieldIsValid = [];
     let form = this.state.submissionForm;
@@ -278,7 +266,7 @@ class SubmitView extends React.Component {
 
     // RETURN TRUTH STATEMENT TO CONTINUE OR STOP SUBMISSION
     return fieldIsValid.every(item=>{ return item === true })
-  }
+  };
 
 
   validateFiles() {
@@ -311,7 +299,7 @@ class SubmitView extends React.Component {
     return fileIsValid.every(item=>{ return item === true })
   }
 
-  showConfirmModal() {
+  showConfirmModal = () => {
     Swal.fire({
       title: 'Are you ready to submit?',
       html: `
@@ -353,10 +341,9 @@ class SubmitView extends React.Component {
         this.setState({submissionDisabled: false});
       }
     })
-  }
+  };
 
-
-  showSurveryModal() {
+  showSurveryModal = () => {
     const formUrl = this.state.submissionForm.survey;
     const userEmail = this.state.user.email;
     const userId = this.props.userId;
@@ -378,9 +365,9 @@ class SubmitView extends React.Component {
           this.showSuccessModal()
         }
       })
-  }
+  };
 
-  showSuccessModal() {
+  showSuccessModal = () => {
     Swal.fire({
       title: 'Submission Successful',
       text: 'Your submission is complete.',
@@ -391,9 +378,9 @@ class SubmitView extends React.Component {
       // this.setState({submissionDisabled: false});
       window.location = `/hacks/${this.props.hackSlug}`;
     })
-  }
+  };
 
-  startSubmitSubmission() {
+  startSubmitSubmission = () => {
     this.setState({submissionDisabled: true});
 
     let validFields = this.validateFields();
@@ -405,7 +392,7 @@ class SubmitView extends React.Component {
     }
 
     this.showConfirmModal()
-  }
+  };
 
   completeSubmitSubmission() {
     const submissionData = this.state.submissionData;

@@ -1,10 +1,9 @@
-import React from 'react';
-import Separator from '../../util/separator';
+import { Component } from 'react';
 import { Loader } from '../../components/loader';
 import { HackCardList, PreviousHackCardList, HackSignupCardList } from '../../components/hacks';
 import { Page, Section, Row, Col } from '../../components/layout';
 
-class HackSelectPage extends React.Component {
+class HackSelectPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +15,6 @@ class HackSelectPage extends React.Component {
       availableHacks: [],
       loading: false,
     }
-    this.getHacks = this.getHacks.bind(this);
   }
 
   componentDidMount() {
@@ -27,7 +25,7 @@ class HackSelectPage extends React.Component {
     }
   }
 
-  async getHacks() {
+  getHacks = async () => {
     const hacks = await window.firebase.firestore()
         .collection('hacks')
         .where('hackPublished', '==', true)
@@ -103,7 +101,7 @@ class HackSelectPage extends React.Component {
       upcomingHacks: upcomingHacks,
       previousHacks: previousHacks,
     })
-  }
+  };
 
   render() {
     if (this.state.loading) {
@@ -123,51 +121,37 @@ class HackSelectPage extends React.Component {
         >
           <Section sectionClass="py-2 mb-10">
             <Row>
-              <Col colClass="">
-                <h1 className="h1 page-title">
-                  <strong>Welcome to IronHacks</strong>
-                </h1>
-
-                <h2 className="h2 py-2">Your Registered Hacks</h2>
-
-                <Separator primary />
+              <Col colClass="mt-1">
+                <h2 className="h4 py-1 badge badge-dark">
+                  Your Registered Hacks
+                </h2>
 
                 <HackCardList
                   emptyText={'You are not registered for any hacks.'}
                   hacks={this.state.registeredHacks}
                 />
 
-                <Separator />
-
-                <h2 className="h2 py-2">
+                <h2 className="h4 py-1 badge badge-dark">
                   Hacks Open for Registration
                 </h2>
-
-                <Separator primary />
 
                 <HackSignupCardList
                   emptyText={'There are no hacks currently available.'}
                   hacks={this.state.availableHacks}
                 />
 
-
-                <h2 className="h2 py-2">
+                <h2 className="h4 py-1 badge badge-dark">
                   Upcoming Hacks
                 </h2>
-
-                <Separator primary />
 
                 <HackCardList
                   emptyText={'No upcoming hacks.'}
                   hacks={this.state.upcomingHacks}
                 />
 
-
-                <h2 className="h2 py-2">
+                <h2 className="h4 py-1 badge bg-grey cl-white">
                   Past Hacks
                 </h2>
-
-                <Separator primary />
 
                 <PreviousHackCardList
                   emptyText={'No previous hacks.'}

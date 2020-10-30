@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import Showdown from 'showdown';
 // import showdownKatex from 'showdown-katex';
 
@@ -9,7 +9,7 @@ import Showdown from 'showdown';
 // ~~strikethrough~~ as <del>strikethrough</del>
 // headerLevelStart  foo parse to <h3>foo</h3>
 
-class MdContentView extends React.Component {
+class MdContentView extends Component {
   constructor(props) {
     super(props);
 

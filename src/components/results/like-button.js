@@ -1,6 +1,6 @@
-import React from 'react';
+import { Component } from 'react';
 
-class LikeButton extends React.Component {
+class LikeButton extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { HackNavContainerDiv } from './nav-container'
 import { upperCaseWord } from '../../util/string-utils';
@@ -6,37 +6,40 @@ import menuIcon from '../../assets/svg/menu-icon.svg';
 import { userMetrics } from '../../util/user-metrics'
 
 
-class HackNavItem extends React.Component {
-  render() {
-    return (
-      <Link
-        className={`hack_nav__item ${this.props.navClass}`}
-        to={`/hacks/${this.props.slug}/${this.props.navId.toLowerCase()}`}
-      >
-        {upperCaseWord(this.props.name)}
-      </Link>
-    )
-  }
-}
+const HackNavItem = (
+  {
+    navClass,
+    slug,
+    navId,
+    name,
+  },
+) => {
+  return (
+    <Link
+      className={`hack_nav__item ${navClass}`}
+      to={`/hacks/${slug}/${navId.toLowerCase()}`}
+    >
+      {upperCaseWord(name)}
+    </Link>
+  );
+};
 
 HackNavItem.defaultProps = {
   navClass: '',
 }
 
-class HackNav extends React.Component {
+class HackNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showMenu: 'none',
       currentView: 'task',
     };
-    this.showMenu = this.showMenu.bind(this);
     this.baseUrl = `/hacks/${this.props.hackSlug}`;
     this.navMenuRef = props.navMenuref;
-    this.getNav = this.getNav.bind(this);
   }
 
-  getNav(items){
+  getNav = items => {
     if (!items) {
       return [];
     }
@@ -55,21 +58,21 @@ class HackNav extends React.Component {
     });
 
     return navItems;
-  }
+  };
 
   hideMenu(event) {
     this.setState({
       showMenu: 'none',
     });
-  };
+  }
 
-  showMenu() {
+  showMenu = () => {
     if (this.state.showMenu === 'none') {
       this.setState({ showMenu: 'flex' });
     } else {
       this.setState({ showMenu: 'none' });
     }
-  }
+  };
 
   render() {
     return (

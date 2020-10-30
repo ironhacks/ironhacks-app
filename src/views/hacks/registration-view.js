@@ -1,20 +1,16 @@
-import React from 'react';
+import { Component } from 'react';
 import Swal from 'sweetalert2';
 import { Row, Col } from '../../components/layout';
 import { registerUser } from '../../services/register-hack';
 import { userMetrics } from '../../util/user-metrics'
 
-class RegistrationView extends React.Component {
+class RegistrationView extends Component {
   constructor(props) {
     super(props);
     this.state = {registerDisabled: false }
-    this.registerHack = this.registerHack.bind(this);
-    this.registerSuccess = this.registerSuccess.bind(this);
-    this.callRegisterUser = this.callRegisterUser.bind(this);
-    this.goToPresurvey = this.goToPresurvey.bind(this);
   }
 
-  registerSuccess(){
+  registerSuccess = () => {
     window.firebase.analytics()
       .logEvent('register_hack', {
         'value': this.props.hackSlug
@@ -28,9 +24,9 @@ class RegistrationView extends React.Component {
     })
 
     window.location = `/hacks/${this.props.hackSlug}`;
-  }
+  };
 
-  callRegisterUser() {
+  callRegisterUser = () => {
     registerUser({
       userId: this.props.userId,
       hackId: this.props.hackId,
@@ -42,9 +38,9 @@ class RegistrationView extends React.Component {
         window.location.reload();
       }
     })
-  }
+  };
 
-  goToPresurvey() {
+  goToPresurvey = () => {
     if (this.props.hackRegistration){
       let hackId = this.props.hackId;
       let userEmail = this.props.userEmail;
@@ -80,11 +76,11 @@ class RegistrationView extends React.Component {
         }
       })
     }
-  }
+  };
 
-  registerHack() {
+  registerHack = () => {
     this.goToPresurvey()
-  }
+  };
 
   render() {
     return (

@@ -1,33 +1,28 @@
-import React from 'react';
+import { Component } from 'react';
 import { Section, Row } from '../../components/layout';
 import Separator from '../../util/separator.js';
 import { AdminSubmissionForm, AdminSubmissionItem } from '../../components/submission';
 
-class AdminHackSubmissions extends React.Component {
+class AdminHackSubmissions extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       submissions: [],
     }
-
-    this.newSubmission = this.newSubmission.bind(this);
-    this.saveSubmissions = this.saveSubmissions.bind(this);
-    this.deleteSubmission = this.deleteSubmission.bind(this);
-    this.getSubmissions = this.getSubmissions.bind(this);
   }
 
   componentDidMount(){
     this.getSubmissions();
   }
 
-  newSubmission(data) {
+  newSubmission = data => {
     let submissions = this.state.submissions;
     submissions.push(data);
     this.setState({submissions: submissions});
-  }
+  };
 
-  getSubmissions() {
+  getSubmissions = () => {
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -49,7 +44,7 @@ class AdminHackSubmissions extends React.Component {
       .catch((error)=>{
         console.log(error);
       })
-  }
+  };
 
   onSubmissionDataChanged(name, value){
     let form = this.state;
@@ -61,7 +56,7 @@ class AdminHackSubmissions extends React.Component {
     console.log('click');
   }
 
-  saveSubmissions(){
+  saveSubmissions = () => {
     let submissions = this.state.submissions;
     let submissionData = {};
     Object.keys(submissions).forEach((key, index)=>{
@@ -82,9 +77,9 @@ class AdminHackSubmissions extends React.Component {
       .catch((error)=>{
         console.log(error);
       })
-  }
+  };
 
-  deleteSubmission(submissionIndex) {
+  deleteSubmission = submissionIndex => {
     let submissions = this.state.submissions;
 
     submissions = [
@@ -117,7 +112,7 @@ class AdminHackSubmissions extends React.Component {
         console.log(error);
       })
 
-  }
+  };
 
   render() {
     return (

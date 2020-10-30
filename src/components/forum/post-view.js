@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import ReactionsView from './reaction-view';
 // import ReactionPicker from './reaction-picker';
 import Separator from '../../util/separator';
@@ -13,6 +13,7 @@ function PostHeader({postTitle, postAuthorName, adminPost}){
   return (
     <div className="post_header">
       <h2 className="post_title mb-2">{postTitle}</h2>
+
       <div className="post_author">
         <div className="post_author__img">{initials}</div>
           {adminPost ? (
@@ -37,7 +38,7 @@ function PostBody({content}){
   )
 }
 
-class PostView extends React.Component {
+class PostView extends Component {
   constructor(props) {
     super(props);
     const { user } = props;
@@ -51,8 +52,6 @@ class PostView extends React.Component {
       profileLetters: profileLetters,
       editMode: false,
     }
-
-    this.deletePost = this.deletePost.bind(this);
   }
 
   editPost() {
@@ -62,7 +61,7 @@ class PostView extends React.Component {
 
   }
 
-  deletePost() {
+  deletePost = () => {
     Swal.fire({
       title: 'Are you sure?',
       text: 'Confirm you want to delete this post.',
@@ -99,7 +98,7 @@ class PostView extends React.Component {
         })
       }
     })
-  }
+  };
 
   render() {
     return (

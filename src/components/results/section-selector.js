@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { userMetrics } from '../../util/user-metrics'
 
 function SectionSelectorItem({
@@ -28,7 +28,7 @@ function SectionSelectorItem({
   )
 }
 
-class ResultsSectionSelector extends React.Component {
+class ResultsSectionSelector extends Component {
   constructor(props){
     super(props);
     this.buttonClass = 'badge btn py-3 px-4 mx-1 bd-1';

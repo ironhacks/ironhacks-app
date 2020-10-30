@@ -1,28 +1,26 @@
-import React from 'react';
+import { Component } from 'react';
 import Button from '../../util/button.js';
 import MarkdownEditor from '../../components/markdown-editor';
 import { userMetrics } from '../../util/user-metrics'
 
-class CommentEditor extends React.Component {
+class CommentEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       content: '',
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.onEditorChange = this.onEditorChange.bind(this);
   }
 
-  onEditorChange(markdown) {
+  onEditorChange = markdown => {
     this.setState({content: markdown})
-  }
+  };
 
   encodeDocument(str) {
     let safeString = unescape(encodeURIComponent(str));
     return window.btoa(safeString);
   }
 
-  handleSubmit() {
+  handleSubmit = () => {
 
     const currentUser = window.firebase.auth().currentUser
     const userId = currentUser.uid;
@@ -85,7 +83,7 @@ class CommentEditor extends React.Component {
           console.log(error)
         })
     }
-  }
+  };
 
 
   render() {

@@ -1,17 +1,16 @@
-import React from 'react';
+import { Component } from 'react';
 import { Row, Col } from '../../components/layout';
 import { MdContentView }  from '../../components/markdown-viewer';
 import Swal from 'sweetalert2';
 import { userMetrics } from '../../util/user-metrics'
 
-class TaskView extends React.Component {
+class TaskView extends Component {
   constructor(props) {
     super(props);
     this.state = {
       taskButtonDisabled: false,
       formFilled: false,
     }
-    this.showTaskSurvey = this.showTaskSurvey.bind(this)
   }
 
   componentDidMount(){
@@ -37,7 +36,7 @@ class TaskView extends React.Component {
   }
 
 
-  showTaskSurvey() {
+  showTaskSurvey = () => {
     let hackId = this.props.hackId;
     let userEmail = this.props.userEmail;
     let userId = this.props.userId;
@@ -59,7 +58,7 @@ class TaskView extends React.Component {
         formFilled: true
       });
     })
-  }
+  };
 
   render() {
     return (

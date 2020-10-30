@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import * as Time from '../../constants/time';
 
-class CountdownTimer extends React.Component {
+class CountdownTimer extends Component {
   constructor(props) {
     super(props);
 
@@ -14,13 +14,9 @@ class CountdownTimer extends React.Component {
       interval: null,
       timer: initalTimer,
     };
-
-    this.updateTimer = this.updateTimer.bind(this);
-    this.setTimerInterval = this.setTimerInterval.bind(this);
-    this.clearTimerInterval = this.clearTimerInterval.bind(this);
   }
 
-  updateTimer(data) {
+  updateTimer = data => {
     this.setState({
       timer: {
         seconds: data.seconds,
@@ -29,7 +25,7 @@ class CountdownTimer extends React.Component {
         days: data.days
       }
     })
-  }
+  };
 
   getTimerStep(distance){
     return {
@@ -40,7 +36,7 @@ class CountdownTimer extends React.Component {
     }
   }
 
-  setTimerInterval() {
+  setTimerInterval = () => {
     const interval = setInterval(() => {
       let distance = this.state.endDate - new Date().getTime();
       let timeRemaining = this.getTimerStep(distance);
@@ -51,16 +47,16 @@ class CountdownTimer extends React.Component {
     }, 1000);
 
     this.setState({interval: interval});
-  }
+  };
 
-  clearTimerInterval() {
+  clearTimerInterval = () => {
     clearInterval(this.state.interval);
 
     this.setState({
       timer: null,
       interval: null,
     });
-  }
+  };
 
   componentDidMount() {
     this.setTimerInterval();

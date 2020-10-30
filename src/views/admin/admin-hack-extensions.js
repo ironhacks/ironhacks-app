@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import Separator from '../../util/separator.js';
 import { InputText, InputCheckbox } from '../../components/input';
 import { Section, Row } from '../../components/layout';
@@ -26,7 +26,7 @@ import { Section, Row } from '../../components/layout';
 // mode=AGENDA
 
 
-class AdminHackExtensions extends React.Component {
+class AdminHackExtensions extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,16 +39,14 @@ class AdminHackExtensions extends React.Component {
 
       }
     }
-    this.onDataChanged = this.onDataChanged.bind(this);
-    this.submitExtensions = this.submitExtensions.bind(this);
   }
 
-  onDataChanged(name, value){
+  onDataChanged = (name, value) => {
     let extensionData = this.state.extensionData;
     extensionData[name] = value
     console.log(extensionData);
     this.setState({extensionData: extensionData})
-  }
+  };
 
   onCalendarDataChanged(data){
     let extensionData = this.state.extensionData;
@@ -66,7 +64,7 @@ class AdminHackExtensions extends React.Component {
     this.setState({extensionData: extensions})
   }
 
-  submitExtensions() {
+  submitExtensions = () => {
     if (this.state.syncing) {
       return false
     }
@@ -90,7 +88,7 @@ class AdminHackExtensions extends React.Component {
         })
         window.location.reload();
       })
-  }
+  };
 
   render() {
     return (

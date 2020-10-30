@@ -1,20 +1,19 @@
-import React from 'react';
+import { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Loader } from '../../components/loader';
 import { userMetrics } from '../../util/user-metrics'
 
-class LogoutPage extends React.Component {
+class LogoutPage extends Component {
   constructor(props) {
     super(props);
     this.state = { loading: true }
-    this._logout = this._logout.bind(this);
   }
 
   componentDidMount() {
     this._logout();
   }
 
-  _logout() {
+  _logout = () => {
     window.firebase.analytics().logEvent('user_logout');
     userMetrics({event: 'user_logout'})
 
@@ -28,7 +27,7 @@ class LogoutPage extends React.Component {
         console.error('Sign Out Error', error);
       }
       )
-  }
+  };
 
   render() {
     if (this.state.loading) {

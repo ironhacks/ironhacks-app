@@ -1,10 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import { OverlayLoaderContainer, Loader } from '../../components/loader';
 import Separator from '../../util/separator';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { Page, Section, Row, Col } from '../../components/layout';
-import { ProjectEditor } from '../../components/project';
 import { HackNav, HackPageBreadCrumbs } from '../../components/hacks';
 import { Hack } from '../hacks';
 import ThreadView from '../forum/thread-view';
@@ -12,25 +11,29 @@ import ThreadEditView from '../forum/post-edit-view';
 import NewThread from '../forum/new-thread';
 import { CountdownTimer } from '../../components/timer';
 
-class HackNavSection extends React.Component {
-  render() {
-    return (
-        <Row>
-          <Col>
-            <HackNav
-              hackDisplayOptions={this.props.hackDisplayOptions}
-              hackId={this.props.hackId}
-              hackSlug={this.props.hackSlug}
-            />
-          </Col>
-          <Separator primary />
-        </Row>
-      )
-  }
-}
+const HackNavSection = (
+  {
+    hackDisplayOptions,
+    hackId,
+    hackSlug,
+  },
+) => {
+  return (
+    <Row>
+      <Col>
+        <HackNav
+          hackDisplayOptions={hackDisplayOptions}
+          hackId={hackId}
+          hackSlug={hackSlug}
+        />
+      </Col>
+      <Separator primary />
+    </Row>
+  );
+};
 
 
-class HackPage extends React.Component {
+class HackPage extends Component {
   constructor(props) {
     super(props);
 
@@ -46,10 +49,9 @@ class HackPage extends React.Component {
     };
 
     this.getHack(this.hackSlug);
-    this.getHack = this.getHack.bind(this);
   }
 
-  async getHack(hackSlug) {
+  getHack = async hackSlug => {
     let hacks = await window.firebase.firestore()
       .collection('hacks')
       .where('hackSlug', '==', hackSlug)
@@ -78,7 +80,7 @@ class HackPage extends React.Component {
         upcomingEvent: upcomingEvent,
       })
     }
-  }
+  };
 
   getUpcomingHackEvent(hackData) {
     let startDate = hackData.startDate;
@@ -255,32 +257,6 @@ class HackPage extends React.Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/projects">
-              <Section>
-                <Hack.ProjectSelect
-                  hackId={this.state.hackId}
-                  user={this.props.user}
-                  userId={this.props.userId}
-                  hackData={this.state.hackData}
-                />
-              </Section>
-            </Route>
-
-            <Route exact path="/hacks/:hackId/projects/:projectName">
-              <Section
-                sectionClass="section_full"
-                containerClass="w-full max-w-none"
-              >
-                <ProjectEditor
-                  hackId={this.state.hackId}
-                  hackData={this.state.hackData}
-                  user={this.props.user}
-                  userId={this.props.userId}
-                  userIsAdmin={this.props.userIsAdmin}
-                />
-              </Section>
-            </Route>
-
             <Route exact path="/hacks/:hackId/results">
               <Section sectionClass="results-section">
                 <Hack.Results
@@ -344,6 +320,8 @@ class HackPage extends React.Component {
                 />
               </Section>
             </Route>
+
+            <Redirect push to={`/hacks/${this.hackSlug}`}/>
 
           </Switch>
       </Page>

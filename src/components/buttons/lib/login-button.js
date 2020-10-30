@@ -1,5 +1,3 @@
-import React from 'react';
-
 function LoginButton({ to, buttonClass, children }) {
   return (
     <a

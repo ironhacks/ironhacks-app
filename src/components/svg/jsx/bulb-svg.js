@@ -1,4 +1,3 @@
-import React from "react"
 const SvgComponent = props => (
   <svg viewBox="0 0 656.375 652.388"
     {...props}>

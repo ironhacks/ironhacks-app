@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import { Theme } from '../../theme';
 const units = Theme.UNITS;
@@ -15,7 +15,7 @@ const Select = styled('select')`
   margin-left: 10px;
 `;
 
-class ForumSelector extends React.Component {
+class ForumSelector extends Component {
   onChange = (event) => {
     this.props.onSelection(event.target.value);
   };

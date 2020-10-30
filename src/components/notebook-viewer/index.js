@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import {
   Card,
   Spin,
@@ -30,7 +30,7 @@ import './style.css';
 //
 
 
-class NotebookViewer extends React.Component {
+class NotebookViewer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,8 +49,6 @@ class NotebookViewer extends React.Component {
     }
 
     this.notebookWidth = '900px';
-
-    this.getNotebookFile = this.getNotebookFile.bind(this);
   }
 
 
@@ -65,7 +63,7 @@ class NotebookViewer extends React.Component {
     return !!pattern.test(str);
   }
 
-  async getNotebookFile() {
+  getNotebookFile = async () => {
     if (this.props.file) {
       var fbase = this.props.file.split('/');
       fbase.pop();
@@ -98,7 +96,7 @@ class NotebookViewer extends React.Component {
         }
       })
     }
-  }
+  };
 
   async componentDidMount() {
     this.getNotebookFile();

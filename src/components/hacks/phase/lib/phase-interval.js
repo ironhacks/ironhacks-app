@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import { Theme } from '../../../../theme';
@@ -46,7 +46,7 @@ const SetDateButton = styled('button')`
   font-weight: 300;
 `;
 
-class PhaseInterval extends React.Component {
+class PhaseInterval extends Component {
   isSelected = () => {
     this.props.onClick();
   };

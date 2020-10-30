@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { Page } from '../../components/layout';
 
-class HubPage extends React.Component {
+class HubPage extends Component {
   constructor(props) {
     super(props);
     this.state = {

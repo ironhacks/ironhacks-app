@@ -1,10 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import { QuizContainer } from '../../components/quiz/quiz-container';
 import  { QuizNav } from '../../components/quiz/quiz-nav';
 import { Section, Row, Col } from '../../components/layout';
-import '../../styles/css/hacks.css';
 
-class QuizView extends React.Component {
+class QuizView extends Component {
   constructor(props) {
     super(props);
     let  { email: userEmail } = this.props.user;
@@ -15,16 +14,14 @@ class QuizView extends React.Component {
       quizActive: false,
       userEmail: userEmail,
     }
-
-    this.setQuizActive = this.setQuizActive.bind(this);
   }
 
-  setQuizActive(event) {
+  setQuizActive = event => {
     let _quizid = event.target.dataset.quizid;
     this.setState({
       quizId: _quizid
     })
-  }
+  };
 
   getUrlQuizId() {
     let params = (new URL(document.location)).searchParams;

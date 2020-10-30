@@ -1,23 +1,20 @@
-import React from 'react';
+import { Component } from 'react';
 import { VariableSizeList as List } from 'react-window';
 
-class AdminUtilsUsers extends React.Component {
+class AdminUtilsUsers extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userCount: 0,
       users: [],
     }
-
-    this.getUsers = this.getUsers.bind(this);
-    this.UserListItem = this.UserListItem.bind(this);
   }
 
   componentDidMount() {
     this.getUsers()
   }
 
-  async getUsers() {
+  getUsers = async () => {
     let adminsRef = await window.firebase.firestore()
       .collection('admins')
       .get()
@@ -63,9 +60,9 @@ class AdminUtilsUsers extends React.Component {
       users: users,
     })
 
-  }
+  };
 
-  UserListItem({ index, style }) {
+  UserListItem = ({ index, style }) => {
     let user = this.state.users[index];
     return (
       <div style={style}>
@@ -84,7 +81,7 @@ class AdminUtilsUsers extends React.Component {
         </div>
       </div>
     )
-  }
+  };
 
   render() {
     return (

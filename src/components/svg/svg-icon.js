@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // <IconComponent className={["svg_icon__svg", iconClasses].join(" ")} />
 
-class SvgIconContainer extends React.Component {
+class SvgIconContainer extends Component {
   constructor(props) {
     super(props);
     this.size = this.props.size;
@@ -30,7 +30,7 @@ SvgIconContainer.propTypes = {
   flex: PropTypes.bool,
 };
 
-class SvgIcon extends React.Component {
+class SvgIcon extends Component {
   constructor(props) {
     super(props);
     this.containerClass = this.props.containerClass;

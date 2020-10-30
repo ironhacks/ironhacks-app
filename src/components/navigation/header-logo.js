@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import { NavButton } from './nav-button'
 
@@ -18,7 +18,7 @@ const IronHacksCenterLogo = styled('div')`
 `;
 
 
-class HeaderLogo extends React.Component {
+class HeaderLogo extends Component {
   constructor(props) {
     super(props);
     this.navMenuRef = props.navMenuref

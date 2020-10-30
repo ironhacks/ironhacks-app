@@ -1,8 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { SkillsTable } from '../../components/skills-table';
-import '../../styles/css/profile.css';
 import { ErrorBoundary } from '../../util';
 import { userMetrics } from '../../util/user-metrics'
 
@@ -20,18 +19,17 @@ function getHackName(hackId) {
     })
 }
 
-class TrainingKeyLink extends React.Component {
+class TrainingKeyLink extends Component {
   constructor(props) {
     super(props);
     this.state = {
       fileUrl: false,
     }
-    this.onResolve = this.onResolve.bind(this)
   }
 
-  onResolve(foundURL) {
+  onResolve = foundURL => {
     this.setState({fileUrl: foundURL});
-  }
+  };
 
   onReject(error) {
     // console.log('Training key file not found')
@@ -96,15 +94,12 @@ class TrainingKeyLink extends React.Component {
 }
 
 
-class RegisteredHackList extends React.Component {
+class RegisteredHackList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       registeredHacks: [],
     }
-
-    this.renderList = this.renderList.bind(this)
-    this.getHackList = this.getHackList.bind(this)
   }
 
   componentDidMount() {
@@ -113,7 +108,7 @@ class RegisteredHackList extends React.Component {
     }
   }
 
-  getHackList(hacks){
+  getHackList = hacks => {
     let result = [];
     hacks.forEach((item, i) => {
       result.push(getHackName(item))
@@ -123,9 +118,9 @@ class RegisteredHackList extends React.Component {
         registeredHacks: names
       })
     })
-  }
+  };
 
-  renderList() {
+  renderList = () => {
     return  (
       this.state.registeredHacks.map((item, index)=>(
         <li key={index}>
@@ -133,7 +128,7 @@ class RegisteredHackList extends React.Component {
         </li>
       ))
     )
-  }
+  };
 
   render() {
     return (
@@ -151,29 +146,33 @@ class RegisteredHackList extends React.Component {
 }
 
 
-class ProfileDemographicData extends React.Component {
-  render() {
-    return (
-      <div className="mb-2">
-        <MaterialDesignIcon name={this.props.icon}/>
-        <span> {this.props.title}: {this.props.label}</span>
-      </div>
-    )
-  }
-}
+const ProfileDemographicData = (
+  {
+    icon,
+    title,
+    label,
+  },
+) => {
+  return (
+    <div className="mb-2">
+      <MaterialDesignIcon name={icon}/>
+      <span> {title}: {label}</span>
+    </div>
+  );
+};
 
-
-
-
-class ProfileSocialAccounts extends React.Component {
-  render(){
-    return (
+const ProfileSocialAccounts = (
+  {
+    data,
+  },
+) => {
+  return (
     <div className="registered-hack-list">
       <h3 className="mt-6 h3 font-bold">
         Social
       </h3>
       <ul className="pl-2 fs-m2">
-        {this.props.data.map((item, index)=>(
+        {data.map((item, index)=>(
           <li key={index}>
             <MaterialDesignIcon iconClass="mx-1" name={item.name}/>
             <span style={{display: 'none', textTransform: 'capitalize'}}>{item.name}:</span>
@@ -182,12 +181,11 @@ class ProfileSocialAccounts extends React.Component {
         ))}
       </ul>
     </div>
-    )
-  }
-}
+  );
+};
 
 
-class ProfilePage extends React.Component {
+class ProfilePage extends Component {
   constructor(props) {
     super(props);
     this.state = {

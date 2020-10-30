@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import { MaterialDesignIcon } from '../icons/material-design-icon';
 
@@ -33,7 +33,7 @@ const ReactionCounter = styled('div')`
 `;
 
 
-class ReactionPicker extends React.Component {
+class ReactionPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,10 +42,6 @@ class ReactionPicker extends React.Component {
       isLiked: false,
       isDisliked: false,
     };
-    this.getScore = this.getScore.bind(this)
-    this.onVoteUp = this.onVoteUp.bind(this)
-    this.onVoteDown = this.onVoteDown.bind(this)
-    this.updateScore = this.updateScore.bind(this)
   }
 
   componentDidMount() {
@@ -53,7 +49,7 @@ class ReactionPicker extends React.Component {
   }
 
 
-  getScore(){
+  getScore = () => {
     if (this.props.reactions) {
       const { likes, dislikes } = this.props.reactions;
       const isVoteUp = likes.includes(this.props.user.uid);
@@ -65,9 +61,9 @@ class ReactionPicker extends React.Component {
         isDisliked: isVoteDown,
       });
     }
-  }
+  };
 
-  onVoteUp() {
+  onVoteUp = () => {
     let likes = this.state.likes;
     let dislikes =this.state.dislikes;
     let userID = this.props.user.uid;
@@ -92,9 +88,9 @@ class ReactionPicker extends React.Component {
       })
       this.updateScore()
     }
-  }
+  };
 
-  onVoteDown() {
+  onVoteDown = () => {
     let likes = this.state.likes;
     let dislikes =this.state.dislikes;
     let userID = this.props.user.uid;
@@ -119,9 +115,9 @@ class ReactionPicker extends React.Component {
       })
       this.updateScore()
     }
-  }
+  };
 
-  updateScore(event) {
+  updateScore = event => {
     this.props.docRef
       .update({
         reactions: {
@@ -129,7 +125,7 @@ class ReactionPicker extends React.Component {
           dislikes: this.state.dislikes,
         }
       })
-  }
+  };
 
 
   render() {

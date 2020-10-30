@@ -1,19 +1,14 @@
-import React from 'react';
+import { Component } from 'react';
 import Select from 'react-select';
 
-class InputSelect extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(value) {
+class InputSelect extends Component {
+  handleChange = value => {
     // let value = event.target.value;
     console.log('changed', value);
     if (this.props.onInputChange) {
       this.props.onInputChange(this.props.name, value);
     }
-  }
+  };
 
   render() {
     return (

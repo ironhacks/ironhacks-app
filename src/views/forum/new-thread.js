@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdown-editor';
 import {Loader} from '../../components/loader';
@@ -44,7 +44,7 @@ const TitleInput = styled('input')`
   margin-bottom: 10px;
 `;
 
-class NewThread extends React.Component {
+class NewThread extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,30 +60,26 @@ class NewThread extends React.Component {
     }
 
     this.firestore = window.firebase.firestore();
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.onEditorChange = this.onEditorChange.bind(this)
-    this.submitIsDisabled = this.submitIsDisabled.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  onEditorChange(markdown) {
+  onEditorChange = markdown => {
     this.setState({ markdown: markdown })
     this.submitIsDisabled()
-  }
+  };
 
   componentDidMount() {
 
   }
 
-  handleInputChange(event) {
+  handleInputChange = event => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
     this.setState({ [name]: value })
     this.submitIsDisabled();
-  }
+  };
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
     let hackId;
     const forumId = 'general';
@@ -125,7 +121,7 @@ class NewThread extends React.Component {
       .catch(function(error) {
         console.error('Error adding document: ', error);
       })
-  }
+  };
 
 
 
@@ -133,14 +129,14 @@ class NewThread extends React.Component {
     return window.btoa(unescape(encodeURIComponent(str)));
   }
 
-  submitIsDisabled() {
+  submitIsDisabled = () => {
     if (this.state.markdown === '' || this.state.title === '') {
       this.setState({submitDisabled: true});
       return true;
     } else {
       this.setState({submitDisabled: false});
     }
-  }
+  };
 
   render() {
     return (

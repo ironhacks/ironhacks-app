@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ReactionsView from './reaction-view';
 import ReactionPicker from './reaction-picker';
@@ -27,7 +27,7 @@ function PostPreviewAuthorImg({initials}){
   )
 }
 
-class PostPreview extends React.Component {
+class PostPreview extends Component {
   constructor(props) {
     super(props);
     const { authorName } = props.thread;
@@ -41,11 +41,9 @@ class PostPreview extends React.Component {
       authorName: authorName,
       authorFirstName: name[0],
     };
-
-    this.getComment = this.getComment.bind(this);
   }
 
-  getComment() {
+  getComment = () => {
     window.firebase.firestore()
       .collection('comments')
       .doc(this.props.thread.comments[0])
@@ -59,7 +57,7 @@ class PostPreview extends React.Component {
       .catch(function(error) {
         console.error('Error getting documents: ', error);
       })
-  }
+  };
 
   render() {
     return (
