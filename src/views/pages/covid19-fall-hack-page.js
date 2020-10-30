@@ -83,7 +83,7 @@ const UpcomingHackPage = () => {
       pageUrl="https://ironhacks.com/covid19-2020-fall"
     >
 
-      <Section sectionClass="bg-orange-lt4 py-5">
+      <Section sectionClass="bg-blue-lt1 py-5">
         <Row rowClass="mb-2">
           <Col colClass="text-center">
             <Img
