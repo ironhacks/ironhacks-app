@@ -7,7 +7,7 @@ const AboutSection = () => {
         <Col>
           <h2 className="h2 text-center my-2">WHAT ARE <span className="font-extrabold">IRONHACKS?</span></h2>
           <p>
-            IronHacks is an open data hacking program that combines experiential learning with real-world data-driven problem solving. During a 5-stage virtual competition, participants  utilize open data to create novel and useful interactive visualizations and analytic "apps" that solve civic challenges. 
+            IronHacks brings together a virtual hacking community who participate in high-energy IronHacks challenges. The IronHacks platform offers participants a no setup workspace and many powerful features. Participants get access to a Juypter Lab, BIG datasets, dashboards, tutorials  so that they can excel in data exploration, prediction and visualization.
           </p>
         </Col>
       </Row>

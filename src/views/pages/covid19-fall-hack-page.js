@@ -88,9 +88,9 @@ const UpcomingHackPage = () => {
           <Col colClass="text-center">
             <Img
               responsive={true}
-              baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
+              baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
               filePath={'media%2Fimg%2F'}
-              fileName={'upcoming-covid19-cta.png?alt=media&token=06c537fe-c97a-47dd-bbd8-ebf03ae0f4b9'}
+              fileName={'covid19-fall-hack-cta.png?alt=media&token=91d93297-57d2-48de-959a-06965c5bb8c9'}
               imgClass="banner_img mb-4"
               alt="Upcoming Hack"
             />
@@ -140,7 +140,7 @@ const UpcomingHackPage = () => {
             </p>
 
             <p>
-              For Fall 2020, we are launching our second hack and invite aspiring data scientists to join the IronHacks crowd in a COVID-19 Data Science Challenge to predict COVID-19 impacts and <a href="http://www.protect.purdue.edu">Protect Purdue!</a> This hack will directly inform the leadership team of the important Protect Purdue initiative to understand the impacts of the virus on our local campus and surrounding community.
+              For Fall 2020, we are launching our second hack and invite aspiring data scientists to join the IronHacks crowd in a COVID-19 Data Science Challenge to predict COVID-19 impacts and <a className="text-underline" href="http://www.protect.purdue.edu">Protect Purdue!</a> This hack will directly inform the leadership team of the important Protect Purdue initiative to understand the impacts of the virus on our local campus and surrounding community.
             </p>
 
             <p>
@@ -247,7 +247,7 @@ const UpcomingHackPage = () => {
             </h2>
 
             <p>
-              This IronHacks calls for the participation of all kinds of data scientists trained in various disciplines. Neither do you have to be a machine learning expert, nor do you have to be trained in epidemiology. We are calling on all of those people who are interested in using data to support information policy making - and helping governments and leaders like the Protect Purdue team in battling the pandemic. In particular, we encourage those who  have ane interest to learn and  iterate quickly over the multiphase hack. Basic knowledge of statistics as well as programming inPython and R is required. But even if you are a beginner or you feel a little rusty in Python or R, you should not shy away. You can use our tutorials to warm up.
+              This IronHacks calls for the participation of all kinds of data scientists trained in various disciplines. Neither do you have to be a machine learning expert, nor do you have to be trained in epidemiology. We are calling on all of those people who are interested in using data to support information policy making - and helping governments and leaders like the <a className="text-underline" href="http://www.protect.purdue.edu">Protect Purdue team</a> in battling the pandemic. In particular, we encourage those who  have ane interest to learn and  iterate quickly over the multiphase hack. Basic knowledge of statistics as well as programming in Python and R is required. But even if you are a beginner or you feel a little rusty in Python or R, you should not shy away. You can use our tutorials to warm up.
             </p>
 
           </Col>

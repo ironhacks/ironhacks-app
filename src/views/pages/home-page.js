@@ -1,59 +1,64 @@
 import { LandingPage, Section } from '../../components/layout';
-import {
-  AboutSection,
-  ExamplesSection,
-  ProcessSection,
-  FeaturesSection,
-  FooterSection,
-  HeroSection,
-  ShowcaseSection,
-  StatsSection,
-  SponsorsSection,
-  UpcomingSection,
-} from '../home';
+import { Home } from '../home';
 
+// {
+//   AboutSection,
+//   ExamplesSection,
+//   ProcessSection,
+//   FeaturesSection,
+//   FooterSection,
+//   HeroSection,
+//   ShowcaseSection,
+//   StatsSection,
+//   SponsorsSection,
+//   UpcomingSection,
+// }
 
 const HomePage = () => {
   return (
     <LandingPage pageClass="home_page">
       <Section id="hero" sectionClass="full-height bg-primary">
-        <HeroSection/>
+        <Home.HeroSection/>
       </Section>
 
       <Section id="home_about" sectionClass="py-4">
-        <AboutSection/>
+        <Home.AboutSection/>
       </Section>
 
       <Section id='home_features' sectionClass='features_section'>
-        <FeaturesSection/>
+        <Home.FeaturesSection/>
       </Section>
 
       <Section id="home_upcoming" sectionClass="bg-primary depth-5">
-        <UpcomingSection />
+        <Home.UpcomingSection />
       </Section>
 
       <Section id='home_process' sectionClass='process_section'>
-        <ProcessSection/>
+        <Home.ProcessSection/>
       </Section>
 
       <Section id='home_examples' sectionClass='bg-primary examples_section' >
-        <ExamplesSection/>
+        <Home.ExamplesSection/>
       </Section>
 
       <Section id='home_showcase' sectionClass='showcase_section' >
-        <ShowcaseSection/>
+        <Home.ShowcaseSection/>
       </Section>
 
       <Section id='home_stats' sectionClass='stats_section bg-primary' >
-        <StatsSection/>
+        <Home.StatsSection/>
       </Section>
 
       <Section id='home_sponsors' sectionClass='stats_section' >
-        <SponsorsSection/>
+        <Home.SponsorsSection/>
+      </Section>
+
+      <Section sectionClass='twitter_section' >
+        <Home.TwitterSection/>
       </Section>
 
       <Section id='home_footer' sectionClass='stats_section bg-black c-white' >
-        <FooterSection/>
+        <Home.FooterSection/>
       </Section>
     </LandingPage>
   )

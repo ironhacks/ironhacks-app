@@ -8,8 +8,9 @@ import { ShowcaseSection } from './showcase-section';
 import { StatsSection } from './stats-section';
 import { SponsorsSection } from './sponsors-section';
 import { UpcomingSection } from './upcoming-section';
+import { TwitterSection } from './twitter-section';
 
-export {
+const Home = {
   AboutSection ,
   ExamplesSection,
   FeaturesSection,
@@ -19,5 +20,8 @@ export {
   ShowcaseSection,
   StatsSection,
   SponsorsSection,
+  TwitterSection,
   UpcomingSection,
 }
+
+export { Home }
