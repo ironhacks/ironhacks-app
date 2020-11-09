@@ -585,13 +585,6 @@ img{
   user-drag:none;
 }
 
-button,
-.button{
-  user-select:none;
-  user-drag:none;
-  cursor:pointer;
-}
-
 h1{
   font-size:1em;
   line-height:1.25;

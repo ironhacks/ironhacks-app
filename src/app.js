@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/static/bootstrap-reboot.css'
 import './assets/static/bootstrap-grid.css'
 import './styles/charrismatic.min.css'
-import './styles/styles.css'
+import './styles/scss/styles.scss'
 
 class App extends Component {
   constructor(props) {

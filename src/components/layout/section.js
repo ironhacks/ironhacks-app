@@ -34,7 +34,7 @@ Section.defaultProps = {
 
 Section.propTypes = {
   id: PropTypes.string,
-  align: PropTypes.string,
+  align: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   sectionClass: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   containerClass: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   children: PropTypes.node.isRequired,
