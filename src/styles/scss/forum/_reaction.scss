@@ -1,0 +1,31 @@
+
+
+.reaction {
+  &_container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  &_button {
+    display: flex;
+    align-items: center;
+    border: 1px solid;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+
+    .reaction_count {
+      padding: 0 5px;
+      width: 24px;
+    }
+
+    &:hover {
+      background-color: #e2e0da;
+    }
+
+    &:last-child {
+      margin-left: 10px;
+    }
+  }
+}

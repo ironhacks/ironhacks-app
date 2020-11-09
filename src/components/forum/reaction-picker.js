@@ -1,166 +1,120 @@
-import { Component } from 'react';
-import styled from 'styled-components';
-import { MaterialDesignIcon } from '../icons/material-design-icon';
-
-const Reactions = styled('div')`
-  display: flex;
-  align-items: center;
-  height: 30px;
-  margin-left: auto;
-`;
-
-const ReactionCounter = styled('div')`
-  position: relative;
-  display: flex;
-  align-items: center;
-  border: 1px solid;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-  cursor: pointer;
-
-  span {
-    padding: 0 5px;
-    width: 24px;
-  }
-
-  &:hover {
-    background-color: #e2e0da;
-  }
-
-  &:last-child {
-    margin-left: 10px;
-  }
-`;
-
+import { Component } from 'react'
+import { ReactionButton } from './reaction-button'
 
 class ReactionPicker extends Component {
   constructor(props) {
     super(props);
+    const { likes, dislikes } = this.props.reactions;
+
     this.state = {
-      likes: [],
-      dislikes: [],
-      isLiked: false,
-      isDisliked: false,
-    };
-  }
-
-  componentDidMount() {
-    this.getScore();
-  }
-
-
-  getScore = () => {
-    if (this.props.reactions) {
-      const { likes, dislikes } = this.props.reactions;
-      const isVoteUp = likes.includes(this.props.user.uid);
-      const isVoteDown = dislikes.includes(this.props.user.uid);
-      this.setState({
-        likes: likes,
-        dislikes: dislikes,
-        isLiked: isVoteUp,
-        isDisliked: isVoteDown,
-      });
+      syncing: false,
+      likes: likes,
+      dislikes: dislikes,
+      isLiked:  likes.includes(this.props.user.uid),
+      isDisliked:  dislikes.includes(this.props.user.uid),
     }
-  };
+  }
 
   onVoteUp = () => {
+    if (this.state.syncing) { return false }
+
+    this.setState({syncing: true})
+
     let likes = this.state.likes;
-    let dislikes =this.state.dislikes;
+    let dislikes = this.state.dislikes;
     let userID = this.props.user.uid;
+    let isLiked = false
+    let isDisliked = false
 
     if (likes.includes(userID)) {
       likes = likes.filter((item)=>{ return item !== userID })
-      this.setState({
-        isLiked: false,
-        likes: likes,
-        isDisliked: false,
-        dislikes: dislikes,
-      })
-      this.updateScore()
     } else {
-      likes.push(userID);
+      isLiked = true
+      likes.push(userID)
       dislikes = dislikes.filter((item)=>{ return item !== userID })
-      this.setState({
-        isLiked: true,
-        likes: likes,
-        isDisliked: false,
-        dislikes: dislikes,
-      })
-      this.updateScore()
     }
-  };
+
+    this.setState({
+      isLiked: isLiked,
+      likes: likes,
+      isDisliked: isDisliked,
+      dislikes: dislikes,
+    })
+
+    this.updateScore({
+      likes: likes,
+      dislikes: dislikes,
+    })
+  }
 
   onVoteDown = () => {
-    let likes = this.state.likes;
-    let dislikes =this.state.dislikes;
-    let userID = this.props.user.uid;
+    if (this.state.syncing) { return false }
+
+    this.setState({syncing: true})
+
+    let likes = this.state.likes
+    let dislikes =this.state.dislikes
+    let userID = this.props.user.uid
+    let isLiked = false
+    let isDisliked = false
 
     if (dislikes.includes(userID)) {
       dislikes = dislikes.filter((item)=>{ return item !== userID })
-      this.setState({
-        isLiked: false,
-        likes: likes,
-        isDisliked: false,
-        dislikes: dislikes,
-      })
-      this.updateScore()
     } else {
-      dislikes.push(userID);
+      isDisliked = true
+      dislikes.push(userID)
       likes = likes.filter((item)=>{ return item !== userID })
-      this.setState({
-        isLiked: false,
-        likes: likes,
-        isDisliked: true,
-        dislikes: dislikes,
-      })
-      this.updateScore()
     }
-  };
 
-  updateScore = event => {
+    this.setState({
+      isLiked: isLiked,
+      likes: likes,
+      isDisliked: isDisliked,
+      dislikes: dislikes,
+    })
+
+    this.updateScore({
+      likes: likes,
+      dislikes: dislikes,
+    })
+  }
+
+  updateScore = (data) => {
     this.props.docRef
       .update({
         reactions: {
-          likes: this.state.likes,
-          dislikes: this.state.dislikes,
+          likes: data.likes,
+          dislikes: data.dislikes,
         }
+      }).then(()=>{
+        this.setState({syncing: false})
       })
-  };
+  }
 
 
   render() {
     return (
-      <Reactions>
+      <div className="reaction_container">
         {this.state.likes.length >= 0 && (
-          <ReactionCounter
-            onClick={this.onVoteUp}
-            active={this.state.isLiked}
-          >
-            <MaterialDesignIcon
-              name="thumb-up"
-              iconClass="pl-1 fs-1"
-              style={{ color: this.state.isLiked ? 'black' : 'gray' }}
-            />
-            <span id='likes'>{this.state.likes.length}</span>
-          </ReactionCounter>
+          <ReactionButton
+            type='upvote'
+            active={this.state.isliked}
+            count={this.state.likes.length}
+            onReact={this.onVoteUp}
+          />
         )}
 
         {this.state.dislikes.length >= 0 && (
-          <ReactionCounter
-            onClick={this.onVoteDown}
+          <ReactionButton
+            type='downvote'
             active={this.state.isDisliked}
-          >
-            <MaterialDesignIcon
-              name="thumb-down"
-              iconClass="pl-1 fs-1"
-              style={{ color: this.state.isDisliked ? 'black' : 'gray' }}
-              />
-            <span id='dislikes'>{this.state.dislikes.length}</span>
-          </ReactionCounter>
+            count={this.state.dislikes.length}
+            onReact={this.onVoteDown}
+          />
         )}
-      </Reactions>
+      </div>
     );
   }
 }
 
-export default ReactionPicker;
+export { ReactionPicker }

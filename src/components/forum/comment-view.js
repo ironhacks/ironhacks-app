@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { MdContentView } from '../markdown-viewer';
-import ReactionsView from './reaction-view';
-import ReactionPicker from './reaction-picker';
+import { CommentMeta } from './comment-meta';
+import { ReactionPicker } from './reaction-picker';
 import Separator from '../../util/separator';
 import { MaterialDesignIcon } from '../icons/material-design-icon';
 import Swal from 'sweetalert2';
@@ -33,22 +33,6 @@ function CommentBody({content}){
       encoded={true}
       content={content}
     />
-  )
-}
-
-
-function CommentFooter({user, data}){
-  return (
-    <div className='flex'>
-      <ReactionsView
-        commentData={data}
-      />
-      <ReactionPicker
-        reactions={data.reactions}
-        docRef={data.commentRef}
-        user={user}
-      />
-    </div>
   )
 }
 
@@ -116,40 +100,45 @@ class CommentView extends Component {
     }
 
     return (
-      <div className="depth-1 mb-2 p-2 bg-grey-lt3 relative">
-          <CommentHeader
-            adminPost={this.props.data.adminPost}
-            postAuthorName={this.props.data.authorName}
+      <div className="comment depth-1 bg-grey-lt3 relative">
+        <CommentHeader
+          adminPost={this.props.data.adminPost}
+          postAuthorName={this.props.data.authorName}
+        />
+
+        <Separator />
+
+        {this.props.data.author === this.state.user.uid && (
+          <div className="comment_controls">
+            <MaterialDesignIcon
+              name="edit"
+              iconClass="btn mr-2"
+              style={{display: 'none'}}
+              onClick={()=>{
+                console.log('click');
+              }}
+            />
+            <MaterialDesignIcon
+              name="delete"
+              iconClass="btn"
+              onClick={this.deleteComment}
+            />
+          </div>
+        )}
+
+        <CommentBody content={this.props.data.body} />
+
+        <div className='comment_footer'>
+          <CommentMeta
+            commentData={this.props.data}
           />
 
-          <Separator />
-
-          {this.props.data.author === this.state.user.uid && (
-            <div className="comment_controls">
-              <MaterialDesignIcon
-                name="edit"
-                iconClass="btn mr-2"
-                style={{display: 'none'}}
-                onClick={()=>{
-                  console.log('click');
-                }}
-              />
-              <MaterialDesignIcon
-                name="delete"
-                iconClass="btn"
-                onClick={this.deleteComment}
-              />
-            </div>
-          )}
-
-          <CommentBody content={this.props.data.body} />
-
-          <Separator />
-
-          <CommentFooter
-            data={this.props.data}
+          <ReactionPicker
+            reactions={this.props.data.reactions}
+            docRef={this.props.data.commentRef}
             user={this.state.user}
           />
+        </div>
       </div>
     )
   }

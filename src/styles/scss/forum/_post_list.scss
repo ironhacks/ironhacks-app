@@ -1,0 +1,28 @@
+.post_list {
+  width: 100%;
+  padding: 0 10%;
+  overflow-y: auto;
+  background-color: var(--light);
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .create_post_button {
+    padding: .5em 1em;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: var(--color-pink);
+    color: white;
+    transition: background-color 0.3s;
+    position: relative;
+
+    @media (max-width: 1300px) {
+      font-size: 12px;
+    }
+  }
+}
