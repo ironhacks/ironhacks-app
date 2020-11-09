@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { MaterialDesignIcon } from '../icons/material-design-icon';
+import PropTypes from 'prop-types'
 
 class InputText extends Component {
   handleChange = event => {
@@ -16,12 +16,6 @@ class InputText extends Component {
           htmlFor={this.props.name}
           className={`input_label ${this.props.labelClass}`}
           >
-          {this.props.icon && (
-            <MaterialDesignIcon
-              iconClass={`input_label__icon ${this.props.iconClass}`}
-              name={this.props.icon}
-            />
-          )}
           <span className="input_label__name">
             {this.props.label}
           </span>
@@ -50,6 +44,18 @@ InputText.defaultProps = {
   disabled: false,
   inputClass: '',
   containerClass: '',
+}
+
+InputText.propTypes = {
+  name: PropTypes.string,
+  value: PropTypes.string,
+  label: PropTypes.string,
+  containerClass: PropTypes.string,
+  labelClass: PropTypes.string,
+  inputClass: PropTypes.string,
+  disabled: PropTypes.bool,
+  required: PropTypes.bool,
+  onInputChange: PropTypes.func,
 }
 
 export { InputText }
