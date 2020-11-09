@@ -1,7 +1,11 @@
 import { Component } from 'react';
 import { OverlayLoaderContainer, Loader } from '../../components/loader';
 import Separator from '../../util/separator';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  // Redirect 
+} from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { Page, Section, Row, Col } from '../../components/layout';
 import { HackNav, HackPageBreadCrumbs } from '../../components/hacks';
@@ -11,13 +15,11 @@ import ThreadEditView from '../forum/post-edit-view';
 import NewThread from '../forum/new-thread';
 import { CountdownTimer } from '../../components/timer';
 
-const HackNavSection = (
-  {
+const HackNavSection = ({
     hackDisplayOptions,
     hackId,
     hackSlug,
-  },
-) => {
+  }) => {
   return (
     <Row>
       <Col>
@@ -45,10 +47,13 @@ class HackPage extends Component {
       activeView: 'task',
       loading: true,
       hackPhases: [],
-      hackTask: null,
-    };
+      defaultTask: null,
+    }
 
-    this.getHack(this.hackSlug);
+  }
+
+  componentDidMount(){
+    this.getHack(this.hackSlug)
   }
 
   getHack = async hackSlug => {
@@ -59,12 +64,12 @@ class HackPage extends Component {
 
     if (hacks.docs[0].exists) {
       let hackData = hacks.docs[0].data();
-      this.state.hackId = hacks.docs[0].id;
+      let hackId = hacks.docs[0].id;
 
       let upcomingEvent = this.getUpcomingHackEvent(hackData)
-
       this.setState({
-        hackId: hacks.docs[0].id,
+        hackId: hackId,
+        defaultTask: hackData.defaultTask,
         hackData: hackData,
         hackName: hackData.name,
         hackDisplayOptions: hackData.displayOptions,
@@ -75,7 +80,6 @@ class HackPage extends Component {
         hackBanner: hackData.hackBannerImg ? hackData.hackBannerImg : false,
         hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
         hackOverview: hackData.overview ? hackData.overview.doc : '',
-        hackTask: hackData.task,
         hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
         upcomingEvent: upcomingEvent,
       })
@@ -284,7 +288,7 @@ class HackPage extends Component {
                   userEmail={this.props.user.email}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
-                  task={this.state.hackTask}
+                  defaultTask={this.state.defaultTask}
                 />
                 </Section>
               </Route>
@@ -321,12 +325,11 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-            <Redirect push to={`/hacks/${this.hackSlug}`}/>
-
           </Switch>
       </Page>
       )
     }
 }
 
+// <Redirect push to={`/hacks/${this.hackSlug}`}/>
 export default withRouter(HackPage)
