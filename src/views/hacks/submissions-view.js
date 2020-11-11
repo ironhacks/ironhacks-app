@@ -129,32 +129,35 @@ class SubmissionsView extends Component {
         let userSubmitted = [];
         let submissions = [];
         let currentSubmission = null;
-        for (let submission of Object.values(submissionData)) {
-          submissions.push(submission);
-        }
+        if (submissionData) {
 
-        submissions.sort((a,b)=>{ return a.deadline.seconds - b.deadline.seconds })
-
-        for (let submission of submissions) {
-          if (fire2Ms(submission.deadline) < Date.now()){
-            submission.status = 'closed';
-          } else if (!currentSubmission) {
-            currentSubmission = fire2Ms(submission.deadline);
-            submission.status = 'current';
-          } else {
-            submission.status = 'upcoming';
+          for (let submission of Object.values(submissionData)) {
+            submissions.push(submission);
           }
 
-          userSubmitted.push(this.getUserSubmission(submission.submissionId))
-        }
+          submissions.sort((a,b)=>{ return a.deadline.seconds - b.deadline.seconds })
 
-        Promise.all(userSubmitted).then(result=>{
-          console.log('result', result);
-          this.setState({ userSubmitted: result })
-        })
-        this.setState({submissions: submissions});
-      })
-  };
+          for (let submission of submissions) {
+            if (fire2Ms(submission.deadline) < Date.now()){
+              submission.status = 'closed';
+            } else if (!currentSubmission) {
+              currentSubmission = fire2Ms(submission.deadline);
+              submission.status = 'current';
+            } else {
+              submission.status = 'upcoming';
+            }
+
+            userSubmitted.push(this.getUserSubmission(submission.submissionId))
+          }
+
+          Promise.all(userSubmitted).then(result=>{
+            this.setState({ userSubmitted: result })
+          })
+
+          this.setState({submissions: submissions});
+      }
+    })
+  }
 
   render() {
     return (

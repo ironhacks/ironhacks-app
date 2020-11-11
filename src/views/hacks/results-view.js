@@ -48,7 +48,7 @@ class ResultsView extends Component {
       currentSubmission: null,
       loading: true,
       finalResults: null,
-      submissions: null,
+      submissions: [],
     }
   }
 
@@ -85,7 +85,7 @@ class ResultsView extends Component {
 
     let resultsData = resultsSettingsDoc.data()
 
-    if (resultsData.content) {
+    if (resultsData && resultsData.content) {
       this.setState({resultsContent: resultsData.content})
     }
   };
@@ -116,6 +116,8 @@ class ResultsView extends Component {
   };
 
   async getSubmissionInfo() {
+    let submissions = []
+
     let submissionsDoc = await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -125,17 +127,17 @@ class ResultsView extends Component {
 
     let submissionsData = submissionsDoc.data();
 
-    let submissions = [];
+    if (submissionsData)  {
+      for (let submission of Object.keys(submissionsData)){
+        submissions.push(submissionsData[submission]);
+      }
 
-    for (let submission of Object.keys(submissionsData)){
-      submissions.push(submissionsData[submission]);
+      submissions.sort((a,b)=>{
+        return fire2Ms(a.deadline) - fire2Ms(b.deadline)
+      })
+
+      this.setState({submissions: submissions})
     }
-
-    submissions.sort((a,b)=>{
-      return fire2Ms(a.deadline) - fire2Ms(b.deadline)
-    })
-
-    this.setState({submissions: submissions})
   }
 
   getResultsFinal = async () => {
@@ -167,7 +169,12 @@ class ResultsView extends Component {
       adminList.push(item.id);
     })
 
-    let submissionId = this.state.submissions[this.state.selectedPhase].submissionId;
+    let submisison = this.state.submissions[this.state.selectedPhase]
+    if (! submisison) {
+      return false
+    }
+
+    let submissionId = submisison.submissionId;
 
     this.setState({currentSubmission:  submissionId})
 
@@ -180,6 +187,7 @@ class ResultsView extends Component {
       .get()
 
     let submissions = [];
+
     submissionsCollection.docs.forEach(doc=>{
       // REMOVE USER SUBMISSION FROM PEER SET
       if (doc.id === this.props.userId) {

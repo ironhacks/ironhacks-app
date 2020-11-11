@@ -6,7 +6,7 @@
 **/
 
 /*jshint bitwise: false*/
-/*eslint-disable no-bitwise,no-mixed-operators */
+/*eslint-disable no-bitwise*/
 const crc32 = function(r){
   for (var a,o=[],c=0;c<256;c++) {
     a=c;
@@ -21,7 +21,6 @@ const crc32 = function(r){
     return (-1 ^ n) >>> 0
   }
 }
-
-/*eslint-enable no-bitwise,no-mixed-operators */
+/*eslint-enable no-bitwise*/
 
 export { crc32 }

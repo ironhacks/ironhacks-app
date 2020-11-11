@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types'
 
 class InputCheckbox extends Component {
   handleChange = event => {
@@ -38,6 +39,17 @@ InputCheckbox.defaultProps = {
   labelClass: '',
   inputClass: '',
   disabled: false,
+}
+
+InputCheckbox.propTypes = {
+  name: PropTypes.string,
+  isChecked: PropTypes.bool,
+  label: PropTypes.string,
+  containerClass: PropTypes.string,
+  labelClass: PropTypes.string,
+  inputClass: PropTypes.string,
+  onInputChange: PropTypes.func,
+  disabled: PropTypes.bool,
 }
 
 export { InputCheckbox }

@@ -37,6 +37,10 @@ class CommentEditor extends Component {
       body: codedBody,
       createdAt: new Date(),
       postId: this.props.postId,
+      reactions: {
+        likes: [],
+        dislikes: [],
+      }
     }
 
     if (this.props.userIsAdmin){

@@ -67,14 +67,27 @@ const FooterSection = () => {
 
     <Row flex={true} rowClass={'py-2 fs-1 flex-align-center flex-wrap'}>
       <Col colClass='flex-1 min-w-350'>
-        <p>+1 765.494.0880</p>
-        <p>opendigital@purdue.edu</p>
+        <p>ironhacks.team@gmail.com</p>
         <p>Ernest C. Young Hall, Room 305<br/> 155 S. Grant St.<br/> West Lafayette, IN 47907</p>
         <p>Discovery Learning Research Center<br/>298 Nimitz Dr.<br/>West Lafayette, IN 47906</p>
         <p>
-          <a href="https://www.facebook.com/OpenDigitalPurdue/">
+          <a href="https://www.facebook.com/OpenDigitalPurdue" target="_blank">
             <MaterialDesignIcon
               name="facebook"
+            />
+          </a>
+
+          <a href="https://twitter.com/Purdue_RCODI" target="_blank">
+            <MaterialDesignIcon
+              iconClass="ml-3"
+              name="twitter"
+            />
+          </a>
+
+          <a href="mailto:ironhacks.team@gmail.com" target="_blank">
+            <MaterialDesignIcon
+              iconClass="ml-3"
+              name="email"
             />
           </a>
         </p>

@@ -1,9 +1,4 @@
-const HackTitle = (
-  {
-    hackName,
-    hackId,
-  },
-) => {
+const HackTitle = ({hackName, hackId}) => {
   return (
     <h2 className="pt-3">
       <span>{ hackName } </span>

@@ -1,6 +1,5 @@
 import { Component } from 'react';
-import ReactionsView from './reaction-view';
-// import ReactionPicker from './reaction-picker';
+import { PostMeta } from './post-meta';
 import Separator from '../../util/separator';
 import { MdContentView } from '../markdown-viewer';
 import { MaterialDesignIcon } from '../icons/material-design-icon';
@@ -128,11 +127,10 @@ class PostView extends Component {
 
         <Separator />
         <PostBody content={this.props.data.body} />
-        <Separator />
 
-        <div className='flex'>
-          <ReactionsView commentData={this.props.data} />
-        </div>
+        <PostMeta
+          commentData={this.props.data}
+        />
       </div>
     )
   }

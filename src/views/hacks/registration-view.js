@@ -10,7 +10,12 @@ class RegistrationView extends Component {
     this.state = {registerDisabled: false }
   }
 
+  componentDidMount() {
+    console.log('registration view');
+  }
+
   registerSuccess = () => {
+    console.log('register success');
     window.firebase.analytics()
       .logEvent('register_hack', {
         'value': this.props.hackSlug
@@ -18,9 +23,7 @@ class RegistrationView extends Component {
 
     userMetrics({
       event: 'register_hack',
-      data: {
-        hackId: this.props.hackId,
-      }
+      hackId: this.props.hackId,
     })
 
     window.location = `/hacks/${this.props.hackSlug}`;

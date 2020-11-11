@@ -1,15 +1,15 @@
-import { Component } from 'react';
-import { Link } from 'react-router-dom';
-import ReactionsView from './reaction-view';
-import ReactionPicker from './reaction-picker';
+import { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { MaterialDesignIcon } from '../icons'
 
-
-function ThreadLink({threadId, threadTitle, threadData}){
+function PostLink({threadId, threadTitle, threadData}){
   return (
     <Link
       to={{
         pathname: `forum/thread/${threadId}`,
-        state: { thread: threadData },
+        state: {
+          postData: threadData
+        }
       }}>
       {threadTitle}
     </Link>
@@ -40,24 +40,21 @@ class PostPreview extends Component {
       authorInitials: initials,
       authorName: authorName,
       authorFirstName: name[0],
-    };
+    }
   }
 
-  getComment = () => {
-    window.firebase.firestore()
+  componentDidMount() {
+    this.getCommentCount()
+  }
+
+  getCommentCount = async () => {
+    let commentSnap = await this.props.postRef
       .collection('comments')
-      .doc(this.props.thread.comments[0])
       .get()
-      .then((doc) => {
-        if (doc.exists) {
-          const commentData = doc.data();
-          this.setState({ commentData })
-        }
-      })
-      .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      })
-  };
+
+    let commentCount = commentSnap.docs.length
+    this.setState({ comments: commentCount })
+  }
 
   render() {
     return (
@@ -69,40 +66,36 @@ class PostPreview extends Component {
 
             <div>
               <h2>
-                <ThreadLink
+                <PostLink
                   threadId={this.props.postId}
                   threadTitle={this.props.postTitle}
                   threadData={this.props.thread}
                 />
               </h2>
-              <div>
+
+              <div className="post-preview__meta cl-grey-dk1">
+                <div className="post-comments">
+                  <span>
+                    {`${this.state.comments} ${this.state.comments > 1 ? 'comments' : 'comment'}`}
+                  </span>
+
+                </div>
+
+                <div className="bullet-spacer">
+                  &bull;
+                </div>
+
+                <span className='post-date'>
+                  <MaterialDesignIcon name="time"/>
+                  <span className="fs-m1">{this.props.postDate}</span>
+                </span>
+
+
                 <span className='post-author'>
                   by <em>{this.state.authorFirstName}</em>
                 </span>
-
-                <span className='post-date'>
-                  on <em>{this.props.postDate}</em>
-                </span>
               </div>
             </div>
-          </div>
-
-          <div className='stats'>
-            {this.state.commentData && (
-              <ReactionsView
-                commentId={this.props.thread.comments[0]}
-                totalComments={this.props.thread.comments.length}
-                commentData={this.state.commentData}
-              />
-            )}
-
-            {this.state.commentData && (
-              <ReactionPicker
-                commentData={this.state.commentData}
-                commentId={this.props.thread.comments[0]}
-                user={this.props.user}
-              />
-            )}
           </div>
         </div>
     )

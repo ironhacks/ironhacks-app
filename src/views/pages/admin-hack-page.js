@@ -55,36 +55,6 @@ class AdminHackPage extends Component {
       hackOverview: result.overview ? this.decodeDocument(result.overview.doc) : '',
       hackExtensions: result.extensions ? result.extensions : {},
     })
-  };
-
-  // HACK SURVEYS
-  // --------------------------------------------
-  updateQualtricsLinks = updatedHackData => {
-    this.setState({ loading: true })
-
-    const hackRef = window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.hackId)
-
-    hackRef.update({
-        phases: updatedHackData.phases,
-        registrationSurvey: updatedHackData.registrationSurvey || '',
-        postHackSurvey: updatedHackData.postHackSurvey || '',
-        quizzes: updatedHackData.quizzes || null,
-      })
-      .then(() => {
-        this.setState({
-          loading: false
-        })
-      })
-      .catch(function(error) {
-        console.error('Error adding document: ', error);
-      })
-  };
-
-  encodeDocument(str) {
-    let safeString = unescape(encodeURIComponent(str));
-    return window.btoa(safeString);
   }
 
   decodeDocument(enc) {
@@ -111,13 +81,14 @@ class AdminHackPage extends Component {
             hackId={this.hackId}
             items={[
               {name: 'Settings', path: 'settings'},
+              {name: 'Cohorts', path: 'cohorts'},
               {name: 'Registration', path: 'registration'},
               {name: 'Forums', path: 'forums'},
               {name: 'Overview', path: 'overview'},
               {name: 'Results', path: 'results'},
               {name: 'Rules', path: 'rules'},
               {name: 'Submissions', path: 'submissions'},
-              {name: 'Task', path: 'task'},
+              {name: 'Tasks', path: 'tasks'},
               {name: 'Tutorials', path: 'tutorials'},
               {name: 'Extensions', path: 'extensions'},
             ]}
@@ -151,6 +122,13 @@ class AdminHackPage extends Component {
                     />
                   </Route>
 
+                  <Route path={this.props.match.url + '/cohorts'}>
+                    <AdminHack.Cohorts
+                      hackId={this.hackId}
+                      hackData={this.state.hackData}
+                    />
+                  </Route>
+
                   <Route path={this.props.match.url + '/forums'}>
                     <AdminHack.Forum
                       hackId={this.hackId}
@@ -168,13 +146,27 @@ class AdminHackPage extends Component {
                     />
                   </Route>
 
-                  <Route path={this.props.match.url + '/task'}>
-                    <AdminHack.Task
+                  <Route exact path={this.props.match.url + '/tasks'}>
+                    <AdminHack.Tasks
+                      hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
+                      defaultTask={this.state.hackData.defaultTask}
+                    />
+                  </Route>
+
+                  <Route exact path={this.props.match.url + '/tasks/new'}>
+                    <AdminHack.TaskNew
                       hackId={this.state.hackId}
                       hackSlug={this.state.hackData.hackSlug}
                     />
                   </Route>
 
+                  <Route path={this.props.match.url + '/tasks/:taskId/edit'}>
+                    <AdminHack.TaskEdit
+                      hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
+                    />
+                  </Route>
 
                   <Route path={this.props.match.url + '/tutorials'}>
                     <AdminHack.Tutorial

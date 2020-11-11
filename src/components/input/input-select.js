@@ -1,10 +1,9 @@
 import { Component } from 'react';
 import Select from 'react-select';
+import PropTypes from 'prop-types'
 
 class InputSelect extends Component {
   handleChange = value => {
-    // let value = event.target.value;
-    console.log('changed', value);
     if (this.props.onInputChange) {
       this.props.onInputChange(this.props.name, value);
     }
@@ -12,10 +11,10 @@ class InputSelect extends Component {
 
   render() {
     return (
-      <div className={`input_field ${this.props.containerClass}`}>
+      <div className={['input_field', this.props.containerClass].join(' ').trim()}>
         <label
+          className={['input_label input_label__name', this.props.labelClass].join(' ').trim()}
           htmlFor={this.props.name}
-          className={`input_label input_label__name ${this.props.labelClass}`}
           >
             {this.props.label}
         </label>
@@ -32,7 +31,6 @@ class InputSelect extends Component {
   }
 }
 
-
 InputSelect.defaultProps = {
   name: '',
   label: '',
@@ -41,5 +39,19 @@ InputSelect.defaultProps = {
   containerClass: '',
   disabled: false,
 }
+
+InputSelect.propTypes = {
+  name: PropTypes.string,
+  label: PropTypes.string,
+  options: PropTypes.array,
+  value: PropTypes.object,
+  containerClass: PropTypes.string,
+  labelClass: PropTypes.string,
+  inputClass: PropTypes.string,
+  disabled: PropTypes.bool,
+  required: PropTypes.bool,
+  onInputChange: PropTypes.func,
+}
+
 
 export { InputSelect }

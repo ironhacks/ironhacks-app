@@ -62,7 +62,7 @@ const FeaturesSection = () => {
 
     <Row rowClass="card_row" flex={true}>
       {featureList.map((item, index)=>(
-        <Col colClass="card_col">
+        <Col key={index} colClass="card_col">
           <FeatureCard
             title={item.title}
             description={item.description}

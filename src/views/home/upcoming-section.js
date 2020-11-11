@@ -9,14 +9,14 @@ const UpcomingSection = () => {
         </h2>
         <Col colClass="text-center">
           <a href="/covid19" className="nohover">
-            <Img
-              responsive={true}
-              baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
-              filePath={'media%2Fimg%2F'}
-              fileName={'upcoming-covid19-cta.png?alt=media&token=06c537fe-c97a-47dd-bbd8-ebf03ae0f4b9'}
-              imgClass="banner_img"
-              alt="Upcoming Hack"
-            />
+          <Img
+            responsive={true}
+            baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
+            filePath={'media%2Fimg%2F'}
+            fileName={'covid19-fall-hack-cta.png?alt=media&token=91d93297-57d2-48de-959a-06965c5bb8c9'}
+            imgClass="banner_img mb-4"
+            alt="Upcoming Hack"
+          />
           </a>
         </Col>
       </Row>

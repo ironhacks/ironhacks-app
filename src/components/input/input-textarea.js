@@ -1,31 +1,21 @@
 import { Component } from 'react';
-
-
-// <InputText
-//   containerClass="flex py-1 flex-between flex-align-center"
-//   inputClass="mx-2 flex-1"
-//   labelClass="flex-1 h4 mb-0"
-//   name="files"
-//   label="Name"
-//   value={this.state.formData.name || ''}
-//   onInputChange={this.onFormDataChanged}
-// />
+import PropTypes from 'prop-types'
 
 class InputTextarea extends Component {
   handleChange = event => {
     let value = event.target.value;
     if (this.props.onInputChange) {
-      this.props.onInputChange(this.props.name, value);
+      this.props.onInputChange(this.props.name, value.trim());
     }
   };
 
   render() {
     return (
-      <div className={`input_field ${this.props.containerClass}`}>
+      <div className={['input_field', this.props.containerClass].join(' ').trim()}>
         {this.props.label && (
           <label
             htmlFor={this.props.name}
-            className={`input_label ${this.props.labelClass}`}
+            className={['input_label', this.props.labelClass].join(' ').trim()}
             >
             <span className="input_label__name">
               {this.props.label}
@@ -34,7 +24,7 @@ class InputTextarea extends Component {
         )}
 
         <textarea
-          className={`input text_input ${this.props.inputClass}`}
+          className={['input text_input', this.props.inputClass].join(' ').trim()}
           name={this.props.name}
           value={this.props.value}
           onChange={this.handleChange}
@@ -45,7 +35,6 @@ class InputTextarea extends Component {
   }
 }
 
-
 InputTextarea.defaultProps = {
   name: '',
   label: false,
@@ -53,6 +42,18 @@ InputTextarea.defaultProps = {
   inputClass: '',
   containerClass: '',
   disabled: false,
+}
+
+InputTextarea.propTypes = {
+  name: PropTypes.string,
+  value: PropTypes.string,
+  label: PropTypes.string,
+  containerClass: PropTypes.string,
+  labelClass: PropTypes.string,
+  inputClass: PropTypes.string,
+  disabled: PropTypes.bool,
+  required: PropTypes.bool,
+  onInputChange: PropTypes.func,
 }
 
 export { InputTextarea }

@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types'
 
 class InputNumber extends Component {
   handleChange = event => {
@@ -45,6 +46,18 @@ InputNumber.defaultProps = {
   disabled: false,
   min: 0,
   max: 99999,
+}
+
+InputNumber.propTypes = {
+  name: PropTypes.string,
+  value: PropTypes.number,
+  label: PropTypes.string,
+  containerClass: PropTypes.string,
+  labelClass: PropTypes.string,
+  inputClass: PropTypes.string,
+  disabled: PropTypes.bool,
+  required: PropTypes.bool,
+  onInputChange: PropTypes.func,
 }
 
 export { InputNumber }
