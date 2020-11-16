@@ -53,36 +53,5 @@
         text-align: center;
       }
     }
-
-    h3 {
-      &.super-cool-banner {
-        font-size: 20px;
-        text-align: center;
-        -webkit-animation-name: example;
-        -webkit-animation-duration: 4s;
-        animation-name: example;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-
-        @-webkit-keyframes example {
-          from {
-            color: red;
-          }
-          to {
-            color: yellow;
-          }
-        }
-
-        @keyframes example {
-          from {
-            color: #caa32a;
-          }
-          to {
-            color: red;
-          }
-        }
-      }
-    }
   }
 }

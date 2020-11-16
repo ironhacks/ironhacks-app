@@ -37,85 +37,54 @@ class ResultsView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      resultsContent: '',
-      resultStats: null,
-      userResults: null,
-      results: null,
+      currentSubmission: null,
+      cohorts: {},
+      cohortSettings: {},
+      finalResults: null,
+      loading: true,
       participantCount: null,
+      results: null,
+      resultsContent: '',
+      resultsPublished: {},
+      resultStats: null,
       section: 'scores',
       selectedPhase: 0,
       submissionData: null,
-      currentSubmission: null,
-      loading: true,
-      finalResults: null,
       submissions: [],
+      userResults: null,
     }
   }
 
   componentDidMount() {
-    this.getSubmissionInfo()
-    this.getParticipantsList()
     this.getResultsContent()
+    this.getSubmissionInfo()
+    this.getCohorts()
+    this.getParticipantsList()
     this.getHackResults()
 
     // TODO: if all submissions are closed then check
     this.getResultsFinal()
   }
 
-  onPhaseSelection = (phase, submissionId) => {
-    this.setState({selectedPhase: phase});
-    if (phase === 'final') {
-      // this.getResultsFinal();
-    } else {
-      this.getHackResults();
-    }
-  };
-
-  updateSection = id => {
-    this.setState({section: id});
-  };
-
   getResultsContent = async () => {
-    let resultsSettingsDoc = await window.firebase.firestore()
+    let doc = await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('results')
       .doc('settings')
       .get()
 
-    let resultsData = resultsSettingsDoc.data()
+    let data = doc.data()
 
-    if (resultsData && resultsData.content) {
-      this.setState({resultsContent: resultsData.content})
+    if (data) {
+      this.setState({
+        resultsContent: data.content,
+        resultsPublished: data.isPublished || {},
+      })
     }
-  };
+  }
 
-  getParticipantsList = async () => {
-    let participantsDoc = await window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('registration')
-      .doc('participants')
-      .get()
-
-    let participantsData = participantsDoc.data();
-
-    let participants = {};
-
-    for (let participant of Object.keys(participantsData)){
-      participants[participant] = {
-        userId: participant,
-        alias: participantsData[participant].alias,
-        ref: participantsData[participant].ref,
-      }
-    }
-
-    this.setState({
-      participants: participants,
-    })
-  };
-
-  async getSubmissionInfo() {
+  getSubmissionInfo = async () => {
     let submissions = []
 
     let submissionsDoc = await window.firebase.firestore()
@@ -140,6 +109,63 @@ class ResultsView extends Component {
     }
   }
 
+  getCohorts = async () => {
+    let cohortListDoc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('registration')
+      .doc('cohorts')
+      .get()
+
+    let cohortList = cohortListDoc.data()
+    this.setState({cohorts: cohortList})
+
+    let cohortSettingsDoc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('registration')
+      .doc('settings')
+      .get()
+
+    let cohortSettings = cohortSettingsDoc.data()
+    this.setState({cohortSettings: cohortSettings})
+  }
+
+  getParticipantsList = async () => {
+    let participants = {}
+
+    let doc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('registration')
+      .doc('participants')
+      .get()
+
+    let data = doc.data();
+
+    for (let participant of Object.keys(data)){
+      participants[participant] = {
+        userId: participant,
+        alias: data[participant].alias,
+        ref: data[participant].ref,
+      }
+    }
+
+    this.setState({
+      participants: participants,
+    })
+  };
+
+
+  onPhaseSelection = (phase, submissionId) => {
+    this.setState({selectedPhase: phase});
+    if (phase === 'final') {
+      // this.getResultsFinal();
+    } else {
+      this.getHackResults();
+    }
+  };
+
   getResultsFinal = async () => {
     let finalDoc = await window.firebase.firestore()
       .collection('hacks')
@@ -149,7 +175,6 @@ class ResultsView extends Component {
       .get()
 
     if (finalDoc.exists) {
-      console.log('final', finalDoc);
       let finalData = finalDoc.data();
       this.setState({finalResults: finalData})
     } else {
@@ -289,7 +314,7 @@ class ResultsView extends Component {
 
                 <ResultsSectionSelector
                   selected={this.state.section}
-                  callback={this.updateSection}
+                  callback={id=>this.setState({section: id})}
                   sections={[
                     {name: 'scores', label: 'Your Scores', disabled: this.state.selectedPhase === 'final' ? true : false},
                     {name: 'peers', label: 'You Peers', disabled: this.state.selectedPhase === 'final' ? true : false},
@@ -306,6 +331,7 @@ class ResultsView extends Component {
                 </h3>
 
                 <ResultsSubmissionSelector
+                  resultsPublished={this.state.resultsPublished}
                   phases={this.state.submissions}
                   finalResults={this.state.finalResults}
                   selectedPhase={this.state.selectedPhase}
@@ -391,7 +417,7 @@ class ResultsView extends Component {
 
             <MdContentView
               content={this.state.resultsContent}
-              encoded={true}
+              encoded={false}
               emptyText="Results Doc not available yet."
             />
           </div>
