@@ -37,6 +37,7 @@ class AdminHackSelectPage extends Component {
       <Page
         user={this.props.user}
         userIsAdmin={this.props.userIsAdmin}
+        pageClass="admin-hack-select"
       >
         <Section sectionClass="py-2">
           <Row>

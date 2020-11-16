@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import Separator from '../../util/separator.js';
+import { AdminImageUpload } from '../../components/admin'
 import {
   InputText,
   InputCheckbox,
@@ -41,15 +41,22 @@ class AdminHackSettings extends Component {
     } = props.hackData;
 
     let defaultDisplayOptions = {
-      forumEnabled: false,
       calendarEnabled: false,
-      taskEnabled: false,
-      tutorialEnabled: false,
-      resultsEnabled: false,
+      forumEnabled: false,
       rulesEnabled: false,
+      taskEnabled: false,
       submissionsEnabled: false,
-      quizEnabled: false,
+      resultsEnabled: false,
+      tutorialsEnabled: false,
     }
+
+    // NOTE: Some display options are moving
+    // to dedicated pages and should not be
+    // controlled from this interface
+    this.excludeDisplayOptions = [
+      'taskEnabled',
+      'quizEnabled',
+    ]
 
     let parsedDate = startDate;
     if (startDate.seconds) {
@@ -65,60 +72,52 @@ class AdminHackSettings extends Component {
       registrationSurvey: registrationSurvey || '',
       hackPublished: hackPublished || false,
       hackBannerImg: hackBannerImg || '',
+      hackBannerUpload: null,
+      hackThumbImg: hackThumbImg || '',
+      hackThumbUpload: null,
       hackName: name || '',
       hackDifficulty: difficulty || null,
       hackDescription: description || '',
       hackSlug: hackSlug || '',
-      hackThumbImg: hackThumbImg || '',
       syncing: false,
       submitDisabled: false,
       startDate: startDate ? parsedDate : new Date(),
     }
   }
 
+  onInputChange = (name, value) => {
+    this.setState({[name]: value})
+  }
+
+  onBannerFileAdded = (file) => {
+    this.setState({hackBannerUpload: file[0]})
+    this.uploadBannerFile()
+  }
+
+  onThumbFileAdded = (file) => {
+    this.setState({hackThumbUpload: file[0]})
+    this.uploadThumbFile()
+  }
+
   onHackStartDateChanged = value => {
     this.setState({startDate: value})
-  };
-
-  onHackBannerImgChanged = (name, value) => {
-    this.setState({hackBannerImg: value})
-  };
-
-  onHackThumbImgChanged = (name, value) => {
-    this.setState({hackThumbImg: value})
-  };
+  }
 
   onHackDifficultyChanged = (name, value) => {
     this.setState({hackDifficulty: value})
-  };
-
-  onRegistrationSurveyChanged = (name, value) => {
-    console.log(name, value);
-    this.setState({registrationSurvey: value})
-  };
-
-  onHackNameChanged = (name, value) => {
-    this.setState({hackName: value})
-  };
-
-  onHackDescriptionChanged = (name, value) => {
-    this.setState({hackDescription: value})
-  };
-
-  onHackSlugChanged = (name, value) => {
-    this.setState({hackSlug: value})
-  };
+  }
 
   onDisplayOptionsChanged = (name, value) => {
     let display = this.state.displayOptions;
     display[name] = value;
     this.setState({displayOptions: display})
-  };
+  }
 
   onRegistrationOpenChanged = (name, value) => {
     if (this.state.syncing) {
       return false;
     }
+
     this.setState({syncing: true})
 
     window.firebase.firestore()
@@ -131,7 +130,7 @@ class AdminHackSettings extends Component {
           syncing: false,
         })
       })
-  };
+  }
 
   onHackPublishedChanged = (name, value) => {
     if (this.state.syncing) {
@@ -149,7 +148,71 @@ class AdminHackSettings extends Component {
           syncing: false
         })
       })
-  };
+  }
+
+  uploadBannerFile = () => {
+    if (!this.state.hackBannerUpload) {
+      return false
+    }
+
+    this.setState({
+      submitDisabled: true,
+      syncing: true,
+    })
+
+    var storageRef = window.firebase.storage().ref()
+    var bannerImageRef = storageRef.child(`/media/hacks/${this.props.hackId}/${this.state.hackBannerUpload.name}`)
+
+    bannerImageRef
+      .put(this.state.hackBannerUpload)
+      .then((snapshot) => {
+        snapshot.ref.getDownloadURL().then(downloadURL=>{
+          window.firebase.firestore()
+            .collection('hacks')
+            .doc(this.props.hackId)
+            .set({hackBannerImg: downloadURL}, {merge: true})
+            .then(()=>{
+              this.setState({
+                hackBannerImg: downloadURL,
+                submitDisabled: false,
+                syncing: false,
+              })
+            })
+      })
+    })
+  }
+
+  uploadThumbFile = () => {
+    if (!this.state.hackThumbUpload) {
+      return false
+    }
+
+    this.setState({
+      submitDisabled: true,
+      syncing: true,
+    })
+
+    var storageRef = window.firebase.storage().ref()
+    var bannerImageRef = storageRef.child(`/media/hacks/${this.props.hackId}/${this.state.hackThumbUpload.name}`)
+
+    bannerImageRef
+      .put(this.state.hackThumbUpload)
+      .then((snapshot) => {
+        snapshot.ref.getDownloadURL().then(downloadURL=>{
+          window.firebase.firestore()
+            .collection('hacks')
+            .doc(this.props.hackId)
+            .set({hackThumbImg: downloadURL}, {merge: true})
+            .then(()=>{
+              this.setState({
+                hackThumbImg: downloadURL,
+                submitDisabled: false,
+                syncing: false,
+              })
+            })
+      })
+    })
+  }
 
   submitSettings = () => {
     if (this.state.syncing) {
@@ -192,17 +255,16 @@ class AdminHackSettings extends Component {
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
-      .update({
+      .set({
         description: hackDescription,
         difficulty: hackDifficulty,
         displayOptions: displayOptions,
-        hackBannerImg: hackBannerImg,
         hackSlug: hackSlug,
         hackThumbImg: hackThumbImg,
         name: hackName,
         registrationSurvey: registrationSurvey,
         startDate: startDate.toISOString(),
-      })
+      }, {merge: true})
       .then(() => {
         this.setState({
           displayOptions: displayOptions,
@@ -214,177 +276,202 @@ class AdminHackSettings extends Component {
           hackThumbImg: hackThumbImg,
           registrationSurvey: registrationSurvey,
           startDate: startDate,
+          updateComplete: true,
           submitDisabled: false,
           syncing: false,
         })
-        window.location.reload();
       })
   };
 
   render() {
     return (
       <>
-        <h2>
-          {this.props.hack.name} Settings
-        </h2>
-
-        <Separator primary />
-
-        <Section sectionClass="py-2">
-          <InputText
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-3"
-            labelClass="flex-1"
-            name="hack_name"
-            label="Name"
-            value={this.state.hackName || ''}
-            onInputChange={this.onHackNameChanged}
-          />
-
-          <InputText
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-3"
-            labelClass="flex-1"
-            name="hack_slug"
-            label="Slug"
-            value={this.state.hackSlug || ''}
-            onInputChange={this.onHackSlugChanged}
-          />
-
-          <InputSelect
-            name="hack_dificulty"
-            containerClass="flex align-items-center"
-            labelClass="mr-2"
-            inputClass="flex-1"
-            label="Dificulty"
-            value={this.state.hackDifficulty}
-            options={[
-              {label: 'Beginner', name: 'beginner'},
-              {label: 'Intermediate', name: 'intermediate'},
-              {label: 'Advanced', name: 'advanced'},
-            ]}
-            onInputChange={this.onHackDifficultyChanged}
-          />
-
-          <InputTextarea
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-3"
-            labelClass="flex-1"
-            name="hack_description"
-            label="Description"
-            value={this.state.hackDescription || ''}
-            onInputChange={this.onHackDescriptionChanged}
-          />
-
-
-          <InputText
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-2"
-            labelClass="flex-1"
-            name="hackRegistration"
-            label="Registration Survey"
-            icon="image"
-            iconClass="pl-1 pr-2"
-            value={this.state.registrationSurvey}
-            onInputChange={this.onRegistrationSurveyChanged}
-          />
-
-
-          <h3 className="h3 py-2">
-            Hack Media
-          </h3>
-
-          <InputText
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-2"
-            labelClass="flex-1"
-            name="hack_banner"
-            label="Hack Banner Image URL"
-            icon="image"
-            iconClass="pl-1 pr-2"
-            value={this.state.hackBannerImg || ''}
-            onInputChange={this.onHackBannerImgChanged}
-          />
-
-          <InputText
-            containerClass="flex py-1 flex-between"
-            inputClass="mx-2 flex-2"
-            labelClass="flex-1"
-            name="hack_thumb"
-            label="Hack Image Thumbnail"
-            icon="image"
-            iconClass="pl-1 pr-2"
-            value={this.state.hackThumbImg || ''}
-            onInputChange={this.onHackThumbImgChanged}
-          />
-
-          <h2 className="h2 pt-3">
-            Hack Options
+        <Section sectionClass="pt-2">
+          <h2 className="h3">
+            {this.props.hack.name} Settings
           </h2>
 
-          <InputCheckbox
-            label="Hack Published"
-            name="hackPublished"
-            onInputChange={this.onHackPublishedChanged}
-            isChecked={this.state.hackPublished}
-            disabled={this.state.syncing}
+          <AdminImageUpload
+            disabled={this.state.submissionDisabled}
+            onFilesChanged={this.onBannerFileAdded}
+            initialImage={this.state.hackBannerImg}
+            maxFiles={1}
           />
 
-          <InputCheckbox
-            label="Registration Open"
-            name="registrationOpen"
-            onInputChange={this.onRegistrationOpenChanged}
-            isChecked={this.state.registrationOpen}
-            disabled={this.state.syncing}
+          <InputText
+            containerClass="mb-1 flex"
+            inputClass="fs-m3 font-bold flex-1"
+            labelClass="hide"
+            name="hackBannerImg"
+            label="Hack Banner Image Url"
+            disabled={true}
+            value={this.state.hackBannerImg || ''}
+            onInputChange={this.onInputChange}
           />
-
-          <h3 className="h3 my-2" style={{verticalAlign: 'center'}}>
-            Display Options
-          </h3>
-
-          {Object.keys(this.state.displayOptions).map((key, index)=>(
-            <InputCheckbox
-              key={index}
-              label={upperCaseWord(key.replace('Enabled', ' Enabled'))}
-              name={key}
-              onInputChange={this.onDisplayOptionsChanged}
-              isChecked={this.state.displayOptions[key]}
-              disabled={this.state.syncing}
-            />
-          ))}
         </Section>
 
-        <Section sectionClass="py-2">
-          <div className="flex align-content-center py-2">
-            <h3 className="h3 my-0 mr-2" style={{verticalAlign: 'center'}}>
-              Start Date
-            </h3>
-
-            <DatePicker
-              selected={this.state.startDate}
-              onChange={this.onHackStartDateChanged}
-              showTimeSelect
-              timeFormat="HH:mm"
-              dateFormat="MMMM d, yyyy h:mm aa"
-              timeCaption="time"
-              timeIntervals={60}
-            />
-          </div>
-
-
+        <Section sectionClass="pt-2">
+          <InputText
+            containerClass="flex py-1 flex-between"
+            inputClass="ml-2 pl-1 flex-3"
+            labelClass="flex-1"
+            name="hackName"
+            label="Name"
+            value={this.state.hackName || ''}
+            onInputChange={this.onInputChange}
+          />
+          <InputText
+            containerClass="flex py-1 flex-between"
+            inputClass="ml-2 pl-1 flex-3"
+            labelClass="flex-1"
+            name="hackSlug"
+            label="Slug"
+            value={this.state.hackSlug || ''}
+            onInputChange={this.onInputChange}
+          />
+          <InputTextarea
+            containerClass="flex py-1 flex-between"
+            inputClass="ml-2 pl-1 flex-3"
+            labelClass="flex-1"
+            name="hackDescription"
+            label="Description"
+            value={this.state.hackDescription || ''}
+            onInputChange={this.onInputChange}
+          />
         </Section>
 
         <Section>
-          <Row rowClass="flex justify-content-center bg-grey-lt2 py-4 mr-5 mb-5">
-            <button
-              className="btn btn- bg-primary px-8"
-              onClick={this.submitSettings}
-              disabled={this.state.submitDisabled}
-            >
-              Submit
-            </button>
-          </Row>
-        </Section>
+          <div className="flex  mt-2 flex-1">
+            <div className="flex-0 pr-2">
+              <h3 className="h4 py-2 font-bold">
+                Hack Media
+              </h3>
+
+              <AdminImageUpload
+                disabled={this.state.submissionDisabled}
+                onFilesChanged={this.onThumbFileAdded}
+                initialImage={this.state.hackThumbImg}
+                containerClass='dropzone_container max-w-100 fs-m5'
+                infoText='Thumb Image'
+                infoSize='100 x 100'
+                maxFiles={1}
+              />
+
+              <InputText
+                containerClass="fs-m5 font-bold"
+                inputClass="max-w-100"
+                labelClass="hide"
+                name="hackThumbImg"
+                label="Hack Image Thumbnail"
+                disabled={true}
+                value={this.state.hackThumbImg || ''}
+                onInputChange={this.onInputChange}
+              />
+            </div>
+
+            <div className="pl-10 flex-1">
+              <h3 className="h4 py-2 font-bold mb-1">
+                Hack Options
+              </h3>
+
+              <InputCheckbox
+                label="Hack Published"
+                name="hackPublished"
+                containerClass=""
+                onInputChange={this.onHackPublishedChanged}
+                isChecked={this.state.hackPublished}
+                disabled={this.state.syncing}
+              />
+
+              <InputCheckbox
+                label="Registration Open"
+                name="registrationOpen"
+                onInputChange={this.onRegistrationOpenChanged}
+                isChecked={this.state.registrationOpen}
+                disabled={this.state.syncing}
+              />
+
+              <div className="flex flex-align-center">
+                <h3 className="h4 pr-2 my-0">
+                  Opening Date
+                </h3>
+
+                <DatePicker
+                  className='fs-m2'
+                  selected={this.state.startDate}
+                  onChange={this.onHackStartDateChanged}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  dateFormat="MMMM d, yyyy h:mm aa"
+                  timeCaption="time"
+                  timeIntervals={60}
+                />
+              </div>
+            </div>
+
+            <div className="flex-1">
+              <h3 className="h4 py-2 font-bold mb-1">
+                Display Options
+              </h3>
+              <div className="fs-m1 px-3 pt-2 bg-grey-lt2">
+                {Object.keys(this.state.displayOptions).map((key, index)=>{
+                  if (!this.excludeDisplayOptions.includes(key)) {
+                    return (
+                      <InputCheckbox
+                        key={index}
+                        label={upperCaseWord(key.replace('Enabled', ' Enabled'))}
+                        name={key}
+                        onInputChange={this.onDisplayOptionsChanged}
+                        isChecked={this.state.displayOptions[key]}
+                        disabled={this.state.syncing}
+                      />
+                    )
+                  }
+                })}
+              </div>
+            </div>
+        </div>
+      </Section>
+
+      <Section sectionClass="pt-2">
+        <InputText
+          containerClass="flex py-1 flex-between"
+          inputClass="ml-2 pl-1 flex-3"
+          labelClass="flex-1"
+          name="registrationSurvey"
+          label="Registration Survey"
+          icon="image"
+          iconClass="pl-1 pr-2"
+          value={this.state.registrationSurvey}
+          onInputChange={this.onInputChange}
+        />
+        <InputSelect
+          name="hack_dificulty"
+          containerClass="flex align-items-center"
+          inputClass="ml-1 flex-3"
+          labelClass="flex-1"
+          label="Dificulty"
+          value={this.state.hackDifficulty}
+          onInputChange={this.onHackDifficultyChanged}
+          options={[
+            {label: 'Beginner', name: 'beginner'},
+            {label: 'Intermediate', name: 'intermediate'},
+            {label: 'Advanced', name: 'advanced'},
+          ]}
+        />
+      </Section>
+
+      <Section>
+        <Row rowClass="flex justify-content-center bg-grey-lt2 py-3 mb-10 mt-2">
+          <button
+            className="btn btn- bg-primary px-8"
+            onClick={this.submitSettings}
+            disabled={this.state.submitDisabled}
+          >
+            Submit
+          </button>
+        </Row>
+      </Section>
       </>
     )
   }

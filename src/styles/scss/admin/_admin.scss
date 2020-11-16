@@ -1,0 +1,28 @@
+.admin-page {
+  .breadcrumb {
+    margin-bottom: 0;
+  }
+}
+
+.admin-hack-content {
+  width: 100%;
+}
+
+.admin-actions-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    height: 50px;
+}
+
+.admin_hack_card_list {
+  margin-top: 1em;
+}
+
+.admin_results_editor {
+  height: 500px;
+  background: #333638;
+  color: #CFD2D1;
+  overflow: auto;
+}

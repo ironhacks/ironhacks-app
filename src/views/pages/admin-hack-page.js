@@ -151,6 +151,7 @@ class AdminHackPage extends Component {
                       hackId={this.state.hackId}
                       hackSlug={this.state.hackData.hackSlug}
                       defaultTask={this.state.hackData.defaultTask}
+                      displayOptions={this.state.hackData.displayOptions || false}
                     />
                   </Route>
 
@@ -168,20 +169,38 @@ class AdminHackPage extends Component {
                     />
                   </Route>
 
-                  <Route path={this.props.match.url + '/tutorials'}>
-                    <AdminHack.Tutorial
-                      previousDocument={this.state.hackTutorial}
+                  <Route exact path={this.props.match.url + '/tutorials'}>
+                    <AdminHack.Tutorials
                       hackId={this.state.hackId}
                       hackSlug={this.state.hackData.hackSlug}
                     />
                   </Route>
 
-                  <Route path={this.props.match.url + '/results'}>
-                    <AdminHack.Results
-                      previousDocument={this.state.hackRules}
+                  <Route path={this.props.match.url + '/tutorials/new'}>
+                    <AdminHack.TutorialNew
                       hackId={this.state.hackId}
                       hackSlug={this.state.hackData.hackSlug}
-                      userId={this.props.user.userId}
+                    />
+                  </Route>
+
+                  <Route path={this.props.match.url + '/tutorials/:tutorialId/edit'}>
+                    <AdminHack.TutorialEdit
+                      hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
+                    />
+                  </Route>
+
+                  <Route exact path={this.props.match.url + '/results'}>
+                    <AdminHack.Results
+                      hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
+                    />
+                  </Route>
+
+                  <Route path={this.props.match.url + '/results/:submissionId'}>
+                    <AdminHack.ResultsEditor
+                      hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
                     />
                   </Route>
 
@@ -195,6 +214,13 @@ class AdminHackPage extends Component {
 
                   <Route exact path={this.props.match.url + '/submissions'}>
                     <AdminHack.Submissions
+                      hackData={this.state.hack}
+                      hackId={this.state.hackId}
+                    />
+                  </Route>
+
+                  <Route exact path={this.props.match.url + '/submissions/new'}>
+                    <AdminHack.SubmissionNew
                       hackData={this.state.hack}
                       hackId={this.state.hackId}
                     />

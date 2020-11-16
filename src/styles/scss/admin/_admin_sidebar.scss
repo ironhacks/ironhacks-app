@@ -1,25 +1,23 @@
-.admin-page {
-  .breadcrumb {
-    margin-bottom: 0;
-  }
-}
-
-.admin-hack-content {
-  width: 100%;
-}
-
-.admin-actions-container {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    height: 50px;
-}
-
 .admin-sidebar {
   max-height: 100%;
-  border-right: 1px solid black;
-  overflow: auto;
+  min-height: calc(100vh - 50px);
+  position: relative;
+  z-index: 0;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 100%;
+    min-height: calc(100vh - 50px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(45deg, rgba(0,0,0,1), rgba(255,255,255,.2));
+  }
+
+  .nav-item {
+    position: relative;
+  }
 
   .admin-sidebar__item:hover,
   .active .admin-sidebar__item {
@@ -52,8 +50,4 @@
       }
     }
   }
-}
-
-.admin_hack_card_list {
-  margin-top: 1em;
 }

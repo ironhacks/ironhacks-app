@@ -7,7 +7,7 @@ class InputSelect extends Component {
     if (this.props.onInputChange) {
       this.props.onInputChange(this.props.name, value);
     }
-  };
+  }
 
   render() {
     return (
@@ -22,6 +22,7 @@ class InputSelect extends Component {
         <Select
           className={this.props.inputClass}
           options={this.props.options}
+          name={this.props.name}
           value={this.props.value}
           onChange={this.handleChange}
           isDisabled={this.props.disabled}
@@ -32,7 +33,7 @@ class InputSelect extends Component {
 }
 
 InputSelect.defaultProps = {
-  name: '',
+  name: 'input_select',
   label: '',
   labelClass: '',
   inputClass: '',

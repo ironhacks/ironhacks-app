@@ -4,11 +4,9 @@ import { AdminRegisteredUserList } from '../../components/admin';
 import { fire2Date } from '../../util/date-utils'
 import { downloadFileData } from '../../util/download-file-data'
 
-
 class AdminHackRegistration extends Component {
   constructor(props) {
     super(props);
-
 
     this.state = {
       data: '',
@@ -21,7 +19,6 @@ class AdminHackRegistration extends Component {
       taskSelect: [],
     }
   }
-
 
   componentDidMount() {
     this.getRegistrationSettings()
