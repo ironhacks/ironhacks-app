@@ -129,5 +129,5 @@
     "styles:dev": "npm run styles:build && node-sass --output-style compressed -w -r -o src/styles src/styles/scss",
     "test": "react-scripts test -env=jsdom"
   },
-  "version": "2.2.2"
+  "version": "2.2.3"
 }
