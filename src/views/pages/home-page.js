@@ -56,7 +56,7 @@ const HomePage = () => {
         <TwitterSection/>
       </Section>
 
-      <Section id='home_footer' sectionClass='stats_section bg-black c-white' >
+      <Section id='home_footer' sectionClass='stats_section bg-black cl-white' >
         <FooterSection/>
       </Section>
     </LandingPage>
