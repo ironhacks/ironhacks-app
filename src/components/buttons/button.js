@@ -13,4 +13,4 @@ const Button = styled('button')`
   border: none;
 `
 
-export default Button
+export { Button }

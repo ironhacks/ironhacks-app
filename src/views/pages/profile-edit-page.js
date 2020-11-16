@@ -1,10 +1,10 @@
 import { Component } from 'react';
+import { withRouter } from 'react-router-dom'
 import { Page, Section, Row, Col } from '../../components/layout';
 import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
 import { InputText, InputNumber } from '../../components/input';
 import Select from 'react-select';
 import { userMetrics } from '../../util/user-metrics'
-
 import {
   COUNTRY_CODES,
   EDUCATION_STATUS,
@@ -78,17 +78,17 @@ class ProfileEditPage extends Component {
           let exp = Object.assign({},
             this.state.formData.programmingExperience,
             data.profileData.programmingExperience,
-          );
+          )
 
           let soc = Object.assign({},
             this.state.formData.socialMedia,
             data.profileData.socialMedia,
-          );
+          )
 
           let dem = Object.assign({},
             this.state.formData.demographicData,
             data.profileData.demographicData,
-          );
+          )
 
           this.setState({
             formData: {
@@ -105,6 +105,11 @@ class ProfileEditPage extends Component {
   }
 
   updateProfileData = () => {
+    let urlSearch = new URLSearchParams(this.props.location.search)
+    let isNewUser = urlSearch.get('newuser')
+
+    console.log('is new user', isNewUser);
+
     window.firebase.firestore()
       .collection('users')
       .doc(this.props.user.uid)
@@ -112,12 +117,16 @@ class ProfileEditPage extends Component {
         profileData: this.state.formData
       })
       .then(()=>{
-        console.log('success');
         window.firebase.analytics().logEvent('update_profile')
         userMetrics({event: 'update_profile'})
-        window.location = '/profile';
+
+        if (isNewUser) {
+          this.props.history.push('/hacks')
+        } else {
+          this.props.history.push('/profile')
+        }
       })
-  };
+  }
 
   socialInputChanged = (name, value) => {
       let social = this.state.formData.socialMedia;
@@ -129,7 +138,7 @@ class ProfileEditPage extends Component {
           socialMedia : social,
         }
       })
-  };
+  }
 
   experienceInputChanged = (name, value) => {
     let experience = this.state.formData.programmingExperience;
@@ -140,7 +149,7 @@ class ProfileEditPage extends Component {
         programmingExperience : experience,
       }
     })
-  };
+  }
 
   demographicSelectInputChanged = (name, data) => {
     let demographic = this.state.formData.demographicData;
@@ -151,7 +160,7 @@ class ProfileEditPage extends Component {
         demographicData : demographic,
       },
     })
-  };
+  }
 
   demographicTextInputChange = (name, data) => {
     let demographic = this.state.formData.demographicData;
@@ -160,9 +169,9 @@ class ProfileEditPage extends Component {
       formData: {
         ...this.state.formData,
         demographicData : demographic,
-      },
+      }
     })
-  };
+  }
 
   render() {
     return (
@@ -318,7 +327,7 @@ class ProfileEditPage extends Component {
               {PROGRAMING_LANGUAGES.map((item, index)=>(
                 <InputNumber
                   containerClass="flex py-1 flex-between"
-                  value={this.state.formData.programmingExperience[item.value] || ''}
+                  value={this.state.formData.programmingExperience[item.value] || 0}
                   inputClass="mx-2 flex-1"
                   key={index}
                   label={item.label}
@@ -349,5 +358,4 @@ class ProfileEditPage extends Component {
   }
 }
 
-
-export default ProfileEditPage;
+export default withRouter(ProfileEditPage)

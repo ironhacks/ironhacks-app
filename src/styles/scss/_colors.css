@@ -1,7 +1,3 @@
-.bg-absolute_zero{ background-color:#0048ba !important; }
-.bg-alien_armpit{ background-color:#84de02 !important; }
-.bg-alloy_orange{ background-color:#c46210 !important; }
-.bg-almond{ background-color:#eed9c4 !important; }
 .bg-amber-ac1{ background-color:#ffe57f !important; }
 .bg-amber-ac2{ background-color:#ffd740 !important; }
 .bg-amber-ac3{ background-color:#ffc400 !important; }
@@ -15,34 +11,6 @@
 .bg-amber-lt3{ background-color:#ffe082 !important; }
 .bg-amber-lt4{ background-color:#ffecb3 !important; }
 .bg-amber-lt5{ background-color:#fff8e1 !important; }
-.bg-amber{ background-color:#ffc107 !important; }
-.bg-amethyst{ background-color:#64609a !important; }
-.bg-antique_brass{ background-color:#c88a65 !important; }
-.bg-apricot{ background-color:#fdd5b1 !important; }
-.bg-aquamarine{ background-color:#95e0e8 !important; }
-.bg-asparagus{ background-color:#7ba05b !important; }
-.bg-atomic_tangerine{ background-color:#ff9966 !important; }
-.bg-aztec_gold{ background-color:#c39953 !important; }
-.bg-baby_powder{ background-color:#fefefa !important; }
-.bg-banana_mania{ background-color:#fbe7b2 !important; }
-.bg-banana{ background-color:#ffd12a !important; }
-.bg-baseball_mitt_burnt_sienna{ background-color:#e97451 !important; }
-.bg-bdazzled_blue{ background-color:#2e5894 !important; }
-.bg-beaver{ background-color:#926f5b !important; }
-.bg-big_dip_o_ruby{ background-color:#9c2542 !important; }
-.bg-big_foot_feet{ background-color:#e88e5a !important; }
-.bg-bittersweet_shimmer{ background-color:#bf4f51 !important; }
-.bg-bittersweet{ background-color:#fe6f5e !important; }
-.bg-black_shadows{ background-color:#bfafb2 !important; }
-.bg-black{ background-color:#000000 !important; }
-.bg-black{ background-color:#000000 !important; }
-.bg-blast_off_bronze{ background-color:#a57164 !important; }
-.bg-blizzard_blue{ background-color:#50bfe6 !important; }
-.bg-blue_bell{ background-color:#9999cc !important; }
-.bg-blue_i{ background-color:#4997d0 !important; }
-.bg-blue_ii{ background-color:#4570e6 !important; }
-.bg-blue_iii{ background-color:#0066ff !important; }
-.bg-blue_jeans{ background-color:#5dadec !important; }
 .bg-blue-ac1{ background-color:#82b1ff !important; }
 .bg-blue-ac2{ background-color:#448aff !important; }
 .bg-blue-ac3{ background-color:#2979ff !important; }
@@ -51,72 +19,11 @@
 .bg-blue-dk2{ background-color:#1976d2 !important; }
 .bg-blue-dk3{ background-color:#1565c0 !important; }
 .bg-blue-dk4{ background-color:#0d47a1 !important; }
-.bg-blue-gray{ background-color:#c8c8cd !important; }
-.bg-blue-green{ background-color:#0095b7 !important; }
-.bg-blue-grey-dk1{ background-color:#546e7a !important; }
-.bg-blue-grey-dk2{ background-color:#455a64 !important; }
-.bg-blue-grey-dk3{ background-color:#37474f !important; }
-.bg-blue-grey-dk4{ background-color:#263238 !important; }
-.bg-blue-grey-lt1{ background-color:#78909c !important; }
-.bg-blue-grey-lt2{ background-color:#90a4ae !important; }
-.bg-blue-grey-lt3{ background-color:#b0bec5 !important; }
-.bg-blue-grey-lt4{ background-color:#cfd8dc !important; }
-.bg-blue-grey-lt5{ background-color:#eceff1 !important; }
-.bg-blue-grey{ background-color:#607d8b !important; }
 .bg-blue-lt1{ background-color:#42a5f5 !important; }
 .bg-blue-lt2{ background-color:#64b5f6 !important; }
 .bg-blue-lt3{ background-color:#90caf9 !important; }
 .bg-blue-lt4{ background-color:#bbdefb !important; }
 .bg-blue-lt5{ background-color:#e3f2fd !important; }
-.bg-blue-violet{ background-color:#6456b7 !important; }
-.bg-blue{ background-color:#2196f3 !important; }
-.bg-blueberry{ background-color:#4f86f7 !important; }
-.bg-blush{ background-color:#db5079 !important; }
-.bg-booger_buster{ background-color:#dde26a !important; }
-.bg-brick_red{ background-color:#c62d42 !important; }
-.bg-bright_yellow{ background-color:#ffaa1d !important; }
-.bg-brilliant_rose{ background-color:#e667ce !important; }
-.bg-brown_sugar{ background-color:#af6e4d !important; }
-.bg-brown-dk1{ background-color:#6d4c41 !important; }
-.bg-brown-dk2{ background-color:#5d4037 !important; }
-.bg-brown-dk3{ background-color:#4e342e !important; }
-.bg-brown-dk4{ background-color:#3e2723 !important; }
-.bg-brown-lt1{ background-color:#8d6e63 !important; }
-.bg-brown-lt2{ background-color:#a1887f !important; }
-.bg-brown-lt3{ background-color:#bcaaa4 !important; }
-.bg-brown-lt4{ background-color:#d7ccc8 !important; }
-.bg-brown-lt5{ background-color:#efebe9 !important; }
-.bg-brown{ background-color:#795548 !important; }
-.bg-brown{ background-color:#af593e !important; }
-.bg-bubble_bath_tickle_me_pink{ background-color:#fc80a5 !important; }
-.bg-bubble_gum{ background-color:#ffd3f8 !important; }
-.bg-burnished_brown{ background-color:#a17a74 !important; }
-.bg-burnt_orange{ background-color:#ff7f49 !important; }
-.bg-burnt_sienna{ background-color:#e97451 !important; }
-.bg-burnt_umber{ background-color:#805533 !important; }
-.bg-cadet_blue{ background-color:#a9b2c3 !important; }
-.bg-canary{ background-color:#ffff99 !important; }
-.bg-caribbean_green{ background-color:#00cc99 !important; }
-.bg-carmine{ background-color:#e62e6b !important; }
-.bg-carnation_pink{ background-color:#ffa6c9 !important; }
-.bg-cedar_chest{ background-color:#c95a49 !important; }
-.bg-celestial_blue{ background-color:#7070cc !important; }
-.bg-cerise{ background-color:#da3287 !important; }
-.bg-cerulean_blue{ background-color:#339acc !important; }
-.bg-cerulean_frost{ background-color:#6d9bc3 !important; }
-.bg-cerulean{ background-color:#02a4d3 !important; }
-.bg-charcoal_gray{ background-color:#736a62 !important; }
-.bg-cherry{ background-color:#da2647 !important; }
-.bg-chocolate{ background-color:#bd8260 !important; }
-.bg-cinnamon_satin{ background-color:#cd607e !important; }
-.bg-citrine{ background-color:#933709 !important; }
-.bg-cobalt_blue{ background-color:#8c90c8 !important; }
-.bg-coconut{ background-color:#fefefe !important; }
-.bg-copper_penny{ background-color:#ad6f69 !important; }
-.bg-copper{ background-color:#da8a67 !important; }
-.bg-cornflower{ background-color:#93ccea !important; }
-.bg-cosmic_cobalt{ background-color:#2e2d88 !important; }
-.bg-cotton_candy{ background-color:#ffb7d5 !important; }
 .bg-cyan-ac1{ background-color:#84ffff !important; }
 .bg-cyan-ac2{ background-color:#18ffff !important; }
 .bg-cyan-ac3{ background-color:#00e5ff !important; }
@@ -131,11 +38,6 @@
 .bg-cyan-lt4{ background-color:#b2ebf2 !important; }
 .bg-cyan-lt5{ background-color:#e0f7fa !important; }
 .bg-cyan{ background-color:#00bcd4 !important; }
-.bg-cyber_grape{ background-color:#58427c !important; }
-.bg-daffodil{ background-color:#ffff31 !important; }
-.bg-dandelion{ background-color:#fed85d !important; }
-.bg-dark_venetian_red{ background-color:#b33b24 !important; }
-.bg-deep_space_sparkle{ background-color:#4a646c !important; }
 .bg-deep-orange-ac1{ background-color:#ff9e80 !important; }
 .bg-deep-orange-ac2{ background-color:#ff6e40 !important; }
 .bg-deep-orange-ac3{ background-color:#ff3d00 !important; }
@@ -164,41 +66,6 @@
 .bg-deep-purple-lt4{ background-color:#d1c4e9 !important; }
 .bg-deep-purple-lt5{ background-color:#ede7f6 !important; }
 .bg-deep-purple{ background-color:#673ab7 !important; }
-.bg-denim_blue{ background-color:#2243b6 !important; }
-.bg-denim{ background-color:#1560bd !important; }
-.bg-desert_sand{ background-color:#edc9af !important; }
-.bg-dingy_dungeon{ background-color:#c53151 !important; }
-.bg-dirt{ background-color:#9b7653 !important; }
-.bg-earthworm_brick_red{ background-color:#c62d42 !important; }
-.bg-eerie_black{ background-color:#1b1b1b !important; }
-.bg-eggplant{ background-color:#614051 !important; }
-.bg-electric_lime{ background-color:#ccff00 !important; }
-.bg-emerald{ background-color:#14a989 !important; }
-.bg-english_vermilion{ background-color:#cc474b !important; }
-.bg-eucalyptus{ background-color:#44d7a8 !important; }
-.bg-fern{ background-color:#63b76c !important; }
-.bg-fiery_rose{ background-color:#ff5470 !important; }
-.bg-flower_shop_wisteria{ background-color:#c9a0dc !important; }
-.bg-forest_green{ background-color:#5fa777 !important; }
-.bg-fresh_air_sky_blue{ background-color:#76d7ea !important; }
-.bg-fresh_air{ background-color:#a6e7ff !important; }
-.bg-frostbite{ background-color:#e936a7 !important; }
-.bg-fuchsia{ background-color:#c154c1 !important; }
-.bg-fuzzy_wuzzy{ background-color:#87421f !important; }
-.bg-gargoyle_gas{ background-color:#ffdf46 !important; }
-.bg-giants_club{ background-color:#b05c52 !important; }
-.bg-glossy_grape{ background-color:#ab92b3 !important; }
-.bg-gold_fusion{ background-color:#85754e !important; }
-.bg-gold_i{ background-color:#92926e !important; }
-.bg-gold_ii{ background-color:#e6be8a !important; }
-.bg-goldenrod{ background-color:#fcd667 !important; }
-.bg-grandmas_perfume_orange{ background-color:#ff8833 !important; }
-.bg-granite_gray{ background-color:#676767 !important; }
-.bg-granny_smith_apple{ background-color:#9de093 !important; }
-.bg-grape{ background-color:#6f2da8 !important; }
-.bg-gray{ background-color:#8b8680 !important; }
-.bg-green_lizard{ background-color:#a7f432 !important; }
-.bg-green_sheen{ background-color:#6eaea1 !important; }
 .bg-green-ac1{ background-color:#b9f6ca !important; }
 .bg-green-ac2{ background-color:#69f0ae !important; }
 .bg-green-ac3{ background-color:#00e676 !important; }
@@ -213,9 +80,6 @@
 .bg-green-lt3{ background-color:#a5d6a7 !important; }
 .bg-green-lt4{ background-color:#c8e6c9 !important; }
 .bg-green-lt5{ background-color:#e8f5e9 !important; }
-.bg-green-yellow{ background-color:#f1e788 !important; }
-.bg-green{ background-color:#3aa655 !important; }
-.bg-green{ background-color:#4caf50 !important; }
 .bg-grey-dk1{ background-color:#757575 !important; }
 .bg-grey-dk2{ background-color:#616161 !important; }
 .bg-grey-dk3{ background-color:#424242 !important; }
@@ -225,11 +89,6 @@
 .bg-grey-lt3{ background-color:#eeeeee !important; }
 .bg-grey-lt4{ background-color:#f5f5f5 !important; }
 .bg-grey-lt5{ background-color:#fafafa !important; }
-.bg-grey{ background-color:#9e9e9e !important; }
-.bg-heat_wave{ background-color:#ff7a00 !important; }
-.bg-hot_magenta{ background-color:#ff00cc !important; }
-.bg-illuminating_emerald{ background-color:#319177 !important; }
-.bg-inchworm{ background-color:#afe313 !important; }
 .bg-indian_red{ background-color:#b94e48 !important; }
 .bg-indigo-ac1{ background-color:#8c9eff !important; }
 .bg-indigo-ac2{ background-color:#536dfe !important; }
@@ -244,27 +103,7 @@
 .bg-indigo-lt3{ background-color:#9fa8da !important; }
 .bg-indigo-lt4{ background-color:#c5cae9 !important; }
 .bg-indigo-lt5{ background-color:#e8eaf6 !important; }
-.bg-indigo{ background-color:#3f51b5 !important; }
 .bg-indigo{ background-color:#4f69c6 !important; }
-.bg-inherit{ background-color:inherit !important; }
-.bg-jade{ background-color:#469a84 !important; }
-.bg-jasper{ background-color:#d05340 !important; }
-.bg-jazzberry_jam{ background-color:#a50b5e !important; }
-.bg-jelly_bean{ background-color:#da614e !important; }
-.bg-jungle_green{ background-color:#29ab87 !important; }
-.bg-koala_tree_jungle_green{ background-color:#29ab87 !important; }
-.bg-lapis_lazuli{ background-color:#436cb9 !important; }
-.bg-laser_lemon{ background-color:#ffff66 !important; }
-.bg-lavender_i{ background-color:#bf8fcc !important; }
-.bg-lavender_ii{ background-color:#fbaed2 !important; }
-.bg-leather_jacket{ background-color:#253529 !important; }
-.bg-lemon_glacier{ background-color:#fdff00 !important; }
-.bg-lemon_yellow{ background-color:#ffff9f !important; }
-.bg-lemon{ background-color:#ffff38 !important; }
-.bg-licorice{ background-color:#1a1110 !important; }
-.bg-light_blue{ background-color:#8fd8d8 !important; }
-.bg-light_chrome_green{ background-color:#bee64b !important; }
-.bg-light_venetian_red{ background-color:#e6735c !important; }
 .bg-lightblue-ac1{ background-color:#80d8ff !important; }
 .bg-lightblue-ac2{ background-color:#40c4ff !important; }
 .bg-lightblue-ac3{ background-color:#00b0ff !important; }
@@ -293,8 +132,6 @@
 .bg-lightgreen-lt4{ background-color:#dcedc8 !important; }
 .bg-lightgreen-lt5{ background-color:#f1f8e9 !important; }
 .bg-lightgreen{ background-color:#8bc34a !important; }
-.bg-lilac_luster{ background-color:#ae98aa !important; }
-.bg-lilac{ background-color:#db91ef !important; }
 .bg-lime-ac1{ background-color:#f4ff81 !important; }
 .bg-lime-ac2{ background-color:#eeff41 !important; }
 .bg-lime-ac3{ background-color:#c6ff00 !important; }
@@ -308,62 +145,7 @@
 .bg-lime-lt3{ background-color:#e6ee9c !important; }
 .bg-lime-lt4{ background-color:#f0f4c3 !important; }
 .bg-lime-lt5{ background-color:#f9fbe7 !important; }
-.bg-lime{ background-color:#b2f302 !important; }
 .bg-lime{ background-color:#cddc39 !important; }
-.bg-lumber{ background-color:#ffe4cd !important; }
-.bg-macaroni_and_cheese{ background-color:#ffb97b !important; }
-.bg-madder_lake{ background-color:#cc3336 !important; }
-.bg-magenta{ background-color:#f653a6 !important; }
-.bg-magic_mint{ background-color:#aaf0d1 !important; }
-.bg-magic_potion{ background-color:#ff4466 !important; }
-.bg-mahogany{ background-color:#ca3435 !important; }
-.bg-maize{ background-color:#f2c649 !important; }
-.bg-malachite{ background-color:#469496 !important; }
-.bg-manatee{ background-color:#8d90a1 !important; }
-.bg-mango_tango{ background-color:#e77200 !important; }
-.bg-maroon{ background-color:#c32148 !important; }
-.bg-mauvelous{ background-color:#f091a9 !important; }
-.bg-maximum_blue_green{ background-color:#30bfbf !important; }
-.bg-maximum_blue_purple{ background-color:#acace6 !important; }
-.bg-maximum_blue{ background-color:#47abcc !important; }
-.bg-maximum_green_yellow{ background-color:#d9e650 !important; }
-.bg-maximum_green{ background-color:#5e8c31 !important; }
-.bg-maximum_purple{ background-color:#733380 !important; }
-.bg-maximum_red_purple{ background-color:#a63a79 !important; }
-.bg-maximum_red{ background-color:#d92121 !important; }
-.bg-maximum_yellow_red{ background-color:#f2ba49 !important; }
-.bg-maximum_yellow{ background-color:#fafa37 !important; }
-.bg-medium_chrome_green{ background-color:#6ca67c !important; }
-.bg-medium_rose{ background-color:#d96cbe !important; }
-.bg-medium_violet{ background-color:#8f47b3 !important; }
-.bg-melon{ background-color:#febaad !important; }
-.bg-metallic_seaweed{ background-color:#0a7e8c !important; }
-.bg-metallic_sunburst{ background-color:#9c7c38 !important; }
-.bg-middle_blue_green{ background-color:#8dd9cc !important; }
-.bg-middle_blue_purple{ background-color:#8b72be !important; }
-.bg-middle_blue{ background-color:#7ed4e6 !important; }
-.bg-middle_green_yellow{ background-color:#acbf60 !important; }
-.bg-middle_green{ background-color:#4d8c57 !important; }
-.bg-middle_purple{ background-color:#d982b5 !important; }
-.bg-middle_red_purple{ background-color:#a55353 !important; }
-.bg-middle_red{ background-color:#e58e73 !important; }
-.bg-middle_yellow_red{ background-color:#ecb176 !important; }
-.bg-middle_yellow{ background-color:#ffeb00 !important; }
-.bg-midnight_blue{ background-color:#00468c !important; }
-.bg-misty_moss{ background-color:#bbb477 !important; }
-.bg-moonstone{ background-color:#3aa8c1 !important; }
-.bg-mountain_meadow{ background-color:#1ab385 !important; }
-.bg-mulberry{ background-color:#c8509b !important; }
-.bg-mummys_tomb{ background-color:#828e84 !important; }
-.bg-mystic_maroon{ background-color:#ad4379 !important; }
-.bg-navy_blue{ background-color:#0066cc !important; }
-.bg-neon_carrot{ background-color:#ff9933 !important; }
-.bg-new_car{ background-color:#214fc6 !important; }
-.bg-none{ background-color:none !important; }
-.bg-ogre_odor{ background-color:#fd5240 !important; }
-.bg-olive_green{ background-color:#b5b35c !important; }
-.bg-onyx{ background-color:#353839 !important; }
-.bg-orange_soda{ background-color:#fa5b3d !important; }
 .bg-orange-ac1{ background-color:#ffd180 !important; }
 .bg-orange-ac2{ background-color:#ffab40 !important; }
 .bg-orange-ac3{ background-color:#ff9100 !important; }
@@ -378,29 +160,29 @@
 .bg-orange-lt4{ background-color:#ffe0b2 !important; }
 .bg-orange-lt5{ background-color:#fff3e0 !important; }
 .bg-orange-red{ background-color:#ff5349 !important; }
-.bg-orange-yellow{ background-color:#f8d568 !important; }
-.bg-orange{ background-color:#ff8833 !important; }
-.bg-orange{ background-color:#ff8866 !important; }
 .bg-orange{ background-color:#ff9800 !important; }
-.bg-orchid{ background-color:#e29cd2 !important; }
-.bg-outer_space{ background-color:#2d383a !important; }
-.bg-outrageous_orange{ background-color:#ff6037 !important; }
-.bg-pacific_blue{ background-color:#009dc4 !important; }
-.bg-peach{ background-color:#ffcba4 !important; }
-.bg-peach{ background-color:#ffd0b9 !important; }
-.bg-pearly_purple{ background-color:#b768a2 !important; }
-.bg-peridot{ background-color:#abad48 !important; }
-.bg-periwinkle{ background-color:#c3cde6 !important; }
-.bg-permanent_geranium_lake{ background-color:#e12c2c !important; }
-.bg-pet_shop_brown{ background-color:#af593e !important; }
-.bg-pewter_blue{ background-color:#8ba8b7 !important; }
-.bg-pig_pink{ background-color:#fdd7e4 !important; }
-.bg-pine_green{ background-color:#01786f !important; }
-.bg-pine_tree_pine_green{ background-color:#01786f !important; }
-.bg-pine{ background-color:#45a27d !important; }
-.bg-pink_flamingo{ background-color:#fc74fd !important; }
-.bg-pink_pearl{ background-color:#b07080 !important; }
-.bg-pink_sherbert{ background-color:#f7a38e !important; }
+.bg-yellow-ac1{ background-color:#ffff8d !important; }
+.bg-yellow-ac2{ background-color:#ffff00 !important; }
+.bg-yellow-ac3{ background-color:#ffea00 !important; }
+.bg-yellow-ac4{ background-color:#ffd600 !important; }
+.bg-yellow-dk1{ background-color:#fdd835 !important; }
+.bg-yellow-dk2{ background-color:#fbc02d !important; }
+.bg-yellow-dk3{ background-color:#f9a825 !important; }
+.bg-yellow-dk4{ background-color:#f57f17 !important; }
+.bg-yellow-green{ background-color:#c5e17a !important; }
+.bg-yellow-lt1{ background-color:#ffee58 !important; }
+.bg-yellow-lt2{ background-color:#fff176 !important; }
+.bg-yellow-lt3{ background-color:#fff59d !important; }
+.bg-yellow-lt4{ background-color:#fff9c4 !important; }
+.bg-yellow-lt5{ background-color:#fffde7 !important; }
+.bg-yellow{ background-color:#ffeb3b !important; }
+
+.bg-black{ background-color:#000000 !important; }
+.bg-blue{ background-color:#2196f3 !important; }
+
+.bg-gray{ background-color:#8b8680 !important; }
+.bg-green{ background-color:#4caf50 !important; }
+
 .bg-pink-ac1{ background-color:#ff80ab !important; }
 .bg-pink-ac2{ background-color:#ff4081 !important; }
 .bg-pink-ac3{ background-color:#f50057 !important; }
@@ -415,15 +197,7 @@
 .bg-pink-lt4{ background-color:#f8bbd0 !important; }
 .bg-pink-lt5{ background-color:#fce4ec !important; }
 .bg-pink{ background-color:#e91e63 !important; }
-.bg-pixie_powder{ background-color:#391285 !important; }
-.bg-plum{ background-color:#8e3179 !important; }
-.bg-plump_purple{ background-color:#5946b2 !important; }
-.bg-polished_pine{ background-color:#5da493 !important; }
-.bg-princess_perfume{ background-color:#ff85cf !important; }
-.bg-purple_heart{ background-color:#652dc1 !important; }
-.bg-purple_mountains_majesty{ background-color:#d6aedd !important; }
-.bg-purple_pizzazz{ background-color:#ff00cc !important; }
-.bg-purple_plum{ background-color:#9c51b6 !important; }
+
 .bg-purple-ac1{ background-color:#ea80fc !important; }
 .bg-purple-ac2{ background-color:#e040fb !important; }
 .bg-purple-ac3{ background-color:#d500f9 !important; }
@@ -438,15 +212,7 @@
 .bg-purple-lt4{ background-color:#e1bee7 !important; }
 .bg-purple-lt5{ background-color:#f3e5f5 !important; }
 .bg-purple{ background-color:#9c27b0 !important; }
-.bg-quick_silver{ background-color:#a6a6a6 !important; }
-.bg-radical_red{ background-color:#ff355e !important; }
-.bg-raw_sienna_i{ background-color:#e6bc5c !important; }
-.bg-raw_sienna{ background-color:#d27d46 !important; }
-.bg-raw_umber{ background-color:#665233 !important; }
-.bg-razzle_dazzle_rose{ background-color:#ee34d2 !important; }
-.bg-razzmatazz{ background-color:#e30b5c !important; }
-.bg-razzmic_berry{ background-color:#8d4e85 !important; }
-.bg-red_salsa{ background-color:#fd3a4a !important; }
+
 .bg-red-ac1{ background-color:#ff8a80 !important; }
 .bg-red-ac2{ background-color:#ff5252 !important; }
 .bg-red-ac3{ background-color:#ff1744 !important; }
@@ -460,59 +226,8 @@
 .bg-red-lt3{ background-color:#ef9a9a !important; }
 .bg-red-lt4{ background-color:#ffcdd2 !important; }
 .bg-red-lt5{ background-color:#ffebee !important; }
-.bg-red-orange{ background-color:#ff681f !important; }
-.bg-red-violet{ background-color:#bb3385 !important; }
-.bg-red{ background-color:#ed0a3f !important; }
 .bg-red{ background-color:#f44336 !important; }
-.bg-robins_egg_blue{ background-color:#00cccc !important; }
-.bg-rose_dust{ background-color:#9e5e6f !important; }
-.bg-rose_quartz{ background-color:#bd559c !important; }
-.bg-rose{ background-color:#ff5050 !important; }
-.bg-royal_purple{ background-color:#6b3fa0 !important; }
-.bg-ruby{ background-color:#aa4069 !important; }
-.bg-rusty_red{ background-color:#da2c43 !important; }
-.bg-salmon{ background-color:#ff91a4 !important; }
-.bg-sapphire{ background-color:#2d5da1 !important; }
-.bg-sasquatch_socks{ background-color:#ff4681 !important; }
-.bg-saw_dust_peach{ background-color:#ffcba4 !important; }
-.bg-scarlet{ background-color:#fd0e35 !important; }
-.bg-screamin_green{ background-color:#66ff66 !important; }
-.bg-sea_green{ background-color:#93dfb8 !important; }
-.bg-sea_serpent{ background-color:#4bc7cf !important; }
-.bg-sepia{ background-color:#9e5b40 !important; }
-.bg-shadow_blue{ background-color:#778ba5 !important; }
-.bg-shadow{ background-color:#837050 !important; }
-.bg-shampoo{ background-color:#ffcff1 !important; }
-.bg-shamrock{ background-color:#33cc99 !important; }
-.bg-sharpening_pencils_goldenrod{ background-color:#fcd667 !important; }
-.bg-sheen_green{ background-color:#8fd400 !important; }
-.bg-shimmering_blush{ background-color:#d98695 !important; }
-.bg-shiny_shamrock{ background-color:#5fa778 !important; }
-.bg-shocking_pink{ background-color:#ff6eff !important; }
-.bg-silver{ background-color:#c9c0bb !important; }
-.bg-sizzling_red{ background-color:#ff3855 !important; }
-.bg-sizzling_sunrise{ background-color:#ffdb00 !important; }
-.bg-sky_blue{ background-color:#76d7ea !important; }
-.bg-slimy_green{ background-color:#299617 !important; }
-.bg-smashed_pumpkin{ background-color:#ff6d3a !important; }
-.bg-smell_the_roses_red{ background-color:#ed0a3f !important; }
-.bg-smoke{ background-color:#738276 !important; }
-.bg-smokey_topaz{ background-color:#832a0d !important; }
-.bg-soap{ background-color:#cec8ef !important; }
-.bg-sonic_silver{ background-color:#757575 !important; }
-.bg-spring_frost{ background-color:#87ff2a !important; }
-.bg-spring_green{ background-color:#ecebbd !important; }
-.bg-steel_blue{ background-color:#0081ab !important; }
-.bg-steel_teal{ background-color:#5f8a8b !important; }
-.bg-strawberry{ background-color:#fc5a8d !important; }
-.bg-sugar_plum{ background-color:#914e75 !important; }
-.bg-sunburnt_cyclops{ background-color:#ff404c !important; }
-.bg-sunglow{ background-color:#ffcc33 !important; }
-.bg-sunny_day_yellow{ background-color:#fbe870 !important; }
-.bg-sunset_orange{ background-color:#fe4c40 !important; }
-.bg-sweet_brown{ background-color:#a83731 !important; }
-.bg-tan{ background-color:#d99a6c !important; }
-.bg-tart_orange{ background-color:#fb4d46 !important; }
+
 .bg-teal_blue{ background-color:#008080 !important; }
 .bg-teal-ac1{ background-color:#a7ffeb !important; }
 .bg-teal-ac2{ background-color:#64ffda !important; }
@@ -528,83 +243,11 @@
 .bg-teal-lt4{ background-color:#b2dfdb !important; }
 .bg-teal-lt5{ background-color:#e0f2f1 !important; }
 .bg-teal{ background-color:#009688 !important; }
-.bg-thistle{ background-color:#ebb0d7 !important; }
-.bg-tickle_me_pink{ background-color:#fc80a5 !important; }
-.bg-tigers_eye{ background-color:#b56917 !important; }
-.bg-timberwolf{ background-color:#d9d6cf !important; }
-.bg-transparent{ background-color:transparent !important; }
-.bg-tropical_rain_forest{ background-color:#00755e !important; }
-.bg-tulip{ background-color:#ff878d !important; }
-.bg-tumbleweed{ background-color:#dea681 !important; }
-.bg-turquoise_blue{ background-color:#6cdae7 !important; }
-.bg-twilight_lavender{ background-color:#8a496b !important; }
-.bg-ui-danger{ background-color:#bf5329; }
-.bg-ui-error{ background-color:#8eb4cb; }
-.bg-ui-good{ background-color:#3097d1; }
-.bg-ui-info{ background-color:#8eb4cb; }
-.bg-ui-notice{ background-color:#3097d1; }
-.bg-ui-primary{ background-color:#3097d1; }
-.bg-ui-success{ background-color:#2ab27b; }
-.bg-ui-warning{ background-color:#cbb956; }
-.bg-ultramarine_blue{ background-color:#3f26bf !important; }
-.bg-unmellow_yellow{ background-color:#ffff66 !important; }
-.bg-van_dyke_brown{ background-color:#664228 !important; }
-.bg-venetian_red{ background-color:#cc553d !important; }
-.bg-violet_i{ background-color:#732e6c !important; }
-.bg-violet_ii{ background-color:#8359a3 !important; }
-.bg-violet-blue{ background-color:#766ec8 !important; }
-.bg-violet-red{ background-color:#f7468a !important; }
-.bg-vivid_tangerine{ background-color:#ff9980 !important; }
-.bg-vivid_violet{ background-color:#803790 !important; }
-.bg-wash_the_dog_dandelion{ background-color:#fed85d !important; }
+
 .bg-white{ background-color:#ffffff !important; }
-.bg-white{ background-color:white; }
-.bg-wild_blue_yonder{ background-color:#7a89b8 !important; }
-.bg-wild_strawberry{ background-color:#ff3399 !important; }
-.bg-wild_watermelon{ background-color:#fd5b78 !important; }
-.bg-winter_sky{ background-color:#ff007c !important; }
-.bg-winter_wizard{ background-color:#a0e6ff !important; }
-.bg-wintergreen_dream{ background-color:#56887d !important; }
-.bg-wisteria{ background-color:#c9a0dc !important; }
-.bg-yellow_sunshine{ background-color:#fff700 !important; }
-.bg-yellow-ac1{ background-color:#ffff8d !important; }
-.bg-yellow-ac2{ background-color:#ffff00 !important; }
-.bg-yellow-ac3{ background-color:#ffea00 !important; }
-.bg-yellow-ac4{ background-color:#ffd600 !important; }
-.bg-yellow-dk1{ background-color:#fdd835 !important; }
-.bg-yellow-dk2{ background-color:#fbc02d !important; }
-.bg-yellow-dk3{ background-color:#f9a825 !important; }
-.bg-yellow-dk4{ background-color:#f57f17 !important; }
-.bg-yellow-green{ background-color:#c5e17a !important; }
-.bg-yellow-lt1{ background-color:#ffee58 !important; }
-.bg-yellow-lt2{ background-color:#fff176 !important; }
-.bg-yellow-lt3{ background-color:#fff59d !important; }
-.bg-yellow-lt4{ background-color:#fff9c4 !important; }
-.bg-yellow-lt5{ background-color:#fffde7 !important; }
-.bg-yellow-orange{ background-color:#ffae42 !important; }
-.bg-yellow{ background-color:#fbe870 !important; }
-.bg-yellow{ background-color:#ffeb3b !important; }
-.c-black{ color:black; }
-.c-bright{ color:!important; }
-.c-fluorescent{ color:!important; }
-.c-fragrances{ color:!important; }
-.c-inherit{ color:inherit !important; }
-.c-jewelrystones{ color:!important; }
-.c-magicscents{ color:!important; }
-.c-metallic{ color:!important; }
-.c-none{ color:none !important; }
-.c-scaryscents{ color:!important; }
-.c-silver{ color:!important; }
-.c-standard{ color:!important; }
-.c-ui-danger{ color:#bf5329; }
-.c-ui-error{ color:#8eb4cb; }
-.c-ui-good{ color:#3097d1; }
-.c-ui-info{ color:#8eb4cb; }
-.c-ui-notice{ color:#3097d1; }
-.c-ui-primary{ color:#3097d1; }
-.c-ui-success{ color:#2ab27b; }
-.c-ui-warning{ color:#cbb956; }
-.c-white{ color:white; }
+
+.cl-black{ color:black; }
+.cl-white{ color:white; }
 .cl-amber-ac1{ color:#ffe57f !important; }
 .cl-amber-ac2{ color:#ffd740 !important; }
 .cl-amber-ac3{ color:#ffc400 !important; }
@@ -628,16 +271,6 @@
 .cl-blue-dk2{ color:#1976d2 !important; }
 .cl-blue-dk3{ color:#1565c0 !important; }
 .cl-blue-dk4{ color:#0d47a1 !important; }
-.cl-blue-grey-dk1{ color:#546e7a !important; }
-.cl-blue-grey-dk2{ color:#455a64 !important; }
-.cl-blue-grey-dk3{ color:#37474f !important; }
-.cl-blue-grey-dk4{ color:#263238 !important; }
-.cl-blue-grey-lt1{ color:#78909c !important; }
-.cl-blue-grey-lt2{ color:#90a4ae !important; }
-.cl-blue-grey-lt3{ color:#b0bec5 !important; }
-.cl-blue-grey-lt4{ color:#cfd8dc !important; }
-.cl-blue-grey-lt5{ color:#eceff1 !important; }
-.cl-blue-grey{ color:#607d8b !important; }
 .cl-blue-lt1{ color:#42a5f5 !important; }
 .cl-blue-lt2{ color:#64b5f6 !important; }
 .cl-blue-lt3{ color:#90caf9 !important; }
@@ -846,7 +479,6 @@
 .cl-teal-lt4{ color:#b2dfdb !important; }
 .cl-teal-lt5{ color:#e0f2f1 !important; }
 .cl-teal{ color:#009688 !important; }
-.cl-transparent{ color:transparent !important; }
 .cl-white{ color:#ffffff !important; }
 .cl-yellow-ac1{ color:#ffff8d !important; }
 .cl-yellow-ac2{ color:#ffff00 !important; }
@@ -862,3 +494,43 @@
 .cl-yellow-lt4{ color:#fff9c4 !important; }
 .cl-yellow-lt5{ color:#fffde7 !important; }
 .cl-yellow{ color:#ffeb3b !important; }
+
+.cl-blue-grey { color: var(--color-bluegrey) !important; }
+.cl-blue-grey-dk1{ color: var(--color-bluegrey-dk1) !important; }
+.cl-blue-grey-dk2{ color: var(--color-bluegrey-dk2) !important; }
+.cl-blue-grey-dk3{ color: var(--color-bluegrey-dk3) !important; }
+.cl-blue-grey-dk4{ color: var(--color-bluegrey-dk4) !important; }
+.cl-blue-grey-lt1{ color: var(--color-bluegrey-lt1) !important; }
+.cl-blue-grey-lt2{ color: var(--color-bluegrey-lt2) !important; }
+.cl-blue-grey-lt3{ color: var(--color-bluegrey-lt3) !important; }
+.cl-blue-grey-lt4{ color: var(--color-bluegrey-lt4) !important; }
+.cl-blue-grey-lt5{ color: var(--color-bluegrey-lt5) !important; }
+
+.bg-blue-grey { background-color: var(--color-bluegrey) !important; }
+.bg-blue-grey-dk1{ background-color: var(--color-bluegrey-dk1) !important; }
+.bg-blue-grey-dk2{ background-color: var(--color-bluegrey-dk2) !important; }
+.bg-blue-grey-dk3{ background-color: var(--color-bluegrey-dk3) !important; }
+.bg-blue-grey-dk4{ background-color: var(--color-bluegrey-dk4) !important; }
+.bg-blue-grey-lt1{ background-color: var(--color-bluegrey-lt1) !important; }
+.bg-blue-grey-lt2{ background-color: var(--color-bluegrey-lt2) !important; }
+.bg-blue-grey-lt3{ background-color: var(--color-bluegrey-lt3) !important; }
+.bg-blue-grey-lt4{ background-color: var(--color-bluegrey-lt4) !important; }
+.bg-blue-grey-lt5{ background-color: var(--color-bluegrey-lt5) !important; }
+
+.bg-ui-danger{ background-color:#bf5329; }
+.bg-ui-error{ background-color:#8eb4cb; }
+.bg-ui-good{ background-color:#3097d1; }
+.bg-ui-info{ background-color:#8eb4cb; }
+.bg-ui-notice{ background-color:#3097d1; }
+.bg-ui-primary{ background-color:#3097d1; }
+.bg-ui-success{ background-color:#2ab27b; }
+.bg-ui-warning{ background-color:#cbb956; }
+
+.cl-ui-danger{ color:#bf5329; }
+.cl-ui-error{ color:#8eb4cb; }
+.cl-ui-good{ color:#3097d1; }
+.cl-ui-info{ color:#8eb4cb; }
+.cl-ui-notice{ color:#3097d1; }
+.cl-ui-primary{ color:#3097d1; }
+.cl-ui-success{ color:#2ab27b; }
+.cl-ui-warning{ color:#cbb956; }

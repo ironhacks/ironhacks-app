@@ -12,8 +12,8 @@ function SubmissionSelectorItem({
 }) {
   let classes = [
     buttonClass,
-    selected ? 'bg-blue-grey-lt3' : 'bg-white',
-    disabled ? 'cl-grey-lt2' : 'cl-grey-dk3'
+    selected ? 'selected' : '',
+    disabled ? 'disabled' : ''
   ].join(' ');
 
   return (
@@ -44,22 +44,22 @@ class ResultsSubmissionSelector extends Component {
 
   render() {
     return (
-      <div className="flex flex-end py-2 fs-m1">
+      <div className="submission_selector">
         {this.props.phases.map((item, index) => {
           return (
             <SubmissionSelectorItem
               key={index}
-              buttonClass={'badge btn flex flex-col flex-align-center py-3 px-4 mx-1 bd-1'}
+              buttonClass={'submission_selector__item'}
               selected={index === this.props.selectedPhase ? true : false}
               onItemClick={()=>this.onItemClick(index, item.submissionId, item)}
-              disabled={fire2Ms(item.deadline) > Date.now()}
+              disabled={this.props.resultsPublished[item.submissionId] ? !this.props.resultsPublished[item.submissionId] : true }
               title={`Phase ${index + 1}`}
             />
           )
         })}
         {this.props.finalResults && (
           <SubmissionSelectorItem
-            buttonClass={'badge btn flex flex-col flex-align-center py-3 px-4 mx-1 bd-1'}
+            buttonClass={'submission_selector__item'}
             selected={this.props.selectedPhase === 'final' ? true : false}
             onItemClick={()=>this.onItemClick('final', 'final')}
             disabled={false}

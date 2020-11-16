@@ -1,13 +1,8 @@
 import { Component } from 'react';
 import { OverlayLoaderContainer, Loader } from '../../components/loader';
-import Separator from '../../util/separator';
-import {
-  Switch,
-  Route,
-  // Redirect 
-} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { Page, Section, Row, Col } from '../../components/layout';
+import { Page, Section, Row } from '../../components/layout';
 import { HackNav, HackPageBreadCrumbs } from '../../components/hacks';
 import { Hack } from '../hacks';
 import ThreadView from '../forum/thread-view';
@@ -22,14 +17,11 @@ const HackNavSection = ({
   }) => {
   return (
     <Row>
-      <Col>
-        <HackNav
-          hackDisplayOptions={hackDisplayOptions}
-          hackId={hackId}
-          hackSlug={hackSlug}
-        />
-      </Col>
-      <Separator primary />
+      <HackNav
+        hackDisplayOptions={hackDisplayOptions}
+        hackId={hackId}
+        hackSlug={hackSlug}
+      />
     </Row>
   );
 };
@@ -117,10 +109,15 @@ class HackPage extends Component {
           userIsAdmin={this.props.userIsAdmin}
           >
 
-        <HackPageBreadCrumbs
-          hackSlug={this.hackSlug}
-          hackName={this.state.hackName}
-        />
+        <Section sectionClass="mb-2 bg-grey-dk4 cl-white">
+          <Row>
+            <HackPageBreadCrumbs
+              hackSlug={this.hackSlug}
+              hackName={this.state.hackName}
+            />
+          </Row>
+        </Section>
+
 
         {this.state.upcomingEvent && (
           <div className="event-countdown" style={{
@@ -155,7 +152,7 @@ class HackPage extends Component {
 
             <Route exact path="/hacks/:hackId">
               {this.state.hackBanner && (
-                <Section sectionClass="py-3">
+                <Section sectionClass="py-2">
                   <Row>
                     <img src={this.state.hackBanner} alt='Hack Banner Img'/>
                   </Row>
@@ -250,17 +247,6 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-
-            <Route exact path="/hacks/:hackId/quiz">
-              <Section>
-                <Hack.Quiz
-                  hackId={this.state.hackId}
-                  userId={this.props.userId}
-                  user={this.props.user}
-                />
-              </Section>
-            </Route>
-
             <Route exact path="/hacks/:hackId/results">
               <Section sectionClass="results-section">
                 <Hack.Results
@@ -293,12 +279,22 @@ class HackPage extends Component {
                 </Section>
               </Route>
 
-            <Route exact path="/hacks/:hackId/tutorial">
+            <Route exact path="/hacks/:hackId/tutorials">
+              <Section>
+                <Hack.TutorialList
+                  hackSlug={this.hackSlug}
+                  hackId={this.state.hackId}
+                  userId={this.props.userId}
+                />
+              </Section>
+            </Route>
+
+            <Route exact path="/hacks/:hackId/tutorials/:tutorialId">
               <Section>
                 <Hack.Tutorial
-                  hackid={this.state.hackId}
+                  hackSlug={this.hackSlug}
+                  hackId={this.state.hackId}
                   userId={this.props.userId}
-                  hackTutorial={this.state.hackTutorial}
                 />
               </Section>
             </Route>
@@ -331,5 +327,4 @@ class HackPage extends Component {
     }
 }
 
-// <Redirect push to={`/hacks/${this.hackSlug}`}/>
 export default withRouter(HackPage)

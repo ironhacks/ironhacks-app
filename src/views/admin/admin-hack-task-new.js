@@ -93,7 +93,6 @@ class AdminHackTaskNew extends Component {
             disabled={this.state.loading}
           />
 
-
           {this.state.surveyEnabled && (
             <InputText
               containerClass="flex py-2 flex-between flex-align-center"
@@ -106,7 +105,6 @@ class AdminHackTaskNew extends Component {
               disabled={this.state.loading}
             />
           )}
-
 
           <MarkdownEditor
             editorLayout='tabbed'

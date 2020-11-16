@@ -13,7 +13,7 @@ const UpcomingSection = () => {
             responsive={true}
             baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
             filePath={'media%2Fimg%2F'}
-            fileName={'covid19-fall-hack-cta.png?alt=media&token=91d93297-57d2-48de-959a-06965c5bb8c9'}
+            fileName={'covid19-fall-hack-cta-2.png?alt=media&token=e3f36e30-06f1-4ee4-893a-d7b22ccf7858'}
             imgClass="banner_img mb-4"
             alt="Upcoming Hack"
           />

@@ -4,6 +4,7 @@
 @import 'base';
 @import 'layout';
 @import 'flex';
+@import 'util';
 @import 'icons';
 @import 'typography';
 @import 'content';
@@ -12,7 +13,10 @@
 @import 'profile';
 @import 'home/index';
 @import 'forum/index';
-@import 'hacks';
-@import 'results';
-@import 'quiz';
-@import 'admin';
+@import 'admin/index';
+@import 'hacks/index';
+@import 'results/index';
+@import 'components/dropzone';
+@import 'components/header';
+@import 'components/footer';
+@import 'components/section';

@@ -67,6 +67,7 @@ body {
 h1, h2, h3 {
   font-family: 'Muli', sans-serif;
   font-weight: 800;
+  text-rendering: optimizeLegibility;
 }
 
 .surveyAlert {
@@ -99,21 +100,6 @@ h1, h2, h3 {
   height: 100%;
 }
 
-.hide {
-  display: none;
-}
-
-.nohover:hover {
-  color: inherit !important;
-  background-color: inherit !important;
-}
-
-.nohover:hover::before {
-  content: unset !important;
-  color: inherit !important;
-  background-color: inherit !important;
-}
-
 .page.home_page {
   font-size: 1.1em;
 }
@@ -136,4 +122,48 @@ h1, h2, h3 {
 
 .cursor {
   cursor: pointer;
+}
+
+h1, h2 , h3, h4, h5, h6 {
+  line-height:unset;
+  margin:unset;
+  font-size:unset;
+}
+
+p { line-height:1.5; }
+
+.list-unstyled{ list-style:none; }
+
+a {
+  color:inherit;
+  text-decoration:inherit;
+  transition:all 0.4s ease-in-out;
+
+  &:focus {
+    text-decoration:none;
+  }
+
+  &:hover {
+    text-decoration:underline;
+    position:relative;
+
+    &::before {
+      content:"";
+      display:block;
+      width:100%;
+      height:100%;
+      position:absolute;
+      left:0;
+      top:0;
+      background:rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.breadcrumb {
+  font-size: .8em;
+  padding: .5em 0;
+  margin: 0;
+  color: inherit;
+  background-color: inherit;
 }

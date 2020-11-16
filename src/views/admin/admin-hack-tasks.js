@@ -8,11 +8,14 @@ class AdminHackTasks extends Component {
   constructor(props) {
     super(props);
 
+    let displayOptions = this.props.displayOptions
+
     this.state = {
       tasks: [],
       loading: true,
       defaultTask: this.props.defaultTask || null,
       cohortTasks: null,
+      taskPublished: displayOptions.taskEnabled || false,
       taskSelect: [],
     }
   }
@@ -50,10 +53,40 @@ class AdminHackTasks extends Component {
     })
   }
 
-  updateDefaultTask = (name, data) => {
+  publishTask = () => {
+    if (this.state.loading) {
+      return false
+    }
+
     this.setState({loading: true})
 
+    let taskPublished = !this.state.taskPublished
+    let displayOptions = this.props.displayOptions
+    displayOptions.taskEnabled = taskPublished
+
+    userMetrics({
+      event: taskPublished ? 'task-published' : 'task-unpublished',
+      hackId: this.props.hackId,
+    })
+
+    window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .set({
+        displayOptions: displayOptions,
+      }, {merge: true})
+      .then(()=>{
+        this.setState({
+          loading: false,
+          taskPublished: taskPublished,
+        })
+      })
+  }
+
+  updateDefaultTask = (name, data) => {
+    this.setState({loading: true})
     this.setState({[name]: data})
+
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -80,7 +113,7 @@ class AdminHackTasks extends Component {
 
     userMetrics({
       event: 'task-deleted',
-      taskId: this.taskId,
+      taskId: taskId,
       hackId: this.props.hackId,
     })
   }
@@ -134,6 +167,35 @@ class AdminHackTasks extends Component {
           <h3 className="my-3">
             Task Documents:
           </h3>
+
+          <div className="flex flex-align-center pb-2 border-bottom">
+          {this.state.taskPublished ? (
+            <>
+              <div className='font-italic'>
+                Task page is visible now
+              </div>
+              <div
+                className='btn-sm button ml-auto bg-secondary cl-white'
+                onClick={this.publishTask}
+              >
+                Unpublish Task
+              </div>
+            </>
+          ) : (
+            <>
+              <div className='font-italic'>
+                Task page is not visible now
+              </div>
+
+              <div
+                className='btn-sm button ml-auto bg-info cl-white'
+                onClick={this.publishTask}
+              >
+                Publish Task
+              </div>
+            </>
+          )}
+          </div>
 
           {this.state.tasks.map((task,index)=>(
             <div

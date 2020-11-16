@@ -13,6 +13,7 @@
 <meta property="og:description" content="Hack for innovation to solve global challenges" />
 <meta property="og:image" content="https://ironhacks.com/ironhacks-social.jpg" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+<script src="https://platform.twitter.com/widgets.js"/></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
@@ -20,8 +21,8 @@
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-storage.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-functions.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
-<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
 <script src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
 <style> body { margin: 0; padding: 0; }</style>
 </head>
 <body>
@@ -43,7 +44,6 @@ if (host !== 'ironhacks.com') {
   }
 } else {
   var firebaseConfig = {
-
     apiKey: "%REACT_APP_FIREBASE_APIKEY_DEV%",
     authDomain: "the-ironhacks-platform-dev.firebaseapp.com",
     databaseURL: "https://the-ironhacks-platform-dev.firebaseio.com",
@@ -54,15 +54,9 @@ if (host !== 'ironhacks.com') {
     measurementId: "G-0DHWPN23J6"
   }
 }
+
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
-// if (host === 'localhost:3000') {
-//   var db = firebase.firestore();
-//   db.settings({
-//     host: "localhost:8080",
-//     ssl: false
-//   });
-// }
 </script>
 </body>
 </html>

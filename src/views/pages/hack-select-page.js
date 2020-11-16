@@ -1,7 +1,8 @@
-import { Component } from 'react';
-import { Loader } from '../../components/loader';
-import { HackCardList, PreviousHackCardList, HackSignupCardList } from '../../components/hacks';
-import { Page, Section, Row, Col } from '../../components/layout';
+import { Component } from 'react'
+import { Loader } from '../../components/loader'
+import { HackCardList, PreviousHackCardList, HackSignupCardList } from '../../components/hacks'
+import { Page, Section, Row, Col } from '../../components/layout'
+import { TwitterButton, TwitterTimeline } from '../../components/twitter'
 
 class HackSelectPage extends Component {
   constructor(props) {
@@ -115,12 +116,13 @@ class HackSelectPage extends Component {
         <Page
           pageTitle="IronHacks | Hacks"
           pageUrl="https://ironhacks.com/hacks"
-          pageFooter={false}
+          pageClass="hack_select"
+          showFooter={false}
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
         >
-          <Section sectionClass="py-2 mb-10">
-            <Row>
+          <Section sectionClass="py-2" containerClass="flex">
+            <Row rowClass="flex-2 mr-2 mb-10">
               <Col colClass="mt-1">
                 <h2 className="h4 py-1 badge badge-dark">
                   Your Registered Hacks
@@ -159,7 +161,25 @@ class HackSelectPage extends Component {
                 />
               </Col>
             </Row>
+
+          <div className="flex-1 mr-1 hide--med">
+            <h2 className="h4 py-1 badge badge-dark">
+              Social Feed
+            </h2>
+
+            <div className="social_feed">
+              <TwitterTimeline
+                src="https://twitter.com/__matt_harris__/lists/ironhacks-com-14752?ref_src=twsrc%5Etfw"
+              />
+            </div>
+            <div className="social_actions">
+              <TwitterButton
+                hashtag="IronHacks"
+              />
+            </div>
+          </div>
           </Section>
+
         </Page>
       )
     }

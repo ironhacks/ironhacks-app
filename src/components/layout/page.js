@@ -21,7 +21,8 @@ const Page = ({
   pageTitle,
   pageUrl,
   pageClass,
-  pageFooter,
+  showFooter,
+  showHeader,
   user,
   userIsAdmin,
 }) => {
@@ -38,17 +39,22 @@ const Page = ({
           {pageUrl && ( <link rel="canonical" href={pageUrl} /> )}
         </Helmet>
       )}
+
+    {showHeader && (
       <Header
         user={user}
         displayName={displayName}
         isAdmin={userIsAdmin}
       />
+    )}
+
       <Content>
         <div className={classes}>
           {children}
         </div>
       </Content>
-      {pageFooter && (
+
+      {showFooter && (
         <Footer />
       )}
     </>
@@ -57,13 +63,14 @@ const Page = ({
 
 Page.defaultProps = {
   pageClass: '',
-  pageFooter: false,
   isAdmin: false,
   displayName: '',
   user: {},
   pageTitle: '',
   pageDescription: '',
   pageUrl: '',
+  showFooter: false,
+  showHeader: true,
 }
 
 

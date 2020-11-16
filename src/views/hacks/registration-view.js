@@ -10,10 +10,6 @@ class RegistrationView extends Component {
     this.state = {registerDisabled: false }
   }
 
-  componentDidMount() {
-    console.log('registration view');
-  }
-
   registerSuccess = () => {
     console.log('register success');
     window.firebase.analytics()
@@ -26,8 +22,8 @@ class RegistrationView extends Component {
       hackId: this.props.hackId,
     })
 
-    window.location = `/hacks/${this.props.hackSlug}`;
-  };
+    window.location = `/hacks/${this.props.hackSlug}`
+  }
 
   callRegisterUser = () => {
     registerUser({
@@ -43,28 +39,27 @@ class RegistrationView extends Component {
     })
   };
 
-  goToPresurvey = () => {
+  registerHack = () => {
     if (this.props.hackRegistration){
-      let hackId = this.props.hackId;
-      let userEmail = this.props.userEmail;
-      let userId = this.props.userId;
-      let formUrl = this.props.hackRegistration;
-      let formType = 'hackRegistration';
-      let alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`;
+      let hackId = this.props.hackId
+      let userEmail = this.props.userEmail
+      let userId = this.props.userId
+      let formUrl = this.props.hackRegistration
+      let formType = 'hackRegistration'
+      let alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`
+
       Swal.fire({
-          title: 'Registration survey',
-          html: `<iframe src="${alertUrl}" title="Registration Form"/>`,
-          showCloseButton: true,
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          customClass: 'surveyAlert',
-        }
-      )
+        title: 'Registration survey',
+        html: `<iframe src="${alertUrl}" title="Registration Form"/>`,
+        showCloseButton: true,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        customClass: 'surveyAlert',
+      })
       .then((result) => {
-        this.setState({registerDisabled: true});
+        this.setState({registerDisabled: true})
         this.callRegisterUser()
       })
-
     } else {
       Swal.fire({
         title: 'Confirm Registration',
@@ -74,16 +69,12 @@ class RegistrationView extends Component {
       })
       .then((result) => {
         if (result.value) {
-          this.setState({registerDisabled: true});
+          this.setState({registerDisabled: true})
           this.callRegisterUser()
         }
       })
     }
-  };
-
-  registerHack = () => {
-    this.goToPresurvey()
-  };
+  }
 
   render() {
     return (

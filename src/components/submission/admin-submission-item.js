@@ -1,23 +1,31 @@
 import { Link } from 'react-router-dom';
 import { fire2Date } from '../../util/date-utils';
-import { MdContentView } from '../../components/markdown-viewer';
 
-function AdminSubmissionItem({submissionIndex, submissionData, onDeleteSubmisison=false}) {
-  let { deadline } = submissionData;
+function AdminSubmissionItem({
+  submissionIndex,
+  submissionData,
+  onDeleteSubmisison=false
+}) {
+
+  let timeFormatOptions = {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour12: true,
+    timeZoneName: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  }
+
+  let { deadline } = submissionData
 
   if (deadline.seconds) {
-    deadline = fire2Date(submissionData.deadline);
+    deadline = fire2Date(submissionData.deadline)
   }
 
   let files = submissionData.files.map((item, index)=>{
     return `${item.required ? '*' : ''}${item.name}`
-  })
-
-  let fields = submissionData.fields.map((item, index)=>{
-    return {
-      title: item.title,
-      required: item.required,
-    }
   })
 
   const onDelete = () => {
@@ -26,49 +34,43 @@ function AdminSubmissionItem({submissionIndex, submissionData, onDeleteSubmisiso
     }
   }
 
+  const CardRow = ({name, value}) => (
+    <div className="flex card_row">
+      <span className="font-bold mr-1 card_row__name">{name}:</span>
+      <span className="card_row__value">{value}</span>
+    </div>
+  )
+
+  const CardBtn = ({action, btnClass, name}) => (
+    <div
+      className={['btn btn-sm', btnClass].join(' ').trim()}
+      onClick={action}
+    >
+      {name}
+    </div>
+  )
+
   return (
     <div className="admin-submission card p-3 mb-3">
-      <div className="flex"><span className="font-bold mr-1">Name:</span>{submissionData.name || ''}</div>
-      <div className="flex"><span className="font-bold mr-1">Deadline: </span> {deadline.toISOString()}</div>
-      <div className="flex"><span className="font-bold mr-1">Survey: </span> {submissionData.survey}<br/></div>
-      <div className=""><span className="font-bold mr-1">Description: </span></div>
-
-      <MdContentView
-        content={submissionData.description}
-        encoded={false}
-        emptyText="Submission Description not available yet."
-      />
-
-      <div className="mb-1"><span className="font-bold mr-1">Fields: </span></div>
-      <ol className="list mb-2">
-      {fields.map((item, index)=>(
-        <li
-          key={index}
-          className="mb-1 ml-2"
-          >
-            {`${item.title}`}
-            {item.required ? (<span className="ml-1 badge font-italic">(required)</span>) : (null)}
-          </li>
-      ))}
-      </ol>
-
-      <div className="flex">
-        <span className="font-bold mr-1">Files:</span>{files.join(', ')}<br/>
-      </div>
+      <CardRow name={'Name'} value={submissionData.name || ''} />
+      <CardRow name={'Deadline'} value={deadline.toLocaleString('en-us', timeFormatOptions) || ''} />
+      <CardRow name={'Files'} value={files.join(', ') || ''} />
 
       <div className="flex flex-between mt-2">
-        <div
-          className={'btn btn-sm btn-danger flex-self-start'}
-          onClick={onDelete}
-          >
-          Delete Submission
-        </div>
-
+        <CardBtn
+          action={onDelete}
+          name={'Delete Submission'}
+          btnClass={'btn-danger flex-self-start'}
+        />
         <Link
           to={`./submissions/edit/${submissionData.submissionId}`}
-          className={'btn btn-sm btn-success flex-self-end'}
+          className={'flex-self-end'}
           >
-          Edit Submission
+          <CardBtn
+            action={()=>{return false}}
+            name={'Edit Submission'}
+            btnClass={'btn-success'}
+          />
         </Link>
       </div>
     </div>

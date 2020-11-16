@@ -1,7 +1,10 @@
-import { Component } from 'react';
-import MarkdownEditor from '../../components/markdown-editor';
-import Button from '../../util/button.js';
-
+import { Component } from 'react'
+import MarkdownEditor from '../../components/markdown-editor'
+import Button from '../../util/button.js'
+import { fire2Ms } from '../../util/date-utils'
+import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2';
+import { userMetrics } from '../../util/user-metrics'
 
 class AdminHackResults extends Component {
   constructor(props) {
@@ -12,11 +15,14 @@ class AdminHackResults extends Component {
       content: '',
       survey: '',
       updated: '',
+      submissions: [],
+      isPublished: {},
     }
   }
 
   componentDidMount(){
-    this.getResultsSettings();
+    this.getResultsSettings()
+    this.getSubmissions()
   }
 
   getResultsSettings = () => {
@@ -34,62 +40,102 @@ class AdminHackResults extends Component {
 
         let data = doc.data()
         this.setState({
-          content: data.content ? this.decodeDocument(data.content) : '',
+          content: data.content ? data.content : '',
           updated: data.updated,
+          isPublished: data.isPublished || {},
           loading: false,
         })
       })
-  };
-
-  encodeDocument(str) {
-    let safeString = unescape(encodeURIComponent(str));
-    return window.btoa(safeString);
   }
 
-  decodeDocument(enc) {
-    let decoded = window.atob(enc);
-    return decodeURIComponent(escape(decoded));
+  getSubmissions = async () => {
+    let doc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('submissions')
+      .doc('settings')
+      .get()
+
+    let data = doc.data()
+    let submissions = Object.keys(data)
+
+    submissions.sort((a,b)=>{ return fire2Ms(data[a].deadline) - fire2Ms(data[b].deadline) })
+
+    this.setState({
+      submissions: submissions,
+    })
   }
 
-  onEditorChange = markdown => {
-    this.setState({content: markdown})
-  };
-
-  updateContent = () => {
+  updateContent = async () => {
     this.setState({ loading: true })
-    let encodedContent = this.encodeDocument(this.state.content);
-    let timeUpdated = new Date();
-    let authorId = this.props.userId;
 
-    window.firebase.firestore()
+    await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('results')
       .doc('settings')
-      .update({
-        updated: timeUpdated.toISOString(),
-        content: encodedContent,
-        authorId: authorId,
-      })
-      .then(() => {
-        this.setState({loading: false})
-        window.location.reload();
-      })
-      .catch(function(error) {
-        console.error('Error adding document: ', error);
-      });
-  };
+      .set({content: this.state.content}, {merge: true})
+
+    userMetrics({
+      event: 'results-updated',
+      hackId: this.props.hackId,
+      submissionId: this.submissionId,
+    })
+
+    this.showSaveSuccessModal()
+    this.setState({loading: false})
+  }
+
+  showSaveSuccessModal = () => {
+    this.setState({loading: true})
+    Swal.fire({
+      icon: 'success',
+      title: 'Document saved',
+    })
+    .then(() => {
+      this.setState({loading: false})
+    })
+  }
 
   render() {
     return (
         <>
-          <h2 className="pb-2">
-            Dashboard Document Editor
+          <h2 className="h3 pb-2">
+            Submission Results
           </h2>
+
+          <h3 className="h4 fm-1 font-bold">
+            Manage Results:
+          </h3>
+
+          <div className="bg-grey-lt2 py-1">
+            <ul className="list my-0">
+              {this.state.submissions.map((item, index)=>(
+                <li key={index}>
+                  <Link to={`results/${item}`}>
+                    {item}
+                  </Link>
+                  {this.state.isPublished[item] ? (
+                    <span className="ml-3 badge badge-info">published</span>
+                  ) : (
+                    <span className="ml-3 badge badge-secondary">not published</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <h2 className="h3 pt-2">
+            Results Dashboard Document
+          </h2>
+
+          <p>
+            Default information related to the results data displayd above in the dashboard
+          </p>
 
           <MarkdownEditor
             editorLayout='tabbed'
-            onEditorChange={this.onEditorChange}
+            onEditorChange={(value)=>this.setState({content: value})}
             value={this.state.content}
             disabled={this.state.loading}
           />
@@ -120,7 +166,7 @@ class AdminHackResults extends Component {
             </a>
           </div>
       </>
-    );
+    )
   }
 }
 

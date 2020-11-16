@@ -4,8 +4,12 @@
 // *  @param {Object} data user metrics
 // *  { event }
 // *  { data }
-// 
+//
 const userMetrics = (eventData) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return false
+  }
+
   let user = window.firebase.auth().currentUser;
   if (!user) {
     return false;

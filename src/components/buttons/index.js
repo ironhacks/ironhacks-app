@@ -1,3 +1,7 @@
-import { LoginButton } from './lib/login-button';
+import { LoginButton } from './login-button'
+import { Button } from './button'
 
-export { LoginButton }
+export {
+  Button,
+  LoginButton,
+}
