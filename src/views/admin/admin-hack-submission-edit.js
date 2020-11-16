@@ -1,8 +1,7 @@
-import { Component } from 'react';
-import { Section, Row } from '../../components/layout';
-import Separator from '../../util/separator.js';
-import { AdminSubmissionEditForm } from '../../components/submission';
-import { withRouter } from 'react-router';
+import { Component } from 'react'
+import { Section, Row } from '../../components/layout'
+import { AdminSubmissionEditForm } from '../../components/submission'
+import { withRouter } from 'react-router'
 
 class AdminHackSubmissionEdit extends Component {
   constructor(props) {
@@ -12,13 +11,14 @@ class AdminHackSubmissionEdit extends Component {
 
     this.state = {
       submissions: [],
+      submissionData: null,
     }
   }
 
   componentDidMount(){
-    this.getSubmissions();
+    this.getSubmissions()
+    this.getSolutions()
   }
-
 
   getSubmissions = () => {
     window.firebase.firestore()
@@ -45,6 +45,26 @@ class AdminHackSubmissionEdit extends Component {
       })
   };
 
+  getSolutions = () => {
+    let solutions = []
+    window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('submissions')
+      .doc('solutions')
+      .get()
+      .then(doc=>{
+        let data = doc.data()
+        if (data[this.submissionId]) {
+          solutions.push(data[this.submissionId])
+        }
+
+        this.setState({
+          solutions: solutions
+        })
+      })
+  }
+
   onSubmissionDataChanged(name, value){
     let form = this.state;
     form[name] = value;
@@ -56,23 +76,12 @@ class AdminHackSubmissionEdit extends Component {
   }
 
   saveSubmission = data => {
-    let submissions = this.state.submissions;
-    let submissionData = {};
-    Object.keys(submissions).forEach((key, index)=>{
-      let submission = submissions[key]
-      let submissionId = submission.submissionId;
-      submissionData[submissionId] = submission;
-    })
-    
-    let updateId = data.submissionId;
-    submissionData[updateId] = data;
-
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('submissions')
       .doc('settings')
-      .set(submissionData, {merge: true})
+      .set({[data.submissionId]: data}, {merge: true})
       .then(()=>{
         window.history.back();
       })
@@ -85,21 +94,20 @@ class AdminHackSubmissionEdit extends Component {
     return (
       <Section>
         <Row>
-          <h2>
+          <h2 className="h3">
             {this.props.hackData.name} Submission: {this.submissionId}
           </h2>
-
-          <Separator primary />
         </Row>
 
         {this.state.submissionData && (
         <Row>
           <AdminSubmissionEditForm
+            hackId={this.props.hackId}
             submissionId={this.submissionId}
             submissionData={this.state.submissionData}
-            onCreate={this.newSubmission}
             onSaveSubmission={this.saveSubmission}
             onCancelEdit={this.cancelEditSubmission}
+            solutionFiles={this.state.solutions}
           />
         </Row>
       )}
