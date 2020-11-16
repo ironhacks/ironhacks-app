@@ -1,177 +1,100 @@
 import { createRef, Component } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import { NavButton } from '../navigation/nav-button'
-import { HeaderLogo } from '../navigation/header-logo'
-import { Theme } from '../../theme';
-
-const styles = Theme.STYLES;
-
-const headerTheme = {
-  backgroundColor: 'var(--color-primary)',
-  textColor: 'var(--color-black)',
-  hoverTextColor: 'var(--color-darkgrey)',
-};
-
-const HeaderContainer = styled('div')`
-  height: ${(props) => props.theme.containerHeight};
-
-  .menu {
-    display: flex;
-    align-items: center;
-  }
-`;
-
-
-const UserMenu = styled('div')`
-  display: ${(props) => props.display};
-  flex-direction: column;
-  align-items: left;
-  position: absolute;
-  top: 45px;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-
-  a {
-    padding: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    text-align: left;
-
-    &:hover {
-      background-color: lightgray;
-    }
-  }
-`;
-
-
-const RightAlignDiv = styled('div')`
-  display: flex;
-  justify-content: flex-end;
-`;
-
-
-const UserMenuDropper = styled('button')`
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
-  color: black;
-  font-weight: 700;
-`;
-
-
-const UserMenuDropdownButton = (
-  {
-    onClick,
-    text,
-  },
-) => {
-  return (
-    <UserMenuDropper onClick={onClick} >
-      {text}
-    </UserMenuDropper>
-  );
-};
+import { Row } from '../layout'
+import { Link } from 'react-router-dom'
+// import Swal from 'sweetalert2'
 
 class Header extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      showUserMenu: 'none',
-      showMenu: 'none',
+      showMenu: false,
     };
 
     this.userMenuRef = createRef();
-    this.navMenuref = createRef();
   }
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+    document.addEventListener('mousedown', this.handleClickOutside)
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+    document.removeEventListener('mousedown', this.handleClickOutside)
   }
 
   handleClickOutside = event => {
     const userMenuRef = this.userMenuRef.current;
     if (userMenuRef && !userMenuRef.contains(event.target)) {
-      this.setState({
-        showUserMenu: 'none',
-      })
+      this.setState({showMenu: false})
     }
-  };
+  }
 
   showUserMenu = () => {
-    if (this.state.showUserMenu === 'none') {
-      this.setState({
-        showUserMenu: 'flex'
-      })
-    } else {
-      this.setState({
-        showUserMenu: 'none'
-      })
-    }
-  };
-
-  hideMenus = event => {
     this.setState({
-      showUserMenu: 'none',
+      showMenu: !this.state.showMenu
     })
-  };
+  }
+
+  hideMenu = () => {
+    this.setState({showMenu: false})
+  }
 
   render() {
     return (
-      <ThemeProvider theme={headerTheme}>
-        <div className='container-fluid' style={styles.HeaderStyle}>
-          <HeaderContainer
-            className='row'
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              paddingLeft: '1em',
-              paddingTop: '.4em',
-            }}>
+        <header className='header site-header container-fluid'>
+          <div className='container header_container'>
+            <Row rowClass='flex flex-between'>
+              <Link className='header_logo' to='/hacks'>
+                IronHacks
+              </Link>
 
-            <div className='col-2'>
-              <HeaderLogo />
-            </div>
+              <div className='header_actions'>
+                <a
+                  href='mailto:c562462b.groups.purdue.edu@amer.teams.ms'
+                  target='_blank'
+                  className='contact_button'>
+                  Get in Touch
+                </a>
 
-            <RightAlignDiv className='col-5'>
-              <UserMenuDropdownButton
-                onClick={this.showUserMenu}
-                text={this.props.displayName}
-              />
+                <div
+                  className='action_menu_button'
+                  onClick={this.showUserMenu}>
+                  {this.props.displayName}
+                </div>
 
-              <UserMenu
-                display={this.state.showUserMenu}
-                innerRef={this.userMenuRef}
-              >
+                <div
+                  className={['action_menu depth-3', this.state.showMenu ? 'active' : ''].join(' ').trim()}
+                  ref={this.userMenuRef}
+                >
+                  {window.location.pathname !== '/profile' && (
+                    <Link
+                      to='/profile'
+                      className='action_menu__item'
+                      onClick={this.hideMenu}>
+                      Profile
+                    </Link>
+                  )}
 
-                {window.location.pathname !== '/profile' && (
-                <NavButton to='/profile' onClick={this.hideMenus}>
-                  Profile
-                </NavButton>
-                )}
+                  {window.location.pathname !== '/admin' && this.props.isAdmin && (
+                    <Link
+                      to='/admin'
+                      className='action_menu__item'
+                      onClick={this.hideMenu}>
+                      Admin
+                    </Link>
+                  )}
 
-                {window.location.pathname !== '/admin'
-                  && this.props.isAdmin
-                  && (
-                  <NavButton to='/admin' onClick={this.hideMenus}>
-                    Admin
-                  </NavButton>
-                )}
-
-                <NavButton to='/logout' onClick={this.hideMenus}>
-                  Sign Out
-                </NavButton>
-              </UserMenu>
-            </RightAlignDiv>
-          </HeaderContainer>
-        </div>
-      </ThemeProvider>
+                  <Link
+                    to='/logout'
+                    className='action_menu__item'
+                    onClick={this.hideMenu}>
+                    Sign Out
+                  </Link>
+                </div>
+              </div>
+            </Row>
+          </div>
+        </header>
     )
   }
 }

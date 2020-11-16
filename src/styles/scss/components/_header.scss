@@ -1,0 +1,95 @@
+.header {
+  background-color: var(--color-primary);
+  color: black;
+  padding: .6rem 0;
+
+  &_container {
+    width: 100%;
+    max-width: var(--page-width);
+  }
+
+  &_logo {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 1.1em;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:hover::before {
+      content: none;
+      background-color: inherit;
+    }
+  }
+
+  &_actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .contact_button {
+    align-items: center;
+    border-radius: .25rem;
+    border: 1px solid;
+    cursor: pointer;
+    display: flex;
+    font-size: 75%;
+    font-weight: 700;
+    justify-content: center;
+    line-height: 1;
+    margin-right: 1.5em;
+    margin-top: 2px;
+    padding: .25em .4em;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .action_menu_button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .action_menu {
+    display: none;
+    align-items: start;
+    flex-direction: column;
+    align-items: start;
+    position: absolute;
+    top: 100%;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 2;
+
+    &.active {
+      display: flex;
+    }
+
+    &__item {
+      padding: 10px 10px;
+      text-align: left;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      width: 100%;
+      display: inline-block;
+      transition: color 0.3s, background-color 0.3s;
+
+      &:hover {
+        background-color: lightgray;
+        text-decoration: none;
+      }
+    }
+  }
+}
