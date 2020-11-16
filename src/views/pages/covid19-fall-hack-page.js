@@ -90,7 +90,7 @@ const UpcomingHackPage = () => {
               responsive={true}
               baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
               filePath={'media%2Fimg%2F'}
-              fileName={'covid19-fall-hack-cta.png?alt=media&token=91d93297-57d2-48de-959a-06965c5bb8c9'}
+              fileName={'covid19-fall-hack-cta-2.png?alt=media&token=e3f36e30-06f1-4ee4-893a-d7b22ccf7858'}
               imgClass="banner_img mb-4"
               alt="Upcoming Hack"
             />
@@ -104,7 +104,7 @@ const UpcomingHackPage = () => {
               <span className="font-light">A Series of Global COVID-19 Data Science Challenges</span>
             </h1>
 
-            <h2 className="mb-3 mt-1">
+            <h2 className="h2 mb-3 mt-1">
               Hack for innovation to solve global challenges.
             </h2>
 
@@ -197,11 +197,16 @@ const UpcomingHackPage = () => {
           <Col>
 
             <h2 className="h2 font-bold mb-2">
-              What will the IronHacks offer?
+              What does the IronHacks offer?
             </h2>
 
             <p>
-              IronHacks is a global virtual open data hacking platform that allows users to participate in a high-energy IronHacks competition. The IronHacks platform offers participants a no setup workspace with JupyterLab and BigQuery integration and many powerful features to create novel and useful models and visualizations. It also offers training and tutorials, as well as a personal dashboard to view scores and progress through the competition. After registration, participants can warm-up, practice their skills and query sample datauntil sufficient participants have joined to launch the competition. After the start of the competition, a multiphase process will start. Each challenge moves through these phases after a registration and warm-up phase.
+              IronHacks is a global virtual open data hacking platform that allows users to participate in a high-energy IronHacks competition.
+              The IronHacks platform offers participants a no setup workspace with <strong>JupyterLab</strong> and <strong>BigQuery</strong>
+              integration and many powerful features to create novel and useful models and visualizations. It also offers training and tutorials,
+              as well as a personal dashboard to view scores and progress through the competition. After registration, participants can warm-up,
+              practice their skills and query sample data until sufficient participants have joined to launch the competition. After the start
+              of the competition, a multiphase process will start. Each challenge moves through these phases after a registration and warm-up phase.
             </p>
 
             <ul className="list">
@@ -260,7 +265,10 @@ const UpcomingHackPage = () => {
             </h2>
 
             <p>
-              We offer a range of cool prizes and recognition to our IronHackers! Winning hackers will have the opportunity to be eligible for cash prizes. In total, we will award up to <strong>$3000</strong> for the COVID-19 Data Science Challenge to Protect Purdue. From Improvement Spirit, to Best Solution, there is a chance for everyone to gain fame, connect with top-level organizations, and be recognized for their excellent solutions to the COVID-19 Data Science Challenge!
+              We offer a range of cool prizes and recognition to our IronHackers! Winning hackers will have the opportunity to be eligible for cash prizes.
+              In total, we will award up to <strong>$5000</strong> for the COVID-19 Data Science Challenge to Protect Purdue. From Improvement Spirit, to
+              Best Solution, there is a chance for everyone to gain fame, connect with top-level organizations, and be recognized for their excellent solutions
+              to the COVID-19 Data Science Challenge!
             </p>
 
             <List
@@ -301,10 +309,12 @@ const UpcomingHackPage = () => {
 
             <ul className="list">
               <li>
-                Sign up on <a className="link--underline" href="https://ironhacks.com">ironhacks.com</a> to learn more about the upcoming Protect Purdue Challenge and other future challenges and timelines.
+                Sign up on <a className="link--underline" href="https://ironhacks.com">ironhacks.com</a> to learn more about the upcoming Protect
+                Purdue Challenge and other future challenges and timelines.
               </li>
               <li>
-                Reach out to us with any questions at <a href="mailto:ironhacks.team@gmail.com">ironhacks.team@gmail.com</a> or on Twitter <a href="https://twitter.com/Purdue_RCODI">@Purdue_RCODI</a>
+                Reach out to us with any questions at <a href="mailto:ironhacks.team@gmail.com">ironhacks.team@gmail.com</a> or on Twitter
+                <a href="https://twitter.com/Purdue_RCODI">@Purdue_RCODI</a>
               </li>
               <li>
                 Watch our recent publicly accessible <a className="link--underline" href="https://youtu.be/vnT587J-wis">Info Sessions.</a>

@@ -1,26 +1,18 @@
 import { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { HackNavContainerDiv } from './nav-container'
+import { NavLink } from 'react-router-dom';
+import { MaterialDesignIcon } from '../icons'
 import { upperCaseWord } from '../../util/string-utils';
-import menuIcon from '../../assets/svg/menu-icon.svg';
 import { userMetrics } from '../../util/user-metrics'
 
-
-const HackNavItem = (
-  {
-    navClass,
-    slug,
-    navId,
-    name,
-  },
-) => {
+const HackNavItem = ({ navClass, slug, navId, name }) => {
   return (
-    <Link
+    <NavLink
       className={`hack_nav__item ${navClass}`}
+      activeClassName="bg-secondary cl-white"
       to={`/hacks/${slug}/${navId.toLowerCase()}`}
     >
       {upperCaseWord(name)}
-    </Link>
+    </NavLink>
   );
 };
 
@@ -32,60 +24,56 @@ class HackNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showMenu: 'none',
+      showMenu: false,
       currentView: 'task',
-    };
-    this.baseUrl = `/hacks/${this.props.hackSlug}`;
-    this.navMenuRef = props.navMenuref;
+      navItems: [],
+    }
+    this.baseUrl = `/hacks/${this.props.hackSlug}`
+    this.navMenuRef = props.navMenuref
   }
 
-  getNav = items => {
-    if (!items) {
-      return [];
-    }
+  componentDidMount() {
+    this.getNav()
+  }
 
-    let display = Object.keys(items).filter((item)=>{
-      return items[item];
-    });
+  getNav = () => {
+    let items = this.props.hackDisplayOptions
+    items = Object.keys(items).filter((item)=>{
+      return items[item]
+    })
 
-    display.sort((a,b)=>{ return a.localeCompare(b) })
+    items.sort((a,b)=>{ return a.localeCompare(b) })
 
-    const navItems = display.map((item)=>{
+    const navItems = items.map((item)=>{
       return {
         id: item.replace('Enabled', ''),
         name: item.replace('Enabled', ''),
       }
-    });
-
-    return navItems;
-  };
-
-  hideMenu(event) {
-    this.setState({
-      showMenu: 'none',
-    });
+    })
+    this.setState({navItems: navItems})
   }
 
   showMenu = () => {
-    if (this.state.showMenu === 'none') {
-      this.setState({ showMenu: 'flex' });
-    } else {
-      this.setState({ showMenu: 'none' });
-    }
-  };
+    this.setState({ showMenu: !this.state.showMenu })
+  }
+
+  workspaceButton = () => {
+    console.log('workspaceButton');
+    userMetrics({event: 'launch_hub'})
+    window.firebase.analytics().logEvent('launch_hub');
+  }
 
   render() {
     return (
-      <HackNavContainerDiv
-        display={this.state.showMenu}
-        innerRef={this.navMenuRef}
-      >
-        <button onClick={this.showMenu}>
-          <img src={menuIcon} alt='menu_icon' />
-        </button>
+      <div className={'hack_nav'}>
+        <MaterialDesignIcon
+          iconClass="btn mobile_nav_btn"
+          name="menu"
+          onClick={this.showMenu}
+        />
 
-        <div className='hack_nav links-container'>
-          {this.getNav(this.props.hackDisplayOptions).map((item, index)=>(
+        <div className={['hack_nav_list', this.state.showMenu ? 'enabled' : ''].join(' ').trim()}>
+          {this.state.navItems.map((item, index)=>(
             <HackNavItem
               key={index}
               navId={item.id}
@@ -95,20 +83,17 @@ class HackNav extends Component {
             />
           ))}
 
+          <a
+            href="https://hub.ironhacks.com"
+            onClick={this.workspaceButton}
+            rel="noopener noreferrer"
+            target="_blank"
+            className="hack_nav__item btn-sm hub-button bg-primary ml-auto font-bold"
+          >
+            Workspace
+          </a>
         </div>
-        <a
-          href="https://hub.ironhacks.com"
-          onClick={(()=>{
-            userMetrics({event: 'launch_hub'})
-            window.firebase.analytics().logEvent('launch_hub');
-          })}
-          rel="noopener noreferrer"
-          target="_blank"
-          className="btn hub-button bg-primary ml-auto font-bold"
-        >
-          Workspace
-        </a>
-      </HackNavContainerDiv>
+      </div>
     )
   }
 }

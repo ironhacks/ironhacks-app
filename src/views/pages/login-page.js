@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { BlankPage, Section, Row, Col } from '../../components/layout';
+import { Page, Section, Row, Col } from '../../components/layout';
 import { Loader } from '../../components/loader';
 import randomUsername from '../../services/random-username';
 import { userMetrics } from '../../util/user-metrics'
@@ -39,20 +39,18 @@ class LoginPage extends Component {
     this.setState({
       loading: true,
       status: 'Sign-in success',
-    });
-  };
+    })
+  }
 
   initAuthUI = () => {
     let authProviders
 
     if (process.env.NODE_ENV !== 'production') {
-      console.log('development');
       authProviders = [
         window.firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         window.firebase.auth.EmailAuthProvider.PROVIDER_ID,
       ]
     } else {
-      console.log(process.env.NODE_ENV);
       authProviders = [
         window.firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       ]
@@ -63,7 +61,8 @@ class LoginPage extends Component {
       signInOptions: authProviders,
       callbacks: {
         signInSuccessWithAuthResult: (result, redirectUrl) => {
-          this._onSignInSuccess();
+          this._onSignInSuccess()
+
           if (result.additionalUserInfo.isNewUser === true) {
             this._saveUserOnDB({
               name: result.user.displayName,
@@ -84,7 +83,7 @@ class LoginPage extends Component {
       tosUrl: '/tos',
       privacyPolicyUrl: '/pp',
       credentialHelper: window.firebaseui.auth.CredentialHelper.NONE,
-    };
+    }
 
     const uiInstance = window.firebaseui.auth.AuthUI.getInstance()
 
@@ -97,7 +96,10 @@ class LoginPage extends Component {
   }
 
   _saveUserOnDB = user => {
-    this.setState({ status: 'Creating user account' });
+    this.setState({
+      status: 'Creating user account'
+    })
+
     window.firebase.firestore()
       .collection('users')
       .doc(user.uid)
@@ -111,7 +113,7 @@ class LoginPage extends Component {
         let timestamp = new Date().toISOString();
         window.firebase.analytics().logEvent('user_signup', { 'value': timestamp });
         userMetrics({ event: 'user_signup' })
-        this._onComplete('/profile/edit');
+        this._onComplete('/profile/edit?newuser=true')
       })
       .catch((error)=>{
         console.error('Error adding user: ', error);
@@ -120,48 +122,50 @@ class LoginPage extends Component {
   }
 
   render() {
-      return (
-        <BlankPage
-          pageClass="bg-primary"
-          pageTitle="IronHacks | Login"
-          pageDescription="Login to IronHacks"
-          pageUrl="https://ironhacks.com/login"
-        >
-          <Section>
-            <div style={{
-              height: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <Row>
-                <Col>
-                  <div className="text-center">
-                    <h1 className={'h2 site-title'}>
-                      <span className="font-light">PURDUE </span>
-                      <span className="font-extrabold">IRONHACKS</span>
-                    </h1>
+    return (
+      <Page
+        pageClass="bg-primary"
+        pageTitle="IronHacks | Login"
+        pageDescription="Login to IronHacks"
+        pageUrl="https://ironhacks.com/login"
+        showFooter={false}
+        showHeader={false}
+      >
+        <Section>
+          <div style={{
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Row>
+              <Col>
+                <div className="text-center">
+                  <h1 className={'h2 site-title'}>
+                    <span className="font-light">PURDUE </span>
+                    <span className="font-extrabold">IRONHACKS</span>
+                  </h1>
 
-                    <h2 className="h4 mb-3 mt-1">
-                      Hack for innovation to solve global challenges.
-                    </h2>
-                  </div>
+                  <h2 className="h4 mb-3 mt-1">
+                    Hack for innovation to solve global challenges.
+                  </h2>
+                </div>
 
-                  {this.state.loading && (
-                    <Loader status={this.state.status} />
-                  )}
+                {this.state.loading && (
+                  <Loader status={this.state.status} />
+                )}
 
-                  <div style={{display:'flex'}}>
-                    <div style={{backgroundColor: 'transparent'}} id='firebaseui-auth-container' />
-                  </div>
-                </Col>
-              </Row>
-            </div>
-          </Section>
-        </BlankPage>
-      )
-    }
+                <div style={{display:'flex'}}>
+                  <div style={{flex: 1, backgroundColor: 'transparent'}} id='firebaseui-auth-container' />
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Section>
+      </Page>
+    )
+  }
 }
 
 export default LoginPage;

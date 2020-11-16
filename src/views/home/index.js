@@ -10,8 +10,8 @@ import { SponsorsSection } from './sponsors-section';
 import { UpcomingSection } from './upcoming-section';
 import { TwitterSection } from './twitter-section';
 
-const Home = {
-  AboutSection ,
+export {
+  AboutSection,
   ExamplesSection,
   FeaturesSection,
   ProcessSection,
@@ -23,5 +23,3 @@ const Home = {
   TwitterSection,
   UpcomingSection,
 }
-
-export { Home }
