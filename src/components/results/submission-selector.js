@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import { userMetrics } from '../../util/user-metrics'
-import { fire2Ms } from '../../util/date-utils';
 
 function SubmissionSelectorItem({
   selected,
