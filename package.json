@@ -44,7 +44,6 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
     "react-select": "^3.1.0",
-    "react-twitter-widgets": "^1.9.5",
     "react-window": "^1.8.6",
     "redux": "^4.0.5",
     "showdown": "^1.9.1",
@@ -81,7 +80,6 @@
     "fslightbox-react": "^1.5.0",
     "node-sass": "^4.14.1",
     "prettier": "^1.19.1",
-    "react-snapshot": "^1.3.0",
     "source-map-explorer": "^2.5.0",
     "typescript": "^3.9.6"
   },
