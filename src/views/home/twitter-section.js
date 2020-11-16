@@ -1,6 +1,5 @@
-import { Timeline, Hashtag } from 'react-twitter-widgets'
 import { Row, Col } from '../../components/layout'
-
+import { TwitterButton, TwitterTimeline } from '../../components/twitter'
 
 const TwitterSection = () => {
   return (
@@ -10,35 +9,23 @@ const TwitterSection = () => {
             WHAT PEOPLE <span className="font-extrabold">ARE SAYING.</span>
           </h2>
 
-          <div className="flex flex-center">
-            <Hashtag
+          <div className="flex flex-center mb-3">
+            <TwitterButton
               hashtag="IronHacks"
-              options={{
-                size: 'large',
-                dnt: true
-              }}
             />
           </div>
 
-          <Timeline
-            dataSource={{
-              sourceType: 'list',
-              ownerScreenName: '__matt_harris__',
-              id: '1324514845899841536'
-            }}
-            options={{
-              dnt: true,
-              height: 500,
-              width: 1200,
-              chrome: 'noheader, nofooter',
-            }}
-          />
-
+          <div style={{
+            maxHeight: '500px',
+            overflow: 'auto',
+          }}>
+            <TwitterTimeline
+              src="https://twitter.com/__matt_harris__/lists/ironhacks-com-14752?ref_src=twsrc%5Etfw"
+            />
+          </div>
         </Col>
       </Row>
   )
-};
-
-
+}
 
 export { TwitterSection }
