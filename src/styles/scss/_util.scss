@@ -1,0 +1,106 @@
+.no {
+  // PREVENT SCROLLING WHILE AN ITEM IS FOCUSED SUCH AN OVERLAY
+  // COULD BE COMBINED WITH HTML BODY PROPERTY
+  // <body scroll="no" style="overflow: hidden">
+  &-scroll {
+    overflow-y: hidden !important;
+    max-height: 100vh;
+  }
+
+  // PLACEHOLDERS
+  // ELEMENT OR TEXT IS IS NOT ABLE TO BE SELECTED, HIGHLIGHTED, OR COPIED
+  &-select {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+  }
+
+  // PREVENT GHOST DRAGGING ON BUTTONS AND UI ELEMENTS NOT MEANT FOR CLICK AND DRAG
+  &-drag {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -o-user-drag: none;
+    -moz-user-drag: none;
+    user-select: none;
+  }
+}
+
+.bg {
+  &-img {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+  }
+
+  &-cover {
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  &-contain {
+    background-size: contain;
+  }
+}
+
+.bg-inherit{ background-color:inherit !important; }
+.bg-transparent{ background-color:transparent !important; }
+.bg-none{ background-color:none !important; }
+
+.cl-transparent{ color:transparent !important; }
+.cl-inherit{ color: inherit !important; }
+.cl-none{ color: none !important; }
+
+.crisp-img {
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+.code-block {
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  border-left: 3px solid #f36d33;
+  color: #666;
+  page-break-inside: avoid;
+  font-family: monospace;
+  font-size: .7rem;
+  line-height: 1;
+  margin-bottom: 1.5em;
+  max-width: 100%;
+  overflow: auto;
+  padding: 1em 1em;
+  display: block;
+  word-wrap: break-word;
+}
+
+.hide {
+  display: none !important;
+}
+
+.invisible{
+  visibility:hidden !important
+}
+
+@media (max-width: 800px){ .hide--med { display: none !important; }}
+@media (max-width: 430px){ .hide--mob-lg { display: none !important; }}
+@media (max-width: 320px){ .hide--mob-sm { display: none !important; }}
+@media screen and (max-width: 1200px){ .show--desktop-only { display: none !important; }}
+
+.nohover:hover {
+  color: inherit !important;
+  background-color: inherit !important;
+}
+
+.nohover:hover::before {
+  content: unset !important;
+  color: inherit !important;
+  background-color: inherit !important;
+}

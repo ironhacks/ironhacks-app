@@ -1,0 +1,101 @@
+.dropzone {
+
+  &_container {
+
+  }
+
+  &_control {
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(100,100,100,.3);
+      z-index: 1;
+      opacity: 0;
+      transition: opacity .2s ease-out;
+    }
+
+    &:hover::before {
+      opacity: 1;
+    }
+  }
+
+  &_preview {
+    display: flex;
+    position: relative;
+    height: 100px,
+  }
+
+  .preview_img {
+    background-position: center;
+    background-size: cover;
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+
+    &__outer {
+      border-radius: 2;
+      border: 1px solid #444;
+      box-sizing: border-box;
+      display: inline-flex;
+      height: 100%;
+      width: 100%;
+    }
+
+    &__inner {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+  }
+
+
+  .label {
+    color: white;
+    font-size: 1.8em;
+    font-weight: 100;
+    opacity: 0.5;
+    font-family: sans-serif;
+    text-align: center;
+    user-select: none;
+    transition: opacity .2s;
+
+    &_container {
+      width: 100%;
+      display: flex;
+      height: 100%;
+      top: 0;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      background-color: rgba(222,222,222,.2);
+      z-index: 2;
+    }
+
+    &_text {
+      line-height: 1.5;
+    }
+
+    &_size {
+      font-size: .8em;
+      font-weight: bold;
+    }
+  }
+
+  .dropzone_control:hover {
+    .label {
+      opacity: .8 ease-out;
+    }
+  }
+}

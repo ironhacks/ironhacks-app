@@ -1,0 +1,22 @@
+.hack_select {
+
+  .social_feed {
+    max-height: calc(99vh - 160px);
+    overflow: auto;
+
+    iframe {
+      zoom: 1.1;
+    }
+  }
+
+  .social_actions {
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5em;
+
+    iframe {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
