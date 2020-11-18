@@ -2,7 +2,8 @@
   display: flex;
   align-items: center;
   font-size: 14px;
-  padding-bottom: 1em;
+  margin-bottom: 1em;
+  background-color: var(--color-grey-lt2);
 
   .mobile_nav_btn {
     display: none;

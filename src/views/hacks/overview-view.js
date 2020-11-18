@@ -14,7 +14,7 @@ class OverviewView extends Component {
         <Col>
           <MdContentView
             content={this.props.document}
-            encoded={true}
+            encoded={false}
             emptyText="Hack Overview not available yet."
           />
         </Col>

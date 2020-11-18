@@ -4,7 +4,7 @@ import {Controlled as CodeMirror} from 'react-codemirror2'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/seti.css'
 import 'codemirror/mode/javascript/javascript.js'
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2'
 import { userMetrics } from '../../util/user-metrics'
 import { MaterialDesignIcon } from '../../components/icons'
 import { downloadFileData } from '../../util/download-file-data'

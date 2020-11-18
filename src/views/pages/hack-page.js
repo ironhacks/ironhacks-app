@@ -38,8 +38,7 @@ class HackPage extends Component {
       status: 'loading',
       activeView: 'task',
       loading: true,
-      hackPhases: [],
-      defaultTask: null,
+      userCohort: null,
     }
 
   }
@@ -54,29 +53,91 @@ class HackPage extends Component {
       .where('hackSlug', '==', hackSlug)
       .get();
 
+    // GET HACK BY SLUG
     if (hacks.docs[0].exists) {
-      let hackData = hacks.docs[0].data();
+      let hackData = hacks.docs[0].data()
       let hackId = hacks.docs[0].id;
 
+      // GET USER COHORT
+      let doc = await window.firebase.firestore()
+        .collection('hacks')
+        .doc(hackId)
+        .collection('registration')
+        .doc('cohorts')
+        .get()
+
+      let cohortList = doc.data()
+      let cohortId = null
+      if (cohortList) {
+        for(let cohort of Object.keys(cohortList)) {
+          if (cohortList[cohort].includes(this.props.userId)) {
+            cohortId = cohort
+          }
+        }
+      }
+
+      this.setState({userCohort: cohortId})
+
       let upcomingEvent = this.getUpcomingHackEvent(hackData)
-      this.setState({
+
+      let hackSettings  = {
         hackId: hackId,
-        defaultTask: hackData.defaultTask,
         hackData: hackData,
-        hackName: hackData.name,
-        hackDisplayOptions: hackData.displayOptions,
-        hackExtensions: hackData.extensions ? hackData.extensions : false,
-        hackPhases: hackData.phases,
-        hackRules:  hackData.rules ? hackData.rules.doc : '',
-        hackResults: hackData.results,
-        hackBanner: hackData.hackBannerImg ? hackData.hackBannerImg : false,
-        hackRegistration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
-        hackOverview: hackData.overview ? hackData.overview.doc : '',
-        hackTutorial: hackData.tutorial ? hackData.tutorial.doc : '',
+        bannerImg: hackData.hackBannerImg ? hackData.hackBannerImg : false,
+        displayOptions: hackData.displayOptions,
+        extensions: hackData.extensions ? hackData.extensions : false,
+        name: hackData.name,
+        overview: hackData.overview || '',
+        registration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
+        results: hackData.results,
+        rules:  hackData.rules || '',
+        task: hackData.defaultTask ? hackData.defaultTask.name : null,
         upcomingEvent: upcomingEvent,
+      }
+
+      if ('taskEnabled' in hackData.displayOptions) {
+        hackSettings.taskPublished = hackData.displayOptions.taskEnabled
+      } else {
+        hackSettings.taskPublished = false
+      }
+
+      // GET COHORT OVERRIDE SETTINGS
+      let cohortSettingsDoc = await window.firebase.firestore()
+        .collection('hacks')
+        .doc(hackId)
+        .collection('registration')
+        .doc('settings')
+        .get()
+
+      let cohortSettings = cohortSettingsDoc.data()
+      let userCohortSettings = {}
+      if (cohortId in cohortSettings) {
+        userCohortSettings = cohortSettings[cohortId].properties
+        if ('task' in userCohortSettings) {
+          hackSettings.task = userCohortSettings.task.name
+        }
+      }
+
+      console.log('userCohortSettings', userCohortSettings)
+
+      this.setState({
+        hackId: hackSettings.hackId,
+        hackData: hackSettings.hackData,
+        bannerImg: hackSettings.bannerImg,
+        displayOptions: hackSettings.displayOptions,
+        extensions: hackSettings.extensions,
+        name: hackSettings.name,
+        overview: hackSettings.overview,
+        registration: hackSettings.registration,
+        results: hackSettings.results,
+        rules:  hackSettings.rules,
+        task: hackSettings.task,
+        taskPublished: hackSettings.taskPublished,
+        upcomingEvent: hackSettings.upcomingEvent,
+
       })
     }
-  };
+  }
 
   getUpcomingHackEvent(hackData) {
     let startDate = hackData.startDate;
@@ -97,23 +158,23 @@ class HackPage extends Component {
           <Loader status={this.state.status} />
         </OverlayLoaderContainer>
       )
-    } else {
-
     }
-      return (
+
+    return (
        <Page
-          pageTitle={`IronHacks | ${this.state.hackName} Hack Page`}
+          pageTitle={`IronHacks | ${this.state.name} Hack Page`}
           pageDescription="IronHacks Hack Event Page"
           pageUrl={`https://ironhacks.com/hacks/${this.hackSlug}`}
           user={this.props.user}
           userIsAdmin={this.props.userIsAdmin}
           >
 
+        {/* PAGE BREADCRUMB NAVIGATION */}
         <Section sectionClass="mb-2 bg-grey-dk4 cl-white">
           <Row>
             <HackPageBreadCrumbs
               hackSlug={this.hackSlug}
-              hackName={this.state.hackName}
+              hackName={this.state.name}
             />
           </Row>
         </Section>
@@ -136,7 +197,9 @@ class HackPage extends Component {
           </div>
         )}
 
+          {/* UNREGISTERED PATHS */}
           <Switch>
+            {/* REGISTRATION PAGE */}
             <Route exact path="/hacks/:hackId/register">
               <Section sectionClass="py-3">
                 <Hack.Registration
@@ -144,28 +207,29 @@ class HackPage extends Component {
                   userId={this.props.userId}
                   hackSlug={this.hackSlug}
                   hackId={this.state.hackId}
-                  hackName={this.state.hackName}
-                  hackRegistration={this.state.hackRegistration}
+                  hackName={this.state.name}
+                  hackRegistration={this.state.registration}
                 />
               </Section>
             </Route>
 
+            {/* OVERVIEW PAGE */}
             <Route exact path="/hacks/:hackId">
-              {this.state.hackBanner && (
+              {this.state.bannerImg && (
                 <Section sectionClass="py-2">
                   <Row>
-                    <img src={this.state.hackBanner} alt='Hack Banner Img'/>
+                    <img src={this.state.bannerImg} alt='Hack Banner Img'/>
                   </Row>
                 </Section>
               )}
 
-              {this.state.hackDisplayOptions && (
+              {this.state.displayOptions && (
               <Section>
                 <HackNavSection
                   hackSlug={this.hackSlug}
                   hackId ={this.state.hackId}
-                  hackDisplayOptions={this.state.hackDisplayOptions}
-                  hackName={this.state.hackName}
+                  hackDisplayOptions={this.state.displayOptions}
+                  hackName={this.state.name}
                 />
               </Section>
               )}
@@ -176,33 +240,37 @@ class HackPage extends Component {
                 <HackNavSection
                   hackId ={this.state.hackId}
                   hackSlug={this.hackSlug}
-                  hackDisplayOptions={this.state.hackDisplayOptions}
-                  hackName={this.state.hackName}
+                  hackDisplayOptions={this.state.displayOptions}
+                  hackName={this.state.name}
                 />
               </Section>
             </Route>
           </Switch>
 
+          {/* REGISTERED PATHS */}
           <Switch>
+            {/* OVERVIEW */}
             <Route exact path="/hacks/:hackId">
               <Section>
                 <Hack.Overview
                   hackId={this.state.hackId}
                   userId={this.props.userId}
-                  document={this.state.hackOverview}
+                  document={this.state.overview}
                 />
               </Section>
             </Route>
 
+            {/* CALENDAR */}
             <Route exact path="/hacks/:hackId/calendar">
               <Section>
                 <Hack.Calendar
-                  data={this.state.hackExtensions}
+                  data={this.state.extensions}
                   hackId={this.state.hackId}
                 />
               </Section>
             </Route>
 
+            {/* FORUM */}
             <Route exact path="/hacks/:hackSlug/forum">
               <Section>
                 <Hack.Forum
@@ -214,7 +282,7 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/forum/:forumId/:threadId/edit">
+            <Route exact path="/hacks/:hackSlug/forum/:forumId/:threadId/edit">
               <Section>
                 <ThreadEditView
                   userIsAdmin={this.props.userIsAdmin}
@@ -225,7 +293,7 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-            <Route path="/hacks/:hackId/forum/:forumId/:threadId">
+            <Route path="/hacks/:hackSlug/forum/:forumId/:threadId">
               <Section>
                 <ThreadView
                   userIsAdmin={this.props.userIsAdmin}
@@ -236,7 +304,7 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/forum/new">
+            <Route exact path="/hacks/:hackSlug/forum/new">
               <Section>
                 <NewThread
                   userIsAdmin={this.props.userIsAdmin}
@@ -247,7 +315,8 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/results">
+            {/* RESULTS DASHBOARD */}
+            <Route exact path="/hacks/:hackSlug/results">
               <Section sectionClass="results-section">
                 <Hack.Results
                   hackData={this.state.hackData}
@@ -258,28 +327,32 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/rules">
+            {/* RULES */}
+            <Route exact path="/hacks/:hackSlug/rules">
               <Section sectionClass="rules-section">
                 <Hack.Rules
                   hackId={this.state.hackId}
                   userId={this.props.userId}
-                  content={this.state.hackRules}
+                  content={this.state.rules}
                 />
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/task">
+            {/* TASK */}
+            <Route exact path="/hacks/:hackSlug/task">
               <Section>
                 <Hack.Task
                   userEmail={this.props.user.email}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
-                  defaultTask={this.state.defaultTask}
+                  taskId={this.state.task}
+                  taskPublished={this.state.taskPublished}
                 />
                 </Section>
               </Route>
 
-            <Route exact path="/hacks/:hackId/tutorials">
+            {/* TUTORIALS */}
+            <Route exact path="/hacks/:hackSlug/tutorials">
               <Section>
                 <Hack.TutorialList
                   hackSlug={this.hackSlug}
@@ -289,7 +362,7 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/tutorials/:tutorialId">
+            <Route exact path="/hacks/:hackSlug/tutorials/:tutorialId">
               <Section>
                 <Hack.Tutorial
                   hackSlug={this.hackSlug}
@@ -299,7 +372,8 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-            <Route exact path="/hacks/:hackId/submissions">
+            {/* SUBMISSIONS */}
+            <Route exact path="/hacks/:hackSlug/submissions">
               <Section>
                 <Hack.Submissions
                   hackSlug={this.hackSlug}
@@ -310,7 +384,7 @@ class HackPage extends Component {
               </Section>
             </Route>
 
-            <Route path="/hacks/:hackId/submit/:submissionId">
+            <Route path="/hacks/:hackSlug/submit/:submissionId">
               <Section>
                 <Hack.Submit
                   hackSlug={this.hackSlug}
@@ -320,7 +394,6 @@ class HackPage extends Component {
                 />
               </Section>
             </Route>
-
           </Switch>
       </Page>
       )

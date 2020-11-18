@@ -1,88 +1,64 @@
-import { Component } from 'react';
-import styled from 'styled-components';
-import MarkdownEditor from '../../components/markdown-editor';
-import Button from '../../util/button.js';
-
-
-const AvailableActionsDiv = styled('div')`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse;
-  height: 50px;
-`;
-
+import { Component } from 'react'
+import MarkdownEditor from '../../components/markdown-editor'
+import { userMetrics } from '../../util/user-metrics'
+import { saveSuccessModal } from '../../components/alerts'
 
 class AdminHackOverview extends Component {
   constructor(props) {
-    super(props);
+    super(props)
+
     this.state = {
       content: this.props.previousDocument || '',
     }
   }
 
-  onEditorChange = markdown => {
-    this.setState({content: markdown});
-  };
-
-  updateHackOverview = () => {
+  updateHackOverview = async () => {
     this.setState({ loading: true })
-    let encodedDoc = this.encodeDocument(this.state.content);
-    let timeUpdated = new Date();
-    window.firebase.firestore()
+
+    await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .update({
-        overview: {
-          doc: encodedDoc,
-          updated: timeUpdated.toISOString(),
-        }
+        overview: this.state.content
       })
-      .then(() => {
-        this.setState({
-          loading: false,
-          hackOverview: this.state.content,
-        })
-        window.location.reload();
-      })
-      .catch((error)=>{
-        console.error('Error adding document: ', error);
-      })
-  };
 
-  encodeDocument(str) {
-    let safeString = unescape(encodeURIComponent(str));
-    return window.btoa(safeString);
-  }
+    userMetrics({
+      event: 'overview-updated',
+      hackId: this.props.hackId,
+    })
 
-  decodeDocument(enc) {
-    let decoded = window.atob(enc);
-    return decodeURIComponent(escape(decoded));
+    saveSuccessModal()
+
+    this.setState({loading: false})
   }
 
   render() {
     return (
-        <>
-          <h2 className="pb-2">
-            Hack Overview Editor
-          </h2>
+      <>
+        <h2 className="pb-2">
+          Hack Overview Editor
+        </h2>
 
-          <MarkdownEditor
-            editorLayout='tabbed'
-            onEditorChange={this.onEditorChange}
-            value={this.state.content}
-          />
+        <MarkdownEditor
+          editorLayout='tabbed'
+          onEditorChange={value=>this.setState({content: value})}
+          value={this.state.content}
+        />
 
-          <AvailableActionsDiv>
-            <Button
-              primary
-              width='150px'
-              margin='0 0 0 15px'
-              onClick={this.updateHackOverview}
+        <div className="flex flex-align-center flex-between py-2">
+          <a
+            href={`/hacks/${this.props.hackSlug}`}
+            target="_blank"
+            rel="noopener noreferrer"
             >
-              Publish
-            </Button>
-          </AvailableActionsDiv>
+            View live document
+          </a>
+          <div
+            className="btn btn-sm bg-primary px-8"
+            onClick={this.updateHackOverview}>
+            Publish
+          </div>
+        </div>
       </>
     )
   }

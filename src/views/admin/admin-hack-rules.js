@@ -1,18 +1,9 @@
 import { Component } from 'react';
-import styled from 'styled-components';
 import MarkdownEditor from '../../components/markdown-editor';
-import Button from '../../util/button.js';
+import { userMetrics } from '../../util/user-metrics'
+import { saveSuccessModal } from '../../components/alerts'
 
-const AvailableActionsDiv = styled('div')`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row-reverse;
-  height: 50px;
-`;
-
-class AdminHackTask extends Component {
+class AdminHackRules extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,75 +11,56 @@ class AdminHackTask extends Component {
     }
   }
 
-  encodeDocument(str) {
-    let safeString = unescape(encodeURIComponent(str));
-    return window.btoa(safeString);
-  }
-
-  decodeDocument(enc) {
-    let decoded = window.atob(enc);
-    return decodeURIComponent(escape(decoded));
-  }
-
-  onEditorChange = markdown => {
-    this.setState({content: markdown})
-  };
-
-  updateHackRules = () => {
+  updateHackRules = async () => {
     this.setState({loading: true})
-    let encodedDoc = this.encodeDocument(this.state.content);
-    let timeUpdated = new Date();
-    let rulesDoc = {
-      doc: encodedDoc,
-      updated: timeUpdated.toISOString(),
-    };
 
-    window.firebase.firestore()
+    await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
-      .update({ rules: rulesDoc })
-      .then(() => {
-        this.setState({ loading: false })
-        window.location.reload();
+      .update({
+        rules: this.state.content
       })
-      .catch((error)=>{
-        console.error('Error adding document: ', error);
+
+      userMetrics({
+        event: 'rules-updated',
+        hackId: this.props.hackId,
       })
-  };
+
+      saveSuccessModal()
+
+      this.setState({ loading: false })
+  }
 
   render() {
     return (
-        <>
-          <h2 className="pb-2">
-            Hack Rules Document
-          </h2>
+      <>
+        <h2 className="pb-2">
+          Hack Rules Document
+        </h2>
 
-          <MarkdownEditor
-            editorLayout='tabbed'
-            onEditorChange={this.onEditorChange}
-            value={this.state.content}
-          />
+        <MarkdownEditor
+          editorLayout='tabbed'
+          onEditorChange={value=>this.setState({content: value})}
+          value={this.state.content}
+        />
 
-          <AvailableActionsDiv>
-            <Button
-              primary
-              width='150px'
-              margin='0 0 0 15px'
-              onClick={this.updateHackRules}
-            >
-              Publish
-            </Button>
-            <a
-              href={`/hacks/${this.props.hackSlug}/rules`}
-              target="_blank"
-              rel="noopener noreferrer"
-              >
-              View live document
-            </a>
-          </AvailableActionsDiv>
+        <div className="flex flex-align-center flex-between py-2">
+          <a
+            href={`/hacks/${this.props.hackSlug}/rules`}
+            target="_blank"
+            rel="noopener noreferrer">
+            View live document
+          </a>
+
+          <div
+            className="btn btn-sm bg-primary px-8"
+            onClick={this.updateHackRules}>
+            Publish
+          </div>
+        </div>
       </>
-    );
+    )
   }
 }
 
-export default AdminHackTask;
+export default AdminHackRules

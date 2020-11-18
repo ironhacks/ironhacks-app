@@ -1,3 +1,9 @@
+.admin-page {
+  .header_container {
+    max-width: none;
+  }
+}
+
 .header {
   background-color: var(--color-primary);
   color: black;

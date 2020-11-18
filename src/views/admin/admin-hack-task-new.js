@@ -29,7 +29,6 @@ class AdminHackTaskNew extends Component {
       .collection('tasks')
       .get()
 
-    console.log(snap.docs.length)
     this.setState({title: `Task ${snap.docs.length + 1}`})
   }
 

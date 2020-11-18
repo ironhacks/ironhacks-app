@@ -12,27 +12,21 @@ class TaskView extends Component {
       taskButtonDisabled: false,
       formFilled: false,
       task: null,
-      userCohort: null,
     }
   }
 
   componentDidMount(){
     userMetrics({event: 'view_task'})
     this.getUserForms()
-    this.getCohortTasks()
-    this.getUserCohort()
     this.getTask()
   }
 
   getTask = () => {
-    let defaultTask = this.props.defaultTask
-    let taskId = defaultTask.name
-
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('tasks')
-      .doc(taskId)
+      .doc(this.props.taskId)
       .get()
       .then((doc)=>{
         let task = doc.data()
@@ -42,50 +36,6 @@ class TaskView extends Component {
           loading: false,
         })
       })
-  }
-
-  getCohortTasks = async () => {
-    let doc = await window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('registration')
-      .doc('settings')
-      .get()
-
-    let data = doc.data()
-    let cohortTasks = {}
-    if (data) {
-      for(let cohort of Object.keys(data)) {
-        let { task } = data[cohort].properties
-        if (task) {
-          cohortTasks[cohort] = task.name
-        }
-      }
-    }
-    console.log('cohortTasks', cohortTasks);
-  }
-
-  getUserCohort = async () => {
-    let doc = await window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('registration')
-      .doc('cohorts')
-      .get()
-
-    let data = doc.data()
-    console.log('cohort data', data);
-    let userCohort = null;
-    if (data) {
-      for (let cohort of Object.keys(data)) {
-        if (data[cohort].includes(this.props.userId)) {
-          userCohort = cohort;
-        }
-      }
-    }
-
-    console.log('user cohort', userCohort);
-    this.setState({userCohort: userCohort})
   }
 
   getUserForms(){
@@ -105,6 +55,20 @@ class TaskView extends Component {
       })
   }
 
+  // SURVEY RESPONSE CALLBACK CAN TAKE SEVERAL MINUTES
+  // IN CASE USER REFRESHED THE PAGE OR LEAVES THEN
+  // RETURNS WE IMMEDIATLEY ADD A PLACEHOLDER TO TRIGGER
+  // TASK VIEW ON LOAD SINCE THE SURVEY HAS BEEN LOADED
+  taskSurveyViewed = async () => {
+    await window.firebase.firestore()
+      .collection('users')
+      .doc(this.props.userId)
+      .collection('forms')
+      .doc(this.props.hackId)
+      .set({
+        hackTaskSurvey: { viewed: true }
+      }, {merge: true})
+  }
 
   showTaskSurvey = () => {
     let hackId = this.props.hackId;
@@ -116,6 +80,7 @@ class TaskView extends Component {
     let alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`;
 
     userMetrics({event: 'open_survey'})
+    this.taskSurveyViewed()
 
     Swal.fire({
       title: 'Hack Consent Form',
@@ -126,34 +91,35 @@ class TaskView extends Component {
       customClass: 'surveyAlert',
     })
     .then((result) => {
-      this.setState({
-        formFilled: true
-      });
+      this.setState({ formFilled: true })
     })
-  };
+  }
 
   render() {
     return (
       <>
-      {this.state.task && (
       <Row>
         <Col>
+        {this.props.taskPublished ? (
+          <>
+          {this.state.task && (
+            <>
             {this.state.task.surveyEnabled ? (
               <>
-                {!this.state.formFilled ? (
-                  <div>
-                    <p>
-                      Please accept the hack terms and complete the form to view the task.
-                    </p>
+              {!this.state.formFilled ? (
+                <div>
+                  <p>
+                    Please accept the hack terms and complete the form to view the task.
+                  </p>
 
-                    <button
-                      className="btn btn-dark"
-                      onClick={this.showTaskSurvey}
-                      disabled={this.state.taskButtonDisabled}
-                      >
-                      Get Task
-                    </button>
-                  </div>
+                  <button
+                    className="btn btn-dark"
+                    onClick={this.showTaskSurvey}
+                    disabled={this.state.taskButtonDisabled}
+                    >
+                    Get Task
+                  </button>
+                </div>
               ):(
                 <MdContentView
                   content={this.state.task.doc}
@@ -163,15 +129,24 @@ class TaskView extends Component {
               )}
               </>
             ):(
-                <MdContentView
-                  content={this.state.task.doc}
-                  encoded={true}
-                  emptyText="Task Document is not available yet."
-                />
+              <MdContentView
+                content={this.state.task.doc}
+                encoded={true}
+                emptyText="Task Document is not available yet."
+              />
             )}
+          </>
+          )}
+        </>
+        ) : (
+          <div>
+            <p>
+              The task document is not available yet.
+            </p>
+          </div>
+        )}
         </Col>
       </Row>
-      )}
       </>
     )
   }

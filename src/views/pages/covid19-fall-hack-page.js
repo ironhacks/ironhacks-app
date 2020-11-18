@@ -1,9 +1,13 @@
-import { useState } from 'react';
-import { LandingPage, Section, Row, Col } from '../../components/layout';
-import { LoginButton } from '../../components/buttons';
-import { List } from '../../components/list';
-import { Img } from '../../components/img';
-import FsLightbox from 'fslightbox-react';
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { LandingPage, Section, Row, Col } from '../../components/layout'
+import { LoginButton } from '../../components/buttons'
+import { TwitterButton, TwitterTimeline } from '../../components/twitter'
+import { List } from '../../components/list'
+import { Img } from '../../components/img'
+import FsLightbox from 'fslightbox-react'
+import fenyPatel from '../../assets/img/feny-patel.jpeg'
+import harshaPavuluri from '../../assets/img/harsha-pavuluri.jpg'
 
 function VideoSection() {
   const [lightboxController, setLightboxController] = useState({
@@ -22,7 +26,7 @@ function VideoSection() {
     <>
     <Row>
       <Col>
-        <h2 className="h2 font-bold mb-2">
+        <h2 className="h2 font-bold mb-3">
           Testimonials
         </h2>
       </Col>
@@ -104,10 +108,6 @@ const UpcomingHackPage = () => {
               <span className="font-light">A Series of Global COVID-19 Data Science Challenges</span>
             </h1>
 
-            <h2 className="h2 mb-3 mt-1">
-              Hack for innovation to solve global challenges.
-            </h2>
-
             <LoginButton to='/login?mode=select'>
               Sign up here now
             </LoginButton>
@@ -120,7 +120,7 @@ const UpcomingHackPage = () => {
 
       </Section>
 
-      <Section sectionClass="py-5">
+      <Section sectionClass="pt-5">
         <Row rowClass="py-2">
           <Col>
             <h2 className="h2 my-4 font-bold">
@@ -128,23 +128,32 @@ const UpcomingHackPage = () => {
             </h2>
 
             <p>
-              COVID-19 is upending our health, our social communities, and our economy. The Research Center for Open Digital Innovation (RCODI) has set forth to launch an IronHacks series to facilitate governments and citizens in making the right decisions as we are moving through this pandemic. Leaders in our country who are responsible for protecting their citizens' welfare and quality of life face difficult questions, such as: When and where do citizens expose themselves and others the most to COVID-19 risk? Which regions and industries are predicted to suffer the most from COVID-19, both economically as well as socially?
+              COVID-19 is upending our health, our social communities, and our economy. The Research Center for Open Digital Innovation (RCODI) has set forth to launch an
+              IronHacks series to facilitate governments and citizens in making the right decisions as we are moving through this pandemic. Leaders in our country who are
+              responsible for protecting their citizens' welfare and quality of life face difficult questions, such as: When and where do citizens expose themselves and
+              others the most to COVID-19 risk? Which regions and industries are predicted to suffer the most from COVID-19, both economically as well as socially?
             </p>
 
             <p>
-              Today, we have more, increasingly granular, and actual data available to answer those questions: Daily updated mobility and location data collected via our mobile phones, visitor counts at core places, regional spending data, unemployment claims, etc. However, it takes the collective effort of a crowd of IronHackers to turn this data into something useful and develop models that help us predict and explore the social and economic impact of COVID-19 at granular level.
+              Today, we have more, increasingly granular, and actual data available to answer those questions: Daily updated mobility and location data collected via our
+              mobile phones, visitor counts at core places, regional spending data, unemployment claims, etc. However, it takes the collective effort of a crowd of IronHackers
+              to turn this data into something useful and develop models that help us predict and explore the social and economic impact of COVID-19 at granular level.
             </p>
 
             <p>
-              In Summer 2020 we held our first COVID-19 Data Science Challenge with exciting results from our participants. You can check out their results here on our website and see how they created useful visualizations to help our partners and citizens understand the impact of COVID-19 at particular brands in the State of Indiana.
+              In Summer 2020 we held our first COVID-19 Data Science Challenge with exciting results from our participants. You can check out their results here on our website
+              and see how they created useful visualizations to help our partners and citizens understand the impact of COVID-19 at particular brands in the State of Indiana.
             </p>
 
             <p>
-              For Fall 2020, we are launching our second hack and invite aspiring data scientists to join the IronHacks crowd in a COVID-19 Data Science Challenge to predict COVID-19 impacts and <a className="text-underline" href="http://www.protect.purdue.edu">Protect Purdue!</a> This hack will directly inform the leadership team of the important Protect Purdue initiative to understand the impacts of the virus on our local campus and surrounding community.
+              For Fall 2020, we are launching our second hack and invite aspiring data scientists to join the IronHacks crowd in a COVID-19 Data Science Challenge to predict
+              COVID-19 impacts and <a className="text-underline" href="https://protect.purdue.edu/">Protect Purdue!</a> This hack will directly inform the leadership team
+              of the important Protect Purdue initiative to understand the impacts of the virus on our local campus and surrounding community.
             </p>
 
             <p>
-              To learn more about the process, you can watch our recent <a href="https://www.youtube.com/watch?v=ta5i7_I5VT8&feature=youtu.be">Info Sessions</a> or sign-up for upcoming events as we announce them to learn more about the COVID-19 Data Science Challenges.
+              To learn more about the process, you can watch our recent <a href="https://calendar.google.com/calendar/embed?src=c_ga132from8eg8v8m86qfkmtu2c%40group.calendar.google.com&ctz=America%2FNew_York" className="text-underline">
+              Info Sessions</a> or follow us on Twitter <a href="https://twitter.com/Purdue_RCODI" className="text-underline">@Purdue_RCODI</a>.
             </p>
           </Col>
         </Row>
@@ -162,7 +171,10 @@ const UpcomingHackPage = () => {
             </h2>
 
             <p>
-              The Fall 2020: COVID-19 Data Science Challenge to Protect Purdue will focus on prediction tasks and real-time data visualizations. We will provide our IronHacks participants with access to a selection of large and granular datasets related to COVID-19 incidents as well as social and economic effects. Equipped with this data, participants will work in the IronHacks workspace with JupyterLab and access to BigQuery to create novel and useful statistical models and visualizations using Python and R. Participants will submit Jupyter notebooks and their outputs (html and markdown files).
+              The Fall 2020: COVID-19 Data Science Challenge to Protect Purdue will focus on prediction tasks and real-time data visualizations. We will provide our IronHacks participants
+              with access to a selection of large and granular datasets related to COVID-19 incidents as well as social and economic effects. Equipped with this data, participants will
+              work in the IronHacks workspace with JupyterLab and access to BigQuery to create novel and useful statistical models and visualizations using Python and R. Participants
+              will submit Jupyter notebooks and their outputs (html and markdown files).
             </p>
           </Col>
         </Row>
@@ -215,15 +227,15 @@ const UpcomingHackPage = () => {
               </li>
 
               <li>
-                <strong>Start of Competition followed by multiphase process:</strong> The competition starts based on invitation, followed by 3 interim and one final submission.
+                <strong>Start of Competition followed by multiphase process:</strong> The competition starts based on invitation, usually followed by multiple interim and one final submission
               </li>
 
                 <ul className="list">
                   <li>
-                    <strong>3 interim submissions:</strong> At three interim submission points, you will receive immediate feedback on your current standing, giving you the opportunity to improve over time.
+                    <strong>Interim submissions:</strong> At multiple interim submission points, you will receive immediate feedback on your current standing, giving you the opportunity to improve over time.
                   </li>
                   <li>
-                    <strong>Final submission:</strong> There will be a final forth submission before we identify the winners.
+                    <strong>Final submission:</strong> There will be a final submission before we identify the winners.
                   </li>
                 </ul>
 
@@ -252,7 +264,13 @@ const UpcomingHackPage = () => {
             </h2>
 
             <p>
-              This IronHacks calls for the participation of all kinds of data scientists trained in various disciplines. Neither do you have to be a machine learning expert, nor do you have to be trained in epidemiology. We are calling on all of those people who are interested in using data to support information policy making - and helping governments and leaders like the <a className="text-underline" href="http://www.protect.purdue.edu">Protect Purdue team</a> in battling the pandemic. In particular, we encourage those who  have ane interest to learn and  iterate quickly over the multiphase hack. Basic knowledge of statistics as well as programming in Python and R is required. But even if you are a beginner or you feel a little rusty in Python or R, you should not shy away. You can use our tutorials to warm up.
+              This IronHacks calls for the participation of all kinds of data scientists trained in various disciplines. Neither do you have
+              to be a machine learning expert, nor do you have to be trained in epidemiology. We are calling on all of those people who are
+              interested in using data to support information policy making and helping governments and leaders like the
+              <a className="text-underline" href="http://www.protect.purdue.edu">Protect Purdue team</a> in battling the pandemic. In
+              particular, we encourage those who have ane interest to learn and  iterate quickly over the multiphase hack. Basic knowledge
+              of statistics as well as programming in Python and R are required. But even if you are a beginner or you feel a little rusty
+              in Python or R, you should not shy away. You can use our tutorials to warm up.
             </p>
 
           </Col>
@@ -277,6 +295,7 @@ const UpcomingHackPage = () => {
                 'Showcases: We will publish selected models www.ironhacks.com at the end of the competition. In addition, our partners will also feature the best solutions on their website.',
                 'Global recognition: The RCODI team and its partners will promote your work via social media.',
                 'Fellowship opportunity: Selected participants will have the opportunity to discuss a fellowship at RCODI.',
+                'Scientific publication: The winners will be invited to work with the RCODI core team to publish the results in a scientific outlet. This gives participants the opportunity to contribute to an interdisciplinary stream of research on COVID-19.',
               ]}
             />
           </Col>
@@ -294,60 +313,85 @@ const UpcomingHackPage = () => {
 
             <List
               items={[
-                <p><strong>COVID-19 Data Science Challenge Summer 2020:</strong> This challenge is complete. Check out the results here!.</p>,
-                <p><strong>COVID-19 Data Science Challenge Fall 2020:</strong> This challenge will open for registration in mid-November. Sign up here at ironhacks.com to create your user profile and to receive email notifications about when you can register to save your spot in the competition.</p>
+                <p><strong>COVID-19 Data Science Challenge Summer 2020:</strong> This challenge is complete. Check out the results here!</p>,
+                <p><strong>COVID-19 Data Science Challenge Fall 2020: Protect Purdue:</strong> This challenge will open for registration in November 18th. Sign up here at ironhacks.com to create your user profile and to receive email notifications about when you can register to save your spot in the competition.</p>
               ]}
             />
           </Col>
         </Row>
 
-        <Row rowClass="py-2">
+        <Row rowClass="py-4">
           <Col>
-            <h2 className="h2 font-bold mb-2">
+            <h2 className="h2 font-bold mb-4">
               How can I stay informed about the start of the COVID-19 Data Science Challenge?
             </h2>
 
             <ul className="list">
               <li>
-                Sign up on <a className="link--underline" href="https://ironhacks.com">ironhacks.com</a> to learn more about the upcoming Protect
+                Sign up on <a className="link-underline" href="https://ironhacks.com">ironhacks.com</a> to learn more about the upcoming Protect
                 Purdue Challenge and other future challenges and timelines.
               </li>
               <li>
-                Reach out to us with any questions at <a href="mailto:ironhacks.team@gmail.com">ironhacks.team@gmail.com</a> or on Twitter
-                <a href="https://twitter.com/Purdue_RCODI">@Purdue_RCODI</a>
+                Reach out to us with any questions at <a href="mailto:ironhacks.team@gmail.com" className="text-underline">ironhacks.team@gmail.com</a> or follow us on Twitter <a href="https://twitter.com/Purdue_RCODI" className="text-underline">@Purdue_RCODI</a>
               </li>
               <li>
-                Watch our recent publicly accessible <a className="link--underline" href="https://youtu.be/vnT587J-wis">Info Sessions.</a>
+                Watch our recent publicly accessible <a className="link--underline" href="https://calendar.google.com/calendar/embed?src=32pq4ab5qn82s01suag3p1o63g%40group.calendar.google.com&ctz=America%2FNew_York">Info Sessions.</a>
               </li>
             </ul>
+          </Col>
+        </Row>
+
+        <Row rowClass="w-70p mx-auto mt-2 mb-10">
+          <Col>
+            <div className="flex flex-center mb-3">
+              <TwitterButton
+                hashtag="IronHacks"
+              />
+            </div>
+
+            <div style={{
+              maxHeight: '500px',
+              overflow: 'auto',
+              zoom: 1.5,
+            }}>
+              <TwitterTimeline
+                src="https://twitter.com/__matt_harris__/lists/ironhacks-com-14752?ref_src=twsrc%5Etfw"
+              />
+            </div>
           </Col>
         </Row>
 
         <Row rowClass="py-2">
           <Col>
             <h2 className="h2 font-bold mb-2">
-              Why should organizations partner with us?
+              What do prior participants say?
             </h2>
 
-            <p>
-              By partnering with us for the IronHacks COVID-19 Data Science Challenge, organizations have the opportunity to take collective action and help society to cope with the COVID-19 pandemic.
-            </p>
 
-            <List
-              items={[
-                'Leverage our network and reach to promote your organization\'s commitment to social good',
-                'Connect with top talent in the areas of data and computational social science',
-                'Work with us and define new data science challenges related to topics and data of your interest',
-              ]}
-            />
+            <div className="my-5">
+              <div className="flex">
+              <img src={fenyPatel} style={{width: 60, height: 60, borderRadius: '50%', marginRight: '1em'}} alt="Feny Patel"/>
+                <div className="font-italic">"The excitement to know how my model would perform after every round kept me enthused till the end! These predictions can give insights into social distancing norms and implement necessary precautions"</div>
+              </div>
+              <div className="my-4">Feny Patel, August 2020 Challenge first-place winner and Purdue University student.</div>
+            </div>
 
-            <p>
-              Join forces with us for this chance to create impact with data-driven insights that help policymakers create real change for citizens in the face of the pandemic!
-            </p>
+            <div className="my-5">
+              <div className="flex">
+                <img src={harshaPavuluri} style={{width: 60, height: 60, borderRadius: '50%', marginRight: '1em'}} alt="Harsha Pavuluri"/>
+                <div className="font-italic">"My greatest experience was being able to try on algorithms I never use. I also had the freedom to experiment, instead of defaulting to certain known models due to crunching code within 24 hours like typical hackathons,"</div>
+              </div>
+              <div className="my-4">Harsha Pavuluri, the August 2020 Challenge second-place winner and Purdue University student.</div>
+            </div>
 
-            <p>
-              <strong>Would you like to support us directly?</strong> You can contact us at <strong>ironhacks.team@gmail.com</strong> for monetary or in-kind donations to the Research Center for Open Digital Innovation at Purdue University.
-            </p>
+          </Col>
+        </Row>
+
+        <Row rowClass="bg-primary my-2">
+          <Col colClass="flex flex-center flex-align-center">
+            <Link to="/login" className="bd-1 btn cl-black font-bold my-0 my-3">
+              Sign up now
+            </Link>
           </Col>
         </Row>
 
@@ -377,6 +421,15 @@ const UpcomingHackPage = () => {
             <div>
               <small>It is financially supported by the National Science Foundation (Award #1462044).</small>
             </div>
+          </Col>
+        </Row>
+
+        <Row rowClass="py-2">
+          <Col>
+            <p>
+              <strong>Would you like to support us directly?</strong> You can contact us at <a href='mailto:c562462b.groups.purdue.edu@amer.teams.ms' target='_blank' className='text-underline'>
+              <strong>here</strong></a> partnership with the Research Center for Open Digital Innovation at Purdue University.
+            </p>
           </Col>
         </Row>
       </Section>

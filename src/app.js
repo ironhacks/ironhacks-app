@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import { Loader } from './components/loader';
-import { withRouter } from 'react-router';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { Pages } from './views/pages/';
 import {Helmet} from 'react-helmet';
 import { userMetrics } from './util/user-metrics'
@@ -124,6 +123,7 @@ class App extends Component {
       )
     } else {
       return (
+      <Router>
         <div className='App'>
           <Helmet>
             <title>IronHacks</title>
@@ -241,9 +241,10 @@ class App extends Component {
               </Switch>
           )}
         </div>
+      </Router>
       )
     }
   }
 }
 
-export default withRouter(App);
+export default App
