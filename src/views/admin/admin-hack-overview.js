@@ -45,7 +45,14 @@ class AdminHackOverview extends Component {
           value={this.state.content}
         />
 
-        <div className="flex flex-align-center flex-end py-2">
+        <div className="flex flex-align-center flex-between py-2">
+          <a
+            href={`/hacks/${this.props.hackSlug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            >
+            View live document
+          </a>
           <div
             className="btn btn-sm bg-primary px-8"
             onClick={this.updateHackOverview}>
