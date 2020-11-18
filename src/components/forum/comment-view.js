@@ -134,7 +134,7 @@ class CommentView extends Component {
           />
 
           <ReactionPicker
-            reactions={this.props.data.reactions}
+            reactions={this.props.data.reactions || {likes: [], dislikes: []}}
             docRef={this.props.data.commentRef}
             user={this.state.user}
           />
