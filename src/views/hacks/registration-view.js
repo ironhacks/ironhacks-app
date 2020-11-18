@@ -11,11 +11,10 @@ class RegistrationView extends Component {
   }
 
   registerSuccess = () => {
-    console.log('register success');
     window.firebase.analytics()
       .logEvent('register_hack', {
         'value': this.props.hackSlug
-      });
+      })
 
     userMetrics({
       event: 'register_hack',
@@ -37,7 +36,7 @@ class RegistrationView extends Component {
         window.location.reload();
       }
     })
-  };
+  }
 
   registerHack = () => {
     if (this.props.hackRegistration){
