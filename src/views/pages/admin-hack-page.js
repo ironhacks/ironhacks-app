@@ -18,7 +18,7 @@ class AdminHackPage extends Component {
       hackData: null,
       overview: '',
       hackTutorial: '',
-      rules_md: '',
+      rules: '',
       hackId: _hackId,
       loading: false,
     }
@@ -50,16 +50,10 @@ class AdminHackPage extends Component {
     this.setState({
       hack: result,
       hackData: result,
-      hackRules: result.rules ? this.decodeDocument(result.rules.doc) : '',
-      hackTutorial: result.tutorial ? this.decodeDocument(result.tutorial.doc) : '',
+      rules: result.rules || '',
       overview: result.overview || '',
       hackExtensions: result.extensions ? result.extensions : {},
     })
-  }
-
-  decodeDocument(enc) {
-    let decoded = window.atob(enc);
-    return decodeURIComponent(escape(decoded));
   }
 
   render() {
@@ -115,13 +109,6 @@ class AdminHackPage extends Component {
                     />
                   </Route>
 
-                  <Route path={`${this.baseUrl}/registration`}>
-                    <AdminHack.Registration
-                      hackId={this.hackId}
-                      hackData={this.state.hackData}
-                    />
-                  </Route>
-
                   <Route path={`${this.baseUrl}/cohorts`}>
                     <AdminHack.Cohorts
                       hackId={this.hackId}
@@ -151,6 +138,14 @@ class AdminHackPage extends Component {
                     <AdminHack.Overview
                       previousDocument={this.state.overview}
                       hackId={this.state.hackId}
+                      hackSlug={this.state.hackData.hackSlug}
+                    />
+                  </Route>
+
+                  <Route path={`${this.baseUrl}/registration`}>
+                    <AdminHack.Registration
+                      hackId={this.hackId}
+                      hackData={this.state.hackData}
                     />
                   </Route>
 
@@ -170,7 +165,7 @@ class AdminHackPage extends Component {
 
                   <Route path={`${this.baseUrl}/rules`}>
                     <AdminHack.Rules
-                      previousDocument={this.state.hackRules}
+                      previousDocument={this.state.rules}
                       hackId={this.state.hackId}
                       hackSlug={this.state.hackData.hackSlug}
                     />
