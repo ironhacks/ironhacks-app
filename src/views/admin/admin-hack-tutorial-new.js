@@ -3,6 +3,7 @@ import MarkdownEditor from '../../components/markdown-editor';
 import Button from '../../util/button';
 import { InputText } from '../../components/input';
 import { userMetrics } from '../../util/user-metrics'
+import { Section } from '../../components/layout'
 
 class AdminTutorialNew extends Component {
   constructor(props) {
@@ -59,9 +60,10 @@ class AdminTutorialNew extends Component {
 
   render() {
     return (
-        <>
-          <h2 className="pb-2">
-            Tutorial document editor
+      <>
+        <Section sectionClass="py-2">
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} New Tutorial`}
           </h2>
 
           <InputText
@@ -98,6 +100,7 @@ class AdminTutorialNew extends Component {
               Publish
             </Button>
           </div>
+        </Section>
       </>
     )
   }

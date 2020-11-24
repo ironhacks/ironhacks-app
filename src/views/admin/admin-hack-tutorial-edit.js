@@ -4,6 +4,7 @@ import { InputText } from '../../components/input';
 import Button from '../../util/button';
 import { withRouter } from 'react-router-dom'
 import { userMetrics } from '../../util/user-metrics'
+import { Section } from '../../components/layout'
 
 class AdminTutorialEdit extends Component {
   constructor(props) {
@@ -90,11 +91,11 @@ class AdminTutorialEdit extends Component {
 
   render() {
     return (
-        <>
-          <h2 className="pb-2">
-            Tutorial document editor
+      <>
+        <Section sectionClass="py-2">
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} Edit Tutorial`}
           </h2>
-
 
           <InputText
             containerClass="flex py-2 flex-between flex-align-center"
@@ -106,7 +107,6 @@ class AdminTutorialEdit extends Component {
             onInputChange={this.onInputChanged}
             disabled={this.state.loading}
           />
-
 
           <MarkdownEditor
             editorLayout='tabbed'
@@ -144,6 +144,7 @@ class AdminTutorialEdit extends Component {
               Cancel
             </Button>
           </div>
+        </Section>
       </>
     )
   }
