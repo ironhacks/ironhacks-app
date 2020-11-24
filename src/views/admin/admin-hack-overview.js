@@ -2,6 +2,7 @@ import { Component } from 'react'
 import MarkdownEditor from '../../components/markdown-editor'
 import { userMetrics } from '../../util/user-metrics'
 import { saveSuccessModal } from '../../components/alerts'
+import { Section } from '../../components/layout'
 
 class AdminHackOverview extends Component {
   constructor(props) {
@@ -35,30 +36,32 @@ class AdminHackOverview extends Component {
   render() {
     return (
       <>
-        <h2 className="pb-2">
-          Hack Overview Editor
-        </h2>
+        <Section sectionClass="py-2">
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} Overview`}
+          </h2>
 
-        <MarkdownEditor
-          editorLayout='tabbed'
-          onEditorChange={value=>this.setState({content: value})}
-          value={this.state.content}
-        />
+          <MarkdownEditor
+            editorLayout='tabbed'
+            onEditorChange={value=>this.setState({content: value})}
+            value={this.state.content}
+          />
 
-        <div className="flex flex-align-center flex-between py-2">
-          <a
-            href={`/hacks/${this.props.hackSlug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            >
-            View live document
-          </a>
-          <div
-            className="btn btn-sm bg-primary px-8"
-            onClick={this.updateHackOverview}>
-            Publish
+          <div className="flex flex-align-center flex-between py-2">
+            <a
+              href={`/hacks/${this.props.hackSlug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              >
+              View live document
+            </a>
+            <div
+              className="btn btn-sm bg-primary px-8"
+              onClick={this.updateHackOverview}>
+              Publish
+            </div>
           </div>
-        </div>
+        </Section>
       </>
     )
   }

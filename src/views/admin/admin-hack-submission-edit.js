@@ -94,8 +94,8 @@ class AdminHackSubmissionEdit extends Component {
     return (
       <Section>
         <Row>
-          <h2 className="h3">
-            {this.props.hackData.name} Submission: {this.submissionId}
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} Edit Submission`}
           </h2>
         </Row>
 

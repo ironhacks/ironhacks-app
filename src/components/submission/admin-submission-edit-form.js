@@ -176,8 +176,8 @@ class AdminSubmissionEditForm extends Component {
   render() {
     return (
       <div className="mt-3 p-2 px-4" style={{ border: '1px solid rgba(0,0,0,.2)'}}>
-        <h3 className="font-bold h3" style={{verticalAlign: 'center'}}>
-          Edit Submission: {this.props.submissionId}
+        <h3 className="h3" style={{verticalAlign: 'center'}}>
+          {this.props.submissionId}
         </h3>
 
         <InputText

@@ -168,44 +168,45 @@ class AdminHackRegistration extends Component {
   render() {
     return (
         <>
-          <Section align={false} containerClass="mx-0">
+        <Section sectionClass="py-2">
           <div className="flex flex-between flex-align-center">
-            <h2 className="h2">
-              {this.props.hackData.name} Registration
+            <h2 className="h3 font-bold">
+              {`${this.props.hackName} Registration`}
             </h2>
 
             <div
               className="btn badge badge-info py-1"
-              onClick={this.downloadRegistrationReport}
-            >
+              onClick={this.downloadRegistrationReport}>
               Download Report
             </div>
           </div>
-          </Section>
+        </Section>
 
-          <Section align={false} containerClass="mx-0" sectionClass="py-2">
-            <h3 className="h3 pb-2">
-              Registered Users: {this.state.registeredUsers.length}
-            </h3>
+        <Section sectionClass="py-2">
+          <h3 className="h3 pb-2">
+            Registered Users: {this.state.registeredUsers.length}
+          </h3>
 
-            {this.state.registeredUsers ? (
-              <AdminRegisteredUserList
-                registeredUsers={this.state.registeredUsers}
-                hackId={this.props.hackId}
-                onRemove={((userlist)=>{
-                  this.setState({registeredUsers: userlist})
-                })}
-              />
-            ):(
-              <p>No registered users</p>
-            )}
-          </Section>
+          {this.state.registeredUsers ? (
+            <AdminRegisteredUserList
+              registeredUsers={this.state.registeredUsers}
+              hackId={this.props.hackId}
+              onRemove={((userlist)=>{
+                this.setState({registeredUsers: userlist})
+              })}
+            />
+          ):(
+            <p>No registered users</p>
+          )}
+        </Section>
 
-          <Section align={false} containerClass="mx-0" sectionClass="py-2">
-            <h3 className="h3 pb-2">
-              Registration Timeline
-            </h3>
-            <p>Timestamp - UserId</p>
+        <Section sectionClass="py-2">
+          <h3 className="h3 pb-2">
+            Registration Timeline
+          </h3>
+
+          <p>Timestamp - UserId</p>
+
           <ul>
           {this.state.registrationEvents.map((item, index)=>(
             <li key={index}>
@@ -213,8 +214,7 @@ class AdminHackRegistration extends Component {
             </li>
           ))}
           </ul>
-          </Section>
-
+        </Section>
       </>
     )
   }

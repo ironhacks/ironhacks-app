@@ -4,6 +4,7 @@ import { InputText, InputCheckbox } from '../../components/input';
 import Button from '../../util/button.js';
 import { userMetrics } from '../../util/user-metrics'
 import { withRouter } from 'react-router-dom';
+import { Section } from '../../components/layout'
 
 class AdminHackTaskEdit extends Component {
   constructor(props) {
@@ -95,6 +96,11 @@ class AdminHackTaskEdit extends Component {
   render() {
     return (
         <>
+        <Section sectionClass="py-2">
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} Edit Task`}
+          </h2>
+
           <InputText
             containerClass="flex py-2 flex-between flex-align-center"
             inputClass="ml-2 flex-1"
@@ -159,8 +165,9 @@ class AdminHackTaskEdit extends Component {
               View live document
             </a>
           </div>
+        </Section>
       </>
-    );
+    )
   }
 }
 

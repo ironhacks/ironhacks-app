@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { userMetrics } from '../../util/user-metrics'
 import { InputSelect } from '../../components/input';
+import { Section } from '../../components/layout'
 
 class AdminHackTasks extends Component {
   constructor(props) {
@@ -144,7 +145,12 @@ class AdminHackTasks extends Component {
 
   render() {
     return (
-        <>
+      <>
+        <Section sectionClass="py-2">
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} Tasks`}
+          </h2>
+
           <Link to="tasks/new">
             <div className="button py-1 px-2 bg-primary font-bold fs-m2">
               + New Task Doc
@@ -224,8 +230,9 @@ class AdminHackTasks extends Component {
               </div>
             </div>
           ))}
+        </Section>
       </>
-    );
+    )
   }
 }
 
