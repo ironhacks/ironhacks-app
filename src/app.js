@@ -22,8 +22,6 @@ class App extends Component {
       userIsAdmin: false,
       userHackData: null,
     }
-
-    this._isMounted = false;
   }
 
   _filterUser = user => {
@@ -45,12 +43,7 @@ class App extends Component {
 
   componentDidMount() {
     window.firebase.analytics().logEvent('screen_view');
-    this._isMounted = true;
     this._isUserConnected();
-  }
-
-  componentWillUnmount() {
-   this._isMounted = false;
   }
 
   _updateAppNavigation = data => {
@@ -58,7 +51,7 @@ class App extends Component {
       navigateTo: data.navigateTo,
       mustNavigate: data.mustNavigate,
     })
-  };
+  }
 
   _isUserConnected = () => {
     const currentUser = window.firebase.auth().currentUser;
@@ -70,7 +63,7 @@ class App extends Component {
         user: user,
         userId: user.userId,
         userIsAdmin: false,
-      });
+      })
     }
 
     window.firebase.auth().onAuthStateChanged(async (user) => {
@@ -82,23 +75,23 @@ class App extends Component {
         const isAdmin = await window.firebase.firestore()
           .collection('admins')
           .doc(_user.userId)
-          .get();
+          .get()
 
         this._setUser({
-            user: _user,
-            userId: _user.userId,
-            userIsAdmin: isAdmin.exists,
-          })
+          user: _user,
+          userId: _user.userId,
+          userIsAdmin: isAdmin.exists,
+        })
 
       } else {
         this._setUser({
           user: false,
           userId: false,
           userIsAdmin: false,
-        });
+        })
       }
     })
-  };
+  }
 
   _setUser = data => {
     this.setState({
@@ -107,7 +100,7 @@ class App extends Component {
       userIsAdmin: data.userIsAdmin,
       loading: false,
     })
-  };
+  }
 
   render() {
     if (this.state.mustNavigate) {
