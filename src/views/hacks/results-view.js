@@ -178,7 +178,7 @@ class ResultsView extends Component {
       let finalData = finalDoc.data();
       this.setState({finalResults: finalData})
     } else {
-      console.log('no final');
+      // console.log('no final');
     }
 
   };
