@@ -20,56 +20,50 @@ class HackSelectPage extends Component {
 
   componentDidMount() {
     try {
-      this.getHacks();
+      this.getHacks()
     } catch (e) {
-      console.log('get hacks failed', e);
+      console.log('get hacks failed', e)
     }
   }
 
   getHacks = async () => {
-    const hacks = await window.firebase.firestore()
-        .collection('hacks')
-        .where('hackPublished', '==', true)
-        .get()
-        .then((result)=>{
-          let hackList = [];
-          result.docs.forEach((hack)=>{
-            let hackData = hack.data();
-            let hackId = hack.id;
-            let hackName = hackData.name;
-            hackList.push(Object.assign(
-              {available: true},
-              hackData,
-              {hackId},
-              {hackName}
-            ))
-          })
-          return hackList;
-        })
+    const hacksSnap = await window.firebase.firestore()
+      .collection('hacks')
+      .where('hackPublished', '==', true)
+      .get()
 
-    const userHacks = await window.firebase.firestore()
+    let hacks = []
+    hacksSnap.docs.forEach((hack)=>{
+      let hackData = hack.data()
+      hacks.push({
+        ...hackData,
+        available: true,
+        hackId: hack.id,
+        hackName: hackData.name,
+      })
+    })
+
+    let userHacks = []
+    const userDoc = await window.firebase.firestore()
       .collection('users')
       .doc(this.props.userId)
       .get()
-      .then((result)=>{
-        if (result.exists) {
-          let userHackList = [];
-          let data = result.data()
-          if (data.hacks) {
-            data.hacks.forEach((hack)=>{
-              userHackList.push(hack);
-            })
-          }
-          return userHackList;
-        }
-      });
+
+    if (userDoc.exists) {
+      let userData = userDoc.data()
+      if (userData.hacks) {
+        userData.hacks.forEach((hack)=>{
+          userHacks.push(hack)
+        })
+      }
+    }
 
     // ALL REGISTERED HACKS
     const registeredHacks = hacks.filter((hack)=>{
       return userHacks.includes(hack.hackId)
     })
 
-    this.setState({ registeredHacks: registeredHacks })
+    this.setState({registeredHacks: registeredHacks})
 
     // HACKS NOT REGISTERED
     const unregisteredHacks = hacks.filter((hack)=>{
@@ -78,14 +72,14 @@ class HackSelectPage extends Component {
 
     // NOT REGISTERED - OPEN FOR REGISTRATION
     const availableHacks = unregisteredHacks.filter((hack)=>{
-      return hack.registrationOpen;
+      return hack.registrationOpen
     })
 
     this.setState({ availableHacks: availableHacks })
 
     // NOT REGISTERED - NOT OPEN FOR REGISTRATION
     const unavailableHacks = unregisteredHacks.filter((hack)=>{
-      return !hack.registrationOpen;
+      return !hack.registrationOpen
     })
 
     // NOT REGISTERED - NOT OPEN FOR REGISTRATION - FUTURE DATE
@@ -93,16 +87,15 @@ class HackSelectPage extends Component {
       return Date.parse(hack.startDate) > Date.now()
     })
 
+    this.setState({upcomingHacks: upcomingHacks})
+
     // NOT REGISTERED - NOT OPEN FOR REGISTRATION - PAST DATE
     const previousHacks = unavailableHacks.filter((hack)=>{
       return Date.parse(hack.startDate) <= Date.now()
     })
 
-    this.setState({
-      upcomingHacks: upcomingHacks,
-      previousHacks: previousHacks,
-    })
-  };
+    this.setState({previousHacks: previousHacks})
+  }
 
   render() {
     if (this.state.loading) {

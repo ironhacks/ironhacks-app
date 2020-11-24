@@ -1,0 +1,76 @@
+.admin_hack_card {
+  min-height: 3em;
+  flex: 1 1 100%;
+  text-align: left;
+  border: none;
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &_list {
+    list-style: none;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2em;
+
+    &__item {
+      margin-top: .5em;
+      display: block;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .card_title {
+    line-height: 1;
+    font-size: 1em;
+    margin: 0 0 0 .5rem;
+  }
+
+  .card_description {
+    margin-top: .8em;
+    margin-bottom: .3em;
+    margin-left: .5rem;
+    line-height: 1;
+    font-size: .8em;
+  }
+
+  .card_meta {
+    font-size: 12px;
+    margin-left: .5rem;
+  }
+
+  a {
+    color: inherit;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &.newHackCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      color: var(--color-primary);
+      font-size: 20px;
+      font-weight: 800;
+      margin: 0;
+
+      &:first-child {
+        line-height: 40px;
+        font-size: 40px;
+      }
+    }
+  }
+}

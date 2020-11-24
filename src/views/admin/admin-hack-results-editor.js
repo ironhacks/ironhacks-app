@@ -291,8 +291,8 @@ class AdminHackResultsEditor extends Component {
   render() {
     return (
         <>
-          <h2 className="h3">
-            Results: <span>{this.submissionId}</span>
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} Results: ${this.submissionId}`}
           </h2>
 
           <div className="flex flex-align-center pb-2 border-bottom">

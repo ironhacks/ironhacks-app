@@ -30,6 +30,13 @@ class TutorialListView extends Component {
       })
     })
 
+    // title
+    // created
+    // updated
+    // result.sort((a,b)=>{ return a.created.localeCompare(b.created) })
+    result.sort((a,b)=>{ return a.title.localeCompare(b.title) })
+    // result.sort((a,b)=>{ return b.created.localeCompare(a.created) })
+
     this.setState({tutorials: result})
   }
 

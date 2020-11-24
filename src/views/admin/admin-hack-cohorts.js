@@ -266,12 +266,12 @@ class AdminHackCohorts extends Component {
   render() {
     return (
         <>
-          <h2>
-            {this.props.hackData.name} Registration
-          </h2>
-
           <Section sectionClass="py-2">
-            <h2>
+            <h2 className="h3 font-bold">
+              {`${this.props.hackName} Cohorts`}
+            </h2>
+
+            <h2 className="h4 font-bold my-4">
               Cohorts Settings
             </h2>
 
@@ -346,25 +346,23 @@ class AdminHackCohorts extends Component {
               </div>
             ))}
 
-            <p>
-              *You will be unable to make changes to user cohorts after the hack starting date.
-            </p>
+            <div className="my-3">
+              <button
+                className={'btn btn-outline-dark'}
+                disabled={this.state.addDisabled || this.state.syncing}
+                onClick={this.addCohort}
+              >
+                +Add Cohort
+              </button>
 
-            <button
-              className={'btn btn-outline-dark'}
-              disabled={this.state.addDisabled || this.state.syncing}
-              onClick={this.addCohort}
-            >
-              +Add Cohort
-            </button>
-
-            <button
-              className={'ml-2 btn btn-success'}
-              disabled={this.state.syncing}
-              onClick={this.saveCohorts}
-            >
-              Save Settings
-            </button>
+              <button
+                className={'ml-2 btn btn-success'}
+                disabled={this.state.syncing}
+                onClick={this.saveCohorts}
+              >
+                Save Settings
+              </button>
+            </div>
 
           </Section>
 

@@ -32,12 +32,12 @@ class TrainingKeyLink extends Component {
   };
 
   onReject(error) {
-    // console.log('Training key file not found')
+    console.log('Access key file not found')
   }
 
   getFileUrl() {
     window.firebase.storage()
-      .ref('/data/ DeKE13nHvqzolDUa0Fg9/keys/competition')
+      .ref('/data/keys/bigquery')
       .child(`${this.props.userId}.json`)
       .getDownloadURL()
       .then(this.onResolve, this.onReject);

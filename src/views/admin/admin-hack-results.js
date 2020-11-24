@@ -5,6 +5,7 @@ import { fire2Ms } from '../../util/date-utils'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2';
 import { userMetrics } from '../../util/user-metrics'
+import { Section } from '../../components/layout'
 
 class AdminHackResults extends Component {
   constructor(props) {
@@ -100,8 +101,9 @@ class AdminHackResults extends Component {
   render() {
     return (
         <>
-          <h2 className="h3 pb-2">
-            Submission Results
+        <Section sectionClass="py-2">
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} Submission Results`}
           </h2>
 
           <h3 className="h4 fm-1 font-bold">
@@ -165,6 +167,7 @@ class AdminHackResults extends Component {
               View live document
             </a>
           </div>
+        </Section>
       </>
     )
   }

@@ -147,8 +147,8 @@ class AdminHackSubmissions extends Component {
   render() {
     return (
       <Section sectionClass="pt-2">
-        <h2 className="h3">
-          {this.props.hackData.name} Submissions
+        <h2 className="h3 font-bold">
+          {`${this.props.hackName} Submissions`}
         </h2>
 
         <Link to="submissions/new">

@@ -9,7 +9,12 @@ class Header extends Component {
 
     this.state = {
       showMenu: false,
-    };
+    }
+
+    this.isAdminPage = false
+    if (window.location.pathname.indexOf('/admin/') === 0) {
+      this.isAdminPage = true
+    }
 
     this.userMenuRef = createRef();
   }
@@ -41,7 +46,12 @@ class Header extends Component {
 
   render() {
     return (
-        <header className='header site-header container-fluid'>
+        <header className={[
+          'header',
+          'site-header',
+          'container-fluid',
+          this.isAdminPage ? 'admin-header' : '',
+        ].join(' ').trim()}>
           <div className='container header_container'>
             <Row rowClass='flex flex-between'>
               <Link className='header_logo' to='/hacks'>

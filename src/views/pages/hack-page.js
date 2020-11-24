@@ -9,6 +9,8 @@ import ThreadView from '../forum/thread-view';
 import ThreadEditView from '../forum/post-edit-view';
 import NewThread from '../forum/new-thread';
 import { CountdownTimer } from '../../components/timer';
+import { fire2Ms } from '../../util/date-utils'
+import { InfoBanner }  from '../../components/info-banner'
 
 const HackNavSection = ({
     hackDisplayOptions,
@@ -39,6 +41,7 @@ class HackPage extends Component {
       activeView: 'task',
       loading: true,
       userCohort: null,
+      hackBanner: null,
     }
 
   }
@@ -47,16 +50,43 @@ class HackPage extends Component {
     this.getHack(this.hackSlug)
   }
 
+  getHackBanners = async (hackId) => {
+    let timeNow = new Date()
+    let snap = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(hackId)
+      .collection('banners')
+      .where('active', '==', true)
+      .where('ends_at', '>', timeNow)
+      .get()
+
+    let banners = []
+    snap.docs.forEach((banner, index) => {
+      banners.push({
+        bannerId: banner.id,
+        ...banner.data()
+      })
+    })
+
+    banners.sort((a,b)=> {return fire2Ms(a.starts_at) - fire2Ms(b.starts_at)})
+
+    if (banners.length > 0) {
+      this.setState({hackBanner: banners[0]})
+    }
+  }
+
   getHack = async hackSlug => {
     let hacks = await window.firebase.firestore()
       .collection('hacks')
       .where('hackSlug', '==', hackSlug)
-      .get();
+      .get()
 
     // GET HACK BY SLUG
     if (hacks.docs[0].exists) {
       let hackData = hacks.docs[0].data()
       let hackId = hacks.docs[0].id;
+
+      this.getHackBanners(hackId)
 
       // GET USER COHORT
       let doc = await window.firebase.firestore()
@@ -111,14 +141,13 @@ class HackPage extends Component {
 
       let cohortSettings = cohortSettingsDoc.data()
       let userCohortSettings = {}
-      if (cohortId in cohortSettings) {
+
+      if (cohortSettings && cohortId in cohortSettings) {
         userCohortSettings = cohortSettings[cohortId].properties
-        if ('task' in userCohortSettings) {
+          if ('task' in userCohortSettings) {
           hackSettings.task = userCohortSettings.task.name
         }
       }
-
-      console.log('userCohortSettings', userCohortSettings)
 
       this.setState({
         hackId: hackSettings.hackId,
@@ -134,7 +163,6 @@ class HackPage extends Component {
         task: hackSettings.task,
         taskPublished: hackSettings.taskPublished,
         upcomingEvent: hackSettings.upcomingEvent,
-
       })
     }
   }
@@ -170,7 +198,7 @@ class HackPage extends Component {
           >
 
         {/* PAGE BREADCRUMB NAVIGATION */}
-        <Section sectionClass="mb-2 bg-grey-dk4 cl-white">
+        <Section sectionClass="mb-0 bg-grey-dk4 cl-white">
           <Row>
             <HackPageBreadCrumbs
               hackSlug={this.hackSlug}
@@ -179,6 +207,16 @@ class HackPage extends Component {
           </Row>
         </Section>
 
+        {/* HACK INFO BANNER */}
+        {this.state.hackBanner && (
+          <InfoBanner
+            content={this.state.hackBanner.content}
+            color={this.state.hackBanner.color}
+            bg_color={this.state.hackBanner.bg_color}
+          />
+        )}
+
+        <div className="py-2"/>
 
         {this.state.upcomingEvent && (
           <div className="event-countdown" style={{
@@ -208,6 +246,8 @@ class HackPage extends Component {
                   hackSlug={this.hackSlug}
                   hackId={this.state.hackId}
                   hackName={this.state.name}
+                  hackDocument={this.state.overview}
+                  hackBannerImg={this.state.bannerImg}
                   hackRegistration={this.state.registration}
                 />
               </Section>

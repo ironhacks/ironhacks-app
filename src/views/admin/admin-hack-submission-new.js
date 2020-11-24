@@ -179,8 +179,8 @@ class AdminHackSubmissionNew extends Component {
   render() {
     return (
       <Section>
-        <h2 className="h3">
-          {this.props.hackData.name} New Submission
+        <h2 className="h3 font-bold">
+          {`${this.props.hackName} New Submission`}
         </h2>
 
         <Row>

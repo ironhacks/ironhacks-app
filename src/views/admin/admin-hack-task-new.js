@@ -3,6 +3,7 @@ import MarkdownEditor from '../../components/markdown-editor';
 import { InputText, InputCheckbox } from '../../components/input';
 import Button from '../../util/button.js';
 import { userMetrics } from '../../util/user-metrics'
+import { Section } from '../../components/layout'
 
 class AdminHackTaskNew extends Component {
   constructor(props) {
@@ -73,6 +74,11 @@ class AdminHackTaskNew extends Component {
   render() {
     return (
         <>
+        <Section sectionClass="py-2">
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} New Task`}
+          </h2>
+
           <InputText
             containerClass="flex py-2 flex-between flex-align-center"
             inputClass="ml-2 flex-1"
@@ -137,8 +143,9 @@ class AdminHackTaskNew extends Component {
               View live document
             </a>
           </div>
+        </Section>
       </>
-    );
+    )
   }
 }
 

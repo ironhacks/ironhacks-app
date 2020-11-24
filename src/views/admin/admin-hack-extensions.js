@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import Separator from '../../util/separator.js';
 import { InputText, InputCheckbox } from '../../components/input';
 import { Section, Row } from '../../components/layout';
 
@@ -93,15 +92,14 @@ class AdminHackExtensions extends Component {
   render() {
     return (
       <>
-        <h2>
-          {this.props.hack.name} Extensions
-        </h2>
-
-        <Separator primary />
-
         <Section sectionClass="py-2">
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} Extensions`}
+          </h2>
 
-          <h3 className="h3 py-3">Google Calendar Integration</h3>
+          <h3 className="h3 py-3">
+            Google Calendar Integration
+          </h3>
 
           <InputCheckbox
             label="Show Calendar Page"

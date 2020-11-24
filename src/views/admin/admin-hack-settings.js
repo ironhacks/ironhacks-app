@@ -287,8 +287,8 @@ class AdminHackSettings extends Component {
     return (
       <>
         <Section sectionClass="pt-2">
-          <h2 className="h3">
-            {this.props.hack.name} Settings
+          <h2 className="h3 font-bold">
+            {`${this.props.hackName} Settings`}
           </h2>
 
           <AdminImageUpload

@@ -1,8 +1,9 @@
 import { Component } from 'react';
 import Swal from 'sweetalert2';
-import { Row, Col } from '../../components/layout';
+import { Section, Row, Col } from '../../components/layout';
 import { registerUser } from '../../services/register-hack';
 import { userMetrics } from '../../util/user-metrics'
+import { MdContentView }  from '../../components/markdown-viewer';
 
 class RegistrationView extends Component {
   constructor(props) {
@@ -78,22 +79,49 @@ class RegistrationView extends Component {
   render() {
     return (
       <>
-        <Row>
-          <Col>
-            <h2 className="h2 my-2">{this.props.hackName} Registration</h2>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <button
-              onClick={this.registerHack}
-              className="btn btn-primary my-3"
-              disabled={this.state.registerDisabled}
-              >
-                Start Registration
-            </button>
-          </Col>
-        </Row>
+        <Section sectionClass="py-2">
+          <Row>
+            <img src={this.props.hackBannerImg} alt='Hack Banner Img'/>
+          </Row>
+        </Section>
+        <Section sectionClass="py-2">
+          <Row>
+            <Col>
+              <h2 className="h2 my-2">{this.props.hackName} Registration</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <button
+                onClick={this.registerHack}
+                className="btn btn-primary my-3"
+                disabled={this.state.registerDisabled}
+                >
+                  Register
+              </button>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <MdContentView
+                content={this.props.hackDocument}
+                encoded={false}
+                emptyText="Hack Overview not available yet."
+              />
+            </Col>
+          </Row>
+          <Row rowClass="mb-3">
+            <Col colClass="flex flex-center">
+              <button
+                onClick={this.registerHack}
+                className="btn btn-primary my-3"
+                disabled={this.state.registerDisabled}
+                >
+                  Register
+              </button>
+            </Col>
+          </Row>
+        </Section>
       </>
     )
   }
