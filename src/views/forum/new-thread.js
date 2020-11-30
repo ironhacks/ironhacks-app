@@ -1,48 +1,9 @@
-import { Component } from 'react';
-import styled from 'styled-components';
-import MarkdownEditor from '../../components/markdown-editor';
-import {Loader} from '../../components/loader';
-import { withRouter } from 'react-router-dom';
+import { Component } from 'react'
+import MarkdownEditor from '../../components/markdown-editor'
+import { withRouter } from 'react-router-dom'
 import { userMetrics } from '../../util/user-metrics'
-
-const SectionContainer = styled('div')`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0 10%;
-  height: ${(props) => props.theme.containerHeight};
-  background-color: ${(props) => props.theme.backgroundColor};
-  overflow: auto;
-`;
-
-const Header = styled('div')`
-  width 100%;
-  margin-top: 25px;
-
-  label {
-    font-weight: 700;
-    font-size: 18px;
-
-    span {
-      font-weight: 500;
-      font-style: italic;
-      font-size: 12px;
-      color: #c02222;
-    }
-  }
-`;
-
-
-const TitleInput = styled('input')`
-  width: 50%;
-  height: 30px;
-  background-color: #f2f2f2;
-  border: 1px solid #999999;
-  border-radius: 3px;
-  padding-left: 10px;
-  margin-bottom: 10px;
-`;
+import { Row, Col } from '../../components/layout'
+import { InputText } from '../../components/input'
 
 class NewThread extends Component {
   constructor(props) {
@@ -56,37 +17,26 @@ class NewThread extends Component {
       mustNavigate: false,
       selectedHack: 0,
       selectedForum: 0,
-      submitDisabled: true,
+      submitDisabled: false,
     }
 
-    this.firestore = window.firebase.firestore();
+    this.firestore = window.firebase.firestore()
   }
 
   onEditorChange = markdown => {
-    this.setState({ markdown: markdown })
-    this.submitIsDisabled()
-  };
-
-  componentDidMount() {
-
+    this.setState({markdown: markdown})
   }
 
-  handleInputChange = event => {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
+  handleInputChange = (name, value) => {
     this.setState({ [name]: value })
-    this.submitIsDisabled();
-  };
+  }
 
-  handleSubmit = event => {
-    event.preventDefault();
-    let hackId;
-    const forumId = 'general';
-    hackId = this.state.currentHack;
+  handleSubmit = () => {
+    this.setState({loading: true})
 
-    const currentDate = new Date();
-    const codedBody = this.utoa(this.state.markdown);
+    const forumId = 'general'
+    const currentDate = new Date()
+    const encodedBody = this.utoa(this.state.markdown)
 
     let postData = {
       title: this.state.title,
@@ -94,16 +44,17 @@ class NewThread extends Component {
       adminPost: false,
       authorName: this.props.user.displayName,
       createdAt: currentDate,
-      hackId: hackId,
+      hackId: this.props.hackId,
       forumId: forumId,
-      body: codedBody,
-    };
+      body: encodedBody,
+    }
 
     if (this.props.userIsAdmin){
       postData.adminPost = true;
     }
 
     userMetrics({event: 'submit_post'})
+
     window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -112,53 +63,38 @@ class NewThread extends Component {
       .collection('posts')
       .add(postData)
       .then((postDoc) => {
-        const threadId = postDoc.id;
+        const threadId = postDoc.id
+
         this.setState({
           threadRef: threadId
         })
-        window.history.back();
+
+        this.setState({loading: false})
+        window.history.back()
       })
       .catch(function(error) {
-        console.error('Error adding document: ', error);
+        console.error('Error adding document: ', error)
       })
-  };
-
-
+  }
 
   utoa(str) {
     return window.btoa(unescape(encodeURIComponent(str)));
   }
 
-  submitIsDisabled = () => {
-    if (this.state.markdown === '' || this.state.title === '') {
-      this.setState({submitDisabled: true});
-      return true;
-    } else {
-      this.setState({submitDisabled: false});
-    }
-  };
-
   render() {
     return (
-      <>
-      {this.state.loading ? (
-          <SectionContainer>
-            <Loader />
-          </SectionContainer>
-      ) : (
-        <SectionContainer>
-          <Header>
-            <label className="mr-2">
-              Title
-            </label>
-
-            <TitleInput
-              type='text'
-              placeholder='Thread Title..'
-              onChange={this.handleInputChange}
-              name='title'
-            />
-          </Header>
+      <Row rowClass="my-2">
+        <Col>
+          <InputText
+            containerClass="my-2 flex flex-align-center"
+            inputClass="px-1 flex-1"
+            labelClass="mr-2 font-extrabold mb-0"
+            name="title"
+            placeholder="Post Title"
+            label="Title:"
+            value={this.state.title || ''}
+            onInputChange={this.handleInputChange}
+          />
 
           <MarkdownEditor
             editorLayout='tabbed'
@@ -177,12 +113,11 @@ class NewThread extends Component {
           </div>
 
           <p>
-            Format your post Markdown, <strong> you can learn more about Markdown syntax<a target='_blank' rel='noopener noreferrer' href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet'> here.</a>)</strong>
+            Format your post Markdown, <strong> you can learn more about Markdown syntax <a className="text-underline" target='_blank' rel='noopener noreferrer' href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet'>here.</a></strong>
             <br/>Click the 'Preview' button to see you post before submitting.
           </p>
-        </SectionContainer>
-    )}
-    </>
+        </Col>
+      </Row>
     )
   }
 }

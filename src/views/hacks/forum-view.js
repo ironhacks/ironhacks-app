@@ -1,6 +1,7 @@
-import { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import PostPreview from '../../components/forum/post-preview';
+import { Component } from 'react'
+import { Redirect } from 'react-router-dom'
+import PostPreview from '../../components/forum/post-preview'
+import { Row } from '../../components/layout'
 
 class ForumView extends Component {
   constructor(props) {
@@ -65,33 +66,34 @@ class ForumView extends Component {
     }
 
     return (
-      <div className="post_list">
-        <div className="post_list__controls">
-          {this.props.userIsAdmin && (
-            <div
-              className="button create_post_button"
-              onClick={this.newThread}>
-              + New Post
-            </div>
-          )}
+      <Row>
+        <div className="post_list">
+          <div className="post_list__controls">
+            {this.props.userIsAdmin && (
+              <div
+                className="button create_post_button"
+                onClick={this.newThread}>
+                + New Post
+              </div>
+            )}
+          </div>
+
+          {this.state.posts.map((post, index) => {
+            return (
+              <PostPreview
+                key={post.id}
+                postId={post.id}
+                postRef={post.ref}
+                postTitle={post.data.title}
+                postAuthor={post.data.authorName}
+                postDate={post.data.createdAt.toDate().toLocaleDateString()}
+                thread={post.data}
+                user={this.props.user}
+              />
+            )
+          })}
         </div>
-
-        {this.state.posts.map((post, index) => {
-          return (
-            <PostPreview
-              key={post.id}
-              postId={post.id}
-              postRef={post.ref}
-              postTitle={post.data.title}
-              postAuthor={post.data.authorName}
-              postDate={post.data.createdAt.toDate().toLocaleDateString()}
-              thread={post.data}
-              user={this.props.user}
-            />
-          )
-        })}
-
-      </div>
+      </Row>
     )
   }
 }
