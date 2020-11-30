@@ -1,0 +1,36 @@
+.results_table {
+  border-collapse: collapse;
+  border-radius: 4px;
+  overflow: hidden;
+  width: 100%;
+
+  thead {
+    background-color: var(--gray-dark);
+    color: var(--white);
+  }
+
+  th {
+    padding: .4em 0;
+  }
+
+  tr {
+    position: relative;
+
+    &:nth-child(even) {
+      background-color: #e2e2e2;
+    }
+
+    td,
+    th {
+      text-align: center;
+    }
+  }
+
+  a {
+    padding: 10px;
+    font-weight: 700;
+    color: white;
+    background-color: #e6b92f;
+    border-radius: 4px;
+  }
+}
