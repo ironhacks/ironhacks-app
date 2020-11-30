@@ -1,19 +1,19 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 
 class InputCheckbox extends Component {
-  handleChange = event => {
-    if (this.props.onInputChange){
+  handleChange = (event) => {
+    if (this.props.onInputChange) {
       let value = event.target.checked
-      this.props.onInputChange(this.props.name, value);
+      this.props.onInputChange(this.props.name, value)
     }
-  };
+  }
 
   render() {
     return (
       <div className={'input_field'}>
         <label className={`${this.props.containerClass}`}>
-          <span className={`input__name ${this.props.labelClass ? this.props.labelClass : 'mr-3' }`}>
+          <span className={`input__name ${this.props.labelClass ? this.props.labelClass : 'mr-3'}`}>
             {this.props.label}
           </span>
           <input
@@ -29,7 +29,6 @@ class InputCheckbox extends Component {
     )
   }
 }
-
 
 InputCheckbox.defaultProps = {
   name: '',

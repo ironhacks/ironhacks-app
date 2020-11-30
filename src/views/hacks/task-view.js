@@ -1,12 +1,12 @@
-import { Component } from 'react';
-import { Row, Col } from '../../components/layout';
-import { MdContentView }  from '../../components/markdown-viewer';
-import Swal from 'sweetalert2';
+import { Component } from 'react'
+import { Row, Col } from '../../components/layout'
+import { MdContentView } from '../../components/markdown-viewer'
+import Swal from 'sweetalert2'
 import { userMetrics } from '../../util/user-metrics'
 
 class TaskView extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       loading: true,
       taskButtonDisabled: false,
@@ -15,20 +15,21 @@ class TaskView extends Component {
     }
   }
 
-  componentDidMount(){
-    userMetrics({event: 'view_task'})
+  componentDidMount() {
+    userMetrics({ event: 'view_task' })
     this.getUserForms()
     this.getTask()
   }
 
   getTask = () => {
-    window.firebase.firestore()
+    window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('tasks')
       .doc(this.props.taskId)
       .get()
-      .then((doc)=>{
+      .then((doc) => {
         let task = doc.data()
         task.taskId = doc.id
         this.setState({
@@ -38,18 +39,19 @@ class TaskView extends Component {
       })
   }
 
-  getUserForms(){
-    window.firebase.firestore()
+  getUserForms() {
+    window.firebase
+      .firestore()
       .collection('users')
       .doc(this.props.userId)
       .collection('forms')
       .doc(this.props.hackId)
       .get()
-      .then((doc)=>{
-        if (doc.exists){
-          let data = doc.data();
-          if ('hackTaskSurvey' in data){
-            this.setState({formFilled: true});
+      .then((doc) => {
+        if (doc.exists) {
+          let data = doc.data()
+          if ('hackTaskSurvey' in data) {
+            this.setState({ formFilled: true })
           }
         }
       })
@@ -60,26 +62,30 @@ class TaskView extends Component {
   // RETURNS WE IMMEDIATLEY ADD A PLACEHOLDER TO TRIGGER
   // TASK VIEW ON LOAD SINCE THE SURVEY HAS BEEN LOADED
   taskSurveyViewed = async () => {
-    await window.firebase.firestore()
+    await window.firebase
+      .firestore()
       .collection('users')
       .doc(this.props.userId)
       .collection('forms')
       .doc(this.props.hackId)
-      .set({
-        hackTaskSurvey: { viewed: true }
-      }, {merge: true})
+      .set(
+        {
+          hackTaskSurvey: { viewed: true },
+        },
+        { merge: true }
+      )
   }
 
   showTaskSurvey = () => {
-    let hackId = this.props.hackId;
-    let userEmail = this.props.userEmail;
-    let userId = this.props.userId;
-    let formUrl = this.state.task.survey;
+    let hackId = this.props.hackId
+    let userEmail = this.props.userEmail
+    let userId = this.props.userId
+    let formUrl = this.state.task.survey
 
-    let formType = 'hackTaskSurvey';
-    let alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`;
+    let formType = 'hackTaskSurvey'
+    let alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`
 
-    userMetrics({event: 'open_survey'})
+    userMetrics({ event: 'open_survey' })
     this.taskSurveyViewed()
 
     Swal.fire({
@@ -89,8 +95,7 @@ class TaskView extends Component {
       showConfirmButton: false,
       allowOutsideClick: false,
       customClass: 'surveyAlert',
-    })
-    .then((result) => {
+    }).then((result) => {
       this.setState({ formFilled: true })
     })
   }
@@ -98,55 +103,51 @@ class TaskView extends Component {
   render() {
     return (
       <>
-      <Row>
-        <Col>
-        {this.props.taskPublished ? (
-          <>
-          {this.state.task && (
-            <>
-            {this.state.task.surveyEnabled ? (
+        <Row>
+          <Col>
+            {this.props.taskPublished ? (
               <>
-              {!this.state.formFilled ? (
-                <div>
-                  <p>
-                    Please accept the hack terms and complete the form to view the task.
-                  </p>
+                {this.state.task && (
+                  <>
+                    {this.state.task.surveyEnabled ? (
+                      <>
+                        {!this.state.formFilled ? (
+                          <div>
+                            <p>Please accept the hack terms and complete the form to view the task.</p>
 
-                  <button
-                    className="btn btn-dark"
-                    onClick={this.showTaskSurvey}
-                    disabled={this.state.taskButtonDisabled}
-                    >
-                    Get Task
-                  </button>
-                </div>
-              ):(
-                <MdContentView
-                  content={this.state.task.doc}
-                  encoded={true}
-                  emptyText="Task Document is not available yet."
-                />
-              )}
+                            <button
+                              className="btn btn-dark"
+                              onClick={this.showTaskSurvey}
+                              disabled={this.state.taskButtonDisabled}
+                            >
+                              Get Task
+                            </button>
+                          </div>
+                        ) : (
+                          <MdContentView
+                            content={this.state.task.doc}
+                            encoded={true}
+                            emptyText="Task Document is not available yet."
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <MdContentView
+                        content={this.state.task.doc}
+                        encoded={true}
+                        emptyText="Task Document is not available yet."
+                      />
+                    )}
+                  </>
+                )}
               </>
-            ):(
-              <MdContentView
-                content={this.state.task.doc}
-                encoded={true}
-                emptyText="Task Document is not available yet."
-              />
+            ) : (
+              <div>
+                <p>The task document is not available yet.</p>
+              </div>
             )}
-          </>
-          )}
-        </>
-        ) : (
-          <div>
-            <p>
-              The task document is not available yet.
-            </p>
-          </div>
-        )}
-        </Col>
-      </Row>
+          </Col>
+        </Row>
       </>
     )
   }

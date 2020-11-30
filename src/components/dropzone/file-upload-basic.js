@@ -1,21 +1,17 @@
-import {useDropzone} from 'react-dropzone';
+import { useDropzone } from 'react-dropzone'
 
 function FileUploadBasic(props) {
-  const {
-    acceptedFiles,
-    getRootProps,
-    getInputProps
-  } = useDropzone();
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
 
-  const files = acceptedFiles.map(file => (
+  const files = acceptedFiles.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
     </li>
-  ));
+  ))
 
   return (
     <section className="container">
-      <div {...getRootProps({className: 'dropzone'})}>
+      <div {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} />
         <p>Drag 'n' drop some files here, or click to select files</p>
       </div>
@@ -25,7 +21,7 @@ function FileUploadBasic(props) {
         <ul>{files}</ul>
       </aside>
     </section>
-  );
+  )
 }
 
 export { FileUploadBasic }

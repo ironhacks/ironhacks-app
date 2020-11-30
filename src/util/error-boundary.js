@@ -1,22 +1,22 @@
-import { Component } from 'react';
+import { Component } from 'react'
 
 class ErrorBoundary extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       hasError: false,
       error: null,
       errorInfo: null,
-    };
+    }
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true };
+    return { hasError: true }
   }
 
   componentDidCatch(error, errorInfo) {
-    console.log('Component error', error, errorInfo);
-    this.setState({error: error})
+    console.log('Component error', error, errorInfo)
+    this.setState({ error: error })
   }
 
   render() {
@@ -26,10 +26,8 @@ class ErrorBoundary extends Component {
           <h1>x</h1>
         </div>
       )
-    }
-
-    else {
-      return this.props.children;
+    } else {
+      return this.props.children
     }
   }
 }

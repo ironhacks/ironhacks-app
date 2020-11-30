@@ -1,13 +1,13 @@
-import { Component } from 'react';
-import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { Component } from 'react'
+import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import { userMetrics } from '../../util/user-metrics'
-import { InputSelect } from '../../components/input';
+import { InputSelect } from '../../components/input'
 import { Section } from '../../components/layout'
 
 class AdminHackTasks extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     let displayOptions = this.props.displayOptions
 
@@ -21,7 +21,7 @@ class AdminHackTasks extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getTasks()
   }
 
@@ -29,7 +29,8 @@ class AdminHackTasks extends Component {
     let taskSelect = this.state.taskSelect
     let tasks = []
 
-    const taskList = await window.firebase.firestore()
+    const taskList = await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('tasks')
@@ -39,7 +40,7 @@ class AdminHackTasks extends Component {
       let taskData = task.data()
       tasks.push({
         taskId: task.id,
-        taskTitle: taskData.title
+        taskTitle: taskData.title,
       })
 
       taskSelect.push({
@@ -50,7 +51,7 @@ class AdminHackTasks extends Component {
 
     this.setState({
       tasks: tasks,
-      loading: false
+      loading: false,
     })
   }
 
@@ -59,7 +60,7 @@ class AdminHackTasks extends Component {
       return false
     }
 
-    this.setState({loading: true})
+    this.setState({ loading: true })
 
     let taskPublished = !this.state.taskPublished
     let displayOptions = this.props.displayOptions
@@ -70,13 +71,17 @@ class AdminHackTasks extends Component {
       hackId: this.props.hackId,
     })
 
-    window.firebase.firestore()
+    window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
-      .set({
-        displayOptions: displayOptions,
-      }, {merge: true})
-      .then(()=>{
+      .set(
+        {
+          displayOptions: displayOptions,
+        },
+        { merge: true }
+      )
+      .then(() => {
         this.setState({
           loading: false,
           taskPublished: taskPublished,
@@ -85,32 +90,39 @@ class AdminHackTasks extends Component {
   }
 
   updateDefaultTask = (name, data) => {
-    this.setState({loading: true})
-    this.setState({[name]: data})
+    this.setState({ loading: true })
+    this.setState({ [name]: data })
 
-    window.firebase.firestore()
+    window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
-      .set({
-        defaultTask: data,
-      }, {merge: true})
-      .then(()=>{
-        this.setState({loading: false})
+      .set(
+        {
+          defaultTask: data,
+        },
+        { merge: true }
+      )
+      .then(() => {
+        this.setState({ loading: false })
       })
   }
 
   deleteTask = async (taskId) => {
-    let tasks = this.state.tasks;
-    tasks = tasks.filter(task=>{ return task.taskId !== taskId })
+    let tasks = this.state.tasks
+    tasks = tasks.filter((task) => {
+      return task.taskId !== taskId
+    })
 
-    await window.firebase.firestore()
+    await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('tasks')
       .doc(taskId)
       .delete()
 
-    this.setState({tasks})
+    this.setState({ tasks })
 
     userMetrics({
       event: 'task-deleted',
@@ -120,7 +132,7 @@ class AdminHackTasks extends Component {
   }
 
   showConfirmDeleteModal = (taskId) => {
-    this.setState({loading: true})
+    this.setState({ loading: true })
 
     Swal.fire({
       title: 'Are you sure?',
@@ -132,13 +144,12 @@ class AdminHackTasks extends Component {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Delete'
-    })
-    .then((result) => {
+      confirmButtonText: 'Delete',
+    }).then((result) => {
       if (result.value) {
         this.deleteTask(taskId)
       } else {
-        this.setState({loading: false})
+        this.setState({ loading: false })
       }
     })
   }
@@ -147,14 +158,10 @@ class AdminHackTasks extends Component {
     return (
       <>
         <Section sectionClass="py-2">
-          <h2 className="h3 font-bold">
-            {`${this.props.hackName} Tasks`}
-          </h2>
+          <h2 className="h3 font-bold">{`${this.props.hackName} Tasks`}</h2>
 
           <Link to="tasks/new">
-            <div className="button py-1 px-2 bg-primary font-bold fs-m2">
-              + New Task Doc
-            </div>
+            <div className="button py-1 px-2 bg-primary font-bold fs-m2">+ New Task Doc</div>
           </Link>
 
           <InputSelect
@@ -169,62 +176,40 @@ class AdminHackTasks extends Component {
             disabled={this.state.loading}
           />
 
-
-          <h3 className="my-3">
-            Task Documents:
-          </h3>
+          <h3 className="my-3">Task Documents:</h3>
 
           <div className="flex flex-align-center pb-2 border-bottom">
-          {this.state.taskPublished ? (
-            <>
-              <div className='font-italic'>
-                Task page is visible now
-              </div>
-              <div
-                className='btn-sm button ml-auto bg-secondary cl-white'
-                onClick={this.publishTask}
-              >
-                Unpublish Task
-              </div>
-            </>
-          ) : (
-            <>
-              <div className='font-italic'>
-                Task page is not visible now
-              </div>
+            {this.state.taskPublished ? (
+              <>
+                <div className="font-italic">Task page is visible now</div>
+                <div className="btn-sm button ml-auto bg-secondary cl-white" onClick={this.publishTask}>
+                  Unpublish Task
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="font-italic">Task page is not visible now</div>
 
-              <div
-                className='btn-sm button ml-auto bg-info cl-white'
-                onClick={this.publishTask}
-              >
-                Publish Task
-              </div>
-            </>
-          )}
+                <div className="btn-sm button ml-auto bg-info cl-white" onClick={this.publishTask}>
+                  Publish Task
+                </div>
+              </>
+            )}
           </div>
 
-          {this.state.tasks.map((task,index)=>(
-            <div
-              className="flex flex-between flex-align-center my-2"
-              key={index}>
-              <Link
-                to={`tasks/${task.taskId}/edit`}
-                >
-                {task.taskTitle || 'Untitled Task'}
-              </Link>
+          {this.state.tasks.map((task, index) => (
+            <div className="flex flex-between flex-align-center my-2" key={index}>
+              <Link to={`tasks/${task.taskId}/edit`}>{task.taskTitle || 'Untitled Task'}</Link>
 
               <div className="flex flex-between">
                 <div
                   className={'btn btn-sm btn-danger flex-self-start mr-2 fs-m3'}
-                  onClick={()=>this.showConfirmDeleteModal(task.taskId)}
-                  >
+                  onClick={() => this.showConfirmDeleteModal(task.taskId)}
+                >
                   Delete Task
                 </div>
 
-                <Link
-                  to={`tasks/${task.taskId}/edit`}
-                  className={'btn btn-sm btn-success flex-self-end fs-m3'}
-                  >
+                <Link to={`tasks/${task.taskId}/edit`} className={'btn btn-sm btn-success flex-self-end fs-m3'}>
                   Edit Task
                 </Link>
               </div>
@@ -236,4 +221,4 @@ class AdminHackTasks extends Component {
   }
 }
 
-export default AdminHackTasks;
+export default AdminHackTasks

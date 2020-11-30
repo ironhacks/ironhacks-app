@@ -1,10 +1,5 @@
-function MaterialDesignIcon({ name, iconClass, ...props}) {
-  return (
-    <i
-      className={`zmdi zmdi-${name} ${iconClass}`}
-      {...props}
-    />
-  )
+function MaterialDesignIcon({ name, iconClass, ...props }) {
+  return <i className={`zmdi zmdi-${name} ${iconClass}`} {...props} />
 }
 MaterialDesignIcon.defaultProps = {
   name: '',

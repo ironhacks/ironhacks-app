@@ -1,7 +1,7 @@
-import { Component } from 'react';
-import ReactMde from 'react-mde';
-import * as Showdown from 'showdown';
-import './css/react-mde-all.css';
+import { Component } from 'react'
+import ReactMde from 'react-mde'
+import * as Showdown from 'showdown'
+import './css/react-mde-all.css'
 
 // function loadSuggestions(text) {
 //   return new Promise((accept, reject) => {
@@ -23,7 +23,7 @@ import './css/react-mde-all.css';
 
 class MarkdownEditor extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       mdeState: {
@@ -32,8 +32,7 @@ class MarkdownEditor extends Component {
       textHmtl: '',
       selectedTab: 'write', // write|preview
       value: this.props.withContent ? this.props.withContent : '',
-    };
-
+    }
 
     this.mdConfig = {
       tables: true,
@@ -46,7 +45,7 @@ class MarkdownEditor extends Component {
       tasklists: true,
     }
 
-    this.converter = new Showdown.Converter(this.mdConfig);
+    this.converter = new Showdown.Converter(this.mdConfig)
   }
 
   _setValue(_value) {
@@ -58,8 +57,8 @@ class MarkdownEditor extends Component {
   }
 
   handleValueChange(value) {
-    this.props.onEditorChange(value);
-  };
+    this.props.onEditorChange(value)
+  }
 
   render() {
     return (
@@ -71,12 +70,12 @@ class MarkdownEditor extends Component {
         }}
         selectedTab={this.state.selectedTab}
         minEditorHeight={this.props.height}
-        generateMarkdownPreview={md=>Promise.resolve(this.converter.makeHtml(md))}
-        onTabChange={tabid => this.setSelectedTab(tabid)}
-        onChange={value => this.handleValueChange(value)}
+        generateMarkdownPreview={(md) => Promise.resolve(this.converter.makeHtml(md))}
+        onTabChange={(tabid) => this.setSelectedTab(tabid)}
+        onChange={(value) => this.handleValueChange(value)}
         readOnly={this.props.disabled}
       />
-    );
+    )
   }
 }
 
@@ -85,4 +84,4 @@ MarkdownEditor.defaultProps = {
   disabled: false,
 }
 
-export default MarkdownEditor;
+export default MarkdownEditor

@@ -1,18 +1,10 @@
 import { Img } from '../img'
 
-const ShowcaseCard = (
-  {
-    title,
-    image,
-    description,
-    likes,
-    url,
-  },
-) => {
+const ShowcaseCard = ({ title, image, description, likes, url }) => {
   return (
     <div className="card showcase_card depth-1">
       <div className="card__content">
-      <h3 className="title showcase_card__title">{title}</h3>
+        <h3 className="title showcase_card__title">{title}</h3>
         <Img
           responsive={false}
           baseUrl={'https://firebasestorage.googleapis.com/v0/b/ironhacks-c406a.appspot.com/o'}
@@ -30,12 +22,14 @@ const ShowcaseCard = (
           <span className="showcase_card__like">{likes}</span>
         </div>
         <div>
-          <a href={url} className="card__link">View App</a>
+          <a href={url} className="card__link">
+            View App
+          </a>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 ShowcaseCard.defaultProps = {
   image: '',
@@ -45,4 +39,4 @@ ShowcaseCard.defaultProps = {
   likes: '0',
 }
 
-export default ShowcaseCard;
+export default ShowcaseCard

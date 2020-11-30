@@ -7,7 +7,7 @@ import { Section } from '../../components/layout'
 
 class AdminHackTaskNew extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       loading: false,
@@ -20,36 +20,38 @@ class AdminHackTaskNew extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getTaskDocsCount()
   }
 
   getTaskDocsCount = async () => {
-    let snap = await window.firebase.firestore()
+    let snap = await window.firebase
+      .firestore()
       .doc(`hacks/${this.props.hackId}`)
       .collection('tasks')
       .get()
 
-    this.setState({title: `Task ${snap.docs.length + 1}`})
+    this.setState({ title: `Task ${snap.docs.length + 1}` })
   }
 
-  onEditorChange = markdown => this.setState({content: markdown})
-  onSurveyChanged = (name, value) => this.setState({survey: value})
-  onTitleChanged = (name, value) => this.setState({title: value})
-  onSurveyEnabledChanged = (name, value) => this.setState({surveyEnabled: value})
+  onEditorChange = (markdown) => this.setState({ content: markdown })
+  onSurveyChanged = (name, value) => this.setState({ survey: value })
+  onTitleChanged = (name, value) => this.setState({ title: value })
+  onSurveyEnabledChanged = (name, value) => this.setState({ surveyEnabled: value })
 
   encodeDocument(str) {
-    let safeString = unescape(encodeURIComponent(str));
-    return window.btoa(safeString);
+    let safeString = unescape(encodeURIComponent(str))
+    return window.btoa(safeString)
   }
 
   publishTask = async () => {
-    this.setState({loading: true})
+    this.setState({ loading: true })
 
     let encodedTask = this.encodeDocument(this.state.content)
     let timeCreated = new Date()
 
-    const taskDoc = await window.firebase.firestore()
+    const taskDoc = await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('tasks')
@@ -73,11 +75,9 @@ class AdminHackTaskNew extends Component {
 
   render() {
     return (
-        <>
+      <>
         <Section sectionClass="py-2">
-          <h2 className="h3 font-bold">
-            {`${this.props.hackName} New Task`}
-          </h2>
+          <h2 className="h3 font-bold">{`${this.props.hackName} New Task`}</h2>
 
           <InputText
             containerClass="flex py-2 flex-between flex-align-center"
@@ -112,34 +112,26 @@ class AdminHackTaskNew extends Component {
           )}
 
           <MarkdownEditor
-            editorLayout='tabbed'
+            editorLayout="tabbed"
             onEditorChange={this.onEditorChange}
             value={this.state.content}
             disabled={this.state.loading}
           />
 
-          <div style={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexDirection: 'row-reverse',
-            height: '50px',
-          }}>
-            <Button
-              primary
-              width='150px'
-              margin='0 0 0 15px'
-              onClick={this.publishTask}
-              disabled={this.state.loading}
-            >
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexDirection: 'row-reverse',
+              height: '50px',
+            }}
+          >
+            <Button primary width="150px" margin="0 0 0 15px" onClick={this.publishTask} disabled={this.state.loading}>
               Publish
             </Button>
-            <a
-              href={`/hacks/${this.props.hackSlug}/task`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={`/hacks/${this.props.hackSlug}/task`} target="_blank" rel="noopener noreferrer">
               View live document
             </a>
           </div>
@@ -149,4 +141,4 @@ class AdminHackTaskNew extends Component {
   }
 }
 
-export default AdminHackTaskNew;
+export default AdminHackTaskNew

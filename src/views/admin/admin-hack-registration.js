@@ -1,12 +1,12 @@
-import { Component } from 'react';
-import { Section } from '../../components/layout';
-import { AdminRegisteredUserList } from '../../components/admin';
+import { Component } from 'react'
+import { Section } from '../../components/layout'
+import { AdminRegisteredUserList } from '../../components/admin'
 import { fire2Date } from '../../util/date-utils'
 import { downloadFileData } from '../../util/download-file-data'
 
 class AdminHackRegistration extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       data: '',
@@ -27,24 +27,26 @@ class AdminHackRegistration extends Component {
   }
 
   getRegistrationSettings = async () => {
-    window.firebase.firestore()
+    window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('registration')
       .doc('settings')
       .get()
-      .then(doc=>{
-        let data = doc.data();
+      .then((doc) => {
+        let data = doc.data()
         if (data) {
           this.setState({
             cohorts: Object.values(data),
-          });
+          })
         }
       })
   }
 
   getRegistrationEvents = async () => {
-    let snap = await window.firebase.firestore()
+    let snap = await window.firebase
+      .firestore()
       .collection('stats')
       .where('event', '==', 'register_hack')
       .where('hackId', '==', this.props.hackId)
@@ -55,14 +57,15 @@ class AdminHackRegistration extends Component {
       result.push(doc.data())
     }
 
-    this.setState({registrationEvents: result})
+    this.setState({ registrationEvents: result })
   }
 
   getRegisteredUsers = async () => {
     let adminList = []
-    let users = [];
+    let users = []
 
-    let adminsSnap = await window.firebase.firestore()
+    let adminsSnap = await window.firebase
+      .firestore()
       .collection('admins')
       .get()
 
@@ -70,54 +73,57 @@ class AdminHackRegistration extends Component {
       adminList.push(item.id)
     })
 
-    let participantDoc = await window.firebase.firestore()
+    let participantDoc = await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('registration')
       .doc('participants')
       .get()
 
-      let data = participantDoc.data();
-      if (!data) { return false }
+    let data = participantDoc.data()
+    if (!data) {
+      return false
+    }
 
-      this.setState({registeredUsersData: data});
+    this.setState({ registeredUsersData: data })
 
-      for (let id of Object.keys(data)) {
-        let user = data[id];
-        let userDoc = await user.ref.get()
+    for (let id of Object.keys(data)) {
+      let user = data[id]
+      let userDoc = await user.ref.get()
 
-        users.push({
-          isAdmin: adminList.includes(id),
-          userId: id,
-          userRef: user.ref,
-          hackAlias: user.alias,
-          ...userDoc.data()
-        })
-      }
+      users.push({
+        isAdmin: adminList.includes(id),
+        userId: id,
+        userRef: user.ref,
+        hackAlias: user.alias,
+        ...userDoc.data(),
+      })
+    }
 
-      // users.filter(el=>{ return el.name })
-      users
-        .sort((a,b)=>{ return a.email.localeCompare(b.email) })
-        .sort((a,b)=>{ if (a.isAdmin) { return -1 } else { return 1 } })
+    // users.filter(el=>{ return el.name })
+    users
+      .sort((a, b) => {
+        return a.email.localeCompare(b.email)
+      })
+      .sort((a, b) => {
+        if (a.isAdmin) {
+          return -1
+        } else {
+          return 1
+        }
+      })
 
-      this.setState({registeredUsers: users});
+    this.setState({ registeredUsers: users })
   }
 
   downloadRegistrationReport = () => {
     let users = this.state.registeredUsers
     let events = this.state.registrationEvents
-    console.log(users);
-    console.log(events);
+    console.log(users)
+    console.log(events)
 
-    let headers = [
-      'timestamp',
-      'userId',
-      'name',
-      'alias',
-      'email',
-      'isAdmin',
-    ].join(',')
-
+    let headers = ['timestamp', 'userId', 'name', 'alias', 'email', 'isAdmin'].join(',')
 
     let registrationTimes = {}
     events.forEach((event, index) => {
@@ -126,93 +132,90 @@ class AdminHackRegistration extends Component {
 
     let result = []
     users.forEach((user, index) => {
-      result.push([
-        registrationTimes[user.userId],
-        user.userId,
-        user.name,
-        user.alias,
-        user.email,
-        user.isAdmin,
-      ].join(','))
+      result.push(
+        [registrationTimes[user.userId], user.userId, user.name, user.alias, user.email, user.isAdmin].join(',')
+      )
     })
 
-    result.sort((a,b)=>{ return a.localeCompare(b) })
+    result.sort((a, b) => {
+      return a.localeCompare(b)
+    })
     let reportDate = new Date()
 
     let meta = [
       `${this.props.hackData.name} - Registration Report`,
       `Date Created: ${reportDate.toLocaleString()}`,
-      '=========================================='
+      '==========================================',
     ].join('\n')
 
-    let output = [
-      meta,
-      headers,
-      ...result
-    ]
+    let output = [meta, headers, ...result]
 
     let reportTimestamp = [
       reportDate.getFullYear(),
-      reportDate.getDate().toString().padStart(2, '0'),
-      reportDate.getMonth().toString().padStart(2, '0'),
-      reportDate.getHours().toString().padStart(2, '0'),
-      reportDate.getMinutes().toString().padStart(2, '0'),
+      reportDate
+        .getDate()
+        .toString()
+        .padStart(2, '0'),
+      reportDate
+        .getMonth()
+        .toString()
+        .padStart(2, '0'),
+      reportDate
+        .getHours()
+        .toString()
+        .padStart(2, '0'),
+      reportDate
+        .getMinutes()
+        .toString()
+        .padStart(2, '0'),
     ].join('')
 
     downloadFileData({
       data: output.join('\n'),
-      name: `ironhacks-registration-${this.props.hackId}-${reportTimestamp}.csv`
+      name: `ironhacks-registration-${this.props.hackId}-${reportTimestamp}.csv`,
     })
   }
 
   render() {
     return (
-        <>
+      <>
         <Section sectionClass="py-2">
           <div className="flex flex-between flex-align-center">
-            <h2 className="h3 font-bold">
-              {`${this.props.hackName} Registration`}
-            </h2>
+            <h2 className="h3 font-bold">{`${this.props.hackName} Registration`}</h2>
 
-            <div
-              className="btn badge badge-info py-1"
-              onClick={this.downloadRegistrationReport}>
+            <div className="btn badge badge-info py-1" onClick={this.downloadRegistrationReport}>
               Download Report
             </div>
           </div>
         </Section>
 
         <Section sectionClass="py-2">
-          <h3 className="h3 pb-2">
-            Registered Users: {this.state.registeredUsers.length}
-          </h3>
+          <h3 className="h3 pb-2">Registered Users: {this.state.registeredUsers.length}</h3>
 
           {this.state.registeredUsers ? (
             <AdminRegisteredUserList
               registeredUsers={this.state.registeredUsers}
               hackId={this.props.hackId}
-              onRemove={((userlist)=>{
-                this.setState({registeredUsers: userlist})
-              })}
+              onRemove={(userlist) => {
+                this.setState({ registeredUsers: userlist })
+              }}
             />
-          ):(
+          ) : (
             <p>No registered users</p>
           )}
         </Section>
 
         <Section sectionClass="py-2">
-          <h3 className="h3 pb-2">
-            Registration Timeline
-          </h3>
+          <h3 className="h3 pb-2">Registration Timeline</h3>
 
           <p>Timestamp - UserId</p>
 
           <ul>
-          {this.state.registrationEvents.map((item, index)=>(
-            <li key={index}>
-              {fire2Date(item.timestamp).toISOString()} - {item.userId}
-            </li>
-          ))}
+            {this.state.registrationEvents.map((item, index) => (
+              <li key={index}>
+                {fire2Date(item.timestamp).toISOString()} - {item.userId}
+              </li>
+            ))}
           </ul>
         </Section>
       </>
@@ -220,4 +223,4 @@ class AdminHackRegistration extends Component {
   }
 }
 
-export default AdminHackRegistration;
+export default AdminHackRegistration

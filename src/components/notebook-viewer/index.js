@@ -9,7 +9,7 @@ import { NotebookStdOut } from './lib/notebook-cell-stdout'
 // import { NotebookCellHtml } from './lib/notebook-cell-html'
 import { NotebookText } from './lib/notebook-text'
 import { NotebookHeader } from './lib/notebook-header'
-import './style.css';
+import './style.css'
 
 // ---
 // <NotebookViewer
@@ -21,10 +21,9 @@ import './style.css';
 // />
 //
 
-
 class NotebookViewer extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       fpath: '',
       fbase_path: '',
@@ -40,27 +39,30 @@ class NotebookViewer extends Component {
       gutterVisible: true,
     }
 
-    this.notebookWidth = '900px';
+    this.notebookWidth = '900px'
   }
 
   validURL(str) {
-    var pattern = new RegExp('^(https?:\\/\\/)?' +
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
-    '((\\d{1,3}\\.){3}\\d{1,3}))' +
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
-    '(\\?[;&a-z\\d%_.~+=-]*)?' +
-    '(\\#[-a-z\\d_]*)?$', 'i');
-    return !!pattern.test(str);
+    var pattern = new RegExp(
+      '^(https?:\\/\\/)?' +
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+        '((\\d{1,3}\\.){3}\\d{1,3}))' +
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+        '(\\?[;&a-z\\d%_.~+=-]*)?' +
+        '(\\#[-a-z\\d_]*)?$',
+      'i'
+    )
+    return !!pattern.test(str)
   }
 
   getNotebookFile = async () => {
     if (this.props.file) {
-      var fbase = this.props.file.split('/');
-      fbase.pop();
+      var fbase = this.props.file.split('/')
+      fbase.pop()
 
       this.setState({
         fpath: this.props.file,
-        fbase_path: fbase.join('/') + '/'
+        fbase_path: fbase.join('/') + '/',
       })
 
       await fetch(this.props.file)
@@ -71,53 +73,47 @@ class NotebookViewer extends Component {
             this.setState({
               notebook_json: notebook_json,
               loading: false,
-              placeholder_component: 'Notebook loaded'
+              placeholder_component: 'Notebook loaded',
             })
           } catch (error) {
-            console.log('error', error);
+            console.log('error', error)
 
             this.setState({
               notebook_json: {
-                'message': 'Unable to parse .ipynb file'
+                message: 'Unable to parse .ipynb file',
               },
               loading: false,
-              placeholder_component: 'Oops! We have problem opening the notebook'
+              placeholder_component: 'Oops! We have problem opening the notebook',
             })
-        }
-      })
+          }
+        })
     }
-  };
+  }
 
   async componentDidMount() {
-    this.getNotebookFile();
+    this.getNotebookFile()
   }
 
   parseSource(source) {
-    return source.join('');
+    return source.join('')
   }
 
   parseMD(source) {
-    var cell_content = [];
+    var cell_content = []
 
     for (var code in source) {
-      var rgx = new RegExp(/src="(.*?)"/);
-      var new_source = source[code];
-      var old_source = source[code].match(rgx);
+      var rgx = new RegExp(/src="(.*?)"/)
+      var new_source = source[code]
+      var old_source = source[code].match(rgx)
 
       if (!!old_source && !this.validURL(old_source[1])) {
-        new_source = source[code].replace(
-          /src="(.*?)"/,
-          'src="' + this.state.fbase_path + old_source[1] + '"'
-        )
+        new_source = source[code].replace(/src="(.*?)"/, 'src="' + this.state.fbase_path + old_source[1] + '"')
       } else {
-        var rgx2 = new RegExp(/!\[(.*?)\]\((.*?)[\s|)]/);
-        var s2 = source[code].match(rgx2);
+        var rgx2 = new RegExp(/!\[(.*?)\]\((.*?)[\s|)]/)
+        var s2 = source[code].match(rgx2)
 
         if (s2 && !this.validURL(s2[2])) {
-          new_source = new_source.replace(
-            s2[2],
-            this.state.fbase_path + s2[2]
-          );
+          new_source = new_source.replace(s2[2], this.state.fbase_path + s2[2])
         }
       }
       cell_content.push(new_source)
@@ -128,14 +124,14 @@ class NotebookViewer extends Component {
 
   parseOutputs(outputs) {
     if (outputs.length === 0) {
-      return '';
+      return ''
     }
 
-    var output_txt = [];
-    var output_img = [];
+    var output_txt = []
+    var output_img = []
     // var output_html = [];
-    var output_std = [];
-    var output_err = [];
+    var output_std = []
+    var output_err = []
 
     for (let output of outputs) {
       if ('data' in output) {
@@ -156,11 +152,7 @@ class NotebookViewer extends Component {
         }
 
         if ('image/png' in output.data) {
-          output_img.push([
-            'data:image/png;base64,',
-            output.data['image/png']
-          ].join('')
-          )
+          output_img.push(['data:image/png;base64,', output.data['image/png']].join(''))
         }
       }
 
@@ -171,7 +163,7 @@ class NotebookViewer extends Component {
       }
 
       if ('ename' in output) {
-        output_err.push([output.ename, output.evalue].join('\n'));
+        output_err.push([output.ename, output.evalue].join('\n'))
         // for (var trace in outputs[outs]['traceback']) {
         //      errors += outputs[outs]['traceback'][trace]
         // }
@@ -220,12 +212,8 @@ class NotebookViewer extends Component {
           }}
         />
         {/* NOTEBOOK CELL IMG */}
-        {output_img.map((item, index)=>(
-          <NotebookImgCell
-            key={index}
-            display={item.length > 0 ? '' : 'none'}
-            imgSrc={item}
-          />
+        {output_img.map((item, index) => (
+          <NotebookImgCell key={index} display={item.length > 0 ? '' : 'none'} imgSrc={item} />
         ))}
         {/* NOTEBOOK CELL ERRORS */}
         <NotebookErrorCell
@@ -253,12 +241,11 @@ class NotebookViewer extends Component {
     return return_template
   }
 
-
   render() {
     return (
       <div className="my-4 content_area">
         <center>
-          <div style={{backgroundColor: this.state.background_output_color }}>
+          <div style={{ backgroundColor: this.state.background_output_color }}>
             <NotebookHeader
               titleColor={this.state.background_text_theme}
               title={this.props.title}
@@ -267,85 +254,81 @@ class NotebookViewer extends Component {
             />
           </div>
 
-        {this.state.loading ? (
-          <div>{'Loading...'}</div>
-        ) : (
-          <>
-          {this.state.notebook_json.cells ? (
-            this.state.notebook_json.cells.map((item, index) => (
-            <div key={index} style={{backgroundColor: this.state.background_output_color}}>
-              <div style={{backgroundColor: this.state.background_output_color}}>
-                <div className="flex">
-                  <div style={{flexWeight: 1, display: this.state.gutterVisible ? '' : 'none'}}>
-                    <span
-                      style={{
-                        display: item.cell_type === 'code' ? '' : 'none',
-                        padding: '5px',
-                        fontFamily: 'monospace',
-                        fontSize: '0.9em',
-                      }}>
-                      In  [{item.execution_count || '  '}]:
-                    </span>
-                  </div>
+          {this.state.loading ? (
+            <div>{'Loading...'}</div>
+          ) : (
+            <>
+              {this.state.notebook_json.cells ? (
+                this.state.notebook_json.cells.map((item, index) => (
+                  <div key={index} style={{ backgroundColor: this.state.background_output_color }}>
+                    <div style={{ backgroundColor: this.state.background_output_color }}>
+                      <div className="flex">
+                        <div style={{ flexWeight: 1, display: this.state.gutterVisible ? '' : 'none' }}>
+                          <span
+                            style={{
+                              display: item.cell_type === 'code' ? '' : 'none',
+                              padding: '5px',
+                              fontFamily: 'monospace',
+                              fontSize: '0.9em',
+                            }}
+                          >
+                            In [{item.execution_count || '  '}]:
+                          </span>
+                        </div>
 
-                  <div className="flex-1 text-left">
-                  {item.cell_type === 'code' ? (
-                      <NotebookCodeCell
-                        bgColor={this.state.background_input_theme}
-                        codeTheme={this.state.text_ed_theme}
-                        maxLength={item.source.length === 0 ? 1 : item.source.length + 1}
-                        onLoad={this.onLoad}
-                        onChange={this.onChange}
-                        cellContent={this.parseSource(item.source)}
-                        displayOptions={editorOptions}
-                      />
-                  ) : (
-                    <div className='notebook-md'>
-                      <div
-                        className={this.state.ed_theme}
-                        style={{
-                          margin: '0 0',
-                          padding: '10px',
-                        }}
-                      >
-                        <ReactMarkdown
-                          source={this.parseMD(item.source)}
-                          escapeHtml={false}
-                        />
+                        <div className="flex-1 text-left">
+                          {item.cell_type === 'code' ? (
+                            <NotebookCodeCell
+                              bgColor={this.state.background_input_theme}
+                              codeTheme={this.state.text_ed_theme}
+                              maxLength={item.source.length === 0 ? 1 : item.source.length + 1}
+                              onLoad={this.onLoad}
+                              onChange={this.onChange}
+                              cellContent={this.parseSource(item.source)}
+                              displayOptions={editorOptions}
+                            />
+                          ) : (
+                            <div className="notebook-md">
+                              <div
+                                className={this.state.ed_theme}
+                                style={{
+                                  margin: '0 0',
+                                  padding: '10px',
+                                }}
+                              >
+                                <ReactMarkdown source={this.parseMD(item.source)} escapeHtml={false} />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    )}
                     </div>
-                </div>
-                </div>
 
-                {item.cell_type === 'markdown' ? (
-                  <div/>
-                ) : (
-                  <>
-                  {item.outputs && (
-                  <NotebookMdCell
-                    bgColor={this.state.background_output_color}
-                    gutterVisible={this.state.gutterVisible ? 3 : 1}
-                    executionCount={item.execution_count}
-                    cellContent={this.parseOutputs(item.outputs)}
-                  />
-                  )}
-                  </>
-                )}
-                </div>
-              ))
-            ) : (
-              <p>Error: Notebook Failed to load</p>
-            )
-          }
-          </>
-        )}
+                    {item.cell_type === 'markdown' ? (
+                      <div />
+                    ) : (
+                      <>
+                        {item.outputs && (
+                          <NotebookMdCell
+                            bgColor={this.state.background_output_color}
+                            gutterVisible={this.state.gutterVisible ? 3 : 1}
+                            executionCount={item.execution_count}
+                            cellContent={this.parseOutputs(item.outputs)}
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p>Error: Notebook Failed to load</p>
+              )}
+            </>
+          )}
         </center>
       </div>
     )
   }
 }
-
 
 export { NotebookViewer }

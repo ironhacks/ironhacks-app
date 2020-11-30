@@ -1,18 +1,13 @@
-import {Controlled as CodeMirror} from 'react-codemirror2'
+import { Controlled as CodeMirror } from 'react-codemirror2'
 
-function NotebookStdOut({
-  stdout_found,
-  display,
-  codeTheme,
-  maxLength,
-  cellContent,
-  displayOptions,
-}) {
+function NotebookStdOut({ stdout_found, display, codeTheme, maxLength, cellContent, displayOptions }) {
   return (
-      <div style={{
+    <div
+      style={{
         padding: '0 3px .5em 3px',
         display: display,
-      }}>
+      }}
+    >
       <CodeMirror
         className=""
         value={cellContent}

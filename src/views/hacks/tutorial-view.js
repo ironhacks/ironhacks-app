@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { Row, Col } from '../../components/layout'
-import { MdContentView }  from '../../components/markdown-viewer'
+import { MdContentView } from '../../components/markdown-viewer'
 import { userMetrics } from '../../util/user-metrics'
 import { withRouter } from 'react-router-dom'
 
@@ -23,9 +23,9 @@ class TutorialView extends Component {
     })
   }
 
-
   getTutorial = async () => {
-    let doc = await window.firebase.firestore()
+    let doc = await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('tutorials')
@@ -43,21 +43,15 @@ class TutorialView extends Component {
 
   render() {
     return (
-        <Row>
-            {!this.state.loading && (
+      <Row>
+        {!this.state.loading && (
           <Col>
-            <h2 className="h3 my-2 font-bold tutorial_title">
-              {this.state.title}
-            </h2>
+            <h2 className="h3 my-2 font-bold tutorial_title">{this.state.title}</h2>
 
-            <MdContentView
-              content={this.state.content}
-              encoded={false}
-              emptyText="Tutorial is not available yet."
-            />
+            <MdContentView content={this.state.content} encoded={false} emptyText="Tutorial is not available yet." />
           </Col>
-            )}
-        </Row>
+        )}
+      </Row>
     )
   }
 }

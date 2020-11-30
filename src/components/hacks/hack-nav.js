@@ -1,7 +1,7 @@
-import { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Component } from 'react'
+import { NavLink } from 'react-router-dom'
 import { MaterialDesignIcon } from '../icons'
-import { upperCaseWord } from '../../util/string-utils';
+import { upperCaseWord } from '../../util/string-utils'
 import { userMetrics } from '../../util/user-metrics'
 
 const HackNavItem = ({ navClass, slug, navId, name }) => {
@@ -13,8 +13,8 @@ const HackNavItem = ({ navClass, slug, navId, name }) => {
     >
       {upperCaseWord(name)}
     </NavLink>
-  );
-};
+  )
+}
 
 HackNavItem.defaultProps = {
   navClass: '',
@@ -22,7 +22,7 @@ HackNavItem.defaultProps = {
 
 class HackNav extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       showMenu: false,
       currentView: 'task',
@@ -38,19 +38,21 @@ class HackNav extends Component {
 
   getNav = () => {
     let items = this.props.hackDisplayOptions
-    items = Object.keys(items).filter((item)=>{
+    items = Object.keys(items).filter((item) => {
       return items[item]
     })
 
-    items.sort((a,b)=>{ return a.localeCompare(b) })
+    items.sort((a, b) => {
+      return a.localeCompare(b)
+    })
 
-    const navItems = items.map((item)=>{
+    const navItems = items.map((item) => {
       return {
         id: item.replace('Enabled', ''),
         name: item.replace('Enabled', ''),
       }
     })
-    this.setState({navItems: navItems})
+    this.setState({ navItems: navItems })
   }
 
   showMenu = () => {
@@ -58,22 +60,18 @@ class HackNav extends Component {
   }
 
   workspaceButton = () => {
-    console.log('workspaceButton');
-    userMetrics({event: 'launch_hub'})
-    window.firebase.analytics().logEvent('launch_hub');
+    console.log('workspaceButton')
+    userMetrics({ event: 'launch_hub' })
+    window.firebase.analytics().logEvent('launch_hub')
   }
 
   render() {
     return (
       <div className={'hack_nav'}>
-        <MaterialDesignIcon
-          iconClass="btn mobile_nav_btn"
-          name="menu"
-          onClick={this.showMenu}
-        />
+        <MaterialDesignIcon iconClass="btn mobile_nav_btn" name="menu" onClick={this.showMenu} />
 
         <div className={['hack_nav_list', this.state.showMenu ? 'enabled' : ''].join(' ').trim()}>
-          {this.state.navItems.map((item, index)=>(
+          {this.state.navItems.map((item, index) => (
             <HackNavItem
               key={index}
               navId={item.id}

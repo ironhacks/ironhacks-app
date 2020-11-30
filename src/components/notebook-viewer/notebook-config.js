@@ -1,6 +1,6 @@
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/seti.css';
-import 'codemirror/mode/python/python';
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/seti.css'
+import 'codemirror/mode/python/python'
 // import 'codemirror/mode/r/r';
 // import 'codemirror/mode/xml/xml';
 // import 'codemirror/mode/javascript/javascript';
@@ -31,4 +31,4 @@ const editorOptions = {
   wrap: true,
 }
 
-export default editorOptions;
+export default editorOptions

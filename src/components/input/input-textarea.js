@@ -1,9 +1,9 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 
 class InputTextarea extends Component {
-  handleChange = event => {
-    let value = event.target.value;
+  handleChange = (event) => {
+    let value = event.target.value
     if (this.props.onInputChange) {
       this.props.onInputChange(this.props.name, value)
     }
@@ -13,13 +13,8 @@ class InputTextarea extends Component {
     return (
       <div className={['input_field', this.props.containerClass].join(' ').trim()}>
         {this.props.label && (
-          <label
-            htmlFor={this.props.name}
-            className={['input_label', this.props.labelClass].join(' ').trim()}
-            >
-            <span className="input_label__name">
-              {this.props.label}
-            </span>
+          <label htmlFor={this.props.name} className={['input_label', this.props.labelClass].join(' ').trim()}>
+            <span className="input_label__name">{this.props.label}</span>
           </label>
         )}
 

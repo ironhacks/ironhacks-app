@@ -1,9 +1,9 @@
-import { Component } from 'react';
+import { Component } from 'react'
 
-function ParticipantScoreRow({participant}) {
+function ParticipantScoreRow({ participant }) {
   let notebooks = []
   participant.files.forEach((file, index) => {
-    if (file.type === 'application/x-ipynb+json'){
+    if (file.type === 'application/x-ipynb+json') {
       notebooks.push({
         name: file.name,
         url: file.url,
@@ -25,12 +25,12 @@ function ParticipantScoreRow({participant}) {
             href={`/notebook-viewer?path=${notebooks[0].url}`}
             target="_blank"
             rel="noopener noreferrer"
-            >
+          >
             View
-            </a>
+          </a>
         </td>
-      ):(
-        <td className="text-capitalize"/>
+      ) : (
+        <td className="text-capitalize" />
       )}
     </tr>
   )
@@ -48,11 +48,8 @@ class ResultsPeersSection extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.participantData.map((item, index)=>(
-              <ParticipantScoreRow
-                key={index}
-                participant={item}
-              />
+            {this.props.participantData.map((item, index) => (
+              <ParticipantScoreRow key={index} participant={item} />
             ))}
           </tbody>
         </table>

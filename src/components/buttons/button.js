@@ -1,13 +1,4 @@
-function Button({
-  buttonClass,
-  children,
-  disabled,
-  height,
-  margin,
-  onClick,
-  primary,
-  width,
-}) {
+function Button({ buttonClass, children, disabled, height, margin, onClick, primary, width }) {
   const buttonStyle = {
     width: width ? width : '100%',
     height: height ? height : '30px',
@@ -18,12 +9,7 @@ function Button({
   }
 
   return (
-    <button
-      style={buttonStyle}
-      className={buttonClass}
-      onClick={onClick}
-      disabled={disabled}
-    >
+    <button style={buttonStyle} className={buttonClass} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   )

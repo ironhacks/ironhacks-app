@@ -1,4 +1,4 @@
-function ParticipantScoreRow({name, stats}) {
+function ParticipantScoreRow({ name, stats }) {
   return (
     <tr>
       <td className="text-capitalize">{name}</td>
@@ -9,12 +9,7 @@ function ParticipantScoreRow({name, stats}) {
   )
 }
 
-const ResultsSummarySection = (
-  {
-    summary,
-    participantCount,
-  },
-) => {
+const ResultsSummarySection = ({ summary, participantCount }) => {
   return (
     <div>
       <table className="results_table">
@@ -27,18 +22,12 @@ const ResultsSummarySection = (
           </tr>
         </thead>
         <tbody>
-          {Object.keys(summary).map((key, index)=>(
-            <ParticipantScoreRow
-              key={index}
-              name={key}
-              stats={summary[key]}
-            />
+          {Object.keys(summary).map((key, index) => (
+            <ParticipantScoreRow key={index} name={key} stats={summary[key]} />
           ))}
         </tbody>
       </table>
-      <p>
-        Total Participants: {participantCount}
-      </p>
+      <p>Total Participants: {participantCount}</p>
     </div>
   )
 }

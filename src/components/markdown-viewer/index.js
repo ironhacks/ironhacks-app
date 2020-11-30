@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import Showdown from 'showdown';
+import { Component } from 'react'
+import Showdown from 'showdown'
 
 // prefixHeaderId  Add a prefix to the generated header ids.
 // Passing a string will prefix that string to the header id.
@@ -10,7 +10,7 @@ import Showdown from 'showdown';
 
 class MdContentView extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     const mdConfig = {
       tables: true,
@@ -22,22 +22,21 @@ class MdContentView extends Component {
       // extensions: [],
     }
 
-    this.converter = new Showdown.Converter(mdConfig);
+    this.converter = new Showdown.Converter(mdConfig)
     // this.converter.setFlavor('github');
   }
 
-
   parseContent(content) {
-    if (!content){
-      return `<h2>${this.props.emptyText}</h2>`;
+    if (!content) {
+      return `<h2>${this.props.emptyText}</h2>`
     }
 
     if (this.props.encoded) {
-      let decoded = this.decodeText(content);
-      let text = this.safeText(decoded);
-      return this.decodeBody(text);
+      let decoded = this.decodeText(content)
+      let text = this.safeText(decoded)
+      return this.decodeBody(text)
     } else {
-      return this.decodeBody(content);
+      return this.decodeBody(content)
     }
   }
 
@@ -46,19 +45,20 @@ class MdContentView extends Component {
   }
 
   decodeText(encoded) {
-    return window.atob(encoded);
+    return window.atob(encoded)
   }
 
-  safeText(text){
-    return decodeURIComponent(escape(text));
+  safeText(text) {
+    return decodeURIComponent(escape(text))
   }
 
   render() {
-    const classes = `content_area ${this.props.containerClass}`;
+    const classes = `content_area ${this.props.containerClass}`
     return (
-      <div className={classes.trim()}
+      <div
+        className={classes.trim()}
         dangerouslySetInnerHTML={{
-          __html: this.parseContent(this.props.content)
+          __html: this.parseContent(this.props.content),
         }}
       />
     )

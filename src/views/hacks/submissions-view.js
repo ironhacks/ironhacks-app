@@ -1,88 +1,52 @@
-import { Component } from 'react';
-import { withRouter } from 'react-router';
-import { Row, Col } from '../../components/layout';
-import { CountdownTimer } from '../../components/timer';
-import { MaterialDesignIcon } from '../../components/icons/material-design-icon';
+import { Component } from 'react'
+import { withRouter } from 'react-router'
+import { Row, Col } from '../../components/layout'
+import { CountdownTimer } from '../../components/timer'
+import { MaterialDesignIcon } from '../../components/icons/material-design-icon'
 import { fire2Date, fire2Ms } from '../../util/date-utils'
 
-function SubmissionListItem({
-  status,
-  hackSlug,
-  submissionId,
-  userSubmitted,
-  name,
-  deadline,
-}){
-
-
+function SubmissionListItem({ status, hackSlug, submissionId, userSubmitted, name, deadline }) {
   if (userSubmitted) {
     return (
       <>
-    <a
-      href={`/hacks/${hackSlug}/submit/${submissionId}`}
-      className="link--underline flex-2 cl-green-ac4"
-      >
-      <MaterialDesignIcon
-        iconClass="icon_fs-1 mr-1"
-        name="check"
-        />
-        {name}
-      </a>
-      <span className="font-italic cl-green-ac4 flex-1 text-center">
-        Submitted
-      </span>
-    </>
+        <a href={`/hacks/${hackSlug}/submit/${submissionId}`} className="link--underline flex-2 cl-green-ac4">
+          <MaterialDesignIcon iconClass="icon_fs-1 mr-1" name="check" />
+          {name}
+        </a>
+        <span className="font-italic cl-green-ac4 flex-1 text-center">Submitted</span>
+      </>
     )
   }
 
   if (status === 'closed') {
     return (
       <>
-      <span className="flex-2">
-        <MaterialDesignIcon
-        iconClass="icon_fs-1 mr-1"
-        name="block"
-        />
-        {name}
-      </span>
-      <span className="font-italic flex-1 text-center">
-        Closed
-      </span>
+        <span className="flex-2">
+          <MaterialDesignIcon iconClass="icon_fs-1 mr-1" name="block" />
+          {name}
+        </span>
+        <span className="font-italic flex-1 text-center">Closed</span>
       </>
     )
   } else if (status === 'current') {
     return (
       <>
-        <a
-          href={`/hacks/${hackSlug}/submit/${submissionId}`}
-          className="link--underline flex-2"
-          >
-          <MaterialDesignIcon
-            iconClass="icon_fs-1 mr-1"
-            name="arrow-forward"
-          />
+        <a href={`/hacks/${hackSlug}/submit/${submissionId}`} className="link--underline flex-2">
+          <MaterialDesignIcon iconClass="icon_fs-1 mr-1" name="arrow-forward" />
           {name}
         </a>
 
-        <CountdownTimer
-          timerClass="flex-1 text-center"
-          endTime={fire2Date(deadline)}
-        />
+        <CountdownTimer timerClass="flex-1 text-center" endTime={fire2Date(deadline)} />
       </>
     )
   } else {
     return (
       <>
-      <span className="flex-2">
-        <MaterialDesignIcon
-          iconClass="icon_fs-1 mr-1"
-          name="alarm"
-        />
-        {name}
-      </span>
-      <span className="font-italic flex-1 text-center">
-        Upcoming
-      </span>
+        <span className="flex-2">
+          <MaterialDesignIcon iconClass="icon_fs-1 mr-1" name="alarm" />
+          {name}
+        </span>
+        <span className="font-italic flex-1 text-center">Upcoming</span>
       </>
     )
   }
@@ -90,7 +54,7 @@ function SubmissionListItem({
 
 class SubmissionsView extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       loading: true,
       submissions: [],
@@ -104,81 +68,83 @@ class SubmissionsView extends Component {
     this.getSubmissions()
   }
 
-  getUserSubmission = submissionId => {
-    const hackId = this.props.hackId;
-    const userId = this.props.userId;
-    return window.firebase.firestore()
+  getUserSubmission = (submissionId) => {
+    const hackId = this.props.hackId
+    const userId = this.props.userId
+    return window.firebase
+      .firestore()
       .doc(`hacks/${hackId}/submissions/${submissionId}/users/${userId}`)
       .get()
-      .then(doc=>{
+      .then((doc) => {
         return doc.exists
       })
-
-  };
+  }
 
   getSubmissions = () => {
-    const hackId = this.props.hackId;
-    window.firebase.firestore()
+    const hackId = this.props.hackId
+    window.firebase
+      .firestore()
       .collection('hacks')
       .doc(hackId)
       .collection('submissions')
       .doc('settings')
       .get()
-      .then((doc)=>{
-        let submissionData = doc.data();
-        let userSubmitted = [];
-        let submissions = [];
-        let currentSubmission = null;
+      .then((doc) => {
+        let submissionData = doc.data()
+        let userSubmitted = []
+        let submissions = []
+        let currentSubmission = null
         if (submissionData) {
-
           for (let submission of Object.values(submissionData)) {
-            submissions.push(submission);
+            submissions.push(submission)
           }
 
-          submissions.sort((a,b)=>{ return a.deadline.seconds - b.deadline.seconds })
+          submissions.sort((a, b) => {
+            return a.deadline.seconds - b.deadline.seconds
+          })
 
           for (let submission of submissions) {
-            if (fire2Ms(submission.deadline) < Date.now()){
-              submission.status = 'closed';
+            if (fire2Ms(submission.deadline) < Date.now()) {
+              submission.status = 'closed'
             } else if (!currentSubmission) {
-              currentSubmission = fire2Ms(submission.deadline);
-              submission.status = 'current';
+              currentSubmission = fire2Ms(submission.deadline)
+              submission.status = 'current'
             } else {
-              submission.status = 'upcoming';
+              submission.status = 'upcoming'
             }
 
             userSubmitted.push(this.getUserSubmission(submission.submissionId))
           }
 
-          Promise.all(userSubmitted).then(result=>{
+          Promise.all(userSubmitted).then((result) => {
             this.setState({ userSubmitted: result })
           })
 
-          this.setState({submissions: submissions});
-      }
-    })
+          this.setState({ submissions: submissions })
+        }
+      })
   }
 
   render() {
     return (
       <Row>
         <Col>
-        <ul className="">
-          {this.state.submissions.map((item, index)=>(
-            <li key={index} className="my-4 w-500 mx-auto">
-              <div className="flex flex-between flex-align-center">
-                <SubmissionListItem
-                  deadline={item.deadline}
-                  userSubmitted={this.state.userSubmitted[index]}
-                  name={item.name}
-                  status={item.status}
-                  hackSlug={this.props.hackSlug}
-                  submissionId={item.submissionId}
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
+          <ul className="">
+            {this.state.submissions.map((item, index) => (
+              <li key={index} className="my-4 w-500 mx-auto">
+                <div className="flex flex-between flex-align-center">
+                  <SubmissionListItem
+                    deadline={item.deadline}
+                    userSubmitted={this.state.userSubmitted[index]}
+                    name={item.name}
+                    status={item.status}
+                    hackSlug={this.props.hackSlug}
+                    submissionId={item.submissionId}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
         </Col>
       </Row>
     )
