@@ -3,9 +3,6 @@ import { InfoBannerEditForm }  from '../../components/info-banner'
 import { Section } from '../../components/layout'
 import Swal from 'sweetalert2'
 import { withRouter } from 'react-router-dom';
-import { saveSuccessModal } from '../../components/alerts'
-
-
 
 class AdminHackInfoBannersEdit extends Component {
   constructor(props) {
@@ -38,8 +35,8 @@ class AdminHackInfoBannersEdit extends Component {
 
     Swal.fire({
       icon: 'success',
-      title: 'Results saved',
-      text: 'Results were saved sucessfully',
+      title: 'Banner saved',
+      text: 'Banner was saved sucessfully',
     })
     .then(()=>{
       this.props.history.goBack()

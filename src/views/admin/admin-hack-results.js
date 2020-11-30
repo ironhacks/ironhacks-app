@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import MarkdownEditor from '../../components/markdown-editor'
-import Button from '../../util/button.js'
+import { Button } from '../../components/buttons'
 import { fire2Ms } from '../../util/date-utils'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2';
@@ -61,6 +61,7 @@ class AdminHackResults extends Component {
     let submissions = Object.keys(data)
 
     submissions.sort((a,b)=>{ return fire2Ms(data[a].deadline) - fire2Ms(data[b].deadline) })
+    submissions.push('final')
 
     this.setState({
       submissions: submissions,
@@ -132,7 +133,7 @@ class AdminHackResults extends Component {
           </h2>
 
           <p>
-            Default information related to the results data displayd above in the dashboard
+            Default information related to the results data displayed above in the dashboard
           </p>
 
           <MarkdownEditor
