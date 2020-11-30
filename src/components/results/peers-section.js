@@ -1,51 +1,4 @@
 import { Component } from 'react';
-import styled from 'styled-components';
-
-const SectionContainer = styled('div')`
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-`;
-
-const Table = styled('table')`
-  border-collapse: collapse;
-  border-radius: 4px;
-  overflow: hidden;
-  width: 100%;
-
-  thead {
-    background-color: var(--gray-dark);
-    color: var(--white);
-  }
-
-  th {
-    padding: .4em 0;
-  }
-
-  tr {
-    position: relative;
-
-    :nth-child(even) {
-      background-color: #e2e2e2;
-    }
-
-    td,
-    th {
-      text-align: center;
-    }
-  }
-
-  a {
-    padding: 10px;
-    font-weight: 700;
-    color: white;
-    background-color: #e6b92f;
-    border-radius: 4px;
-  }
-`;
 
 function ParticipantScoreRow({participant}) {
   let notebooks = []
@@ -84,18 +37,10 @@ function ParticipantScoreRow({participant}) {
 }
 
 class ResultsPeersSection extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      likedUsers: [],
-    }
-  }
-
-
   render() {
     return (
-      <SectionContainer>
-        <Table>
+      <div>
+        <table className="results_table">
           <thead>
             <tr>
               <th>Participant</th>
@@ -110,8 +55,8 @@ class ResultsPeersSection extends Component {
               />
             ))}
           </tbody>
-        </Table>
-      </SectionContainer>
+        </table>
+      </div>
     )
   }
 }

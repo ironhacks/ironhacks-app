@@ -1,44 +1,5 @@
 import { Component } from 'react';
-import styled from 'styled-components';
 import { downloadFileUrl } from '../../util/download-file-url';
-
-const Table = styled('table')`
-  border-collapse: collapse;
-  border-radius: 4px;
-  overflow: hidden;
-  width: 100%;
-
-  thead {
-    background-color: var(--gray-dark);
-
-    color: var(--white);
-  }
-
-  th {
-    padding: .4em 0;
-  }
-
-  tr {
-    position: relative;
-
-    :nth-child(even) {
-      background-color: #e2e2e2;
-    }
-
-    td,
-    th {
-      text-align: center;
-    }
-  }
-
-  a {
-    padding: 10px;
-    font-weight: 700;
-    color: white;
-    background-color: #e6b92f;
-    border-radius: 4px;
-  }
-`;
 
 function UserScoreRow({name, label, value}) {
   return (
@@ -62,7 +23,7 @@ class SubmissionLink extends Component {
       return (
         <a
           className="btn badge"
-          href={`https://ironhacks.com/notebook-viewer?path=${this.props.fileUrl}`}
+          href={`/notebook-viewer?path=${this.props.fileUrl}`}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -106,21 +67,16 @@ SubmissionLink.defaultProps = {
 }
 
 
-const ResultsScoresSection = (
-  {
-    scores,
-    submission,
-  },
-) => {
+const ResultsScoresSection = ({scores, submission}) => {
   return (
     <div>
       {scores && (
-        <Table>
-        <thead>
-        <tr>
-        <th>Metric</th>
-        <th>Value</th>
-        </tr>
+        <table className="results_table">
+          <thead>
+            <tr>
+            <th>Metric</th>
+            <th>Value</th>
+          </tr>
         </thead>
         <tbody>
         {scores.map((item, index)=>(
@@ -132,28 +88,28 @@ const ResultsScoresSection = (
           />
         ))}
         </tbody>
-        </Table>
-      )}
-
-      {submission && (
-        <div>
-          <h3 className="font-bold mb-1 text-left text-underline">Your Submission:</h3>
-          {submission.files.map((item, index)=>(
-            <div
-              key={index}
-              className="mb-2"
-              >
-              <SubmissionLink
-                fileName={item.name}
-                fileType={item.type}
-                fileUrl={item.url}
-              />
-            </div>
-          ))}
-        </div>
+        </table>
       )}
     </div>
-  );
-};
+  )
+}
 
 export { ResultsScoresSection }
+
+// {submission && (
+//   <div>
+//     <h3 className="font-bold mb-1 text-left text-underline">Your Submission:</h3>
+//     {submission.files.map((item, index)=>(
+//       <div
+//         key={index}
+//         className="mb-2"
+//         >
+//         <SubmissionLink
+//           fileName={item.name}
+//           fileType={item.type}
+//           fileUrl={item.url}
+//         />
+//       </div>
+//     ))}
+//   </div>
+// )}

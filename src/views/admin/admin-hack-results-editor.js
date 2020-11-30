@@ -38,7 +38,7 @@ class AdminHackResultsEditor extends Component {
       loading: true,
       showTemplate: false,
       content: '',
-      resultsPushblished: false,
+      resultsPublished: false,
       resultKeys: [],
     }
   }
@@ -51,6 +51,7 @@ class AdminHackResultsEditor extends Component {
   }
 
   componentDidMount() {
+    this.getResultsPublished()
     this.getResults()
   }
 
@@ -95,6 +96,22 @@ class AdminHackResultsEditor extends Component {
     })
   }
 
+  getResultsPublished = async () => {
+    let doc = await window.firebase.firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('results')
+      .doc('settings')
+      .get()
+
+    let data = doc.data()
+    if (data) {
+      this.setState({
+        resultsPublished: data.isPublished[this.submissionId] || false
+      })
+    }
+  }
+
   validateResults = () => {
     let data
     let isValid = true
@@ -117,7 +134,7 @@ class AdminHackResultsEditor extends Component {
   }
 
   updatePublished = async () => {
-    let isPublished = !this.state.resultsPushblished
+    let isPublished = !this.state.resultsPublished
     userMetrics({
       event: isPublished ? 'results-published' : 'results-unpublished',
       hackId: this.props.hackId,
@@ -135,7 +152,7 @@ class AdminHackResultsEditor extends Component {
         }
       }, {merge: true})
 
-    this.setState({resultsPushblished: isPublished})
+    this.setState({resultsPublished: isPublished})
   }
 
   saveResults = async () => {
@@ -296,7 +313,7 @@ class AdminHackResultsEditor extends Component {
           </h2>
 
           <div className="flex flex-align-center pb-2 border-bottom">
-          {this.state.resultsPushblished ? (
+          {this.state.resultsPublished ? (
             <>
               <div className='font-italic'>
                 Submission Results are <span className="badge badge-success">visible</span> in the dashboard now

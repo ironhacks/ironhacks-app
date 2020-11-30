@@ -37,32 +37,32 @@ class ResultsView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentSubmission: null,
-      cohorts: {},
-      cohortSettings: {},
-      finalResults: null,
       loading: true,
+      loadingCohorts: false,
+      loadingResults: false,
+      filterUsers: [],
+      currentSubmission: null,
+      selectedPhase: 0,
+      finalResults: null,
       participantCount: null,
       results: null,
       resultsContent: '',
       resultsPublished: {},
       resultStats: null,
       section: 'scores',
-      selectedPhase: 0,
       submissionData: null,
       submissions: [],
+      cohortSubmissions: [],
       userResults: null,
     }
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    await this.getSubmissionInfo()
+    await this.getParticipantsList()
     this.getResultsContent()
-    this.getSubmissionInfo()
-    this.getCohorts()
-    this.getParticipantsList()
     this.getHackResults()
-
-    // TODO: if all submissions are closed then check
+    this.getCohortSubmissions()
     this.getResultsFinal()
   }
 
@@ -98,37 +98,12 @@ class ResultsView extends Component {
 
     if (submissionsData)  {
       for (let submission of Object.keys(submissionsData)){
-        submissions.push(submissionsData[submission]);
+        submissions.push(submissionsData[submission])
       }
 
-      submissions.sort((a,b)=>{
-        return fire2Ms(a.deadline) - fire2Ms(b.deadline)
-      })
-
+      submissions.sort((a,b)=>{ return fire2Ms(a.deadline) - fire2Ms(b.deadline) })
       this.setState({submissions: submissions})
     }
-  }
-
-  getCohorts = async () => {
-    let cohortListDoc = await window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('registration')
-      .doc('cohorts')
-      .get()
-
-    let cohortList = cohortListDoc.data()
-    this.setState({cohorts: cohortList})
-
-    let cohortSettingsDoc = await window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('registration')
-      .doc('settings')
-      .get()
-
-    let cohortSettings = cohortSettingsDoc.data()
-    this.setState({cohortSettings: cohortSettings})
   }
 
   getParticipantsList = async () => {
@@ -154,17 +129,32 @@ class ResultsView extends Component {
     this.setState({
       participants: participants,
     })
-  };
+  }
 
-
-  onPhaseSelection = (phase, submissionId) => {
-    this.setState({selectedPhase: phase});
-    if (phase === 'final') {
-      // this.getResultsFinal();
+  updateLoadingStatus = () => {
+    if (this.state.loadingCohorts || this.state.loadingResults) {
+      this.setState({loading: true})
     } else {
-      this.getHackResults();
+      this.setState({loading: false})
     }
-  };
+  }
+
+  onPhaseSelection = async (phase, submissionId) => {
+    if (phase === this.state.selectedPhase) {
+      return false
+    }
+
+    await this.setState({
+      selectedPhase: phase,
+      currentSubmission: submissionId,
+    })
+
+    if (submissionId !== 'final') {
+      this.setState({loading: true})
+      this.getCohortSubmissions()
+      this.getHackResults()
+    }
+  }
 
   getResultsFinal = async () => {
     let finalDoc = await window.firebase.firestore()
@@ -177,67 +167,112 @@ class ResultsView extends Component {
     if (finalDoc.exists) {
       let finalData = finalDoc.data();
       this.setState({finalResults: finalData})
-    } else {
-      // console.log('no final');
     }
+  }
 
-  };
-
-  getHackResults = async () => {
-    let adminsRef = await window.firebase.firestore()
-      .collection('admins')
-      .get()
-
-    let adminList = [];
-
-    adminsRef.docs.forEach((item, index) => {
-      adminList.push(item.id);
-    })
-
+  getCohortSubmissions = async () => {
     let submisison = this.state.submissions[this.state.selectedPhase]
     if (! submisison) {
       return false
     }
+    let submissionId = submisison.submissionId
+    this.setState({loadingCohorts: true})
 
-    let submissionId = submisison.submissionId;
+    let cohortSubmissions = []
 
-    this.setState({currentSubmission:  submissionId})
+    if (this.props.userCohortList && this.props.userCohortList.length > 0) {
+      for (let userId of this.props.userCohortList) {
+        let doc = await window.firebase.firestore()
+          .collection('hacks')
+          .doc(this.props.hackId)
+          .collection('submissions')
+          .doc(submissionId)
+          .collection('users')
+          .doc(userId)
+          .get()
 
-    let submissionsCollection = await window.firebase.firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('submissions')
-      .doc(this.state.currentSubmission)
-      .collection('users')
-      .get()
-
-    let submissions = [];
-
-    submissionsCollection.docs.forEach(doc=>{
-      // REMOVE USER SUBMISSION FROM PEER SET
-      if (doc.id === this.props.userId) {
-        this.setState({
-          userSubmission: doc.data()
-        })
-      // REMOVE ADMIN USERS FROM PEER SET
-      } else if (!adminList.includes(doc.id)) {
-        let userName;
-        if (this.state.participants[doc.id]){
-          userName  = this.state.participants[doc.id].alias
+        if (doc.exists) {
+          let userName
+          if (this.state.participants[doc.id]){
+            userName = this.state.participants[doc.id].alias
+          }
+          cohortSubmissions.push({
+            userId: userId,
+            name: userName,
+            ...doc.data()
+          })
         }
-        submissions.push({
-          userId: doc.id,
-          name: userName,
-          ...doc.data()
-        })
       }
-    })
 
-    if (submissions.length > 0){
-      this.setState({submissionData: submissions})
+      this.setState({
+        cohortSubmissions: cohortSubmissions,
+        loadingCohorts: false,
+      })
+      this.updateLoadingStatus()
     } else {
-      this.setState({submissionData: null})
+      this.setState({loadingCohorts: false})
+      this.updateLoadingStatus()
     }
+  }
+
+  getHackResults = async () => {
+    let submisison = this.state.submissions[this.state.selectedPhase]
+    if (! submisison) {
+      return false
+    }
+    let submissionId = submisison.submissionId
+
+    this.setState({loadingResults: true})
+
+    let adminList = this.state.filterUsers
+    if (adminList.length === 0) {
+      let adminsRef = await window.firebase.firestore()
+        .collection('admins')
+        .get()
+
+      adminsRef.docs.forEach((item, index) => {
+        adminList.push(item.id)
+      })
+
+      this.setState({filterUsers: adminList})
+    }
+
+    // let submissionsCollection = await window.firebase.firestore()
+    //   .collection('hacks')
+    //   .doc(this.props.hackId)
+    //   .collection('submissions')
+    //   .doc(this.state.currentSubmission)
+    //   .collection('users')
+    //   .get()
+    //
+    // let submissions = [];
+    //
+    // submissionsCollection.docs.forEach(doc=>{
+    //   // REMOVE USER SUBMISSION FROM PEER SET
+    //   if (doc.id === this.props.userId) {
+    //     this.setState({userSubmission: doc.data()})
+    //
+    //   // REMOVE ADMIN USERS FROM PEER SET
+    //   } else if (!adminList.includes(doc.id)) {
+    //     let userName
+    //     if (this.state.participants[doc.id]){
+    //       userName  = this.state.participants[doc.id].alias
+    //     }
+    //
+    //     submissions.push({
+    //       userId: doc.id,
+    //       name: userName,
+    //       ...doc.data()
+    //     })
+    //   }
+    // })
+    //
+    // if (submissions.length > 0){
+    //   this.setState({submissionData: submissions})
+    // } else {
+    //   this.setState({submissionData: null})
+    // }
+
 
     let submissionResultsDoc = await window.firebase.firestore()
       .collection('hacks')
@@ -250,13 +285,13 @@ class ResultsView extends Component {
       let submissionResultsData = submissionResultsDoc.data();
 
       let resultsIds = Object.keys(submissionResultsData).filter((item)=>{
-        return ! adminList.includes(item)
+        return !adminList.includes(item)
       })
 
       let results = {};
       resultsIds.forEach((result, i) => {
         results[result] = submissionResultsData[result];
-      });
+      })
 
       this.setState({
         participantCount: Object.keys(results).length,
@@ -288,16 +323,22 @@ class ResultsView extends Component {
         stats[key] = getArrayStats(values[key])
       })
 
-      this.setState({ resultStats: stats })
+      this.setState({
+        resultStats: stats,
+        loadingResults: false
+      })
+      this.updateLoadingStatus()
+
     } else {
       this.setState({
         resultStats: null,
         userResults: null,
+        loadingResults: false
       })
+      this.updateLoadingStatus()
     }
 
-    this.setState({ loading: false });
-  };
+  }
 
   render() {
     return (
@@ -317,7 +358,6 @@ class ResultsView extends Component {
                   callback={id=>this.setState({section: id})}
                   sections={[
                     {name: 'scores', label: 'Your Scores', disabled: this.state.selectedPhase === 'final' ? true : false},
-                    {name: 'peers', label: 'You Peers', disabled: this.state.selectedPhase === 'final' ? true : false},
                     {name: 'summary', label: 'Summary', disabled: this.state.selectedPhase === 'final' ? true : false},
                   ]}
                 />
@@ -333,9 +373,9 @@ class ResultsView extends Component {
                 <ResultsSubmissionSelector
                   resultsPublished={this.state.resultsPublished}
                   phases={this.state.submissions}
-                  finalResults={this.state.finalResults}
                   selectedPhase={this.state.selectedPhase}
                   onClick={this.onPhaseSelection}
+                  disabled={this.state.loading}
                 />
                 </>
               )}
@@ -395,25 +435,31 @@ class ResultsView extends Component {
                       )}
                     </>
                 )}
-
-                {this.state.section === 'peers' && (
-                    <>
-                      {this.state.submissionData ? (
-                        <ResultsPeersSection
-                          participantData={this.state.submissionData}
-                        />
-                      ) : (
-                        <h2 className='border text-center font-bold py-2'>
-                          No results for this submission.
-                        </h2>
-                      )}
-                    </>
-                )}
               </>
               )}
               </>
             )}
             </div>
+
+            {this.props.cohortSettings
+              && this.props.cohortSettings.showNotebooks
+              && this.state.selectedPhase !== 'final' && (
+              <>
+              <h3 className="h4 font-bold text-left my-2">
+                Your Peers
+              </h3>
+
+              {this.state.cohortSubmissions ? (
+                <ResultsPeersSection
+                  participantData={this.state.cohortSubmissions}
+                />
+              ) : (
+                <h2 className='border text-center font-bold py-2'>
+                  No results for this submission.
+                </h2>
+              )}
+              </>
+            )}
 
             <MdContentView
               content={this.state.resultsContent}

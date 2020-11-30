@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { VariableSizeList as List } from 'react-window';
 
-class AdminCohortListItem extends Component {
+class AdminCohortList extends Component {
   ListItem = ({ index, style }) => {
     return (
       <div style={style}>
@@ -26,4 +26,4 @@ class AdminCohortListItem extends Component {
 }
 
 
-export { AdminCohortListItem }
+export { AdminCohortList }
