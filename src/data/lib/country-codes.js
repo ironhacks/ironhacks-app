@@ -254,6 +254,6 @@ const COUNTRY_CODES = [
   {value: "ZM", label: "Zambia"},
   {value: "ZW", label: "Zimbabwe"},
   {value: "AX", label: "Åland Islands}"},
-];
+]
 
 export { COUNTRY_CODES }
