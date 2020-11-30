@@ -54,6 +54,7 @@ class SubmitView extends Component {
       loading: true,
       user: null,
       submissionForm: {
+        enabled: null,
         deadline: '',
         name: '',
         description: '',
@@ -79,10 +80,28 @@ class SubmitView extends Component {
       submissionDisabled: false,
       surveyComplete: false,
       uploadComplete: false,
+      submissionClosed: false,
       submissionComplete: false,
     }
 
     this.SUMMARY_MIN_LENGTH = 120
+  }
+
+  uploadMessageStyle = {
+    display: 'flex',
+    position: 'fixed',
+    width: '100vw',
+    height: '100vh',
+    zIndex: '1',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    background: 'radial-gradient(rgba(0,0,0,.4), transparent)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'white',
+    fontSize: '1em',
   }
 
   componentDidMount() {
@@ -150,6 +169,13 @@ class SubmitView extends Component {
       let submissionForm = submissions[this.submissionId]
 
       if (fire2Ms(submissionForm.deadline) < Date.now()) {
+        this.setState({
+          submissionDisabled: true,
+          submissionClosed: true,
+        })
+      }
+
+      if (!submissionForm.enabled) {
         this.setState({ submissionDisabled: true })
       }
 
@@ -372,7 +398,10 @@ class SubmitView extends Component {
     let formFields = form.fields
 
     formFields.forEach((field, index) => {
-      if (field.required && (!submissionFields[index] || submissionFields[index].trim().length === 0)) {
+      if (
+        field.required &&
+        (!submissionFields[index] || submissionFields[index].trim().length === 0)
+      ) {
         fieldIsValid.push(false)
         formFields[index].isValid = false
       } else {
@@ -485,35 +514,35 @@ class SubmitView extends Component {
       <div className="mb-7">
         <Row>
           {this.state.uploading && (
-            <div
-              style={{
-                display: 'flex',
-                position: 'fixed',
-                width: '100vw',
-                height: '100vh',
-                zIndex: '1',
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0,
-                background: 'radial-gradient(rgba(0,0,0,.4), transparent)',
-                justifyContent: 'center',
-                alignItems: 'center',
-                color: 'white',
-                fontSize: '1em',
-              }}
-            >
+            <div style={this.uploadMessageStyle}>
               Upload in progress...
             </div>
           )}
+
           <Col>
+            {this.state.submissionClosed && (
+              <div className="bg-pink cl-white font-italic my-2 py-2 text-center w-full">
+                This submission has passed the deadline and is now closed
+              </div>
+            )}
+
+            {this.state.submissionForm.enabled === false && (
+              <div className="bg-info cl-darkgrey my-2 py-2 text-center w-full">
+                <div className="font-italic">This submission is currently locked.</div>
+                <div className="fs-m1">You will be notified once the next submission round is made available.</div>
+              </div>
+            )}
+
             <h3 className="h2 font-bold py-2">{this.state.submissionForm.name}</h3>
 
             {this.state.submissionForm.deadline && (
               <div className="py-1 flex">
                 <h3 className="h4 font-extrabold">Deadline:</h3>
                 <span className="ml-2">
-                  {fire2Date(this.state.submissionForm.deadline).toLocaleString('en-US', this.dateSettings)}
+                  {fire2Date(this.state.submissionForm.deadline).toLocaleString(
+                    'en-US',
+                    this.dateSettings
+                  )}
                 </span>
               </div>
             )}
@@ -535,7 +564,9 @@ class SubmitView extends Component {
             />
 
             {this.state.submissionForm.summaryEnabled && (
-              <div className={['my-3', this.state.summaryInvalid === true ? 'cl-red' : ''].join(' ')}>
+              <div
+                className={['my-3', this.state.summaryInvalid === true ? 'cl-red' : ''].join(' ')}
+              >
                 <div className="flex">
                   <h3 className="h4 font-extrabold">Summary:</h3>
                   <span className="font-italic font-bold fs-m1 ml-2">
@@ -591,7 +622,11 @@ class SubmitView extends Component {
                   <code className={item.isValid ? '' : 'border-danger border'}>{item.name}</code>
 
                   {item.required && (
-                    <span className={`font-italic ml-1 mr-1 badge font-italic ${item.isValid ? '' : 'cl-red'}`}>
+                    <span
+                      className={`font-italic ml-1 mr-1 badge font-italic ${
+                        item.isValid ? '' : 'cl-red'
+                      }`}
+                    >
                       (required)
                     </span>
                   )}

@@ -181,15 +181,18 @@ class AdminSubmissionEditForm extends Component {
   render() {
     return (
       <div className="mt-3 p-2 px-4" style={{ border: '1px solid rgba(0,0,0,.2)' }}>
-        <h3 className="h3" style={{ verticalAlign: 'center' }}>
-          {this.props.submissionId}
-        </h3>
+        <div className="flex flex-between flex-align-center">
+          <h3 className="h3" style={{ verticalAlign: 'center' }}>
+            {this.props.submissionId}
+          </h3>
 
-        <div className="inblock">
           <InputCheckbox
             label="Submission Enabled"
             name="enabled"
-            containerClass="badge badge-dark flex flex-align-center"
+            containerClass={[
+              'badge flex flex-align-center fs-m1 py-1 px-2',
+              this.state.enabled ? 'badge-success' : 'badge-warning',
+            ].join(' ')}
             onInputChange={this.onSubmissionEnabledChanged}
             isChecked={this.state.enabled}
             disabled={this.state.loading}
@@ -197,9 +200,9 @@ class AdminSubmissionEditForm extends Component {
         </div>
 
         <InputText
-          containerClass="py-1 flex flex-between"
-          inputClass="mx-2 flex-1"
-          labelClass="flex-1 h4"
+          containerClass="py-1 flex flex-between flex-align-center"
+          inputClass="ml-2 flex-1"
+          labelClass="flex-1 mb-0 h4"
           name="name"
           label="Name"
           value={this.state.name || ''}
@@ -207,9 +210,9 @@ class AdminSubmissionEditForm extends Component {
         />
 
         <InputText
-          containerClass="py-1 flex flex-between"
-          inputClass="mx-2 flex-1"
-          labelClass="flex-1 h4"
+          containerClass="py-1 flex flex-between flex-align-center"
+          inputClass="ml-2 flex-1"
+          labelClass="flex-1 mb-0 h4"
           name="submissionId"
           label="Submission Id"
           value={this.state.submissionId || ''}
@@ -217,10 +220,10 @@ class AdminSubmissionEditForm extends Component {
           disabled={true}
         />
 
-        <div className="flex py-1 flex-between">
-          <h3 className="h4 flex-1">Deadline</h3>
+        <div className="flex py-1 flex-between flex-align-center">
+          <h3 className="h4 mb-0 flex-1">Deadline</h3>
 
-          <div className="pr-2 flex-1">
+          <div className="pr-2 ml-2 flex-1">
             <DatePicker
               selected={this.state.deadline}
               onChange={(value) => this.onFormDataChanged('deadline', value)}
@@ -234,9 +237,9 @@ class AdminSubmissionEditForm extends Component {
         </div>
 
         <InputText
-          containerClass="py-1 flex flex-between"
-          inputClass="mx-2 flex-1"
-          labelClass="h4 mr-3"
+          containerClass="py-1 flex flex-between flex-align-center"
+          inputClass="ml-2 flex-1"
+          labelClass="h4 mr-3 mb-0"
           name="survey"
           label="Survey Url"
           value={this.state.survey || ''}
