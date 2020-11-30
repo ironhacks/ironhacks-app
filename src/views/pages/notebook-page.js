@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { Page } from '../../components/layout';
+import { Page, Section, Row } from '../../components/layout';
 import { NotebookViewer } from '../../components/notebook-viewer';
 import { userMetrics } from '../../util/user-metrics'
 
@@ -58,11 +58,15 @@ class NotebookPage extends Component {
           pageDescription="Juptyer Notebook Viewer"
           pageUrl="https://ironhacks.com/notebook-viewer"
         >
-        <NotebookViewer
-          title="Notebook Viewer"
-          subtitle={this.name}
-          file={this.path}
-        />
+        <Section>
+          <Row>
+            <NotebookViewer
+              title="Notebook Viewer"
+              subtitle={this.name}
+              file={this.path}
+            />
+          </Row>
+        </Section>
       </Page>
     )
   }
