@@ -5,9 +5,9 @@ class InputTextarea extends Component {
   handleChange = event => {
     let value = event.target.value;
     if (this.props.onInputChange) {
-      this.props.onInputChange(this.props.name, value.trim());
+      this.props.onInputChange(this.props.name, value)
     }
-  };
+  }
 
   render() {
     return (
