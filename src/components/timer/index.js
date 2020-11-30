@@ -9,11 +9,26 @@ class CountdownTimer extends Component {
     let distance = endDate - new Date().getTime();
     let initalTimer = this.getTimerStep(distance);
 
-    this.state ={
+    if (distance > 0) {
+      initalTimer = this.getTimerStep(distance)
+    } else {
+      initalTimer = {
+        seconds: 0,
+        minutes: 0,
+        hours: 0,
+        days: 0
+      }
+    }
+
+    this.state = {
       endDate: endDate,
       interval: null,
       timer: initalTimer,
     };
+  }
+
+  componentDidMount() {
+      this.setTimerInterval()
   }
 
   updateTimer = data => {
@@ -25,7 +40,7 @@ class CountdownTimer extends Component {
         days: data.days
       }
     })
-  };
+  }
 
   getTimerStep(distance){
     return {
@@ -39,38 +54,49 @@ class CountdownTimer extends Component {
   setTimerInterval = () => {
     const interval = setInterval(() => {
       let distance = this.state.endDate - new Date().getTime();
-      let timeRemaining = this.getTimerStep(distance);
-      this.updateTimer(timeRemaining)
+      let timeRemaining = this.getTimerStep(distance)
       if (distance <= 0) {
-        this.clearTimerInterval();
+        this.clearTimerInterval()
+      } else {
+        this.updateTimer(timeRemaining)
       }
-    }, 1000);
+    }, 1000)
 
     this.setState({interval: interval});
-  };
+  }
 
   clearTimerInterval = () => {
     clearInterval(this.state.interval);
-
     this.setState({
-      timer: null,
+      timer: {
+        seconds: 0,
+        minutes: 0,
+        hours: 0,
+        days: 0
+      },
       interval: null,
     });
   };
 
-  componentDidMount() {
-    this.setTimerInterval();
-  }
 
   componentWillUnmount() {
     this.clearTimerInterval();
     this.setState({interval: null})
   }
 
+  getTimerString = () => {
+    return [
+      this.state.timer.days.toString().padStart(2, '0'),
+      this.state.timer.hours.toString().padStart(2, '0'),
+      this.state.timer.minutes.toString().padStart(2, '0'),
+      this.state.timer.seconds.toString().padStart(2, '0'),
+    ].join(':')
+  }
+
   render() {
     return (
       <div className={`countdown-timer ${this.props.timerClass}`}>
-        {`${this.state.timer.days}:${this.state.timer.hours}:${this.state.timer.minutes}:${this.state.timer.seconds}`}
+        {this.getTimerString()}
       </div>
     )
   }
