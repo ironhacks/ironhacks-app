@@ -1,5 +1,4 @@
 import { Component } from 'react';
-// import styled from 'styled-components';
 import ReactMde from 'react-mde';
 import * as Showdown from 'showdown';
 import './css/react-mde-all.css';

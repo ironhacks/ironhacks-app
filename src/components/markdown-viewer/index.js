@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import Showdown from 'showdown';
-// import showdownKatex from 'showdown-katex';
 
 // prefixHeaderId  Add a prefix to the generated header ids.
 // Passing a string will prefix that string to the header id.
@@ -20,17 +19,7 @@ class MdContentView extends Component {
       strikethrough: true,
       headerLevelStart: 1,
       tasklists: true,
-      // extensions: [
-      //   showdownKatex({
-      //     displayMode: true,
-      //     throwOnError: false, // allows katex to fail silently
-      //     errorColor: '#ff0000',
-      //     delimiters: [
-      //       { left: '$', right: '$', display: true },
-      //       { left: '~', right: '~', display: true, asciimath: true },
-      //     ],
-      //   }),
-      // ],
+      // extensions: [],
     }
 
     this.converter = new Showdown.Converter(mdConfig);
