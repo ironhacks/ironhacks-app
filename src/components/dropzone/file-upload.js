@@ -9,7 +9,7 @@ const baseStyle = {
   padding: '20px',
   borderWidth: 2,
   borderRadius: 2,
-  borderColor: '#eeeeee',
+  borderColor: 'rgba(0,0,0,.3)',
   borderStyle: 'dashed',
   backgroundColor: '#fafafa',
   color: '#bdbdbd',
@@ -86,7 +86,7 @@ class FileUpload extends Component {
               <p>Drag 'n' drop files here, or click to select files</p>
             </div>
             <aside>
-              <h4>Files:</h4>
+              <h4 className="mt-4 h5 font-extrabold">{this.props.acceptedFilesLabel}</h4>
 
               <ul>
                 {this.state.files.map((file, index) => (
@@ -116,6 +116,7 @@ class FileUpload extends Component {
 
 FileUpload.defaultProps = {
   disabled: false,
+  acceptedFilesLabel: 'Files:'
 }
 
 export { FileUpload }
