@@ -3,12 +3,12 @@ import { Img } from '../../components/img'
 
 const UpcomingSection = () => {
   return (
-      <Row>
-        <h2 className="h2 text-center mb-4">
-          UPCOMING <span className="font-extrabold">IRONHACKS</span>
-        </h2>
-        <Col colClass="text-center">
-          <a href="/covid19" className="nohover">
+    <Row>
+      <h2 className="h2 text-center mb-4">
+        UPCOMING <span className="font-extrabold">IRONHACKS</span>
+      </h2>
+      <Col colClass="text-center">
+        <a href="/covid19" className="nohover">
           <Img
             responsive={true}
             baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
@@ -17,10 +17,10 @@ const UpcomingSection = () => {
             imgClass="banner_img mb-4"
             alt="Upcoming Hack"
           />
-          </a>
-        </Col>
-      </Row>
+        </a>
+      </Col>
+    </Row>
   )
-};
+}
 
 export { UpcomingSection }

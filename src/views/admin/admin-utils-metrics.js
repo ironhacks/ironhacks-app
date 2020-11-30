@@ -1,23 +1,19 @@
-import { Component } from 'react';
+import { Component } from 'react'
 
 class AdminUtilsMetrics extends Component {
   constructor(props) {
-    super(props);
-    this.state = { }
+    super(props)
+    this.state = {}
   }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   render() {
     return (
       <>
-        <h2 className="pb-2">
-          Admin Metrics Utils
-        </h2>
+        <h2 className="pb-2">Admin Metrics Utils</h2>
       </>
-    );
+    )
   }
 }
 

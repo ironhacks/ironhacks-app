@@ -1,13 +1,13 @@
-import { Component } from 'react';
-import * as Time from '../../constants/time';
+import { Component } from 'react'
+import * as Time from '../../constants/time'
 
 class CountdownTimer extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    let endDate = new Date(Date.parse(this.props.endTime));
-    let distance = endDate - new Date().getTime();
-    let initalTimer = this.getTimerStep(distance);
+    let endDate = new Date(Date.parse(this.props.endTime))
+    let distance = endDate - new Date().getTime()
+    let initalTimer = this.getTimerStep(distance)
 
     if (distance > 0) {
       initalTimer = this.getTimerStep(distance)
@@ -16,7 +16,7 @@ class CountdownTimer extends Component {
         seconds: 0,
         minutes: 0,
         hours: 0,
-        days: 0
+        days: 0,
       }
     }
 
@@ -24,36 +24,36 @@ class CountdownTimer extends Component {
       endDate: endDate,
       interval: null,
       timer: initalTimer,
-    };
+    }
   }
 
   componentDidMount() {
-      this.setTimerInterval()
+    this.setTimerInterval()
   }
 
-  updateTimer = data => {
+  updateTimer = (data) => {
     this.setState({
       timer: {
         seconds: data.seconds,
         minutes: data.minutes,
         hours: data.hours,
-        days: data.days
-      }
+        days: data.days,
+      },
     })
   }
 
-  getTimerStep(distance){
+  getTimerStep(distance) {
     return {
       seconds: Math.floor((distance % Time.ONE_MINUTE) / Time.ONE_SECOND),
       minutes: Math.floor((distance % Time.ONE_HOUR) / Time.ONE_MINUTE),
       hours: Math.floor((distance % Time.ONE_DAY) / Time.ONE_HOUR),
-      days:  Math.floor(distance / Time.ONE_DAY),
+      days: Math.floor(distance / Time.ONE_DAY),
     }
   }
 
   setTimerInterval = () => {
     const interval = setInterval(() => {
-      let distance = this.state.endDate - new Date().getTime();
+      let distance = this.state.endDate - new Date().getTime()
       let timeRemaining = this.getTimerStep(distance)
       if (distance <= 0) {
         this.clearTimerInterval()
@@ -62,26 +62,25 @@ class CountdownTimer extends Component {
       }
     }, 1000)
 
-    this.setState({interval: interval});
+    this.setState({ interval: interval })
   }
 
   clearTimerInterval = () => {
-    clearInterval(this.state.interval);
+    clearInterval(this.state.interval)
     this.setState({
       timer: {
         seconds: 0,
         minutes: 0,
         hours: 0,
-        days: 0
+        days: 0,
       },
       interval: null,
-    });
-  };
-
+    })
+  }
 
   componentWillUnmount() {
-    this.clearTimerInterval();
-    this.setState({interval: null})
+    this.clearTimerInterval()
+    this.setState({ interval: null })
   }
 
   getTimerString = () => {
@@ -94,11 +93,7 @@ class CountdownTimer extends Component {
   }
 
   render() {
-    return (
-      <div className={`countdown-timer ${this.props.timerClass}`}>
-        {this.getTimerString()}
-      </div>
-    )
+    return <div className={`countdown-timer ${this.props.timerClass}`}>{this.getTimerString()}</div>
   }
 }
 

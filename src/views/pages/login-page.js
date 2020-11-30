@@ -1,12 +1,12 @@
-import { Component } from 'react';
-import { Page, Section, Row, Col } from '../../components/layout';
-import { Loader } from '../../components/loader';
-import randomUsername from '../../services/random-username';
+import { Component } from 'react'
+import { Page, Section, Row, Col } from '../../components/layout'
+import { Loader } from '../../components/loader'
+import randomUsername from '../../services/random-username'
 import { userMetrics } from '../../util/user-metrics'
 
 class LoginPage extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       loading: false,
       status: 'loading',
@@ -15,19 +15,19 @@ class LoginPage extends Component {
 
   componentDidMount() {
     if (window.firebase.auth().currentUser) {
-      this._onComplete('/hacks');
+      this._onComplete('/hacks')
     } else {
-      this.initAuthUI();
+      this.initAuthUI()
     }
   }
 
   _onComplete = (path) => {
-    this.setState({ status: 'Navigating...' });
-    window.location = path;
+    this.setState({ status: 'Navigating...' })
+    window.location = path
   }
 
-  _onFailed = error => {
-    if (this.props.onLoginSuccess){
+  _onFailed = (error) => {
+    if (this.props.onLoginSuccess) {
       this.props.onLoginSuccess({
         mustNavigate: true,
         navigateTo: '/',
@@ -51,9 +51,7 @@ class LoginPage extends Component {
         window.firebase.auth.EmailAuthProvider.PROVIDER_ID,
       ]
     } else {
-      authProviders = [
-        window.firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      ]
+      authProviders = [window.firebase.auth.GoogleAuthProvider.PROVIDER_ID]
     }
 
     const uiConfig = {
@@ -71,8 +69,8 @@ class LoginPage extends Component {
               isAdmin: false,
             })
           } else {
-            window.firebase.analytics().logEvent('user_login');
-            userMetrics({event: 'user_login'})
+            window.firebase.analytics().logEvent('user_login')
+            userMetrics({ event: 'user_login' })
             this._onComplete('/hacks')
           }
         },
@@ -88,19 +86,20 @@ class LoginPage extends Component {
     const uiInstance = window.firebaseui.auth.AuthUI.getInstance()
 
     if (uiInstance) {
-      uiInstance.start('#firebaseui-auth-container', uiConfig);
+      uiInstance.start('#firebaseui-auth-container', uiConfig)
     } else {
-      const ui = new window.firebaseui.auth.AuthUI(window.firebase.auth());
-      ui.start('#firebaseui-auth-container', uiConfig);
+      const ui = new window.firebaseui.auth.AuthUI(window.firebase.auth())
+      ui.start('#firebaseui-auth-container', uiConfig)
     }
   }
 
-  _saveUserOnDB = user => {
+  _saveUserOnDB = (user) => {
     this.setState({
-      status: 'Creating user account'
+      status: 'Creating user account',
     })
 
-    window.firebase.firestore()
+    window.firebase
+      .firestore()
       .collection('users')
       .doc(user.uid)
       .set({
@@ -109,15 +108,15 @@ class LoginPage extends Component {
         alias: randomUsername(),
         created: window.firebase.firestore.FieldValue.serverTimestamp(),
       })
-      .then(()=>{
-        let timestamp = new Date().toISOString();
-        window.firebase.analytics().logEvent('user_signup', { 'value': timestamp });
+      .then(() => {
+        let timestamp = new Date().toISOString()
+        window.firebase.analytics().logEvent('user_signup', { value: timestamp })
         userMetrics({ event: 'user_signup' })
         this._onComplete('/profile/edit?newuser=true')
       })
-      .catch((error)=>{
-        console.error('Error adding user: ', error);
-        this._onFailed();
+      .catch((error) => {
+        console.error('Error adding user: ', error)
+        this._onFailed()
       })
   }
 
@@ -132,13 +131,15 @@ class LoginPage extends Component {
         showHeader={false}
       >
         <Section>
-          <div style={{
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+          <div
+            style={{
+              height: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <Row>
               <Col>
                 <div className="text-center">
@@ -147,17 +148,13 @@ class LoginPage extends Component {
                     <span className="font-extrabold">IRONHACKS</span>
                   </h1>
 
-                  <h2 className="h4 mb-3 mt-1">
-                    Hack for innovation to solve global challenges.
-                  </h2>
+                  <h2 className="h4 mb-3 mt-1">Hack for innovation to solve global challenges.</h2>
                 </div>
 
-                {this.state.loading && (
-                  <Loader status={this.state.status} />
-                )}
+                {this.state.loading && <Loader status={this.state.status} />}
 
-                <div style={{display:'flex'}}>
-                  <div style={{flex: 1, backgroundColor: 'transparent'}} id='firebaseui-auth-container' />
+                <div style={{ display: 'flex' }}>
+                  <div style={{ flex: 1, backgroundColor: 'transparent' }} id="firebaseui-auth-container" />
                 </div>
               </Col>
             </Row>
@@ -168,4 +165,4 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+export default LoginPage

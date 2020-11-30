@@ -9,9 +9,7 @@ class TwitterTimeline extends Component {
   }
 
   componentDidMount() {
-    window.twttr.widgets.load(
-      document.getElementById('twitter-timeline')
-    )
+    window.twttr.widgets.load(document.getElementById('twitter-timeline'))
   }
 
   render() {
@@ -34,6 +32,5 @@ TwitterTimeline.defaultProps = {
   dnt: true,
   buttonClass: '',
 }
-
 
 export { TwitterTimeline }

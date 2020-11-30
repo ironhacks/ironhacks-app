@@ -9,9 +9,9 @@ import { saveSuccessModal } from '../../components/alerts'
 
 class AdminHackTaskEdit extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.taskId = this.props.match.params.taskId;
+    this.taskId = this.props.match.params.taskId
 
     this.state = {
       loading: true,
@@ -24,29 +24,30 @@ class AdminHackTaskEdit extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getTask()
   }
 
-  onEditorChange = markdown => this.setState({content: markdown})
-  onSurveyChanged = (name, value) => this.setState({survey: value})
-  onTitleChanged = (name, value) => this.setState({title: value})
-  onSurveyEnabledChanged = (name, value) => this.setState({surveyEnabled: value})
+  onEditorChange = (markdown) => this.setState({ content: markdown })
+  onSurveyChanged = (name, value) => this.setState({ survey: value })
+  onTitleChanged = (name, value) => this.setState({ title: value })
+  onSurveyEnabledChanged = (name, value) => this.setState({ surveyEnabled: value })
 
   encodeDocument(str) {
-    let safeString = unescape(encodeURIComponent(str));
-    return window.btoa(safeString);
+    let safeString = unescape(encodeURIComponent(str))
+    return window.btoa(safeString)
   }
 
   decodeDocument(enc) {
-    let decoded = window.atob(enc);
-    return decodeURIComponent(escape(decoded));
+    let decoded = window.atob(enc)
+    return decodeURIComponent(escape(decoded))
   }
 
   getTask = async () => {
-    this.setState({loading: true})
+    this.setState({ loading: true })
 
-    let taskDoc = await window.firebase.firestore()
+    let taskDoc = await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('tasks')
@@ -69,10 +70,11 @@ class AdminHackTaskEdit extends Component {
   updateTaskDocument = async () => {
     this.setState({ loading: true })
 
-    let encodedTask = this.encodeDocument(this.state.content);
-    let timeUpdated = new Date();
+    let encodedTask = this.encodeDocument(this.state.content)
+    let timeUpdated = new Date()
 
-    await window.firebase.firestore()
+    await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('tasks')
@@ -84,8 +86,8 @@ class AdminHackTaskEdit extends Component {
         surveyEnabled: this.state.surveyEnabled,
         title: this.state.title,
         updated: timeUpdated.toISOString(),
-      }).then(()=>{
-
+      })
+      .then(() => {
         userMetrics({
           event: 'task-updated',
           taskId: this.taskId,
@@ -93,18 +95,15 @@ class AdminHackTaskEdit extends Component {
         })
 
         saveSuccessModal('Task')
-        this.setState({loading: false})
+        this.setState({ loading: false })
       })
-
   }
 
   render() {
     return (
-        <>
+      <>
         <Section sectionClass="py-2">
-          <h2 className="h3 font-bold">
-            {`${this.props.hackName} Edit Task`}
-          </h2>
+          <h2 className="h3 font-bold">{`${this.props.hackName} Edit Task`}</h2>
 
           <InputText
             containerClass="flex py-2 flex-between flex-align-center"
@@ -139,34 +138,32 @@ class AdminHackTaskEdit extends Component {
           )}
 
           <MarkdownEditor
-            editorLayout='tabbed'
+            editorLayout="tabbed"
             onEditorChange={this.onEditorChange}
             value={this.state.content}
             disabled={this.state.loading}
           />
 
-          <div style={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexDirection: 'row-reverse',
-            height: '50px',
-          }}>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexDirection: 'row-reverse',
+              height: '50px',
+            }}
+          >
             <Button
               primary
-              width='150px'
-              margin='0 0 0 15px'
+              width="150px"
+              margin="0 0 0 15px"
               onClick={this.updateTaskDocument}
               disabled={this.state.loading}
             >
               Publish
             </Button>
-            <a
-              href={`/hacks/${this.props.hackSlug}/task`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={`/hacks/${this.props.hackSlug}/task`} target="_blank" rel="noopener noreferrer">
               View live document
             </a>
           </div>

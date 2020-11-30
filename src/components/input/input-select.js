@@ -1,11 +1,11 @@
-import { Component } from 'react';
-import Select from 'react-select';
+import { Component } from 'react'
+import Select from 'react-select'
 import PropTypes from 'prop-types'
 
 class InputSelect extends Component {
-  handleChange = value => {
+  handleChange = (value) => {
     if (this.props.onInputChange) {
-      this.props.onInputChange(this.props.name, value);
+      this.props.onInputChange(this.props.name, value)
     }
   }
 
@@ -15,8 +15,8 @@ class InputSelect extends Component {
         <label
           className={['input_label input_label__name', this.props.labelClass].join(' ').trim()}
           htmlFor={this.props.name}
-          >
-            {this.props.label}
+        >
+          {this.props.label}
         </label>
 
         <Select
@@ -53,6 +53,5 @@ InputSelect.propTypes = {
   required: PropTypes.bool,
   onInputChange: PropTypes.func,
 }
-
 
 export { InputSelect }

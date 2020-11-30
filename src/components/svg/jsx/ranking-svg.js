@@ -1,4 +1,4 @@
-const SvgComponent = props => (
+const SvgComponent = (props) => (
   <svg
     aria-hidden="true"
     style={{

@@ -1,7 +1,7 @@
-import { Component } from 'react';
-import { downloadFileUrl } from '../../util/download-file-url';
+import { Component } from 'react'
+import { downloadFileUrl } from '../../util/download-file-url'
 
-function UserScoreRow({name, label, value}) {
+function UserScoreRow({ name, label, value }) {
   return (
     <tr className="">
       <td className="">{label}</td>
@@ -10,16 +10,15 @@ function UserScoreRow({name, label, value}) {
   )
 }
 
-
 class SubmissionLink extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.downloadFileUrl = downloadFileUrl;
+    this.downloadFileUrl = downloadFileUrl
   }
 
   render() {
-    if (this.props.fileType ===  'application/x-ipynb+json') {
+    if (this.props.fileType === 'application/x-ipynb+json') {
       return (
         <a
           className="btn badge"
@@ -30,33 +29,26 @@ class SubmissionLink extends Component {
           View Submission Notebook
         </a>
       )
-    }
-
-    else if (this.props.fileType === 'text/csv') {
+    } else if (this.props.fileType === 'text/csv') {
       return (
-      <div
-        className="btn badge"
-        onClick={()=>{
-          this.downloadFileUrl({
-            url: this.props.fileUrl,
-            label: 'submission_file',
-            name: this.props.fileName,
-          })
-        }}
-      >
-        Download Data File
-      </div>
+        <div
+          className="btn badge"
+          onClick={() => {
+            this.downloadFileUrl({
+              url: this.props.fileUrl,
+              label: 'submission_file',
+              name: this.props.fileName,
+            })
+          }}
+        >
+          Download Data File
+        </div>
       )
-    }
-
-    else {
+    } else {
       return (
-      <a
-        className="link"
-        href={this.props.fileUrl}
-      >
-        View File
-      </a>
+        <a className="link" href={this.props.fileUrl}>
+          View File
+        </a>
       )
     }
   }
@@ -66,28 +58,22 @@ SubmissionLink.defaultProps = {
   fileType: 'file',
 }
 
-
-const ResultsScoresSection = ({scores, submission}) => {
+const ResultsScoresSection = ({ scores, submission }) => {
   return (
     <div>
       {scores && (
         <table className="results_table">
           <thead>
             <tr>
-            <th>Metric</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-        {scores.map((item, index)=>(
-          <UserScoreRow
-            key={index}
-            label={item.label}
-            value={item.value}
-            name={item.name}
-          />
-        ))}
-        </tbody>
+              <th>Metric</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scores.map((item, index) => (
+              <UserScoreRow key={index} label={item.label} value={item.value} name={item.name} />
+            ))}
+          </tbody>
         </table>
       )}
     </div>

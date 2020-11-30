@@ -5,27 +5,26 @@ import { userMetrics } from '../../util/user-metrics'
 
 class CommentEditor extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       content: '',
     }
   }
 
-  onEditorChange = markdown => {
-    this.setState({content: markdown})
-  };
+  onEditorChange = (markdown) => {
+    this.setState({ content: markdown })
+  }
 
   encodeDocument(str) {
-    let safeString = unescape(encodeURIComponent(str));
-    return window.btoa(safeString);
+    let safeString = unescape(encodeURIComponent(str))
+    return window.btoa(safeString)
   }
 
   handleSubmit = () => {
-
     const currentUser = window.firebase.auth().currentUser
-    const userId = currentUser.uid;
-    const userName = currentUser.displayName;
-    const codedBody = this.encodeDocument(this.state.content);
+    const userId = currentUser.uid
+    const userName = currentUser.displayName
+    const codedBody = this.encodeDocument(this.state.content)
 
     window.firebase.firestore()
 
@@ -40,68 +39,68 @@ class CommentEditor extends Component {
       reactions: {
         likes: [],
         dislikes: [],
-      }
+      },
     }
 
-    if (this.props.userIsAdmin){
-      comment.adminPost = true;
+    if (this.props.userIsAdmin) {
+      comment.adminPost = true
       this.props.postRef
-      .collection('comments')
-      .add(comment)
-      .then((docRef) => {
-        this.setState({content: ''});
-        this.props.refreshComments();
-      })
-      .catch(function(error) {
-        console.error('Error adding comment', error)
-      })
-
+        .collection('comments')
+        .add(comment)
+        .then((docRef) => {
+          this.setState({ content: '' })
+          this.props.refreshComments()
+        })
+        .catch(function(error) {
+          console.error('Error adding comment', error)
+        })
     } else {
-      userMetrics({event: 'submit_comment'})
+      userMetrics({ event: 'submit_comment' })
 
       // LOOKUP USER ALIAS
-      window.firebase.firestore()
+      window.firebase
+        .firestore()
         .collection('hacks')
         .doc(this.props.hackId)
         .collection('registration')
         .doc('participants')
         .get()
-        .then((participants)=>{
-          let result = participants.data();
-          let registeredUser = result[userId];
+        .then((participants) => {
+          let result = participants.data()
+          let registeredUser = result[userId]
           if (registeredUser.alias) {
-            comment.authorName = registeredUser.alias;
+            comment.authorName = registeredUser.alias
           }
 
           this.props.postRef
             .collection('comments')
             .add(comment)
             .then((docRef) => {
-              this.setState({content: ''});
-              this.props.refreshComments();
+              this.setState({ content: '' })
+              this.props.refreshComments()
             })
             .catch(function(error) {
               console.error('Error adding comment ', error)
             })
-        }).catch((error)=>{
+        })
+        .catch((error) => {
           console.log(error)
         })
     }
-  };
-
+  }
 
   render() {
     return (
       <>
         <MarkdownEditor
-          editorLayout='tabbed'
+          editorLayout="tabbed"
           height={250}
           value={this.state.content}
           onEditorChange={this.onEditorChange}
         />
 
-        <div className='control'>
-          <Button primary width='150px' onClick={this.handleSubmit}>
+        <div className="control">
+          <Button primary width="150px" onClick={this.handleSubmit}>
             Submit
           </Button>
         </div>

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import Dropzone from 'react-dropzone'
 
 const baseStyle = {
@@ -14,26 +14,26 @@ const baseStyle = {
   backgroundColor: '#fafafa',
   color: '#bdbdbd',
   outline: 'none',
-  transition: 'border .24s ease-in-out'
-};
+  transition: 'border .24s ease-in-out',
+}
 
 class FileUpload extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       loading: true,
       files: [],
       fileList: [],
-    };
+    }
   }
 
   onFileStatus({ meta }, status) {
     console.log(status, meta)
   }
 
-  onFiles = _files => {
-    let fileList = this.state.fileList;
-    let files = this.state.files;
+  onFiles = (_files) => {
+    let fileList = this.state.fileList
+    let files = this.state.files
 
     _files.forEach((item, i) => {
       if (this.props.acceptedFiles) {
@@ -41,35 +41,35 @@ class FileUpload extends Component {
           return false
         }
       }
-      if(!fileList.includes(item.path)){
-        files.push(item);
+      if (!fileList.includes(item.path)) {
+        files.push(item)
         fileList.push(item.path)
       }
-    });
+    })
 
     this.setState({
       files: files,
       fileList: fileList,
-    });
+    })
 
     if (this.props.onFilesChanged) {
       this.props.onFilesChanged(files)
     }
-  };
+  }
 
   validateFile(files) {
-    console.log('validate', files);
+    console.log('validate', files)
     return true
   }
 
-  removeFile = position => {
-    let files = this.state.files;
-    let newFiles = files.filter((item, index)=>{
-      return index !== position;
+  removeFile = (position) => {
+    let files = this.state.files
+    let newFiles = files.filter((item, index) => {
+      return index !== position
     })
 
-    this.setState({files: newFiles});
-  };
+    this.setState({ files: newFiles })
+  }
 
   render() {
     return (
@@ -79,9 +79,9 @@ class FileUpload extends Component {
         onChangeStatus={this.onFileStatus}
         disabled={this.props.disabled}
       >
-        {({ getRootProps, getInputProps}) => (
+        {({ getRootProps, getInputProps }) => (
           <section className="dropzone">
-            <div {...getRootProps({style: baseStyle})}>
+            <div {...getRootProps({ style: baseStyle })}>
               <input {...getInputProps()} />
               <p>Drag 'n' drop files here, or click to select files</p>
             </div>
@@ -99,8 +99,10 @@ class FileUpload extends Component {
                         fontSize: '1.2em',
                         padding: '0 1em',
                       }}
-                      onClick={(() => {this.removeFile(index)})}
-                      >
+                      onClick={() => {
+                        this.removeFile(index)
+                      }}
+                    >
                       X
                     </span>
                   </li>
@@ -116,7 +118,7 @@ class FileUpload extends Component {
 
 FileUpload.defaultProps = {
   disabled: false,
-  acceptedFilesLabel: 'Files:'
+  acceptedFilesLabel: 'Files:',
 }
 
 export { FileUpload }

@@ -1,7 +1,7 @@
 import { InfoBanner } from './info-banner'
 import { InputCheckbox } from '../../components/input'
 import { fire2Date } from '../../util/date-utils'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
 const InfoBannerPreview = ({
   bannerId,
@@ -55,29 +55,20 @@ const InfoBannerPreview = ({
   return (
     <div className="my-4">
       <div className="mt-4 mb-2 flex flex-align-center">
-        <div
-          className="btn badge bg-secondary cl-white mr-1"
-          onClick={editInfoBanner}
-          >
-            <Link to={`banners/${bannerId}/edit`}>
-                Edit
-            </Link>
+        <div className="btn badge bg-secondary cl-white mr-1" onClick={editInfoBanner}>
+          <Link to={`banners/${bannerId}/edit`}>Edit</Link>
         </div>
 
         <div className="mr-2 flex-1">
-          <InfoBanner
-            content={content}
-            color={color}
-            bg_color={bg_color}
-          />
+          <InfoBanner content={content} color={color} bg_color={bg_color} />
         </div>
         <div className="flex-0">
           <InputCheckbox
-            name='active'
-            label='Active'
-            containerClass='my-0 mr-1 badge badge-dark flex flex-align-center'
-            labelClass='mr-2'
-            inputClass=''
+            name="active"
+            label="Active"
+            containerClass="my-0 mr-1 badge badge-dark flex flex-align-center"
+            labelClass="mr-2"
+            inputClass=""
             isChecked={active}
             onInputChange={toggleActive}
           />
@@ -90,12 +81,17 @@ const InfoBannerPreview = ({
       </div>
 
       <div className="">
-        <div className="flex flex-align-center"><span className="flex-1">Starts: </span><span className="flex-9 fs-m1 font-bold ml-3">{starts_at.toLocaleString('en-us', timeFormatOptions)}</span></div>
-        <div className="flex flex-align-center"><span className="flex-1">Ends: </span><span className="flex-9 fs-m1 font-bold ml-3">{ends_at.toLocaleString('en-us', timeFormatOptions)}</span></div>
+        <div className="flex flex-align-center">
+          <span className="flex-1">Starts: </span>
+          <span className="flex-9 fs-m1 font-bold ml-3">{starts_at.toLocaleString('en-us', timeFormatOptions)}</span>
+        </div>
+        <div className="flex flex-align-center">
+          <span className="flex-1">Ends: </span>
+          <span className="flex-9 fs-m1 font-bold ml-3">{ends_at.toLocaleString('en-us', timeFormatOptions)}</span>
+        </div>
       </div>
     </div>
   )
 }
-
 
 export { InfoBannerPreview }

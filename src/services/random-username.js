@@ -1,4 +1,4 @@
-import friendlyWords from 'friendly-words';
+import friendlyWords from 'friendly-words'
 
 export default function randomUsername() {
   return [

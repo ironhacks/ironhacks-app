@@ -16,11 +16,12 @@ class AdminHackOverview extends Component {
   updateHackOverview = async () => {
     this.setState({ loading: true })
 
-    await window.firebase.firestore()
+    await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .update({
-        overview: this.state.content
+        overview: this.state.content,
       })
 
     userMetrics({
@@ -30,34 +31,26 @@ class AdminHackOverview extends Component {
 
     saveSuccessModal()
 
-    this.setState({loading: false})
+    this.setState({ loading: false })
   }
 
   render() {
     return (
       <>
         <Section sectionClass="py-2">
-          <h2 className="h3 font-bold">
-            {`${this.props.hackName} Overview`}
-          </h2>
+          <h2 className="h3 font-bold">{`${this.props.hackName} Overview`}</h2>
 
           <MarkdownEditor
-            editorLayout='tabbed'
-            onEditorChange={value=>this.setState({content: value})}
+            editorLayout="tabbed"
+            onEditorChange={(value) => this.setState({ content: value })}
             value={this.state.content}
           />
 
           <div className="flex flex-align-center flex-between py-2">
-            <a
-              href={`/hacks/${this.props.hackSlug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              >
+            <a href={`/hacks/${this.props.hackSlug}`} target="_blank" rel="noopener noreferrer">
               View live document
             </a>
-            <div
-              className="btn btn-sm bg-primary px-8"
-              onClick={this.updateHackOverview}>
+            <div className="btn btn-sm bg-primary px-8" onClick={this.updateHackOverview}>
               Publish
             </div>
           </div>
@@ -67,4 +60,4 @@ class AdminHackOverview extends Component {
   }
 }
 
-export default AdminHackOverview;
+export default AdminHackOverview

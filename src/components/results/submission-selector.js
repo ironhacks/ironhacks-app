@@ -1,32 +1,22 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import { userMetrics } from '../../util/user-metrics'
 
-function SubmissionSelectorItem({
-  selected,
-  buttonClass,
-  title,
-  disabled,
-  index,
-  onItemClick,
-}) {
-  let classes = [
-    buttonClass,
-    selected ? 'selected' : '',
-    disabled ? 'disabled' : ''
-  ].join(' ');
+function SubmissionSelectorItem({ selected, buttonClass, title, disabled, index, onItemClick }) {
+  let classes = [buttonClass, selected ? 'selected' : '', disabled ? 'disabled' : ''].join(' ')
 
   return (
     <div
       className={classes}
-      onClick={()=>{
-        if (disabled) { return false }
+      onClick={() => {
+        if (disabled) {
+          return false
+        }
         onItemClick()
       }}
     >
       <span>{title}</span>
     </div>
   )
-
 }
 
 class ResultsSubmissionSelector extends Component {
@@ -35,7 +25,7 @@ class ResultsSubmissionSelector extends Component {
       event: 'results_phase_view',
       data: {
         selected: submissionId,
-      }
+      },
     })
 
     this.props.onClick(phase, submissionId)
@@ -60,7 +50,7 @@ class ResultsSubmissionSelector extends Component {
               key={index}
               buttonClass={'submission_selector__item'}
               selected={index === this.props.selectedPhase ? true : false}
-              onItemClick={()=>this.onItemClick(index, item.submissionId)}
+              onItemClick={() => this.onItemClick(index, item.submissionId)}
               disabled={this.isDisabled(item.submissionId)}
               title={`Phase ${index + 1}`}
             />
@@ -71,7 +61,7 @@ class ResultsSubmissionSelector extends Component {
           <SubmissionSelectorItem
             buttonClass={'submission_selector__item'}
             selected={this.props.selectedPhase === 'final' ? true : false}
-            onItemClick={()=>this.onItemClick('final', 'final')}
+            onItemClick={() => this.onItemClick('final', 'final')}
             disabled={this.props.disabled}
             title={'Final'}
           />

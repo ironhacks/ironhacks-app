@@ -10,24 +10,25 @@ const userMetrics = (eventData) => {
     return false
   }
 
-  let user = window.firebase.auth().currentUser;
+  let user = window.firebase.auth().currentUser
   if (!user) {
-    return false;
+    return false
   }
 
   let metricData = {
     ...eventData,
-    userId:  user.uid || 'unauthenticated',
+    userId: user.uid || 'unauthenticated',
     timestamp: window.firebase.firestore.Timestamp.now(),
     pathname: window.location.pathname,
   }
 
   try {
-    window.firebase.firestore()
+    window.firebase
+      .firestore()
       .collection('stats')
       .add(metricData)
   } catch (e) {
-    console.log('metrics error', e);
+    console.log('metrics error', e)
   }
 }
 

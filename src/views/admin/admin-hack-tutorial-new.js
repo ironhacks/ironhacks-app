@@ -7,7 +7,7 @@ import { Section } from '../../components/layout'
 
 class AdminTutorialNew extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       tutorialData: {
         title: '',
@@ -21,20 +21,20 @@ class AdminTutorialNew extends Component {
     }
   }
 
-  onEditorChange = value => {
+  onEditorChange = (value) => {
     let data = this.state.tutorialData
     data.content = value
-    this.setState({tutorialData: data})
+    this.setState({ tutorialData: data })
   }
 
   onInputChanged = (name, value) => {
     let data = this.state.tutorialData
     data[name] = value
-    this.setState({tutorialData: data})
+    this.setState({ tutorialData: data })
   }
 
   publishTutorial = async () => {
-    this.setState({loading: true})
+    this.setState({ loading: true })
 
     let timeUpdated = new Date()
     let data = this.state.tutorialData
@@ -42,7 +42,8 @@ class AdminTutorialNew extends Component {
     data.created = timeUpdated.toISOString()
     data.updated = timeUpdated.toISOString()
 
-    let doc = await window.firebase.firestore()
+    let doc = await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('tutorials')
@@ -54,7 +55,7 @@ class AdminTutorialNew extends Component {
       hackId: this.props.hackId,
     })
 
-    this.setState({loading: false})
+    this.setState({ loading: false })
     window.location = `/admin/hacks/${this.props.hackId}/tutorials`
   }
 
@@ -62,9 +63,7 @@ class AdminTutorialNew extends Component {
     return (
       <>
         <Section sectionClass="py-2">
-          <h2 className="h3 font-bold">
-            {`${this.props.hackName} New Tutorial`}
-          </h2>
+          <h2 className="h3 font-bold">{`${this.props.hackName} New Tutorial`}</h2>
 
           <InputText
             containerClass="flex py-2 flex-between flex-align-center"
@@ -78,23 +77,25 @@ class AdminTutorialNew extends Component {
           />
 
           <MarkdownEditor
-            editorLayout='tabbed'
+            editorLayout="tabbed"
             onEditorChange={this.onEditorChange}
             value={this.state.tutorialData.content}
           />
 
-          <div style={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexDirection: 'row-reverse',
-            height: '50px',
-          }}>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexDirection: 'row-reverse',
+              height: '50px',
+            }}
+          >
             <Button
               primary
-              width='150px'
-              margin='0 0 0 15px'
+              width="150px"
+              margin="0 0 0 15px"
               onClick={this.publishTutorial}
               disabled={this.state.loading}
             >
@@ -107,4 +108,4 @@ class AdminTutorialNew extends Component {
   }
 }
 
-export default AdminTutorialNew;
+export default AdminTutorialNew

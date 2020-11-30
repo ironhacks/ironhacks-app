@@ -1,8 +1,8 @@
-import { Component } from 'react';
+import { Component } from 'react'
 
 class AdminHackForumItem extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       currentHack: this.props.hackId || null,
@@ -23,62 +23,57 @@ class AdminHackForumItem extends Component {
     this.props.onForumItemUpdate(false, treatment, this.props.forumIndex)
   }
 
-
   render() {
     return (
-      <div style={{
-        display: 'block',
-        width: '100%',
-        padding: '1em 0',
-      }}>
-
-      <div>
-        <div className=''>{'Id: ' + (this.props.forumId)}</div>
-
+      <div
+        style={{
+          display: 'block',
+          width: '100%',
+          padding: '1em 0',
+        }}
+      >
         <div>
-          <input
-            type='text'
-            placeholder='Forum Name'
-            onChange={this.onNameChange}
-            value={this.props.name}
-          />
-
-          <div className='treatment-div'>
-
-            <span>Treatment identifier:</span>
-
-            <input
-              type='number'
-              name='treatmentIdentifier'
-              defaultValue={this.props.treatment}
-              min='0'
-              onChange={this.onTreatmentChange}/>
-
-          </div>
+          <div className="">{'Id: ' + this.props.forumId}</div>
 
           <div>
-            <h3>Participants:</h3>
-            <pre style={{
-              width: '100%',
-              whiteSpace: 'break-spaces',
-              padding: 0,
-              margin: 0,
-              position: 'relative',
-            }}>
-              {JSON.stringify(this.props.participants, null, '  ')}
-            </pre>
+            <input type="text" placeholder="Forum Name" onChange={this.onNameChange} value={this.props.name} />
+
+            <div className="treatment-div">
+              <span>Treatment identifier:</span>
+
+              <input
+                type="number"
+                name="treatmentIdentifier"
+                defaultValue={this.props.treatment}
+                min="0"
+                onChange={this.onTreatmentChange}
+              />
+            </div>
+
+            <div>
+              <h3>Participants:</h3>
+              <pre
+                style={{
+                  width: '100%',
+                  whiteSpace: 'break-spaces',
+                  padding: 0,
+                  margin: 0,
+                  position: 'relative',
+                }}
+              >
+                {JSON.stringify(this.props.participants, null, '  ')}
+              </pre>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     )
   }
 }
 
-
 class AdminHackForumView extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       currentHack: this.props.hackId || null,
       selectedForum: 0,
@@ -86,16 +81,16 @@ class AdminHackForumView extends Component {
       threads: [],
       selectedHack: 0,
     }
-
   }
 
   componentDidMount() {
-    this.getForums();
+    this.getForums()
   }
 
   getForums() {
-    const forums = [];
-    window.firebase.firestore()
+    const forums = []
+    window.firebase
+      .firestore()
       .collection('forums')
       .where('hack', '==', this.props.hackId)
       .get()
@@ -104,23 +99,23 @@ class AdminHackForumView extends Component {
           forums.push({
             id: doc.id,
             data: doc.data(),
-          });
+          })
         })
 
-        console.log(forums);
+        console.log(forums)
         this.setState({
-          hackForums: forums
+          hackForums: forums,
         })
 
         // this.getThreads();
         // _this.getThreadsAdmin(0);
       })
       .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      });
+        console.error('Error getting documents: ', error)
+      })
   }
 
-  render(){
+  render() {
     return (
       <>
         {this.state.hackForums.map((forum, index, arr) => {
@@ -132,15 +127,19 @@ class AdminHackForumView extends Component {
               name={forum.data.name}
               participants={forum.data.participants}
               forumId={forum.id}
-              onNameChange={()=>{console.log('test')}}
+              onNameChange={() => {
+                console.log('test')
+              }}
               treatment={index}
-              onTreatmentChange={()=>{console.log('test2')}}
+              onTreatmentChange={() => {
+                console.log('test2')
+              }}
             />
           )
         })}
-        </>
+      </>
     )
   }
 }
 
-export default AdminHackForumView;
+export default AdminHackForumView

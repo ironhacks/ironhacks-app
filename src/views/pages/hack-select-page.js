@@ -6,7 +6,7 @@ import { TwitterButton, TwitterTimeline } from '../../components/twitter'
 
 class HackSelectPage extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       user: this.props.user,
       startNewHackNav: true,
@@ -27,13 +27,14 @@ class HackSelectPage extends Component {
   }
 
   getHacks = async () => {
-    const hacksSnap = await window.firebase.firestore()
+    const hacksSnap = await window.firebase
+      .firestore()
       .collection('hacks')
       .where('hackPublished', '==', true)
       .get()
 
     let hacks = []
-    hacksSnap.docs.forEach((hack)=>{
+    hacksSnap.docs.forEach((hack) => {
       let hackData = hack.data()
       hacks.push({
         ...hackData,
@@ -44,7 +45,8 @@ class HackSelectPage extends Component {
     })
 
     let userHacks = []
-    const userDoc = await window.firebase.firestore()
+    const userDoc = await window.firebase
+      .firestore()
       .collection('users')
       .doc(this.props.userId)
       .get()
@@ -52,49 +54,49 @@ class HackSelectPage extends Component {
     if (userDoc.exists) {
       let userData = userDoc.data()
       if (userData.hacks) {
-        userData.hacks.forEach((hack)=>{
+        userData.hacks.forEach((hack) => {
           userHacks.push(hack)
         })
       }
     }
 
     // ALL REGISTERED HACKS
-    const registeredHacks = hacks.filter((hack)=>{
+    const registeredHacks = hacks.filter((hack) => {
       return userHacks.includes(hack.hackId)
     })
 
-    this.setState({registeredHacks: registeredHacks})
+    this.setState({ registeredHacks: registeredHacks })
 
     // HACKS NOT REGISTERED
-    const unregisteredHacks = hacks.filter((hack)=>{
+    const unregisteredHacks = hacks.filter((hack) => {
       return !userHacks.includes(hack.hackId)
     })
 
     // NOT REGISTERED - OPEN FOR REGISTRATION
-    const availableHacks = unregisteredHacks.filter((hack)=>{
+    const availableHacks = unregisteredHacks.filter((hack) => {
       return hack.registrationOpen
     })
 
     this.setState({ availableHacks: availableHacks })
 
     // NOT REGISTERED - NOT OPEN FOR REGISTRATION
-    const unavailableHacks = unregisteredHacks.filter((hack)=>{
+    const unavailableHacks = unregisteredHacks.filter((hack) => {
       return !hack.registrationOpen
     })
 
     // NOT REGISTERED - NOT OPEN FOR REGISTRATION - FUTURE DATE
-    const upcomingHacks = unavailableHacks.filter((hack)=>{
+    const upcomingHacks = unavailableHacks.filter((hack) => {
       return Date.parse(hack.startDate) > Date.now()
     })
 
-    this.setState({upcomingHacks: upcomingHacks})
+    this.setState({ upcomingHacks: upcomingHacks })
 
     // NOT REGISTERED - NOT OPEN FOR REGISTRATION - PAST DATE
-    const previousHacks = unavailableHacks.filter((hack)=>{
+    const previousHacks = unavailableHacks.filter((hack) => {
       return Date.parse(hack.startDate) <= Date.now()
     })
 
-    this.setState({previousHacks: previousHacks})
+    this.setState({ previousHacks: previousHacks })
   }
 
   render() {
@@ -117,66 +119,42 @@ class HackSelectPage extends Component {
           <Section sectionClass="py-2" containerClass="flex">
             <Row rowClass="flex-2 mr-2 mb-10">
               <Col colClass="mt-1">
-                <h2 className="h4 py-1 badge badge-dark">
-                  Your Registered Hacks
-                </h2>
+                <h2 className="h4 py-1 badge badge-dark">Your Registered Hacks</h2>
 
-                <HackCardList
-                  emptyText={'You are not registered for any hacks.'}
-                  hacks={this.state.registeredHacks}
-                />
+                <HackCardList emptyText={'You are not registered for any hacks.'} hacks={this.state.registeredHacks} />
 
-                <h2 className="h4 py-1 badge badge-dark">
-                  Hacks Open for Registration
-                </h2>
+                <h2 className="h4 py-1 badge badge-dark">Hacks Open for Registration</h2>
 
                 <HackSignupCardList
                   emptyText={'There are no hacks currently available.'}
                   hacks={this.state.availableHacks}
                 />
 
-                <h2 className="h4 py-1 badge badge-dark">
-                  Upcoming Hacks
-                </h2>
+                <h2 className="h4 py-1 badge badge-dark">Upcoming Hacks</h2>
 
-                <HackCardList
-                  emptyText={'No upcoming hacks.'}
-                  hacks={this.state.upcomingHacks}
-                />
+                <HackCardList emptyText={'No upcoming hacks.'} hacks={this.state.upcomingHacks} />
 
-                <h2 className="h4 py-1 badge bg-grey cl-white">
-                  Past Hacks
-                </h2>
+                <h2 className="h4 py-1 badge bg-grey cl-white">Past Hacks</h2>
 
-                <PreviousHackCardList
-                  emptyText={'No previous hacks.'}
-                  hacks={this.state.previousHacks}
-                />
+                <PreviousHackCardList emptyText={'No previous hacks.'} hacks={this.state.previousHacks} />
               </Col>
             </Row>
 
-          <div className="flex-1 mr-1 hide--med">
-            <h2 className="h4 py-1 badge badge-dark">
-              Social Feed
-            </h2>
+            <div className="flex-1 mr-1 hide--med">
+              <h2 className="h4 py-1 badge badge-dark">Social Feed</h2>
 
-            <div className="social_feed">
-              <TwitterTimeline
-                src="https://twitter.com/__matt_harris__/lists/ironhacks-com-14752?ref_src=twsrc%5Etfw"
-              />
+              <div className="social_feed">
+                <TwitterTimeline src="https://twitter.com/__matt_harris__/lists/ironhacks-com-14752?ref_src=twsrc%5Etfw" />
+              </div>
+              <div className="social_actions">
+                <TwitterButton hashtag="IronHacks" />
+              </div>
             </div>
-            <div className="social_actions">
-              <TwitterButton
-                hashtag="IronHacks"
-              />
-            </div>
-          </div>
           </Section>
-
         </Page>
       )
     }
   }
 }
 
-export default HackSelectPage;
+export default HackSelectPage

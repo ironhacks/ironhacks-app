@@ -4,10 +4,4 @@ import { HIGHEST_DEGREE } from './lib/highest-degree'
 import { PROGRAMING_LANGUAGES } from './lib/programming-languages'
 import { SUBMISSION_TAGS } from './lib/submission-tags'
 
-export {
-  COUNTRY_CODES,
-  EDUCATION_STATUS,
-  HIGHEST_DEGREE,
-  PROGRAMING_LANGUAGES,
-  SUBMISSION_TAGS,
-}
+export { COUNTRY_CODES, EDUCATION_STATUS, HIGHEST_DEGREE, PROGRAMING_LANGUAGES, SUBMISSION_TAGS }

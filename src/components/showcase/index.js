@@ -1,3 +1,3 @@
-import ShowcaseCard from './showcase-card';
+import ShowcaseCard from './showcase-card'
 
 export { ShowcaseCard }

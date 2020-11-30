@@ -1,4 +1,3 @@
-
 export const getMIME = (type) => {
   const mime = {
     css: 'text/css',
@@ -14,8 +13,8 @@ export const getMIME = (type) => {
   }
 
   if (mime.hasOwnProperty(type)) {
-    return mime[type];
+    return mime[type]
   } else {
-    return false;
+    return false
   }
 }

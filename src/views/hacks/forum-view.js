@@ -5,23 +5,24 @@ import { Row } from '../../components/layout'
 
 class ForumView extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       forum: null,
       selectedForum: 0,
       hackForums: {},
       posts: [],
       selectedHack: 0,
-    };
+    }
   }
 
   componentDidMount() {
-    this.getPosts();
+    this.getPosts()
   }
 
   getPosts = () => {
-    let posts = [];
-    window.firebase.firestore()
+    let posts = []
+    window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('forums')
@@ -35,16 +36,16 @@ class ForumView extends Component {
             id: doc.id,
             ref: doc.ref,
             data: doc.data(),
-          });
+          })
         })
         this.setState({ posts: posts })
       })
       .catch(function(error) {
-        console.error('Error getting documents: ', error);
-      });
-  };
+        console.error('Error getting documents: ', error)
+      })
+  }
 
-  sortThreads = (posts, order='asc') => {
+  sortThreads = (posts, order = 'asc') => {
     if (order === 'asc') {
       return posts.sort((a, b) => {
         return a.data.createdAt.toMillis() - b.data.createdAt.toMillis()
@@ -54,15 +55,15 @@ class ForumView extends Component {
         return b.data.createdAt.toMillis() - a.data.createdAt.toMillis()
       })
     }
-  };
+  }
 
-  newThread = event => {
-    this.setState({ startNewThreadFlow: true });
-  };
+  newThread = (event) => {
+    this.setState({ startNewThreadFlow: true })
+  }
 
   render() {
     if (this.state.startNewThreadFlow) {
-      return <Redirect push to='./forum/new' />;
+      return <Redirect push to="./forum/new" />
     }
 
     return (
@@ -70,9 +71,7 @@ class ForumView extends Component {
         <div className="post_list">
           <div className="post_list__controls">
             {this.props.userIsAdmin && (
-              <div
-                className="button create_post_button"
-                onClick={this.newThread}>
+              <div className="button create_post_button" onClick={this.newThread}>
                 + New Post
               </div>
             )}
@@ -98,4 +97,4 @@ class ForumView extends Component {
   }
 }
 
-export default ForumView;
+export default ForumView

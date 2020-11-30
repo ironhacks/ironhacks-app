@@ -5,9 +5,7 @@ const Col = (props) => {
   const { colClass, children } = props
   const defaultClass = 'col'
 
-  return (
-    <div className={mergeClasses(defaultClass, colClass)}>{children}</div>
-  )
+  return <div className={mergeClasses(defaultClass, colClass)}>{children}</div>
 }
 
 Col.defaultProps = {

@@ -1,35 +1,37 @@
 export const getOpenHacks = async () => {
-  const openHacks = await window.firebase.firestore()
+  const openHacks = await window.firebase
+    .firestore()
     .collection('hacks')
     .where('registrationOpen', '==', true)
     .get()
-    .then((result)=>{
-      var openHackList = [];
+    .then((result) => {
+      var openHackList = []
       if (!result.empty) {
-        result.docs.forEach((hack)=>{
-          let hackId = hack.id;
-            openHackList.push(hackId)
+        result.docs.forEach((hack) => {
+          let hackId = hack.id
+          openHackList.push(hackId)
         })
-        return openHackList;
+        return openHackList
       }
     })
-  return openHacks;
+  return openHacks
 }
 
 export const getClosedHacks = async () => {
-  const closedHacks = await window.firebase.firestore()
+  const closedHacks = await window.firebase
+    .firestore()
     .collection('hacks')
     .where('registrationOpen', '==', false)
     .get()
-    .then((result)=>{
-      var closedHackList = [];
+    .then((result) => {
+      var closedHackList = []
       if (!result.empty) {
-        result.docs.forEach((hack)=>{
-          let hackId = hack.id;
-            closedHackList.push(hackId)
+        result.docs.forEach((hack) => {
+          let hackId = hack.id
+          closedHackList.push(hackId)
         })
-        return closedHackList;
+        return closedHackList
       }
     })
-   return closedHacks;
+  return closedHacks
 }

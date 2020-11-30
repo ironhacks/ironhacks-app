@@ -1,21 +1,20 @@
-import { Component } from 'react';
-import Swal from 'sweetalert2';
-import { Section, Row, Col } from '../../components/layout';
-import { registerUser } from '../../services/register-hack';
+import { Component } from 'react'
+import Swal from 'sweetalert2'
+import { Section, Row, Col } from '../../components/layout'
+import { registerUser } from '../../services/register-hack'
 import { userMetrics } from '../../util/user-metrics'
-import { MdContentView }  from '../../components/markdown-viewer';
+import { MdContentView } from '../../components/markdown-viewer'
 
 class RegistrationView extends Component {
   constructor(props) {
-    super(props);
-    this.state = {registerDisabled: false }
+    super(props)
+    this.state = { registerDisabled: false }
   }
 
   registerSuccess = () => {
-    window.firebase.analytics()
-      .logEvent('register_hack', {
-        'value': this.props.hackSlug
-      })
+    window.firebase.analytics().logEvent('register_hack', {
+      value: this.props.hackSlug,
+    })
 
     userMetrics({
       event: 'register_hack',
@@ -29,18 +28,17 @@ class RegistrationView extends Component {
     registerUser({
       userId: this.props.userId,
       hackId: this.props.hackId,
-    })
-    .then((result) => {
+    }).then((result) => {
       if (result) {
-        this.registerSuccess();
+        this.registerSuccess()
       } else {
-        window.location.reload();
+        window.location.reload()
       }
     })
   }
 
   registerHack = () => {
-    if (this.props.hackRegistration){
+    if (this.props.hackRegistration) {
       let hackId = this.props.hackId
       let userEmail = this.props.userEmail
       let userId = this.props.userId
@@ -55,9 +53,8 @@ class RegistrationView extends Component {
         showConfirmButton: false,
         allowOutsideClick: false,
         customClass: 'surveyAlert',
-      })
-      .then((result) => {
-        this.setState({registerDisabled: true})
+      }).then((result) => {
+        this.setState({ registerDisabled: true })
         this.callRegisterUser()
       })
     } else {
@@ -66,10 +63,9 @@ class RegistrationView extends Component {
         text: 'Click to continue registering for this hack.',
         icon: 'success',
         showCancelButton: true,
-      })
-      .then((result) => {
+      }).then((result) => {
         if (result.value) {
-          this.setState({registerDisabled: true})
+          this.setState({ registerDisabled: true })
           this.callRegisterUser()
         }
       })
@@ -81,7 +77,7 @@ class RegistrationView extends Component {
       <>
         <Section sectionClass="py-2">
           <Row>
-            <img src={this.props.hackBannerImg} alt='Hack Banner Img'/>
+            <img src={this.props.hackBannerImg} alt="Hack Banner Img" />
           </Row>
         </Section>
         <Section sectionClass="py-2">
@@ -96,8 +92,8 @@ class RegistrationView extends Component {
                 onClick={this.registerHack}
                 className="btn btn-primary my-3"
                 disabled={this.state.registerDisabled}
-                >
-                  Register
+              >
+                Register
               </button>
             </Col>
           </Row>
@@ -116,8 +112,8 @@ class RegistrationView extends Component {
                 onClick={this.registerHack}
                 className="btn btn-primary my-3"
                 disabled={this.state.registerDisabled}
-                >
-                  Register
+              >
+                Register
               </button>
             </Col>
           </Row>
@@ -127,4 +123,4 @@ class RegistrationView extends Component {
   }
 }
 
-export default RegistrationView;
+export default RegistrationView

@@ -1,16 +1,12 @@
-import {Controlled as CodeMirror} from 'react-codemirror2'
+import { Controlled as CodeMirror } from 'react-codemirror2'
 
-function NotebookText({
-  display,
-  codeTheme,
-  maxLength,
-  cellContent,
-  displayOptions,
-}) {
+function NotebookText({ display, codeTheme, maxLength, cellContent, displayOptions }) {
   return (
-    <div style={{
-       display: display,
-     }}>
+    <div
+      style={{
+        display: display,
+      }}
+    >
       <CodeMirror
         value={cellContent}
         className="notebook-text"

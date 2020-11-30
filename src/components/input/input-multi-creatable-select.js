@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import CreatableSelect from 'react-select/creatable';
+import { Component } from 'react'
+import CreatableSelect from 'react-select/creatable'
 import PropTypes from 'prop-types'
 
 class InputMultiCreatableSelect extends Component {
@@ -15,8 +15,8 @@ class InputMultiCreatableSelect extends Component {
         <label
           className={['input_label input_label__name', this.props.labelClass].join(' ').trim()}
           htmlFor={this.props.name}
-          >
-            {this.props.label}
+        >
+          {this.props.label}
         </label>
 
         <CreatableSelect
@@ -52,6 +52,5 @@ InputMultiCreatableSelect.propTypes = {
   disabled: PropTypes.bool,
   onInputChange: PropTypes.func,
 }
-
 
 export { InputMultiCreatableSelect }

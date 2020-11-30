@@ -1,12 +1,12 @@
 import { Component } from 'react'
-import { InfoBannerEditForm }  from '../../components/info-banner'
+import { InfoBannerEditForm } from '../../components/info-banner'
 import { Section } from '../../components/layout'
 import Swal from 'sweetalert2'
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'
 
 class AdminHackInfoBannersEdit extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.bannerId = this.props.match.params.bannerId
 
@@ -24,9 +24,10 @@ class AdminHackInfoBannersEdit extends Component {
       return false
     }
 
-    this.setState({loading: true})
+    this.setState({ loading: true })
 
-    await window.firebase.firestore()
+    await window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
       .collection('banners')
@@ -37,21 +38,18 @@ class AdminHackInfoBannersEdit extends Component {
       icon: 'success',
       title: 'Banner saved',
       text: 'Banner was saved sucessfully',
-    })
-    .then(()=>{
+    }).then(() => {
       this.props.history.goBack()
     })
 
-    this.setState({loading: false})
+    this.setState({ loading: false })
   }
 
   render() {
     return (
       <>
         <Section sectionClass="py-2">
-          <h2 className="h3 font-bold">
-            {`${this.props.hackName} Edit Info Banner`}
-          </h2>
+          <h2 className="h3 font-bold">{`${this.props.hackName} Edit Info Banner`}</h2>
         </Section>
 
         <Section sectionClass="mb-3">
@@ -67,7 +65,5 @@ class AdminHackInfoBannersEdit extends Component {
     )
   }
 }
-
-
 
 export default withRouter(AdminHackInfoBannersEdit)

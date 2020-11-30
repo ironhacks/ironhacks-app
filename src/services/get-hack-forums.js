@@ -1,20 +1,21 @@
 const getHackForums = (hackId) => {
-  return window.firebse.firestore()
+  return window.firebse
+    .firestore()
     .collection('forums')
     .where('hack', '==', hackId)
     .get()
     .then((hackForums) => {
       try {
-        let forums = [];
-        hackForums.forEach(doc => {
+        let forums = []
+        hackForums.forEach((doc) => {
           forums.push(doc.data())
         })
-        return forums;
+        return forums
       } catch (e) {
         console.log('error', e)
-        return false;
+        return false
       }
     })
-};
+}
 
 export { getHackForums }

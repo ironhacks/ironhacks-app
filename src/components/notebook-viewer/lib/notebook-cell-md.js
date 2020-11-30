@@ -1,12 +1,6 @@
-import { Row } from  '../../../components/layout';
+import { Row } from '../../../components/layout'
 
-function NotebookMdCell({
-  bgColor,
-  executionCount,
-  gutterVisible,
-  cellContent,
-}) {
-
+function NotebookMdCell({ bgColor, executionCount, gutterVisible, cellContent }) {
   const tagStyle = {
     padding: '5px',
     color: 'var(--red)',
@@ -22,20 +16,14 @@ function NotebookMdCell({
   if (cellContent) {
     return (
       <Row rowClass="mt-1 mx-0 text-left flex flex-nowrap">
-        <span style={tagStyle}>
-          {`Out[${executionCount}]:`}
-        </span>
+        <span style={tagStyle}>{`Out[${executionCount}]:`}</span>
 
-        <div className="flex-1">
-          {cellContent}
-        </div>
+        <div className="flex-1">{cellContent}</div>
       </Row>
     )
   } else {
-    return (<></>)
+    return <></>
   }
 }
-
-
 
 export { NotebookMdCell }

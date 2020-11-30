@@ -21,7 +21,7 @@ const InfoBanner = (props) => {
 
   let bannerStyle = {
     color: props.color,
-    backgroundColor: props.bg_color
+    backgroundColor: props.bg_color,
   }
 
   const converter = new Showdown.Converter(bannerConfig)
@@ -33,9 +33,10 @@ const InfoBanner = (props) => {
   return (
     <div className={bannerClass}>
       <div className="info-banner__container" style={bannerStyle}>
-        <div className="info-banner__content"
+        <div
+          className="info-banner__content"
           dangerouslySetInnerHTML={{
-            __html: convertToHtml(props.content)
+            __html: convertToHtml(props.content),
           }}
         />
       </div>

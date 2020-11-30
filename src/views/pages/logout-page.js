@@ -1,33 +1,35 @@
-import { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import { Loader } from '../../components/loader';
+import { Component } from 'react'
+import { Redirect } from 'react-router-dom'
+import { Loader } from '../../components/loader'
 import { userMetrics } from '../../util/user-metrics'
 
 class LogoutPage extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = { loading: true }
   }
 
   componentDidMount() {
-    this._logout();
+    this._logout()
   }
 
   _logout = () => {
-    window.firebase.analytics().logEvent('user_logout');
-    userMetrics({event: 'user_logout'})
+    window.firebase.analytics().logEvent('user_logout')
+    userMetrics({ event: 'user_logout' })
 
-    window.firebase.auth()
+    window.firebase
+      .auth()
       .signOut()
-      .then(()=>{
-        window.localStorage.clear();
-        this.setState({ loading: false })
-      },
-      function(error) {
-        console.error('Sign Out Error', error);
-      }
+      .then(
+        () => {
+          window.localStorage.clear()
+          this.setState({ loading: false })
+        },
+        function(error) {
+          console.error('Sign Out Error', error)
+        }
       )
-  };
+  }
 
   render() {
     if (this.state.loading) {
@@ -38,7 +40,8 @@ class LogoutPage extends Component {
       )
     } else {
       return (
-        <Redirect to={{
+        <Redirect
+          to={{
             pathname: '/',
           }}
         />
@@ -47,4 +50,4 @@ class LogoutPage extends Component {
   }
 }
 
-export default LogoutPage;
+export default LogoutPage

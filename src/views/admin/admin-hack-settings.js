@@ -1,30 +1,25 @@
-import { Component } from 'react';
+import { Component } from 'react'
 import { AdminImageUpload } from '../../components/admin'
-import {
-  InputText,
-  InputCheckbox,
-  InputTextarea,
-  InputSelect,
-} from '../../components/input';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { Section, Row } from '../../components/layout';
-import { upperCaseWord } from '../../util/string-utils';
+import { InputText, InputCheckbox, InputTextarea, InputSelect } from '../../components/input'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { Section, Row } from '../../components/layout'
+import { upperCaseWord } from '../../util/string-utils'
 
 var fire2Date = (fireDate) => {
-  if (!fireDate){
-    return '';
+  if (!fireDate) {
+    return ''
   }
 
-  let secs = fireDate.seconds || 0;
-  let nsecs = fireDate.nanoseconds || 0;
+  let secs = fireDate.seconds || 0
+  let nsecs = fireDate.nanoseconds || 0
 
-  return new Date((secs * 1000) + (nsecs / 1000000)).toISOString();
+  return new Date(secs * 1000 + nsecs / 1000000).toISOString()
 }
 
 class AdminHackSettings extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     const {
       hackBannerImg,
       description,
@@ -38,7 +33,7 @@ class AdminHackSettings extends Component {
       registrationSurvey,
       displayOptions,
       whitelist,
-    } = props.hackData;
+    } = props.hackData
 
     let defaultDisplayOptions = {
       calendarEnabled: false,
@@ -53,16 +48,13 @@ class AdminHackSettings extends Component {
     // NOTE: Some display options are moving
     // to dedicated pages and should not be
     // controlled from this interface
-    this.excludeDisplayOptions = [
-      'taskEnabled',
-      'quizEnabled',
-    ]
+    this.excludeDisplayOptions = ['taskEnabled', 'quizEnabled']
 
-    let parsedDate = startDate;
+    let parsedDate = startDate
     if (startDate.seconds) {
       parsedDate = new Date(Date.parse(fire2Date(startDate)))
     } else {
-      parsedDate = new Date(Date.parse(startDate));
+      parsedDate = new Date(Date.parse(startDate))
     }
 
     this.state = {
@@ -86,44 +78,45 @@ class AdminHackSettings extends Component {
   }
 
   onInputChange = (name, value) => {
-    this.setState({[name]: value})
+    this.setState({ [name]: value })
   }
 
   onBannerFileAdded = (file) => {
-    this.setState({hackBannerUpload: file[0]})
+    this.setState({ hackBannerUpload: file[0] })
     this.uploadBannerFile()
   }
 
   onThumbFileAdded = (file) => {
-    this.setState({hackThumbUpload: file[0]})
+    this.setState({ hackThumbUpload: file[0] })
     this.uploadThumbFile()
   }
 
-  onHackStartDateChanged = value => {
-    this.setState({startDate: value})
+  onHackStartDateChanged = (value) => {
+    this.setState({ startDate: value })
   }
 
   onHackDifficultyChanged = (name, value) => {
-    this.setState({hackDifficulty: value})
+    this.setState({ hackDifficulty: value })
   }
 
   onDisplayOptionsChanged = (name, value) => {
-    let display = this.state.displayOptions;
-    display[name] = value;
-    this.setState({displayOptions: display})
+    let display = this.state.displayOptions
+    display[name] = value
+    this.setState({ displayOptions: display })
   }
 
   onRegistrationOpenChanged = (name, value) => {
     if (this.state.syncing) {
-      return false;
+      return false
     }
 
-    this.setState({syncing: true})
+    this.setState({ syncing: true })
 
-    window.firebase.firestore()
+    window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
-      .update({registrationOpen: value})
+      .update({ registrationOpen: value })
       .then(() => {
         this.setState({
           registrationOpen: value,
@@ -136,16 +129,17 @@ class AdminHackSettings extends Component {
     if (this.state.syncing) {
       return false
     }
-    this.setState({syncing: true})
+    this.setState({ syncing: true })
 
-    window.firebase.firestore()
+    window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
-      .update({hackPublished: value})
+      .update({ hackPublished: value })
       .then(() => {
         this.setState({
           hackPublished: value,
-          syncing: false
+          syncing: false,
         })
       })
   }
@@ -163,21 +157,20 @@ class AdminHackSettings extends Component {
     var storageRef = window.firebase.storage().ref()
     var bannerImageRef = storageRef.child(`/media/hacks/${this.props.hackId}/${this.state.hackBannerUpload.name}`)
 
-    bannerImageRef
-      .put(this.state.hackBannerUpload)
-      .then((snapshot) => {
-        snapshot.ref.getDownloadURL().then(downloadURL=>{
-          window.firebase.firestore()
-            .collection('hacks')
-            .doc(this.props.hackId)
-            .set({hackBannerImg: downloadURL}, {merge: true})
-            .then(()=>{
-              this.setState({
-                hackBannerImg: downloadURL,
-                submitDisabled: false,
-                syncing: false,
-              })
+    bannerImageRef.put(this.state.hackBannerUpload).then((snapshot) => {
+      snapshot.ref.getDownloadURL().then((downloadURL) => {
+        window.firebase
+          .firestore()
+          .collection('hacks')
+          .doc(this.props.hackId)
+          .set({ hackBannerImg: downloadURL }, { merge: true })
+          .then(() => {
+            this.setState({
+              hackBannerImg: downloadURL,
+              submitDisabled: false,
+              syncing: false,
             })
+          })
       })
     })
   }
@@ -195,21 +188,20 @@ class AdminHackSettings extends Component {
     var storageRef = window.firebase.storage().ref()
     var bannerImageRef = storageRef.child(`/media/hacks/${this.props.hackId}/${this.state.hackThumbUpload.name}`)
 
-    bannerImageRef
-      .put(this.state.hackThumbUpload)
-      .then((snapshot) => {
-        snapshot.ref.getDownloadURL().then(downloadURL=>{
-          window.firebase.firestore()
-            .collection('hacks')
-            .doc(this.props.hackId)
-            .set({hackThumbImg: downloadURL}, {merge: true})
-            .then(()=>{
-              this.setState({
-                hackThumbImg: downloadURL,
-                submitDisabled: false,
-                syncing: false,
-              })
+    bannerImageRef.put(this.state.hackThumbUpload).then((snapshot) => {
+      snapshot.ref.getDownloadURL().then((downloadURL) => {
+        window.firebase
+          .firestore()
+          .collection('hacks')
+          .doc(this.props.hackId)
+          .set({ hackThumbImg: downloadURL }, { merge: true })
+          .then(() => {
+            this.setState({
+              hackThumbImg: downloadURL,
+              submitDisabled: false,
+              syncing: false,
             })
+          })
       })
     })
   }
@@ -226,45 +218,50 @@ class AdminHackSettings extends Component {
 
     const filterText = (text) => {
       return text.replace(/[^a-zA-Z0-9- ]/g, '')
-    };
+    }
 
     const filterDescription = (text) => {
       return text.replace(/[^a-zA-Z0-9-.,()"'/ ]/g, '')
-    };
+    }
 
     const filterUrl = (path) => {
-      return path.toLowerCase()
+      return path
+        .toLowerCase()
         .replace(/[^a-zA-Z0-9- ]/g, '')
         .replace(/ /g, '-')
     }
 
-    let hackBannerImg = this.state.hackBannerImg.trim();
-    let hackThumbImg = this.state.hackThumbImg.trim();
-    let hackDifficulty = this.state.hackDifficulty;
-    let hackName = filterText(this.state.hackName.trim());
-    let hackDescription = filterDescription(this.state.hackDescription.trim());
-    let displayOptions = this.state.displayOptions;
-    let hackSlug = filterUrl(this.state.hackSlug.trim());
-    let registrationSurvey = this.state.registrationSurvey.trim();
-    let startDate = this.state.startDate;
+    let hackBannerImg = this.state.hackBannerImg.trim()
+    let hackThumbImg = this.state.hackThumbImg.trim()
+    let hackDifficulty = this.state.hackDifficulty
+    let hackName = filterText(this.state.hackName.trim())
+    let hackDescription = filterDescription(this.state.hackDescription.trim())
+    let displayOptions = this.state.displayOptions
+    let hackSlug = filterUrl(this.state.hackSlug.trim())
+    let registrationSurvey = this.state.registrationSurvey.trim()
+    let startDate = this.state.startDate
 
     if (!this.state.hackSlug) {
-      hackSlug = filterUrl(hackName);
+      hackSlug = filterUrl(hackName)
     }
 
-    window.firebase.firestore()
+    window.firebase
+      .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
-      .set({
-        description: hackDescription,
-        difficulty: hackDifficulty,
-        displayOptions: displayOptions,
-        hackSlug: hackSlug,
-        hackThumbImg: hackThumbImg,
-        name: hackName,
-        registrationSurvey: registrationSurvey,
-        startDate: startDate.toISOString(),
-      }, {merge: true})
+      .set(
+        {
+          description: hackDescription,
+          difficulty: hackDifficulty,
+          displayOptions: displayOptions,
+          hackSlug: hackSlug,
+          hackThumbImg: hackThumbImg,
+          name: hackName,
+          registrationSurvey: registrationSurvey,
+          startDate: startDate.toISOString(),
+        },
+        { merge: true }
+      )
       .then(() => {
         this.setState({
           displayOptions: displayOptions,
@@ -281,15 +278,13 @@ class AdminHackSettings extends Component {
           syncing: false,
         })
       })
-  };
+  }
 
   render() {
     return (
       <>
         <Section sectionClass="pt-2">
-          <h2 className="h3 font-bold">
-            {`${this.props.hackName} Settings`}
-          </h2>
+          <h2 className="h3 font-bold">{`${this.props.hackName} Settings`}</h2>
 
           <AdminImageUpload
             disabled={this.state.submissionDisabled}
@@ -343,17 +338,15 @@ class AdminHackSettings extends Component {
         <Section>
           <div className="flex  mt-2 flex-1">
             <div className="flex-0 pr-2">
-              <h3 className="h4 py-2 font-bold">
-                Hack Media
-              </h3>
+              <h3 className="h4 py-2 font-bold">Hack Media</h3>
 
               <AdminImageUpload
                 disabled={this.state.submissionDisabled}
                 onFilesChanged={this.onThumbFileAdded}
                 initialImage={this.state.hackThumbImg}
-                containerClass='dropzone_container max-w-100 fs-m5'
-                infoText='Thumb Image'
-                infoSize='100 x 100'
+                containerClass="dropzone_container max-w-100 fs-m5"
+                infoText="Thumb Image"
+                infoSize="100 x 100"
                 maxFiles={1}
               />
 
@@ -370,9 +363,7 @@ class AdminHackSettings extends Component {
             </div>
 
             <div className="pl-10 flex-1">
-              <h3 className="h4 py-2 font-bold mb-1">
-                Hack Options
-              </h3>
+              <h3 className="h4 py-2 font-bold mb-1">Hack Options</h3>
 
               <InputCheckbox
                 label="Hack Published"
@@ -392,12 +383,10 @@ class AdminHackSettings extends Component {
               />
 
               <div className="flex flex-align-center">
-                <h3 className="h4 pr-2 my-0">
-                  Opening Date
-                </h3>
+                <h3 className="h4 pr-2 my-0">Opening Date</h3>
 
                 <DatePicker
-                  className='fs-m2'
+                  className="fs-m2"
                   selected={this.state.startDate}
                   onChange={this.onHackStartDateChanged}
                   showTimeSelect
@@ -410,11 +399,9 @@ class AdminHackSettings extends Component {
             </div>
 
             <div className="flex-1">
-              <h3 className="h4 py-2 font-bold mb-1">
-                Display Options
-              </h3>
+              <h3 className="h4 py-2 font-bold mb-1">Display Options</h3>
               <div className="fs-m1 px-3 pt-2 bg-grey-lt2">
-                {Object.keys(this.state.displayOptions).map((key, index)=>{
+                {Object.keys(this.state.displayOptions).map((key, index) => {
                   if (!this.excludeDisplayOptions.includes(key)) {
                     return (
                       <InputCheckbox
@@ -430,51 +417,51 @@ class AdminHackSettings extends Component {
                 })}
               </div>
             </div>
-        </div>
-      </Section>
+          </div>
+        </Section>
 
-      <Section sectionClass="pt-2">
-        <InputText
-          containerClass="flex py-1 flex-between"
-          inputClass="ml-2 pl-1 flex-3"
-          labelClass="flex-1"
-          name="registrationSurvey"
-          label="Registration Survey"
-          icon="image"
-          iconClass="pl-1 pr-2"
-          value={this.state.registrationSurvey}
-          onInputChange={this.onInputChange}
-        />
-        <InputSelect
-          name="hack_dificulty"
-          containerClass="flex align-items-center"
-          inputClass="ml-1 flex-3"
-          labelClass="flex-1"
-          label="Dificulty"
-          value={this.state.hackDifficulty}
-          onInputChange={this.onHackDifficultyChanged}
-          options={[
-            {label: 'Beginner', name: 'beginner'},
-            {label: 'Intermediate', name: 'intermediate'},
-            {label: 'Advanced', name: 'advanced'},
-          ]}
-        />
-      </Section>
+        <Section sectionClass="pt-2">
+          <InputText
+            containerClass="flex py-1 flex-between"
+            inputClass="ml-2 pl-1 flex-3"
+            labelClass="flex-1"
+            name="registrationSurvey"
+            label="Registration Survey"
+            icon="image"
+            iconClass="pl-1 pr-2"
+            value={this.state.registrationSurvey}
+            onInputChange={this.onInputChange}
+          />
+          <InputSelect
+            name="hack_dificulty"
+            containerClass="flex align-items-center"
+            inputClass="ml-1 flex-3"
+            labelClass="flex-1"
+            label="Dificulty"
+            value={this.state.hackDifficulty}
+            onInputChange={this.onHackDifficultyChanged}
+            options={[
+              { label: 'Beginner', name: 'beginner' },
+              { label: 'Intermediate', name: 'intermediate' },
+              { label: 'Advanced', name: 'advanced' },
+            ]}
+          />
+        </Section>
 
-      <Section>
-        <Row rowClass="flex justify-content-center bg-grey-lt2 py-3 mb-10 mt-2">
-          <button
-            className="btn btn- bg-primary px-8"
-            onClick={this.submitSettings}
-            disabled={this.state.submitDisabled}
-          >
-            Submit
-          </button>
-        </Row>
-      </Section>
+        <Section>
+          <Row rowClass="flex justify-content-center bg-grey-lt2 py-3 mb-10 mt-2">
+            <button
+              className="btn btn- bg-primary px-8"
+              onClick={this.submitSettings}
+              disabled={this.state.submitDisabled}
+            >
+              Submit
+            </button>
+          </Row>
+        </Section>
       </>
     )
   }
 }
 
-export default AdminHackSettings;
+export default AdminHackSettings
