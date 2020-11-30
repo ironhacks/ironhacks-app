@@ -40,10 +40,11 @@ class HackPage extends Component {
       status: 'loading',
       activeView: 'task',
       loading: true,
-      userCohort: null,
+      userCohortId: null,
+      userCohortList: null,
+      cohortSettings: {},
       hackBanner: null,
     }
-
   }
 
   componentDidMount(){
@@ -98,6 +99,7 @@ class HackPage extends Component {
 
       let cohortList = doc.data()
       let cohortId = null
+
       if (cohortList) {
         for(let cohort of Object.keys(cohortList)) {
           if (cohortList[cohort].includes(this.props.userId)) {
@@ -106,7 +108,12 @@ class HackPage extends Component {
         }
       }
 
-      this.setState({userCohort: cohortId})
+      if (cohortId) {
+        this.setState({
+          userCohortId: cohortId,
+          userCohortList: cohortList[cohortId],
+        })
+      }
 
       let upcomingEvent = this.getUpcomingHackEvent(hackData)
 
@@ -119,7 +126,6 @@ class HackPage extends Component {
         name: hackData.name,
         overview: hackData.overview || '',
         registration: hackData.registrationSurvey ? hackData.registrationSurvey : '',
-        results: hackData.results,
         rules:  hackData.rules || '',
         task: hackData.defaultTask ? hackData.defaultTask.name : null,
         upcomingEvent: upcomingEvent,
@@ -144,7 +150,9 @@ class HackPage extends Component {
 
       if (cohortSettings && cohortId in cohortSettings) {
         userCohortSettings = cohortSettings[cohortId].properties
-          if ('task' in userCohortSettings) {
+        this.setState({cohortSettings: userCohortSettings})
+
+        if ('task' in userCohortSettings) {
           hackSettings.task = userCohortSettings.task.name
         }
       }
@@ -158,7 +166,6 @@ class HackPage extends Component {
         name: hackSettings.name,
         overview: hackSettings.overview,
         registration: hackSettings.registration,
-        results: hackSettings.results,
         rules:  hackSettings.rules,
         task: hackSettings.task,
         taskPublished: hackSettings.taskPublished,
@@ -315,6 +322,8 @@ class HackPage extends Component {
               <Section>
                 <Hack.Forum
                   userIsAdmin={this.props.userIsAdmin}
+                  userCohortId={this.state.userCohortId}
+                  userCohortList={this.state.userCohortList}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   user={this.props.user}
@@ -326,6 +335,8 @@ class HackPage extends Component {
               <Section>
                 <ThreadEditView
                   userIsAdmin={this.props.userIsAdmin}
+                  userCohortId={this.state.userCohortId}
+                  userCohortList={this.state.userCohortList}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   user={this.props.user}
@@ -337,6 +348,8 @@ class HackPage extends Component {
               <Section>
                 <ThreadView
                   userIsAdmin={this.props.userIsAdmin}
+                  userCohortId={this.state.userCohortId}
+                  userCohortList={this.state.userCohortList}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   user={this.props.user}
@@ -348,6 +361,8 @@ class HackPage extends Component {
               <Section>
                 <NewThread
                   userIsAdmin={this.props.userIsAdmin}
+                  userCohortId={this.state.userCohortId}
+                  userCohortList={this.state.userCohortList}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
                   user={this.props.user}
@@ -360,7 +375,9 @@ class HackPage extends Component {
               <Section sectionClass="results-section">
                 <Hack.Results
                   hackData={this.state.hackData}
-                  user={this.props.user}
+                  userCohortId={this.state.userCohortId}
+                  userCohortList={this.state.userCohortList}
+                  cohortSettings={this.state.cohortSettings}
                   userId={this.props.userId}
                   hackId={this.state.hackId}
                 />
@@ -382,9 +399,11 @@ class HackPage extends Component {
             <Route exact path="/hacks/:hackSlug/task">
               <Section>
                 <Hack.Task
-                  userEmail={this.props.user.email}
                   hackId={this.state.hackId}
                   userId={this.props.userId}
+                  userEmail={this.props.user.email}
+                  userCohortId={this.state.userCohortId}
+                  userCohortList={this.state.userCohortList}
                   taskId={this.state.task}
                   taskPublished={this.state.taskPublished}
                 />
@@ -416,9 +435,11 @@ class HackPage extends Component {
             <Route exact path="/hacks/:hackSlug/submissions">
               <Section>
                 <Hack.Submissions
-                  hackSlug={this.hackSlug}
                   hackId={this.state.hackId}
+                  hackSlug={this.hackSlug}
                   userId={this.props.userId}
+                  userCohortId={this.state.userCohortId}
+                  userCohortList={this.state.userCohortList}
                   hackData={this.state.hackData}
                 />
               </Section>
@@ -427,9 +448,11 @@ class HackPage extends Component {
             <Route path="/hacks/:hackSlug/submit/:submissionId">
               <Section>
                 <Hack.Submit
-                  hackSlug={this.hackSlug}
                   hackId={this.state.hackId}
+                  hackSlug={this.hackSlug}
                   userId={this.props.userId}
+                  userCohortId={this.state.userCohortId}
+                  userCohortList={this.state.userCohortList}
                   hackData={this.state.hackData}
                 />
               </Section>

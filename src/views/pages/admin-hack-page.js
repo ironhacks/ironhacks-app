@@ -86,7 +86,7 @@ class AdminHackPage extends Component {
               {name: 'Tutorials', path: 'tutorials'},
               {name: 'Banners', path: 'banners'},
               {name: 'Extensions', path: 'extensions'},
-              {name: 'Forums', path: 'forums'},
+              // {name: 'Forums', path: 'forums'},
             ]}
           />
 

@@ -1,6 +1,6 @@
-import { Component } from 'react';
-import Button from '../../util/button.js';
-import MarkdownEditor from '../../components/markdown-editor';
+import { Component } from 'react'
+import { Button } from '../../components/buttons'
+import MarkdownEditor from '../../components/markdown-editor'
 import { userMetrics } from '../../util/user-metrics'
 
 class CommentEditor extends Component {
