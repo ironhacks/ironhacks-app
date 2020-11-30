@@ -1,9 +1,9 @@
 import Swal from 'sweetalert2'
 
-export const saveSuccessModal = () => {
+export const saveSuccessModal = (name='Settings') => {
   Swal.fire({
     icon: 'success',
-    title: 'Results saved',
-    text: 'Results were saved sucessfully',
+    title: `${name} saved`,
+    text: `${name} were saved sucessfully`,
   })
 }
