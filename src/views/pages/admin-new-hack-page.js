@@ -1,9 +1,9 @@
-import { Component } from 'react';
-import { Page, Section, Row, Col } from '../../components/layout';
-import { Redirect } from 'react-router-dom';
-import Button from '../../util/button.js';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import { Component } from 'react'
+import { Page, Section, Row, Col } from '../../components/layout'
+import { Redirect } from 'react-router-dom'
+import { Button } from '../../components/buttons'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 class AdminNewHackPage extends Component {
   constructor(props) {
@@ -27,6 +27,10 @@ class AdminNewHackPage extends Component {
       isCreateEnable: event.target.value ? false : true,
     })
   };
+
+  cancelCreateHack = () => {
+    window.location = '/admin';
+  }
 
   createHack = async () => {
     const hackInstance = {
@@ -61,6 +65,13 @@ class AdminNewHackPage extends Component {
       .doc(hackId)
       .collection('submissions')
       .doc('settings')
+      .set({})
+
+    await window.firebase.firestore()
+      .collection('hacks')
+      .doc(hackId)
+      .collection('results')
+      .doc('final')
       .set({})
 
     window.location = `/admin/hacks/${hackId}`;
@@ -117,7 +128,11 @@ class AdminNewHackPage extends Component {
 
                 <div className='row'>
                   <div className='col-md-8 offset-md-2 finish-cancel-button-container'>
-                    <Button className="mr-3" width='150px'>
+                    <Button
+                      className="mr-3"
+                      width='150px'
+                      onClick={this.cancelCreateHack}
+                    >
                       Cancel
                     </Button>
 
@@ -140,4 +155,4 @@ class AdminNewHackPage extends Component {
   }
 }
 
-export default AdminNewHackPage;
+export default AdminNewHackPage

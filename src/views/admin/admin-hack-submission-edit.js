@@ -83,7 +83,7 @@ class AdminHackSubmissionEdit extends Component {
       .doc('settings')
       .set({[data.submissionId]: data}, {merge: true})
       .then(()=>{
-        window.history.back();
+        window.history.back()
       })
       .catch((error)=>{
         console.log(error);

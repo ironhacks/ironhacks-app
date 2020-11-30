@@ -1,44 +1,17 @@
-import { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import styled from 'styled-components';
-import Button from '../../util/button.js';
-import MarkdownEditor from '../../components/markdown-editor';
+import { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+import { Button } from '../../components/buttons'
+import MarkdownEditor from '../../components/markdown-editor'
 import { userMetrics } from '../../util/user-metrics'
-
-const AvailableActionsDiv = styled('div')`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row-reverse;
-  height: 50px;
-`;
-
-const SectionContainer = styled('div')`
-  width: 100%;
-  padding: 0 10%;
-
-  .editor {
-    margin: 20px 0;
-  }
-
-  .control {
-    position: relative;
-    display: flex;
-    flex-direction: row-reverse;
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-`;
-
+import { Row, Col } from '../../components/layout';
 
 class ThreadEditView extends Component {
   constructor(props) {
     super(props);
     const { user } = props;
 
-    this.hackId = this.props.match.params.hackId;
-    this.threadId = this.props.match.params.threadId;
+    this.hackId = this.props.match.params.hackId
+    this.threadId = this.props.match.params.threadId
     this.state = {
       content: '',
       thread: this.threadId,
@@ -47,7 +20,7 @@ class ThreadEditView extends Component {
       user,
       postData: null,
       postRef: null,
-    };
+    }
 
     // RECEIVE POST DATA FROM PREVIOUS ROUTE
     if (this.props.location.state){
@@ -56,7 +29,7 @@ class ThreadEditView extends Component {
   }
 
   componentDidMount() {
-    this.getPostData();
+    this.getPostData()
   }
 
   getPostData = () => {
@@ -137,12 +110,13 @@ class ThreadEditView extends Component {
 
   render() {
     return (
-        <SectionContainer>
+      <Row>
+        <Col>
           <div className="mt-2">
             {this.state.postData && (
               <>
 
-              <h2 className="h2">
+              <h2 className="h3 font-bold">
                 {this.state.postData.title}
               </h2>
 
@@ -156,16 +130,24 @@ class ThreadEditView extends Component {
             )}
           </div>
 
-          <AvailableActionsDiv>
-            <Button primary width='150px' onClick={this.updatePost}>
-              Update
-            </Button>
-
-            <Button width='150px' onClick={this.cancelSubmit}>
+          <div className="flex flex-between my-3">
+            <Button
+              width='150px'
+              onClick={this.cancelSubmit}
+            >
               Cancel
             </Button>
-          </AvailableActionsDiv>
-        </SectionContainer>
+
+            <Button
+              primary
+              width='150px'
+              onClick={this.updatePost}
+            >
+              Update
+            </Button>
+          </div>
+        </Col>
+      </Row>
     )
   }
 }

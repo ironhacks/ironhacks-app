@@ -20,8 +20,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.1",
-    "@emotion/styled": "^10.0.10",
-    "antd": "^4.8.0",
     "bootstrap": "^4.5.3",
     "codemirror": "^5.58.2",
     "friendly-words": "^1.1.10",
@@ -44,12 +42,10 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
-    "react-select": "^3.1.0",
+    "react-select": "^3.1.1",
     "react-window": "^1.8.6",
     "redux": "^4.0.5",
     "showdown": "^1.9.1",
-    "showdown-katex": "^0.8.0",
-    "styled-components": "^5.2.1",
     "sweetalert2": "^9.17.2",
     "warning": "^4.0.3"
   },
@@ -130,5 +126,5 @@
     "styles:dev": "npm run styles:build && node-sass --output-style compressed -w -r -o src/styles src/styles/scss",
     "test": "react-scripts test -env=jsdom"
   },
-  "version": "2.2.6"
+  "version": "2.2.7"
 }

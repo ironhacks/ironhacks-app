@@ -28,6 +28,7 @@ class InputText extends Component {
           disabled={this.props.disabled}
           value={this.props.value}
           onChange={this.handleChange}
+          placeholder={this.props.placeholder}
         />
       </div>
     )
@@ -41,6 +42,7 @@ InputText.defaultProps = {
   labelClass: '',
   iconClass: '',
   icon: false,
+  placeholder: '',
   disabled: false,
   inputClass: '',
   containerClass: '',
@@ -53,6 +55,7 @@ InputText.propTypes = {
   containerClass: PropTypes.string,
   labelClass: PropTypes.string,
   inputClass: PropTypes.string,
+  placeholder: PropTypes.string,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
   onInputChange: PropTypes.func,

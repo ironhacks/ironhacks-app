@@ -1,32 +1,4 @@
 import { Component } from 'react';
-import styled from 'styled-components';
-import forumIcon from '../../assets/svg/forum-icon.svg';
-
-const ForumItemContainer = styled('div')`
-  margin: 10px 0 10px 15px;
-
-  img {
-    height: 20px;
-    width: 20px;
-    margin-right: 10px;
-  }
-
-  span {
-    &.interval {
-      font-weight: 300;
-      font-size: 20px;
-    };
-  };
-
-  input {
-    text-align: right;
-    padding-right: 10px;
-  }
-
-  .treatment-div{
-    margin-top: 10px;
-  }
-`;
 
 class AdminHackForumItem extends Component {
   constructor(props) {
@@ -38,9 +10,8 @@ class AdminHackForumItem extends Component {
       hackForums: {},
       threads: [],
       selectedHack: 0,
-    };
+    }
   }
-
 
   onNameChange(e) {
     const name = e.target.value
@@ -61,13 +32,8 @@ class AdminHackForumItem extends Component {
         padding: '1em 0',
       }}>
 
-      <ForumItemContainer>
-        <div>
-          <img src={forumIcon} alt='forum-icon'/>
-          <span className='interval'>{'Forum ' + (this.props.forumIndex + 1)}</span>
-        </div>
-
-        <div className='interval'>{'Id: ' + (this.props.forumId)}</div>
+      <div>
+        <div className=''>{'Id: ' + (this.props.forumId)}</div>
 
         <div>
           <input
@@ -103,7 +69,7 @@ class AdminHackForumItem extends Component {
             </pre>
           </div>
         </div>
-      </ForumItemContainer>
+      </div>
     </div>
     )
   }

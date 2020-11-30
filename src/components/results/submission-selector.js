@@ -41,6 +41,16 @@ class ResultsSubmissionSelector extends Component {
     this.props.onClick(phase, submissionId)
   }
 
+  isDisabled = (submissionId) => {
+    if (this.props.disabled) {
+      return true
+    }
+    if (this.props.resultsPublished[submissionId]) {
+      return !this.props.resultsPublished[submissionId]
+    }
+    return true
+  }
+
   render() {
     return (
       <div className="submission_selector">
@@ -50,18 +60,19 @@ class ResultsSubmissionSelector extends Component {
               key={index}
               buttonClass={'submission_selector__item'}
               selected={index === this.props.selectedPhase ? true : false}
-              onItemClick={()=>this.onItemClick(index, item.submissionId, item)}
-              disabled={this.props.resultsPublished[item.submissionId] ? !this.props.resultsPublished[item.submissionId] : true }
+              onItemClick={()=>this.onItemClick(index, item.submissionId)}
+              disabled={this.isDisabled(item.submissionId)}
               title={`Phase ${index + 1}`}
             />
           )
         })}
-        {this.props.finalResults && (
+
+        {this.props.resultsPublished.final && (
           <SubmissionSelectorItem
             buttonClass={'submission_selector__item'}
             selected={this.props.selectedPhase === 'final' ? true : false}
             onItemClick={()=>this.onItemClick('final', 'final')}
-            disabled={false}
+            disabled={this.props.disabled}
             title={'Final'}
           />
         )}

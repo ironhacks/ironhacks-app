@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import MarkdownEditor from '../../components/markdown-editor';
 import { InputText } from '../../components/input';
-import Button from '../../util/button';
+import { Button } from '../../components/buttons'
 import { withRouter } from 'react-router-dom'
 import { userMetrics } from '../../util/user-metrics'
 import { Section } from '../../components/layout'
@@ -21,7 +21,7 @@ class AdminTutorialEdit extends Component {
         updated: '',
         tags: [],
       },
-      loading: true,
+      loading: false,
     }
   }
 
@@ -42,6 +42,8 @@ class AdminTutorialEdit extends Component {
   }
 
   getTutorial = async () => {
+    this.setState({loading: true})
+
     let doc = await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -127,6 +129,7 @@ class AdminTutorialEdit extends Component {
               width='150px'
               margin='0 0 0 15px'
               onClick={this.updateTutorial}
+              disabled={this.state.loading}
             >
               Publish
             </Button>

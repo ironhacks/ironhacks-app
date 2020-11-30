@@ -1,7 +1,7 @@
-import { Component } from 'react';
-import MarkdownEditor from '../../components/markdown-editor';
-import Button from '../../util/button';
-import { InputText } from '../../components/input';
+import { Component } from 'react'
+import MarkdownEditor from '../../components/markdown-editor'
+import { Button } from '../../components/buttons'
+import { InputText } from '../../components/input'
 import { userMetrics } from '../../util/user-metrics'
 import { Section } from '../../components/layout'
 
@@ -96,6 +96,7 @@ class AdminTutorialNew extends Component {
               width='150px'
               margin='0 0 0 15px'
               onClick={this.publishTutorial}
+              disabled={this.state.loading}
             >
               Publish
             </Button>

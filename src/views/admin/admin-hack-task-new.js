@@ -1,7 +1,7 @@
-import { Component } from 'react';
-import MarkdownEditor from '../../components/markdown-editor';
-import { InputText, InputCheckbox } from '../../components/input';
-import Button from '../../util/button.js';
+import { Component } from 'react'
+import MarkdownEditor from '../../components/markdown-editor'
+import { InputText, InputCheckbox } from '../../components/input'
+import { Button } from '../../components/buttons'
 import { userMetrics } from '../../util/user-metrics'
 import { Section } from '../../components/layout'
 

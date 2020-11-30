@@ -17,12 +17,14 @@ class AdminSubmissionEditForm extends Component {
     super(props);
 
     let defaultSubmission = {
-      loading: false,
       deadline: '',
       submissionId: '',
       name: '',
       description: '',
       survey: '',
+      summaryEnabled: true,
+      tagsEnabled: true,
+      enabled: false,
       fields: [],
       files: [],
     }
@@ -30,14 +32,22 @@ class AdminSubmissionEditForm extends Component {
     let stateData = Object.assign({}, defaultSubmission, this.props.submissionData);
     stateData.deadline = fire2Date(stateData.deadline);
 
-    this.state = stateData;
+    this.state = {
+      loading: false,
+      ...stateData
+
+    }
   }
+
+  onSubmissionEnabledChanged = (name, value) => this.setState({enabled: value})
+  onSummaryEnabledChanged = (name, value) => this.setState({summaryEnabled: value})
+  onTagsEnabledChanged = (name, value) => this.setState({tagsEnabled: value})
 
   cancelChanges = () => {
     if (this.props.onCancelEdit) {
       this.props.onCancelEdit()
     }
-  };
+  }
 
   addFile = () => {
     let _files = this.state.files;
@@ -46,14 +56,14 @@ class AdminSubmissionEditForm extends Component {
       required: false,
     })
     this.setState({files: _files})
-  };
+  }
 
   removeFile = index => {
     let _files = this.state.files;
     delete _files[index];
     _files = [..._files.slice(0, index), ..._files.slice(index + 1, _files.length)]
     this.setState({files: _files})
-  };
+  }
 
   addField = () => {
     let _fields = this.state.fields;
@@ -63,31 +73,31 @@ class AdminSubmissionEditForm extends Component {
       required: true,
     })
     this.setState({fields: _fields})
-  };
+  }
 
   removeField = index => {
     let _fields = this.state.fields;
     delete _fields[index];
     _fields = [..._fields.slice(0, index), ..._fields.slice(index + 1, _fields.length)]
     this.setState({fields: _fields})
-  };
+  }
 
   onFormDataChanged = (name, value) => {
     let form = this.state;
     form[name] = value;
     this.setState(form)
-  };
+  }
 
   onFormDescriptionChanged = content => {
     this.setState({
       description: content,
     })
-  };
+  }
 
   onSubmissionIdChanged = (name, value) => {
     let id = filterUrl(value.trim());
     this.setState({submissionId: id})
-  };
+  }
 
   onFileChanged = (name, value, index) => {
     let files = this.state.files;
@@ -138,7 +148,6 @@ class AdminSubmissionEditForm extends Component {
   }
 
   saveChanges = () => {
-
     let data = {
       deadline: this.state.deadline,
       submissionId: this.state.submissionId,
@@ -147,6 +156,9 @@ class AdminSubmissionEditForm extends Component {
       survey: this.state.survey,
       fields: this.state.fields,
       files: this.state.files,
+      summaryEnabled: this.state.summaryEnabled,
+      tagsEnabled: this.state.tagsEnabled,
+      enabled: this.state.enabled,
     }
 
     if (!data.name){
@@ -160,18 +172,8 @@ class AdminSubmissionEditForm extends Component {
 
     if (this.props.onSaveSubmission) {
       this.props.onSaveSubmission(data);
-
-      this.setState({
-        deadline: '',
-        submissionId: '',
-        name: '',
-        description: '',
-        survey: '',
-        fields: [],
-        files: [],
-      })
     }
-  };
+  }
 
   render() {
     return (
@@ -179,6 +181,17 @@ class AdminSubmissionEditForm extends Component {
         <h3 className="h3" style={{verticalAlign: 'center'}}>
           {this.props.submissionId}
         </h3>
+
+        <div className="inblock">
+          <InputCheckbox
+            label="Submission Enabled"
+            name="enabled"
+            containerClass="badge badge-dark flex flex-align-center"
+            onInputChange={this.onSubmissionEnabledChanged}
+            isChecked={this.state.enabled}
+            disabled={this.state.loading}
+          />
+        </div>
 
         <InputText
           containerClass="py-1 flex flex-between"
@@ -229,23 +242,58 @@ class AdminSubmissionEditForm extends Component {
           onInputChange={this.onFormDataChanged}
         />
 
+        <div className="my-2">
+          <h3 className="h4">
+            Description
+          </h3>
 
-        <h3 className="h4 pr-4">
-          Description
+          <MarkdownEditor
+            editorLayout='tabbed'
+            height={300}
+            onEditorChange={this.onFormDescriptionChanged}
+            value={this.state.description}
+            disabled={this.state.loading}
+          />
+        </div>
+
+
+        <div className="my-1">
+          <h3 className="h4 font-bold py-2">
+            Submisison Options
+          </h3>
+
+          <div className="">
+            <div className="inblock">
+              <InputCheckbox
+                label="Submission Summary"
+                name="summaryEnabled"
+                containerClass="badge badge-dark flex flex-align-center"
+                onInputChange={this.onSummaryEnabledChanged}
+                isChecked={this.state.summaryEnabled}
+                disabled={this.state.loading}
+              />
+            </div>
+          </div>
+
+          <div className="">
+            <div className="inblock">
+              <InputCheckbox
+                label="Submission Tags"
+                name="summaryTags"
+                containerClass="badge badge-dark flex flex-align-center"
+                onInputChange={this.onTagsEnabledChanged}
+                isChecked={this.state.tagsEnabled}
+                disabled={this.state.loading}
+              />
+            </div>
+          </div>
+        </div>
+
+        <h3 className="mt-3 h4 font-bold">
+          Additional Fields
         </h3>
 
-        <MarkdownEditor
-          editorLayout='tabbed'
-          height={300}
-          onEditorChange={this.onFormDescriptionChanged}
-          value={this.state.description}
-          disabled={this.state.loading}
-        />
-
-        <h3 className="mt-3 h4">
-          Submission Fields
-        </h3>
-
+        {this.state.fields.length > 0 && (
         <div className="flex py-1 flex-between my-2">
           <div className="flex flex-col w-full">
             {this.state.fields.map((item, index)=>(
@@ -278,6 +326,7 @@ class AdminSubmissionEditForm extends Component {
             ))}
           </div>
         </div>
+        )}
 
         <button
           className="btn btn-outline-dark btn-sm font-bold px-4"
@@ -287,10 +336,11 @@ class AdminSubmissionEditForm extends Component {
         </button>
 
         <div className="flex py-1 flex-between my-2">
-          <h3 className="h4">
+          <h3 className="h4 font-bold">
             Submission Files
           </h3>
 
+          {this.state.files.length > 0 && (
           <div className="flex flex-col">
             {this.state.files.map((item, index)=>(
               <div key={index} className="pr-2 flex flex-align-center">
@@ -321,6 +371,7 @@ class AdminSubmissionEditForm extends Component {
               </div>
             ))}
           </div>
+        )}
         </div>
 
         <button

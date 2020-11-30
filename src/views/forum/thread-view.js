@@ -4,6 +4,7 @@ import PostView from '../../components/forum/post-view';
 import { CommentView } from '../../components/forum/comment-view';
 import { CommentEditor } from '../../components/forum/comment-editor';
 import { userMetrics } from '../../util/user-metrics'
+import { Row } from '../../components/layout';
 
 class ThreadView extends Component {
   constructor(props) {
@@ -85,7 +86,7 @@ class ThreadView extends Component {
 
   render() {
     return (
-        <div>
+        <Row>
           <div className="mt-2">
             {this.state.postData && (
               <PostView
@@ -122,7 +123,7 @@ class ThreadView extends Component {
               user={this.state.user}
             />
           )}
-        </div>
+      </Row>
     )
   }
 }

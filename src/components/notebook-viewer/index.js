@@ -1,23 +1,15 @@
-import { Component } from 'react';
-import {
-  Card,
-  Spin,
-  Col,
-  Row,
-  Typography,
-} from 'antd';
-import ReactMarkdown from 'react-markdown';
-import editorOptions from './notebook-config';
-import { NotebookCodeCell } from './lib/notebook-cell-code';
-import { NotebookErrorCell } from './lib/notebook-error';
-import { NotebookImg } from './lib/notebook-img';
-import { NotebookImgCell } from './lib/notebook-cell-img';
-import { NotebookMdCell } from './lib/notebook-cell-md';
-import { NotebookStdOut } from './lib/notebook-cell-stdout';
-import { NotebookText } from './lib/notebook-text';
-import { NotebookHeader } from './lib/notebook-header';
+import { Component } from 'react'
+import ReactMarkdown from 'react-markdown'
+import editorOptions from './notebook-config'
+import { NotebookCodeCell } from './lib/notebook-cell-code'
+import { NotebookErrorCell } from './lib/notebook-error'
+import { NotebookImgCell } from './lib/notebook-cell-img'
+import { NotebookMdCell } from './lib/notebook-cell-md'
+import { NotebookStdOut } from './lib/notebook-cell-stdout'
+// import { NotebookCellHtml } from './lib/notebook-cell-html'
+import { NotebookText } from './lib/notebook-text'
+import { NotebookHeader } from './lib/notebook-header'
 import './style.css';
-
 
 // ---
 // <NotebookViewer
@@ -41,17 +33,15 @@ class NotebookViewer extends Component {
       background_theme: 'white',
       background_text_theme: 'black',
       background_input_theme: '#E8E9E8',
-      background_output_theme: '#F1F1F2',
+      background_output_color: '#F1F1F2',
       loading: true,
       notebook_json: null,
       placeholder_component: 'Loading....',
-      gutterVisible: true
+      gutterVisible: true,
     }
 
     this.notebookWidth = '900px';
   }
-
-
 
   validURL(str) {
     var pattern = new RegExp('^(https?:\\/\\/)?' +
@@ -143,12 +133,18 @@ class NotebookViewer extends Component {
 
     var output_txt = [];
     var output_img = [];
+    // var output_html = [];
     var output_std = [];
     var output_err = [];
 
     for (let output of outputs) {
       if ('data' in output) {
-        // ('text/html' in output.data)
+        // if ('text/html' in output.data) {
+        //   for (let html of output.data['text/html']) {
+        //     output_html.push(html)
+        //   }
+        // }
+
         // ('text/markdown' in output.data)
         if ('text/plain' in output.data) {
           for (let text of output.data['text/plain']) {
@@ -203,6 +199,13 @@ class NotebookViewer extends Component {
             showLineNumbers: false,
           }}
         />
+        {/* NOTEBOOK CELL HTML (NOT PRODUCTION READY) */}
+        {/*
+        <NotebookCellHtml
+          display={output_html.length > 0 ? '' : 'none'}
+          cellContent={output_html.join('')}
+        />
+        */}
         {/* NOTEBOOK CELL TXT */}
         <NotebookText
           display={output_txt.length > 0 ? '' : 'none'}
@@ -254,127 +257,91 @@ class NotebookViewer extends Component {
   render() {
     return (
       <div className="my-4 content_area">
-        <Spin spinning={this.state.loading} >
-          <center>
-            <div>
-              <Card
-                bodyStyle={{
-                  padding: '.6em 10px 1.5em',
-                  backgroundColor: this.state.background_output_theme,
-                }}
-                style={{
-                  width: '100%',
-                  maxWidth: this.notebookWidth,
-                  border: 'none'
-                }}
-              >
-                <NotebookHeader
-                  titleColor={this.state.background_text_theme}
-                  title={this.props.title}
-                  fileName={this.props.subtitle}
-                  fileUrl={this.props.file}
-                />
+        <center>
+          <div style={{backgroundColor: this.state.background_output_color }}>
+            <NotebookHeader
+              titleColor={this.state.background_text_theme}
+              title={this.props.title}
+              fileName={this.props.subtitle}
+              fileUrl={this.props.file}
+            />
+          </div>
 
-                {this.props.coverImg && (
-                <NotebookImg
-                  imgSrc={this.props.coverImg}
-                />
-                )}
-              </Card>
-            </div>
-
-          {this.state.loading ? (
-            <div>{'Loading...'}</div>
-          ) : (
-            <>
-            {this.state.notebook_json.cells ? (
-              this.state.notebook_json.cells.map((item, index) => (
-              <Card
-                key={index}
-                bodyStyle={{
-                  padding: '0px 10px',
-                  backgroundColor: this.state.background_output_theme
-                }}
-                style={{
-                  width: '100%',
-                  maxWidth: this.notebookWidth,
-                  border: 'none'
-                }}
-              >
-                <Row style={{backgroundColor: this.state.background_output_theme}}>
-                  <Col span={this.state.gutterVisible ? 3 : 1}>
-                    <div style={{display: this.state.gutterVisible ? '' : 'none'}}>
-                      <Typography.Text
-                        style={{
-                          display: item.cell_type === 'code' ? '' : 'none',
-                          float: 'left',
-                          padding: '5px',
-                          fontFamily: 'monospace',
-                          fontSize: '0.9em',
-                        }}>
-                        In  [{item.execution_count || '  '}]:
-                      </Typography.Text>
-                    </div>
-                  </Col>
-
-                  <Col
-                    span={this.state.gutterVisible ? 20 : 22}
-                    style={{textAlign: 'left'}}
-                  >
-
-              {item.cell_type === 'code' ? (
-                <NotebookCodeCell
-                  bgColor={this.state.background_input_theme}
-                  codeTheme={this.state.text_ed_theme}
-                  maxLength={item.source.length === 0 ? 1 : item.source.length + 1}
-                  onLoad={this.onLoad}
-                  onChange={this.onChange}
-                  cellContent={this.parseSource(item.source)}
-                  displayOptions={editorOptions}
-                />
-              ) : (
-                <div className='MDImg'>
-                  <div
-                    className={this.state.ed_theme}
-                    style={{
-                      margin: '0px 0px',
-                      padding: '10px',
-                    }}
-                  >
-                    <ReactMarkdown
-                      style={{float: 'left'}}
-                      source={this.parseMD(item.source)}
-                      escapeHtml={false}
-                    />
-                    </div>
+        {this.state.loading ? (
+          <div>{'Loading...'}</div>
+        ) : (
+          <>
+          {this.state.notebook_json.cells ? (
+            this.state.notebook_json.cells.map((item, index) => (
+            <div key={index} style={{backgroundColor: this.state.background_output_color}}>
+              <div style={{backgroundColor: this.state.background_output_color}}>
+                <div className="flex">
+                  <div style={{flexWeight: 1, display: this.state.gutterVisible ? '' : 'none'}}>
+                    <span
+                      style={{
+                        display: item.cell_type === 'code' ? '' : 'none',
+                        padding: '5px',
+                        fontFamily: 'monospace',
+                        fontSize: '0.9em',
+                      }}>
+                      In  [{item.execution_count || '  '}]:
+                    </span>
                   </div>
-                )}
-                </Col>
-                <Col span={1}/>
-              </Row>
 
-              {item.cell_type === 'markdown' ? (<div/>) : (
-                <>
-                {item.outputs && (
-                <NotebookMdCell
-                  bgColor={this.state.background_output_theme}
-                  gutterVisible={this.state.gutterVisible ? 3 : 1}
-                  executionCount={item.execution_count}
-                  cellContent={this.parseOutputs(item.outputs)}
-                />
+                  <div className="flex-1 text-left">
+                  {item.cell_type === 'code' ? (
+                      <NotebookCodeCell
+                        bgColor={this.state.background_input_theme}
+                        codeTheme={this.state.text_ed_theme}
+                        maxLength={item.source.length === 0 ? 1 : item.source.length + 1}
+                        onLoad={this.onLoad}
+                        onChange={this.onChange}
+                        cellContent={this.parseSource(item.source)}
+                        displayOptions={editorOptions}
+                      />
+                  ) : (
+                    <div className='notebook-md'>
+                      <div
+                        className={this.state.ed_theme}
+                        style={{
+                          margin: '0 0',
+                          padding: '10px',
+                        }}
+                      >
+                        <ReactMarkdown
+                          source={this.parseMD(item.source)}
+                          escapeHtml={false}
+                        />
+                        </div>
+                      </div>
+                    )}
+                    </div>
+                </div>
+                </div>
+
+                {item.cell_type === 'markdown' ? (
+                  <div/>
+                ) : (
+                  <>
+                  {item.outputs && (
+                  <NotebookMdCell
+                    bgColor={this.state.background_output_color}
+                    gutterVisible={this.state.gutterVisible ? 3 : 1}
+                    executionCount={item.execution_count}
+                    cellContent={this.parseOutputs(item.outputs)}
+                  />
+                  )}
+                  </>
                 )}
-                </>
-              )}
-              </Card>
-            ))
-          ) : (
-            <p>Error: Notebook Failed to load</p>
-          )
-        }
-        </>
-      )}
-          </center>
-        </Spin>
+                </div>
+              ))
+            ) : (
+              <p>Error: Notebook Failed to load</p>
+            )
+          }
+          </>
+        )}
+        </center>
       </div>
     )
   }

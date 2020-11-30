@@ -1,10 +1,11 @@
-import { Component } from 'react';
-import MarkdownEditor from '../../components/markdown-editor';
-import { InputText, InputCheckbox } from '../../components/input';
-import Button from '../../util/button.js';
+import { Component } from 'react'
+import MarkdownEditor from '../../components/markdown-editor'
+import { InputText, InputCheckbox } from '../../components/input'
+import { Button } from '../../components/buttons'
 import { userMetrics } from '../../util/user-metrics'
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'
 import { Section } from '../../components/layout'
+import { saveSuccessModal } from '../../components/alerts'
 
 class AdminHackTaskEdit extends Component {
   constructor(props) {
@@ -43,6 +44,8 @@ class AdminHackTaskEdit extends Component {
   }
 
   getTask = async () => {
+    this.setState({loading: true})
+
     let taskDoc = await window.firebase.firestore()
       .collection('hacks')
       .doc(this.props.hackId)
@@ -81,16 +84,18 @@ class AdminHackTaskEdit extends Component {
         surveyEnabled: this.state.surveyEnabled,
         title: this.state.title,
         updated: timeUpdated.toISOString(),
+      }).then(()=>{
+
+        userMetrics({
+          event: 'task-updated',
+          taskId: this.taskId,
+          hackId: this.props.hackId,
+        })
+
+        saveSuccessModal('Task')
+        this.setState({loading: false})
       })
 
-    userMetrics({
-      event: 'task-updated',
-      taskId: this.taskId,
-      hackId: this.props.hackId,
-    })
-
-    this.setState({loading: false})
-    window.location.reload()
   }
 
   render() {
