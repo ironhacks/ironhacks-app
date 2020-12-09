@@ -1,14 +1,8 @@
 const SUBMISSION_TAGS = [
   { label: 'Autoregession (AR)', value: 'autoregession-ar' },
   { label: 'AutoRegessive Moving Average (ARMA)', value: 'autoregessive-moving-average-arma' },
-  {
-    label: 'AutoRegressive Conditional Heteroscedasticity (ARCH)',
-    value: 'autoregressive-conditional-heteroscedasticity-arch',
-  },
-  {
-    label: 'Autoregressive Integrated Moving Average (ARIMA)',
-    value: 'autoregressive-integrated-moving-average-arima',
-  },
+  { label: 'AutoRegressive Conditional Heteroscedasticity (ARCH)', value: 'autoregressive-conditional-heteroscedasticity-arch' },
+  { label: 'Autoregressive Integrated Moving Average (ARIMA)', value: 'autoregressive-integrated-moving-average-arima' },
   { label: 'Bayesian Analysis', value: 'bayesian-analysis' },
   { label: 'Clustering', value: 'clustering' },
   { label: 'Convolutional Neural Networks (CNN)', value: 'convolutional-neural-networks-cnn' },
@@ -17,10 +11,7 @@ const SUBMISSION_TAGS = [
   { label: 'Exponential Smoothing', value: 'exponential-smoothing' },
   { label: 'Factor Analysis', value: 'factor-analysis' },
   { label: 'Feature Extraction', value: 'feature-extraction' },
-  {
-    label: 'Generalized AutoRegressive Conditional Heteroskedasticity (GARCH)',
-    value: 'generalized-autoregressive-conditional-heteroskedasticity-garch',
-  },
+  { label: 'Generalized AutoRegressive Conditional Heteroskedasticity (GARCH)', value: 'generalized-autoregressive-conditional-heteroskedasticity-garch' },
   { label: 'Generative Adversarial Network (GAN)', value: 'generative-adversarial-network-gan' },
   { label: 'Hierarchical Linear Modeling (HLM)', value: 'hierarchical-linear-modeling-hlm' },
   { label: 'K-Means', value: 'k-means' },
@@ -45,32 +36,17 @@ const SUBMISSION_TAGS = [
   { label: 'Recurrent Neural Networks (RNN)', value: 'recurrent-neural-networks-rnn' },
   { label: 'Reinforcement Learning Models', value: 'reinforcement-learning-models' },
   { label: 'Ridge Regression', value: 'ridge-regression' },
-  {
-    label: 'Seasonal Autoregressive Integrated Moving-Average (SARIMA)',
-    value: 'seasonal-autoregressive-integrated-moving-average-sarima',
-  },
-  {
-    label: 'Seasonal Autoregressive Integrated Moving-Average Exogenous Regressors (SARIMAX)',
-    value: 'seasonal-autoregressive-integrated-moving-average-exogenous-regressors-sarimax',
-  },
+  { label: 'Seasonal Autoregressive Integrated Moving-Average (SARIMA)', value: 'seasonal-autoregressive-integrated-moving-average-sarima' },
+  { label: 'Seasonal Autoregressive Integrated Moving-Average Exogenous Regressors (SARIMAX)', value: 'seasonal-autoregressive-integrated-moving-average-exogenous-regressors-sarimax' },
   { label: 'Spatial Regression Modeling', value: 'spatial-regression-modeling' },
   { label: 'Support Vector Machines (SVM)', value: 'support-vector-machines-svm' },
   { label: 'Survival Analysis', value: 'survival-analysis' },
   { label: 'Time-Series Modeling', value: 'time-series-modeling' },
-  {
-    label: 'Time-Series With Multiple Seasonality (BATS-TBATS)',
-    value: 'time-series-with-multiple-seasonality-bats-tbats',
-  },
+  { label: 'Time-Series With Multiple Seasonality (BATS-TBATS)', value: 'time-series-with-multiple-seasonality-bats-tbats' },
   { label: 'Uplift Modeling', value: 'uplift-modeling' },
   { label: 'Vector AutoRegression (VAR)', value: 'vector-autoregression-var' },
-  {
-    label: 'Vector AutoRegression Moving-Average (VARMA)',
-    value: 'vector-autoregression-moving-average-varma',
-  },
-  {
-    label: 'Vector AutoRegression Moving-Average With Exogenogressors (VARMAX)',
-    value: 'vector-autoregression-moving-average-with-exogenogressors-varmax',
-  },
+  { label: 'Vector AutoRegression Moving-Average (VARMA)', value: 'vector-autoregression-moving-average-varma' },
+  { label: 'Vector AutoRegression Moving-Average With Exogenogressors (VARMAX)', value: 'vector-autoregression-moving-average-with-exogenogressors-varmax' },
 ]
 
 export { SUBMISSION_TAGS }
