@@ -175,19 +175,21 @@ class App extends Component {
                     </Route>
 
                     <Route exact path="/profile">
-                      <Pages.Profile
-                        profileId={this.state.userId}
+                      <Pages.Profile user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
+                    </Route>
+
+                    <Route exact path="/profile/edit">
+                      <Pages.ProfileEdit
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                       />
                     </Route>
 
-                    <Route exact path="/profile/edit">
-                      <Pages.ProfileEdit user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
-                    </Route>
-
-                    <Route path="/profile:profileId">
-                      <Pages.Profile user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
+                    <Route path="/profile/u/:profileId">
+                      <Pages.ProfileView
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
                     </Route>
 
                     <Route exact path="/logout">

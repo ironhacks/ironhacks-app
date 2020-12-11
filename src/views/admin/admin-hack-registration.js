@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { Section } from '../../components/layout'
 import { AdminRegisteredUserList } from '../../components/admin'
-import { fire2Date } from '../../util/date-utils'
+import { fire2Date, fire2Ms } from '../../util/date-utils'
 import { downloadFileData } from '../../util/download-file-data'
 
 class AdminHackRegistration extends Component {
@@ -11,6 +11,7 @@ class AdminHackRegistration extends Component {
     this.state = {
       data: '',
       loading: false,
+      registeredUserCount: null,
       registeredUsers: [],
       registeredUsersData: null,
       registrationEvents: [],
@@ -57,6 +58,10 @@ class AdminHackRegistration extends Component {
       result.push(doc.data())
     }
 
+    result.sort((a, b) => {
+      return fire2Ms(a.timestamp) - fire2Ms(b.timestamp)
+    })
+
     this.setState({ registrationEvents: result })
   }
 
@@ -86,7 +91,7 @@ class AdminHackRegistration extends Component {
       return false
     }
 
-    this.setState({ registeredUsersData: data })
+    this.setState({ registeredUserCount: Object.keys(data).length })
 
     for (let id of Object.keys(data)) {
       let user = data[id]
@@ -120,8 +125,6 @@ class AdminHackRegistration extends Component {
   downloadRegistrationReport = () => {
     let users = this.state.registeredUsers
     let events = this.state.registrationEvents
-    console.log(users)
-    console.log(events)
 
     let headers = ['timestamp', 'userId', 'name', 'alias', 'email', 'isAdmin'].join(',')
 
@@ -133,7 +136,14 @@ class AdminHackRegistration extends Component {
     let result = []
     users.forEach((user, index) => {
       result.push(
-        [registrationTimes[user.userId], user.userId, user.name, user.alias, user.email, user.isAdmin].join(',')
+        [
+          registrationTimes[user.userId],
+          user.userId,
+          user.name,
+          user.alias,
+          user.email,
+          user.isAdmin,
+        ].join(',')
       )
     })
 
@@ -190,7 +200,7 @@ class AdminHackRegistration extends Component {
         </Section>
 
         <Section sectionClass="py-2">
-          <h3 className="h3 pb-2">Registered Users: {this.state.registeredUsers.length}</h3>
+          <h3 className="h3 pb-2">Registered Users: {this.state.registeredUserCount}</h3>
 
           {this.state.registeredUsers ? (
             <AdminRegisteredUserList
@@ -210,7 +220,12 @@ class AdminHackRegistration extends Component {
 
           <p>Timestamp - UserId</p>
 
-          <ul>
+          <ul
+            style={{
+              overflow: 'auto',
+              maxHeight: '300px',
+            }}
+          >
             {this.state.registrationEvents.map((item, index) => (
               <li key={index}>
                 {fire2Date(item.timestamp).toISOString()} - {item.userId}
