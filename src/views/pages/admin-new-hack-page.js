@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { Button } from '../../components/buttons'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { userMetrics } from '../../util/user-metrics'
 
 class AdminNewHackPage extends Component {
   constructor(props) {
@@ -78,6 +79,11 @@ class AdminNewHackPage extends Component {
       .doc('final')
       .set({})
 
+    userMetrics({
+      event: 'hack_created',
+      hackId: hackId,
+    })
+
     window.location = `/admin/hacks/${hackId}`
   }
 
@@ -86,7 +92,11 @@ class AdminNewHackPage extends Component {
       return <Redirect push to="/hacks" />
     } else {
       return (
-        <Page user={this.props.user} userIsAdmin={this.props.userIsAdmin} pageClass="admin-hack-create">
+        <Page
+          user={this.props.user}
+          userIsAdmin={this.props.userIsAdmin}
+          pageClass="admin-hack-create"
+        >
           <Section sectionClass="py-2">
             <Row>
               <Col>
@@ -99,7 +109,11 @@ class AdminNewHackPage extends Component {
                 <div className="row">
                   <div className="col-md-8 offset-md-2">
                     <h2>Hack name</h2>
-                    <input type="text" placeholder="Hack Name" onChange={this.hackNameEventHandler} />
+                    <input
+                      type="text"
+                      placeholder="Hack Name"
+                      onChange={this.hackNameEventHandler}
+                    />
                   </div>
                 </div>
 
