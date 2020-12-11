@@ -7,8 +7,9 @@ import {
   ResultsSectionSelector,
   ResultsSubmissionSelector,
   ResultsScoresSection,
-  ResultsPeersSection,
   ResultsSummarySection,
+  CohortSubmissionsSummary,
+  CohortSubmissionsNotebook,
 } from '../../components/results'
 import { fire2Ms } from '../../util/date-utils'
 import { getArrayStats } from '../../util/stats'
@@ -49,12 +50,15 @@ class ResultsView extends Component {
       selectedPhase: 0,
       finalResults: null,
       participantCount: null,
+      cohortCount: null,
       results: null,
       resultsContent: '',
       resultsPublished: {},
       resultStats: null,
       section: 'scores',
       submissionData: null,
+      submissionSelectOptions: [],
+      submissionSelectValue: {},
       submissions: [],
       cohortSubmissions: [],
       userResults: null,
@@ -80,8 +84,25 @@ class ResultsView extends Component {
       .get()
 
     let data = doc.data()
-
     if (data) {
+      if (this.state.submissionSelectOptions && data.isPublished) {
+        let submissionSelectOptions = this.state.submissionSelectOptions
+        submissionSelectOptions.map((item, i) => {
+          if (!data.isPublished[item.value]) {
+            item.isDisabled = true
+          }
+          return item
+        })
+
+        if (data.isPublished.final) {
+          submissionSelectOptions.push({
+            label: 'Final',
+            value: 'final',
+          })
+        }
+        this.setState({ submissionSelectOptions: submissionSelectOptions })
+      }
+
       this.setState({
         resultsContent: data.content,
         resultsPublished: data.isPublished || {},
@@ -110,7 +131,20 @@ class ResultsView extends Component {
       submissions.sort((a, b) => {
         return fire2Ms(a.deadline) - fire2Ms(b.deadline)
       })
-      this.setState({ submissions: submissions })
+
+      let submissionSelectOptions = submissions.map((item) => {
+        return {
+          label: item.name,
+          value: item.submissionId,
+        }
+      })
+
+      this.setState({
+        submissions: submissions,
+        currentSubmission: submissions[0].submissionId,
+        submissionSelectValue: submissionSelectOptions[0],
+        submissionSelectOptions: submissionSelectOptions,
+      })
     }
   }
 
@@ -126,18 +160,17 @@ class ResultsView extends Component {
       .get()
 
     let data = doc.data()
-
-    for (let participant of Object.keys(data)) {
-      participants[participant] = {
-        userId: participant,
-        alias: data[participant].alias,
-        ref: data[participant].ref,
+    if (data) {
+      for (let participant of Object.keys(data)) {
+        participants[participant] = {
+          userId: participant,
+          alias: data[participant].alias,
+          ref: data[participant].ref,
+        }
       }
     }
 
-    this.setState({
-      participants: participants,
-    })
+    this.setState({ participants: participants })
   }
 
   updateLoadingStatus = () => {
@@ -165,6 +198,21 @@ class ResultsView extends Component {
     }
   }
 
+  onSubmissionSelected = async (selected) => {
+    if (selected.value === this.state.currentSubmission) {
+      return false
+    }
+
+    this.setState({
+      currentSubmission: selected.value,
+      submissionSelectValue: selected,
+    })
+
+    this.setState({ loading: true })
+    this.getCohortSubmissions()
+    this.getHackResults()
+  }
+
   getResultsFinal = async () => {
     let finalDoc = await window.firebase
       .firestore()
@@ -181,11 +229,6 @@ class ResultsView extends Component {
   }
 
   getCohortSubmissions = async () => {
-    let submisison = this.state.submissions[this.state.selectedPhase]
-    if (!submisison) {
-      return false
-    }
-    let submissionId = submisison.submissionId
     this.setState({ loadingCohorts: true })
 
     let cohortSubmissions = []
@@ -197,7 +240,7 @@ class ResultsView extends Component {
           .collection('hacks')
           .doc(this.props.hackId)
           .collection('submissions')
-          .doc(submissionId)
+          .doc(this.state.currentSubmission)
           .collection('users')
           .doc(userId)
           .get()
@@ -248,42 +291,6 @@ class ResultsView extends Component {
 
       this.setState({ filterUsers: adminList })
     }
-
-    // let submissionsCollection = await window.firebase.firestore()
-    //   .collection('hacks')
-    //   .doc(this.props.hackId)
-    //   .collection('submissions')
-    //   .doc(this.state.currentSubmission)
-    //   .collection('users')
-    //   .get()
-    //
-    // let submissions = [];
-    //
-    // submissionsCollection.docs.forEach(doc=>{
-    //   // REMOVE USER SUBMISSION FROM PEER SET
-    //   if (doc.id === this.props.userId) {
-    //     this.setState({userSubmission: doc.data()})
-    //
-    //   // REMOVE ADMIN USERS FROM PEER SET
-    //   } else if (!adminList.includes(doc.id)) {
-    //     let userName
-    //     if (this.state.participants[doc.id]){
-    //       userName  = this.state.participants[doc.id].alias
-    //     }
-    //
-    //     submissions.push({
-    //       userId: doc.id,
-    //       name: userName,
-    //       ...doc.data()
-    //     })
-    //   }
-    // })
-    //
-    // if (submissions.length > 0){
-    //   this.setState({submissionData: submissions})
-    // } else {
-    //   this.setState({submissionData: null})
-    // }
 
     let submissionResultsDoc = await window.firebase
       .firestore()
@@ -357,12 +364,8 @@ class ResultsView extends Component {
       <Row>
         <Col>
           <div className="top-container pb-4">
-            <h1 className="h2 font-bold pt-2 mb-0">Dashboard</h1>
-
-            <div className="results-controls flex flex-between my-2">
+            <div className="results-controls flex flex-between mt-2">
               <div>
-                <h3 className="font-bold text-center">Select the results section.</h3>
-
                 <ResultsSectionSelector
                   selected={this.state.section}
                   callback={(id) => this.setState({ section: id })}
@@ -370,12 +373,12 @@ class ResultsView extends Component {
                     {
                       name: 'scores',
                       label: 'Your Scores',
-                      disabled: this.state.selectedPhase === 'final' ? true : false,
+                      disabled: this.state.currentSubmission === 'final' ? true : false,
                     },
                     {
-                      name: 'summary',
-                      label: 'Summary',
-                      disabled: this.state.selectedPhase === 'final' ? true : false,
+                      name: 'peers',
+                      label: 'Your Peers',
+                      disabled: this.state.currentSubmission === 'final' ? true : false,
                     },
                   ]}
                 />
@@ -383,19 +386,40 @@ class ResultsView extends Component {
 
               <div className="">
                 {this.state.submissions && (
-                  <>
-                    <h3 className="font-bold text-center">Select the phase you want to view.</h3>
-
-                    <ResultsSubmissionSelector
-                      resultsPublished={this.state.resultsPublished}
-                      phases={this.state.submissions}
-                      selectedPhase={this.state.selectedPhase}
-                      onClick={this.onPhaseSelection}
-                      disabled={this.state.loading}
-                    />
-                  </>
+                  <ResultsSubmissionSelector
+                    selectOptions={this.state.submissionSelectOptions}
+                    selectValue={this.state.submissionSelectValue}
+                    currentSubmission={this.state.currentSubmission}
+                    onSelect={this.onSubmissionSelected}
+                    disabled={this.state.loading}
+                  />
                 )}
               </div>
+            </div>
+
+            <div className="hack-stats-section flex my-2 px-6">
+              {/*this.state.submissionSelectValue && (
+                <div className="ml-0 mr-4 text-center">
+                  <h3 className="font-bold">Selected Phase</h3>
+                  <div className="fs-5 font-bold cl-amber my-3">
+                    Phase {this.state.selectedPhase + 1}
+                  </div>
+                </div>
+              )*/}
+
+              <div className="ml-0 mr-6 text-center">
+                <h3 className="font-bold">Number of Hackers</h3>
+                <div className="fs-5 font-bold cl-cyan my-3">{this.state.participantCount}</div>
+              </div>
+
+              {this.props.userCohortList && this.props.userCohortList.length > 0 && (
+                <div className="mx-6 text-center">
+                  <h3 className="font-bold">Cohort Size</h3>
+                  <div className="fs-5 font-bold cl-pink my-3">
+                    {this.props.userCohortList.length}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="selected-section">
@@ -405,7 +429,7 @@ class ResultsView extends Component {
                 </div>
               ) : (
                 <>
-                  {this.state.selectedPhase === 'final' ? (
+                  {this.state.currentSubmission === 'final' ? (
                     <>
                       {this.state.finalResults ? (
                         <ResultsFinalSection
@@ -419,6 +443,7 @@ class ResultsView extends Component {
                     </>
                   ) : (
                     <>
+                      {/* SCORES TAB */}
                       {this.state.section === 'scores' && (
                         <>
                           {this.state.userResults ? (
@@ -428,11 +453,24 @@ class ResultsView extends Component {
                               submission={this.state.userSubmission}
                             />
                           ) : (
-                            <h2 className="border text-center font-bold py-2">No results for this submission.</h2>
+                            <h2 className="border text-center font-bold py-2">
+                              No results for this submission.
+                            </h2>
+                          )}
+
+                          {this.state.resultsContent && (
+                            <div className="bd-1 cl-grey m-4 p-4">
+                              <MdContentView
+                                content={this.state.resultsContent}
+                                encoded={false}
+                                emptyText=""
+                              />
+                            </div>
                           )}
                         </>
                       )}
 
+                      {/* SUMMARY TAB */}
                       {this.state.section === 'summary' && (
                         <>
                           {this.state.resultStats ? (
@@ -441,8 +479,49 @@ class ResultsView extends Component {
                               summary={this.state.resultStats}
                             />
                           ) : (
-                            <h2 className="border text-center font-bold py-2">No results for this submission.</h2>
+                            <h2 className="border text-center font-bold py-2">
+                              No results for this submission.
+                            </h2>
                           )}
+                        </>
+                      )}
+
+                      {/* PEERS TAB */}
+                      {this.state.section === 'peers' && (
+                        <>
+                          {/* PEERS TAB - NOTEBOOK VERSION */}
+                          {this.props.cohortSettings &&
+                            this.props.cohortSettings.showNotebooks &&
+                            this.state.currentSubmission !== 'final' && (
+                              <>
+                                {this.state.cohortSubmissions ? (
+                                  <CohortSubmissionsNotebook
+                                    participantData={this.state.cohortSubmissions}
+                                  />
+                                ) : (
+                                  <h2 className="border text-center font-bold py-2">
+                                    No results for this submission.
+                                  </h2>
+                                )}
+                              </>
+                            )}
+
+                          {/* PEERS TAB - SUMMARY VERSION */}
+                          {this.props.cohortSettings &&
+                            this.props.cohortSettings.showSummaries &&
+                            this.state.currentSubmission !== 'final' && (
+                              <>
+                                {this.state.cohortSubmissions ? (
+                                  <CohortSubmissionsSummary
+                                    participantData={this.state.cohortSubmissions}
+                                  />
+                                ) : (
+                                  <h2 className="border text-center font-bold py-2">
+                                    No results for this submission.
+                                  </h2>
+                                )}
+                              </>
+                            )}
                         </>
                       )}
                     </>
@@ -450,26 +529,6 @@ class ResultsView extends Component {
                 </>
               )}
             </div>
-
-            {this.props.cohortSettings &&
-              this.props.cohortSettings.showNotebooks &&
-              this.state.selectedPhase !== 'final' && (
-                <>
-                  <h3 className="h4 font-bold text-left my-2">Your Peers</h3>
-
-                  {this.state.cohortSubmissions ? (
-                    <ResultsPeersSection participantData={this.state.cohortSubmissions} />
-                  ) : (
-                    <h2 className="border text-center font-bold py-2">No results for this submission.</h2>
-                  )}
-                </>
-              )}
-
-            <MdContentView
-              content={this.state.resultsContent}
-              encoded={false}
-              emptyText="Results Doc not available yet."
-            />
           </div>
         </Col>
       </Row>

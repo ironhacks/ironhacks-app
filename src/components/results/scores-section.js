@@ -3,10 +3,10 @@ import { downloadFileUrl } from '../../util/download-file-url'
 
 function UserScoreRow({ name, label, value }) {
   return (
-    <tr className="">
-      <td className="">{label}</td>
-      <td className="">{value}</td>
-    </tr>
+    <div className="flex flex-between py-3 px-2 font-bold">
+      <div className="">{label}</div>
+      <div className="">{value.toLocaleString('en-US')}</div>
+    </div>
   )
 }
 
@@ -62,40 +62,36 @@ const ResultsScoresSection = ({ scores, submission }) => {
   return (
     <div>
       {scores && (
-        <table className="results_table">
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
+        <div className="results_table px-4 mb-5">
+          <div
+            className="results_table_header flex flex-between py-2 mb-2 fs-m1 font-bold cl-grey"
+            style={{
+              borderBottom: '1px solid rgba(0,0,0,.2)',
+            }}
+          >
+            <div className="header_col pl-2">Metric</div>
+            <div className="header_col pr-2">Value</div>
+          </div>
+          <div>
             {scores.map((item, index) => (
               <UserScoreRow key={index} label={item.label} value={item.value} name={item.name} />
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
+      )}
+
+      {submission && (
+        <div>
+          <h3 className="font-bold mb-1 text-left text-underline">Your Submission:</h3>
+          {submission.files.map((item, index) => (
+            <div key={index} className="mb-2">
+              <SubmissionLink fileName={item.name} fileType={item.type} fileUrl={item.url} />
+            </div>
+          ))}
+        </div>
       )}
     </div>
   )
 }
 
 export { ResultsScoresSection }
-
-// {submission && (
-//   <div>
-//     <h3 className="font-bold mb-1 text-left text-underline">Your Submission:</h3>
-//     {submission.files.map((item, index)=>(
-//       <div
-//         key={index}
-//         className="mb-2"
-//         >
-//         <SubmissionLink
-//           fileName={item.name}
-//           fileType={item.type}
-//           fileUrl={item.url}
-//         />
-//       </div>
-//     ))}
-//   </div>
-// )}

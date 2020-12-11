@@ -151,7 +151,11 @@ class AdminHackResults extends Component {
               Publish
             </Button>
 
-            <a href={`/hacks/${this.props.hackSlug}/results`} target="_blank" rel="noopener noreferrer">
+            <a
+              href={`/hacks/${this.props.hackSlug}/results`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               View live document
             </a>
           </div>
