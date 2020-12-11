@@ -48,7 +48,11 @@ class TutorialView extends Component {
           <Col>
             <h2 className="h3 my-2 font-bold tutorial_title">{this.state.title}</h2>
 
-            <MdContentView content={this.state.content} encoded={false} emptyText="Tutorial is not available yet." />
+            <MdContentView
+              content={this.state.content}
+              encoded={false}
+              emptyText="Tutorial is not available yet."
+            />
           </Col>
         )}
       </Row>

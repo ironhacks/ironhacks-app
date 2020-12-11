@@ -13,7 +13,10 @@ class InputTextarea extends Component {
     return (
       <div className={['input_field', this.props.containerClass].join(' ').trim()}>
         {this.props.label && (
-          <label htmlFor={this.props.name} className={['input_label', this.props.labelClass].join(' ').trim()}>
+          <label
+            htmlFor={this.props.name}
+            className={['input_label', this.props.labelClass].join(' ').trim()}
+          >
             <span className="input_label__name">{this.props.label}</span>
           </label>
         )}

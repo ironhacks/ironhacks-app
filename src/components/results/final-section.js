@@ -26,7 +26,13 @@ function ResultsFinalSection({ scores, userId }) {
           <tbody>
             {userResult ? (
               userResult.map((item, index) => (
-                <UserScoreRow key={index} label={item.label} value={item.value} format={item.format} name={item.name} />
+                <UserScoreRow
+                  key={index}
+                  label={item.label}
+                  value={item.value}
+                  format={item.format}
+                  name={item.name}
+                />
               ))
             ) : (
               <tr className="">

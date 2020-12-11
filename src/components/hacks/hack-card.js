@@ -88,17 +88,25 @@ class HackSignupCard extends Component {
           <div className="flex">
             <div className="hack_card__header">
               {this.props.thumbImg && (
-                <img className="card_img" src={this.props.thumbImg} alt={`${this.props.name} Thumbnail`} />
+                <img
+                  className="card_img"
+                  src={this.props.thumbImg}
+                  alt={`${this.props.name} Thumbnail`}
+                />
               )}
             </div>
 
             <div className="hack_card__body p-2">
               <h3 className="card_title font-bold">{this.props.name}</h3>
 
-              {this.props.description && <p className="card_description">{this.props.description}</p>}
+              {this.props.description && (
+                <p className="card_description">{this.props.description}</p>
+              )}
 
               <div className="card_meta">
-                {this.props.startDate && <span className="mr-3">Opening Date: {formatDate(this.props.startDate)}</span>}
+                {this.props.startDate && (
+                  <span className="mr-3">Opening Date: {formatDate(this.props.startDate)}</span>
+                )}
 
                 {this.props.difficulty && <span>Difficulty: {this.props.difficulty.label}</span>}
               </div>

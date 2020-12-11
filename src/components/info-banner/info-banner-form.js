@@ -94,7 +94,11 @@ class InfoBannerForm extends Component {
     return (
       <div className="info-banner-form">
         <div className="info-banner-form__header">
-          <InfoBanner content={this.state.content} color={this.state.color} bg_color={this.state.bg_color} />
+          <InfoBanner
+            content={this.state.content}
+            color={this.state.color}
+            bg_color={this.state.bg_color}
+          />
         </div>
 
         <div className="info-banner-form__main">
@@ -165,10 +169,16 @@ class InfoBannerForm extends Component {
         </div>
 
         <div className="info-banner-form__footer">
-          {this.state.message && <p className="flex flex-center font-italic cl-red my-2">{this.state.message}</p>}
+          {this.state.message && (
+            <p className="flex flex-center font-italic cl-red my-2">{this.state.message}</p>
+          )}
 
           <div className="flex justify-content-center bg-grey-lt2 py-2">
-            <button className="btn btn-sm bg-primary px-8" onClick={this.onCreateBanner} disabled={this.props.disabled}>
+            <button
+              className="btn btn-sm bg-primary px-8"
+              onClick={this.onCreateBanner}
+              disabled={this.props.disabled}
+            >
               Create Banner
             </button>
           </div>

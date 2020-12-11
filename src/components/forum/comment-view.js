@@ -91,7 +91,10 @@ class CommentView extends Component {
 
     return (
       <div className="comment depth-1 bg-grey-lt3 relative">
-        <CommentHeader adminPost={this.props.data.adminPost} postAuthorName={this.props.data.authorName} />
+        <CommentHeader
+          adminPost={this.props.data.adminPost}
+          postAuthorName={this.props.data.authorName}
+        />
 
         <Separator />
 

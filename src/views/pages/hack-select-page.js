@@ -121,7 +121,10 @@ class HackSelectPage extends Component {
               <Col colClass="mt-1">
                 <h2 className="h4 py-1 badge badge-dark">Your Registered Hacks</h2>
 
-                <HackCardList emptyText={'You are not registered for any hacks.'} hacks={this.state.registeredHacks} />
+                <HackCardList
+                  emptyText={'You are not registered for any hacks.'}
+                  hacks={this.state.registeredHacks}
+                />
 
                 <h2 className="h4 py-1 badge badge-dark">Hacks Open for Registration</h2>
 
@@ -136,7 +139,10 @@ class HackSelectPage extends Component {
 
                 <h2 className="h4 py-1 badge bg-grey cl-white">Past Hacks</h2>
 
-                <PreviousHackCardList emptyText={'No previous hacks.'} hacks={this.state.previousHacks} />
+                <PreviousHackCardList
+                  emptyText={'No previous hacks.'}
+                  hacks={this.state.previousHacks}
+                />
               </Col>
             </Row>
 

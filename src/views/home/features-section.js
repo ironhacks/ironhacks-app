@@ -6,7 +6,9 @@ const FeatureCard = ({ image, title, description }) => {
     <div className="card bd-0">
       <Img
         responsive={false}
-        baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
+        baseUrl={
+          'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'
+        }
         filePath={'media%2Fimg%2Foptim%2F'}
         fileName={image}
         alt={title}

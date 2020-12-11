@@ -11,10 +11,11 @@ const ProcessSection = () => {
           </h2>
 
           <p>
-            During an iterative multiphase process, the competing participants have access to tutorials, standardized
-            libraries and packages, and virtual help sessions. After each phase, submissions are evaluated within a few
-            hours or days with the help of machine intelligence and human experts. Real-time and targeted feedback
-            accelerate learning and facilitate participants in hacking complex problems.
+            During an iterative multiphase process, the competing participants have access to
+            tutorials, standardized libraries and packages, and virtual help sessions. After each
+            phase, submissions are evaluated within a few hours or days with the help of machine
+            intelligence and human experts. Real-time and targeted feedback accelerate learning and
+            facilitate participants in hacking complex problems.
           </p>
         </Col>
       </Row>
@@ -22,7 +23,9 @@ const ProcessSection = () => {
         <Col>
           <Img
             responsive={false}
-            baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
+            baseUrl={
+              'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'
+            }
             filePath={'media%2Fimg%2F'}
             fileName={'ironhacks-process.jpg?alt=media&token=0b68c710-36fb-4992-9c02-604dff758a5e'}
             alt="IronHacks Process Figure"

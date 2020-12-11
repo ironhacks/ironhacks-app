@@ -1,6 +1,14 @@
 import { Controlled as CodeMirror } from 'react-codemirror2'
 
-function NotebookCodeCell({ bgColor, codeTheme, maxLength, onLoad, onChange, cellContent, displayOptions }) {
+function NotebookCodeCell({
+  bgColor,
+  codeTheme,
+  maxLength,
+  onLoad,
+  onChange,
+  cellContent,
+  displayOptions,
+}) {
   const containerStyle = {
     padding: '5px 0px',
     borderColor: 'rgba(0,0,0,.4)',

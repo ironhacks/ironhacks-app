@@ -22,9 +22,13 @@ function FooterVideo() {
       <div className="card" style={{ cursor: 'pointer' }} onClick={() => openLightboxOnSlide(1)}>
         <Img
           responsive={false}
-          baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
+          baseUrl={
+            'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'
+          }
           filePath={'media%2Fimg%2Foptim%2F'}
-          fileName={'video-ironhacks-promo_360x200.png?alt=media&token=d1dd80ad-010e-47dc-b0b9-66c1660f58ab'}
+          fileName={
+            'video-ironhacks-promo_360x200.png?alt=media&token=d1dd80ad-010e-47dc-b0b9-66c1660f58ab'
+          }
           alt={'IronHacks Video Promo'}
           imgClass="card__image bd-0 mb-0 depth-2"
           imgStyle={{ objectFit: 'cover' }}
@@ -54,8 +58,8 @@ const FooterSection = () => {
       <Row>
         <Col>
           <p className="text-center py-2">
-            You can connect with us via phone, email, or just come to the Research Center for Open Digital Innovation,
-            West Lafayette, IN.
+            You can connect with us via phone, email, or just come to the Research Center for Open
+            Digital Innovation, West Lafayette, IN.
           </p>
         </Col>
       </Row>
@@ -99,10 +103,14 @@ const FooterSection = () => {
       <Row>
         <Col colClass="text-center">
           <div>
-            <small>IronHacks is an initiative of the Research Center for Open Digital Innovation (RCODI).</small>
+            <small>
+              IronHacks is an initiative of the Research Center for Open Digital Innovation (RCODI).
+            </small>
           </div>
           <div>
-            <small>It is financially supported by the National Science Foundation (Award #1462044).</small>
+            <small>
+              It is financially supported by the National Science Foundation (Award #1462044).
+            </small>
           </div>
         </Col>
       </Row>

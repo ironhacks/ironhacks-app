@@ -118,7 +118,10 @@ class AdminTutorials extends Component {
                   Delete
                 </div>
 
-                <Link to={`tutorials/${item.tutorialId}/edit`} className={'btn btn-sm btn-success flex-self-end fs-m3'}>
+                <Link
+                  to={`tutorials/${item.tutorialId}/edit`}
+                  className={'btn btn-sm btn-success flex-self-end fs-m3'}
+                >
                   Edit
                 </Link>
               </div>

@@ -37,7 +37,16 @@ function Img({ baseUrl, imgClass, imgStyle, responsive, filePath, fileName, size
   const imgPathSet = responsive ? getImgPathSet(imgSet, baseUrl, filePath) : null
   const imgSizes = responsive ? getImgSizes(sizes) : null
 
-  return <img src={imgSrc} alt={imgAlt} sizes={imgSizes} srcSet={imgPathSet} className={imgClass} style={imgStyle} />
+  return (
+    <img
+      src={imgSrc}
+      alt={imgAlt}
+      sizes={imgSizes}
+      srcSet={imgPathSet}
+      className={imgClass}
+      style={imgStyle}
+    />
+  )
 }
 
 Img.defaultProps = {

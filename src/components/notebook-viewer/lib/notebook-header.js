@@ -18,7 +18,10 @@ function NotebookHeader({ title, fileUrl, fileName }) {
       .then((response) => response.text())
       .then((fileContents) => {
         var element = window.document.createElement('a')
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents))
+        element.setAttribute(
+          'href',
+          'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents)
+        )
         element.setAttribute('download', fileName)
         element.style.display = 'none'
         window.document.body.appendChild(element)

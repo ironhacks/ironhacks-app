@@ -69,7 +69,9 @@ class PostPreview extends Component {
 
             <div className="post-preview__meta cl-grey-dk1">
               <div className="post-comments">
-                <span>{`${this.state.comments} ${this.state.comments > 1 ? 'comments' : 'comment'}`}</span>
+                <span>{`${this.state.comments} ${
+                  this.state.comments > 1 ? 'comments' : 'comment'
+                }`}</span>
               </div>
 
               <div className="bullet-spacer">&bull;</div>

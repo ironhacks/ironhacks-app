@@ -8,10 +8,11 @@ const AboutSection = () => {
           WHAT ARE <span className="font-extrabold">IRONHACKS?</span>
         </h2>
         <p>
-          IronHacks brings together a virtual hacking community who participate in high-energy IronHacks challenges. The
-          IronHacks platform offers participants a no setup workspace and many powerful features. Participants get
-          access to a Juypter Lab, BIG datasets, dashboards, tutorials so that they can excel in data exploration,
-          prediction and visualization.
+          IronHacks brings together a virtual hacking community who participate in high-energy
+          IronHacks challenges. The IronHacks platform offers participants a no setup workspace and
+          many powerful features. Participants get access to a Juypter Lab, BIG datasets,
+          dashboards, tutorials so that they can excel in data exploration, prediction and
+          visualization.
         </p>
       </Col>
     </Row>

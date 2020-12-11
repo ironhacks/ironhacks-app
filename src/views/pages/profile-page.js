@@ -65,7 +65,10 @@ class TrainingKeyLink extends Component {
       .then((response) => response.text())
       .then((fileContents) => {
         var element = window.document.createElement('a')
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents))
+        element.setAttribute(
+          'href',
+          'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents)
+        )
         element.setAttribute('download', this.props.fileName)
         element.style.display = 'none'
         window.document.body.appendChild(element)
@@ -287,12 +290,18 @@ class ProfilePage extends Component {
               <div className="profile">
                 <div className="">
                   {this.props.user.provider[0].photoURL ? (
-                    <img className="profile__img" alt="User Profile" src={this.props.user.provider[0].photoURL} />
+                    <img
+                      className="profile__img"
+                      alt="User Profile"
+                      src={this.props.user.provider[0].photoURL}
+                    />
                   ) : (
                     <span className="profile__initials">{this.props.user.profileLetters}</span>
                   )}
 
-                  {this.state.socialData.length > 0 && <ProfileSocialAccounts data={this.state.socialData} />}
+                  {this.state.socialData.length > 0 && (
+                    <ProfileSocialAccounts data={this.state.socialData} />
+                  )}
 
                   {this.state.hacks && <RegisteredHackList hacks={this.state.hacks} />}
                 </div>
@@ -357,7 +366,8 @@ class ProfilePage extends Component {
                           <MaterialDesignIcon name="time" /> Joined: {this.props.user.createdAt}{' '}
                         </div>
                         <div className="mb-2">
-                          <MaterialDesignIcon name="time" /> Last Login: {this.props.user.lastLoginAt}{' '}
+                          <MaterialDesignIcon name="time" /> Last Login:{' '}
+                          {this.props.user.lastLoginAt}{' '}
                         </div>
                       </div>
                     </div>

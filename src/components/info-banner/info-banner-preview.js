@@ -83,11 +83,15 @@ const InfoBannerPreview = ({
       <div className="">
         <div className="flex flex-align-center">
           <span className="flex-1">Starts: </span>
-          <span className="flex-9 fs-m1 font-bold ml-3">{starts_at.toLocaleString('en-us', timeFormatOptions)}</span>
+          <span className="flex-9 fs-m1 font-bold ml-3">
+            {starts_at.toLocaleString('en-us', timeFormatOptions)}
+          </span>
         </div>
         <div className="flex flex-align-center">
           <span className="flex-1">Ends: </span>
-          <span className="flex-9 fs-m1 font-bold ml-3">{ends_at.toLocaleString('en-us', timeFormatOptions)}</span>
+          <span className="flex-9 fs-m1 font-bold ml-3">
+            {ends_at.toLocaleString('en-us', timeFormatOptions)}
+          </span>
         </div>
       </div>
     </div>

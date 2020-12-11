@@ -2,8 +2,6 @@
 // ISO 3166 Alpha-2 Format: [2 letter Country Code]: [Country Name]
 // Alphabetical by Country Name
 
-/* eslint-disable quotes */
-
 const COUNTRY_CODES = [
   { value: 'US', label: 'United States of America' },
   { value: 'AF', label: 'Afghanistan' },

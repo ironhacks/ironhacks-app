@@ -107,7 +107,10 @@ class NotebookViewer extends Component {
       var old_source = source[code].match(rgx)
 
       if (!!old_source && !this.validURL(old_source[1])) {
-        new_source = source[code].replace(/src="(.*?)"/, 'src="' + this.state.fbase_path + old_source[1] + '"')
+        new_source = source[code].replace(
+          /src="(.*?)"/,
+          'src="' + this.state.fbase_path + old_source[1] + '"'
+        )
       } else {
         var rgx2 = new RegExp(/!\[(.*?)\]\((.*?)[\s|)]/)
         var s2 = source[code].match(rgx2)
@@ -263,7 +266,9 @@ class NotebookViewer extends Component {
                   <div key={index} style={{ backgroundColor: this.state.background_output_color }}>
                     <div style={{ backgroundColor: this.state.background_output_color }}>
                       <div className="flex">
-                        <div style={{ flexWeight: 1, display: this.state.gutterVisible ? '' : 'none' }}>
+                        <div
+                          style={{ flexWeight: 1, display: this.state.gutterVisible ? '' : 'none' }}
+                        >
                           <span
                             style={{
                               display: item.cell_type === 'code' ? '' : 'none',
@@ -296,7 +301,10 @@ class NotebookViewer extends Component {
                                   padding: '10px',
                                 }}
                               >
-                                <ReactMarkdown source={this.parseMD(item.source)} escapeHtml={false} />
+                                <ReactMarkdown
+                                  source={this.parseMD(item.source)}
+                                  escapeHtml={false}
+                                />
                               </div>
                             </div>
                           )}

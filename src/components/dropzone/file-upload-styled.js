@@ -30,7 +30,9 @@ const rejectStyle = {
 }
 
 function FileUploadStyled(props) {
-  const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({ accept: 'image/*' })
+  const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
+    accept: 'image/*',
+  })
 
   const style = useMemo(
     () => ({

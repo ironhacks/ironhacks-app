@@ -297,7 +297,11 @@ class HackPage extends Component {
           {/* OVERVIEW */}
           <Route exact path="/hacks/:hackId">
             <Section>
-              <Hack.Overview hackId={this.state.hackId} userId={this.props.userId} document={this.state.overview} />
+              <Hack.Overview
+                hackId={this.state.hackId}
+                userId={this.props.userId}
+                document={this.state.overview}
+              />
             </Section>
           </Route>
 
@@ -378,7 +382,11 @@ class HackPage extends Component {
           {/* RULES */}
           <Route exact path="/hacks/:hackSlug/rules">
             <Section sectionClass="rules-section">
-              <Hack.Rules hackId={this.state.hackId} userId={this.props.userId} content={this.state.rules} />
+              <Hack.Rules
+                hackId={this.state.hackId}
+                userId={this.props.userId}
+                content={this.state.rules}
+              />
             </Section>
           </Route>
 
@@ -400,13 +408,21 @@ class HackPage extends Component {
           {/* TUTORIALS */}
           <Route exact path="/hacks/:hackSlug/tutorials">
             <Section>
-              <Hack.TutorialList hackSlug={this.hackSlug} hackId={this.state.hackId} userId={this.props.userId} />
+              <Hack.TutorialList
+                hackSlug={this.hackSlug}
+                hackId={this.state.hackId}
+                userId={this.props.userId}
+              />
             </Section>
           </Route>
 
           <Route exact path="/hacks/:hackSlug/tutorials/:tutorialId">
             <Section>
-              <Hack.Tutorial hackSlug={this.hackSlug} hackId={this.state.hackId} userId={this.props.userId} />
+              <Hack.Tutorial
+                hackSlug={this.hackSlug}
+                hackId={this.state.hackId}
+                userId={this.props.userId}
+              />
             </Section>
           </Route>
 

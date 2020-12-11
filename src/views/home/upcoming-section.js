@@ -11,9 +11,13 @@ const UpcomingSection = () => {
         <a href="/covid19" className="nohover">
           <Img
             responsive={true}
-            baseUrl={'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'}
+            baseUrl={
+              'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'
+            }
             filePath={'media%2Fimg%2F'}
-            fileName={'covid19-fall-hack-cta-2.png?alt=media&token=e3f36e30-06f1-4ee4-893a-d7b22ccf7858'}
+            fileName={
+              'covid19-fall-hack-cta-2.png?alt=media&token=e3f36e30-06f1-4ee4-893a-d7b22ccf7858'
+            }
             imgClass="banner_img mb-4"
             alt="Upcoming Hack"
           />

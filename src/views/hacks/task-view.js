@@ -113,7 +113,9 @@ class TaskView extends Component {
                       <>
                         {!this.state.formFilled ? (
                           <div>
-                            <p>Please accept the hack terms and complete the form to view the task.</p>
+                            <p>
+                              Please accept the hack terms and complete the form to view the task.
+                            </p>
 
                             <button
                               className="btn btn-dark"
