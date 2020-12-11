@@ -328,20 +328,28 @@ class AdminHackResultsEditor extends Component {
           {this.state.resultsPublished ? (
             <>
               <div className="font-italic">
-                Submission Results are <span className="badge badge-success">visible</span> in the dashboard now
+                Submission Results are <span className="badge badge-success">visible</span> in the
+                dashboard now
               </div>
 
-              <div className="btn-sm button ml-auto bg-secondary cl-white" onClick={this.updatePublished}>
+              <div
+                className="btn-sm button ml-auto bg-secondary cl-white"
+                onClick={this.updatePublished}
+              >
                 Unpublish Results
               </div>
             </>
           ) : (
             <>
               <div className="font-italic">
-                Submission Results are <span className="badge badge-secondary">not visible</span> in the dashboard now
+                Submission Results are <span className="badge badge-secondary">not visible</span> in
+                the dashboard now
               </div>
 
-              <div className="btn-sm button ml-auto bg-info cl-white" onClick={this.updatePublished}>
+              <div
+                className="btn-sm button ml-auto bg-info cl-white"
+                onClick={this.updatePublished}
+              >
                 Publish Results
               </div>
             </>
@@ -393,7 +401,9 @@ class AdminHackResultsEditor extends Component {
           </div>
         </div>
 
-        <p className="mb-1 mt-2">Enter results data in the field above to upload them the server.</p>
+        <p className="mb-1 mt-2">
+          Enter results data in the field above to upload them the server.
+        </p>
 
         <p className="font-italic fs-m1 mt-0">*Valid JSON syntax style is required</p>
 

@@ -128,10 +128,20 @@ class AdminHackTaskNew extends Component {
               height: '50px',
             }}
           >
-            <Button primary width="150px" margin="0 0 0 15px" onClick={this.publishTask} disabled={this.state.loading}>
+            <Button
+              primary
+              width="150px"
+              margin="0 0 0 15px"
+              onClick={this.publishTask}
+              disabled={this.state.loading}
+            >
               Publish
             </Button>
-            <a href={`/hacks/${this.props.hackSlug}/task`} target="_blank" rel="noopener noreferrer">
+            <a
+              href={`/hacks/${this.props.hackSlug}/task`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               View live document
             </a>
           </div>

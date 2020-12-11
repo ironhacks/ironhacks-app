@@ -11,6 +11,7 @@ import LogoutPage from './logout-page'
 import NotebookViewer from './notebook-page'
 import ProfileEditPage from './profile-edit-page'
 import ProfilePage from './profile-page'
+import ProfileViewPage from './profile-view-page'
 import ShowcasePage from './showcase-page'
 import UpcomingHackFall2020Page from './covid19-fall-hack-page'
 // import UpcomingHackSummer2020Page from './covid19-summer-hack-page';
@@ -27,8 +28,9 @@ const Pages = {
   Notebook: NotebookViewer,
   Login: LoginPage,
   Logout: LogoutPage,
-  ProfileEdit: ProfileEditPage,
   Profile: ProfilePage,
+  ProfileEdit: ProfileEditPage,
+  ProfileView: ProfileViewPage,
   Showcase: ShowcasePage,
   UpcomingHack: UpcomingHackFall2020Page,
 }

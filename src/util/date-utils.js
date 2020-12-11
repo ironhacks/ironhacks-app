@@ -27,7 +27,10 @@ export const getDatesDifference = (date) => {
 }
 
 export const getFirebaseDate = (firebaseDate) => {
-  return new window.firebase.firestore.Timestamp(firebaseDate.seconds, firebaseDate.nanoseconds).toDate()
+  return new window.firebase.firestore.Timestamp(
+    firebaseDate.seconds,
+    firebaseDate.nanoseconds
+  ).toDate()
 }
 
 export const fire2Ms = (fireDate) => {

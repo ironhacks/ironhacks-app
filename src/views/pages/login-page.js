@@ -154,7 +154,10 @@ class LoginPage extends Component {
                 {this.state.loading && <Loader status={this.state.status} />}
 
                 <div style={{ display: 'flex' }}>
-                  <div style={{ flex: 1, backgroundColor: 'transparent' }} id="firebaseui-auth-container" />
+                  <div
+                    style={{ flex: 1, backgroundColor: 'transparent' }}
+                    id="firebaseui-auth-container"
+                  />
                 </div>
               </Col>
             </Row>

@@ -70,7 +70,6 @@ class ThreadView extends Component {
         const comments = []
         docs.forEach((doc) => {
           const data = doc.data()
-          console.log('comment', data)
           data.commentId = doc.id
           data.commentRef = doc.ref
           comments.push(data)

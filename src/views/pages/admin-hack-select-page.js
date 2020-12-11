@@ -120,7 +120,11 @@ class AdminHackSelectPage extends Component {
 
   render() {
     return (
-      <Page user={this.props.user} userIsAdmin={this.props.userIsAdmin} pageClass="admin-hack-select">
+      <Page
+        user={this.props.user}
+        userIsAdmin={this.props.userIsAdmin}
+        pageClass="admin-hack-select"
+      >
         <Section sectionClass="py-2">
           <Row>
             <div className="flex flex-between bd-b1 py-2 mb-2 flex-center">

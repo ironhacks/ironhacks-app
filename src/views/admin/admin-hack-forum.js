@@ -36,7 +36,12 @@ class AdminHackForumItem extends Component {
           <div className="">{'Id: ' + this.props.forumId}</div>
 
           <div>
-            <input type="text" placeholder="Forum Name" onChange={this.onNameChange} value={this.props.name} />
+            <input
+              type="text"
+              placeholder="Forum Name"
+              onChange={this.onNameChange}
+              value={this.props.name}
+            />
 
             <div className="treatment-div">
               <span>Treatment identifier:</span>

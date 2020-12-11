@@ -1,25 +1,8 @@
 import { Component } from 'react'
 import ReactMde from 'react-mde'
-import * as Showdown from 'showdown'
+import Showdown from 'showdown'
+import showdownKatex from 'showdown-katex'
 import './css/react-mde-all.css'
-
-// function loadSuggestions(text) {
-//   return new Promise((accept, reject) => {
-//     setTimeout(() => {
-//       const suggestions = [
-//         {
-//           preview: '// HACK:hackId',
-//           value: '@hack',
-//         },
-//         {
-//           preview: 'rcodi purdue',
-//           value: '@rcodi',
-//         },
-//       ].filter(i => i.preview.toLowerCase().includes(text.toLowerCase()))
-//       accept(suggestions)
-//     }, 250)
-//   })
-// }
 
 class MarkdownEditor extends Component {
   constructor(props) {
@@ -35,14 +18,20 @@ class MarkdownEditor extends Component {
     }
 
     this.mdConfig = {
-      tables: true,
-      ghCodeBlocks: true,
-      simpleLineBreaks: true,
-      requireSpaceBeforeHeadingText: true,
-      simplifiedAutoLink: true,
+      headerLevelStart: 1,
       prefixHeaderId: true,
+      requireSpaceBeforeHeadingText: true,
+      simpleLineBreaks: false,
+      simplifiedAutoLink: true,
       strikethrough: true,
+      openLinksInNewWindow: true,
+      tables: true,
       tasklists: true,
+      extensions: [
+        showdownKatex({
+          delimiters: [{ left: '$$', right: '$$', display: false }],
+        }),
+      ],
     }
 
     this.converter = new Showdown.Converter(this.mdConfig)

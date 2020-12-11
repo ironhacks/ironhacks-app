@@ -330,7 +330,9 @@ class AdminHackCohorts extends Component {
                 inputClass="flex-1"
                 options={this.state.taskSelect}
                 value={item.properties.task}
-                onInputChange={(name, value) => this.handleCohortPropertyInputChange(index, name, value)}
+                onInputChange={(name, value) =>
+                  this.handleCohortPropertyInputChange(index, name, value)
+                }
                 disabled={this.state.loading}
               />
 
@@ -343,7 +345,9 @@ class AdminHackCohorts extends Component {
                   inputClass="order-1 mr-1"
                   isChecked={item.properties.forumEnabled}
                   disabled={this.state.loading}
-                  onInputChange={(name, value) => this.handleCohortPropertyInputChange(index, name, value)}
+                  onInputChange={(name, value) =>
+                    this.handleCohortPropertyInputChange(index, name, value)
+                  }
                 />
 
                 <InputCheckbox
@@ -354,7 +358,9 @@ class AdminHackCohorts extends Component {
                   inputClass="order-1 mr-1"
                   isChecked={item.properties.showNotebooks}
                   disabled={this.state.loading}
-                  onInputChange={(name, value) => this.handleCohortPropertyInputChange(index, name, value)}
+                  onInputChange={(name, value) =>
+                    this.handleCohortPropertyInputChange(index, name, value)
+                  }
                 />
 
                 <InputCheckbox
@@ -365,7 +371,9 @@ class AdminHackCohorts extends Component {
                   inputClass="order-1 mr-1"
                   isChecked={item.properties.showSummaries}
                   disabled={this.state.loading}
-                  onInputChange={(name, value) => this.handleCohortPropertyInputChange(index, name, value)}
+                  onInputChange={(name, value) =>
+                    this.handleCohortPropertyInputChange(index, name, value)
+                  }
                 />
 
                 <button
@@ -388,7 +396,11 @@ class AdminHackCohorts extends Component {
               +Add Cohort
             </button>
 
-            <button className={'ml-2 btn btn-success'} disabled={this.state.loading} onClick={this.saveCohorts}>
+            <button
+              className={'ml-2 btn btn-success'}
+              disabled={this.state.loading}
+              onClick={this.saveCohorts}
+            >
               Save Settings
             </button>
           </div>

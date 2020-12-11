@@ -9,7 +9,10 @@ function SubmissionListItem({ status, hackSlug, submissionId, userSubmitted, nam
   if (userSubmitted) {
     return (
       <>
-        <a href={`/hacks/${hackSlug}/submit/${submissionId}`} className="link--underline flex-2 cl-green-ac4">
+        <a
+          href={`/hacks/${hackSlug}/submit/${submissionId}`}
+          className="link--underline flex-2 cl-green-ac4"
+        >
           <MaterialDesignIcon iconClass="icon_fs-1 mr-1" name="check" />
           {name}
         </a>
@@ -129,22 +132,26 @@ class SubmissionsView extends Component {
     return (
       <Row>
         <Col>
-          <ul className="">
-            {this.state.submissions.map((item, index) => (
-              <li key={index} className="my-4 w-500 mx-auto">
-                <div className="flex flex-between flex-align-center">
-                  <SubmissionListItem
-                    deadline={item.deadline}
-                    userSubmitted={this.state.userSubmitted[index]}
-                    name={item.name}
-                    status={item.status}
-                    hackSlug={this.props.hackSlug}
-                    submissionId={item.submissionId}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
+          {this.state.submissions.length > 0 ? (
+            <ul className="">
+              {this.state.submissions.map((item, index) => (
+                <li key={index} className="my-4 w-500 mx-auto">
+                  <div className="flex flex-between flex-align-center">
+                    <SubmissionListItem
+                      deadline={item.deadline}
+                      userSubmitted={this.state.userSubmitted[index]}
+                      name={item.name}
+                      status={item.status}
+                      hackSlug={this.props.hackSlug}
+                      submissionId={item.submissionId}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Submissions have not opened yet</p>
+          )}
         </Col>
       </Row>
     )

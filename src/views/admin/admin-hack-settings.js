@@ -155,7 +155,9 @@ class AdminHackSettings extends Component {
     })
 
     var storageRef = window.firebase.storage().ref()
-    var bannerImageRef = storageRef.child(`/media/hacks/${this.props.hackId}/${this.state.hackBannerUpload.name}`)
+    var bannerImageRef = storageRef.child(
+      `/media/hacks/${this.props.hackId}/${this.state.hackBannerUpload.name}`
+    )
 
     bannerImageRef.put(this.state.hackBannerUpload).then((snapshot) => {
       snapshot.ref.getDownloadURL().then((downloadURL) => {
@@ -186,7 +188,9 @@ class AdminHackSettings extends Component {
     })
 
     var storageRef = window.firebase.storage().ref()
-    var bannerImageRef = storageRef.child(`/media/hacks/${this.props.hackId}/${this.state.hackThumbUpload.name}`)
+    var bannerImageRef = storageRef.child(
+      `/media/hacks/${this.props.hackId}/${this.state.hackThumbUpload.name}`
+    )
 
     bannerImageRef.put(this.state.hackThumbUpload).then((snapshot) => {
       snapshot.ref.getDownloadURL().then((downloadURL) => {

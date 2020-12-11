@@ -84,7 +84,7 @@ class SubmitView extends Component {
       submissionComplete: false,
     }
 
-    this.SUMMARY_MIN_LENGTH = 120
+    this.SUMMARY_MIN_LENGTH = 500
   }
 
   uploadMessageStyle = {
@@ -513,11 +513,7 @@ class SubmitView extends Component {
     return (
       <div className="mb-7">
         <Row>
-          {this.state.uploading && (
-            <div style={this.uploadMessageStyle}>
-              Upload in progress...
-            </div>
-          )}
+          {this.state.uploading && <div style={this.uploadMessageStyle}>Upload in progress...</div>}
 
           <Col>
             {this.state.submissionClosed && (
@@ -526,10 +522,12 @@ class SubmitView extends Component {
               </div>
             )}
 
-            {this.state.submissionForm.enabled === false && (
+            {!this.state.submissionClosed && this.state.submissionForm.enabled === false && (
               <div className="bg-info cl-darkgrey my-2 py-2 text-center w-full">
                 <div className="font-italic">This submission is currently locked.</div>
-                <div className="fs-m1">You will be notified once the next submission round is made available.</div>
+                <div className="fs-m1">
+                  You will be notified once the next submission round is made available.
+                </div>
               </div>
             )}
 

@@ -81,7 +81,9 @@ class AdminHackPage extends Component {
             />
 
             <div className="admin-hack-content">
-              {this.state.hack && <AdminPageNavBreadcrumbs hackId={this.hackId} hackName={this.state.hack.name} />}
+              {this.state.hack && (
+                <AdminPageNavBreadcrumbs hackId={this.hackId} hackName={this.state.hack.name} />
+              )}
 
               <Row rowClass="no-gutters py-2">
                 <Col colClass="">
@@ -100,10 +102,16 @@ class AdminHackPage extends Component {
 
                       {/* BANNERS */}
                       <Route exact path={`${this.baseUrl}/banners`}>
-                        <AdminHack.InfoBanners hackId={this.hackId} hackName={this.state.hackName} />
+                        <AdminHack.InfoBanners
+                          hackId={this.hackId}
+                          hackName={this.state.hackName}
+                        />
                       </Route>
                       <Route path={`${this.baseUrl}/banners/:bannerId/edit`}>
-                        <AdminHack.InfoBannersEdit hackId={this.hackId} hackName={this.state.hackName} />
+                        <AdminHack.InfoBannersEdit
+                          hackId={this.hackId}
+                          hackName={this.state.hackName}
+                        />
                       </Route>
 
                       {/* COHORTS */}

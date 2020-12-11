@@ -70,11 +70,19 @@ class ProfileEditPage extends Component {
       .then((result) => {
         let data = result.data()
         if (data.profileData) {
-          let exp = Object.assign({}, this.state.formData.programmingExperience, data.profileData.programmingExperience)
+          let exp = Object.assign(
+            {},
+            this.state.formData.programmingExperience,
+            data.profileData.programmingExperience
+          )
 
           let soc = Object.assign({}, this.state.formData.socialMedia, data.profileData.socialMedia)
 
-          let dem = Object.assign({}, this.state.formData.demographicData, data.profileData.demographicData)
+          let dem = Object.assign(
+            {},
+            this.state.formData.demographicData,
+            data.profileData.demographicData
+          )
 
           this.setState({
             formData: {
@@ -175,7 +183,11 @@ class ProfileEditPage extends Component {
               <div className="flex">
                 <div className="mr-6">
                   {this.props.user.provider[0].photoURL ? (
-                    <img className="profile__img" alt="User Profile" src={this.props.user.provider[0].photoURL} />
+                    <img
+                      className="profile__img"
+                      alt="User Profile"
+                      src={this.props.user.provider[0].photoURL}
+                    />
                   ) : (
                     <span className="profile__initials">{this.props.user.profileLetters}</span>
                   )}

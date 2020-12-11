@@ -33,7 +33,9 @@ function AdminFileUpload(props) {
       <section className={props.containerClass}>
         <div {...getRootProps({ className: 'dropzone' })}>
           <input {...getInputProps()} />
-          <button className="dropzone_control btn button mb-4 btn-info btn-block btn-sm">Select</button>
+          <button className="dropzone_control btn button mb-4 btn-info btn-block btn-sm">
+            Select
+          </button>
         </div>
       </section>
 

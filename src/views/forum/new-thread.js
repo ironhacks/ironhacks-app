@@ -97,10 +97,18 @@ class NewThread extends Component {
             onInputChange={this.handleInputChange}
           />
 
-          <MarkdownEditor editorLayout="tabbed" value={this.state.markdown} onEditorChange={this.onEditorChange} />
+          <MarkdownEditor
+            editorLayout="tabbed"
+            value={this.state.markdown}
+            onEditorChange={this.onEditorChange}
+          />
 
           <div className="flex flex-end my-2">
-            <button className={'btn bg-primary px-2'} disabled={this.state.submitDisabled} onClick={this.handleSubmit}>
+            <button
+              className={'btn bg-primary px-2'}
+              disabled={this.state.submitDisabled}
+              onClick={this.handleSubmit}
+            >
               Submit
             </button>
           </div>

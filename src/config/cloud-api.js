@@ -1,14 +1,19 @@
-const cloudFunctionsProdEndPoint = 'https://us-central1-the-ironhacks-platform-dev.cloudfunctions.net'
+const cloudFunctionsProdEndPoint =
+  'https://us-central1-the-ironhacks-platform-dev.cloudfunctions.net'
 
 const CloudApiDevConfig = {
   baseUrl: 'localhost:5000',
   commitToGitHubUrl: 'http://localhost:5000/the-ironhacks-platform-dev/us-central1/commitToGitHub',
-  createGitHubRepoUrl: 'http://localhost:5000/the-ironhacks-platform-dev/us-central1/createGitHubRepo',
-  getPhaseResultsUrl: 'http://localhost:5000/the-ironhacks-platform-dev/us-central1/getPhaseResults',
+  createGitHubRepoUrl:
+    'http://localhost:5000/the-ironhacks-platform-dev/us-central1/createGitHubRepo',
+  getPhaseResultsUrl:
+    'http://localhost:5000/the-ironhacks-platform-dev/us-central1/getPhaseResults',
   getTaskDocUrl: 'http://localhost:5000/the-ironhacks-platform-dev/us-central1/getTaskDoc',
-  previewWebServerUrl: 'http://localhost:5000/the-ironhacks-platform-dev/us-central1/previewWebServer',
+  previewWebServerUrl:
+    'http://localhost:5000/the-ironhacks-platform-dev/us-central1/previewWebServer',
   registerUserUrl: 'http://localhost:5000/the-ironhacks-platform-dev/us-central1/registerUser',
-  saveLikedCompetitorsUrl: 'http://localhost:5000/the-ironhacks-platform-dev/us-central1/saveLikedCompetitors',
+  saveLikedCompetitorsUrl:
+    'http://localhost:5000/the-ironhacks-platform-dev/us-central1/saveLikedCompetitors',
   saveStatUrl: 'http://localhost:5000/the-ironhacks-platform-dev/us-central1/saveStat',
 }
 

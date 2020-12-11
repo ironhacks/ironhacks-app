@@ -38,7 +38,9 @@ function AdminImageUpload(props) {
               <div
                 className="preview_img"
                 style={{
-                  backgroundImage: files[0] ? `url(${files[0].preview})` : `url(${props.initialImage})`,
+                  backgroundImage: files[0]
+                    ? `url(${files[0].preview})`
+                    : `url(${props.initialImage})`,
                 }}
               />
             </div>

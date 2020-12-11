@@ -124,7 +124,10 @@ class App extends Component {
               <title>IronHacks</title>
               <link rel="canonical" href="https://ironhacks.com" />
               <meta property="og:title" content="IronHacks" />
-              <meta property="og:description" content="Hack for innovation to solve global challenges" />
+              <meta
+                property="og:description"
+                content="Hack for innovation to solve global challenges"
+              />
               <meta property="og:image" content="https://ironhacks.com/ironhacks-social.jpg" />
             </Helmet>
 
@@ -143,7 +146,10 @@ class App extends Component {
                 </Route>
 
                 <Route path="/login">
-                  <Pages.Login onLoginSuccess={this._updateAppNavigation} onLoginFail={this._updateAppNavigation} />
+                  <Pages.Login
+                    onLoginSuccess={this._updateAppNavigation}
+                    onLoginFail={this._updateAppNavigation}
+                  />
                 </Route>
 
                 {this.state.user && (
@@ -169,19 +175,21 @@ class App extends Component {
                     </Route>
 
                     <Route exact path="/profile">
-                      <Pages.Profile
-                        profileId={this.state.userId}
+                      <Pages.Profile user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
+                    </Route>
+
+                    <Route exact path="/profile/edit">
+                      <Pages.ProfileEdit
                         user={this.state.user}
                         userIsAdmin={this.state.userIsAdmin}
                       />
                     </Route>
 
-                    <Route exact path="/profile/edit">
-                      <Pages.ProfileEdit user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
-                    </Route>
-
-                    <Route path="/profile:profileId">
-                      <Pages.Profile user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
+                    <Route path="/profile/u/:profileId">
+                      <Pages.ProfileView
+                        user={this.state.user}
+                        userIsAdmin={this.state.userIsAdmin}
+                      />
                     </Route>
 
                     <Route exact path="/logout">
@@ -191,19 +199,31 @@ class App extends Component {
                     {this.state.userIsAdmin && (
                       <>
                         <Route exact path="/admin">
-                          <Pages.AdminHackSelect user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
+                          <Pages.AdminHackSelect
+                            user={this.state.user}
+                            userIsAdmin={this.state.userIsAdmin}
+                          />
                         </Route>
 
                         <Route path="/admin/hacks/:hackId">
-                          <Pages.AdminHack user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
+                          <Pages.AdminHack
+                            user={this.state.user}
+                            userIsAdmin={this.state.userIsAdmin}
+                          />
                         </Route>
 
                         <Route path="/admin/utils">
-                          <Pages.AdminUtils user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
+                          <Pages.AdminUtils
+                            user={this.state.user}
+                            userIsAdmin={this.state.userIsAdmin}
+                          />
                         </Route>
 
                         <Route path="/admin/new-hack">
-                          <Pages.AdminNewHack user={this.state.user} userIsAdmin={this.state.userIsAdmin} />
+                          <Pages.AdminNewHack
+                            user={this.state.user}
+                            userIsAdmin={this.state.userIsAdmin}
+                          />
                         </Route>
                       </>
                     )}

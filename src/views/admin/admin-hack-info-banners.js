@@ -163,13 +163,17 @@ class AdminHackInfoBanners extends Component {
 
         <Section>
           <p>
-            <strong>Note:</strong> If more than one banner is active at one time, only the one with the earliest
-            starting date will be displayed.
+            <strong>Note:</strong> If more than one banner is active at one time, only the one with
+            the earliest starting date will be displayed.
           </p>
 
           <p>
             List of available emojis list:{' '}
-            <a href="https://github.com/showdownjs/showdown/wiki/Emojis" className="text-underline" target="_blank">
+            <a
+              href="https://github.com/showdownjs/showdown/wiki/Emojis"
+              className="text-underline"
+              target="_blank"
+            >
               showdownjs/showdown/wiki/Emojis
             </a>
           </p>

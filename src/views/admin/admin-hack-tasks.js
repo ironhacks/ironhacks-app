@@ -182,7 +182,10 @@ class AdminHackTasks extends Component {
             {this.state.taskPublished ? (
               <>
                 <div className="font-italic">Task page is visible now</div>
-                <div className="btn-sm button ml-auto bg-secondary cl-white" onClick={this.publishTask}>
+                <div
+                  className="btn-sm button ml-auto bg-secondary cl-white"
+                  onClick={this.publishTask}
+                >
                   Unpublish Task
                 </div>
               </>
@@ -209,7 +212,10 @@ class AdminHackTasks extends Component {
                   Delete Task
                 </div>
 
-                <Link to={`tasks/${task.taskId}/edit`} className={'btn btn-sm btn-success flex-self-end fs-m3'}>
+                <Link
+                  to={`tasks/${task.taskId}/edit`}
+                  className={'btn btn-sm btn-success flex-self-end fs-m3'}
+                >
                   Edit Task
                 </Link>
               </div>

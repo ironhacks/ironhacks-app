@@ -163,7 +163,11 @@ class AdminHackTaskEdit extends Component {
             >
               Publish
             </Button>
-            <a href={`/hacks/${this.props.hackSlug}/task`} target="_blank" rel="noopener noreferrer">
+            <a
+              href={`/hacks/${this.props.hackSlug}/task`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               View live document
             </a>
           </div>

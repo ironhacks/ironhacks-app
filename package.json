@@ -25,6 +25,7 @@
     "friendly-words": "^1.1.10",
     "jquery": "^3.5.1",
     "moment": "^2.29.1",
+    "npm": "^6.14.9",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
@@ -46,6 +47,7 @@
     "react-window": "^1.8.6",
     "redux": "^4.0.5",
     "showdown": "^1.9.1",
+    "showdown-katex": "^0.8.0",
     "sweetalert2": "^9.17.2",
     "warning": "^4.0.3"
   },
@@ -126,5 +128,5 @@
     "styles:dev": "npm run styles:build && node-sass --output-style compressed -w -r -o src/styles src/styles/scss",
     "test": "react-scripts test -env=jsdom"
   },
-  "version": "2.2.7"
+  "version": "2.2.8"
 }

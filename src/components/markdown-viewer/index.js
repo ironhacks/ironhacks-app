@@ -1,29 +1,28 @@
 import { Component } from 'react'
 import Showdown from 'showdown'
-
-// prefixHeaderId  Add a prefix to the generated header ids.
-// Passing a string will prefix that string to the header id.
-// Setting to true will add a generic 'section' prefix.
-// strikethrough  Enable support for strikethrough syntax.
-// ~~strikethrough~~ as <del>strikethrough</del>
-// headerLevelStart  foo parse to <h3>foo</h3>
+import showdownKatex from 'showdown-katex'
 
 class MdContentView extends Component {
   constructor(props) {
     super(props)
-
     const mdConfig = {
-      tables: true,
-      simplifiedAutoLink: true,
-      prefixHeaderId: true,
-      strikethrough: true,
       headerLevelStart: 1,
+      prefixHeaderId: true,
+      requireSpaceBeforeHeadingText: true,
+      simpleLineBreaks: false,
+      simplifiedAutoLink: true,
+      strikethrough: true,
+      openLinksInNewWindow: true,
+      tables: true,
       tasklists: true,
-      // extensions: [],
+      extensions: [
+        showdownKatex({
+          delimiters: [{ left: '$$', right: '$$', display: false }],
+        }),
+      ],
     }
 
     this.converter = new Showdown.Converter(mdConfig)
-    // this.converter.setFlavor('github');
   }
 
   parseContent(content) {

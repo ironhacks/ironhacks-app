@@ -6,7 +6,12 @@ export function fire2Date(fireDate) {
   return new Date(fireDate.seconds * 1000 + fireDate.nanoseconds / 1000000)
 }
 
-export async function getStats({ startDate = false, hackId = false, userId = false, notUserId = false }) {
+export async function getStats({
+  startDate = false,
+  hackId = false,
+  userId = false,
+  notUserId = false,
+}) {
   var START_DATE = '2020-08-10'
 
   var date = startDate ? startDate : START_DATE
@@ -40,7 +45,9 @@ export async function getStats({ startDate = false, hackId = false, userId = fal
     result.push(['timestamp', 'userId', 'event', 'pathname'].join(','))
 
     stats.forEach((stat) => {
-      result.push([fire2Date(stat.timestamp).toISOString(), stat.userId, stat.event, stat.pathname].join(', '))
+      result.push(
+        [fire2Date(stat.timestamp).toISOString(), stat.userId, stat.event, stat.pathname].join(', ')
+      )
     })
 
     console.log('\nRESULTS\n')

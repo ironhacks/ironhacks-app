@@ -1,6 +1,13 @@
 import { Controlled as CodeMirror } from 'react-codemirror2'
 
-function NotebookStdOut({ stdout_found, display, codeTheme, maxLength, cellContent, displayOptions }) {
+function NotebookStdOut({
+  stdout_found,
+  display,
+  codeTheme,
+  maxLength,
+  cellContent,
+  displayOptions,
+}) {
   return (
     <div
       style={{

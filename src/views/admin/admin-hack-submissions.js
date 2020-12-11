@@ -155,7 +155,7 @@ class AdminHackSubmissions extends Component {
         <h2 className="h3 font-bold">{`${this.props.hackName} Submissions`}</h2>
 
         <Link to="submissions/new">
-          <div className="button py-1 px-2 bg-primary font-bold fs-m2">+ New Submisison</div>
+          <div className="button py-1 px-2 bg-primary font-bold fs-m2">+ New Submission</div>
         </Link>
 
         <Row rowClass="pt-2">

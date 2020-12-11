@@ -37,7 +37,7 @@ function ParticipantScoreRow({ participant }) {
   )
 }
 
-class ResultsPeersSection extends Component {
+class CohortSubmissionsNotebook extends Component {
   render() {
     return (
       <div>
@@ -62,4 +62,4 @@ class ResultsPeersSection extends Component {
   }
 }
 
-export { ResultsPeersSection }
+export { CohortSubmissionsNotebook }

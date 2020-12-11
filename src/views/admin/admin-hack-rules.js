@@ -46,7 +46,11 @@ class AdminHackRules extends Component {
           />
 
           <div className="flex flex-align-center flex-between py-2">
-            <a href={`/hacks/${this.props.hackSlug}/rules`} target="_blank" rel="noopener noreferrer">
+            <a
+              href={`/hacks/${this.props.hackSlug}/rules`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               View live document
             </a>
 

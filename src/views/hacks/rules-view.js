@@ -12,7 +12,11 @@ class RulesView extends Component {
     return (
       <Row>
         <Col>
-          <MdContentView content={this.props.content} encoded={false} emptyText="Rules not available yet." />
+          <MdContentView
+            content={this.props.content}
+            encoded={false}
+            emptyText="Rules not available yet."
+          />
         </Col>
       </Row>
     )

@@ -47,7 +47,12 @@ class Header extends Component {
   render() {
     return (
       <header
-        className={['header', 'site-header', 'container-fluid', this.isAdminPage ? 'admin-header' : '']
+        className={[
+          'header',
+          'site-header',
+          'container-fluid',
+          this.isAdminPage ? 'admin-header' : '',
+        ]
           .join(' ')
           .trim()}
       >
@@ -58,7 +63,11 @@ class Header extends Component {
             </Link>
 
             <div className="header_actions">
-              <a href="mailto:c562462b.groups.purdue.edu@amer.teams.ms" target="_blank" className="contact_button">
+              <a
+                href="mailto:c562462b.groups.purdue.edu@amer.teams.ms"
+                target="_blank"
+                className="contact_button"
+              >
                 Get in Touch
               </a>
 
@@ -67,7 +76,9 @@ class Header extends Component {
               </div>
 
               <div
-                className={['action_menu depth-3', this.state.showMenu ? 'active' : ''].join(' ').trim()}
+                className={['action_menu depth-3', this.state.showMenu ? 'active' : '']
+                  .join(' ')
+                  .trim()}
                 ref={this.userMenuRef}
               >
                 {window.location.pathname !== '/profile' && (
