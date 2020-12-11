@@ -18,6 +18,7 @@ class AdminHackSubmissionNew extends Component {
     super(props)
 
     this.state = {
+      enabled: false,
       deadline: '',
       submissionId: '',
       name: '',
@@ -293,7 +294,10 @@ class AdminHackSubmissionNew extends Component {
                 </div>
               </div>
 
-              <button className="btn btn-outline-dark btn-sm font-bold px-4" onClick={this.addField}>
+              <button
+                className="btn btn-outline-dark btn-sm font-bold px-4"
+                onClick={this.addField}
+              >
                 +Add Fields
               </button>
 
