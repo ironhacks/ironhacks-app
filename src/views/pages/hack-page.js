@@ -65,6 +65,10 @@ class HackPage extends Component {
       return fire2Ms(a.starts_at) - fire2Ms(b.starts_at)
     })
 
+    banners = banners.filter((item) => {
+      return fire2Ms(item.starts_at) < Date.now()
+    })
+
     if (banners.length > 0) {
       this.setState({ hackBanner: banners[0] })
     }
