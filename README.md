@@ -6,7 +6,7 @@ Hack for innovation to solve global challenges.
 
 IronHacks is an open data hacking program that combines experiential learning with real-world data-driven problem solving. During a 5-stage virtual competition, students utilize open data to create novel and useful interactive visualizations and analytic "apps" that solve civic challenges.
 
-[![](http://i.imgur.com/wtv2dy6.png)](http://ironhacks.com)
+[![](https://i.imgur.com/vR1ShR5.png)](http://ironhacks.com)
 
 During an iterative multiphase process, the competing participants have access to tutorials, standardized libraries and packages, and virtual help sessions. After each phase, submissions are being evaluated within a few hours or days with the help of machine intelligence and human experts. Real time and targeted feedback accelerate learning and facilitate participants in hacking complex problems.
 
