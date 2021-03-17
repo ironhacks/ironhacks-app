@@ -6,7 +6,7 @@ import {
   FeaturesSection,
   FooterSection,
   HeroSection,
-  ShowcaseSection,
+  TestimonialSection,
   StatsSection,
   SponsorsSection,
   UpcomingSection,
@@ -40,8 +40,8 @@ const HomePage = () => {
         <ExamplesSection />
       </Section>
 
-      <Section id="home_showcase" sectionClass="showcase_section">
-        <ShowcaseSection />
+      <Section id="home_testimonials" sectionClass="testimonials_section">
+        <TestimonialSection />
       </Section>
 
       <Section id="home_stats" sectionClass="stats_section bg-primary">

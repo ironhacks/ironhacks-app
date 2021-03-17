@@ -6,8 +6,6 @@ import { TwitterButton, TwitterTimeline } from '../../components/twitter'
 import { List } from '../../components/list'
 import { Img } from '../../components/img'
 import FsLightbox from 'fslightbox-react'
-import fenyPatel from '../../assets/img/feny-patel.jpeg'
-import harshaPavuluri from '../../assets/img/harsha-pavuluri.jpg'
 
 function VideoSection() {
   const [lightboxController, setLightboxController] = useState({
@@ -208,8 +206,8 @@ const UpcomingHackPage = () => {
             <div className="my-5">
               <div className="flex">
                 <img
-                  src={fenyPatel}
-                  style={{ width: 60, height: 60, borderRadius: '50%', marginRight: '1em' }}
+                  src="/assets/img/feny-patel.jpg"
+                  style={{ width: 80, height: 80, borderRadius: '50%', marginRight: '1em' }}
                   alt="Feny Patel"
                 />
                 <div className="font-italic">
@@ -218,16 +216,16 @@ const UpcomingHackPage = () => {
                   norms and implement necessary precautions."
                 </div>
               </div>
-              <div className="my-4">
-                Feny Patel, August 2020 Challenge first-place winner and Purdue University student.
+              <div className="my-4 fs-m1">
+                - Feny Patel (Purdue University), 1st Place August 2020 Challenge
               </div>
             </div>
 
             <div className="my-5">
               <div className="flex">
                 <img
-                  src={harshaPavuluri}
-                  style={{ width: 60, height: 60, borderRadius: '50%', marginRight: '1em' }}
+                  src="/assets/img/harsha-pavuluri.jpg"
+                  style={{ width: 80, height: 80, borderRadius: '50%', marginRight: '1em' }}
                   alt="Harsha Pavuluri"
                 />
                 <div className="font-italic">
@@ -236,9 +234,8 @@ const UpcomingHackPage = () => {
                   to crunching code within 24 hours like typical hackathons."
                 </div>
               </div>
-              <div className="my-4">
-                Harsha Pavuluri, the August 2020 Challenge second-place winner and Purdue University
-                student.
+              <div className="my-4 fs-m1">
+                - Harsha Pavuluri (Purdue University), 2nd Place August 2020 Challenge
               </div>
             </div>
           </Col>
