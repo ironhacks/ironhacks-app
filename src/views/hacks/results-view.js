@@ -3,6 +3,7 @@ import { Loader } from '../../components/loader'
 import { MdContentView } from '../../components/markdown-viewer'
 import { Row, Col } from '../../components/layout'
 import {
+  ResultsAdminUserScoreSelector,
   ResultsFinalSection,
   ResultsSectionSelector,
   ResultsSubmissionSelector,
@@ -47,16 +48,13 @@ class ResultsView extends Component {
       loadingResults: false,
       filterUsers: [],
       currentSubmission: null,
-      selectedPhase: 0,
       finalResults: null,
       participantCount: null,
-      cohortCount: null,
       results: null,
       resultsContent: '',
       resultsPublished: {},
       resultStats: null,
-      section: 'scores',
-      submissionData: null,
+      section: this.props.userCohortId ? 'peers' : 'scores',
       submissionSelectOptions: [],
       submissionSelectValue: {},
       submissions: [],
@@ -181,36 +179,31 @@ class ResultsView extends Component {
     }
   }
 
-  onPhaseSelection = async (phase, submissionId) => {
-    if (phase === this.state.selectedPhase) {
-      return false
-    }
-
-    await this.setState({
-      selectedPhase: phase,
-      currentSubmission: submissionId,
-    })
-
-    if (submissionId !== 'final') {
-      this.setState({ loading: true })
-      this.getCohortSubmissions()
-      this.getHackResults()
-    }
-  }
-
   onSubmissionSelected = async (selected) => {
     if (selected.value === this.state.currentSubmission) {
       return false
     }
 
-    this.setState({
+    await this.setState({
       currentSubmission: selected.value,
       submissionSelectValue: selected,
     })
 
-    this.setState({ loading: true })
-    this.getCohortSubmissions()
-    this.getHackResults()
+    await this.setState({ loading: true })
+    await this.getCohortSubmissions()
+    await this.getHackResults()
+  }
+
+  onAdminUserScoreSelected = (selected) => {
+    if (this.state.adminSelectedUser && this.state.adminSelectedUser.value === selected.value) {
+      return false
+    }
+
+    this.setState({ adminSelectedUser: selected })
+
+    let userResults = this.state.adminResults[selected.value]
+
+    this.setState({ userResults: userResults })
   }
 
   getResultsFinal = async () => {
@@ -250,6 +243,7 @@ class ResultsView extends Component {
           if (this.state.participants[doc.id]) {
             userName = this.state.participants[doc.id].alias
           }
+
           cohortSubmissions.push({
             userId: userId,
             name: userName,
@@ -262,6 +256,7 @@ class ResultsView extends Component {
         cohortSubmissions: cohortSubmissions,
         loadingCohorts: false,
       })
+
       this.updateLoadingStatus()
     } else {
       this.setState({ loadingCohorts: false })
@@ -270,11 +265,7 @@ class ResultsView extends Component {
   }
 
   getHackResults = async () => {
-    let submisison = this.state.submissions[this.state.selectedPhase]
-    if (!submisison) {
-      return false
-    }
-    let submissionId = submisison.submissionId
+    let submissionId = this.state.currentSubmission
 
     this.setState({ loadingResults: true })
 
@@ -316,6 +307,26 @@ class ResultsView extends Component {
         participantCount: Object.keys(results).length,
         userResults: results[this.props.userId],
       })
+
+      if (this.props.userIsAdmin) {
+        let adminUserList = Object.keys(results).map((item) => {
+          return {
+            label: item,
+            value: item,
+          }
+        })
+
+        adminUserList.sort((a, b) => {
+          return a.label.localeCompare(b.label)
+        })
+
+        this.setState({
+          adminResults: results,
+          adminUserList: adminUserList,
+          // adminSelectedUser: adminUserList[0],
+          adminSelectedUser: null,
+        })
+      }
 
       let metrics = getMetrics(submissionResultsData)
 
@@ -371,15 +382,20 @@ class ResultsView extends Component {
                   callback={(id) => this.setState({ section: id })}
                   sections={[
                     {
-                      name: 'scores',
-                      label: 'Your Scores',
-                      disabled: this.state.currentSubmission === 'final' ? true : false,
-                    },
-                    {
                       name: 'peers',
                       label: 'Your Peers',
                       disabled: this.state.currentSubmission === 'final' ? true : false,
                     },
+                    {
+                      name: 'scores',
+                      label: 'Your Scores',
+                      disabled: this.state.currentSubmission === 'final' ? true : false,
+                    },
+                    // {
+                    //   name: 'summary',
+                    //   label: 'Stats',
+                    //   disabled: this.state.currentSubmission === 'final' ? true : false,
+                    // },
                   ]}
                 />
               </div>
@@ -394,27 +410,36 @@ class ResultsView extends Component {
                     disabled={this.state.loading}
                   />
                 )}
+
+                {this.props.userIsAdmin && (
+                  <ResultsAdminUserScoreSelector
+                    selectOptions={this.state.adminUserList}
+                    selectValue={this.state.adminSelectedUser}
+                    onSelect={this.onAdminUserScoreSelected}
+                    disabled={this.state.loading}
+                  />
+                )}
               </div>
             </div>
 
             <div className="hack-stats-section flex my-2 px-6">
-              {/*this.state.submissionSelectValue && (
-                <div className="ml-0 mr-4 text-center">
-                  <h3 className="font-bold">Selected Phase</h3>
-                  <div className="fs-5 font-bold cl-amber my-3">
-                    Phase {this.state.selectedPhase + 1}
+              {this.props.cohortSettings && this.props.cohortSettings.name && (
+                <div className="ml-0 mr-6 text-left">
+                  <h3 className="font-bold text-left">Group Name</h3>
+                  <div className="fs-5 font-bold cl-amber my-3 text-capitalize">
+                    {this.props.cohortSettings.name}
                   </div>
                 </div>
-              )*/}
+              )}
 
               <div className="ml-0 mr-6 text-center">
-                <h3 className="font-bold">Number of Hackers</h3>
+                <h3 className="font-bold">Hack Size</h3>
                 <div className="fs-5 font-bold cl-cyan my-3">{this.state.participantCount}</div>
               </div>
 
               {this.props.userCohortList && this.props.userCohortList.length > 0 && (
                 <div className="mx-6 text-center">
-                  <h3 className="font-bold">Cohort Size</h3>
+                  <h3 className="font-bold">Group Size</h3>
                   <div className="fs-5 font-bold cl-pink my-3">
                     {this.props.userCohortList.length}
                   </div>
@@ -497,6 +522,7 @@ class ResultsView extends Component {
                               <>
                                 {this.state.cohortSubmissions ? (
                                   <CohortSubmissionsNotebook
+                                    currentSubmission={this.state.currentSubmission}
                                     participantData={this.state.cohortSubmissions}
                                   />
                                 ) : (
@@ -514,6 +540,7 @@ class ResultsView extends Component {
                               <>
                                 {this.state.cohortSubmissions ? (
                                   <CohortSubmissionsSummary
+                                    currentSubmission={this.state.currentSubmission}
                                     participantData={this.state.cohortSubmissions}
                                   />
                                 ) : (
