@@ -104,3 +104,15 @@
   color: inherit !important;
   background-color: inherit !important;
 }
+
+.separator {
+  width: 100%;
+  height: 1px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  background-color: lightgray;
+
+  &.primary {
+    background-color: var(--color-primary);
+  }
+}
