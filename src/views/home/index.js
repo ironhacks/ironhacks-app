@@ -5,7 +5,8 @@ import { ProcessSection } from './process-section'
 import { FooterSection } from './footer-section'
 import { HeroSection } from './hero-section'
 // import { ShowcaseSection } from './showcase-section'
-import { TestimonialSection } from './testimonial-section'
+import { TestimonialSectionSlider } from './testimonial-slider'
+//import { TestimonialSection } from './testimonial-section'
 import { StatsSection } from './stats-section'
 import { SponsorsSection } from './sponsors-section'
 import { UpcomingSection } from './upcoming-section'
@@ -18,10 +19,10 @@ export {
   ProcessSection,
   FooterSection,
   HeroSection,
-  // ShowcaseSection,
   StatsSection,
   SponsorsSection,
-  TestimonialSection,
+  //  TestimonialSection,
+  TestimonialSectionSlider,
   TwitterSection,
   UpcomingSection,
 }
