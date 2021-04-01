@@ -127,6 +127,7 @@ class TaskView extends Component {
                           </div>
                         ) : (
                           <MdContentView
+                            enableTracking={true}
                             content={this.state.task.doc}
                             encoded={true}
                             emptyText="Task Document is not available yet."
@@ -135,6 +136,7 @@ class TaskView extends Component {
                       </>
                     ) : (
                       <MdContentView
+                        enableTracking={true}
                         content={this.state.task.doc}
                         encoded={true}
                         emptyText="Task Document is not available yet."

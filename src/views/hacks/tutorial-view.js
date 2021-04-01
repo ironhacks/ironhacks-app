@@ -49,6 +49,7 @@ class TutorialView extends Component {
             <h2 className="h3 my-2 font-bold tutorial_title">{this.state.title}</h2>
 
             <MdContentView
+              enableTracking={true}
               content={this.state.content}
               encoded={false}
               emptyText="Tutorial is not available yet."

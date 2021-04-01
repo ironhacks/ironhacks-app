@@ -1,10 +1,12 @@
 import { Component } from 'react'
 import Showdown from 'showdown'
 import showdownKatex from 'showdown-katex'
+import { userMetrics } from '../../util/user-metrics'
 
 class MdContentView extends Component {
   constructor(props) {
     super(props)
+
     const mdConfig = {
       headerLevelStart: 1,
       prefixHeaderId: true,
@@ -23,6 +25,16 @@ class MdContentView extends Component {
     }
 
     this.converter = new Showdown.Converter(mdConfig)
+  }
+
+  trackClicks(e) {
+    if (e.target && e.target.tagName === 'A') {
+      userMetrics({
+        event: 'click_link',
+        linkTarget: e.target.href,
+        linkText: e.target.text,
+      })
+    }
   }
 
   parseContent(content) {
@@ -55,6 +67,7 @@ class MdContentView extends Component {
     const classes = `content_area ${this.props.containerClass}`
     return (
       <div
+        onClick={this.props.enableTracking ? this.trackClicks : null}
         className={classes.trim()}
         dangerouslySetInnerHTML={{
           __html: this.parseContent(this.props.content),
@@ -67,6 +80,7 @@ class MdContentView extends Component {
 MdContentView.defaultProps = {
   emptyText: 'Content is not available yet',
   containerClass: '',
+  enableTracking: false,
 }
 
 export { MdContentView }

@@ -13,6 +13,7 @@ class RulesView extends Component {
       <Row>
         <Col>
           <MdContentView
+            enableTracking={true}
             content={this.props.content}
             encoded={false}
             emptyText="Rules not available yet."

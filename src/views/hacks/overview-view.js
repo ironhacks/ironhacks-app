@@ -13,6 +13,7 @@ class OverviewView extends Component {
       <Row>
         <Col>
           <MdContentView
+            enableTracking={true}
             content={this.props.document}
             encoded={false}
             emptyText="Hack Overview not available yet."

@@ -556,6 +556,7 @@ class SubmitView extends Component {
             )}
 
             <MdContentView
+              enableTracking={true}
               content={this.state.submissionForm.description}
               encoded={false}
               emptyText="Submission Description not available yet."

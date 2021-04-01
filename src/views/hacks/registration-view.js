@@ -100,6 +100,7 @@ class RegistrationView extends Component {
           <Row>
             <Col>
               <MdContentView
+                enableTracking={true}
                 content={this.props.hackDocument}
                 encoded={false}
                 emptyText="Hack Overview not available yet."

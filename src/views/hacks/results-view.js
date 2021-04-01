@@ -461,6 +461,7 @@ class ResultsView extends Component {
                           {this.state.resultsContent && (
                             <div className="bd-1 cl-grey m-4 p-4">
                               <MdContentView
+                                enableTracking={true}
                                 content={this.state.resultsContent}
                                 encoded={false}
                                 emptyText=""
