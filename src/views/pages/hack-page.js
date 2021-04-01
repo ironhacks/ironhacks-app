@@ -151,6 +151,7 @@ class HackPage extends Component {
 
       if (cohortSettings && cohortId in cohortSettings) {
         userCohortSettings = cohortSettings[cohortId].properties
+        userCohortSettings.name = cohortSettings[cohortId].name
         this.setState({ cohortSettings: userCohortSettings })
 
         if ('task' in userCohortSettings) {
@@ -378,6 +379,7 @@ class HackPage extends Component {
                 userCohortList={this.state.userCohortList}
                 cohortSettings={this.state.cohortSettings}
                 userId={this.props.userId}
+                userIsAdmin={this.props.userIsAdmin}
                 hackId={this.state.hackId}
               />
             </Section>
