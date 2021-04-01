@@ -56,7 +56,7 @@ const TestimonialSection = () => {
       <h2 className="title section__title h2 text-center mb-4">
         <span className="font-extrabold">TESTIMONIALS</span>
       </h2>
-      <h3 className="h3 font-bold mb-2">What do prior participants say?</h3>
+      <h3 className="h3 font-bold text-center mb-2">What do prior participants say?</h3>
       <Carousel
         showArrows={true}
         infiniteLoop={true}
