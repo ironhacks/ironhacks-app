@@ -1,5 +1,3 @@
-import { Component } from 'react'
-import { Redirect } from 'react-router-dom'
 import { MdContentView } from '../markdown-viewer'
 import { CommentMeta } from './comment-meta'
 import { ReactionPicker } from './reaction-picker'
@@ -29,33 +27,29 @@ function CommentBody({ content }) {
   return <MdContentView containerClass={'mt-1'} encoded={true} content={content} />
 }
 
-class CommentView extends Component {
-  constructor(props) {
-    super(props)
-    const { user } = props
-    const { authorName } = props.data
-    const name = authorName.split(' ')
-    const profileLetters = name[0].slice(0, 1) + name[1].slice(0, 1)
-
-    this.state = {
-      user,
-      profileLetters,
-    }
-
-    this.firestore = window.firebase.firestore()
-  }
-
-  deleteComment = () => {
-    let commentBody = window.atob(this.props.data.body).trim()
-    if (commentBody.length > 100) {
-      commentBody = commentBody.substring(0, 100) + '...'
+function CommentView({
+  adminPost,
+  commentId,
+  commentRef,
+  createdAt,
+  authorId,
+  authorName,
+  body,
+  user,
+  reactions,
+  reloadComments,
+}) {
+  const deleteComment = () => {
+    let commentPreview = window.atob(body).trim()
+    if (commentPreview.length > 100) {
+      commentPreview = commentPreview.substring(0, 100) + '...'
     }
 
     let alertHtml = `
     <h3 class="h3 mb-2 py-3">
       Confirm you want to delete this comment.
     </h3>
-    <p><small><em>"${commentBody}"</em></small></p>
+    <p><small><em>"${commentPreview}"</em></small></p>
     `
 
     Swal.fire({
@@ -71,7 +65,7 @@ class CommentView extends Component {
     })
       .then((result) => {
         if (result.value) {
-          this.props.commentRef.delete().then(() => {
+          commentRef.delete().then(() => {
             Swal.fire('Deleted!', 'Your comment has been deleted.', 'success').then(() => {
               window.location.reload()
             })
@@ -83,48 +77,40 @@ class CommentView extends Component {
       })
   }
 
-  render() {
-    if (this.state.navigateToForum) {
-      return <Redirect push to="/forum" />
-    }
-
-    return (
-      <div className="comment depth-1 bg-grey-lt3 relative">
-        <CommentHeader
-          adminPost={this.props.data.adminPost}
-          postAuthorName={this.props.data.authorName}
-        />
+  return (
+    <div className="comment depth-1 bg-grey-lt3 relative">
+      <CommentHeader adminPost={adminPost} postAuthorName={authorName} />
 
       <div className="separator" />
 
-        {this.props.data.author === this.state.user.uid && (
-          <div className="comment_controls">
-            <MaterialDesignIcon
-              name="edit"
-              iconClass="btn mr-2"
-              style={{ display: 'none' }}
-              onClick={() => {
-                console.log('click')
-              }}
-            />
-            <MaterialDesignIcon name="delete" iconClass="btn" onClick={this.deleteComment} />
-          </div>
-        )}
-
-        <CommentBody content={this.props.data.body} />
-
-        <div className="comment_footer">
-          <CommentMeta commentData={this.props.data} />
-
-          <ReactionPicker
-            reactions={this.props.data.reactions || { likes: [], dislikes: [] }}
-            docRef={this.props.data.commentRef}
-            user={this.state.user}
+      {authorId === user.uid && (
+        <div className="comment_controls">
+          <MaterialDesignIcon
+            name="edit"
+            iconClass="btn mr-2"
+            style={{ display: 'none' }}
+            onClick={() => {
+              console.log('click')
+            }}
           />
+
+          <MaterialDesignIcon name="delete" iconClass="btn" onClick={deleteComment} />
         </div>
+      )}
+
+      <CommentBody content={body} />
+
+      <div className="comment_footer">
+        <CommentMeta createdAt={createdAt} />
+
+        <ReactionPicker
+          reactions={reactions || { likes: [], dislikes: [] }}
+          docRef={commentRef}
+          userId={user.uid}
+        />
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export { CommentView }

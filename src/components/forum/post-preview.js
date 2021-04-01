@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MaterialDesignIcon } from '../icons'
 
@@ -25,71 +25,52 @@ function PostPreviewAuthorImg({ initials }) {
   )
 }
 
-class PostPreview extends Component {
-  constructor(props) {
-    super(props)
-    const { authorName } = props.thread
-    const name = authorName.split(' ')
-    const initials = name[0].slice(0, 1) + name[1].slice(0, 1)
+function PostPreview({ postId, postRef, postTitle, postAuthor, postDate, thread, user }) {
+  const { authorName } = thread
+  const name = authorName.split(' ')
+  const authorInitials = name[0].slice(0, 1) + name[1].slice(0, 1)
+  const authorFirstName = name[0]
+  const [comments, setComments] = useState(0)
 
-    this.state = {
-      navigate: false,
-      referrer: null,
-      authorInitials: initials,
-      authorName: authorName,
-      authorFirstName: name[0],
-    }
+  useEffect(() => {
+    getCommentCount()
+  })
+
+  const getCommentCount = async () => {
+    let commentSnap = await postRef.collection('comments').get()
+    setComments(commentSnap.docs.length)
   }
 
-  componentDidMount() {
-    this.getCommentCount()
-  }
+  return (
+    <div className="post-preview">
+      <div className="flex">
+        <PostPreviewAuthorImg initials={authorInitials} />
 
-  getCommentCount = async () => {
-    let commentSnap = await this.props.postRef.collection('comments').get()
+        <div>
+          <h2>
+            <PostLink threadId={postId} threadTitle={postTitle} threadData={thread} />
+          </h2>
 
-    let commentCount = commentSnap.docs.length
-    this.setState({ comments: commentCount })
-  }
-
-  render() {
-    return (
-      <div className="post-preview">
-        <div className="flex">
-          <PostPreviewAuthorImg initials={this.state.authorInitials} />
-
-          <div>
-            <h2>
-              <PostLink
-                threadId={this.props.postId}
-                threadTitle={this.props.postTitle}
-                threadData={this.props.thread}
-              />
-            </h2>
-
-            <div className="post-preview__meta cl-grey-dk1">
-              <div className="post-comments">
-                <span>{`${this.state.comments} ${
-                  this.state.comments > 1 ? 'comments' : 'comment'
-                }`}</span>
-              </div>
-
-              <div className="bullet-spacer">&bull;</div>
-
-              <span className="post-date">
-                <MaterialDesignIcon name="time" />
-                <span className="fs-m1">{this.props.postDate}</span>
-              </span>
-
-              <span className="post-author">
-                by <em>{this.state.authorFirstName}</em>
-              </span>
+          <div className="post-preview__meta cl-grey-dk1">
+            <div className="post-comments">
+              <span>{`${comments} ${comments > 1 ? 'comments' : 'comment'}`}</span>
             </div>
+
+            <div className="bullet-spacer">&bull;</div>
+
+            <span className="post-date">
+              <MaterialDesignIcon name="time" />
+              <span className="fs-m1">{postDate}</span>
+            </span>
+
+            <span className="post-author">
+              by <em>{authorFirstName}</em>
+            </span>
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default PostPreview
