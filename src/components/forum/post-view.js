@@ -1,6 +1,5 @@
 import { Component } from 'react'
 import { PostMeta } from './post-meta'
-import Separator from '../../util/separator'
 import { MdContentView } from '../markdown-viewer'
 import { MaterialDesignIcon } from '../icons/material-design-icon'
 import Swal from 'sweetalert2'
@@ -29,7 +28,7 @@ function PostHeader({ postTitle, postAuthorName, adminPost }) {
 }
 
 function PostBody({ content }) {
-  return <MdContentView encoded={true} content={content} />
+  return <MdContentView enableTracking={true} encoded={true} content={content} />
 }
 
 class PostView extends Component {
@@ -107,7 +106,8 @@ class PostView extends Component {
           </div>
         )}
 
-        <Separator />
+        <div className="separator" />
+
         <PostBody content={this.props.data.body} />
 
         <PostMeta commentData={this.props.data} />

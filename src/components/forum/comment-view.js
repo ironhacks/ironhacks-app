@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import { MdContentView } from '../markdown-viewer'
 import { CommentMeta } from './comment-meta'
 import { ReactionPicker } from './reaction-picker'
-import Separator from '../../util/separator'
 import { MaterialDesignIcon } from '../icons/material-design-icon'
 import Swal from 'sweetalert2'
 
@@ -96,7 +95,7 @@ class CommentView extends Component {
           postAuthorName={this.props.data.authorName}
         />
 
-        <Separator />
+      <div className="separator" />
 
         {this.props.data.author === this.state.user.uid && (
           <div className="comment_controls">
