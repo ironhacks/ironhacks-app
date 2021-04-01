@@ -5,11 +5,7 @@
 // *  { event }
 // *  { data }
 //
-const userMetrics = (eventData) => {
-  if (process.env.NODE_ENV !== 'production') {
-    return false
-  }
-
+const userMetrics = (eventData, options = {}) => {
   let user = window.firebase.auth().currentUser
   if (!user) {
     return false
@@ -20,6 +16,14 @@ const userMetrics = (eventData) => {
     userId: user.uid || 'unauthenticated',
     timestamp: window.firebase.firestore.Timestamp.now(),
     pathname: window.location.pathname,
+  }
+
+  if (options.debug) {
+    console.log(metricData)
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    return false
   }
 
   try {
