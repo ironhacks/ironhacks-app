@@ -6,8 +6,7 @@ import {
   FeaturesSection,
   FooterSection,
   HeroSection,
-  //  TestimonialSection,
-  TestimonialSectionSlider,
+  TestimonialSection,
   StatsSection,
   SponsorsSection,
   UpcomingSection,
@@ -41,8 +40,8 @@ const HomePage = () => {
         <ExamplesSection />
       </Section>
 
-      <Section id="home_testimonials_slider" sectionClass="testimonials_section_slider">
-        <TestimonialSectionSlider />
+      <Section id="home_testimonials" sectionClass="testimonials_section">
+        <TestimonialSection />
       </Section>
 
       <Section id="home_stats" sectionClass="stats_section bg-primary">
