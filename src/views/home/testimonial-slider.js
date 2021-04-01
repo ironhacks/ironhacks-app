@@ -44,7 +44,7 @@ const Testimonial = ({ name, association, bio, image, quote }) => {
         <h3> {name}</h3>
         <h4>{association}</h4>
         <h5>{bio}</h5>
-        <p>"{quote}"</p>
+        <p>{quote}</p>
       </div>
     </div>
   )
