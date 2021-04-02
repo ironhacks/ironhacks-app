@@ -15,12 +15,13 @@
   margin-top: -6%;
   margin-left: auto;
   margin-right: auto;
-  padding-top: 6%;
+  padding-top: 10%;
   padding-bottom: 8%;
   padding-left: 5%;
   padding-right: 5%;
   border: 1px solid #ddd;
   height: 306px;
+  width: 100%;
 }
 
 .carousel .control-dots {
@@ -57,7 +58,7 @@
 }
 
 .myCarousel p:before {
-  content: "“";
+  content: '“';
   color: #aaa;
   font-size: 26px;
   font-family: monospace;
@@ -65,7 +66,7 @@
 }
 
 .myCarousel p:after {
-  content: "”";
+  content: '”';
   color: #aaa;
   font-size: 26px;
   font-family: monospace;
@@ -86,17 +87,34 @@
   top: 50% !important;
 }
 
+.carousel .slide img {
+  border-radius: 50%;
+}
+
 @media only screen and (max-width: 934px) {
   .carousel-root {
-    outline: 0;
-    width: 93% !important;
+    width: 90% !important;
     margin: auto !important;
   }
 
-
-
-
-  .carousel .slide img {
-    border-radius: 50%;
+  .myCarousel {
+    background: #fafafa;
+    margin-top: -13%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 16%;
+    padding-bottom: 8%;
+    padding-left: 5%;
+    padding-right: 5%;
+    border: 1px solid #ddd;
+    height: 470px;
+    width: 100%;
+  }
+  .myCarousel p {
+    font-weight: 100 !important;
+    line-height: 25px !important;
+    color: #222;
+    font-size: 15px;
+    max-height: 67px;
   }
 }
