@@ -40,6 +40,7 @@
     "react-markdown": "^4.3.1",
     "react-mde": "^10.2.1",
     "react-redux": "^7.2.2",
+    "react-responsive-carousel": "^3.2.18",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
@@ -128,5 +129,5 @@
     "styles:dev": "npm run styles:build && node-sass --output-style compressed -w -r -o src/styles src/styles/scss",
     "test": "react-scripts test -env=jsdom"
   },
-  "version": "2.2.8"
+  "version": "2.2.10"
 }

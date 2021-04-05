@@ -1,6 +1,6 @@
 import { fire2Date } from '../../util/date-utils'
 
-const PostMeta = ({ commentData, totalComments }) => {
+function PostMeta({ commentData, totalComments }) {
   const dateSettings = {
     weekday: 'short',
     year: 'numeric',

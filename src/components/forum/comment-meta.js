@@ -1,6 +1,6 @@
 import { fire2Date } from '../../util/date-utils'
 
-const CommentMeta = ({ commentData }) => {
+function CommentMeta({ createdAt }) {
   const dateSettings = {
     weekday: 'short',
     year: 'numeric',
@@ -11,7 +11,7 @@ const CommentMeta = ({ commentData }) => {
     timeZoneName: 'short',
   }
 
-  const date = fire2Date(commentData.createdAt).toLocaleString('en-US', dateSettings)
+  const date = fire2Date(createdAt).toLocaleString('en-US', dateSettings)
 
   return (
     <div className="comment_meta">

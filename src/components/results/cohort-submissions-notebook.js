@@ -1,6 +1,7 @@
 import { Component } from 'react'
+import { userMetrics } from '../../util/user-metrics'
 
-function ParticipantScoreRow({ participant }) {
+function ParticipantScoreRow({ participant, submission }) {
   let notebooks = []
   participant.files.forEach((file, index) => {
     if (file.type === 'application/x-ipynb+json') {
@@ -23,6 +24,15 @@ function ParticipantScoreRow({ participant }) {
         <div className="text-capitalize flex-1 pr-2 text-right">
           <a
             className="badge bg-primary cl-black"
+            onClick={() => {
+              userMetrics({
+                event: 'results_notebook_opened',
+                data: {
+                  selectedUserId: participant.userId,
+                  submission: submission,
+                },
+              })
+            }}
             href={`/notebook-viewer?path=${notebooks[0].url}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -53,7 +63,11 @@ class CohortSubmissionsNotebook extends Component {
           </div>
           <div>
             {this.props.participantData.map((item, index) => (
-              <ParticipantScoreRow key={index} participant={item} />
+              <ParticipantScoreRow
+                key={index}
+                participant={item}
+                submission={this.props.currentSubmission}
+              />
             ))}
           </div>
         </div>

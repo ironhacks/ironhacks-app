@@ -1,7 +1,10 @@
 function UserScoreRow({ name, label, value, format }) {
-  if (format === 'percent') {
+  if (!value) {
+    value = 'n/a'
+  } else if (format === 'percent') {
     value = `${value * 100}%`
   }
+
   return (
     <tr className="">
       <td className="">{label}</td>

@@ -5,7 +5,7 @@ function UserScoreRow({ name, label, value }) {
   return (
     <div className="flex flex-between py-3 px-2 font-bold">
       <div className="">{label}</div>
-      <div className="">{value.toLocaleString('en-US')}</div>
+      <div className="">{value ? value.toLocaleString('en-US') : 'N/A'}</div>
     </div>
   )
 }

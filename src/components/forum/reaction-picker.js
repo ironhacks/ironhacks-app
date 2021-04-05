@@ -1,132 +1,100 @@
-import { Component } from 'react'
+import { useState, useEffect } from 'react'
 import { ReactionButton } from './reaction-button'
 
-class ReactionPicker extends Component {
-  constructor(props) {
-    super(props)
-    const { likes, dislikes } = this.props.reactions
+function ReactionPicker({ reactions, userId, docRef }) {
+  const [syncing, setSyncing] = useState(false)
+  const [likes, setLikes] = useState(reactions.likes)
+  const [dislikes, setDislikes] = useState(reactions.dislikes)
+  const [isLiked, setIsLiked] = useState(likes.includes(userId))
+  const [isDisliked, setIsDisliked] = useState(dislikes.includes(userId))
 
-    this.state = {
-      syncing: false,
-      likes: likes,
-      dislikes: dislikes,
-      isLiked: likes.includes(this.props.user.uid),
-      isDisliked: dislikes.includes(this.props.user.uid),
+  useEffect(() => {
+    if (syncing) {
+      docRef
+        .update({
+          reactions: {
+            likes: likes,
+            dislikes: dislikes,
+          },
+        })
+        .then(() => {
+          setSyncing(false)
+        })
     }
-  }
+  }, [syncing, setSyncing, likes, dislikes, isLiked, isDisliked, docRef])
 
-  onVoteUp = () => {
-    if (this.state.syncing) {
+  const onVoteUp = () => {
+    if (syncing) {
       return false
     }
 
-    this.setState({ syncing: true })
+    setSyncing(true)
 
-    let likes = this.state.likes
-    let dislikes = this.state.dislikes
-    let userID = this.props.user.uid
-    let isLiked = false
-    let isDisliked = false
-
-    if (likes.includes(userID)) {
-      likes = likes.filter((item) => {
-        return item !== userID
+    if (isDisliked) {
+      let updated = dislikes.filter((item) => {
+        return item !== userId
       })
-    } else {
-      isLiked = true
-      likes.push(userID)
-      dislikes = dislikes.filter((item) => {
-        return item !== userID
-      })
+      setDislikes(updated)
+      setIsDisliked(false)
     }
 
-    this.setState({
-      isLiked: isLiked,
-      likes: likes,
-      isDisliked: isDisliked,
-      dislikes: dislikes,
-    })
-
-    this.updateScore({
-      likes: likes,
-      dislikes: dislikes,
-    })
+    if (isLiked) {
+      let updated = likes.filter((item) => {
+        return item !== userId
+      })
+      setLikes(updated)
+      setIsLiked(false)
+    } else {
+      let updated = likes.concat(userId)
+      setLikes(updated)
+      setIsLiked(true)
+    }
   }
 
-  onVoteDown = () => {
-    if (this.state.syncing) {
+  function onVoteDown() {
+    if (syncing) {
       return false
     }
 
-    this.setState({ syncing: true })
+    setSyncing(true)
 
-    let likes = this.state.likes
-    let dislikes = this.state.dislikes
-    let userID = this.props.user.uid
-    let isLiked = false
-    let isDisliked = false
-
-    if (dislikes.includes(userID)) {
-      dislikes = dislikes.filter((item) => {
-        return item !== userID
+    if (isLiked) {
+      let updated = likes.filter((item) => {
+        return item !== userId
       })
-    } else {
-      isDisliked = true
-      dislikes.push(userID)
-      likes = likes.filter((item) => {
-        return item !== userID
-      })
+      setLikes(updated)
+      setIsLiked(false)
     }
 
-    this.setState({
-      isLiked: isLiked,
-      likes: likes,
-      isDisliked: isDisliked,
-      dislikes: dislikes,
-    })
-
-    this.updateScore({
-      likes: likes,
-      dislikes: dislikes,
-    })
-  }
-
-  updateScore = (data) => {
-    this.props.docRef
-      .update({
-        reactions: {
-          likes: data.likes,
-          dislikes: data.dislikes,
-        },
+    if (isDisliked) {
+      let updated = dislikes.filter((item) => {
+        return item !== userId
       })
-      .then(() => {
-        this.setState({ syncing: false })
-      })
+      setDislikes(updated)
+      setIsDisliked(false)
+    } else {
+      let updated = dislikes.concat(userId)
+      setDislikes(updated)
+      setIsDisliked(true)
+    }
   }
 
-  render() {
-    return (
-      <div className="reaction_container">
-        {this.state.likes.length >= 0 && (
-          <ReactionButton
-            type="upvote"
-            active={this.state.isliked}
-            count={this.state.likes.length}
-            onReact={this.onVoteUp}
-          />
-        )}
+  return (
+    <div className="reaction_container">
+      {likes.length >= 0 && (
+        <ReactionButton type="upvote" active={isLiked} count={likes.length} onReact={onVoteUp} />
+      )}
 
-        {this.state.dislikes.length >= 0 && (
-          <ReactionButton
-            type="downvote"
-            active={this.state.isDisliked}
-            count={this.state.dislikes.length}
-            onReact={this.onVoteDown}
-          />
-        )}
-      </div>
-    )
-  }
+      {dislikes.length >= 0 && (
+        <ReactionButton
+          type="downvote"
+          active={isDisliked}
+          count={dislikes.length}
+          onReact={onVoteDown}
+        />
+      )}
+    </div>
+  )
 }
 
 export { ReactionPicker }

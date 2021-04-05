@@ -1,6 +1,6 @@
 import { MaterialDesignIcon } from '../icons/material-design-icon'
 
-const ReactionButton = ({ count, type, active, onReact }) => {
+function ReactionButton({ count, type, active, onReact }) {
   return (
     <div className={['reaction_button', active ? 'active' : ''].join(' ').trim()} onClick={onReact}>
       <MaterialDesignIcon

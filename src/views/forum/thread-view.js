@@ -101,11 +101,15 @@ class ThreadView extends Component {
           {this.state.comments.map((comment, index) => (
             <CommentView
               key={comment.commentId}
+              adminPost={comment.adminPost}
               commentId={comment.commentId}
               commentRef={comment.commentRef}
+              createdAt={comment.createdAt}
+              authorId={comment.author}
+              authorName={comment.authorName}
               body={comment.body}
-              data={comment}
               user={this.state.user}
+              reactions={comment.reactions}
               reloadComments={this.getComments}
             />
           ))}
