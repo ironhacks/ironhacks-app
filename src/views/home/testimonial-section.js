@@ -1,4 +1,5 @@
-import { Row, Col } from '../../components/layout'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import { Carousel } from 'react-responsive-carousel'
 
 const testimonialData = [
   {
@@ -37,19 +38,13 @@ const testimonialData = [
 
 const Testimonial = ({ name, association, bio, image, quote }) => {
   return (
-    <div className="my-5 py-3">
-      <div className="flex">
-        <img
-          src={image}
-          style={{ width: 80, height: 80, borderRadius: '50%', marginRight: '1em' }}
-          alt={name}
-        />
-
-        <div className="font-italic">"{quote}"</div>
-      </div>
-
-      <div className="my-4 fs-m1 text-right">
-        - {name} ({association}), {bio}
+    <div>
+      <img src={image} style={{ width: 80, height: 80, borderRadius: '50%', marginRight: '1em' }} />
+      <div className="myCarousel">
+        <h3> {name}</h3>
+        <h4>{association}</h4>
+        <h5>{bio}</h5>
+        <p>{quote}</p>
       </div>
     </div>
   )
@@ -57,14 +52,19 @@ const Testimonial = ({ name, association, bio, image, quote }) => {
 
 const TestimonialSection = () => {
   return (
-    <Row rowClass={'py-6 w-70p mx-auto'}>
-      <Col>
-        <h2 className="title section__title h2 text-center mb-4">
-          <span className="font-extrabold">TESTIMONIALS</span>
-        </h2>
-
-        <h3 className="h3 font-bold mb-2">What do prior participants say?</h3>
-
+    <div>
+      <h2 className="title section__title h2 text-center mb-4">
+        <span className="font-extrabold">TESTIMONIALS</span>
+      </h2>
+      <h3 className="h3 font-bold text-center mb-2">What do prior participants say?</h3>
+      <Carousel
+        showArrows={true}
+        infiniteLoop={true}
+        showThumbs={false}
+        showStatus={false}
+        autoPlay={true}
+        interval={6100}
+      >
         {testimonialData.map((item, index) => (
           <Testimonial
             key={index}
@@ -75,8 +75,8 @@ const TestimonialSection = () => {
             bio={item.bio}
           />
         ))}
-      </Col>
-    </Row>
+      </Carousel>
+    </div>
   )
 }
 
