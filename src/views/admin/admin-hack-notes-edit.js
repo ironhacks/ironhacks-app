@@ -73,7 +73,6 @@ class AdminNoteEdit extends Component {
     let timeUpdated = new Date()
     let data = this.state.noteData
     data.updated = timeUpdated.toDateString()
-    data.created = timeUpdated.toISOString()
     data.content = data.content.trim()
     data.created_by = userDetails.name
     data.email = userDetails.email

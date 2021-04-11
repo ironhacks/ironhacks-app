@@ -38,12 +38,14 @@ class AdminNotes extends Component {
     // created
     // updated
     // result.sort((a,b)=>{ return a.created.localeCompare(b.created) })
-    result.sort((a, b) => {
-      return a.created.localeCompare(b.created)
-    })
+    result
+      .sort((a, b) => {
+        return a.created.localeCompare(b.created)
+      })
+      .reverse()
+
     // result.sort((a,b)=>{ return b.title.localeCompare(a.title) })
     // result.sort((a,b)=>{ return b.created.localeCompare(a.created) })
-
     this.setState({ notes: result })
   }
 
