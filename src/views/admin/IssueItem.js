@@ -15,12 +15,13 @@ function IssueItem({ issue, deletenote }) {
         <Button
           onClick={() => deletenote(issue.noteId)}
           variant="outline-danger"
+          style={{ marginLeft: 5 + 'px' }}
           className="float-right"
         >
           Delete
         </Button>
         <Link to={`notes/${issue.noteId}/edit`}>
-          <Button variant="outline-info" className="float-right">
+          <Button variant="outline-info" style={{ marginRight: 5 + 'px' }} className="float-right">
             Edit
           </Button>
         </Link>
