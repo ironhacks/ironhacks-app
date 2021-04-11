@@ -52,7 +52,7 @@ class ParticipantScoreRow extends Component {
             </>
           ) : (
             <>
-            <span className="ml-1">{this.summaryPreview}</span>
+              <span className="ml-1">{this.summaryPreview}</span>
               <div
                 className="badge bd-1 button cl-pink ml-2 pb-1 px-1"
                 onClick={this.expandPreview}

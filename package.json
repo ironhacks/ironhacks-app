@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.1",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "codemirror": "^5.58.2",
     "friendly-words": "^1.1.10",
@@ -47,12 +48,14 @@
     "react-select": "^3.1.1",
     "react-window": "^1.8.6",
     "redux": "^4.0.5",
+    "rsuite": "^4.9.3",
     "showdown": "^1.9.1",
     "showdown-katex": "^0.8.0",
     "sweetalert2": "^9.17.2",
     "warning": "^4.0.3"
   },
   "devDependencies": {
+    "@babel/helper-builder-react-jsx": "^7.12.13",
     "@babel/preset-react": "^7.12.1",
     "@testing-library/dom": "^7.26.3",
     "@testing-library/jest-dom": "^4.2.4",

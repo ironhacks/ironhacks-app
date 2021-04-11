@@ -18,6 +18,9 @@ import AdminHackTasks from './admin-hack-tasks'
 import AdminHackTutorialEdit from './admin-hack-tutorial-edit'
 import AdminHackTutorialNew from './admin-hack-tutorial-new'
 import AdminHackTutorials from './admin-hack-tutorials'
+import AdminHackNoteEdit from './admin-hack-notes-edit'
+import AdminHackNoteNew from './admin-hack-notes-new'
+import AdminHackNotes from './admin-hack-notes'
 import { AdminUtilsMetrics } from './admin-utils-metrics'
 import { AdminUtilsUsers } from './admin-utils-users'
 
@@ -42,6 +45,9 @@ const AdminHack = {
   TutorialEdit: AdminHackTutorialEdit,
   TutorialNew: AdminHackTutorialNew,
   Tutorials: AdminHackTutorials,
+  NotesEdit: AdminHackNoteEdit,
+  NotesNew: AdminHackNoteNew,
+  Notes: AdminHackNotes,
 }
 
 const AdminUtils = {

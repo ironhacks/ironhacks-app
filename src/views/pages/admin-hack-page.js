@@ -74,6 +74,7 @@ class AdminHackPage extends Component {
                 { name: 'Submissions', path: 'submissions' },
                 { name: 'Tasks', path: 'tasks' },
                 { name: 'Tutorials', path: 'tutorials' },
+                { name: 'Notes', path: 'notes' },
                 { name: 'Banners', path: 'banners' },
                 { name: 'Extensions', path: 'extensions' },
                 // {name: 'Forums', path: 'forums'},
@@ -256,6 +257,30 @@ class AdminHackPage extends Component {
 
                       <Route path={`${this.baseUrl}/tutorials/:tutorialId/edit`}>
                         <AdminHack.TutorialEdit
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                        />
+                      </Route>
+
+                      <Route exact path={`${this.baseUrl}/notes`}>
+                        <AdminHack.Notes
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                        />
+                      </Route>
+
+                      <Route path={`${this.baseUrl}/notes/new`}>
+                        <AdminHack.NotesNew
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                        />
+                      </Route>
+
+                      <Route path={`${this.baseUrl}/notes/:noteId/edit`}>
+                        <AdminHack.NotesEdit
                           hackId={this.state.hackId}
                           hackName={this.state.hackName}
                           hackSlug={this.state.hackData.hackSlug}
