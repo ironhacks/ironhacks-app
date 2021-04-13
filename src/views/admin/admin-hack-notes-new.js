@@ -44,6 +44,10 @@ class AdminNoteNew extends Component {
     this.setState({ noteData: data })
   }
 
+  cancelNew = () => {
+    window.history.back()
+  }
+
   onInputChanged = (name, value) => {
     let data = this.state.noteData
     data[name] = value
@@ -122,6 +126,9 @@ class AdminNoteNew extends Component {
               disabled={this.state.loading}
             >
               Create
+            </Button>
+            <Button width="150px" onClick={this.cancelNew}>
+              Cancel
             </Button>
           </div>
         </Section>

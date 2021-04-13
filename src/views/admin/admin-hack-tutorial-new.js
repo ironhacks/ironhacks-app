@@ -59,6 +59,10 @@ class AdminTutorialNew extends Component {
     window.location = `/admin/hacks/${this.props.hackId}/tutorials`
   }
 
+  cancelNew = () => {
+    window.history.back()
+  }
+
   render() {
     return (
       <>
@@ -100,6 +104,9 @@ class AdminTutorialNew extends Component {
               disabled={this.state.loading}
             >
               Publish
+            </Button>
+            <Button width="150px" onClick={this.cancelNew}>
+              Cancel
             </Button>
           </div>
         </Section>
