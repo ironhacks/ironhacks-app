@@ -3,6 +3,26 @@ import { Card, Accordion, Badge, Button } from 'react-bootstrap'
 import ReactMarkdown from 'react-markdown'
 import { Link } from 'react-router-dom'
 
+const stateColor = (state, issue) => {
+  if (issue.created_by === 'Manthan Keim') {
+    return 'primary'
+  } else if (issue.created_by === 'Matt Harris') {
+    return 'info'
+  } else if (issue.created_by === 'Sabine') {
+    return 'success'
+  } else if (issue.created_by === 'Elizabeth') {
+    return 'secondary'
+  } else if (issue.created_by === 'Bryan Herbert') {
+    return 'danger'
+  } else if (issue.created_by === 'Feny Patel') {
+    return 'dark'
+  } else if (issue.created_by === 'RCODI') {
+    return 'warning'
+  } else {
+    return 'light'
+  }
+}
+
 function IssueItem({ issue, deletenote }) {
   return (
     <Card>
@@ -14,7 +34,7 @@ function IssueItem({ issue, deletenote }) {
           height="29"
           style={{ borderRadius: 50, marginRight: 5 + 'px' }}
         />
-        <Badge pill variant="info">
+        <Badge variant={stateColor(issue.state, issue)}>
           {issue.noteId} Created on {issue.created_at} by {issue.created_by}
         </Badge>{' '}
         {issue.title || ''}
