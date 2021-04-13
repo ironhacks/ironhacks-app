@@ -7,7 +7,13 @@ function IssueItem({ issue, deletenote }) {
   return (
     <Card>
       <Accordion.Toggle as={Card.Header} eventKey={issue.noteId}>
-        <img src={issue.photo_url} alt="user_photo" width="29" height="29" />
+        <img
+          src={issue.photo_url}
+          alt="user_photo"
+          width="29"
+          height="29"
+          style={{ borderRadius: 50, marginRight: 5 + 'px' }}
+        />
         <Badge pill variant="info">
           {issue.noteId} Created on {issue.created_at} by {issue.created_by}
         </Badge>{' '}
