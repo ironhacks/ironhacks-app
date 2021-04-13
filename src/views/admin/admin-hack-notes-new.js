@@ -5,20 +5,6 @@ import { InputText } from '../../components/input'
 import { userMetrics } from '../../util/user-metrics'
 import { Section } from '../../components/layout'
 
-var userDetails = {}
-window.firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    userDetails = {
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-      nid: user.uid,
-    }
-  } else {
-    // No user is signed in.
-  }
-})
-
 class AdminNoteNew extends Component {
   constructor(props) {
     super(props)
@@ -62,11 +48,11 @@ class AdminNoteNew extends Component {
     data.content = data.content.trim()
     data.created = timeUpdated.toISOString()
     data.updated = timeUpdated.toDateString()
-    data.created_by = userDetails.name
+    data.created_by = this.props.username
     data.created_at = timeUpdated.toDateString()
-    data.email = userDetails.email
-    data.photo_url = userDetails.photo
-    data.uid = userDetails.nid
+    data.email = this.props.useremail
+    data.photo_url = this.props.userphotourl
+    data.uid = this.props.nid
 
     let doc = await window.firebase
       .firestore()

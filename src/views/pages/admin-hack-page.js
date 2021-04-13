@@ -44,7 +44,6 @@ class AdminHackPage extends Component {
       .get()
 
     const result = Object.assign({}, { hackId: _hackId }, hackData.data(), adminHackData.data())
-
     this.setState({
       hack: result,
       hackData: result,
@@ -276,6 +275,10 @@ class AdminHackPage extends Component {
                           hackId={this.state.hackId}
                           hackName={this.state.hackName}
                           hackSlug={this.state.hackData.hackSlug}
+                          username={this.props.user.displayName}
+                          useremail={this.props.user.email}
+                          nid={this.props.user.uid}
+                          userphotourl={this.props.user.photoURL}
                         />
                       </Route>
 
@@ -284,6 +287,10 @@ class AdminHackPage extends Component {
                           hackId={this.state.hackId}
                           hackName={this.state.hackName}
                           hackSlug={this.state.hackData.hackSlug}
+                          username={this.props.user.displayName}
+                          useremail={this.props.user.email}
+                          nid={this.props.user.uid}
+                          userphotourl={this.props.user.photoURL}
                         />
                       </Route>
 

@@ -5,7 +5,6 @@ import { Button } from '../../components/buttons'
 import { withRouter } from 'react-router-dom'
 import { userMetrics } from '../../util/user-metrics'
 import { Section } from '../../components/layout'
-import userDetails from './admin-hack-notes-new'
 
 class AdminNoteEdit extends Component {
   constructor(props) {
@@ -74,10 +73,10 @@ class AdminNoteEdit extends Component {
     let data = this.state.noteData
     data.updated = timeUpdated.toDateString()
     data.content = data.content.trim()
-    data.created_by = userDetails.name
-    data.email = userDetails.email
-    data.photo_url = userDetails.photo
-    data.uid = userDetails.nid
+    data.created_by = this.props.username
+    data.email = this.props.useremail
+    data.uid = this.props.nid
+    data.photo_url = this.props.userphotourl
 
     await window.firebase
       .firestore()

@@ -114,12 +114,18 @@ class AdminNotes extends Component {
             <div className="col-12">
               <Accordion defaultActiveKey="0">
                 {this.state.notes.map((item, index) => (
-                  <IssueItem issue={item} key={index} deletenote={this.showConfirmDeleteModal} />
+                  <IssueItem
+                    issue={item}
+                    key={index}
+                    deletenote={this.showConfirmDeleteModal}
+                    // photourl={this.props.userphotourl}
+                  />
                 ))}
               </Accordion>
             </div>
           </div>
         </Section>
+        {}
       </>
     )
   }
