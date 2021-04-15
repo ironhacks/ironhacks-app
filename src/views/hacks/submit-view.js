@@ -359,9 +359,7 @@ class SubmitView extends Component {
     const userEmail = this.state.user.email
     const userId = this.props.userId
     const hackId = this.props.hackId
-    const formId = crc32(`${this.props.hackSlug}|${this.submissionId}`)
-      .toString(16)
-      .toUpperCase()
+    const formId = crc32(`${this.props.hackSlug}|${this.submissionId}`).toUpperCase()
     const formType = `hackSubmitSurvey_${formId}`
     const alertUrl = `${formUrl}?userid=${userId}&email=${userEmail}&hackid=${hackId}&type=${formType}`
 
