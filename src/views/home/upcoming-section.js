@@ -1,5 +1,5 @@
 import { Row, Col } from '../../components/layout'
-import { Img } from '../../components/img'
+import { MaterialDesignIcon } from '../../components/icons'
 
 const UpcomingSection = () => {
   return (
@@ -8,20 +8,15 @@ const UpcomingSection = () => {
         UPCOMING <span className="font-extrabold">IRONHACKS</span>
       </h2>
       <Col colClass="text-center">
-        <a href="/covid19" className="nohover">
-          <Img
-            responsive={true}
-            baseUrl={
-              'https://firebasestorage.googleapis.com/v0/b/the-ironhacks-platform-dev.appspot.com/o'
-            }
-            filePath={'media%2Fimg%2F'}
-            fileName={
-              'covid19-fall-hack-cta-2.png?alt=media&token=e3f36e30-06f1-4ee4-893a-d7b22ccf7858'
-            }
-            imgClass="banner_img mb-4"
-            alt="Upcoming Hack"
-          />
-        </a>
+        <h3 className="h3">
+          <div className="pb-5">Learn more about upcoming news and events on the</div>
+          <a href="https://blog.ironhacks.com" className="nohover">
+            <div>
+              <MaterialDesignIcon name="arrow-forward" iconClass="pr-2" />
+              <span className="text-underline">IronHacks Blog</span>
+            </div>
+          </a>
+        </h3>
       </Col>
     </Row>
   )
