@@ -1,65 +1,102 @@
 import { Component } from 'react'
 import MarkdownEditor from '../../components/markdown-editor'
-import { Button } from '../../components/buttons'
 import { InputText } from '../../components/input'
+import { Button } from '../../components/buttons'
+import { withRouter } from 'react-router-dom'
 import { userMetrics } from '../../util/user-metrics'
 import { Section } from '../../components/layout'
 
-class AdminTutorialNew extends Component {
+class AdminNoteEdit extends Component {
   constructor(props) {
     super(props)
+
+    this.noteId = this.props.match.params.noteId
+
     this.state = {
-      tutorialData: {
+      noteData: {
         title: '',
-        slug: '',
         content: '',
-        created: '',
+        created_at: '',
         updated: '',
         tags: [],
+        created_by: '',
+        email: '',
+        photo_url: '',
+        uid: '',
       },
       loading: false,
     }
   }
 
+  componentDidMount() {
+    this.getNote()
+  }
+
   onEditorChange = (value) => {
-    let data = this.state.tutorialData
+    let data = this.state.noteData
     data.content = value
-    this.setState({ tutorialData: data })
+    this.setState({ noteData: data })
   }
 
   onInputChanged = (name, value) => {
-    let data = this.state.tutorialData
+    let data = this.state.noteData
     data[name] = value
-    this.setState({ tutorialData: data })
+    this.setState({ noteData: data })
   }
 
-  publishTutorial = async () => {
+  getNote = async () => {
     this.setState({ loading: true })
-
-    let timeUpdated = new Date()
-    let data = this.state.tutorialData
-    data.content = data.content.trim()
-    data.created = timeUpdated.toISOString()
-    data.updated = timeUpdated.toISOString()
 
     let doc = await window.firebase
       .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
-      .collection('tutorials')
-      .add(data)
+      .collection('notes')
+      .doc(this.noteId)
+      .get()
+
+    let note = {
+      noteId: this.noteId,
+      ...doc.data(),
+    }
+
+    this.setState({
+      noteData: note,
+      loading: false,
+    })
+  }
+
+  updateNote = async () => {
+    this.setState({ loading: true })
+
+    let timeUpdated = new Date()
+    let data = this.state.noteData
+    data.updated = timeUpdated.toDateString()
+    data.content = data.content.trim()
+    data.created_by = this.props.username
+    data.email = this.props.useremail
+    data.uid = this.props.nid
+    data.photo_url = this.props.userphotourl
+
+    await window.firebase
+      .firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('notes')
+      .doc(this.noteId)
+      .update(data)
 
     userMetrics({
-      event: 'tutorial-created',
-      tutorialId: doc.id,
+      event: 'note-created',
+      noteId: this.noteId,
       hackId: this.props.hackId,
     })
 
     this.setState({ loading: false })
-    window.location = `/admin/hacks/${this.props.hackId}/tutorials`
+    window.location = `/admin/hacks/${this.props.hackId}/notes`
   }
 
-  cancelNew = () => {
+  cancelEdit = () => {
     window.history.back()
   }
 
@@ -67,7 +104,7 @@ class AdminTutorialNew extends Component {
     return (
       <>
         <Section sectionClass="py-2">
-          <h2 className="h3 font-bold">{`${this.props.hackName} New Tutorial`}</h2>
+          <h2 className="h3 font-bold">{`${this.props.hackName} Edit Note`}</h2>
 
           <InputText
             containerClass="flex py-2 flex-between flex-align-center"
@@ -75,7 +112,7 @@ class AdminTutorialNew extends Component {
             labelClass="h4 mr-3 mb-0"
             name="title"
             label="Title"
-            value={this.state.tutorialData.title || ''}
+            value={this.state.noteData.title || ''}
             onInputChange={this.onInputChanged}
             disabled={this.state.loading}
           />
@@ -83,7 +120,7 @@ class AdminTutorialNew extends Component {
           <MarkdownEditor
             editorLayout="tabbed"
             onEditorChange={this.onEditorChange}
-            value={this.state.tutorialData.content}
+            value={this.state.noteData.content}
           />
 
           <div
@@ -100,12 +137,12 @@ class AdminTutorialNew extends Component {
               primary
               width="150px"
               margin="0 0 0 15px"
-              onClick={this.publishTutorial}
+              onClick={this.updateNote}
               disabled={this.state.loading}
             >
-              Publish
+              Update
             </Button>
-            <Button width="150px" onClick={this.cancelNew}>
+            <Button width="150px" onClick={this.cancelEdit}>
               Cancel
             </Button>
           </div>
@@ -115,4 +152,4 @@ class AdminTutorialNew extends Component {
   }
 }
 
-export default AdminTutorialNew
+export default withRouter(AdminNoteEdit)

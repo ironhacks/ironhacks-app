@@ -44,7 +44,6 @@ class AdminHackPage extends Component {
       .get()
 
     const result = Object.assign({}, { hackId: _hackId }, hackData.data(), adminHackData.data())
-
     this.setState({
       hack: result,
       hackData: result,
@@ -74,6 +73,7 @@ class AdminHackPage extends Component {
                 { name: 'Submissions', path: 'submissions' },
                 { name: 'Tasks', path: 'tasks' },
                 { name: 'Tutorials', path: 'tutorials' },
+                { name: 'Notes', path: 'notes' },
                 { name: 'Banners', path: 'banners' },
                 { name: 'Extensions', path: 'extensions' },
                 // {name: 'Forums', path: 'forums'},
@@ -259,6 +259,38 @@ class AdminHackPage extends Component {
                           hackId={this.state.hackId}
                           hackName={this.state.hackName}
                           hackSlug={this.state.hackData.hackSlug}
+                        />
+                      </Route>
+
+                      <Route exact path={`${this.baseUrl}/notes`}>
+                        <AdminHack.Notes
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                        />
+                      </Route>
+
+                      <Route path={`${this.baseUrl}/notes/new`}>
+                        <AdminHack.NotesNew
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                          username={this.props.user.displayName}
+                          useremail={this.props.user.email}
+                          nid={this.props.user.uid}
+                          userphotourl={this.props.user.photoURL}
+                        />
+                      </Route>
+
+                      <Route path={`${this.baseUrl}/notes/:noteId/edit`}>
+                        <AdminHack.NotesEdit
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                          username={this.props.user.displayName}
+                          useremail={this.props.user.email}
+                          nid={this.props.user.uid}
+                          userphotourl={this.props.user.photoURL}
                         />
                       </Route>
 
