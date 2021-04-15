@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { Button } from '../../components/buttons'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import randomTeamname from '../../services/random-teamname'
 import { userMetrics } from '../../util/user-metrics'
 
 class AdminNewHackPage extends Component {
@@ -55,6 +56,43 @@ class AdminNewHackPage extends Component {
       .doc('participants')
       .set({})
 
+    let cohortName = randomTeamname()
+    let cohortId = [
+      cohortName.replace(/ /g, '-').toLowerCase(),
+      Math.floor(Math.random() * 100)
+        .toString()
+        .padStart(2, '0'),
+    ].join('-')
+
+    await window.firebase
+      .firestore()
+      .collection('hacks')
+      .doc(hackId)
+      .collection('registration')
+      .doc('settings')
+      .set({
+        [cohortId]: {
+          name: cohortName,
+          id: cohortId,
+          label: 'default cohort',
+          properties: {
+            forumEnabled: false,
+            showNotebooks: false,
+            showSummaries: false,
+          },
+        },
+      })
+
+    await window.firebase
+      .firestore()
+      .collection('hacks')
+      .doc(hackId)
+      .collection('registration')
+      .doc('cohorts')
+      .set({
+        [cohortId]: [],
+      })
+
     await window.firebase
       .firestore()
       .collection('hacks')
@@ -80,7 +118,7 @@ class AdminNewHackPage extends Component {
       .set({})
 
     userMetrics({
-      event: 'hack_created',
+      event: 'hack-created',
       hackId: hackId,
     })
 
