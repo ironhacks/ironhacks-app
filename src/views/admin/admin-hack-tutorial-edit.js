@@ -80,7 +80,7 @@ class AdminTutorialEdit extends Component {
       .update(data)
 
     userMetrics({
-      event: 'tutorial-created',
+      event: 'tutorial-updated',
       tutorialId: this.tutorialId,
       hackId: this.props.hackId,
     })
