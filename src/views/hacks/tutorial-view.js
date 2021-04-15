@@ -18,7 +18,7 @@ class TutorialView extends Component {
   componentDidMount() {
     this.getTutorial()
     userMetrics({
-      event: 'view_tutorial',
+      event: 'view-tutorial',
       tutorialId: this.tutorialId,
     })
   }

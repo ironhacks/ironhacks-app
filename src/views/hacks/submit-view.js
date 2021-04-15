@@ -484,7 +484,12 @@ class SubmitView extends Component {
     const userId = this.props.userId
     const hackId = this.props.hackId
     const submissionId = this.submissionId
-    userMetrics({ event: 'user_submission' })
+
+    userMetrics({
+      event: 'user-submission',
+      hackId: hackId,
+      submissionId: submissionId,
+    })
 
     // for (let field of submissionData.fields){
     //   if (typeof(submissionData.fields[field]) === 'undefined'){

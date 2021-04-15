@@ -16,7 +16,7 @@ class TaskView extends Component {
   }
 
   componentDidMount() {
-    userMetrics({ event: 'view_task' })
+    userMetrics({ event: 'view-task' })
     this.getUserForms()
     this.getTask()
   }

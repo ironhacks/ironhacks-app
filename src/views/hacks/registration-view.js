@@ -17,7 +17,7 @@ class RegistrationView extends Component {
     })
 
     userMetrics({
-      event: 'register_hack',
+      event: 'register-hack',
       hackId: this.props.hackId,
     })
 
@@ -75,11 +75,13 @@ class RegistrationView extends Component {
   render() {
     return (
       <>
-        <Section sectionClass="py-2">
-          <Row>
-            <img src={this.props.hackBannerImg} alt="Hack Banner Img" />
-          </Row>
-        </Section>
+        {this.props.hackBannerImg && (
+          <Section sectionClass="py-2">
+            <Row>
+              <img src={this.props.hackBannerImg} alt="Hack Banner Img" />
+            </Row>
+          </Section>
+        )}
         <Section sectionClass="py-2">
           <Row>
             <Col>
