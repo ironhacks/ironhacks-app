@@ -1,10 +1,10 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import { Accordion } from 'react-bootstrap'
 import { userMetrics } from '../../util/user-metrics'
 import { Section } from '../../components/layout'
-import IssueItem from './IssueItem'
-import { Accordion } from 'react-bootstrap'
+import { AdminHackNoteItem } from '../../components/admin/admin-hack-note-item'
 
 class AdminNotes extends Component {
   constructor(props) {
@@ -114,11 +114,10 @@ class AdminNotes extends Component {
             <div className="col-12">
               <Accordion defaultActiveKey="0">
                 {this.state.notes.map((item, index) => (
-                  <IssueItem
-                    issue={item}
+                  <AdminHackNoteItem
+                    note={item}
                     key={index}
                     deletenote={this.showConfirmDeleteModal}
-                    // photourl={this.props.userphotourl}
                   />
                 ))}
               </Accordion>
