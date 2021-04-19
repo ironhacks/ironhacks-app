@@ -27,6 +27,7 @@ class AdminHackRegistration extends Component {
     this.getRegistrationEvents()
   }
 
+  // TODO: GET REGISTRATION STATUS DIRECTLY FROM USER RECORD
   getRegistrationSettings = async () => {
     window.firebase
       .firestore()

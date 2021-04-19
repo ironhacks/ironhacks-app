@@ -10,7 +10,7 @@
 /*eslint-disable prettier/prettier*/
 const crc32 = function(message) {
   if (typeof message !== 'string') {
-    console.warn('crc32 error: Function did not receive type string.');
+    console.warn('crc32 error: Function did not receive type string.')
     return ''
   }
 
