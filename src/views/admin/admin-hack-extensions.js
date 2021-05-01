@@ -94,6 +94,17 @@ class AdminHackExtensions extends Component {
         <Section sectionClass="py-2">
           <h2 className="h3 font-bold">{`${this.props.hackName} Extensions`}</h2>
 
+          <div className="bg-grey-lt2 py-1">
+            <h3 className="my-3">While adding the link to calendar: </h3>
+            Step 1: Go to{' '}
+            <a href="https://calendar.google.com/calendar/u/0/r/settings">settings </a>
+            of Google Calendar. <br /> Step 2: Choose the Calendar from the left pane. <br /> Step
+            3: Go to "Customize" under Integrate Calendar. <br /> Step 4: Make changes according to
+            the webpage requirements using options given on left bar. <br /> Step 5: Copy the src
+            value from the Embed code without any quotes and whitespace. <br />
+            Step 6: Paste it into "Calendar src" below.
+          </div>
+
           <h3 className="h3 py-3">Google Calendar Integration</h3>
 
           <InputCheckbox
