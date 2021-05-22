@@ -102,13 +102,13 @@ const StatsSection = () => {
             <i className="zmdi zmdi-hc-2x zmdi-sort-amount-asc w-20 mr-2" />
             <CountUp
               start={42}
-              end={3091}
+              end={1341}
               duration={25}
               useEasing={true}
               separator=" "
               delay={3}
               decimal=","
-              suffix=" VISUALIZATIONS"
+              suffix=" NOTEBOOKS"
             />
           </div>
         </Col>

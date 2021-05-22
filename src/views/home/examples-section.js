@@ -54,9 +54,9 @@ const ExamplesSection = () => {
 
         <Col>
           <ExampleCard
-            title="WORKFORCE ANALYTICS"
-            description="Use workforce data to explore factors that affect successful career paths."
-            image={'topics-housing.jpg?alt=media&token=8b0152d8-5fdd-49c9-bb2c-35f94361c8c5'}
+            title="COVID-19 DATA SCIENCE CHALLENGE"
+            description="Predict COVID-19 rates in places of interest in real-time."
+            image={'topics-covid.jpg?alt=media&token=000aea48-7aa3-43c5-86ae-f7740756c6a4'}
           />
         </Col>
       </Row>
