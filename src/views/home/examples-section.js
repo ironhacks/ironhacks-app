@@ -54,8 +54,8 @@ const ExamplesSection = () => {
 
         <Col>
           <ExampleCard
-            title="COVID-19 DATA SCIENCE CHALLENGE"
-            description="Predict COVID-19 rates in places of interest in real-time."
+            title="COVID-19 CHALLENGE"
+            description="Build a statistical model using social movement, distancing and infection data to predict COVID-19 impact."
             image={'topics-covid.jpg?alt=media&token=000aea48-7aa3-43c5-86ae-f7740756c6a4'}
           />
         </Col>
