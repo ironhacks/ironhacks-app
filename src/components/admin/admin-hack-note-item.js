@@ -12,7 +12,7 @@ const stateColor = (state, note) => {
     return 'success'
   } else if (note.created_by === 'Elizabeth') {
     return 'secondary'
-  } else if (note.created_by === 'Bryan Herbert') {
+  } else if (note.created_by === 'Bryan Jacobs') {
     return 'danger'
   } else if (note.created_by === 'Feny Patel') {
     return 'dark'
