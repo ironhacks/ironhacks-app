@@ -50,6 +50,7 @@ class ResultsView extends Component {
       currentSubmission: null,
       finalResults: null,
       participantCount: null,
+      submissionCount: null,
       results: null,
       resultsContent: '',
       resultsPublished: {},
@@ -291,6 +292,27 @@ class ResultsView extends Component {
       .doc(submissionId)
       .get()
 
+    let submissionCountsDoc = await window.firebase
+      .firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('submissions')
+      .doc(submissionId)
+      .collection('users')
+      .get()
+
+    if (submissionCountsDoc.exists) {
+      this.setState({
+        submissionCount: submissionCountsDoc.size,
+      })
+      this.updateLoadingStatus()
+    } else {
+      this.setState({
+        submissionCount: 3,
+      })
+      this.updateLoadingStatus()
+    }
+
     if (submissionResultsDoc.exists) {
       let submissionResultsData = submissionResultsDoc.data()
 
@@ -435,6 +457,11 @@ class ResultsView extends Component {
               <div className="ml-0 mr-6 text-center">
                 <h3 className="font-bold">Hack Size</h3>
                 <div className="fs-5 font-bold cl-cyan my-3">{this.state.participantCount}</div>
+              </div>
+
+              <div className="ml-0 mr-6 text-center">
+                <h3 className="font-bold">Submission Size</h3>
+                <div className="fs-5 font-bold cl-cyan my-3">{this.state.submissionCount}</div>
               </div>
 
               {this.props.userCohortList && this.props.userCohortList.length > 0 && (
