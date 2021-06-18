@@ -52,8 +52,8 @@ const StatsSection = () => {
         <Col colClass="impact_card">
           <h3 className="h3 my-2 font-bold">Globalization Impact</h3>
           <p>
-            The virtual setting of hacking has emerged at Purdue and beyond. Participants come from
-            the US, Colombia, and China. Virtual setting encourages a more diverse audience.
+            The virtual setting of hacking has emerged at Purdue and spread abroad. Our virtual
+            platform encourages a diverse audience to partake in our hacks.
           </p>
         </Col>
         <Col colClass="impact_card">
@@ -102,13 +102,13 @@ const StatsSection = () => {
             <i className="zmdi zmdi-hc-2x zmdi-sort-amount-asc w-20 mr-2" />
             <CountUp
               start={42}
-              end={3091}
+              end={3901}
               duration={25}
               useEasing={true}
               separator=" "
               delay={3}
               decimal=","
-              suffix=" VISUALIZATIONS"
+              suffix=" SUBMISSIONS"
             />
           </div>
         </Col>
