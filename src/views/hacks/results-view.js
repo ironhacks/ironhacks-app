@@ -308,7 +308,7 @@ class ResultsView extends Component {
       this.updateLoadingStatus()
     } else {
       this.setState({
-        submissionCount: 3,
+        submissionCount: null,
       })
       this.updateLoadingStatus()
     }
