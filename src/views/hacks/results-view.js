@@ -292,18 +292,19 @@ class ResultsView extends Component {
       .doc(submissionId)
       .get()
 
-    let submissionCountsDoc = await window.firebase
-      .firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('submissions')
-      .doc(submissionId)
-      .collection('users')
-      .get()
+    if (submissionResultsDoc.exists) {
+      let count = 0
 
-    if (submissionCountsDoc.exists) {
+      let resultdata = submissionResultsDoc.data()
+      let resultcnt = Object.values(resultdata)
+      resultcnt.forEach((temp) => {
+        if (temp[0].value) {
+          count += 1
+        }
+      })
+      console.log(count)
       this.setState({
-        submissionCount: submissionCountsDoc.size,
+        submissionCount: count,
       })
       this.updateLoadingStatus()
     } else {
