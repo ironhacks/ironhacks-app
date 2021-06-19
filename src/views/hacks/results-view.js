@@ -302,7 +302,6 @@ class ResultsView extends Component {
           count += 1
         }
       })
-      console.log(count)
       this.setState({
         submissionCount: count,
       })
