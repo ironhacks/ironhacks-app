@@ -406,7 +406,11 @@ class ResultsView extends Component {
                     {
                       name: 'peers',
                       label: 'Your Peers',
-                      disabled: this.state.currentSubmission === 'final' ? true : false,
+                      disabled:
+                        this.state.currentSubmission === 'final'
+                          ? // this.props.userCohortList.length > 1
+                            true
+                          : false,
                     },
                     {
                       name: 'scores',

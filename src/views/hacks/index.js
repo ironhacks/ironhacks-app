@@ -9,6 +9,7 @@ import SubmissionsView from './submissions-view'
 import TaskView from './task-view'
 import TutorialView from './tutorial-view'
 import TutorialListView from './tutorial-list-view'
+import ExampleView from './example-view'
 
 const Hack = {
   Calendar: CalendarView,
@@ -22,6 +23,7 @@ const Hack = {
   Task: TaskView,
   Tutorial: TutorialView,
   TutorialList: TutorialListView,
+  Example: ExampleView,
 }
 
 export { Hack }

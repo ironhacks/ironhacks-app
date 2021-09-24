@@ -43,6 +43,7 @@ class AdminHackSettings extends Component {
       submissionsEnabled: false,
       resultsEnabled: false,
       tutorialsEnabled: false,
+      examplesEnabled: false,
     }
 
     // NOTE: Some display options are moving
