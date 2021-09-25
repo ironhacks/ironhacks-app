@@ -33,6 +33,7 @@ class HackPage extends Component {
       loading: true,
       userCohortId: null,
       userCohortList: null,
+      cohortList: null,
       cohortSettings: {},
       hackBanner: null,
     }
@@ -110,6 +111,7 @@ class HackPage extends Component {
 
       if (cohortId) {
         this.setState({
+          cohortList: cohortList,
           userCohortId: cohortId,
           userCohortList: cohortList[cohortId],
         })
@@ -420,7 +422,7 @@ class HackPage extends Component {
                 hackId={this.state.hackId}
                 userId={this.props.userId}
                 userCohortId={this.state.userCohortId}
-                userCohortList={this.state.userCohortList}
+                cohortList={this.state.cohortList}
               />
             </Section>
           </Route>

@@ -7,6 +7,7 @@ class ExampleView extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      loading: true,
       cohortList: [],
       clst: [],
       examples: [],
@@ -16,39 +17,18 @@ class ExampleView extends Component {
   }
 
   componentDidMount() {
+    console.log('here')
     this.getExamples()
     this.getExampleNotebooks()
-    this.getRegistrationCohorts()
-
     userMetrics({ event: 'view_example' })
   }
 
-  getRegistrationCohorts = async () => {
-    window.firebase
-      .firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('registration')
-      .doc('cohorts')
-      .get()
-      .then((doc) => {
-        let data = doc.data()
-        Object.entries(data).map(([key, value]) => {
-          this.state.clst.push(key)
-        })
-        this.state.clst.sort()
-        console.log(this.state.clst[1])
-        if (this.props.userCohortId === this.state.clst[0]) {
-          this.state.view = <ExampleSubmissionsSummary exampleData={this.state.examples} />
-        } else {
-          this.state.view = <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
-        }
-        // if (data) {
-        //   this.setState({
-        //     cohortList: data,
-        //   })
-        // }
-      })
+  componentWillUnmount() {
+    if (this.props.userCohortId === Object.keys(this.props.cohortList)[0]) {
+      return <ExampleSubmissionsSummary exampleData={this.state.examples} />
+    } else {
+      return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
+    }
   }
 
   getExamples = async () => {
@@ -65,6 +45,9 @@ class ExampleView extends Component {
         exampleId: item.id,
         ...item.data(),
       })
+    })
+    this.setState({
+      loading: false,
     })
     // this.setState({ examples: result })
   }
@@ -84,13 +67,26 @@ class ExampleView extends Component {
         ...item.data(),
       })
     })
-    // this.setState({ examples: result })
+    this.setState({
+      loading: false,
+    })
   }
 
   render() {
     return (
       <Row>
-        <Col>{this.state.view}</Col>
+        {!this.state.loading && (
+          <Col>
+            {/* {this.state.view} */}
+            {(() => {
+              if (this.props.userCohortId === Object.keys(this.props.cohortList)[1]) {
+                return <ExampleSubmissionsSummary exampleData={this.state.examples} />
+              } else {
+                return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
+              }
+            })()}
+          </Col>
+        )}
       </Row>
     )
   }
