@@ -311,7 +311,7 @@ class AdminHackPage extends Component {
                         />
                       </Route>
 
-                      <Route path={`${this.baseUrl}/example/:exampleId/edit_summary`}>
+                      <Route path={`${this.baseUrl}/examples/:exampleId/edit`}>
                         <AdminHack.ExampleEditSummary
                           hackId={this.state.hackId}
                           hackName={this.state.hackName}
@@ -327,7 +327,7 @@ class AdminHackPage extends Component {
                         />
                       </Route>
 
-                      <Route path={`${this.baseUrl}/example/:exampleId/edit_notebook`}>
+                      <Route path={`${this.baseUrl}/examples/:exampleId/edit`}>
                         <AdminHack.ExampleEditNotebook
                           hackId={this.state.hackId}
                           hackName={this.state.hackName}

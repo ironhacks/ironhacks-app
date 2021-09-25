@@ -26,7 +26,7 @@ const stateColor = (state, note) => {
 function AdminHackExampleItem({ note, deletenote }) {
   return (
     <Card>
-      <Accordion.Toggle as={Card.Header} eventKey={note.noteId} className="flex">
+      <Accordion.Toggle as={Card.Header} eventKey={note.exampleId} className="flex">
         <div className="note-info flex flex-1">
           <img
             src={note.photo_url}
@@ -44,7 +44,7 @@ function AdminHackExampleItem({ note, deletenote }) {
         </div>
 
         <div className="note-actions">
-          <Link to={`notes/${note.noteId}/edit`}>
+          <Link to={`examples/${note.exampleId}/edit`}>
             <Button
               variant="outline-info"
               size="sm"
@@ -55,7 +55,7 @@ function AdminHackExampleItem({ note, deletenote }) {
             </Button>
           </Link>
           <Button
-            onClick={() => deletenote(note.noteId)}
+            onClick={() => deletenote(note.exampleId)}
             variant="outline-danger"
             size="sm"
             style={{ marginLeft: 5 + 'px' }}
@@ -65,7 +65,7 @@ function AdminHackExampleItem({ note, deletenote }) {
           </Button>
         </div>
       </Accordion.Toggle>
-      <Accordion.Collapse eventKey={note.noteId}>
+      <Accordion.Collapse eventKey={note.exampleId}>
         <Card.Body>
           <ReactMarkdown source={note.content} />
         </Card.Body>

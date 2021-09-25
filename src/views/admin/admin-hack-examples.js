@@ -70,9 +70,9 @@ class AdminExamples extends Component {
     this.setState({ examples_notebook: result })
   }
 
-  deleteExample = async (exampleId) => {
-    let examples = this.state.examples
-    examples = examples.filter((example) => {
+  deleteExampleSummary = async (exampleId) => {
+    let examples_summary = this.state.examples_summary
+    examples_summary = examples_summary.filter((example) => {
       return example.exampleId !== exampleId
     })
 
@@ -80,29 +80,29 @@ class AdminExamples extends Component {
       .firestore()
       .collection('hacks')
       .doc(this.props.hackId)
-      .collection('examples')
+      .collection('examples_summary')
       .doc(exampleId)
       .delete()
 
     this.setState({
-      examples: examples,
+      examples_summary: examples_summary,
       loading: false,
     })
 
     userMetrics({
-      event: 'example-deleted',
+      event: 'example-summary-deleted',
       taskId: exampleId,
       hackId: this.props.hackId,
     })
   }
 
-  showConfirmDeleteModal = (exampleId) => {
+  showConfirmDeleteModalSummary = (exampleId) => {
     this.setState({ loading: true })
-
+    console.log(exampleId)
     Swal.fire({
       title: 'Are you sure?',
       html: `
-        <p>Confirm you want to delete this example.</p>
+        <p>Confirm you want to delete this example summary.</p>
         <code>${exampleId}</code>`,
       icon: 'question',
       reverseButtons: true,
@@ -112,7 +112,56 @@ class AdminExamples extends Component {
       confirmButtonText: 'Delete',
     }).then((result) => {
       if (result.value) {
-        this.deleteNote(exampleId)
+        this.deleteExampleSummary(exampleId)
+      } else {
+        this.setState({ loading: false })
+      }
+    })
+  }
+
+  deleteExampleNotebook = async (exampleId) => {
+    let examples_notebook = this.state.examples_notebook
+    examples_notebook = examples_notebook.filter((example) => {
+      return example.exampleId !== exampleId
+    })
+
+    await window.firebase
+      .firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('examples_notebook')
+      .doc(exampleId)
+      .delete()
+
+    this.setState({
+      examples_notebook: examples_notebook,
+      loading: false,
+    })
+
+    userMetrics({
+      event: 'example-summary-deleted',
+      taskId: exampleId,
+      hackId: this.props.hackId,
+    })
+  }
+
+  showConfirmDeleteModalNotebook = (exampleId) => {
+    this.setState({ loading: true })
+    console.log(exampleId)
+    Swal.fire({
+      title: 'Are you sure?',
+      html: `
+        <p>Confirm you want to delete this example notebook.</p>
+        <code>${exampleId}</code>`,
+      icon: 'question',
+      reverseButtons: true,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Delete',
+    }).then((result) => {
+      if (result.value) {
+        this.deleteExampleNotebook(exampleId)
       } else {
         this.setState({ loading: false })
       }
@@ -139,7 +188,7 @@ class AdminExamples extends Component {
                   <AdminHackExampleItem
                     note={item}
                     key={index}
-                    deletenote={this.showConfirmDeleteModal}
+                    deletenote={this.showConfirmDeleteModalSummary}
                   />
                 ))}
               </Accordion>
@@ -153,7 +202,7 @@ class AdminExamples extends Component {
                   <AdminHackExampleItem
                     note={item}
                     key={index}
-                    deletenote={this.showConfirmDeleteModal}
+                    deletenote={this.showConfirmDeleteModalNotebook}
                   />
                 ))}
               </Accordion>

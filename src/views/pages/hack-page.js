@@ -129,7 +129,7 @@ class HackPage extends Component {
         rules: hackData.rules || '',
         task: hackData.defaultTask ? hackData.defaultTask.name : null,
         upcomingEvent: upcomingEvent,
-        examples: hackData.examples,
+        // examples: hackData.examples,
       }
 
       if ('taskEnabled' in hackData.displayOptions) {
@@ -173,7 +173,7 @@ class HackPage extends Component {
         task: hackSettings.task,
         taskPublished: hackSettings.taskPublished,
         upcomingEvent: hackSettings.upcomingEvent,
-        examples: hackSettings.examples,
+        // examples: hackSettings.examples,
       })
     }
   }
