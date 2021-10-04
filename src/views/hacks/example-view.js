@@ -17,7 +17,6 @@ class ExampleView extends Component {
   }
 
   componentDidMount() {
-    console.log('here')
     this.getExamples()
     this.getExampleNotebooks()
     userMetrics({ event: 'view_example' })
@@ -79,7 +78,7 @@ class ExampleView extends Component {
           <Col>
             {/* {this.state.view} */}
             {(() => {
-              if (this.props.userCohortId === Object.keys(this.props.cohortList)[1]) {
+              if (this.props.userCohortId === Object.keys(this.props.cohortList).sort()[0]) {
                 return <ExampleSubmissionsSummary exampleData={this.state.examples} />
               } else {
                 return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
