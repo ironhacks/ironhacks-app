@@ -12,6 +12,7 @@ class AdminHackCohorts extends Component {
 
     this.state = {
       data: '',
+      currentCohort: '',
       loading: false,
       addDisabled: Date.parse(this.props.hackData.startDate) > Date.now(),
       assignDisabled: false,
@@ -22,6 +23,7 @@ class AdminHackCohorts extends Component {
       tasks: [],
       defaultTask: this.props.defaultTask || null,
       taskSelect: [],
+      whiteListUsers: [],
     }
   }
 
@@ -194,6 +196,11 @@ class AdminHackCohorts extends Component {
     return false
   }
 
+  handlePcpntInputChange(index, name, value) {
+    this.state.whiteListUsers = value.split(',')
+    this.state.currentCohort = name
+  }
+
   handleCohortPropertyInputChange(index, name, value) {
     let cohorts = this.state.cohorts
     cohorts[index].properties[name] = value
@@ -209,7 +216,7 @@ class AdminHackCohorts extends Component {
   assignCohorts = () => {
     this.setState({ loading: true })
     let userlist = this.state.registeredUsers
-
+    console.log(userlist)
     // DO NOT ASSIGN ADMIN USERS TO THE PARTICIPANT COHORT
     userlist = userlist.filter((user) => {
       return !user.isAdmin
@@ -290,6 +297,24 @@ class AdminHackCohorts extends Component {
       })
   }
 
+  whiteListCohort = () => {
+    this.setState({ loading: true })
+    let userList = this.state.whiteListUsers
+    const cohorts_wl = {}
+    cohorts_wl[this.state.currentCohort] = []
+
+    window.firebase
+      .firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('registration')
+      .doc('cohorts')
+      .update({ [this.state.currentCohort]: userList })
+      .then(() => {
+        this.setState({ loading: false })
+      })
+  }
+
   render() {
     return (
       <>
@@ -319,7 +344,34 @@ class AdminHackCohorts extends Component {
                 onInputChange={(name, value) => this.handleCohortInputChange(index, name, value)}
                 disabled={true}
               />
-
+              <div
+                key={index}
+                style={{
+                  padding: '1em',
+                  border: '2px solid rgba(0,0,255,0.5)',
+                  marginTop: '1em',
+                }}
+              >
+                <InputText
+                  containerClass="flex py-1 flex-between"
+                  inputClass="flex-2 text-capitalize"
+                  labelClass="flex-1"
+                  name={item.id}
+                  label="Cohort Participants (Whitelist)"
+                  icon="tag"
+                  iconClass="pl-1 pr-2"
+                  value={this.state.value}
+                  onInputChange={(name, value) => this.handlePcpntInputChange(index, name, value)}
+                  // disabled={false}
+                />
+                <button
+                  className={'btn btn-sm btn-primary flex-between ml-auto'}
+                  onClick={() => this.whiteListCohort(index)}
+                  disabled={this.state.loading}
+                >
+                  Update Cohort
+                </button>
+              </div>
               <h3 className="fs-m1 font-bold">Cohort Options</h3>
 
               <InputSelect
