@@ -300,82 +300,19 @@ class AdminHackCohorts extends Component {
   whiteListCohort = () => {
     this.setState({ loading: true })
     let userList = this.state.whiteListUsers
-    let currentc = this.state.currentCohort
-    let cohorts = {}
     const cohorts_wl = {}
-    this.state.cohorts.forEach((cohorts, i) => {
-      cohorts_wl[cohorts.id] = []
-    })
+    cohorts_wl[this.state.currentCohort] = []
 
-    while (userList.length > 0) {
-      for (var i = 0; i < Object.keys(cohorts_wl).length; i++) {
-        if (userList.length > 0) {
-          let group = Object.keys(cohorts_wl)[0]
-          let index = Math.floor(Math.random() * userList.length)
-          cohorts_wl[group].push(userList[index].userId)
-          userList = removeArrayItem(userList, index)
-        }
-      }
-    }
-    let cohorts1 = Object.keys(cohorts_wl)[0]
-    let cohorts2 = Object.keys(cohorts_wl)[1]
-    console.log(cohorts1)
-
-    if (this.state.currentCohort === this.state.cohorts[0].name) {
-      cohorts_wl.push
-      window.firebase
-        .firestore()
-        .collection('hacks')
-        .doc(this.props.hackId)
-        .collection('registration')
-        .doc('cohorts')
-        .update({})
-    } else {
-      window.firebase
-        .firestore()
-        .collection('hacks')
-        .doc(this.props.hackId)
-        .collection('registration')
-        .doc('cohorts')
-        .update({ cohorts2 })
-      console.log('No')
-    }
-
-    // USERS ARE ORDERED BY EMAIL FOR DISPLAY
-    // RESORTING ON USERID WHICH IS RANDOMLY GENERATED
-    // SHUFFLES THE LIST BEFORE SORTING INTO GROUPS
-    // whiteListUsers.sort((a, b) => {
-    //   return a.userId.localeCompare(b.userId)
-    // })
-
-    // if (Object.keys(groups).length === 0) {
-    //   return false
-    // }
-
-    // while (userlist.length > 0) {
-    //   for (var i = 0; i < Object.keys(groups).length; i++) {
-    //     if (userlist.length > 0) {
-    //       let group = Object.keys(groups)[i]
-    //       let index = Math.floor(Math.random() * userlist.length)
-    //       groups[group].push(userlist[index].userId)
-    //       userlist = removeArrayItem(userlist, index)
-    //     }
-    //   }
-    // }
-
-    // this.setState({ cohortList: groups })
-
-    // window.firebase
-    //   .firestore()
-    //   .collection('hacks')
-    //   .doc(this.props.hackId)
-    //   .collection('registration')
-    //   .doc('cohorts')
-    //   .set(groups)
-    //   .then(() => {
-    //     saveSuccessModal('Cohorts')
-    //     this.setState({ loading: false })
-    //   })
+    window.firebase
+      .firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('registration')
+      .doc('cohorts')
+      .update({ [this.state.currentCohort]: userList })
+      .then(() => {
+        this.setState({ loading: false })
+      })
   }
 
   render() {
@@ -407,13 +344,20 @@ class AdminHackCohorts extends Component {
                 onInputChange={(name, value) => this.handleCohortInputChange(index, name, value)}
                 disabled={true}
               />
-              <div className="flex">
+              <div
+                key={index}
+                style={{
+                  padding: '1em',
+                  border: '2px solid rgba(0,0,255,0.5)',
+                  marginTop: '1em',
+                }}
+              >
                 <InputText
                   containerClass="flex py-1 flex-between"
                   inputClass="flex-2 text-capitalize"
                   labelClass="flex-1"
-                  name={item.name}
-                  label="Cohort Participants"
+                  name={item.id}
+                  label="Cohort Participants (Whitelist)"
                   icon="tag"
                   iconClass="pl-1 pr-2"
                   value={this.state.value}
@@ -421,7 +365,7 @@ class AdminHackCohorts extends Component {
                   // disabled={false}
                 />
                 <button
-                  className={'btn btn-sm btn-primary flex-self-end ml-auto'}
+                  className={'btn btn-sm btn-primary flex-between ml-auto'}
                   onClick={() => this.whiteListCohort(index)}
                   disabled={this.state.loading}
                 >
