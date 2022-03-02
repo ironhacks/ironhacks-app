@@ -73,6 +73,7 @@ class AdminHackPage extends Component {
                 { name: 'Submissions', path: 'submissions' },
                 { name: 'Tasks', path: 'tasks' },
                 { name: 'Tutorials', path: 'tutorials' },
+                { name: 'Examples', path: 'examples' },
                 { name: 'Notes', path: 'notes' },
                 { name: 'Banners', path: 'banners' },
                 { name: 'Extensions', path: 'extensions' },
@@ -291,6 +292,46 @@ class AdminHackPage extends Component {
                           useremail={this.props.user.email}
                           nid={this.props.user.uid}
                           userphotourl={this.props.user.photoURL}
+                        />
+                      </Route>
+
+                      <Route exact path={`${this.baseUrl}/examples`}>
+                        <AdminHack.Examples
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                        />
+                      </Route>
+
+                      <Route path={`${this.baseUrl}/examples/new_summary`}>
+                        <AdminHack.ExampleNewSummary
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                        />
+                      </Route>
+
+                      <Route path={`${this.baseUrl}/examples/:exampleId/edit`}>
+                        <AdminHack.ExampleEditSummary
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                        />
+                      </Route>
+
+                      <Route path={`${this.baseUrl}/examples/new_notebook`}>
+                        <AdminHack.ExampleNewNotebook
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
+                        />
+                      </Route>
+
+                      <Route path={`${this.baseUrl}/examples/:exampleId/edit`}>
+                        <AdminHack.ExampleEditNotebook
+                          hackId={this.state.hackId}
+                          hackName={this.state.hackName}
+                          hackSlug={this.state.hackData.hackSlug}
                         />
                       </Route>
 

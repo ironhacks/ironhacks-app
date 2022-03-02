@@ -30,7 +30,7 @@ export function getArrayStats(list) {
 
   deltaSquaredSum = deltaSq.reduce((a, b) => {
     return a + b
-  })
+  }, 0)
 
   let deltaMean = deltaSum / count
   let stdDev = Math.sqrt(deltaSquaredSum / count - 1)

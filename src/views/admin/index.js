@@ -21,6 +21,11 @@ import AdminHackTutorials from './admin-hack-tutorials'
 import AdminHackNoteEdit from './admin-hack-notes-edit'
 import AdminHackNoteNew from './admin-hack-notes-new'
 import AdminHackNotes from './admin-hack-notes'
+import AdminExampleNewNotebook from './admin-hack-examples-new-notebook'
+import AdminExampleNewSummary from './admin-hack-examples-new-summary'
+import AdminExamples from './admin-hack-examples'
+import AdminExampleEditNotebook from './admin-hack-examples-edit-notebook'
+import AdminExampleEditSummary from './admin-hack-examples-edit-summary'
 import { AdminUtilsMetrics } from './admin-utils-metrics'
 import { AdminUtilsUsers } from './admin-utils-users'
 
@@ -48,6 +53,11 @@ const AdminHack = {
   NotesEdit: AdminHackNoteEdit,
   NotesNew: AdminHackNoteNew,
   Notes: AdminHackNotes,
+  Examples: AdminExamples,
+  ExampleEditSummary: AdminExampleEditSummary,
+  ExampleEditNotebook: AdminExampleEditNotebook,
+  ExampleNewNotebook: AdminExampleNewNotebook,
+  ExampleNewSummary: AdminExampleNewSummary,
 }
 
 const AdminUtils = {

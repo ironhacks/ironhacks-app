@@ -33,6 +33,7 @@ class HackPage extends Component {
       loading: true,
       userCohortId: null,
       userCohortList: null,
+      cohortList: null,
       cohortSettings: {},
       hackBanner: null,
     }
@@ -110,6 +111,7 @@ class HackPage extends Component {
 
       if (cohortId) {
         this.setState({
+          cohortList: cohortList,
           userCohortId: cohortId,
           userCohortList: cohortList[cohortId],
         })
@@ -129,6 +131,7 @@ class HackPage extends Component {
         rules: hackData.rules || '',
         task: hackData.defaultTask ? hackData.defaultTask.name : null,
         upcomingEvent: upcomingEvent,
+        // examples: hackData.examples,
       }
 
       if ('taskEnabled' in hackData.displayOptions) {
@@ -172,6 +175,7 @@ class HackPage extends Component {
         task: hackSettings.task,
         taskPublished: hackSettings.taskPublished,
         upcomingEvent: hackSettings.upcomingEvent,
+        // examples: hackSettings.examples,
       })
     }
   }
@@ -407,6 +411,18 @@ class HackPage extends Component {
                 userCohortList={this.state.userCohortList}
                 taskId={this.state.task}
                 taskPublished={this.state.taskPublished}
+              />
+            </Section>
+          </Route>
+
+          {/* EXAMPLE */}
+          <Route exact path="/hacks/:hackSlug/examples">
+            <Section>
+              <Hack.Example
+                hackId={this.state.hackId}
+                userId={this.props.userId}
+                userCohortId={this.state.userCohortId}
+                cohortList={this.state.cohortList}
               />
             </Section>
           </Route>
