@@ -5,6 +5,7 @@ import { AdminCohortList } from '../../components/admin'
 import randomTeamname from '../../services/random-teamname'
 import { removeArrayItem } from '../../util/array-utils'
 import { saveSuccessModal } from '../../components/alerts'
+import Swal from 'sweetalert2'
 
 class AdminHackCohorts extends Component {
   constructor(props) {
@@ -297,22 +298,53 @@ class AdminHackCohorts extends Component {
       })
   }
 
+  showWarningModal = () => {
+    this.setState({ loading: true })
+    Swal.fire({
+      icon: 'warning',
+      title: 'Error',
+    }).then(() => {
+      this.setState({ loading: false })
+    })
+  }
+
+  checkWhiteList = (arr1, arr2) => {
+    //check if arr1 contains arr2
+    var flag = false
+    arr2.forEach((user, index) => {
+      if (arr1.indexOf(user) > -1) {
+        console.log(arr1.indexOf(user) > -1)
+        flag = true
+      } else {
+        return false
+      }
+    })
+    return flag
+  }
+
   whiteListCohort = () => {
     this.setState({ loading: true })
     let userList = this.state.whiteListUsers
-    const cohorts_wl = {}
-    cohorts_wl[this.state.currentCohort] = []
+    let reguserlist = []
 
-    window.firebase
-      .firestore()
-      .collection('hacks')
-      .doc(this.props.hackId)
-      .collection('registration')
-      .doc('cohorts')
-      .update({ [this.state.currentCohort]: userList })
-      .then(() => {
-        this.setState({ loading: false })
-      })
+    this.state.registeredUsers.forEach((reguser, index) => {
+      reguserlist.push(reguser.userId)
+    })
+    if (this.checkWhiteList(reguserlist, userList)) {
+      window.firebase
+        .firestore()
+        .collection('hacks')
+        .doc(this.props.hackId)
+        .collection('registration')
+        .doc('cohorts')
+        .update({ [this.state.currentCohort]: userList })
+        .then(() => {
+          saveSuccessModal('Whitelist')
+          this.setState({ loading: false })
+        })
+    } else {
+      this.showWarningModal()
+    }
   }
 
   render() {
@@ -354,7 +386,7 @@ class AdminHackCohorts extends Component {
               >
                 <InputText
                   containerClass="flex py-1 flex-between"
-                  inputClass="flex-2 text-capitalize"
+                  inputClass="flex-2"
                   labelClass="flex-1"
                   name={item.id}
                   label="Cohort Participants (Whitelist)"

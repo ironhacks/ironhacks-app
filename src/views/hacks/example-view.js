@@ -24,9 +24,9 @@ class ExampleView extends Component {
 
   componentWillUnmount() {
     if (this.props.userCohortId === Object.keys(this.props.cohortList)[0]) {
-      return <ExampleSubmissionsSummary exampleData={this.state.examples} />
-    } else {
       return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
+    } else {
+      return <ExampleSubmissionsSummary exampleData={this.state.examples} />
     }
   }
 
@@ -79,9 +79,9 @@ class ExampleView extends Component {
             {/* {this.state.view} */}
             {(() => {
               if (this.props.userCohortId === Object.keys(this.props.cohortList).sort()[0]) {
-                return <ExampleSubmissionsSummary exampleData={this.state.examples} />
-              } else {
                 return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
+              } else {
+                return <ExampleSubmissionsSummary exampleData={this.state.examples} />
               }
             })()}
           </Col>
