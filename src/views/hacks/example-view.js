@@ -19,6 +19,13 @@ class ExampleView extends Component {
   componentDidMount() {
     this.getExamples()
     this.getExampleNotebooks()
+    if (this.props.cohortSettings.showNotebooks) {
+      return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
+    } if (this.props.cohortSettings.showSummaries) 
+    {
+      return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
+    }
+
     userMetrics({ event: 'view_example' })
   }
   getExamples = async () => {
