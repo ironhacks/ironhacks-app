@@ -21,15 +21,6 @@ class ExampleView extends Component {
     this.getExampleNotebooks()
     userMetrics({ event: 'view_example' })
   }
-
-  componentWillUnmount() {
-    if (this.props.cohortSettings.showNotebooks) {
-      return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
-    } if (this.props.cohortSettings.showSummaries) {
-      return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
-    }
-  }
-
   getExamples = async () => {
     // let result = []
     let snap = await window.firebase
@@ -80,7 +71,8 @@ class ExampleView extends Component {
             {(() => {
               if (this.props.cohortSettings.showNotebooks) {
                 return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
-              } if (this.props.cohortSettings.showSummaries) {
+              } if (this.props.cohortSettings.showSummaries) 
+              {
                 return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
               }
             })()}
