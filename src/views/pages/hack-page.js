@@ -389,6 +389,21 @@ class HackPage extends Component {
             </Section>
           </Route>
 
+          {/* EXAMPLES DASHBOARD */}
+          <Route exact path="/hacks/:hackSlug/examples">
+            <Section sectionClass="examples-section">
+              <Hack.Example
+                hackData={this.state.hackData}
+                userCohortId={this.state.userCohortId}
+                userCohortList={this.state.userCohortList}
+                cohortSettings={this.state.cohortSettings}
+                userId={this.props.userId}
+                userIsAdmin={this.props.userIsAdmin}
+                hackId={this.state.hackId}
+              />
+            </Section>
+          </Route>
+
           {/* RULES */}
           <Route exact path="/hacks/:hackSlug/rules">
             <Section sectionClass="rules-section">

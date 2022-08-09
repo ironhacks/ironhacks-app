@@ -23,10 +23,10 @@ class ExampleView extends Component {
   }
 
   componentWillUnmount() {
-    if (this.props.userCohortId === Object.keys(this.props.cohortList)[0]) {
+    if (this.props.cohortSettings.showNotebooks) {
       return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
-    } else {
-      return <ExampleSubmissionsSummary exampleData={this.state.examples} />
+    } if (this.props.cohortSettings.showSummaries) {
+      return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
     }
   }
 
@@ -78,10 +78,10 @@ class ExampleView extends Component {
           <Col>
             {/* {this.state.view} */}
             {(() => {
-              if (this.props.userCohortId === Object.keys(this.props.cohortList).sort()[0]) {
+              if (this.props.cohortSettings.showNotebooks) {
                 return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
-              } else {
-                return <ExampleSubmissionsSummary exampleData={this.state.examples} />
+              } if (this.props.cohortSettings.showSummaries) {
+                return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
               }
             })()}
           </Col>
