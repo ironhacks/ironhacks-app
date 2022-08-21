@@ -1,7 +1,8 @@
 import { Component } from 'react'
 import { Row, Col } from '../../components/layout'
 import { userMetrics } from '../../util/user-metrics'
-import { ExampleSubmissionsSummary, ExampleSubmissionsNotebook } from '../../components/example'
+import { ExampleSubmissionsNotebook } from '../../components/example'
+// import { ExampleSubmissionsSummary } from '../../components/example'
 
 class ExampleView extends Component {
   constructor(props) {
@@ -21,8 +22,8 @@ class ExampleView extends Component {
     this.getExampleNotebooks()
     if (this.props.cohortSettings.showNotebooks) {
       return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
-    } if (this.props.cohortSettings.showSummaries) 
-    {
+    }
+    if (this.props.cohortSettings.showSummaries) {
       return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
     }
 
@@ -78,8 +79,8 @@ class ExampleView extends Component {
             {(() => {
               if (this.props.cohortSettings.showNotebooks) {
                 return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
-              } if (this.props.cohortSettings.showSummaries) 
-              {
+              }
+              if (this.props.cohortSettings.showSummaries) {
                 return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
               }
             })()}
