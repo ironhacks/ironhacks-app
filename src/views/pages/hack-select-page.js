@@ -149,7 +149,12 @@ class HackSelectPage extends Component {
             <div className="flex-1 mr-1 hide--med">
               <h2 className="h4 py-1 badge badge-dark">Social Feed</h2>
 
-              <div className="social_feed">
+              <div
+                className="social_feed"
+                //   style={{
+                // maxWidth: '330px',
+                // overflow: 'auto',}}
+              >
                 <TwitterTimeline src="https://twitter.com/__matt_harris__/lists/ironhacks-com-14752?ref_src=twsrc%5Etfw" />
               </div>
               <div className="social_actions">

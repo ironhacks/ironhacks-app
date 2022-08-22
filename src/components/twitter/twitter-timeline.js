@@ -19,7 +19,9 @@ class TwitterTimeline extends Component {
           className="twitter-timeline"
           data-dnt={this.props.dnt}
           data-theme={this.props.theme}
-          data-chrome="noheader, nofooter"
+          data-width="329"
+          data-height="5731"
+          data-chrome="noheader, nofooter, noborders"
           href={this.props.src}
         />
       </div>
