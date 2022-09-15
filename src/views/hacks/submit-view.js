@@ -61,6 +61,7 @@ class SubmitView extends Component {
         survey: '',
         summaryEnabled: false,
         tagsEnabled: false,
+        refEnabled: false,
         fields: [],
         files: [],
       },
@@ -72,6 +73,7 @@ class SubmitView extends Component {
         files: [], // COMPLETED FILE UPLOADS ADDED TO HERE BEFORE SUBMISSION
         fields: [],
         tags: [],
+        references: [],
       },
       submissionFiles: [], // HOLDS FILES BEFORE UPLOAD BEGINS
       previousFiles: {},
@@ -104,7 +106,8 @@ class SubmitView extends Component {
     fontSize: '1em',
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    await this.getParticipantsList()
     this.getUser()
     this.getSubmissionData()
   }
@@ -139,6 +142,7 @@ class SubmitView extends Component {
       submissionData.summary = data.summary
       submissionData.fields = data.fields
       submissionData.tags = data.tags
+      submissionData.references = data.references
 
       let previousFiles = {}
       data.files.forEach((item, index) => {
@@ -389,6 +393,32 @@ class SubmitView extends Component {
     })
   }
 
+  getParticipantsList = async () => {
+    let tempalias = {}
+    let alias = []
+
+    let doc = await window.firebase
+      .firestore()
+      .collection('hacks')
+      .doc(this.props.hackId)
+      .collection('registration')
+      .doc('participants')
+      .get()
+
+    let data = doc.data()
+    if (data) {
+      for (let participant of Object.keys(data)) {
+        tempalias = {
+          label: data[participant].alias,
+          value: data[participant].alias,
+        }
+        alias.push(tempalias)
+      }
+    }
+
+    this.setState({ alias: alias })
+  }
+
   validateFields = () => {
     let submissionFields = this.state.submissionData.fields
     let fieldIsValid = []
@@ -611,6 +641,20 @@ class SubmitView extends Component {
                 inputClass={`flex-1 cl-grey-dk1 ${this.state.submissionDisabled ? '' : 'bd-1'}`}
                 options={SUBMISSION_TAGS}
                 value={this.state.submissionData.tags}
+                onInputChange={this.onSubmissionInputChange}
+                disabled={this.state.submissionDisabled}
+              />
+            )}
+
+            {this.state.submissionForm.refEnabled && (
+              <InputMultiCreatableSelect
+                name="References"
+                label="References"
+                containerClass="flex align-items-center mt-2 mb-4"
+                labelClass="mr-2 font-extrabold mb-0"
+                inputClass={`flex-1 cl-grey-dk1 ${this.state.submissionDisabled ? '' : 'bd-1'}`}
+                options={this.state.alias}
+                value={this.state.submissionData.alias}
                 onInputChange={this.onSubmissionInputChange}
                 disabled={this.state.submissionDisabled}
               />
