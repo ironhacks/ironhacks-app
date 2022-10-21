@@ -1,8 +1,7 @@
 import { Component } from 'react'
 import { Row, Col } from '../../components/layout'
 import { userMetrics } from '../../util/user-metrics'
-import { ExampleSubmissionsNotebook } from '../../components/example'
-// import { ExampleSubmissionsSummary } from '../../components/example'
+import { ExampleSubmissionsNotebook, ExampleSubmissionsSummary } from '../../components/example'
 
 class ExampleView extends Component {
   constructor(props) {
@@ -24,7 +23,8 @@ class ExampleView extends Component {
       return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
     }
     if (this.props.cohortSettings.showSummaries) {
-      return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
+      // return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
+      return <ExampleSubmissionsSummary exampleData={this.state.examples} />
     }
 
     userMetrics({ event: 'view_example' })
@@ -81,7 +81,8 @@ class ExampleView extends Component {
                 return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
               }
               if (this.props.cohortSettings.showSummaries) {
-                return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
+                // return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
+                return <ExampleSubmissionsSummary exampleData={this.state.examples} />
               }
             })()}
           </Col>

@@ -82,7 +82,7 @@ class HackNav extends Component {
           ))}
 
           <a
-            href="https://hub.ironhacks.com"
+            href="http://128.211.160.104/"
             onClick={this.workspaceButton}
             rel="noopener noreferrer"
             target="_blank"
