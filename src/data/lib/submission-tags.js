@@ -22,7 +22,6 @@ const SUBMISSION_TAGS = [
   { label: 'Logistic Growth Models', value: 'logistic-growth-models' },
   { label: 'Logistic Regression', value: 'logistic-regression' },
   { label: 'Mobility Network Modeling', value: 'mobility-network-modeling' },
-  { label: 'Models', value: 'models' },
   { label: 'Moving Average (MA)', value: 'moving-average-ma' },
   { label: 'Naive Bayes', value: 'naive-bayes' },
   { label: 'Natural Language Processing (NLP)', value: 'natural-language-processing-nlp' },

@@ -25,7 +25,6 @@ class AdminSubmissionEditForm extends Component {
       survey: '',
       summaryEnabled: true,
       tagsEnabled: true,
-      refEnabled: true,
       enabled: false,
       fields: [],
       files: [],
@@ -43,7 +42,6 @@ class AdminSubmissionEditForm extends Component {
   onSubmissionEnabledChanged = (name, value) => this.setState({ enabled: value })
   onSummaryEnabledChanged = (name, value) => this.setState({ summaryEnabled: value })
   onTagsEnabledChanged = (name, value) => this.setState({ tagsEnabled: value })
-  onRefEnabledChanged = (name, value) => this.setState({ refEnabled: value })
 
   cancelChanges = () => {
     if (this.props.onCancelEdit) {
@@ -163,7 +161,6 @@ class AdminSubmissionEditForm extends Component {
       files: this.state.files,
       summaryEnabled: this.state.summaryEnabled,
       tagsEnabled: this.state.tagsEnabled,
-      refEnabled: this.state.refEnabled,
       enabled: this.state.enabled,
     }
 
@@ -285,19 +282,6 @@ class AdminSubmissionEditForm extends Component {
                 containerClass="badge badge-dark flex flex-align-center"
                 onInputChange={this.onTagsEnabledChanged}
                 isChecked={this.state.tagsEnabled}
-                disabled={this.state.loading}
-              />
-            </div>
-          </div>
-
-          <div className="">
-            <div className="inblock">
-              <InputCheckbox
-                label="References"
-                name="references"
-                containerClass="badge badge-dark flex flex-align-center"
-                onInputChange={this.onRefEnabledChanged}
-                isChecked={this.state.refEnabled}
                 disabled={this.state.loading}
               />
             </div>
