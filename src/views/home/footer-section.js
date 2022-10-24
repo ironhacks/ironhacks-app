@@ -3,6 +3,7 @@ import { Img } from '../../components/img'
 import { Row, Col } from '../../components/layout'
 import { MaterialDesignIcon } from '../../components/icons'
 import FsLightbox from 'fslightbox-react'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 function FooterVideo() {
   const [lightboxController, setLightboxController] = useState({
@@ -112,6 +113,22 @@ const FooterSection = () => {
               It is financially supported by the National Science Foundation (Award #1462044).
             </small>
           </div>
+          <br />
+          <Router>
+            <div>
+              <a
+                href="https://connect.purdue.edu/s/givenow?dids=067974&appealcode=18073"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  src="https://freepngimg.com/save/48932-paypal-donate-button-image-download-hq-png/200x80"
+                  width="200"
+                  alt="donate"
+                />
+              </a>
+            </div>
+          </Router>
         </Col>
       </Row>
     </>

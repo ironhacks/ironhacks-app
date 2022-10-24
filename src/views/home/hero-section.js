@@ -22,6 +22,13 @@ const HeroSection = () => {
       <Col colClass="flex-1 hide--med">
         <SvgImg containerClass="" imgClass={''} imgComponent={BulbSvg} />
       </Col>
+      <Col>
+        <div className="container">
+          <div className="field">
+            <div className="mouse" />
+          </div>
+        </div>
+      </Col>
     </Row>
   )
 }
