@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import { userMetrics } from '../../util/user-metrics'
+import { MdContentView } from '../../components/markdown-viewer'
 
 class ParticipantScoreRow extends Component {
   constructor(props) {
@@ -30,7 +31,12 @@ class ParticipantScoreRow extends Component {
           <span className="font-bold">Summary:</span>
           {this.state.expanded ? (
             <>
-              <span className="ml-1">{this.props.title.content}</span>
+              <MdContentView
+                enableTracking={true}
+                content={this.props.title.content}
+                encoded={false}
+                emptyText="Tutorial is not available yet."
+              />
             </>
           ) : (
             <>
