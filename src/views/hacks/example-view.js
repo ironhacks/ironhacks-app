@@ -76,6 +76,11 @@ class ExampleView extends Component {
         {!this.state.loading && (
           <Col>
             {/* {this.state.view} */}
+            <div className="cl-pink">
+              Below, you find a few examples of data science models that might be of relevance for
+              your challenge. They should give you some inspiration of what you can try to use
+              during the data science challenge
+            </div>
             {(() => {
               if (this.props.cohortSettings.showNotebooks) {
                 return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
