@@ -452,30 +452,27 @@ class ResultsView extends Component {
               {this.props.cohortSettings && this.props.cohortSettings.name && (
                 <div className="ml-0 mr-6 text-left">
                   <h3 className="font-bold text-left">Group Name</h3>
-                  <div className="fs-5 font-bold cl-amber my-3 text-capitalize">
+                  <div className="fs-3 font-bold cl-amber my-3 text-capitalize">
                     {this.props.cohortSettings.name}
                   </div>
                 </div>
               )}
 
-              <div className="ml-0 mr-6 text-center">
+              {/* <div className="ml-0 mr-6 text-center">
                 <h3 className="font-bold">Hack Size</h3>
                 <div className="fs-5 font-bold cl-cyan my-3">{this.state.participantCount}</div>
-              </div>
-
-              <div className="ml-0 mr-6 text-center">
-                <h3 className="font-bold">Submission Size</h3>
-                <div className="fs-5 font-bold cl-cyan my-3">{this.state.submissionCount}</div>
-              </div>
-
+              </div> */}
               {this.props.userCohortList && this.props.userCohortList.length > 0 && (
-                <div className="mx-6 text-center">
+                <div className="mx-4 text-center">
                   <h3 className="font-bold">Group Size</h3>
-                  <div className="fs-5 font-bold cl-pink my-3">
-                    {this.props.userCohortList.length}
-                  </div>
+                  <div className="fs-3 font-bold my-3">{this.props.userCohortList.length}</div>
                 </div>
               )}
+
+              <div className="ml-0 mr-4 text-center">
+                <h3 className="font-bold">No. of Submissions in Phase</h3>
+                <div className="fs-3 font-bold my-3">{this.state.submissionCount}</div>
+              </div>
             </div>
 
             <div className="selected-section">
@@ -546,13 +543,14 @@ class ResultsView extends Component {
                       {/* PEERS TAB */}
                       {this.state.section === 'peers' && (
                         <>
-                          {/* PEERS TAB - NOTEBOOK VERSION */}
+                          {/* PEERS TAB - SUMMARY VERSION */}
                           {this.props.cohortSettings &&
-                            this.props.cohortSettings.showNotebooks &&
+                            this.props.cohortSettings.showSummaries &&
                             this.state.currentSubmission !== 'final' && (
                               <>
+                                <h2 className="h4 py-1 badge badge-dark">Summary of Submissions</h2>
                                 {this.state.cohortSubmissions ? (
-                                  <CohortSubmissionsNotebook
+                                  <CohortSubmissionsSummary
                                     currentSubmission={this.state.currentSubmission}
                                     participantData={this.state.cohortSubmissions}
                                   />
@@ -564,13 +562,16 @@ class ResultsView extends Component {
                               </>
                             )}
 
-                          {/* PEERS TAB - SUMMARY VERSION */}
+                          {/* PEERS TAB - NOTEBOOK VERSION */}
                           {this.props.cohortSettings &&
-                            this.props.cohortSettings.showSummaries &&
+                            this.props.cohortSettings.showNotebooks &&
                             this.state.currentSubmission !== 'final' && (
                               <>
+                                <h2 className="h4 py-1 badge badge-dark">
+                                  Notebook of Submissions
+                                </h2>
                                 {this.state.cohortSubmissions ? (
-                                  <CohortSubmissionsSummary
+                                  <CohortSubmissionsNotebook
                                     currentSubmission={this.state.currentSubmission}
                                     participantData={this.state.cohortSubmissions}
                                   />

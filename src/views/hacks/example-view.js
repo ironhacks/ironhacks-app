@@ -30,7 +30,7 @@ class ExampleView extends Component {
     userMetrics({ event: 'view_example' })
   }
   getExamples = async () => {
-    // let result = []
+    let result = []
     let snap = await window.firebase
       .firestore()
       .collection('hacks')
@@ -39,7 +39,7 @@ class ExampleView extends Component {
       .get()
 
     snap.docs.forEach((item, i) => {
-      this.state.examples.push({
+      result.push({
         exampleId: item.id,
         ...item.data(),
       })
@@ -47,11 +47,14 @@ class ExampleView extends Component {
     this.setState({
       loading: false,
     })
-    // this.setState({ examples: result })
+    result.sort((a, b) => {
+      return a.title.localeCompare(b.title)
+    })
+    this.setState({ examples: result })
   }
 
   getExampleNotebooks = async () => {
-    // let result = []
+    let result = []
     let snap = await window.firebase
       .firestore()
       .collection('hacks')
@@ -60,7 +63,7 @@ class ExampleView extends Component {
       .get()
 
     snap.docs.forEach((item, i) => {
-      this.state.example_notebook.push({
+      result.push({
         exampleId: item.id,
         ...item.data(),
       })
@@ -68,6 +71,10 @@ class ExampleView extends Component {
     this.setState({
       loading: false,
     })
+    result.sort((a, b) => {
+      return a.title.localeCompare(b.title)
+    })
+    this.setState({ example_notebook: result })
   }
 
   render() {
@@ -76,18 +83,48 @@ class ExampleView extends Component {
         {!this.state.loading && (
           <Col>
             {/* {this.state.view} */}
-            <div className="cl-pink">
-              Below, you find a few examples of data science models that might be of relevance for
-              your challenge. They should give you some inspiration of what you can try to use
-              during the data science challenge
-            </div>
             {(() => {
-              if (this.props.cohortSettings.showNotebooks) {
-                return <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
-              }
-              if (this.props.cohortSettings.showSummaries) {
+              if (
+                this.props.cohortSettings.showNotebooks === true &&
+                this.props.cohortSettings.showSummaries === false
+              ) {
+                return (
+                  <Col>
+                    <h2 className="h4 py-1 badge badge-dark">Example Notebooks</h2>
+                    <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
+                  </Col>
+                )
+              } else if (
+                this.props.cohortSettings.showNotebooks === false &&
+                this.props.cohortSettings.showSummaries === true
+              ) {
+                return (
+                  <Col>
+                    <h2 className="h4 py-1 badge badge-dark">Example Summaries</h2>
+                    <ExampleSubmissionsSummary exampleData={this.state.examples} />
+                  </Col>
+                )
+              } else if (
+                this.props.cohortSettings.showNotebooks === true &&
+                this.props.cohortSettings.showSummaries === true
+              ) {
                 // return <ExampleSubmissionsNotebook exampleData={this.state.examples} />
-                return <ExampleSubmissionsSummary exampleData={this.state.examples} />
+                return (
+                  // <ExampleSumNotebook
+                  //   exampleDataNB={this.state.example_notebook}
+                  //   exampleDataSM={this.state.examples}
+                  // />
+                  <Col>
+                    <div>
+                      <h2 className="h4 py-1 badge badge-dark">Example Summaries</h2>
+                      <ExampleSubmissionsSummary exampleData={this.state.examples} />
+                    </div>
+                    <div>
+                      <h2 className="h4 py-1 badge badge-dark">Example Notebooks</h2>
+                      <ExampleSubmissionsNotebook exampleData={this.state.example_notebook} />
+                    </div>
+                  </Col>
+                )
               }
             })()}
           </Col>

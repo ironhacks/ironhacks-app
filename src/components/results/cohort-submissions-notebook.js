@@ -59,7 +59,7 @@ class CohortSubmissionsNotebook extends Component {
             }}
           >
             <div className="header_col pl-2 flex-1 text-left">Participant</div>
-            <div className="header_col pl-2 flex-1 text-right">Submission</div>
+            <div className="header_col pl-2 flex-1 text-right">Notebook</div>
           </div>
           <div>
             {this.props.participantData.map((item, index) => (
