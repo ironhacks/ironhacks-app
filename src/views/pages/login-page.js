@@ -55,7 +55,7 @@ class LoginPage extends Component {
     }
 
     const uiConfig = {
-      signInFlow: 'redirect',
+      signInFlow: 'popup',
       signInOptions: authProviders,
       callbacks: {
         signInSuccessWithAuthResult: (result, redirectUrl) => {
